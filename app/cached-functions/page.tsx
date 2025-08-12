@@ -40,7 +40,7 @@ async function getData() {
   'use cache';
 
   // DEMO: Add a delay to simulate a slow data request
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  //await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return db.product.findMany({ limit: 9 });
 }

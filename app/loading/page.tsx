@@ -10,7 +10,7 @@ export default async function Page() {
   // 1. We indicate that we require a user Request before continuing:
   await connection();
   // 2. Add an artificial delay to make the loading state more noticeable:
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  //await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const products = db.product.findMany({ limit: 9 });
 

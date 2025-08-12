@@ -84,43 +84,43 @@ const products: Product[] = [
 
 const demos = [
   {
-    name: 'Layouts',
+    name: 'Start',
     items: [
       {
-        slug: 'layouts',
-        name: 'Nested Layouts',
-        description: 'Create UI that is shared across routes',
+        slug: 'select-shape',
+        name: 'Select Shape',
+        description: 'Products come in a range of shapes for you to choose from. Custom shapes are available upon request. Please call us for more information.',
       },
       {
-        slug: 'route-groups',
-        name: 'Route Groups',
-        description: 'Organize routes without affecting URL paths',
+        slug: 'select-size',
+        name: 'Select Size',
+        description: 'The size of headstones range from 300mm ~ 1200mm in width & height in 1mm increments. The thickness of the headstone depends on the width &amp; height of the headstone. As examples, 300mm square will be 40mm thick, 600mm square will be 60mm thick, and 1200mm square will be 100mm thick. Please be aware that cemeteries often have regulations on allowable dimensions including thickness of memorials.',
       },
       {
-        slug: 'parallel-routes',
-        name: 'Parallel Routes',
-        description: 'Render multiple pages in the same layout',
+        slug: 'select-material',
+        name: 'Select Material',
+        description: 'Traditional Engraved Plaques and Headstones are available in a number of different granites, marbles and sandstone. Our most popular material for this product is Blue Pearl.',
       },
     ],
   },
   {
-    name: 'File Conventions',
+    name: 'Personalize',
     items: [
       {
-        slug: 'loading',
-        name: 'Loading',
+        slug: 'inscription',
+        name: 'Inscriptions',
         description:
-          'Create meaningful Loading UI for specific parts of an app',
+          'Inscriptions commemorate the lost family member or friend in an individual way. Inscriptions come in a range of fonts and colours including gold and silver gilding and are priced on font size and number of characters. Gilded inscriptions cost slightly more than other colours.',
       },
       {
-        slug: 'error',
-        name: 'Error',
-        description: 'Create Error UI for specific parts of an app',
+        slug: 'images',
+        name: 'Images',
+        description: 'These images are recreated from a photo or image and then fixed onto the headstone or plaque.',
       },
       {
-        slug: 'not-found',
-        name: 'Not Found',
-        description: 'Create Not Found UI for specific parts of an app',
+        slug: 'motifs',
+        name: 'Motifs',
+        description: 'Choose from a selection of 5000+ flat motifs to personalise your plaque, headstone, urn or ceramic image. Motifs range from religious symbols to flora and fauna, borders and flourishes. Motifs have a minimum size to ensure visible detail. The cost of each motif depends on its size, with gold and silver gilding costing a little more.',
       },
     ],
   },
