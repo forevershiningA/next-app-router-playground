@@ -5,6 +5,7 @@ import * as React from "react";
 import * as THREE from "three";
 import { useEffect, useMemo, useRef } from "react";
 import { useLoader } from "@react-three/fiber";
+import type { MeshProps } from "@react-three/fiber";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import { mergeGeometries, mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { Edges } from "@react-three/drei";
@@ -37,7 +38,8 @@ type Props = {
   doubleSided?: boolean;        // debug only
 
   // Interaction / visuals
-  meshProps?: JSX.IntrinsicElements["mesh"]; // events from parent
+  //meshProps?: JSX.IntrinsicElements["mesh"]; // events from parent
+  meshProps?: MeshProps;
   showEdges?: boolean;                        // outline when editing
 
   // Render-prop child to attach inscription, etc.

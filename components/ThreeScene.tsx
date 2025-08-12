@@ -8,6 +8,7 @@ import { OrbitControls } from "@react-three/drei";
 import SvgHeadstone from "./SvgHeadstone";
 import HeadstoneInscription from "./HeadstoneInscription";
 import AutoFit from "./AutoFit";
+import { useHeadstoneStore } from "#/lib/headstone-store";
 
 function Box(props: JSX.IntrinsicElements["mesh"]) {
   const meshRef = useRef<THREE.Mesh>(null!);
