@@ -31,6 +31,9 @@ function HeadstoneWithEditing() {
   const [edit, setEdit] = useState(false);
   const [sel, setSel] = useState(false);
 
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const heightM  = React.useMemo(() => (heightMm / 100), [heightMm]);
+
   useEffect(() => {
     controls.enabled = !edit;
     controls.enableZoom = !edit;
@@ -91,7 +94,7 @@ function HeadstoneWithEditing() {
       faceTexture="/textures/forever/l/Blue-Pearl-TILE-900-X-900.jpg"
       sideTexture="/textures/forever/l/Blue-Pearl-TILE-900-X-900.jpg"
       tileSize={10} sideTileSize={10} topTileSize={10}
-      targetHeight={5}
+      targetHeight={heightM}
       preserveTop
       showEdges={edit}
       meshProps={meshProps}
@@ -109,7 +112,7 @@ function HeadstoneWithEditing() {
             editable={edit}
             selected={sel}
             onSelect={() => setSel(true)}
-            approxHeight={5}    // <- pass the world height here
+            approxHeight={heightM}
           />
         </>
       )}
