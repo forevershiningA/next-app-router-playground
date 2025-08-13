@@ -85,7 +85,7 @@ function HeadstoneWithEditing() {
       depth={100}
       scale={0.01}
       faceTexture="/textures/forever/l/Imperial-Red-TILE-900-X-900.jpg"
-      sideTexture="/textures/forever/l/Blue-Pearl-TILE-900-X-900.jpg"
+      sideTexture="/textures/forever/l/Imperial-Red-TILE-900-X-900.jpg"
       tileSize={10} sideTileSize={10} topTileSize={10}
       targetHeight={heightM}
       targetWidth={widthM}
