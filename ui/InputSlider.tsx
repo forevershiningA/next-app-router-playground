@@ -7,7 +7,8 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
-import HeightIcon from "@mui/icons-material/Height";
+import WidthIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import HeightIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import { useHeadstoneStore } from "#/lib/headstone-store";
 
 const MIN = 300;
@@ -21,11 +22,22 @@ const Input = styled(MuiInput)`
   &:after  { border-bottom-color: #90caf9; }
 `;
 
-export default function InputSlider() {
+export default function InputSlider(props) {
+
   // Ensure a defined number on the very first render
-  const storeMm     = useHeadstoneStore((s) => s.heightMm);
-  const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
+  const storeMm = useHeadstoneStore(
+    (s) => s[`${props.type}Mm` as "heightMm" | "widthMm"]
+  );
+
+  const setMm = useHeadstoneStore(
+    (s) => s[`set${props.type.charAt(0).toUpperCase() + props.type.slice(1)}Mm` as | "setHeightMm" | "setWidthMm"]
+  );
+
+  // Ensure a defined number
   const safeStoreMm = Number.isFinite(storeMm) ? storeMm : MIN;
+
+  //const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
+  //const safeStoreMm = Number.isFinite(storeMm) ? storeMm : MIN;
 
   // Local slider state (number) + input state (string)
   const [draft, setDraft] = React.useState<number>(safeStoreMm);
@@ -45,19 +57,19 @@ export default function InputSlider() {
     const v = clamp(next);
     if (raf.current) cancelAnimationFrame(raf.current);
     raf.current = requestAnimationFrame(() => {
-      setHeightMm(v);
+      setMm(v);
       raf.current = null;
     });
-  }, [setHeightMm]);
+  }, [setMm]);
 
   React.useEffect(() => () => { if (raf.current) cancelAnimationFrame(raf.current); }, []);
 
   return (
     <Box sx={{ width: "100%", maxWidth: 1000, mx: "auto", mt: 2, mb: 2 }}>
-      <Typography id="height-slider" gutterBottom>Height</Typography>
+      <Typography id="{props.type}-slider" gutterBottom className="capitalize">{props.type}</Typography>
 
       <Grid container alignItems="center" wrap="nowrap" columnSpacing={2}>
-        <Grid item><HeightIcon /></Grid>
+        <Grid item>{props.type === "height" ? <HeightIcon /> : props.type === "width" ? <WidthIcon /> : null}</Grid>
 
         <Grid item sx={{ flexGrow: 1, minWidth: 240 }}>
           <Slider
@@ -71,7 +83,7 @@ export default function InputSlider() {
               commit(n);
               setText(String(n));         // keep the input in sync while dragging
             }}
-            aria-labelledby="height-slider"
+            aria-labelledby="{props.type}-slider"
           />
         </Grid>
 
@@ -98,7 +110,7 @@ export default function InputSlider() {
                 e.ctrlKey || e.metaKey;
               if (!ok) e.preventDefault();
             }}
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*", "aria-labelledby": "height-slider" }}
+            inputProps={{ inputMode: "numeric", pattern: "[0-9]*", "aria-labelledby": "{props.type}-slider" }}
           />
         </Grid>
 

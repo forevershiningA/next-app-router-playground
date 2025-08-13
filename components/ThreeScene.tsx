@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useRef, useState, useEffect, Suspense } from "react";
@@ -14,13 +13,16 @@ function Box(props: JSX.IntrinsicElements["mesh"]) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  useFrame((_, d) => meshRef.current && (meshRef.current.rotation.x += d));
   return (
-    <mesh {...props} ref={meshRef} scale={active ? 1.5 : 1}
+    <mesh
+      {...props}
+      ref={meshRef}
+      scale={active ? 1.5 : 1}
       onClick={() => setActive(!active)}
       onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}>
-      <boxGeometry args={[0.2, 0.2, 0.2]} />
+      onPointerOut={() => setHover(false)}
+    >
+      <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color={hovered ? "hotpink" : "orange"} />
     </mesh>
   );
@@ -33,6 +35,9 @@ function HeadstoneWithEditing() {
 
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const heightM  = React.useMemo(() => (heightMm / 100), [heightMm]);
+
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const widthM  = React.useMemo(() => (widthMm / 100), [widthMm]);
 
   useEffect(() => {
     controls.enabled = !edit;
@@ -68,33 +73,22 @@ function HeadstoneWithEditing() {
   };
 
   const meshProps = {
-    onDoubleClick: (e: any) => {
+    onPointerDown: (e: any) => {
       e.stopPropagation();
-      setEdit(true);
       setSel(true);
-      const root = (e.object as THREE.Object3D).parent ?? e.object;
-      frameObject(root, 1.05);
-      zoomToSafe();
     },
-    onClick: (e: any) => {
-      if (!edit) return;
-      e.stopPropagation();
-      setEdit(false);
-      setSel(false);
-      const root = (e.object as THREE.Object3D).parent ?? e.object;
-      frameObject(root, 1.15);
-    },
-  };
+  } as const;
 
   return (
     <SvgHeadstone
       url="/shapes/headstones/serpentine.svg"
       depth={100}
       scale={0.01}
-      faceTexture="/textures/forever/l/Blue-Pearl-TILE-900-X-900.jpg"
+      faceTexture="/textures/forever/l/Imperial-Red-TILE-900-X-900.jpg"
       sideTexture="/textures/forever/l/Blue-Pearl-TILE-900-X-900.jpg"
       tileSize={10} sideTileSize={10} topTileSize={10}
       targetHeight={heightM}
+      targetWidth={widthM}
       preserveTop
       showEdges={edit}
       meshProps={meshProps}
@@ -107,7 +101,7 @@ function HeadstoneWithEditing() {
             text="In Loving Memory"
             height={0.5}
             color="#fff8dc"
-            font="/fonts/ChopinScript.otf" // drop a .ttf into /public/fonts and uncomment
+            font="/fonts/ChopinScript.otf"
             lift={0.002}
             editable={edit}
             selected={sel}
@@ -122,10 +116,9 @@ function HeadstoneWithEditing() {
 
 export default function ThreeScene() {
   return (
-    <div style={{ width: "100%", height: "50vh" }}>
-      <Canvas camera={{ position: [0, 1.2, 3.2], fov: 40, near: 0.01, far: 100 }}>
-        <color attach="background" args={["#f7f7f7"]} />
-        <gridHelper args={[20, 40]} />
+    <div className="w-full h-[600px] bg-black">
+      <Canvas shadows camera={{ position: [2.6, 1.8, 2.6], fov: 45 }}>
+        <gridHelper args={[20, 40, "#666", "#333"]} />
         <axesHelper args={[1]} />
 
         <ambientLight intensity={0.6} />
