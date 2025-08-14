@@ -8,7 +8,7 @@ import readme from './readme.mdx';
 import db from '#/lib/db';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const demo = db.demo.find({ where: { slug: 'parallel-routes' } });
+  const demo = db.demo.find({ where: { slug: 'select-material' } });
 
   return {
     title: demo.name,

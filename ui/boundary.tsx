@@ -7,15 +7,17 @@ type Size = 'small' | 'medium';
 
 export const Boundary = ({
   children,
+  show = false,
   label,
   size = 'medium',
   color = 'gray',
   kind = 'dashed',
-  animateRerendering = true,
+  animateRerendering = false,
   corners,
   className,
 }: {
   children: React.ReactNode;
+  show?: boolean;
   label?: string | string[];
   size?: Size;
   color?: Color;
@@ -24,6 +26,7 @@ export const Boundary = ({
   corners?: boolean;
   className?: string;
 }) => {
+  if (!show) return <>{children}</>;
   return (
     <div
       className={clsx('relative border', {

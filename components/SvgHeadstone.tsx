@@ -3,10 +3,11 @@
 import * as React from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
+import type { ThreeElements } from "@react-three/fiber";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import { Edges } from "@react-three/drei";
 
-type HeadstoneAPI = {
+export type HeadstoneAPI = {
   group: React.RefObject<THREE.Group>;
   mesh: React.RefObject<THREE.Mesh>;
   frontZ: number;
@@ -26,6 +27,7 @@ type Props = {
   autoRepeat?: boolean;        // if true or tileSize given → physical tiling
   tileSize?: number;           // meters/tile for caps (default 0.10)
   sideTileSize?: number;       // meters/tile for sides (default = tileSize)
+  topTileSize?: number;
 
   faceRepeatX?: number;        // used when not physically tiling (default 6)
   faceRepeatY?: number;        // default 6
@@ -40,7 +42,8 @@ type Props = {
   doubleSided?: boolean;
   showEdges?: boolean;
 
-  meshProps?: JSX.IntrinsicElements["mesh"];
+  meshProps?: ThreeElements["mesh"];
+  //meshProps?: JSX.IntrinsicElements["mesh"];
   children?: (api: HeadstoneAPI) => React.ReactNode;
 };
 

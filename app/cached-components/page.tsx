@@ -1,6 +1,6 @@
 import db from '#/lib/db';
 import { Boundary } from '#/ui/boundary';
-import { ProductCard } from '#/ui/product-card';
+import ProductCard from '#/ui/product-card';
 
 export default async function Page() {
   return (

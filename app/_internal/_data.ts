@@ -103,24 +103,24 @@ const demos = [
       },
     ],
   },
-  {
-    name: 'Personalize',
+ {
+    name: 'File Conventions',
     items: [
       {
-        slug: 'inscription',
-        name: 'Inscriptions',
+        slug: 'loading',
+        name: 'Loading',
         description:
-          'Inscriptions commemorate the lost family member or friend in an individual way. Inscriptions come in a range of fonts and colours including gold and silver gilding and are priced on font size and number of characters. Gilded inscriptions cost slightly more than other colours.',
+          'Create meaningful Loading UI for specific parts of an app',
       },
       {
-        slug: 'images',
-        name: 'Images',
-        description: 'These images are recreated from a photo or image and then fixed onto the headstone or plaque.',
+        slug: 'error',
+        name: 'Error',
+        description: 'Create Error UI for specific parts of an app',
       },
       {
-        slug: 'motifs',
-        name: 'Motifs',
-        description: 'Choose from a selection of 5000+ flat motifs to personalise your plaque, headstone, urn or ceramic image. Motifs range from religious symbols to flora and fauna, borders and flourishes. Motifs have a minimum size to ensure visible detail. The cost of each motif depends on its size, with gold and silver gilding costing a little more.',
+        slug: 'not-found',
+        name: 'Not Found',
+        description: 'Create Not Found UI for specific parts of an app',
       },
     ],
   },
@@ -174,6 +174,7 @@ const demos = [
       },
     ],
   },
+  
 ] as const satisfies DemoCategory[];
 
 export type DemoSlug = (typeof demos)[number]['items'][number]['slug'];

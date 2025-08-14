@@ -3,7 +3,7 @@ import { Boundary } from '#/ui/boundary';
 import { Tab } from '#/ui/tabs';
 
 export default function Page() {
-  const demo = db.demo.find({ where: { slug: 'route-groups' } });
+  const demo = db.demo.find({ where: { slug: 'select-size' } });
 
   return (
     <Boundary label="(checkout)/page.tsx" className="flex flex-col gap-9">

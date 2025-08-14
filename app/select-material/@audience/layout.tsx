@@ -3,11 +3,11 @@ import { Boundary } from '#/ui/boundary';
 import { Tabs } from '#/ui/tabs';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const demo = db.demo.find({ where: { slug: 'parallel-routes' } });
+  const demo = db.demo.find({ where: { slug: 'select-material' } });
 
   return (
     <Boundary
-      label="@views/layout.tsx"
+      label="@audience/layout.tsx"
       size="small"
       className="flex flex-col gap-6"
     >
@@ -15,10 +15,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         basePath={`/${demo.slug}`}
         items={[
           { text: 'Home' },
-          { text: 'Impressions', slug: 'impressions' },
-          { text: 'View Duration', slug: 'view-duration' },
+          { text: 'Demographics', slug: 'demographics' },
+          { text: 'Subscribers', slug: 'subscribers' },
         ]}
       />
+
       {children}
     </Boundary>
   );

@@ -3,11 +3,11 @@ import { Boundary } from '#/ui/boundary';
 import { Tab } from '#/ui/tabs';
 
 export default function Default() {
-  const demo = db.demo.find({ where: { slug: 'parallel-routes' } });
+  const demo = db.demo.find({ where: { slug: 'select-material' } });
 
   return (
     <Boundary
-      label="@audience/default.tsx"
+      label="@views/default.tsx"
       size="small"
       className="flex flex-col gap-4"
     >

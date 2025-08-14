@@ -9,25 +9,6 @@ import HeadstoneInscription from "./HeadstoneInscription";
 import AutoFit from "./AutoFit";
 import { useHeadstoneStore } from "#/lib/headstone-store";
 
-function Box(props: JSX.IntrinsicElements["mesh"]) {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
-  return (
-    <mesh
-      {...props}
-      ref={meshRef}
-      scale={active ? 1.5 : 1}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? "hotpink" : "orange"} />
-    </mesh>
-  );
-}
-
 function HeadstoneWithEditing() {
   const { camera, controls, gl } = useThree() as any;
   const [edit, setEdit] = useState(false);
