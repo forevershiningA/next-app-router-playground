@@ -1,4 +1,3 @@
-// lib/headstone-store.ts
 "use client";
 import { create } from "zustand";
 
@@ -7,6 +6,15 @@ const MAX = 1200;
 const clamp = (v: number) => Math.min(MAX, Math.max(MIN, Math.round(v)));
 
 type HeadstoneState = {
+  // shapes
+  shapeUrl: string | null;
+  setShapeUrl: (url: string) => void;
+
+  // materials ✅ new
+  materialUrl: string | null;
+  setMaterialUrl: (url: string) => void;
+
+  // dimensions
   widthMm: number;
   setWidthMm: (v: number) => void;
   heightMm: number;
@@ -14,14 +22,14 @@ type HeadstoneState = {
 };
 
 export const useHeadstoneStore = create<HeadstoneState>()((set) => ({
-  widthMm: 900, // always defined number
-  setWidthMm: (v) => {
-    //console.log("heightMm value before clamp:", v);
-    set({ widthMm: clamp(v) });
-  },
-  heightMm: 900, // always defined number
-  setHeightMm: (v) => {
-    //console.log("heightMm value before clamp:", v);
-    set({ heightMm: clamp(v) });
-  },
+  shapeUrl: null,
+  setShapeUrl: (shapeUrl) => set({ shapeUrl }),
+
+  materialUrl: null,                               // ✅
+  setMaterialUrl: (materialUrl) => set({ materialUrl }), // ✅
+
+  widthMm: 900,
+  setWidthMm: (v) => set({ widthMm: clamp(v) }),
+  heightMm: 900,
+  setHeightMm: (v) => set({ heightMm: clamp(v) }),
 }));

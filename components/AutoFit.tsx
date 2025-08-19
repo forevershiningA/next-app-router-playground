@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useState } from "react";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { useHeadstoneStore } from "#/lib/headstone-store";
@@ -17,6 +18,11 @@ export default function AutoFit({
   const widthMm  = useHeadstoneStore((state) => state.widthMm);
 
   React.useEffect(() => {
+
+    const checkMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
+      navigator.userAgent
+    );
+
     const obj = target.current;
     if (!obj) return;
 
@@ -28,8 +34,12 @@ export default function AutoFit({
       box.getCenter(center);
 
       // frame
+      let half = 180;
+      if (checkMobile) { 
+        half = 300;
+      }
       const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = (camera.fov * Math.PI) / 180;
+      const fov = (camera.fov * Math.PI) / half;
       let dist = (maxDim / 2) / Math.tan(fov / 2) * margin;
       camera.position.set(
         center.x,

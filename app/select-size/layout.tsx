@@ -19,16 +19,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <InputSlider type={"width"} />
-      <InputSlider type={"height"} />
-
-      <Boundary label="Demo" kind="solid" animateRerendering={false}>
+      <div className="p-8 pt-0">
+        <h1 className="text-xl font-semibold text-gray-300">
+          Select Size
+        </h1>
         <Mdx source={Readme} collapsed={true} />
-      </Boundary>
-
-      <Boundary kind="solid" animateRerendering={false}>
-        {children}
-      </Boundary>
+        <div className="pt-4 pb-10">
+          <InputSlider type={"width"} />
+          <InputSlider type={"height"} />
+        </div>
+      </div>
     </>
   );
 }

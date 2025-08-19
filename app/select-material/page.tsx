@@ -1,14 +1,18 @@
-import { Boundary } from '#/ui/boundary';
+'use cache';
 
-export default function Page() {
+import db from '#/lib/db';
+import { ProductCard } from '#/ui/product-card';
+
+export default async function Page() {
+  const materials = db.material.findMany({ limit: 32 });
+
   return (
-    <Boundary label="page.tsx" size="small" className="flex flex-col gap-4">
-      <h1 className="text-xl font-semibold text-gray-300">Channel analytics</h1>
-
-      <div className="flex flex-col gap-2">
-        <div className="h-2 w-4/5 rounded-full bg-gray-800" />
-        <div className="h-2 w-1/3 rounded-full bg-gray-800" />
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {materials.map((material) => (
+          <ProductCard key={material.id} product={material} type={"material"} />
+        ))}
       </div>
-    </Boundary>
+    </div>
   );
 }

@@ -6,6 +6,7 @@ import { GlobalNav } from '#/ui/global-nav';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import ThreeScene from '#/components/ThreeScene';
+import { Suspense } from "react";
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 
@@ -46,7 +47,14 @@ export default function RootLayout({
 
         <div className="lg:pl-72">
           <div className="mx-auto mt-12 mb-24 max-w-4xl -space-y-[1px] lg:px-8 lg:py-8">
-            <ThreeScene />
+          
+            <Suspense
+              fallback={
+                <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
+              }
+            >
+              <ThreeScene />
+            </Suspense>
 
             {children}
 

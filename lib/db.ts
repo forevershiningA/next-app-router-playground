@@ -10,23 +10,27 @@ import {
   type DemoCategory,
   type DemoSlug,
   type Product,
+  type Shape,
+  type Material,
   type Section,
 } from '../app/_internal/_data';
 
 type ProductWhere = { id?: string; category?: string; section?: string };
-
 type ProductFindOptions = { where?: ProductWhere; limit?: number };
 
-type SectionWhere = { id?: string; slug?: string };
+type ShapeWhere = { id?: string; category?: string; section?: string };
+type ShapeFindOptions = { where?: ShapeWhere; limit?: number };
 
+type MaterialWhere = { id?: string; category?: string; section?: string };
+type MaterialFindOptions = { where?: MaterialWhere; limit?: number };
+
+type SectionWhere = { id?: string; slug?: string };
 type SectionFindOptions = { where?: SectionWhere; limit?: number };
 
 type CategoryWhere = { id?: string; slug?: string; section?: string };
-
 type CategoryFindOptions = { where?: CategoryWhere };
 
 type DemoWhere = { slug?: DemoSlug };
-
 type DemoFindOptions = { where?: DemoWhere };
 
 const db = {
@@ -82,6 +86,114 @@ const db = {
       return result;
     },
   },
+
+  shape: {
+    find: (options: ShapeFindOptions) => {
+      let shape: Shape | undefined;
+
+      if (options.where?.id !== undefined) {
+        shape = data.shapes.find((p) => p.id === options.where?.id);
+      } else if (options.where?.category !== undefined) {
+        shape = data.shapes.find(
+          (p) => p.category === options.where?.category,
+        );
+      }
+
+      let prev: string | undefined = undefined;
+      let next: string | undefined = undefined;
+
+      if (shape) {
+        const ids = data.shapes.map((p) => Number(p.id));
+        const currentIndex = ids.indexOf(Number(shape.id));
+        const prevIndex = (currentIndex - 1 + ids.length) % ids.length;
+        const nextIndex = (currentIndex + 1) % ids.length;
+
+        prev = data.shapes[prevIndex]?.id;
+        next = data.shapes[nextIndex]?.id;
+      }
+
+      return shape ? { ...shape, prev, next } : null;
+    },
+    findMany: (options: ShapeFindOptions = {}) => {
+      let result = data.shapes;
+
+      if (options.where?.category) {
+        result = result.filter(
+          (shape) => shape.category === options.where!.category,
+        );
+      }
+
+      if (options.where?.section) {
+        const sectionCategories = data.categories
+          .filter((category) => category.section === options.where!.section)
+          .map((category) => category.id);
+        result = result.filter((shape) =>
+          sectionCategories.includes(shape.category),
+        );
+      }
+
+      if (options.limit !== undefined) {
+        result = result.slice(0, options.limit);
+      }
+
+      return result;
+    },
+  },
+
+  material: {
+    find: (options: MaterialFindOptions) => {
+      let material: Material | undefined;
+
+      if (options.where?.id !== undefined) {
+        material = data.materials.find((p) => p.id === options.where?.id);
+      } else if (options.where?.category !== undefined) {
+        material = data.materials.find(
+          (p) => p.category === options.where?.category,
+        );
+      }
+
+      let prev: string | undefined = undefined;
+      let next: string | undefined = undefined;
+
+      if (material) {
+        const ids = data.materials.map((p) => Number(p.id));
+        const currentIndex = ids.indexOf(Number(material.id));
+        const prevIndex = (currentIndex - 1 + ids.length) % ids.length;
+        const nextIndex = (currentIndex + 1) % ids.length;
+
+        prev = data.materials[prevIndex]?.id;
+        next = data.materials[nextIndex]?.id;
+      }
+
+      return material ? { ...material, prev, next } : null;
+    },
+
+    findMany: (options: MaterialFindOptions = {}) => {
+      let result = data.materials;
+
+      if (options.where?.category) {
+        result = result.filter(
+          (m) => m.category === options.where!.category,
+        );
+      }
+
+      if (options.where?.section) {
+        const sectionCategories = data.categories
+          .filter((category) => category.section === options.where!.section)
+          .map((category) => category.id);
+        result = result.filter((m) =>
+          sectionCategories.includes(m.category),
+        );
+      }
+
+      if (options.limit !== undefined) {
+        result = result.slice(0, options.limit);
+      }
+
+      return result;
+    },
+  },
+
   section: {
     find: (options: SectionFindOptions) => {
       let section: Section | undefined;
@@ -114,6 +226,7 @@ const db = {
       return result;
     },
   },
+
   category: {
     find: (options: CategoryFindOptions) => {
       let category: Category | undefined;
@@ -152,6 +265,7 @@ const db = {
       return result;
     },
   },
+
   demo: {
     find: (options: DemoFindOptions) => {
       let demo: Demo | undefined;
@@ -184,4 +298,4 @@ const db = {
 
 export default db;
 
-export type { Demo, Product, Section, Category, DemoCategory };
+export type { Demo, Product, Section, Shape, Material, Category, DemoCategory };
