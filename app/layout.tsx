@@ -46,7 +46,7 @@ export default function RootLayout({
         </div>
 
         <div className="lg:pl-72">
-          <div className="mx-auto mt-12 mb-24 max-w-4xl -space-y-[1px] lg:px-8 lg:py-8">
+          <div className="mx-auto -space-y-[1px] lg:px-8 lg:py-8">
           
             <Suspense
               fallback={
@@ -55,9 +55,9 @@ export default function RootLayout({
             >
               <ThreeScene />
             </Suspense>
-
-            {children}
-
+            <div className="pt-4 pb-10">
+              {children}
+            </div>
             <Byline />
           </div>
         </div>

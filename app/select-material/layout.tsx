@@ -35,9 +35,13 @@ export default async function Layout({
 
   return (
     <>
-      <MaterialTitle materials={materials} />
-      <Mdx source={readme} collapsed={false} />
-      <div className="pt-10">{children}</div>
+      <div className="p-8 pt-0">
+        <MaterialTitle materials={materials} />
+        <Mdx source={readme} collapsed={false} />
+        <div className="pt-10">
+          {children}
+        </div>
+      </div>
     </>
   );
 }

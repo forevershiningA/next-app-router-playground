@@ -24,9 +24,13 @@ export default async function Layout({
 
   return (
     <>
+    <div className="p-8 pt-0">
       <ShapeTitle products={products} />
       <Mdx source={readme} collapsed={false} />
-      <div className="pt-10">{children}</div>
+      <div className="pt-10">
+        {children}
+        </div>
+      </div>
     </>
   );
 }
