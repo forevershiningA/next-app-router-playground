@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useState } from "react";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { useHeadstoneStore } from "#/lib/headstone-store";
@@ -9,25 +8,32 @@ import { useHeadstoneStore } from "#/lib/headstone-store";
 export default function AutoFit({
   target,
   margin = 1.15,
+  baseHeight = 0, // 👈 NEW: meters (e.g. 0.10 for 100 mm)
 }: {
   target: React.RefObject<THREE.Object3D>;
   margin?: number;
+  baseHeight?: number;
 }) {
   const { camera, controls } = useThree() as any;
-  const heightMm = useHeadstoneStore((state) => state.heightMm);
-  const widthMm  = useHeadstoneStore((state) => state.widthMm);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const widthMm  = useHeadstoneStore((s) => s.widthMm);
 
   React.useEffect(() => {
-
-    const checkMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
-      navigator.userAgent
-    );
+    const checkMobile =
+      /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
+        navigator.userAgent
+      );
 
     const obj = target.current;
     if (!obj) return;
 
     const id = requestAnimationFrame(() => {
+      // Compute bounds of the target…
       const box = new THREE.Box3().setFromObject(obj);
+
+      // …then extend it DOWN by the base height so the base is included
+      if (baseHeight > 0) box.min.y -= baseHeight;
+
       const size = new THREE.Vector3();
       box.getSize(size);
       const center = new THREE.Vector3();
@@ -35,17 +41,14 @@ export default function AutoFit({
 
       // frame
       let half = 180;
-      if (checkMobile) { 
+      if (checkMobile) {
         half = 300;
       }
       const maxDim = Math.max(size.x, size.y, size.z);
       const fov = (camera.fov * Math.PI) / half;
-      let dist = (maxDim / 2) / Math.tan(fov / 2) * margin;
-      camera.position.set(
-        center.x,
-        center.y + size.y * 0.05,
-        center.z + dist
-      );
+      const dist = (maxDim / 2) / Math.tan(fov / 2) * margin;
+
+      camera.position.set(center.x, center.y + size.y * 0.05, center.z + dist);
       controls?.target.copy(center);
 
       // SAFE MIN DISTANCE
@@ -59,8 +62,7 @@ export default function AutoFit({
     });
 
     return () => cancelAnimationFrame(id);
-  }, [target, camera, controls, margin, heightMm, widthMm]);
-
+  }, [target, camera, controls, margin, baseHeight, heightMm, widthMm]);
 
   return null;
 }

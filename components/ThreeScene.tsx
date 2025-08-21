@@ -23,8 +23,8 @@ function BigCenteredLoader() {
   return (
     <Html fullscreen>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 text-gray-100">
-          <div className="h-16 w-16 rounded-full border-[6px] border-white/30 border-t-white animate-spin" />
+        <div className="flex flex-col items-center gap-4 text-black">
+          <div className="h-16 w-16 rounded-full border-[6px] border-black/30 border-t-black animate-spin" />
           <div className="text-sm font-mono opacity-80">Loading assets…</div>
         </div>
       </div>
@@ -296,7 +296,7 @@ function HeadstoneWithEditing() {
             {(api) => (
               <>
                 {/* Fit camera to the TABLET group only */}
-                <AutoFit target={tabletRef} />
+                <AutoFit target={tabletRef} baseHeight={BASE_H} />
 
                 <MeshOutline
                   key={`outline::${remountKey}::${heightM}::${widthM}`}
@@ -351,24 +351,17 @@ export default function ThreeScene() {
   return (
     <div className="w-full h-[600px] bg-black relative">
       <Canvas
-        frameloop="always" // ensures initial frames for placement
+        frameloop="always"
         shadows
         camera={{ position: [2.6, 1.8, 2.6], fov: 45 }}
       >
-        <gridHelper args={[20, 40, "#666", "#333"]} />
-        <axesHelper args={[1]} />
+        <color attach="background" args={['#cfe8fc']} />
         <ambientLight intensity={0.6} />
         <directionalLight position={[3, 6, 3]} intensity={1} castShadow />
 
         <Suspense fallback={<BigCenteredLoader />}>
           <HeadstoneWithEditing />
         </Suspense>
-
-        {/* Ground a hair below y=0 to avoid z-fighting */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.001, 0]}>
-          <planeGeometry args={[20, 20]} />
-          <meshStandardMaterial color="#e5e5e5" />
-        </mesh>
 
         <OrbitControls makeDefault enableDamping dampingFactor={0.08} />
       </Canvas>
