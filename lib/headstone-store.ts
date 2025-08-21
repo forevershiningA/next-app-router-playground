@@ -12,6 +12,9 @@ type HeadstoneState = {
   shapeUrl: string | null;
   setShapeUrl: (url: string) => void;
 
+  materialUrl: string | null;
+  setMaterialUrl: (url: string) => void;
+
   widthMm: number;
   setWidthMm: (v: number) => void;
 
@@ -25,6 +28,9 @@ type HeadstoneState = {
 export const useHeadstoneStore = create<HeadstoneState>()((set) => ({
   shapeUrl: null,
   setShapeUrl: (shapeUrl) => set({ shapeUrl }),
+
+  materialUrl: null,
+  setMaterialUrl: (materialUrl) => set({ materialUrl }),
 
   widthMm: 900,
   setWidthMm: (v) => set({ widthMm: clamp(v) }),

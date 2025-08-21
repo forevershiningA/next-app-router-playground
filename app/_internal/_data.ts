@@ -37,6 +37,11 @@ export type Category = {
   section: string;
   slug: string;
   products: string[];
+  products?: string[];
+  shapes?: string[];
+  materials?: string[];
+  motifs?: string[];
+  images?: string[];
 };
 
 export type Demo = {

@@ -7,6 +7,7 @@ const nextConfig = {
   experimental: {
     inlineCss: true,
     dynamicIO: true,
+    useCache: true,
     clientSegmentCache: true,
     viewTransition: true,
     prerenderEarlyExit: false,

@@ -13,11 +13,12 @@ import AutoFit from "./AutoFit";
 import { useHeadstoneStore } from "#/lib/headstone-store";
 import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
 
+/* ---------- constants ---------- */
 const TEX_BASE = "/textures/forever/l/";
 const DEFAULT_TEX = "Imperial-Red.jpg";
+const BASE_H = 2; // 100 mm
 
-/* ---------- UI ---------- */
-
+/* ---------- UI loader ---------- */
 function BigCenteredLoader() {
   return (
     <Html fullscreen>
@@ -31,11 +32,7 @@ function BigCenteredLoader() {
   );
 }
 
-/**
- * White outline that follows the WHOLE tablet group.
- * Computes world-space bounds every frame. Depth test ON so back edges
- * do not render through the stone. Tiny pad prevents z-fighting.
- */
+/* ---------- optional outline for selection ---------- */
 function MeshOutline({
   object,
   visible = true,
@@ -87,12 +84,10 @@ function MeshOutline({
 
     obj.updateWorldMatrix(true, true);
     boxWorld.current.setFromObject(obj);
-
     if (boxWorld.current.isEmpty()) {
       helper.visible = false;
       return;
     }
-
     const padded = boxWorld.current.clone().expandByScalar(PAD);
     // @ts-ignore
     helper.box.copy(padded);
@@ -103,94 +98,7 @@ function MeshOutline({
   return null;
 }
 
-/* ---------- Base (world → wrapper local; +15% width, +10% depth) ---------- */
-function HeadstoneBaseAuto({
-  headstoneObject,           // tablet group (api.group)
-  wrapper,                   // wrapper group (tablet + base)
-  selected,
-  onClick,
-  height = 0.10,             // base height (meters) — 0.10 = 100 mm
-}: {
-  headstoneObject: React.RefObject<THREE.Object3D>;
-  wrapper: React.RefObject<THREE.Object3D>;
-  selected: boolean;
-  onClick?: (e: any) => void;
-  height?: number;
-}) {
-  const baseRef = useRef<THREE.Mesh>(null);
-
-  const bbWorld = useRef(new THREE.Box3());
-  const centerWorld = useRef(new THREE.Vector3());
-  const posLocal = useRef(new THREE.Vector3());
-  const invWrapper = useRef(new THREE.Matrix4());
-  const wrapperScaleW = useRef(new THREE.Vector3());
-  const EPS = 1e-3;
-
-  useFrame(() => {
-    const hs = headstoneObject.current;
-    const wrap = wrapper.current as THREE.Object3D | null;
-    const base = baseRef.current;
-    if (!base || !wrap) return;
-
-    if (!hs) {
-      base.visible = false;   // hide until tablet exists
-      return;
-    }
-
-    // WORLD bbox of the tablet group
-    hs.updateWorldMatrix(true, true);
-    bbWorld.current.setFromObject(hs);
-    if (bbWorld.current.isEmpty()) {
-      base.visible = false;
-      return;
-    }
-
-    const min = bbWorld.current.min;
-    const max = bbWorld.current.max;
-
-    const hsWidthW = max.x - min.x;
-    const hsDepthW = max.z - min.z;
-
-    // +15% wider, +10% thicker
-    const baseWidthW = hsWidthW * 1.4;
-    const baseDepthW = hsDepthW * 2;
-
-    // Base center in WORLD: top flush, back flush (extra to +Z/front)
-    centerWorld.current.set(
-      (min.x + max.x) * 0.5,      // X center
-      min.y - height * 0.5 + EPS, // Y under the tablet
-      min.z + baseDepthW * 0.5    // Z: back flush
-    );
-
-    // WORLD → WRAPPER LOCAL
-    wrap.updateWorldMatrix(true, false);
-    invWrapper.current.copy(wrap.matrixWorld).invert();
-    posLocal.current.copy(centerWorld.current).applyMatrix4(invWrapper.current);
-
-    // WORLD sizes → WRAPPER scales
-    wrap.getWorldScale(wrapperScaleW.current);
-    const s = wrapperScaleW.current;
-
-    base.position.copy(posLocal.current);
-    base.scale.set(
-      baseWidthW / Math.max(1e-9, s.x),
-      height      / Math.max(1e-9, s.y),
-      baseDepthW  / Math.max(1e-9, s.z)
-    );
-
-    base.visible = true;       // show every frame once positioned
-  });
-
-  return (
-    <mesh ref={baseRef} onClick={onClick} castShadow receiveShadow>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="#212529" metalness={0.1} roughness={0.55} />
-      {selected && <Edges threshold={15} scale={1.002} color="white" />}
-    </mesh>
-  );
-}
-
-/* ---------- Preloader ---------- */
+/* ---------- Preloader: arm after one RAF & invalidate once ---------- */
 function PreloadedHeadstone(props: {
   url: string;
   faceTexture: string;
@@ -211,36 +119,127 @@ function PreloadedHeadstone(props: {
   useLoader(SVGLoader, url);
   useTexture([faceTexture, sideTexture ?? faceTexture]);
 
-  // Defer one RAF to avoid a black frame while textures upload to GPU
+  const { invalidate } = useThree();
   const [armed, setArmed] = useState(false);
+
   useEffect(() => {
-    const raf = requestAnimationFrame(() => setArmed(true));
+    const raf = requestAnimationFrame(() => {
+      setArmed(true);
+      invalidate(); // render right after assets are ready
+    });
     return () => cancelAnimationFrame(raf);
-  }, [url, faceTexture, sideTexture]);
+  }, [url, faceTexture, sideTexture, invalidate]);
 
   if (!armed) return null;
   return <SvgHeadstone {...props} />;
 }
 
+/* ---------- Base (frame-until-placed from TABLET bbox, in ASSEMBLY space) ---------- */
+function HeadstoneBaseAuto({
+  headstoneObject,   // tablet-only group
+  wrapper,           // assembly group (parent of tablet + base)
+  selected,
+  onClick,
+  height = BASE_H,
+  depsKey,
+}: {
+  headstoneObject: React.RefObject<THREE.Object3D>;
+  wrapper: React.RefObject<THREE.Object3D>;
+  selected: boolean;
+  onClick?: (e: any) => void;
+  height?: number;
+  depsKey: string;
+}) {
+  const baseRef = useRef<THREE.Mesh>(null);
+  const placed = useRef(false);
+  const [visible, setVisible] = useState(false);
+
+  // reset when deps change
+  useEffect(() => {
+    placed.current = false;
+    setVisible(false);
+  }, [depsKey]);
+
+  useFrame(() => {
+    if (placed.current) return;
+
+    const tablet = headstoneObject.current as THREE.Object3D | null;
+    const wrap   = wrapper.current as THREE.Object3D | null;
+    const base   = baseRef.current;
+    if (!tablet || !wrap || !base) return;
+
+    // bbox from TABLET ONLY (doesn't include base)
+    tablet.updateWorldMatrix(true, true);
+    const bbWorld = new THREE.Box3().setFromObject(tablet);
+    if (bbWorld.isEmpty()) return;
+
+    const min = bbWorld.min;
+    const max = bbWorld.max;
+
+    const hsWidthW = max.x - min.x;
+    const hsDepthW = max.z - min.z;
+    if (hsWidthW <= 0 || hsDepthW <= 0) return;
+
+    const baseWidthW = hsWidthW * 1.4;
+    const baseDepthW = Math.max(hsDepthW * 2.0, 0.2 * hsWidthW);
+    const EPS = 1e-3;
+
+    // base center in WORLD: under tablet, back-flush
+    const centerWorld = new THREE.Vector3(
+      (min.x + max.x) * 0.5,
+      min.y - height * 0.5 + EPS,
+      min.z + baseDepthW * 0.5
+    );
+
+    // world → WRAPPER local (since base is child of wrapper)
+    wrap.updateWorldMatrix(true, false);
+    const invWrapper = new THREE.Matrix4().copy(wrap.matrixWorld).invert();
+    const posLocal   = centerWorld.clone().applyMatrix4(invWrapper);
+
+    const s = new THREE.Vector3();
+    wrap.getWorldScale(s);
+
+    base.position.copy(posLocal);
+    base.scale.set(
+      baseWidthW / Math.max(1e-9, s.x),
+      height      / Math.max(1e-9, s.y),
+      baseDepthW  / Math.max(1e-9, s.z)
+    );
+
+    placed.current = true;
+    setVisible(true);
+  });
+
+  return (
+    <mesh
+      ref={baseRef}
+      visible={visible}
+      onClick={onClick}
+      castShadow
+      receiveShadow
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="#212529" metalness={0.1} roughness={0.55} />
+      {selected && <Edges threshold={15} scale={1.002} color="white" />}
+    </mesh>
+  );
+}
+
 /* ---------- Scene contents ---------- */
 function HeadstoneWithEditing() {
-  const { controls, gl } = useThree() as any;
-
   const [selected, setSelected] = useState<"headstone" | "base" | null>(null);
-  const [edit] = useState(false);
   const [inscriptionSel, setInscriptionSel] = useState(false);
 
-  const heightMm = useHeadstoneStore((s) => s.heightMm);
-  const widthMm  = useHeadstoneStore((s) => s.widthMm);
-  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
-  const materialUrl = useHeadstoneStore((s) => s.materialUrl);
+  const heightMm = useHeadstoneStore((s: any) => s.heightMm);
+  const widthMm  = useHeadstoneStore((s: any) => s.widthMm);
+  const shapeUrl = useHeadstoneStore((s: any) => s.shapeUrl);
+  const materialUrl = useHeadstoneStore((s: any) => s.materialUrl);
 
   const heightM = useMemo(() => heightMm / 100, [heightMm]);
   const widthM  = useMemo(() => widthMm  / 100, [widthMm]);
 
   const svgUrl = shapeUrl || DEFAULT_SHAPE_URL;
 
-  // Normalize to .jpg and build texture path
   const materialFile = useMemo(() => {
     const file = materialUrl?.split("/").pop() ?? DEFAULT_TEX;
     return file.replace(/\.(png|webp|jpeg)$/i, ".jpg");
@@ -248,19 +247,7 @@ function HeadstoneWithEditing() {
   const faceTex = useMemo(() => TEX_BASE + materialFile, [materialFile]);
 
   const remountKey = `${svgUrl}::${faceTex}`;
-
-  useEffect(() => {
-    controls.enabled = !edit;
-    controls.enableZoom = !edit;
-  }, [edit, controls]);
-
-  useEffect(() => {
-    const onWheel = (e: WheelEvent) => { if (edit) e.preventDefault(); };
-    gl.domElement.addEventListener("wheel", onWheel, { passive: false });
-    return () => gl.domElement.removeEventListener("wheel", onWheel);
-  }, [gl.domElement, edit]);
-
-  const BASE_H = 2;
+  const depsKey    = `${svgUrl}::${faceTex}::${heightM}::${widthM}`;
 
   const meshProps = {
     onPointerDown: (e: any) => {
@@ -269,40 +256,40 @@ function HeadstoneWithEditing() {
     },
   } as const;
 
-  // wrapper holds tablet group + base and is lifted by BASE_H so base sits on ground
-  const wrapperRef = useRef<THREE.Group>(null);
-  const tabletGroupRef = useRef<THREE.Group | null>(null);
+  // Outer assembly (lifted by base height); base is placed in this space.
+  const assemblyRef = useRef<THREE.Group>(null);
+
+  // Tablet-only wrapper: contains ONLY the headstone mesh, no base.
+  const tabletRef = useRef<THREE.Group>(null);
 
   return (
     <>
-      <group ref={wrapperRef} position={[0, BASE_H, 0]}>
-        <PreloadedHeadstone
-          key={remountKey}
-          url={svgUrl}
-          depth={100}
-          scale={0.01}
-          faceTexture={faceTex}
-          sideTexture={faceTex}
-          tileSize={10}
-          sideTileSize={10}
-          topTileSize={10}
-          targetHeight={heightM}
-          targetWidth={widthM}
-          preserveTop
-          showEdges={false}
-          meshProps={meshProps}
-        >
-          {(api) => {
-            tabletGroupRef.current = api.group?.current ?? null;
-            return (
+      <group ref={assemblyRef} position={[0, BASE_H, 0]}>
+        <group ref={tabletRef}>
+          <PreloadedHeadstone
+            key={remountKey}
+            url={svgUrl}
+            depth={100}
+            scale={0.01}
+            faceTexture={faceTex}
+            sideTexture={faceTex}
+            tileSize={10}
+            sideTileSize={10}
+            topTileSize={10}
+            targetHeight={heightM}
+            targetWidth={widthM}
+            preserveTop
+            showEdges={false}
+            meshProps={meshProps}
+          >
+            {(api) => (
               <>
-                {/* Keep camera fitting locked to the tablet only */}
-                <AutoFit target={api.group} />
+                {/* Fit camera to the TABLET group only */}
+                <AutoFit target={tabletRef} />
 
-                {/* Outline around the whole tablet group */}
                 <MeshOutline
                   key={`outline::${remountKey}::${heightM}::${widthM}`}
-                  object={api.group?.current ?? undefined}
+                  object={tabletRef.current ?? undefined}
                   visible={selected === "headstone"}
                   color="white"
                 />
@@ -320,22 +307,27 @@ function HeadstoneWithEditing() {
                   approxHeight={heightM}
                 />
               </>
-            );
-          }}
-        </PreloadedHeadstone>
+            )}
+          </PreloadedHeadstone>
+        </group>
 
-        {/* Base is a sibling of the tablet under the same wrapper (always rendered) */}
+        {/* Base: computed from TABLET bounds, positioned in ASSEMBLY space */}
         <HeadstoneBaseAuto
-          headstoneObject={tabletGroupRef}   // pass the ref itself, not .current
-          wrapper={wrapperRef}
+          headstoneObject={tabletRef}
+          wrapper={assemblyRef}
           selected={selected === "base"}
           onClick={(e) => { e.stopPropagation(); setSelected("base"); }}
           height={BASE_H}
+          depsKey={depsKey}
         />
       </group>
 
       {/* click-away to clear selection */}
-      <mesh position={[0, -0.001, 0]} onPointerDown={() => setSelected(null)} visible={false}>
+      <mesh
+        position={[0, -0.001, 0]}
+        onPointerDown={() => setSelected(null)}
+        visible={false}
+      >
         <boxGeometry args={[100, 0.001, 100]} />
         <meshBasicMaterial transparent opacity={0} />
       </mesh>
@@ -344,11 +336,14 @@ function HeadstoneWithEditing() {
 }
 
 /* ---------- Exported Canvas ---------- */
-
 export default function ThreeScene() {
   return (
     <div className="w-full h-[600px] bg-black relative">
-      <Canvas shadows camera={{ position: [2.6, 1.8, 2.6], fov: 45 }}>
+      <Canvas
+        frameloop="always" // ensures initial frames for placement
+        shadows
+        camera={{ position: [2.6, 1.8, 2.6], fov: 45 }}
+      >
         <gridHelper args={[20, 40, "#666", "#333"]} />
         <axesHelper args={[1]} />
         <ambientLight intensity={0.6} />
@@ -358,7 +353,7 @@ export default function ThreeScene() {
           <HeadstoneWithEditing />
         </Suspense>
 
-        {/* Ground a hair below y=0 to avoid z-fighting with base bottom */}
+        {/* Ground a hair below y=0 to avoid z-fighting */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.001, 0]}>
           <planeGeometry args={[20, 20]} />
           <meshStandardMaterial color="#e5e5e5" />
