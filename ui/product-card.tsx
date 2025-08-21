@@ -11,6 +11,7 @@ import {
   ElementType,
   ComponentPropsWithoutRef,
   PropsWithChildren,
+  ReactNode,
 } from "react";
 
 export type PolymorphicProps<E extends ElementType, P = {}> = PropsWithChildren<P> & {
@@ -25,6 +26,8 @@ type ProductCardOwnProps = {
   type?: Kind; // "shape" | "material" (default: "shape")
   assetBase?: string;
   routeBase?: string;
+  className?: string;
+  children?: ReactNode;
   onPick?: (args: { product: Product; slug: string; type: Kind; selectedUrl: string }) => void;
 };
 
@@ -33,17 +36,19 @@ type ProductCardProps<E extends ElementType> = PolymorphicProps<E, ProductCardOw
 export function ProductCard<E extends ElementType = "div">({
   as,
   product,
-  animateEnter,
+  animateEnter, // unused for now
   type = "shape",
   assetBase: assetBaseProp,
   routeBase: routeBaseProp,
   onPick,
+  className,
+  children,
   ...rest
 }: ProductCardProps<E>) {
-  const Component = as || "div";
-  const router = useRouter();
+  // WIDEN to avoid polymorphic 'children: never' issues
+  const Comp: any = as || "div";
 
-  // ✅ pull setMaterialUrl from the store
+  const router = useRouter();
   const { setShapeUrl, setMaterialUrl } = useHeadstoneStore();
 
   const assetBase = assetBaseProp ?? (type === "shape" ? SHAPES_BASE : "/materials/");
@@ -53,7 +58,10 @@ export function ProductCard<E extends ElementType = "div">({
   const selectedUrl = assetBase + product.image;
 
   return (
-    <Component className="group flex flex-col gap-2.5" {...rest}>
+    <Comp
+      {...(rest as any)}
+      className={clsx("group flex flex-col gap-2.5", className)}
+    >
       <div className="overflow-hidden rounded-md bg-gray-900/50 p-8 group-hover:bg-gray-900">
         <Image
           className="pointer"
@@ -80,7 +88,9 @@ export function ProductCard<E extends ElementType = "div">({
         <div className="h-2 w-4/5 rounded-full bg-gray-800" />
         <div className="h-2 w-1/3 rounded-full bg-gray-800" />
       </div>
-    </Component>
+
+      {children}
+    </Comp>
   );
 }
 
@@ -136,3 +146,5 @@ export function ProductListSkeleton({ title, count = 3 }: { title: string; count
     </div>
   );
 }
+
+export default ProductCard;

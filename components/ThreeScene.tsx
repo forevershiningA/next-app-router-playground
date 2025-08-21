@@ -256,11 +256,8 @@ function HeadstoneWithEditing() {
     },
   } as const;
 
-  // Outer assembly (lifted by base height); base is placed in this space.
-  const assemblyRef = useRef<THREE.Group>(null);
-
-  // Tablet-only wrapper: contains ONLY the headstone mesh, no base.
-  const tabletRef = useRef<THREE.Group>(null);
+  const assemblyRef = useRef<THREE.Object3D>(new THREE.Group());
+  const tabletRef   = useRef<THREE.Object3D>(new THREE.Group());
 
   return (
     <>

@@ -4,6 +4,8 @@ import type { ReactElement } from 'react';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest): Promise<Response | ImageResponse> {
   try {
     const { searchParams } = new URL(req.url);

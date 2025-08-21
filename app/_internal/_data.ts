@@ -36,7 +36,6 @@ export type Category = {
   name: string;
   section: string;
   slug: string;
-  products: string[];
   products?: string[];
   shapes?: string[];
   materials?: string[];

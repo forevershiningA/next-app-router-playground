@@ -1,28 +1,29 @@
 // components/BoxOutline.tsx
 "use client";
 
-import * as React from "react";
+import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree, useFrame } from "@react-three/fiber";
 
-/** Mesh-accurate white outline that resizes with the tablet mesh */
-/** White bounding box that truly tracks the selected object (mesh) */
-function BoxOutline({
+type Props = {
+  object?: THREE.Object3D | null;
+  visible?: boolean;
+  color?: string;
+  pad?: number;
+};
+
+export default function BoxOutline({
   object,
   visible = true,
   color = "white",
-}: {
-  object: THREE.Object3D | null | undefined; // pass api.mesh.current
-  visible?: boolean;
-  color?: string;
-}) {
+  pad = 0.0008,
+}: Props) {
   const { scene } = useThree();
   const helperRef = useRef<THREE.Box3Helper | null>(null);
-  const box = useRef(new THREE.Box3());
-  const EPS = 0.002; // small pad to avoid z-fighting with the face
+  const boxWorld = useRef(new THREE.Box3());
 
   useEffect(() => {
-    // clean up any existing helper
+    // cleanup any previous helper
     if (helperRef.current) {
       scene.remove(helperRef.current);
       helperRef.current.geometry.dispose();
@@ -32,16 +33,19 @@ function BoxOutline({
     }
     if (!visible || !object) return;
 
-    const helper = new THREE.Box3Helper(box.current, new THREE.Color(color).getHex());
-    // Always render on top of the stone
-    // @ts-ignore (LineBasicMaterial)
-    helper.material.depthTest = false;
+    const helper = new THREE.Box3Helper(
+      boxWorld.current,
+      new THREE.Color(color).getHex()
+    );
+    // @ts-ignore
+    helper.material.depthTest = true;
     // @ts-ignore
     helper.material.depthWrite = false;
-    helper.renderOrder = 9999;
+    helper.renderOrder = 10;
 
     helperRef.current = helper;
     scene.add(helper);
+
     return () => {
       if (helperRef.current) {
         scene.remove(helperRef.current);
@@ -55,28 +59,24 @@ function BoxOutline({
 
   useFrame(() => {
     const helper = helperRef.current;
-    const obj = object as THREE.Object3D | undefined;
+    const obj = object ?? undefined;
     if (!helper || !obj) return;
 
-    // Ensure latest transforms (incl. parent scaling from AutoFit / height changes)
     obj.updateWorldMatrix(true, true);
-
-    // World-space box from the *object and all its descendants*
-    box.current.setFromObject(obj);
-
-    if (box.current.isEmpty()) {
+    boxWorld.current.setFromObject(obj);
+    if (boxWorld.current.isEmpty()) {
       helper.visible = false;
       return;
     }
 
-    // Slightly inflate to avoid overlap with the face edges
-    const padded = box.current.clone().expandByScalar(EPS);
-
-    // @ts-ignore Box3Helper exposes .box
+    const padded = boxWorld.current.clone().expandByScalar(pad);
+    // @ts-ignore three’s helper has a .box
     helper.box.copy(padded);
     helper.visible = !!visible;
-    helper.updateMatrixWorld(true);
   });
 
   return null;
 }
+
+// also allow named import if you like
+export { BoxOutline as BoxOutline };

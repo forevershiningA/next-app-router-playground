@@ -1,4 +1,5 @@
 // app/select-shape/[slug]/page.tsx
+import { Suspense } from 'react';
 import { Boundary } from "#/ui/boundary";
 import { ProductCard } from "#/ui/product-card";
 import db from "#/lib/db";
@@ -16,19 +17,21 @@ function formatSlug(slug: string) {
 export default async function Page({
   params,
 }: {
-  params: Promise<RouteParams>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params; // ← IMPORTANT
+   const { slug } = await params;
   const materials = await db.material.findMany({ limit: 32 });
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {materials.map((material) => (
-          <ProductCard key={material.id} product={material} type={"material"} />
-        ))}
+    <Suspense fallback={null}>
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {materials.map((material) => (
+            <ProductCard key={material.id} product={material} type={"material"} />
+          ))}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }
 
