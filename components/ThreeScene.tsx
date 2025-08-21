@@ -136,87 +136,101 @@ function PreloadedHeadstone(props: {
 
 /* ---------- Base (frame-until-placed from TABLET bbox, in ASSEMBLY space) ---------- */
 function HeadstoneBaseAuto({
-  headstoneObject,   // tablet-only group
+  headstoneObject,   // tablet-only group (NOT including the base)
   wrapper,           // assembly group (parent of tablet + base)
   selected,
   onClick,
-  height = BASE_H,
-  depsKey,
+  height = 0.10,
+  depsKey,           // optional; kept for compatibility, not required
 }: {
   headstoneObject: React.RefObject<THREE.Object3D>;
   wrapper: React.RefObject<THREE.Object3D>;
   selected: boolean;
   onClick?: (e: any) => void;
   height?: number;
-  depsKey: string;
+  depsKey?: string;
 }) {
   const baseRef = useRef<THREE.Mesh>(null);
-  const placed = useRef(false);
-  const [visible, setVisible] = useState(false);
 
-  // reset when deps change
-  useEffect(() => {
-    placed.current = false;
-    setVisible(false);
-  }, [depsKey]);
+  // Track if we've ever had a valid transform, and targets for smooth updates
+  const hasTransform = useRef(false);
+  const targetPos = useRef(new THREE.Vector3());
+  const targetScale = useRef(new THREE.Vector3(1, height, 1));
+
+  const LERP = 0.25; // smoothing factor per frame
+  const EPS = 1e-3;
 
   useFrame(() => {
-    if (placed.current) return;
-
     const tablet = headstoneObject.current as THREE.Object3D | null;
     const wrap   = wrapper.current as THREE.Object3D | null;
     const base   = baseRef.current;
     if (!tablet || !wrap || !base) return;
 
-    // bbox from TABLET ONLY (doesn't include base)
+    // Read the TABLET bbox (base is excluded)
     tablet.updateWorldMatrix(true, true);
     const bbWorld = new THREE.Box3().setFromObject(tablet);
-    if (bbWorld.isEmpty()) return;
 
-    const min = bbWorld.min;
-    const max = bbWorld.max;
+    if (!bbWorld.isEmpty()) {
+      const min = bbWorld.min;
+      const max = bbWorld.max;
 
-    const hsWidthW = max.x - min.x;
-    const hsDepthW = max.z - min.z;
-    if (hsWidthW <= 0 || hsDepthW <= 0) return;
+      // Guard against transient zeros during rescale/remount
+      const hsWidthW = Math.max(max.x - min.x, 1e-6);
+      const hsDepthW = Math.max(max.z - min.z, 1e-6);
 
-    const baseWidthW = hsWidthW * 1.4;
-    const baseDepthW = Math.max(hsDepthW * 2.0, 0.2 * hsWidthW);
-    const EPS = 1e-3;
+      const baseWidthW = Math.max(hsWidthW * 1.4, 0.05);
+      const baseDepthW = Math.max(hsDepthW * 2.0, 0.05);
 
-    // base center in WORLD: under tablet, back-flush
-    const centerWorld = new THREE.Vector3(
-      (min.x + max.x) * 0.5,
-      min.y - height * 0.5 + EPS,
-      min.z + baseDepthW * 0.5
-    );
+      // World-space target center: under tablet, back flush
+      const centerWorld = new THREE.Vector3(
+        (min.x + max.x) * 0.5,
+        min.y - height * 0.5 + EPS,
+        min.z + baseDepthW * 0.5
+      );
 
-    // world → WRAPPER local (since base is child of wrapper)
-    wrap.updateWorldMatrix(true, false);
-    const invWrapper = new THREE.Matrix4().copy(wrap.matrixWorld).invert();
-    const posLocal   = centerWorld.clone().applyMatrix4(invWrapper);
+      // World → wrapper local (the base lives under wrapper)
+      wrap.updateWorldMatrix(true, false);
+      const invWrapper = new THREE.Matrix4().copy(wrap.matrixWorld).invert();
+      const posLocal = centerWorld.applyMatrix4(invWrapper);
 
-    const s = new THREE.Vector3();
-    wrap.getWorldScale(s);
+      const s = new THREE.Vector3();
+      wrap.getWorldScale(s);
 
-    base.position.copy(posLocal);
-    base.scale.set(
-      baseWidthW / Math.max(1e-9, s.x),
-      height      / Math.max(1e-9, s.y),
-      baseDepthW  / Math.max(1e-9, s.z)
-    );
+      targetPos.current.copy(posLocal);
+      targetScale.current.set(
+        baseWidthW / Math.max(1e-9, s.x),
+        height      / Math.max(1e-9, s.y),
+        baseDepthW  / Math.max(1e-9, s.z)
+      );
 
-    placed.current = true;
-    setVisible(true);
+      if (!hasTransform.current) {
+        // First valid frame: snap to target, show immediately (no flicker)
+        base.position.copy(targetPos.current);
+        base.scale.copy(targetScale.current);
+        base.visible = true;
+        hasTransform.current = true;
+      }
+    }
+
+    // If we’ve never had a valid transform, keep hidden (initial load only)
+    if (!hasTransform.current) {
+      base.visible = false;
+      return;
+    }
+
+    // Smoothly follow target transforms; never hide during updates
+    base.position.lerp(targetPos.current, LERP);
+    base.scale.lerp(targetScale.current, LERP);
+    base.visible = true;
   });
 
   return (
     <mesh
       ref={baseRef}
-      visible={visible}
       onClick={onClick}
       castShadow
       receiveShadow
+      // keep visible managed in the frame loop
     >
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color="#212529" metalness={0.1} roughness={0.55} />
