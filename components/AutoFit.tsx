@@ -8,7 +8,7 @@ import { useHeadstoneStore } from "#/lib/headstone-store";
 export default function AutoFit({
   target,
   margin = 1.15,
-  baseHeight = 0, // 👈 NEW: meters (e.g. 0.10 for 100 mm)
+  baseHeight = 0,
 }: {
   target: React.RefObject<THREE.Object3D>;
   margin?: number;
@@ -17,13 +17,12 @@ export default function AutoFit({
   const { camera, controls } = useThree() as any;
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const widthMm  = useHeadstoneStore((s) => s.widthMm);
+  const checkMobile =
+    /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
+      navigator.userAgent
+    );
 
   React.useEffect(() => {
-    const checkMobile =
-      /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
-        navigator.userAgent
-      );
-
     const obj = target.current;
     if (!obj) return;
 

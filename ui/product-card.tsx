@@ -62,7 +62,7 @@ export function ProductCard<E extends ElementType = "div">({
       {...(rest as any)}
       className={clsx("group flex flex-col gap-2.5", className)}
     >
-      <div className="overflow-hidden rounded-md bg-gray-900/50 p-8 group-hover:bg-gray-900">
+      <div className="overflow-hidden bg-gray-900/50 p-4 group-hover:bg-gray-900">
         <Image
           className="pointer"
           src={`/shop/${product.image}`}
@@ -83,10 +83,8 @@ export function ProductCard<E extends ElementType = "div">({
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 text-center">
         <h2>{product.name}</h2>
-        <div className="h-2 w-4/5 rounded-full bg-gray-800" />
-        <div className="h-2 w-1/3 rounded-full bg-gray-800" />
       </div>
 
       {children}
@@ -99,7 +97,7 @@ export function ProductCardSkeleton() {
     <div className="group flex flex-col gap-2.5">
       <div
         className={clsx(
-          "aspect-square overflow-hidden rounded-md bg-gray-900/50",
+          "aspect-square overflow-hidden bg-gray-900/50",
           "relative before:absolute before:inset-0",
           "before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent",
           "before:translate-x-[-50%] before:opacity-0",
@@ -107,8 +105,8 @@ export function ProductCardSkeleton() {
         )}
       />
       <div className="flex flex-col gap-2">
-        <div className="h-2 w-4/5 rounded-full bg-gray-800" />
-        <div className="h-2 w-1/3 rounded-full bg-gray-800" />
+        <div className="h-2 w-4/5 bg-gray-800" />
+        <div className="h-2 w-1/3 bg-gray-800" />
       </div>
     </div>
   );

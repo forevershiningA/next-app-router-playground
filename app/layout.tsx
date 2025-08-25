@@ -6,6 +6,7 @@ import { GlobalNav } from '#/ui/global-nav';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import ThreeScene from '#/components/ThreeScene';
+import SceneOverlayHost from "#/components/SceneOverlayHost";
 import { Suspense } from "react";
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
@@ -53,6 +54,7 @@ export default function RootLayout({
                 <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
               }
             >
+              <SceneOverlayHost /> {/* ← one host, one overlay */}
               <ThreeScene />
             </Suspense>
             <div className="pt-4 pb-10">

@@ -25,7 +25,7 @@ export default async function Page({
   return (
     <Suspense fallback={null}>
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-3 gap-6 lg:grid-cols-3">
         {shapes.map((shape) => (
           <ProductCard key={shape.id} product={shape} type={"shape"} />
         ))}

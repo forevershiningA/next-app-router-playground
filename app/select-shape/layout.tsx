@@ -1,32 +1,30 @@
-import React, { Suspense } from 'react';
-import db from '#/lib/db';
-import ShapeTitle from './shape-title';
-import type { Metadata } from 'next';
-import type { Product } from '#/lib/db';
-
-export const experimental_ppr = false;
+import React from "react";
+import { type Metadata } from "next";
+import db from "#/lib/db";
+import ProductCard from "#/ui/product-card";
+import SceneOverlayController from "#/components/SceneOverlayController";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const demo = await db.demo.find({ where: { slug: 'select-shape' } });
-  const title = demo?.name ?? 'Select Shape';
-  return {
-    title,
-    openGraph: { title, images: [`/api/og?title=${encodeURIComponent(title)}`] },
-  };
+  const demo = db.demo.find({ where: { slug: "select-shape" } });
+  return { title: demo.name, openGraph: { title: demo.name, images: [`/api/og?title=${demo.name}`] } };
 }
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  // Pull shapes but pass as products to match <ShapeTitle> props
-  const products = (await db.shape.findMany({ limit: 32 })) as unknown as Product[];
+  // server-side data, pass to a small client list if needed
+  const shapes = await db.shape.findMany({ limit: 32 }); // a few featured items
 
   return (
-    <div className="p-8 pt-0">
-      <Suspense fallback={null}>
-        <ShapeTitle products={products} />
-      </Suspense>
-      <div className="pt-10">
-        <Suspense fallback={null}>{children}</Suspense>
-      </div>
+    <div className="relative w-full">
+      <SceneOverlayController section="shape" title="Select Shape">
+        <div className="text-sm leading-relaxed text-white/85 mb-3">
+          Pick a headstone outline. Click any card to apply it.
+        </div>
+        <div className="grid grid-cols-3 gap-3 max-h-[320px] overflow-auto pr-1">
+          {shapes.map((p) => (
+            <ProductCard key={p.id} product={p} type="shape" />
+          ))}
+        </div>
+      </SceneOverlayController>
     </div>
   );
 }

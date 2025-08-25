@@ -99,12 +99,13 @@ export default function InputSlider({ type }: InputSliderProps) {
           {type === "height" ? <HeightIcon /> : <WidthIcon />}
         </Box>
 
-        <Box sx={{ flexGrow: 1, minWidth: 240 }}>
+         <Box sx={{ flexShrink: 0, width: { xs: 140, sm: 170, md: 200 } }}>
           <Slider
             value={draft}
             min={MIN}
             max={MAX}
             step={1}
+            sx={{ width: '100%' }}
             onChange={(_, v) => {
               const n = Array.isArray(v) ? v[0] : Number(v);
               setDraft(n);

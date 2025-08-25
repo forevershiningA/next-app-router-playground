@@ -1,39 +1,30 @@
-import React, { Suspense } from 'react';
-import db from '#/lib/db';
-import { Mdx } from '#/ui/codehike';
-import readme from './readme.mdx';
-import MaterialTitle from './material-title';
-import type { Metadata } from 'next';
-
-export const experimental_ppr = false;
-
-type DemoItem = { slug: string; name: string; description: string };
-function isDemoItem(x: any): x is DemoItem {
-  return x && typeof x.slug === 'string' && typeof x.name === 'string' && typeof x.description === 'string';
-}
+import React from "react";
+import { type Metadata } from "next";
+import db from "#/lib/db";
+import ProductCard from "#/ui/product-card";
+import SceneOverlayController from "#/components/SceneOverlayController";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const all = db.demo.findMany();
-  const items: DemoItem[] = all.flatMap((cat: any) => cat?.items ?? []).filter(isDemoItem);
-  const found = items.find((d) => d.slug === 'material' || d.slug === 'select-material') ?? null;
-  const title = found?.name ?? 'Select Material';
-  return {
-    title,
-    openGraph: { title, images: [`/api/og?title=${encodeURIComponent(title)}`] },
-  };
+  const demo = db.demo.find({ where: { slug: "select-material" } });
+  return { title: demo.name, openGraph: { title: demo.name, images: [`/api/og?title=${demo.name}`] } };
 }
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const materials = await db.material.findMany({ limit: 32 });
+
   return (
-    <div className="p-8 pt-0">
-      <Suspense fallback={null}>
-        <MaterialTitle materials={materials} />
-      </Suspense>
-      <Mdx source={readme} collapsed={false} />
-      <div className="pt-10">
-        <Suspense fallback={null}>{children}</Suspense>
-      </div>
+    <div className="relative w-full">
+
+      <SceneOverlayController section="material" title="Select Material">
+        <div className="text-sm leading-relaxed text-white/85 mb-3">
+          Choose a stone material to preview on the headstone.
+        </div>
+        <div className="grid grid-cols-3 gap-3 max-h-[320px] overflow-auto pr-1">
+          {materials.map((p) => (
+            <ProductCard key={p.id} product={p} type="material" />
+          ))}
+        </div>
+      </SceneOverlayController>
     </div>
   );
 }
