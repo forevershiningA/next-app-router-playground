@@ -55,7 +55,7 @@ export function ProductCard<E extends ElementType = "div">({
     (type === "shape"
       ? SHAPES_BASE
       : type === "material"
-      ? "/materials/"
+      ? "/textures/forever/l/"
       : "/products/");
   
   const routeBase =

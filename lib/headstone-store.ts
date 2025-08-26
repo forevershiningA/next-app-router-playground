@@ -1,12 +1,17 @@
 // lib/headstone-store.ts
 "use client";
+
 import { create } from "zustand";
+import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
+
+const TEX_BASE = "/textures/forever/l/";
+const DEFAULT_TEX = "Imperial-Red.jpg";
 
 const MIN = 300;
 const MAX = 1200;
 const clamp = (v: number) => Math.min(MAX, Math.max(MIN, Math.round(v)));
 
-type Part = "headstone" | "base" | null;
+export type Part = "headstone" | "base" | null;
 
 type HeadstoneState = {
   productUrl: string | null;
@@ -30,20 +35,34 @@ type HeadstoneState = {
 
 export const useHeadstoneStore = create<HeadstoneState>()((set) => ({
   productUrl: null,
-  setProductUrl: (productUrl) => set({ productUrl }),
+  setProductUrl(productUrl) {
+    set({ productUrl });
+  },
 
-  shapeUrl: null,
-  setShapeUrl: (shapeUrl) => set({ shapeUrl }),
+  // Default SVG: /shapes/headstones/serpentine.svg
+  shapeUrl: DEFAULT_SHAPE_URL,
+  setShapeUrl(shapeUrl) {
+    set({ shapeUrl });
+  },
 
-  materialUrl: null,
-  setMaterialUrl: (materialUrl) => set({ materialUrl }),
+  // Default texture: /textures/forever/l/Imperial-Red.jpg
+  materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
+  setMaterialUrl(materialUrl) {
+    set({ materialUrl });
+  },
 
   widthMm: 900,
-  setWidthMm: (v) => set({ widthMm: clamp(v) }),
+  setWidthMm(v) {
+    set({ widthMm: clamp(v) });
+  },
 
   heightMm: 900,
-  setHeightMm: (v) => set({ heightMm: clamp(v) }),
+  setHeightMm(v) {
+    set({ heightMm: clamp(v) });
+  },
 
   selected: null,
-  setSelected: (p) => set({ selected: p }),
+  setSelected(p) {
+    set({ selected: p });
+  },
 }));

@@ -44,7 +44,6 @@ export default function HeadstoneInscription({
     return -hLocal / 2; // our mesh uses top=0 before flip; center = -H/2
   }, [approxHeight, headstone.unitsPerMeter]);
 
-  // SINGLE pos state (← this replaces both previous declarations)
   const [pos, setPos] = React.useState<THREE.Vector3>(
     () => new THREE.Vector3(0, initialYLocal, headstone.frontZ + liftLocal)
   );

@@ -34,8 +34,8 @@ type Props = {
   sideRepeatX?: number;        // default 8
   sideRepeatY?: number;        // default 1 (for depth)
 
-  targetHeight?: number;       // world height
-  targetWidth?: number;        // world width
+  targetHeight?: number;       // world height (meters)
+  targetWidth?: number;        // world width (meters)
 
   preserveTop?: boolean;       // keep top; adjust bottom only
   bevel?: boolean;
@@ -43,7 +43,6 @@ type Props = {
   showEdges?: boolean;
 
   meshProps?: ThreeElements["mesh"];
-  //meshProps?: JSX.IntrinsicElements["mesh"];
   children?: (api: HeadstoneAPI) => React.ReactNode;
 };
 
