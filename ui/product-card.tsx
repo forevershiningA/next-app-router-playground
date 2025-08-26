@@ -18,17 +18,17 @@ export type PolymorphicProps<E extends ElementType, P = {}> = PropsWithChildren<
   as?: E;
 } & Omit<ComponentPropsWithoutRef<E>, keyof P | "as" | "children">;
 
-type Kind = "shape" | "material";
+type CardKind = "shape" | "material" | "product";
 
 type ProductCardOwnProps = {
   product: Product;
   animateEnter?: boolean;
-  type?: Kind; // "shape" | "material" (default: "shape")
+  type?: CardKind;     
   assetBase?: string;
   routeBase?: string;
   className?: string;
   children?: ReactNode;
-  onPick?: (args: { product: Product; slug: string; type: Kind; selectedUrl: string }) => void;
+  onPick?: (args: { product: Product; slug: string; type: CardKind; selectedUrl: string }) => void;
 };
 
 type ProductCardProps<E extends ElementType> = PolymorphicProps<E, ProductCardOwnProps>;
@@ -45,14 +45,26 @@ export function ProductCard<E extends ElementType = "div">({
   children,
   ...rest
 }: ProductCardProps<E>) {
-  // WIDEN to avoid polymorphic 'children: never' issues
   const Comp: any = as || "div";
 
   const router = useRouter();
-  const { setShapeUrl, setMaterialUrl } = useHeadstoneStore();
+  const { setProductUrl, setShapeUrl, setMaterialUrl } = useHeadstoneStore();
 
-  const assetBase = assetBaseProp ?? (type === "shape" ? SHAPES_BASE : "/materials/");
-  const routeBase = routeBaseProp ?? (type === "shape" ? "/select-shape/" : "/select-material/");
+ const assetBase =
+    assetBaseProp ??
+    (type === "shape"
+      ? SHAPES_BASE
+      : type === "material"
+      ? "/materials/"
+      : "/products/");
+  
+  const routeBase =
+    routeBaseProp ??
+    (type === "shape"
+      ? "/select-shape/"
+      : type === "material"
+      ? "/select-material/"
+      : "/select-product/");
 
   const slug = toSlug(product.name);
   const selectedUrl = assetBase + product.image;
@@ -74,6 +86,7 @@ export function ProductCard<E extends ElementType = "div">({
             if (onPick) {
               onPick({ product, slug, type, selectedUrl });
             } else {
+              if (type === "product") setProductUrl(selectedUrl);
               if (type === "shape") setShapeUrl(selectedUrl);
               if (type === "material") setMaterialUrl(selectedUrl);
               window.scrollTo({ top: 0 });

@@ -9,6 +9,9 @@ const clamp = (v: number) => Math.min(MAX, Math.max(MIN, Math.round(v)));
 type Part = "headstone" | "base" | null;
 
 type HeadstoneState = {
+  productUrl: string | null;
+  setProductUrl: (url: string) => void;
+
   shapeUrl: string | null;
   setShapeUrl: (url: string) => void;
 
@@ -26,6 +29,9 @@ type HeadstoneState = {
 };
 
 export const useHeadstoneStore = create<HeadstoneState>()((set) => ({
+  productUrl: null,
+  setProductUrl: (productUrl) => set({ productUrl }),
+
   shapeUrl: null,
   setShapeUrl: (shapeUrl) => set({ shapeUrl }),
 
