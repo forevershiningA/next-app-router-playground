@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import db from '#/lib/db';
 import { Boundary } from '#/ui/boundary';
 import { ProductCard } from '#/ui/product-card';
-import BuggyButton from '#/app/error/_ui/buggy-button';
 
 export async function generateStaticParams() {
   const categories = db.category.findMany();
@@ -35,9 +34,6 @@ export default async function Page({
             </span>
           </h1>
 
-          <div className="flex">
-            <BuggyButton />
-          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

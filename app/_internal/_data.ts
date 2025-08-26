@@ -69,20 +69,17 @@ const categories: Category[] = [
 ];
 
 const products: Product[] = [
-  { id: '1', name: 'Serpentine', image: 'serpentine.svg', category: '1' },
-  { id: '2', name: 'Cropped Peak', image: 'cropped_peak.svg', category: '1' },
-  { id: '3', name: 'Curved Gable', image: 'curved_gable.svg', category: '1' },
-  { id: '4', name: 'Curved Peak', image: 'curved_peak.svg', category: '1' },
-  { id: '5', name: 'Curved Top', image: 'curved_top.svg', category: '1' },
-  { id: '6', name: 'Gable', image: 'gable.svg', category: '1' },
-  { id: '7', name: 'Half Roung', image: 'half_round.svg', category: '1' },
-  { id: '8', name: 'Left Wave', image: 'left_wave.svg', category: '1' },
-  { id: '9', name: 'Peak', image: 'peak.svg', category: '1' },
-  { id: '10', name: 'Right Wave', image: 'right_wave.svg', category: '1' },
-  { id: '11', name: 'Square', image: 'square.svg', category: '1' },
-  { id: '12', name: 'Headstone 1', image: 'headstone_1.svg', category: '1' },
-  { id: '13', name: 'Headstone 2', image: 'headstone_2.svg', category: '1' },
-  { id: '14', name: 'Buddha', image: 'buddha.svg', category: '1' },
+  { id: '4', name: 'Laser-etched Black Granite Headstone', image: 'laser-etched-black-granite-headstone.webp', category: '1' },
+  { id: '5', name: 'Bronze Plaque', image: 'bronze-plaque.webp', category: '1' },
+  { id: '22', name: 'Laser-etched Black Granite Mini Headstone', image: 'laser-etched-black-granite-mini-headstone.webp', category: '1' },
+  { id: '30', name: 'Laser-etched Black Granite Colour', image: 'laser-etched-black-granite-plaque.webp', category: '1' },
+  { id: '32', name: 'Full Colour Plaque', image: 'full-color-plaque.webp', category: '1' },
+  { id: '34', name: 'Traditional Engraved Plaque', image: 'traditional-engraved-plaque.webp', category: '1' },
+  { id: '52', name: 'YAG Lasered Stainless Steel Plaque', image: 'yag-lasered-stainless-steel-plaque.webp', category: '1' },
+  { id: '124', name: 'Traditional Engraved Headstone', image: 'traditional-engraved-headstone.webp', category: '1' },
+  { id: '100', name: 'Laser-etched Black Granite Full Monument', image: 'laser-etched-black-granite-full-monument.webp', category: '1' },
+  { id: '101', name: 'Traditional Engraved Full Monument', image: 'traditional-engraved-full-monument.webp', category: '1' },
+
 ];
 
 const shapes: Shape[] = [
@@ -140,6 +137,11 @@ const demos = [
     name: 'Start',
     items: [
       {
+        slug: 'select-product',
+        name: 'Select Product',
+        description: 'Create Error UI for specific parts of an app',
+      },
+      {
         slug: 'select-shape',
         name: 'Select Shape',
         description: 'Products come in a range of shapes for you to choose from. Custom shapes are available upon request. Please call us for more information.',
@@ -157,18 +159,13 @@ const demos = [
     ],
   },
  {
-    name: 'File Conventions',
+    name: 'Personalization',
     items: [
       {
-        slug: 'loading',
-        name: 'Loading',
+        slug: 'inscriptions',
+        name: 'Inscriptions',
         description:
-          'Create meaningful Loading UI for specific parts of an app',
-      },
-      {
-        slug: 'error',
-        name: 'Error',
-        description: 'Create Error UI for specific parts of an app',
+          'Inscriptions commemorate the lost family member or friend in an individual way.',
       },
       {
         slug: 'not-found',

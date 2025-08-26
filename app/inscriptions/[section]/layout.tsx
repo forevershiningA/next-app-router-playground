@@ -1,17 +1,9 @@
+'use cache';
+
 import { notFound } from 'next/navigation';
 import db from '#/lib/db';
 import { Boundary } from '#/ui/boundary';
 import { Tabs } from '#/ui/tabs';
-import { Metadata } from 'next';
-
-export async function generateMetadata(): Promise<Metadata> {
-  const demo = db.demo.find({ where: { slug: 'error' } });
-
-  return {
-    title: demo.name,
-    openGraph: { title: demo.name, images: [`/api/og?title=${demo.name}`] },
-  };
-}
 
 export default async function Layout({
   params,
@@ -26,8 +18,8 @@ export default async function Layout({
     notFound();
   }
 
-  const demo = db.demo.find({ where: { slug: 'error' } });
-  const categories = db.category.findMany({ where: { section: section.id } });
+  const demo = db.demo.find({ where: { slug: 'select-product' } });
+  const categories = db.category.findMany({ where: { section: section?.id } });
 
   return (
     <Boundary label="[section]/layout.tsx" className="flex flex-col gap-9">

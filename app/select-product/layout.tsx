@@ -7,7 +7,7 @@ import Readme from './readme.mdx';
 import { Mdx } from '#/ui/codehike';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const demo = db.demo.find({ where: { slug: 'error' } });
+  const demo = db.demo.find({ where: { slug: 'select-product' } });
 
   return {
     title: demo.name,
@@ -20,7 +20,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const demo = db.demo.find({ where: { slug: 'error' } });
+  const demo = db.demo.find({ where: { slug: 'select-product' } });
   const sections = db.section.findMany();
 
   return (
@@ -29,22 +29,7 @@ export default async function Layout({
         <Mdx source={Readme} collapsed={true} />
       </Boundary>
 
-      <Boundary
-        label="layout.tsx"
-        kind="solid"
-        animateRerendering={false}
-        className="flex flex-col gap-9"
-      >
-        <Tabs
-          basePath={`/${demo.slug}`}
-          items={[
-            { text: 'Home' },
-            ...sections.map((x) => ({ text: x.name, slug: x.slug })),
-          ]}
-        />
-
-        {children}
-      </Boundary>
+      {children}
     </>
   );
 }

@@ -1,37 +1,55 @@
 // components/three/headstone/ShapeSwapper.tsx
 "use client";
 
-import React, { Suspense, useMemo, useState, useEffect } from "react";
-import type * as THREE from "three";
+import * as React from "react";
+import * as THREE from "three";
 import { useThree, useLoader } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
-import { useHeadstoneStore } from "#/lib/headstone-store";
-import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
+import AutoFit from "../../AutoFit"; // re-export points to components/three/AutoFit
 import SvgHeadstone from "../../SvgHeadstone";
 import HeadstoneInscription from "../../HeadstoneInscription";
-import AutoFit from "../../AutoFit";
+import { useHeadstoneStore } from "#/lib/headstone-store";
+import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
 
+/* ---------- constants ---------- */
 const TEX_BASE = "/textures/forever/l/";
 const DEFAULT_TEX = "Imperial-Red.jpg";
-const BASE_H = 2;
+const BASE_H = 2; // scene units (100mm)
 
-/* ---------- small, centered loader (Html → portal to #scene-root) ---------- */
+/* ---------- tiny preloaders (no DOM output) ---------- */
+function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
+  useLoader(SVGLoader, url);
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => onReady?.());
+    return () => cancelAnimationFrame(id);
+  }, [onReady]);
+  return null;
+}
+
+function PreloadTexture({ url, onReady }: { url: string; onReady?: () => void }) {
+  // drei's useTexture
+  useTexture(url);
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => onReady?.());
+    return () => cancelAnimationFrame(id);
+  }, [onReady]);
+  return null;
+}
+
+/* ---------- centered white loader, portaled to #scene-root ---------- */
 function InlineCanvasLoader({ show }: { show: boolean }) {
   const [mounted, setMounted] = React.useState(show);
   const [visible, setVisible] = React.useState(show);
-
-  // <-- hold the portal container as a RefObject<HTMLElement>
   const portalRef = React.useRef<HTMLElement | null>(null);
 
-  // find #scene-root once on mount
   React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    portalRef.current = document.getElementById("scene-root");
+    if (typeof window !== "undefined") {
+      portalRef.current = document.getElementById("scene-root");
+    }
   }, []);
 
-  // fade in/out
   React.useEffect(() => {
     if (show) {
       setMounted(true);
@@ -50,7 +68,7 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
     <Html
       fullscreen
       transform={false}
-      portal={portalRef as React.RefObject<HTMLElement>} // ✅ ref, not element
+      portal={portalRef as React.RefObject<HTMLElement>}
       zIndexRange={[1000, 0]}
     >
       <div
@@ -66,59 +84,61 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
   );
 }
 
-/* ---------- hidden preloaders (suspend locally, not at Canvas) ---------- */
-function PreloadShape({ url, onReady }: { url: string; onReady: () => void }) {
-  useLoader(SVGLoader, url); // suspends here until loaded
-  useEffect(() => onReady(), [onReady]); // mount => ready
-  return null;
-}
-
-function PreloadTexture({ url, onReady }: { url: string; onReady: () => void }) {
-  useTexture([url]); // suspends here until loaded
-  useEffect(() => onReady(), [onReady]); // mount => ready
-  return null;
-}
-
-export default function ShapeSwapper({
-  tabletRef,
-  onSelectHeadstone,
-}: {
+/* ---------- props ---------- */
+export interface ShapeSwapperProps {
   tabletRef: React.RefObject<THREE.Object3D>;
-  onSelectHeadstone: () => void;
-}) {
-  const heightMm     = useHeadstoneStore((s: any) => s.heightMm);
-  const widthMm      = useHeadstoneStore((s: any) => s.widthMm);
-  const requestedUrl = useHeadstoneStore((s: any) => s.shapeUrl) || DEFAULT_SHAPE_URL;
-  const materialUrl  = useHeadstoneStore((s: any) => s.materialUrl);
+  onSelectHeadstone?: () => void;
+}
 
-  const heightM = useMemo(() => heightMm / 100, [heightMm]);
-  const widthM  = useMemo(() => widthMm  / 100, [widthMm]);
-
-  const requestedTex = useMemo(() => {
-    const f = (materialUrl?.split("/").pop() ?? DEFAULT_TEX).replace(/\.(png|webp|jpeg)$/i, ".jpg");
-    return TEX_BASE + f;
-  }, [materialUrl]);
-
-  // what’s currently visible
-  const [visibleUrl, setVisibleUrl] = useState(requestedUrl);
-  const [visibleTex, setVisibleTex] = useState(requestedTex);
-
+/* ---------- main ---------- */
+export default function ShapeSwapper({ tabletRef, onSelectHeadstone }: ShapeSwapperProps) {
   const { invalidate } = useThree();
 
-  // are we warming either a new shape or a new texture?
-  const loading = requestedUrl !== visibleUrl || requestedTex !== visibleTex;
+  // Store state
+  const heightMm = useHeadstoneStore((s: any) => s.heightMm);
+  const widthMm  = useHeadstoneStore((s: any) => s.widthMm);
+  const shapeUrl = useHeadstoneStore((s: any) => s.shapeUrl);
+  const materialUrl = useHeadstoneStore((s: any) => s.materialUrl);
+
+  const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
+  const widthM  = React.useMemo(() => widthMm  / 100, [widthMm]);
+
+  // Desired (requested) assets from store
+  const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
+  const requestedTex = React.useMemo(() => {
+    const file = materialUrl?.split("/").pop() ?? DEFAULT_TEX;
+    const jpg = file.replace(/\.(png|webp|jpeg)$/i, ".jpg");
+    return TEX_BASE + jpg;
+  }, [materialUrl]);
+
+  // Actually visible assets (lag behind while we preload)
+  const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);
+  const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
+
+  // Force AutoFit refit once geometry/texture are truly visible
+  const [fitTick, setFitTick] = React.useState(0);
+
+  // Show loader if we're swapping either shape or texture
+  const swapping = requestedUrl !== visibleUrl || requestedTex !== visibleTex;
+
+  // On first paint, bump AutoFit once (in case assets were already ready)
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => setFitTick((n) => n + 1));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
     <>
-      {/* Visible tablet – never suspends because we only swap to preloaded URLs */}
+      {/* Tablet group hosts the visible headstone */}
       <group
         ref={tabletRef}
         onPointerDown={(e) => {
           e.stopPropagation();
-          onSelectHeadstone();
+          onSelectHeadstone?.();
         }}
       >
         <SvgHeadstone
+          key={`${visibleUrl}::${visibleTex}`}
           url={visibleUrl}
           depth={100}
           scale={0.01}
@@ -131,6 +151,7 @@ export default function ShapeSwapper({
           targetWidth={widthM}
           preserveTop
           showEdges={false}
+          meshProps={{}}
         >
           {(api: any) => (
             <HeadstoneInscription
@@ -146,36 +167,46 @@ export default function ShapeSwapper({
             />
           )}
         </SvgHeadstone>
-        <AutoFit target={tabletRef} baseHeight={BASE_H} />
+
+        {/* Smooth framing – runs on init, on size changes, and when fitTick bumps */}
+        <AutoFit
+          target={tabletRef}
+          baseHeight={BASE_H}  // scene units
+          margin={1.15}
+          pad={0.04}
+          trigger={fitTick}
+        />
       </group>
 
-      {/* Hidden preloaders — each suspends locally and calls onReady when done */}
+      {/* Preloaders for requested assets (update visible + nudge AutoFit when ready) */}
       {requestedUrl !== visibleUrl && (
-        <Suspense fallback={null}>
+        <React.Suspense fallback={null}>
           <PreloadShape
             url={requestedUrl}
             onReady={() => {
               setVisibleUrl(requestedUrl);
+              requestAnimationFrame(() => setFitTick((n) => n + 1));
               invalidate();
             }}
           />
-        </Suspense>
+        </React.Suspense>
       )}
 
       {requestedTex !== visibleTex && (
-        <Suspense fallback={null}>
+        <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
             onReady={() => {
               setVisibleTex(requestedTex);
+              requestAnimationFrame(() => setFitTick((n) => n + 1));
               invalidate();
             }}
           />
-        </Suspense>
+        </React.Suspense>
       )}
 
-      {/* Centered loader overlay while either preloader is active */}
-      <InlineCanvasLoader show={loading} />
+      {/* Centered loader while swapping */}
+      <InlineCanvasLoader show={swapping} />
     </>
   );
 }
