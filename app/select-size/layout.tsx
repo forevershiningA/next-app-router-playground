@@ -3,21 +3,29 @@ import { type Metadata } from "next";
 import db from "#/lib/db";
 import { Mdx } from "#/ui/codehike";
 import Readme from "./readme.mdx";
-import InputSlider from "#/ui/InputSlider";
+import InputSlider from "#/ui/InputSlider"; // or "#/ui/input-slider" in your repo
 import SceneOverlayController from "#/components/SceneOverlayController";
 
 export async function generateMetadata(): Promise<Metadata> {
   const demo = db.demo.find({ where: { slug: "select-size" } });
-  return { title: demo.name, openGraph: { title: demo.name, images: [`/api/og?title=${demo.name}`] } };
+  return {
+    title: demo.name,
+    openGraph: { title: demo.name, images: [`/api/og?title=${demo.name}`] },
+  };
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative w-full">
-      <SceneOverlayController section="size">
+      <SceneOverlayController
+        section="size"
+        title="Select Size"
+        persistKey="size"
+      >
         <p className="text-sm leading-relaxed text-white/85 mb-3">
-          Choose the headstone width &amp; height in millimetres. Thickness is computed from size;
-          cemeteries may have regulations on allowable dimensions.
+          Choose the headstone width &amp; height in millimetres. Thickness is
+          computed from size; cemeteries may have regulations on allowable
+          dimensions.
         </p>
         <div className="space-y-3">
           <InputSlider type="width" />
@@ -34,6 +42,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Suspense>
         </div>
       </div>
+      {children}
     </div>
   );
 }

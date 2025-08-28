@@ -31,6 +31,12 @@ type HeadstoneState = {
 
   selected: Part;
   setSelected: (p: Part) => void;
+
+  activeInscriptionText: string;
+  setActiveInscriptionText: (t: string) => void;
+
+  openInscriptions: () => void;
+
 };
 
 export const useHeadstoneStore = create<HeadstoneState>()((set) => ({
@@ -65,4 +71,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set) => ({
   setSelected(p) {
     set({ selected: p });
   },
+
+  activeInscriptionText: "In Loving Memory",
+  setActiveInscriptionText: (activeInscriptionText) => set({ activeInscriptionText }),
+
+  openInscriptions: () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("fs:open-overlay", { detail: { section: "inscriptions" } })
+      );
+    }
+  },
+
 }));

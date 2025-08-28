@@ -5,18 +5,19 @@ import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import type { HeadstoneAPI } from "./SvgHeadstone";
+import { useHeadstoneStore } from "#/lib/headstone-store"; // << ADD THIS
 
 type Props = {
   headstone: HeadstoneAPI;
   text?: string;
-  height?: number;        // world meters
+  height?: number;
   color?: string;
-  font?: string;          // /fonts/YourFont.ttf (TTF/OTF recommended)
-  lift?: number;          // world meters off the face
+  font?: string;
+  lift?: number;
   editable?: boolean;
   selected?: boolean;
   onSelect?: () => void;
-  approxHeight?: number;  // world meters (use same as targetHeight)
+  approxHeight?: number;
 };
 
 export default function HeadstoneInscription({
@@ -37,11 +38,14 @@ export default function HeadstoneInscription({
   const stone = headstone.mesh.current;
   const liftLocal = lift * headstone.unitsPerMeter;
 
-  // initial centered Y so there’s no “bottom flash” on first frame
+  // store hooks to open overlay + prefill
+  const setActiveText = useHeadstoneStore((s: any) => s.setActiveInscriptionText);
+  const openInscriptions = useHeadstoneStore((s: any) => s.openInscriptions);
+
   const initialYLocal = React.useMemo(() => {
     if (!approxHeight) return 0;
     const hLocal = approxHeight * headstone.unitsPerMeter;
-    return -hLocal / 2; // our mesh uses top=0 before flip; center = -H/2
+    return -hLocal / 2;
   }, [approxHeight, headstone.unitsPerMeter]);
 
   const [pos, setPos] = React.useState<THREE.Vector3>(
@@ -49,7 +53,6 @@ export default function HeadstoneInscription({
   );
   const [dragging, setDragging] = React.useState(false);
 
-  // recenter precisely when geometry is ready
   React.useEffect(() => {
     if (!stone) return;
     const id = requestAnimationFrame(() => {
@@ -76,11 +79,10 @@ export default function HeadstoneInscription({
     if (!hit) return;
     const local = hit.point.clone();
     stone.worldToLocal(local);
-    local.z = headstone.frontZ + liftLocal; // stick to front plane
+    local.z = headstone.frontZ + liftLocal;
     setPos(local);
   }, [camera, size.width, size.height, raycaster, stone, headstone.frontZ, liftLocal, mouse]);
 
-  // drag loop (disables orbit while dragging)
   React.useEffect(() => {
     if (!dragging) return;
     const onMove = (e: PointerEvent) => placeFromClientXY(e.clientX, e.clientY);
@@ -102,10 +104,9 @@ export default function HeadstoneInscription({
   }, [dragging, placeFromClientXY, gl.domElement, controls]);
 
   return (
-    // flip Y so text reads upright in the flipped headstone group
     <group position={[pos.x, pos.y, pos.z]} scale={[1, -1, 1]}>
       <Text
-        font={font}                      // e.g. "/fonts/YourFont.ttf"
+        font={font}
         color={color}
         anchorX="center"
         anchorY="middle"
@@ -113,8 +114,12 @@ export default function HeadstoneInscription({
         outlineWidth={(selected ? 0.005 : 0.002) * headstone.unitsPerMeter}
         outlineColor={selected ? "#ffd54a" : "black"}
         onPointerDown={(e) => {
-          if (!editable) return;
           e.stopPropagation();
+          // Always sync panel text + open the overlay
+          setActiveText(text);
+          openInscriptions();
+
+          if (!editable) return;
           onSelect?.();
           setDragging(true);
         }}

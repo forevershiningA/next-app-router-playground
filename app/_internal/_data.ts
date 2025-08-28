@@ -24,6 +24,13 @@ export type Material = {
   category: string;
 };
 
+export type Font = {
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+};
+
 export type Section = {
   id: string;
   name: string;
@@ -130,6 +137,19 @@ const materials: Material[] = [
   { id: '28', name: 'Sapphire Brown', image: 'Saphire-Brown.jpg', category: '2' },
   { id: '29', name: 'Visage Blue', image: 'Vizage-Blue.jpg', category: '2' },
   { id: '30', name: 'White Carrara', image: 'White-Carrara.jpg', category: '2' },
+];
+
+const fonts: Font[] = [
+  { id: '1', name: 'Adorable', image: 'adorable.woff', category: '1' },
+  { id: '2', name: 'Arial', image: 'Arial.woff', category: '1' },
+  { id: '3', name: 'Chopin Script', image: 'chopinscript-webfont.woff', category: '1' },
+  { id: '4', name: 'Dobkin', image: 'DobkinPlain-webfont.woff', category: '1' },
+  { id: '5', name: 'Franklin Gothic', image: 'franklin.woff', category: '1' },
+  { id: '6', name: 'French Script', image: 'french.woff', category: '1' },
+  { id: '7', name: 'Garamond', image: 'garamond.woff', category: '1' },
+  { id: '8', name: 'Great Vibes', image: 'great_vibes.woff', category: '1' },
+  { id: '9', name: 'Lucida Calligraphy', image: 'lucida.woff', category: '1' },
+  { id: '10', name: 'Xirwena', image: 'xirwena1_0.woff', category: '1' },
 ];
 
 const demos = [
