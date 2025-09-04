@@ -8,11 +8,22 @@ type Props = {
   title: string;
   children: React.ReactNode;
   defaultCollapsed?: boolean;
+  /** If provided, we still fall back to the global key and mirror saves globally. */
   persistKey?: string;
   className?: string;
 };
 
 type Pos = { x: number; y: number };
+
+// in-memory cache to avoid a flash back to defaults between mounts
+declare global {
+  interface Window { __FS_OVERLAY_UI__?: { pos?: Pos } }
+}
+function getUI() {
+  if (typeof window === "undefined") return {};
+  if (!window.__FS_OVERLAY_UI__) window.__FS_OVERLAY_UI__ = {};
+  return window.__FS_OVERLAY_UI__;
+}
 
 export default function SceneOverlayController({
   section,
@@ -24,33 +35,91 @@ export default function SceneOverlayController({
 }: Props) {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
 
-  // Hydration-safe default; load persisted pos after mount
-  const [pos, setPos] = React.useState<Pos>({ x: 16, y: 80 });
+  // Keys
+  const globalKey = React.useMemo(() => `overlay-pos:_global`, []);
+  const specificKey = React.useMemo(
+    () => (persistKey ? `overlay-pos:${persistKey}` : null),
+    [persistKey]
+  );
+
+  // Initial from in-memory to prevent default flash
+  const initialPos: Pos =
+    (typeof window !== "undefined" && getUI().pos) || { x: 16, y: 80 };
+
+  const [pos, setPos] = React.useState<Pos>(initialPos);
+
+  // Load from section key first, else fall back to global
   React.useEffect(() => {
-    if (!persistKey) return;
     try {
-      const raw = window.localStorage.getItem(`overlay-pos:${persistKey}`);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Pos;
-        if (Number.isFinite(parsed?.x) && Number.isFinite(parsed?.y)) setPos(parsed);
+      let loaded: Pos | null = null;
+
+      if (specificKey) {
+        const raw = window.localStorage.getItem(specificKey);
+        if (raw) {
+          const parsed = JSON.parse(raw) as Pos;
+          if (Number.isFinite(parsed?.x) && Number.isFinite(parsed?.y)) {
+            loaded = parsed;
+          }
+        }
+      }
+
+      if (!loaded) {
+        const rawG = window.localStorage.getItem(globalKey);
+        if (rawG) {
+          const parsedG = JSON.parse(rawG) as Pos;
+          if (Number.isFinite(parsedG?.x) && Number.isFinite(parsedG?.y)) {
+            loaded = parsedG;
+          }
+        }
+      }
+
+      if (loaded) {
+        setPos((p) => (p.x === loaded!.x && p.y === loaded!.y ? p : loaded!));
+        getUI().pos = loaded;
       }
     } catch {}
-  }, [persistKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [specificKey, globalKey]);
 
-  // Persist on change
+  // Persist to BOTH (so every section and the shared global stay in sync)
   React.useEffect(() => {
-    if (!persistKey) return;
     try {
-      window.localStorage.setItem(`overlay-pos:${persistKey}`, JSON.stringify(pos));
+      window.localStorage.setItem(globalKey, JSON.stringify(pos));
+      if (specificKey) {
+        window.localStorage.setItem(specificKey, JSON.stringify(pos));
+      }
+      getUI().pos = pos;
     } catch {}
-  }, [pos, persistKey]);
+  }, [pos, globalKey, specificKey]);
 
   const rootRef = React.useRef<HTMLDivElement | null>(null);
   const dragging = React.useRef(false);
   const dragStart = React.useRef<Pos | null>(null);
   const mouseStart = React.useRef<Pos | null>(null);
 
-  // Open programmatically
+  // Keep within viewport
+  React.useEffect(() => {
+    const clampIntoViewport = () => {
+      const el = rootRef.current;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const w = el?.offsetWidth ?? 380;
+      const h = el?.offsetHeight ?? 300;
+      setPos((p) => ({
+        x: Math.max(8, Math.min(vw - w - 8, p.x)),
+        y: Math.max(8, Math.min(vh - 60, p.y)),
+      }));
+    };
+    clampIntoViewport();
+    window.addEventListener("resize", clampIntoViewport);
+    window.addEventListener("orientationchange", clampIntoViewport);
+    return () => {
+      window.removeEventListener("resize", clampIntoViewport);
+      window.removeEventListener("orientationchange", clampIntoViewport);
+    };
+  }, []);
+
+  // Programmatic open (unchanged)
   React.useEffect(() => {
     const onOpen = (e: Event) => {
       const ce = e as CustomEvent<{ section?: string }>;
@@ -75,7 +144,6 @@ export default function SceneOverlayController({
 
   // Drag handling
   const onHeaderPointerDown = (e: React.PointerEvent) => {
-    // 🚫 Don’t start dragging when clicking interactive elements (like the collapse button)
     if (isInteractive(e.target)) return;
     if (e.button !== 0) return;
 
@@ -83,8 +151,7 @@ export default function SceneOverlayController({
     dragStart.current = { ...pos };
     mouseStart.current = { x: e.clientX, y: e.clientY };
 
-    // Only capture if we’re actually dragging
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
     document.body.style.cursor = "grabbing";
   };
 
@@ -99,12 +166,11 @@ export default function SceneOverlayController({
     const el = rootRef.current;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const w = el?.offsetWidth ?? 360;
+    const w = el?.offsetWidth ?? 380;
     const h = el?.offsetHeight ?? 300;
 
     next.x = Math.max(8, Math.min(vw - w - 8, next.x));
     next.y = Math.max(8, Math.min(vh - 60, next.y));
-
     setPos(next);
   };
 
@@ -114,7 +180,7 @@ export default function SceneOverlayController({
     dragStart.current = null;
     mouseStart.current = null;
     try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
     } catch {}
     document.body.style.cursor = "auto";
   };
@@ -122,8 +188,8 @@ export default function SceneOverlayController({
   return (
     <div
       ref={rootRef}
-      className={clsx("pointer-events-auto fixed z-[60]", className)}
-      style={{ left: pos.x, top: pos.y, width: 360, maxWidth: "92vw" }}
+      className={clsx("pointer-events-auto fixed z-[9998]", className)}
+      style={{ left: pos.x, top: pos.y, width: 380, maxWidth: "92vw" }}
     >
       <div
         className={clsx(
@@ -133,7 +199,7 @@ export default function SceneOverlayController({
       >
         {/* Header (drag handle) */}
         <div
-          className="flex items-center justify-between px-4 pt-3 select-none cursor-grab"
+          className="flex items-center justify-between px-4 pt-1 select-none cursor-grab"
           onPointerDown={onHeaderPointerDown}
           onPointerMove={onHeaderPointerMove}
           onPointerUp={onHeaderPointerUp}
@@ -143,7 +209,7 @@ export default function SceneOverlayController({
 
           <button
             type="button"
-            data-nodrag // 👈 extra guard
+            data-nodrag
             className="bg-white/10 hover:bg-white/20 text-white px-2 py-1 text-sm"
             onClick={(e) => {
               e.stopPropagation();

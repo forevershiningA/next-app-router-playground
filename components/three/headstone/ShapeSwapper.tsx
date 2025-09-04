@@ -132,10 +132,11 @@ export default function ShapeSwapper({ tabletRef, onSelectHeadstone }: ShapeSwap
       {/* Tablet group hosts the visible headstone */}
       <group
         ref={tabletRef}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-          onSelectHeadstone?.();
-        }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            console.log("🪨 headstone mesh wrapper clicked");
+            onSelectHeadstone();
+          }}
       >
         <SvgHeadstone
           key={`${visibleUrl}::${visibleTex}`}

@@ -42,7 +42,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Suspense>
         </div>
       </div>
-      {children}
     </div>
   );
 }

@@ -19,7 +19,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="relative w-full">
       {/* Render ONLY the panel; it already wraps itself with SceneOverlayController */}
       <InscriptionOverlayPanel />
-      {children}
     </div>
   );
 }
