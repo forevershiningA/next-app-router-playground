@@ -6,38 +6,49 @@ import * as THREE from "three";
 
 import ShapeSwapper from "./ShapeSwapper";
 import HeadstoneBaseAuto from "./HeadstoneBaseAuto";
-import BoxOutline from "../BoxOutline"; // ← up one level
+import BoxOutline from "../BoxOutline";
+import { useHeadstoneStore } from "#/lib/headstone-store";
 
-const BASE_H = 2; // 100 mm
+const BASE_H = 2;
 
 export default function HeadstoneAssembly() {
   const [sel, setSel] = useState<"headstone" | "base" | null>(null);
 
-  // Assembly = parent of tablet + base
+  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+
   const assemblyRef = useRef<THREE.Object3D>(new THREE.Group());
-  // Tablet-only group (used for outline/camera/base sizing)
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
+  const inscriptionRef = useRef<THREE.Object3D>(null);
 
   return (
     <>
       <group ref={assemblyRef} position={[0, BASE_H, 0]}>
-        {/* Tablet with atomic shape/material swap */}
         <ShapeSwapper
           tabletRef={tabletRef}
-          onSelectHeadstone={() => setSel("headstone")}
+          onSelectHeadstone={() => {
+            setSel("headstone");
+            setSelectedInscriptionId(null);
+          }}
+          inscriptionRef={inscriptionRef}
         />
 
-        {/* Headstone selection outline */}
         <BoxOutline
-        targetRef={tabletRef}
-        visible={sel === "headstone"}
-        color="white"
-        pad={0.004}
-        through={false}   // ← hide back lines (enable depth test)
-        // you can also just remove the prop since false is the default below
+          targetRef={tabletRef}
+          visible={sel === "headstone"}
+          color="white"
+          pad={0.004}
+          through={false}
         />
 
-        {/* Auto-sized base from tablet bounds */}
+        <BoxOutline
+          targetRef={inscriptionRef}
+          visible={selectedInscriptionId !== null}
+          color="yellow"
+          pad={0.02}
+          through={false}
+        />
+
         <HeadstoneBaseAuto
           headstoneObject={tabletRef}
           wrapper={assemblyRef}
@@ -45,15 +56,18 @@ export default function HeadstoneAssembly() {
           onClick={(e) => {
             e.stopPropagation();
             setSel("base");
+            setSelectedInscriptionId(null);
           }}
           height={BASE_H}
         />
       </group>
 
-      {/* Click-away to clear selection */}
       <mesh
         position={[0, -0.001, 0]}
-        onPointerDown={() => setSel(null)}
+        onPointerDown={() => {
+          setSel(null);
+          setSelectedInscriptionId(null);
+        }}
         visible={false}
       >
         <boxGeometry args={[100, 0.001, 100]} />
