@@ -7,7 +7,7 @@ import { useThree, useLoader } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
-import AutoFit from "../../AutoFit";
+import AutoFit from "../AutoFit";
 import SvgHeadstone from "../../SvgHeadstone";
 import HeadstoneInscription from "../../HeadstoneInscription"; // Ensure this path is correct
 import { useHeadstoneStore, Line } from "#/lib/headstone-store"; // Import Line type
@@ -135,7 +135,7 @@ export default function ShapeSwapper({
         onPointerDown={(e) => {
           e.stopPropagation();
           console.log("🪨 headstone mesh wrapper clicked");
-          useHeadstoneStore.getState().setSelectedInscriptionId(null);
+          useHeadstoneStore.getState().openSizePanel();
           onSelectHeadstone?.();
         }}
       >
@@ -154,23 +154,32 @@ export default function ShapeSwapper({
           preserveTop
           showEdges={false}
           meshProps={{}}
+          inscriptions={inscriptions}
         >
           {(api: any) => (
             <>
               {inscriptions.map((line: Line) => (
                 <HeadstoneInscription
-                  key={line.id}
                   id={line.id}
+                  key={line.id}
                   headstone={api}
                   font="/fonts/ChopinScript.otf"
-                  editable
-                  onSelectInscription={() => setActivePanel("inscription")}
+                  editable={true}
+                  onSelectInscription={() => {
+                    console.log("onSelectInscription called");
+                    setActivePanel("inscription");
+                  }}
                   inscriptionRef={inscriptionRef}
                   color="#fff8dc"
                   lift={0.002}
-                  editable={true}
-                  approxHeight={heightM}
-                  assemblyInscriptionRef={inscriptionRef}
+                  xPos={line.xPos}
+                  yPos={line.yPos}
+                  // The `height` prop of the `HeadstoneInscription` component is in SVG units.
+                  // The `sizeMm` is in millimeters.
+                  // The conversion is based on the `scale` of the `SvgHeadstone` component, which is 0.01 (1m = 100 SVG units).
+                  // 1m = 1000mm, so 1000mm = 100 SVG units, which means 10mm = 1 SVG unit.
+                  height={line.sizeMm / 10}
+                  text={line.text}
                 />
               ))}
             </>

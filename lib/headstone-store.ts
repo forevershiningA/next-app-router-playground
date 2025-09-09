@@ -1,29 +1,51 @@
-"use client";
+// lib/headstone-store.ts
+'use client';
 
-import { create } from "zustand";
-import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
+import { create } from 'zustand';
+import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 
-const TEX_BASE = "/textures/forever/l/";
-const DEFAULT_TEX = "Imperial-Red.jpg";
+const TEX_BASE = '/textures/forever/l/';
+const DEFAULT_TEX = 'Imperial-Red.jpg';
 
 /* clamps */
 const MIN_HEADSTONE_DIM = 300;
 const MAX_HEADSTONE_DIM = 1200;
-const clampHeadstoneDim = (v: number) => Math.min(MAX_HEADSTONE_DIM, Math.max(MIN_HEADSTONE_DIM, Math.round(v)));
+const clampHeadstoneDim = (v: number) =>
+  Math.min(MAX_HEADSTONE_DIM, Math.max(MIN_HEADSTONE_DIM, Math.round(v)));
 
 const MIN_INSCRIPTION_SIZE_MM = 5;
 const MAX_INSCRIPTION_SIZE_MM = 120;
-const clampInscriptionSize = (v: number) => Math.min(MAX_INSCRIPTION_SIZE_MM, Math.max(MIN_INSCRIPTION_SIZE_MM, Math.round(v)));
+const clampInscriptionSize = (v: number) =>
+  Math.min(
+    MAX_INSCRIPTION_SIZE_MM,
+    Math.max(MIN_INSCRIPTION_SIZE_MM, Math.round(v))
+  );
 
 const MIN_INSCRIPTION_ROTATION_DEG = -45;
 const MAX_INSCRIPTION_ROTATION_DEG = 45;
-const clampInscriptionRotation = (v: number) => Math.max(MIN_INSCRIPTION_ROTATION_DEG, Math.min(MAX_INSCRIPTION_ROTATION_DEG, Math.round(v)));
+const clampInscriptionRotation = (v: number) =>
+  Math.max(
+    MIN_INSCRIPTION_ROTATION_DEG,
+    Math.min(MAX_INSCRIPTION_ROTATION_DEG, Math.round(v))
+  );
 
 /* types */
-export type Line = { id: string; text: string; font: string; sizeMm: number; rotationDeg: number; };
-export type Part = "headstone" | "base" | null;
-export type PanelName = "shape" | "size" | "material" | "inscription" | null;
+export type Line = {
+  id: string;
+  text: string;
+  font: string;
+  sizeMm: number;
+  xPos: number;
+  yPos: number;
+  rotationDeg: number;
+};
+export type Part = 'headstone' | 'base' | null;
+export type PanelName = 'shape' | 'size' | 'material' | 'inscription' | null;
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
+
+type LinePatch = Partial<Pick<Line,
+  'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos'
+>>;
 
 type HeadstoneState = {
   productUrl: string | null;
@@ -49,7 +71,10 @@ type HeadstoneState = {
   activeInscriptionText: string;
 
   setInscriptions: (lines: Line[]) => void;
-  addInscriptionLine: (line?: Partial<Line>) => string;
+
+  // ✅ type signature only; implementation lives in the store below
+  addInscriptionLine: (patch?: LinePatch) => string;
+
   updateInscription: (id: string, patch: Partial<Line>) => void;
   duplicateInscription: (id: string) => string;
   deleteInscription: (id: string) => void;
@@ -66,6 +91,7 @@ type HeadstoneState = {
   setActivePanel: (p: PanelName) => void;
 
   openInscriptions: (id?: string) => void;
+  openSizePanel: () => void;
   closeInscriptions: () => void;
 };
 
@@ -74,47 +100,105 @@ const genId = () => `l-${nextId++}`;
 
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   productUrl: null,
-  setProductUrl(productUrl) { set({ productUrl }); },
+  setProductUrl(productUrl) {
+    set({ productUrl });
+  },
 
   shapeUrl: DEFAULT_SHAPE_URL,
-  setShapeUrl(shapeUrl) { set({ shapeUrl }); },
+  setShapeUrl(shapeUrl) {
+    set({ shapeUrl });
+  },
 
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
-  setMaterialUrl(materialUrl) { set({ materialUrl }); },
+  setMaterialUrl(materialUrl) {
+    set({ materialUrl });
+  },
 
   widthMm: 900,
-  setWidthMm(v) { set({ widthMm: clampHeadstoneDim(v) }); },
+  setWidthMm(v) {
+    set({ widthMm: clampHeadstoneDim(v) });
+  },
 
   heightMm: 900,
-  setHeightMm(v) { set({ heightMm: clampHeadstoneDim(v) }); },
+  setHeightMm(v) {
+    set({ heightMm: clampHeadstoneDim(v) });
+  },
 
   selected: null,
-  setSelected(p) { set({ selected: p }); },
+  setSelected(p) {
+    set({ selected: p });
+  },
 
   inscriptions: [
-    { id: genId(), text: "In Loving Memory", font: "Garamond", sizeMm: 19, rotationDeg: 0 },
+    {
+      id: genId(),
+      text: 'In Loving Memory',
+      font: 'Garamond',
+      sizeMm: 80,
+      xPos: 0,
+      yPos: 0,
+      rotationDeg: 0,
+    },
+    {
+      id: genId(),
+      text: 'of General Admiral Aladeen',
+      font: 'Garamond',
+      sizeMm: 120,
+      xPos: 0,
+      yPos: 20,
+      rotationDeg: 0,
+    },
   ],
   selectedInscriptionId: null,
-  activeInscriptionText: "In Loving Memory",
+  activeInscriptionText: 'In Loving Memory',
 
   setInscriptions: (inscriptions) => set({ inscriptions }),
 
-  addInscriptionLine: (patch) => {
+  addInscriptionLine: (patch: LinePatch = {}) => {
     const id = genId();
-    const newLine: Line = { id, text: "New line", font: "Garamond", sizeMm: 19, rotationDeg: 0, ...patch };
-    set((s) => ({ inscriptions: [...s.inscriptions, newLine] }));
+
+    // normalize once
+    const text = patch.text ?? 'New line';
+    const font = patch.font ?? 'Garamond';
+    const sizeMm = clampInscriptionSize(patch.sizeMm ?? 30);
+    const rotationDeg = clampInscriptionRotation(patch.rotationDeg ?? 0);
+    const xPos = patch.xPos ?? 0;
+    const yPos = patch.yPos ?? 0;
+
+    const newLine: Line = { id, text, font, sizeMm, rotationDeg, xPos, yPos };
+
+    set((s) => ({
+      inscriptions: [...s.inscriptions, newLine],
+      selectedInscriptionId: id, // optional: auto-select the new line
+    }));
+
     return id;
   },
 
   updateInscription: (id, patch) => {
-    if (patch.sizeMm !== undefined) patch.sizeMm = clampInscriptionSize(patch.sizeMm);
-    if (patch.rotationDeg !== undefined) patch.rotationDeg = clampInscriptionRotation(patch.rotationDeg);
-    set((s) => ({ inscriptions: s.inscriptions.map((l) => (l.id === id ? { ...l, ...patch } : l)) }));
+    set((s) => ({
+      inscriptions: s.inscriptions.map((l) =>
+        l.id === id
+          ? {
+              ...l,
+              ...patch,
+              sizeMm:
+                patch.sizeMm !== undefined
+                  ? clampInscriptionSize(patch.sizeMm)
+                  : l.sizeMm,
+              rotationDeg:
+                patch.rotationDeg !== undefined
+                  ? clampInscriptionRotation(patch.rotationDeg)
+                  : l.rotationDeg,
+            }
+          : l
+      ),
+    }));
   },
 
   duplicateInscription: (id) => {
     const src = get().inscriptions.find((l) => l.id === id);
-    if (!src) return "";
+    if (!src) return '';
     const newId = genId();
     set((s) => ({ inscriptions: [...s.inscriptions, { ...src, id: newId }] }));
     return newId;
@@ -128,7 +212,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
   },
 
-  setSelectedInscriptionId: (id) => set({ selectedInscriptionId: id }),
+  setSelectedInscriptionId: (id) => {
+    if (id === get().selectedInscriptionId) return;
+
+    if (!id) {
+      set({ selectedInscriptionId: null, activeInscriptionText: '' });
+      return;
+    }
+
+    const line = get().inscriptions.find((l) => l.id === id);
+    if (line) {
+      set({ selectedInscriptionId: id, activeInscriptionText: line.text });
+    } else {
+      set({ selectedInscriptionId: id, activeInscriptionText: '' });
+    }
+  },
+
   setActiveInscriptionText: (activeInscriptionText) => set({ activeInscriptionText }),
 
   /* router injection */
@@ -138,55 +237,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   /* panel control + conditional routing */
   activePanel: null,
   setActivePanel: (p) => {
-    const prev = get().activePanel;
-    if (prev !== p) set({ activePanel: p });
-    if (typeof window === "undefined") return;
-
-    const open = (section: string) =>
-      window.dispatchEvent(new CustomEvent("fs:open-overlay", { detail: { section } }));
-    const close = (section?: string) =>
-      window.dispatchEvent(new CustomEvent("fs:close-overlay", { detail: section ? { section } : {} }));
-
-    if (!p) {
-      close();
-      close("inscriptions"); // explicit legacy close
-      return;
-    }
-
-    // map panel -> route that hosts the overlay component
-    const routeOf: Record<Exclude<PanelName, null>, string> = {
-      shape: "/shape",
-      size: "/size",
-      material: "/materials",
-      inscription: "/inscriptions",
-    };
-
-    const overlaySection = p === "inscription" ? "inscriptions" : p; // your panel expects plural
-    const targetRoute = routeOf[p] ?? "/";
-    const here = window.location?.pathname ?? "";
-    const needRoute = here !== targetRoute;
-
-    if (needRoute) {
-      const nav = get().navTo;
-      if (nav) {
-        nav(targetRoute);
-        // let the new route mount, then open overlay
-        requestAnimationFrame(() => open(overlaySection));
-      } else {
-        window.dispatchEvent(new CustomEvent("fs:navigate", { detail: { href: targetRoute } }));
-        if (here !== targetRoute) window.location.assign(targetRoute); // hard fallback
-      }
-    } else {
-      open(overlaySection);
-    }
+    set({ activePanel: p });
   },
 
   openInscriptions: (id) => {
     if (id) {
-      const line = get().inscriptions.find((l) => l.id === id);
-      if (line) set({ selectedInscriptionId: id, activeInscriptionText: line.text });
+      get().setSelectedInscriptionId(id);
     }
-    get().setActivePanel("inscription");
+    get().setActivePanel('inscription');
+    get().navTo?.('/inscriptions');
+  },
+
+  openSizePanel: () => {
+    get().setActivePanel('size');
+    get().navTo?.('/select-size');
   },
 
   closeInscriptions: () => {

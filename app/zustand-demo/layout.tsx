@@ -1,6 +1,5 @@
 import { Boundary } from '#/ui/boundary';
 import { Mdx } from '#/ui/codehike';
-import { CounterProvider } from 'app/context/counter-context';
 import React from 'react';
 import ContextClickCounter from './context-click-counter';
 import Readme from './readme.mdx';
@@ -32,12 +31,10 @@ export default async function Layout({
           color="blue"
           animateRerendering={false}
         >
-          <CounterProvider>
             <div className="flex flex-col gap-9">
               <ContextClickCounter />
               {children}
             </div>
-          </CounterProvider>
         </Boundary>
       </Boundary>
     </>

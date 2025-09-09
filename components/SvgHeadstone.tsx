@@ -1,3 +1,4 @@
+// components/SvgHeadstone.tsx
 "use client";
 
 import * as React from "react";
@@ -6,6 +7,7 @@ import { useLoader } from "@react-three/fiber";
 import type { ThreeElements } from "@react-three/fiber";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import { Edges } from "@react-three/drei";
+import { Line } from "#/lib/headstone-store";
 
 export type HeadstoneAPI = {
   group: React.RefObject<THREE.Group>;
@@ -44,6 +46,7 @@ type Props = {
 
   meshProps?: ThreeElements["mesh"];
   children?: (api: HeadstoneAPI) => React.ReactNode;
+  inscriptions: Line[];
 };
 
 /* ---------------- helpers ---------------- */
@@ -140,6 +143,7 @@ export default function SvgHeadstone({
   showEdges = false,
   meshProps,
   children,
+  inscriptions,
 }: Props) {
   const svg = useLoader(SVGLoader, url) as any;
 
@@ -368,7 +372,7 @@ export default function SvgHeadstone({
     faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY,
     targetHeight, targetWidth,
     preserveTop, bevel, doubleSided,
-    showEdges, meshProps, children,
+    showEdges, meshProps, children, inscriptions,
   ]);
 
   return node;

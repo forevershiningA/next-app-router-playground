@@ -11,6 +11,8 @@ type Props = {
   /** If provided, we still fall back to the global key and mirror saves globally. */
   persistKey?: string;
   className?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 };
 
 type Pos = { x: number; y: number };
@@ -32,7 +34,10 @@ export default function SceneOverlayController({
   defaultCollapsed = false,
   persistKey,
   className,
+  isOpen,
+   onClose,
 }: Props) {
+  const controlled = typeof isOpen === 'boolean';
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
 
   // Keys

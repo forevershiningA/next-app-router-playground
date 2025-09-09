@@ -6,7 +6,7 @@ import Scene from "./three/Scene";
 
 export default function ThreeScene() {
   return (
-    <div className="relative w-full h-[800px] bg-[#cfe8fc]">
+    <div className="relative w-full h-screen bg-[#cfe8fc]">
       <Canvas shadows camera={{ position: [2.6, 1.8, 2.6], fov: 45 }}>
         <color attach="background" args={["#cfe8fc"]} />
         {/* IMPORTANT: no global fallback here */}

@@ -18,11 +18,11 @@ import { z } from 'zod';
 const Schema = Block.extend({ col: z.array(Block) });
 
 export function Grid(props: unknown) {
-  const data = parseProps(props, Schema);
+  const data = parseProps(props, Schema) as z.infer<typeof Schema>;
 
   return (
     <div className="my-5 grid grid-cols-1 gap-6 lg:grid-cols-2 [&:first-child]:mt-0 [&:last-child]:mb-0">
-      {data.col.map((col, index) => (
+      {data.col.map((col: any, index: number) => (
         <div className="[&>:first-child]:mt-0 [&>:last-child]:mb-0" key={index}>
           {col.children}
         </div>

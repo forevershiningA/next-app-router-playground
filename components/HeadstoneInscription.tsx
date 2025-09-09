@@ -13,9 +13,10 @@ import { useHeadstoneStore } from "#/lib/headstone-store";
 /* ------------------------------------------------------------------ */
 
 type Props = {
+  id: string;
   headstone: HeadstoneAPI;
   text?: string;
-  height?: number;        // meters in world space
+  height: number;        // SVG units
   color?: string;
   font?: string;
   lift?: number;          // meters in world space
@@ -23,7 +24,8 @@ type Props = {
   selected?: boolean;     // purely visual outline state
   onSelect?: () => void;  // internal (e.g., start dragging)
   approxHeight?: number;  // meters, used for an initial Y offset
-
+  xPos?: number;  // horizontal offset
+  yPos?: number;  // vertical offset
   // External selection wiring (safe/optional)
   inscriptionRef?: React.MutableRefObject<THREE.Object3D | null>;
   onSelectInscription?: () => void;
@@ -32,12 +34,15 @@ type Props = {
 /* ------------------------------------------------------------------ */
 
 export default function HeadstoneInscription({
+  id,
   headstone,
-  text = "In Loving Memory",
-  height = 0.8,
+  text = "",
+  height,
   color = "#fff8dc",
   font,
   lift = 0.002,
+  xPos = 0,          // <-- default here
+  yPos = 0,          // <-- default here
   editable = false,
   selected = false,
   onSelect,
@@ -55,7 +60,6 @@ export default function HeadstoneInscription({
   const liftLocal = lift * units;
 
   // store hooks (guarded; if your store keys differ, adjust here)
-  const setActiveText = useHeadstoneStore((s: any) => s?.setActiveInscriptionText);
   const openInscriptions = useHeadstoneStore((s: any) => s?.openInscriptions);
 
   // initial Y based on approx height
@@ -69,6 +73,7 @@ export default function HeadstoneInscription({
     () => new THREE.Vector3(0, initialYLocal, headstone.frontZ + liftLocal)
   );
   const [dragging, setDragging] = React.useState(false);
+  const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
 
   /* -------------------- center on current mesh bbox once available -------------------- */
   React.useEffect(() => {
@@ -113,9 +118,9 @@ export default function HeadstoneInscription({
       const local = hit.point.clone();
       stone.worldToLocal(local);
       local.z = headstone.frontZ + liftLocal;
-      setPos(local);
+      setPos(local.add(dragOffset));
     },
-    [camera, size.width, size.height, raycaster, headstone.mesh, headstone.frontZ, liftLocal, mouse]
+    [camera, size.width, size.height, raycaster, headstone.mesh, headstone.frontZ, liftLocal, mouse, dragOffset]
   );
 
   /* ---------------------------- drag wiring (pointermove/up) --------------------------- */
@@ -146,42 +151,45 @@ export default function HeadstoneInscription({
 
   /* --------------------------------------- UI ---------------------------------------- */
   return (
-    <group position={[pos.x, pos.y, pos.z]} scale={[1, -1, 1]}>
+    <group position={[pos.x + xPos, pos.y + yPos, pos.z]} scale={[1, -1, 1]}>
       <Text
-        // troika Text is a mesh; accept any Object3D-like ref
         ref={inscriptionRef as any}
         font={font}
         color={color}
         anchorX="center"
         anchorY="middle"
-        fontSize={height * units}
+        fontSize={height}
         outlineWidth={(selected ? 0.005 : 0.002) * units}
-        outlineColor={selected ? "#ffd54a" : "black"}
+        outlineColor={selected ? "#ffffff" : "black"}
         onPointerDown={(e) => {
-          e.stopPropagation();
+            e.stopPropagation();
 
-          // external selection (safe)
-          if (typeof onSelectInscription === "function") onSelectInscription();
+            // external selection (safe)
+            if (typeof onSelectInscription === "function") onSelectInscription();
 
-          // open overlay + prefill text if store is present
-          try {
-            setActiveText?.(text);
-            openInscriptions?.();
-          } catch {
-            /* store not wired — ignore */
-          }
+            // open overlay + prefill text if store is present
+            try {
+              openInscriptions?.(id);
+            } catch {
+              /* store not wired — ignore */
+            }
 
-          if (!editable) return;
-          onSelect?.();
-          setDragging(true);
-        }}
-        onPointerOver={() => {
-          if (editable) document.body.style.cursor = "grab";
-        }}
-        onPointerOut={() => {
-          if (editable && !dragging) document.body.style.cursor = "auto";
-        }}
-      >
+            if (!editable) return;
+            const stone = headstone.mesh.current as THREE.Mesh | null;
+            if (stone) {
+              const localPoint = stone.worldToLocal(e.point.clone());
+              setDragOffset(pos.clone().sub(localPoint));
+            }
+            onSelect?.();
+            setDragging(true);
+          }}
+          onPointerOver={() => {
+            if (editable) document.body.style.cursor = "grab";
+          }}
+          onPointerOut={() => {
+            if (editable && !dragging) document.body.style.cursor = "auto";
+          }}
+        >
         {text}
       </Text>
     </group>

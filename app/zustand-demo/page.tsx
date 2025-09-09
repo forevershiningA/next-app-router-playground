@@ -1,4 +1,3 @@
-import ContextClickCounter from '#/app/context/context-click-counter';
 import db from '#/lib/db';
 import { Boundary } from '#/ui/boundary';
 import { ProductCard } from '#/ui/product-card';
@@ -15,8 +14,6 @@ export default function Page() {
             ({products.length})
           </span>
         </h1>
-
-        <ContextClickCounter />
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {products.map((product) => (

@@ -19,7 +19,7 @@ export default function HeadstoneAssembly() {
 
   const assemblyRef = useRef<THREE.Object3D>(new THREE.Group());
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
-  const inscriptionRef = useRef<THREE.Object3D>(null);
+  const inscriptionRef = useRef<THREE.Object3D>(null!);
 
   return (
     <>

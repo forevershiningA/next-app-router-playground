@@ -3,7 +3,6 @@
 
 import * as React from "react";
 import OverlayPortal from "#/components/OverlayPortal";
-import InputSlider from "#/ui/InputSlider";
 
 export default function SelectSizeOverlayCard() {
   const cardRef = React.useRef<HTMLDivElement | null>(null);
@@ -158,10 +157,6 @@ export default function SelectSizeOverlayCard() {
                   Choose the headstone width &amp; height in millimetres. Thickness is computed
                   from size; cemeteries may have regulations on allowable dimensions.
                 </p>
-                <div className="space-y-3">
-                  <InputSlider type="width" />
-                  <InputSlider type="height" />
-                </div>
               </div>
             )}
           </div>
