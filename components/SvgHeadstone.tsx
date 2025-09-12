@@ -122,29 +122,32 @@ function rebuildGroupsByZ(geom: THREE.BufferGeometry, zFront: number, zBack: num
 
 /* ---------------- component ---------------- */
 
-export default function SvgHeadstone({
-  url,
-  depth,
-  scale = 0.01,
-  faceTexture,
-  sideTexture,
-  autoRepeat = false,
-  tileSize = 0.10,
-  sideTileSize,
-  faceRepeatX = 6,
-  faceRepeatY = 6,
-  sideRepeatX = 8,
-  sideRepeatY = 1,
-  targetHeight,
-  targetWidth,
-  preserveTop = true,
-  bevel = false,
-  doubleSided = false,
-  showEdges = false,
-  meshProps,
-  children,
-  inscriptions,
-}: Props) {
+const SvgHeadstone = React.forwardRef<THREE.Group, Props>((
+  {
+    url,
+    depth,
+    scale = 0.01,
+    faceTexture,
+    sideTexture,
+    autoRepeat = false,
+    tileSize = 0.10,
+    sideTileSize,
+    faceRepeatX = 6,
+    faceRepeatY = 6,
+    sideRepeatX = 8,
+    sideRepeatY = 1,
+    targetHeight,
+    targetWidth,
+    preserveTop = true,
+    bevel = false,
+    doubleSided = false,
+    showEdges = false,
+    meshProps,
+    children,
+    inscriptions,
+  }, 
+  ref
+) => {
   const svg = useLoader(SVGLoader, url) as any;
 
   const faceMap = useLoader(THREE.TextureLoader, faceTexture);
@@ -158,7 +161,6 @@ export default function SvgHeadstone({
     t.needsUpdate = true;
   }
 
-  const groupRef = React.useRef<THREE.Group>(null!);
   const firstMeshRef = React.useRef<THREE.Mesh>(null!);
 
   const node = React.useMemo(() => {
@@ -354,11 +356,11 @@ export default function SvgHeadstone({
     ));
 
     return (
-      <group ref={groupRef} scale={[scale * sCore, -scale * sCore, scale]}>
+      <group ref={ref} scale={[scale * sCore, -scale * sCore, scale]}>
         {meshes}
         {typeof children === "function" &&
           children({
-            group: groupRef,
+            group: ref as React.RefObject<THREE.Group>,
             mesh: firstMeshRef,
             frontZ: depth / 2,
             unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
@@ -376,4 +378,8 @@ export default function SvgHeadstone({
   ]);
 
   return node;
-}
+});
+
+SvgHeadstone.displayName = "SvgHeadstone";
+
+export default SvgHeadstone;

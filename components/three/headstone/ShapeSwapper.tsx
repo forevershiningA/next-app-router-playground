@@ -1,16 +1,15 @@
-// components/three/headstone/ShapeSwapper.tsx
 "use client";
 
 import * as React from "react";
 import * as THREE from "three";
-import { useThree, useLoader } from "@react-three/fiber";
+import { useThree, useLoader, useFrame } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 import AutoFit from "../AutoFit";
 import SvgHeadstone from "../../SvgHeadstone";
-import HeadstoneInscription from "../../HeadstoneInscription"; // Ensure this path is correct
-import { useHeadstoneStore, Line } from "#/lib/headstone-store"; // Import Line type
+import HeadstoneInscription from "../../HeadstoneInscription";
+import { useHeadstoneStore, Line } from "#/lib/headstone-store";
 import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
 
 /* ---------- constants ---------- */
@@ -29,7 +28,6 @@ function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
 }
 
 function PreloadTexture({ url, onReady }: { url: string; onReady?: () => void }) {
-  // drei's useTexture
   useTexture(url);
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
@@ -87,24 +85,29 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
 /* ---------- props ---------- */
 export interface ShapeSwapperProps {
   tabletRef: React.RefObject<THREE.Object3D>;
-  onSelectHeadstone?: () => void;
-  inscriptionRef: React.MutableRefObject<THREE.Object3D | null>;
+  /** DEPRECATED: avoid passing a single ref to all inscriptions (last one wins). */
+  inscriptionRef?: React.MutableRefObject<THREE.Object3D | null>;
 }
 
 /* ---------- main ---------- */
 export default function ShapeSwapper({
   tabletRef,
-  onSelectHeadstone,
   inscriptionRef,
 }: ShapeSwapperProps) {
   const { invalidate } = useThree();
 
-  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
-  const heightMm = useHeadstoneStore((s: any) => s.heightMm);
-  const widthMm  = useHeadstoneStore((s: any) => s.widthMm);
-  const shapeUrl = useHeadstoneStore((s: any) => s.shapeUrl);
-  const materialUrl = useHeadstoneStore((s: any) => s.materialUrl);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const widthMm  = useHeadstoneStore((s) => s.widthMm);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const materialUrl = useHeadstoneStore((s) => s.materialUrl);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
+
+  const setSelected  = useHeadstoneStore((s) => s.setSelected);
+
+  const selectedInscriptionId     = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const setSelectedInscriptionId  = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const openInscriptions          = useHeadstoneStore((s) => s.openInscriptions);
+  const openSizePanel             = useHeadstoneStore((s) => s.openSizePanel);
 
   const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
   const widthM  = React.useMemo(() => widthMm  / 100, [widthMm]);
@@ -118,7 +121,6 @@ export default function ShapeSwapper({
 
   const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);
   const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
-
   const [fitTick, setFitTick] = React.useState(0);
 
   const swapping = requestedUrl !== visibleUrl || requestedTex !== visibleTex;
@@ -130,15 +132,7 @@ export default function ShapeSwapper({
 
   return (
     <>
-      <group
-        ref={tabletRef}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-          console.log("🪨 headstone mesh wrapper clicked");
-          useHeadstoneStore.getState().openSizePanel();
-          onSelectHeadstone?.();
-        }}
-      >
+      <group ref={tabletRef}>
         <SvgHeadstone
           key={`${visibleUrl}::${visibleTex}`}
           url={visibleUrl}
@@ -153,33 +147,41 @@ export default function ShapeSwapper({
           targetWidth={widthM}
           preserveTop
           showEdges={false}
-          meshProps={{}}
           inscriptions={inscriptions}
+          meshProps={{
+            name: "headstone",
+            onClick: (e) => {
+              e.stopPropagation();
+              setSelected("headstone");
+              setSelectedInscriptionId(null);
+              openSizePanel?.();
+            },
+          }}
         >
           {(api: any) => (
             <>
-              {inscriptions.map((line: Line) => (
+              {inscriptions.map((line: Line, i: number) => (
                 <HeadstoneInscription
                   id={line.id}
                   key={line.id}
                   headstone={api}
                   font="/fonts/ChopinScript.otf"
-                  editable={true}
+                  editable
+                  selected={selectedInscriptionId === line.id}
+                  ref={selectedInscriptionId === line.id ? inscriptionRef : null}
                   onSelectInscription={() => {
-                    console.log("onSelectInscription called");
-                    setActivePanel("inscription");
+                    // Single source of truth: id-based selection via store helper
+                    setSelected(null);
+                    openInscriptions?.(line.id);
                   }}
-                  inscriptionRef={inscriptionRef}
                   color="#fff8dc"
                   lift={0.002}
                   xPos={line.xPos}
                   yPos={line.yPos}
-                  // The `height` prop of the `HeadstoneInscription` component is in SVG units.
-                  // The `sizeMm` is in millimeters.
-                  // The conversion is based on the `scale` of the `SvgHeadstone` component, which is 0.01 (1m = 100 SVG units).
-                  // 1m = 1000mm, so 1000mm = 100 SVG units, which means 10mm = 1 SVG unit.
                   height={line.sizeMm / 10}
                   text={line.text}
+                  // NEGATIVE bump so later items are slightly farther away
+                  zBump={-i * 0.00005}
                 />
               ))}
             </>

@@ -1,7 +1,8 @@
-// lib/headstone-store.ts
 'use client';
 
 import { create } from 'zustand';
+import React from 'react';
+import type { Group } from 'three'; 
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 
 const TEX_BASE = '/textures/forever/l/';
@@ -14,7 +15,7 @@ const clampHeadstoneDim = (v: number) =>
   Math.min(MAX_HEADSTONE_DIM, Math.max(MIN_HEADSTONE_DIM, Math.round(v)));
 
 const MIN_INSCRIPTION_SIZE_MM = 5;
-const MAX_INSCRIPTION_SIZE_MM = 120;
+const MAX_INSCRIPTION_SIZE_MM = 1200;
 const clampInscriptionSize = (v: number) =>
   Math.min(
     MAX_INSCRIPTION_SIZE_MM,
@@ -33,19 +34,20 @@ const clampInscriptionRotation = (v: number) =>
 export type Line = {
   id: string;
   text: string;
-  font: string;
   sizeMm: number;
+  font: string;
   xPos: number;
   yPos: number;
   rotationDeg: number;
+  ref: React.RefObject<Group | null>;  // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
 export type PanelName = 'shape' | 'size' | 'material' | 'inscription' | null;
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 
-type LinePatch = Partial<Pick<Line,
-  'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos'
->>;
+type LinePatch = Partial<
+  Pick<Line, 'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos'>
+>;
 
 type HeadstoneState = {
   productUrl: string | null;
@@ -70,11 +72,9 @@ type HeadstoneState = {
   selectedInscriptionId: string | null;
   activeInscriptionText: string;
 
-  setInscriptions: (lines: Line[]) => void;
+  setInscriptions: (inscriptions: Line[] | ((inscriptions: Line[]) => Line[])) => void;
 
-  // ✅ type signature only; implementation lives in the store below
   addInscriptionLine: (patch?: LinePatch) => string;
-
   updateInscription: (id: string, patch: Partial<Line>) => void;
   duplicateInscription: (id: string) => string;
   deleteInscription: (id: string) => void;
@@ -90,7 +90,7 @@ type HeadstoneState = {
   activePanel: PanelName;
   setActivePanel: (p: PanelName) => void;
 
-  openInscriptions: (id?: string) => void;
+  openInscriptions: (id: string | null) => void;
   openSizePanel: () => void;
   closeInscriptions: () => void;
 };
@@ -138,6 +138,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       xPos: 0,
       yPos: 0,
       rotationDeg: 0,
+      ref: React.createRef<Group>(), // ✅
     },
     {
       id: genId(),
@@ -147,17 +148,23 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       xPos: 0,
       yPos: 20,
       rotationDeg: 0,
+      ref: React.createRef<Group>(), // ✅
     },
   ],
   selectedInscriptionId: null,
   activeInscriptionText: 'In Loving Memory',
 
-  setInscriptions: (inscriptions) => set({ inscriptions }),
+  setInscriptions: (inscriptions) => {
+    if (typeof inscriptions === "function") {
+      set({ inscriptions: inscriptions(get().inscriptions) });
+    } else {
+      set({ inscriptions });
+    }
+  },
 
   addInscriptionLine: (patch: LinePatch = {}) => {
     const id = genId();
 
-    // normalize once
     const text = patch.text ?? 'New line';
     const font = patch.font ?? 'Garamond';
     const sizeMm = clampInscriptionSize(patch.sizeMm ?? 30);
@@ -165,11 +172,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const xPos = patch.xPos ?? 0;
     const yPos = patch.yPos ?? 0;
 
-    const newLine: Line = { id, text, font, sizeMm, rotationDeg, xPos, yPos };
+    const newLine: Line = {
+      id,
+      text,
+      font,
+      sizeMm,
+      rotationDeg,
+      xPos,
+      yPos,
+      ref: React.createRef(),
+    };
 
     set((s) => ({
       inscriptions: [...s.inscriptions, newLine],
-      selectedInscriptionId: id, // optional: auto-select the new line
+      selectedInscriptionId: id,
     }));
 
     return id;

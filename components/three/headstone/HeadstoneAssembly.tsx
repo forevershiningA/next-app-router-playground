@@ -1,7 +1,7 @@
 // components/three/headstone/HeadstoneAssembly.tsx
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import * as THREE from "three";
 
 import ShapeSwapper from "./ShapeSwapper";
@@ -12,67 +12,66 @@ import { useHeadstoneStore } from "#/lib/headstone-store";
 const BASE_H = 2;
 
 export default function HeadstoneAssembly() {
-  const [sel, setSel] = useState<"headstone" | "base" | null>(null);
-
+  const selected = useHeadstoneStore((s) => s.selected);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
   const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
-  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const inscriptions = useHeadstoneStore((s) => s.inscriptions);
+  const setSelectedInscriptionId = useHeadstoneStore(
+    (s) => s.setSelectedInscriptionId
+  );
 
-  const assemblyRef = useRef<THREE.Object3D>(new THREE.Group());
+  const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
-  const inscriptionRef = useRef<THREE.Object3D>(null!);
+  const baseRef = useRef<THREE.Mesh>(null!);
+
+  const selectedInscription = inscriptions.find(
+    (inscription) => inscription.id === selectedInscriptionId
+  );
 
   return (
     <>
       <group ref={assemblyRef} position={[0, BASE_H, 0]}>
-        <ShapeSwapper
-          tabletRef={tabletRef}
-          onSelectHeadstone={() => {
-            setSel("headstone");
-            setSelectedInscriptionId(null);
-          }}
-          inscriptionRef={inscriptionRef}
-        />
+        <ShapeSwapper tabletRef={tabletRef} />
 
         <BoxOutline
           targetRef={tabletRef}
-          visible={sel === "headstone"}
+          visible={selected === "headstone"}
           color="white"
           pad={0.004}
           through={false}
         />
 
         <BoxOutline
-          targetRef={inscriptionRef}
-          visible={selectedInscriptionId !== null}
-          color="yellow"
-          pad={0.02}
+          targetRef={baseRef}
+          visible={selected === "base"}
+          color="white"
+          pad={0.004}
           through={false}
         />
 
+        {selectedInscription && (
+          <BoxOutline
+            targetRef={selectedInscription.ref}
+            visible={true}
+            color="white"
+            pad={0.02}
+            through={false}
+          />
+        )}
+
         <HeadstoneBaseAuto
+          ref={baseRef}
           headstoneObject={tabletRef}
           wrapper={assemblyRef}
-          selected={sel === "base"}
+          name="base"
+          height={BASE_H}
           onClick={(e) => {
             e.stopPropagation();
-            setSel("base");
+            setSelected("base");
             setSelectedInscriptionId(null);
           }}
-          height={BASE_H}
         />
       </group>
-
-      <mesh
-        position={[0, -0.001, 0]}
-        onPointerDown={() => {
-          setSel(null);
-          setSelectedInscriptionId(null);
-        }}
-        visible={false}
-      >
-        <boxGeometry args={[100, 0.001, 100]} />
-        <meshBasicMaterial transparent opacity={0} />
-      </mesh>
     </>
   );
 }

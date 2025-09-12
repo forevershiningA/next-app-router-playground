@@ -5,9 +5,9 @@ import * as React from "react";
 import * as THREE from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 
-export type BoxOutlineProps = {
+type BoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   /** Object whose world-space bounds should be outlined (e.g., your tablet group). */
-  targetRef: React.RefObject<THREE.Object3D>;
+  targetRef: React.RefObject<T> | React.MutableRefObject<T | null>;
   /** Toggle outline visibility. */
   visible?: boolean;
   /** Outline color. */
@@ -24,7 +24,7 @@ export type BoxOutlineProps = {
  * Lightweight world-space bounding box outline that follows a target object.
  * Uses THREE.Box3Helper under the hood and updates every frame.
  */
-export default function BoxOutline({
+export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   targetRef,
   visible = true,
   color = "white",
