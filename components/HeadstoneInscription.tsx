@@ -1,10 +1,11 @@
 'use client';
-import * as React from "react";
-import * as THREE from "three";
-import { useThree, useFrame } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
-import type { HeadstoneAPI } from "./SvgHeadstone";
-import { useHeadstoneStore } from "#/lib/headstone-store";
+
+import * as React from 'react';
+import * as THREE from 'three';
+import { useThree, useFrame } from '@react-three/fiber';
+import { Text } from '@react-three/drei';
+import type { HeadstoneAPI } from './SvgHeadstone';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 /* ------------------------------------------------------------------ */
 /* Props                                                               */
@@ -36,9 +37,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     {
       id,
       headstone,
-      text = "",
+      text = '',
       height,
-      color = "#fff8dc",
+      color = '#fff8dc',
       font,
       lift = 0.002,
       xPos = 0,
@@ -52,17 +53,17 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     },
     ref
   ) => {
-    const { camera, size, gl, controls, scene } = useThree() as any;
+    const { camera, gl, controls, scene } = useThree() as any;
 
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
     React.useImperativeHandle(ref, () => groupRef.current!, []);
 
     const helperRef = React.useRef<THREE.BoxHelper | null>(null);
-    const setInscriptions = useHeadstoneStore((s) => s.setInscriptions);
+    const setInscriptions = useHeadstoneStore((s: any) => s.setInscriptions);
 
     React.useEffect(() => {
-      setInscriptions((inscriptions) =>
+      setInscriptions((inscriptions: any[]) =>
         inscriptions.map((inscription) =>
           inscription.id === id ? { ...inscription, ref: groupRef } : inscription
         )
@@ -75,9 +76,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
     const units = headstone.unitsPerMeter;
     const liftLocal = lift * units;
-
-    // store hooks (guarded; if your store keys differ, adjust here)
-    const openInscriptions = useHeadstoneStore((s: any) => s?.openInscriptions);
 
     // initial Y based on approx height
     const initialYLocal = React.useMemo(() => {
@@ -97,7 +95,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       const stone = headstone.mesh.current as THREE.Mesh | null;
       if (!stone || !stone.geometry) return;
 
-      const id = requestAnimationFrame(() => {
+      const raf = requestAnimationFrame(() => {
         const g = stone.geometry as THREE.BufferGeometry;
         g.computeBoundingBox();
         const bb = g.boundingBox;
@@ -110,17 +108,20 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           )
         );
       });
-      return () => cancelAnimationFrame(id);
+      return () => cancelAnimationFrame(raf);
     }, [headstone.mesh, headstone.frontZ, liftLocal]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
     const placeFromClientXY = React.useCallback(
       (clientX: number, clientY: number) => {
         const stone = headstone.mesh.current as THREE.Mesh | null;
-        if (!stone) return;
+        const canvas: HTMLCanvasElement | undefined = gl?.domElement;
+        if (!stone || !canvas) return;
 
-        mouse.x = (clientX / size.width) * 2 - 1;
-        mouse.y = -(clientY / size.height) * 2 + 1;
+        // ✅ FIX: Use canvas rect for correct NDC mapping (canvas may not be at 0,0)
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
         raycaster.setFromCamera(mouse, camera);
         const hits = raycaster.intersectObject(stone, true);
@@ -134,44 +135,57 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         const local = hit.point.clone();
         stone.worldToLocal(local);
         local.z = headstone.frontZ + liftLocal;
-        setPos(local.add(dragOffset));
+
+        // next is in headstone-local space, corrected by the initial grab offset
+        const next = local.add(dragOffset);
+
+        // ✅ FIX: we render at [pos + (xPos,yPos)], so write back into pos by subtracting
+        setPos(
+          new THREE.Vector3(
+            next.x - xPos,
+            next.y - yPos,
+            headstone.frontZ + liftLocal
+          )
+        );
       },
       [
         camera,
-        size.width,
-        size.height,
+        gl,
         raycaster,
         headstone.mesh,
         headstone.frontZ,
         liftLocal,
         mouse,
         dragOffset,
+        xPos,
+        yPos,
       ]
     );
 
     /* ---------------------------- drag wiring (pointermove/up) --------------------------- */
     React.useEffect(() => {
       if (!dragging) return;
-      const dom: HTMLElement | undefined = gl?.domElement;
-      if (!dom) return;
+      const canvas: HTMLElement | undefined = gl?.domElement;
+      if (!canvas) return;
 
       const onMove = (e: PointerEvent) => placeFromClientXY(e.clientX, e.clientY);
-      const onUp = () => {
+      const onUp = (e: PointerEvent) => {
         setDragging(false);
         if (controls) controls.enabled = true;
-        document.body.style.cursor = "auto";
+        document.body.style.cursor = 'auto';
+        (e.target as any)?.releasePointerCapture?.(e.pointerId);
       };
 
       if (controls) controls.enabled = false;
-      dom.addEventListener("pointermove", onMove);
-      window.addEventListener("pointerup", onUp, { once: true });
-      document.body.style.cursor = "grabbing";
+      canvas.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp, { once: true });
+      document.body.style.cursor = 'grabbing';
 
       return () => {
-        dom.removeEventListener("pointermove", onMove);
-        window.removeEventListener("pointerup", onUp);
+        canvas.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
         if (controls) controls.enabled = true;
-        document.body.style.cursor = "auto";
+        document.body.style.cursor = 'auto';
       };
     }, [dragging, gl, controls, placeFromClientXY]);
 
@@ -216,7 +230,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           anchorY="middle"
           fontSize={height}
           outlineWidth={(selected ? 0.005 : 0.002) * units}
-          outlineColor={selected ? "#ffffff" : "black"}
+          outlineColor={selected ? '#ffffff' : 'black'}
           onSync={() => {
             // geometry finished updating; refresh helper bounds if present
             helperRef.current?.update();
@@ -225,27 +239,35 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           onClick={(e) => {
             e.stopPropagation();
             onSelectInscription?.();
-            try {
-              // openInscriptions?.(id);
-            } catch {}
           }}
           onPointerDown={(e) => {
             e.stopPropagation();
-
             if (!editable) return;
+
             const stone = headstone.mesh.current as THREE.Mesh | null;
             if (stone) {
+              // world → headstone local at click
               const localPoint = stone.worldToLocal(e.point.clone());
-              setDragOffset(pos.clone().sub(localPoint));
+
+              // ✅ FIX: compute grab offset from the *rendered* local position = pos + xPos/yPos
+              const currentLocal = new THREE.Vector3(
+                pos.x + xPos,
+                pos.y + yPos,
+                headstone.frontZ + liftLocal
+              );
+              setDragOffset(currentLocal.sub(localPoint));
             }
+
+            // capture & start drag
+            (e.target as any)?.setPointerCapture?.(e.pointerId);
             onSelect?.();
             setDragging(true);
           }}
           onPointerOver={() => {
-            if (editable) document.body.style.cursor = "grab";
+            if (editable) document.body.style.cursor = 'grab';
           }}
           onPointerOut={() => {
-            if (editable && !dragging) document.body.style.cursor = "auto";
+            if (editable && !dragging) document.body.style.cursor = 'auto';
           }}
         >
           {text}
@@ -255,5 +277,5 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
   }
 );
 
-HeadstoneInscription.displayName = "HeadstoneInscription";
+HeadstoneInscription.displayName = 'HeadstoneInscription';
 export default HeadstoneInscription;
