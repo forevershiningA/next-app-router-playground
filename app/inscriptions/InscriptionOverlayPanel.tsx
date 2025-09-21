@@ -54,8 +54,12 @@ export default function InscriptionOverlayPanel() {
           data-inscriptions-auto-focus
           className="w-full rounded-lg border border-violet-400/60 bg-transparent px-3 py-2 outline-none ring-0 focus:border-violet-300"
           value={incomingText ?? ""}
-          onChange={(e) => setActiveInscriptionText(e.target.value)}
-          onBlur={() => active && updateLine(active.id, { text: incomingText })}
+          onChange={(e) => {
+            setActiveInscriptionText(e.target.value);
+            if (active) {
+              updateLine(active.id, { text: e.target.value });
+            }
+          }}
           placeholder="Type here…"
         />
       </div>
