@@ -1,9 +1,9 @@
 // components/three/BoxOutline.tsx
-"use client";
+'use client';
 
-import * as React from "react";
-import * as THREE from "three";
-import { useThree, useFrame } from "@react-three/fiber";
+import * as React from 'react';
+import * as THREE from 'three';
+import { useThree, useFrame } from '@react-three/fiber';
 
 type BoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   /** Object whose world-space bounds should be outlined (e.g., your tablet group). */
@@ -27,7 +27,7 @@ type BoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
 export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   targetRef,
   visible = true,
-  color = "white",
+  color = 'white',
   pad = 0.004,
   through = true,
   renderOrder = 1000,
@@ -51,12 +51,12 @@ export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
 
     const helper = new THREE.Box3Helper(
       boxRef.current,
-      new THREE.Color(color as any).getHex()
+      new THREE.Color(color as any).getHex(),
     );
 
     // Configure the line material
     const mat = helper.material as THREE.LineBasicMaterial;
-    mat.depthTest = through ? false : true;  // draw-through if requested
+    mat.depthTest = through ? false : true; // draw-through if requested
     mat.depthWrite = false;
     mat.transparent = true;
 

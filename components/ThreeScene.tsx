@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
-import Scene from "./three/Scene";
+import { Canvas } from '@react-three/fiber';
+import { Suspense } from 'react';
+import Scene from './three/Scene';
 
 export default function ThreeScene() {
   return (
-    <div className="relative w-full h-screen bg-[#cfe8fc]">
+    <div className="relative h-screen w-full bg-[#cfe8fc]">
       <Canvas shadows camera={{ position: [2.6, 1.8, 2.6], fov: 45 }}>
-        <color attach="background" args={["#cfe8fc"]} />
+        <color attach="background" args={['#cfe8fc']} />
         {/* IMPORTANT: no global fallback here */}
         <Suspense fallback={null}>
           <Scene />

@@ -25,6 +25,7 @@ type Props = {
   approxHeight?: number; // meters, used for an initial Y offset
   xPos?: number; // horizontal offset (local units of headstone)
   yPos?: number; // vertical offset   (local units of headstone)
+  rotationDeg?: number; // rotation in degrees
   onSelectInscription?: () => void;
   /** tiny Z offset to disambiguate picking when items overlap in Z */
   zBump?: number;
@@ -44,6 +45,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       lift = 0.002,
       xPos = 0,
       yPos = 0,
+      rotationDeg = 0,
       editable = false,
       selected = false,
       onSelect,
@@ -51,7 +53,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       onSelectInscription,
       zBump = 0,
     },
-    ref
+    ref,
   ) => {
     const { camera, gl, controls, scene } = useThree() as any;
 
@@ -60,15 +62,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     React.useImperativeHandle(ref, () => groupRef.current!, []);
 
     const helperRef = React.useRef<THREE.BoxHelper | null>(null);
-    const setInscriptions = useHeadstoneStore((s: any) => s.setInscriptions);
-
-    React.useEffect(() => {
-      setInscriptions((inscriptions: any[]) =>
-        inscriptions.map((inscription) =>
-          inscription.id === id ? { ...inscription, ref: groupRef } : inscription
-        )
-      );
-    }, [id, setInscriptions]);
+    const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
 
     // tools reused during pointer placement
     const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
@@ -85,15 +79,18 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     }, [approxHeight, units]);
 
     const [pos, setPos] = React.useState(
-      () => new THREE.Vector3(0, initialYLocal, headstone.frontZ + liftLocal)
+      () => new THREE.Vector3(0, initialYLocal, headstone.frontZ + liftLocal),
     );
     const [dragging, setDragging] = React.useState(false);
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
 
-    /* ---------------- center on current mesh bbox once available ---------------- */
+    /* ---------------- position on current mesh bbox once available ---------------- */
     React.useEffect(() => {
       const stone = headstone.mesh.current as THREE.Mesh | null;
       if (!stone || !stone.geometry) return;
+
+      // Only position initial and duplicated inscriptions (xPos=0)
+      if (xPos !== 0) return;
 
       const raf = requestAnimationFrame(() => {
         const g = stone.geometry as THREE.BufferGeometry;
@@ -104,12 +101,12 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           new THREE.Vector3(
             (bb.min.x + bb.max.x) / 2,
             (bb.min.y + bb.max.y) / 2,
-            headstone.frontZ + liftLocal
-          )
+            headstone.frontZ + liftLocal,
+          ),
         );
       });
       return () => cancelAnimationFrame(raf);
-    }, [headstone.mesh, headstone.frontZ, liftLocal]);
+    }, [headstone.mesh, headstone.frontZ, liftLocal, xPos, yPos]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
     const placeFromClientXY = React.useCallback(
@@ -129,7 +126,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
         // prefer front-facing triangles
         const hit =
-          hits.find((h) => h.face?.normal?.z && h.face.normal.z > 0.2) ?? hits[0];
+          hits.find((h) => h.face?.normal?.z && h.face.normal.z > 0.2) ??
+          hits[0];
         if (!hit) return;
 
         const local = hit.point.clone();
@@ -139,14 +137,11 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         // next is in headstone-local space, corrected by the initial grab offset
         const next = local.add(dragOffset);
 
-        // ✅ FIX: we render at [pos + (xPos,yPos)], so write back into pos by subtracting
-        setPos(
-          new THREE.Vector3(
-            next.x - xPos,
-            next.y - yPos,
-            headstone.frontZ + liftLocal
-          )
-        );
+        // Update store with new position offsets
+        updateLineStore(id, { xPos: next.x, yPos: next.y });
+
+        // Reset local pos to base position (0, 0)
+        setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));
       },
       [
         camera,
@@ -159,7 +154,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         dragOffset,
         xPos,
         yPos,
-      ]
+      ],
     );
 
     /* ---------------------------- drag wiring (pointermove/up) --------------------------- */
@@ -168,7 +163,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       const canvas: HTMLElement | undefined = gl?.domElement;
       if (!canvas) return;
 
-      const onMove = (e: PointerEvent) => placeFromClientXY(e.clientX, e.clientY);
+      const onMove = (e: PointerEvent) =>
+        placeFromClientXY(e.clientX, e.clientY);
       const onUp = (e: PointerEvent) => {
         setDragging(false);
         if (controls) controls.enabled = true;
@@ -221,6 +217,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       <group
         ref={groupRef}
         position={[pos.x + xPos, pos.y + yPos, pos.z + zBump]}
+        rotation={[0, 0, (rotationDeg * Math.PI) / 180]}
         scale={[1, -1, 1]}
       >
         <Text
@@ -253,7 +250,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
               const currentLocal = new THREE.Vector3(
                 pos.x + xPos,
                 pos.y + yPos,
-                headstone.frontZ + liftLocal
+                headstone.frontZ + liftLocal,
               );
               setDragOffset(currentLocal.sub(localPoint));
             }
@@ -274,7 +271,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         </Text>
       </group>
     );
-  }
+  },
 );
 
 HeadstoneInscription.displayName = 'HeadstoneInscription';

@@ -33,7 +33,6 @@ export default async function Page({
               ({products.length})
             </span>
           </h1>
-
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

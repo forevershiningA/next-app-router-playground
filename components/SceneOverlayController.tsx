@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import clsx from "clsx";
+import * as React from 'react';
+import clsx from 'clsx';
 
 type Props = {
   section: string;
@@ -19,10 +19,12 @@ type Pos = { x: number; y: number };
 
 // in-memory cache to avoid a flash back to defaults between mounts
 declare global {
-  interface Window { __FS_OVERLAY_UI__?: { pos?: Pos } }
+  interface Window {
+    __FS_OVERLAY_UI__?: { pos?: Pos };
+  }
 }
 function getUI() {
-  if (typeof window === "undefined") return {};
+  if (typeof window === 'undefined') return {};
   if (!window.__FS_OVERLAY_UI__) window.__FS_OVERLAY_UI__ = {};
   return window.__FS_OVERLAY_UI__;
 }
@@ -35,7 +37,7 @@ export default function SceneOverlayController({
   persistKey,
   className,
   isOpen,
-   onClose,
+  onClose,
 }: Props) {
   const controlled = typeof isOpen === 'boolean';
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
@@ -44,12 +46,14 @@ export default function SceneOverlayController({
   const globalKey = React.useMemo(() => `overlay-pos:_global`, []);
   const specificKey = React.useMemo(
     () => (persistKey ? `overlay-pos:${persistKey}` : null),
-    [persistKey]
+    [persistKey],
   );
 
   // Initial from in-memory to prevent default flash
-  const initialPos: Pos =
-    (typeof window !== "undefined" && getUI().pos) || { x: 16, y: 80 };
+  const initialPos: Pos = (typeof window !== 'undefined' && getUI().pos) || {
+    x: 16,
+    y: 80,
+  };
 
   const [pos, setPos] = React.useState<Pos>(initialPos);
 
@@ -116,11 +120,11 @@ export default function SceneOverlayController({
       }));
     };
     clampIntoViewport();
-    window.addEventListener("resize", clampIntoViewport);
-    window.addEventListener("orientationchange", clampIntoViewport);
+    window.addEventListener('resize', clampIntoViewport);
+    window.addEventListener('orientationchange', clampIntoViewport);
     return () => {
-      window.removeEventListener("resize", clampIntoViewport);
-      window.removeEventListener("orientationchange", clampIntoViewport);
+      window.removeEventListener('resize', clampIntoViewport);
+      window.removeEventListener('orientationchange', clampIntoViewport);
     };
   }, []);
 
@@ -132,20 +136,23 @@ export default function SceneOverlayController({
         setCollapsed(false);
         requestAnimationFrame(() => {
           const el = document.querySelector(
-            "[data-inscriptions-auto-focus]"
+            '[data-inscriptions-auto-focus]',
           ) as HTMLInputElement | null;
           el?.focus();
           el?.select?.();
         });
       }
     };
-    window.addEventListener("fs:open-overlay", onOpen as EventListener);
-    return () => window.removeEventListener("fs:open-overlay", onOpen as EventListener);
+    window.addEventListener('fs:open-overlay', onOpen as EventListener);
+    return () =>
+      window.removeEventListener('fs:open-overlay', onOpen as EventListener);
   }, [section]);
 
   const isInteractive = (el: EventTarget | null) =>
     el instanceof HTMLElement &&
-    !!el.closest("button,[role='button'],a,input,select,textarea,[data-nodrag]");
+    !!el.closest(
+      "button,[role='button'],a,input,select,textarea,[data-nodrag]",
+    );
 
   // Drag handling
   const onHeaderPointerDown = (e: React.PointerEvent) => {
@@ -157,7 +164,7 @@ export default function SceneOverlayController({
     mouseStart.current = { x: e.clientX, y: e.clientY };
 
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-    document.body.style.cursor = "grabbing";
+    document.body.style.cursor = 'grabbing';
   };
 
   const onHeaderPointerMove = (e: React.PointerEvent) => {
@@ -166,7 +173,10 @@ export default function SceneOverlayController({
     const dx = e.clientX - mouseStart.current.x;
     const dy = e.clientY - mouseStart.current.y;
 
-    const next: Pos = { x: dragStart.current.x + dx, y: dragStart.current.y + dy };
+    const next: Pos = {
+      x: dragStart.current.x + dx,
+      y: dragStart.current.y + dy,
+    };
 
     const el = rootRef.current;
     const vw = window.innerWidth;
@@ -187,54 +197,54 @@ export default function SceneOverlayController({
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
     } catch {}
-    document.body.style.cursor = "auto";
+    document.body.style.cursor = 'auto';
   };
 
   return (
     <div
       ref={rootRef}
-      className={clsx("pointer-events-auto fixed z-[9998]", className)}
-      style={{ left: pos.x, top: pos.y, width: 380, maxWidth: "92vw" }}
+      className={clsx('pointer-events-auto fixed z-[9998]', className)}
+      style={{ left: pos.x, top: pos.y, width: 380, maxWidth: '92vw' }}
     >
       <div
         className={clsx(
-          "bg-[rgba(0,0,0,0.79)] transition-opacity",
-          collapsed ? "opacity-80" : "opacity-100"
+          'bg-[rgba(0,0,0,0.79)] transition-opacity',
+          collapsed ? 'opacity-80' : 'opacity-100',
         )}
       >
         {/* Header (drag handle) */}
         <div
-          className="flex items-center justify-between px-4 pt-1 select-none cursor-grab"
+          className="flex cursor-grab items-center justify-between px-4 pt-1 select-none"
           onPointerDown={onHeaderPointerDown}
           onPointerMove={onHeaderPointerMove}
           onPointerUp={onHeaderPointerUp}
           onDoubleClick={() => setCollapsed((c) => !c)}
         >
-          <h3 className="text-white font-semibold">{title}</h3>
+          <h3 className="font-semibold text-white">{title}</h3>
 
           <button
             type="button"
             data-nodrag
-            className="bg-white/10 hover:bg-white/20 text-white px-2 py-1 text-sm"
+            className="bg-white/10 px-2 py-1 text-sm text-white hover:bg-white/20"
             onClick={(e) => {
               e.stopPropagation();
               setCollapsed((c) => !c);
             }}
             aria-expanded={!collapsed}
-            aria-label={collapsed ? "Expand" : "Collapse"}
-            title={collapsed ? "Expand" : "Collapse"}
+            aria-label={collapsed ? 'Expand' : 'Collapse'}
+            title={collapsed ? 'Expand' : 'Collapse'}
           >
-            {collapsed ? "+" : "–"}
+            {collapsed ? '+' : '–'}
           </button>
         </div>
 
         {/* Body */}
         <div
           className={clsx(
-            "px-4 pb-4 pt-2 transition-[max-height,opacity] duration-200",
+            'px-4 pt-2 pb-4 transition-[max-height,opacity] duration-200',
             collapsed
-              ? "max-h-0 opacity-0 overflow-hidden"
-              : "max-h-[75vh] opacity-100 overflow-auto"
+              ? 'max-h-0 overflow-hidden opacity-0'
+              : 'max-h-[75vh] overflow-auto opacity-100',
           )}
         >
           {children}

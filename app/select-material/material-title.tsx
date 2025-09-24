@@ -1,13 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useHeadstoneStore } from "#/lib/headstone-store";
+import { useEffect, useMemo } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type Material = { id: string; name: string; image: string; category: string };
 
 const toKebab = (s: string) =>
-  (s || "").toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  (s || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-');
 
 export default function MaterialTitle({
   materials,
@@ -22,10 +26,10 @@ export default function MaterialTitle({
 
   // Prefer ?slug=..., else last path segment (ignore base route)
   const rawSlug = useMemo(() => {
-    const q = searchParams.get("slug");
+    const q = searchParams.get('slug');
     if (q) return q;
-    const seg = pathname?.split("/").filter(Boolean).pop() ?? null;
-    if (seg && seg !== "select-material") return seg;
+    const seg = pathname?.split('/').filter(Boolean).pop() ?? null;
+    if (seg && seg !== 'select-material') return seg;
     return null;
   }, [searchParams, pathname]);
 
@@ -45,7 +49,7 @@ export default function MaterialTitle({
   useEffect(() => {
     if (!slugMatch) return;
     const desired = `/materials/${slugMatch.image}`;
-    if ((materialUrl ?? "").toLowerCase() !== desired.toLowerCase()) {
+    if ((materialUrl ?? '').toLowerCase() !== desired.toLowerCase()) {
       setMaterialUrl(desired);
     }
   }, [slugMatch, materialUrl, setMaterialUrl]);
@@ -56,13 +60,12 @@ export default function MaterialTitle({
 
     // 2) Else try store URL -> material
     if (materialUrl) {
-      const file = (materialUrl.split("/").pop() || materialUrl).toLowerCase();
+      const file = (materialUrl.split('/').pop() || materialUrl).toLowerCase();
       const byImage =
         materials.find((m) => m.image.toLowerCase() === file) ||
         materials.find(
           (m) =>
-            (`/materials/${m.image}`).toLowerCase() ===
-            materialUrl.toLowerCase()
+            `/materials/${m.image}`.toLowerCase() === materialUrl.toLowerCase(),
         );
       if (byImage) return byImage.name;
     }
@@ -73,7 +76,7 @@ export default function MaterialTitle({
 
   return (
     <h1 className="text-xl font-semibold text-gray-300">
-      Select Material{ name ? <span> - {name}</span> : null }
+      Select Material{name ? <span> - {name}</span> : null}
     </h1>
   );
 }

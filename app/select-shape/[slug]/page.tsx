@@ -1,17 +1,17 @@
 // app/select-shape/[slug]/page.tsx
 import { Suspense } from 'react';
-import { Boundary } from "#/ui/boundary";
-import { ProductCard } from "#/ui/product-card";
-import db from "#/lib/db";
+import { Boundary } from '#/ui/boundary';
+import { ProductCard } from '#/ui/product-card';
+import db from '#/lib/db';
 
 type RouteParams = { slug: string };
 
 // Turn "curved-gable" → "Curved Gable"
 function formatSlug(slug: string) {
   return slug
-    .split("-")
+    .split('-')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export default async function Page({
@@ -19,18 +19,18 @@ export default async function Page({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-   const { slug } = await params;       
+  const { slug } = await params;
   const shapes = await db.shape.findMany({ limit: 32 });
 
   return (
     <Suspense fallback={null}>
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-3 gap-6 lg:grid-cols-3">
-        {shapes.map((shape) => (
-          <ProductCard key={shape.id} product={shape} type={"shape"} />
-        ))}
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-3 gap-6 lg:grid-cols-3">
+          {shapes.map((shape) => (
+            <ProductCard key={shape.id} product={shape} type={'shape'} />
+          ))}
+        </div>
       </div>
-    </div>
     </Suspense>
   );
 }

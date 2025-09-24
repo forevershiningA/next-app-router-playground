@@ -11,7 +11,7 @@ const nextConfig = {
     clientSegmentCache: true,
     viewTransition: true,
     prerenderEarlyExit: false,
-    routerBFCache: true
+    routerBFCache: true,
   },
 } satisfies NextConfig;
 

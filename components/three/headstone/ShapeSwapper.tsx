@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import * as THREE from "three";
-import { useThree, useLoader, useFrame } from "@react-three/fiber";
-import { Html, useTexture } from "@react-three/drei";
-import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
+import * as React from 'react';
+import * as THREE from 'three';
+import { useThree, useLoader, useFrame } from '@react-three/fiber';
+import { Html, useTexture } from '@react-three/drei';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
-import AutoFit from "../AutoFit";
-import SvgHeadstone from "../../SvgHeadstone";
-import HeadstoneInscription from "../../HeadstoneInscription";
-import { useHeadstoneStore, Line } from "#/lib/headstone-store";
-import { DEFAULT_SHAPE_URL } from "#/lib/headstone-constants";
+import AutoFit from '../AutoFit';
+import SvgHeadstone from '../../SvgHeadstone';
+import HeadstoneInscription from '../../HeadstoneInscription';
+import { useHeadstoneStore, Line } from '#/lib/headstone-store';
+import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 
 /* ---------- constants ---------- */
-const TEX_BASE = "/textures/forever/l/";
-const DEFAULT_TEX = "Imperial-Red.jpg";
+const TEX_BASE = '/textures/forever/l/';
+const DEFAULT_TEX = 'Imperial-Red.jpg';
 const BASE_H = 2; // scene units (100mm)
 
 /* ---------- tiny preloaders (no DOM output) ---------- */
@@ -27,7 +27,13 @@ function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
   return null;
 }
 
-function PreloadTexture({ url, onReady }: { url: string; onReady?: () => void }) {
+function PreloadTexture({
+  url,
+  onReady,
+}: {
+  url: string;
+  onReady?: () => void;
+}) {
   useTexture(url);
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
@@ -43,8 +49,8 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
   const portalRef = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      portalRef.current = document.getElementById("scene-root");
+    if (typeof window !== 'undefined') {
+      portalRef.current = document.getElementById('scene-root');
     }
   }, []);
 
@@ -70,12 +76,12 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
       zIndexRange={[1000, 0]}
     >
       <div
-        className="absolute inset-0 grid place-items-center pointer-events-none transition-opacity duration-200"
+        className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-200"
         style={{ opacity: visible ? 1 : 0 }}
       >
         <div className="flex flex-col items-center gap-4 text-white drop-shadow">
-          <div className="h-16 w-16 rounded-full border-[6px] border-white/30 border-t-white animate-spin" />
-          <div className="text-sm font-mono opacity-90">Loading assets…</div>
+          <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
+          <div className="font-mono text-sm opacity-90">Loading assets…</div>
         </div>
       </div>
     </Html>
@@ -97,25 +103,29 @@ export default function ShapeSwapper({
   const { invalidate } = useThree();
 
   const heightMm = useHeadstoneStore((s) => s.heightMm);
-  const widthMm  = useHeadstoneStore((s) => s.widthMm);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const materialUrl = useHeadstoneStore((s) => s.materialUrl);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
 
-  const setSelected  = useHeadstoneStore((s) => s.setSelected);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
 
-  const selectedInscriptionId     = useHeadstoneStore((s) => s.selectedInscriptionId);
-  const setSelectedInscriptionId  = useHeadstoneStore((s) => s.setSelectedInscriptionId);
-  const openInscriptions          = useHeadstoneStore((s) => s.openInscriptions);
-  const openSizePanel             = useHeadstoneStore((s) => s.openSizePanel);
+  const selectedInscriptionId = useHeadstoneStore(
+    (s) => s.selectedInscriptionId,
+  );
+  const setSelectedInscriptionId = useHeadstoneStore(
+    (s) => s.setSelectedInscriptionId,
+  );
+  const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
+  const openSizePanel = useHeadstoneStore((s) => s.openSizePanel);
 
   const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
-  const widthM  = React.useMemo(() => widthMm  / 100, [widthMm]);
+  const widthM = React.useMemo(() => widthMm / 100, [widthMm]);
 
   const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
   const requestedTex = React.useMemo(() => {
-    const file = materialUrl?.split("/").pop() ?? DEFAULT_TEX;
-    const jpg = file.replace(/\.(png|webp|jpeg)$/i, ".jpg");
+    const file = materialUrl?.split('/').pop() ?? DEFAULT_TEX;
+    const jpg = file.replace(/\.(png|webp|jpeg)$/i, '.jpg');
     return TEX_BASE + jpg;
   }, [materialUrl]);
 
@@ -149,10 +159,10 @@ export default function ShapeSwapper({
           showEdges={false}
           inscriptions={inscriptions}
           meshProps={{
-            name: "headstone",
+            name: 'headstone',
             onClick: (e) => {
               e.stopPropagation();
-              setSelected("headstone");
+              setSelected('headstone');
               setSelectedInscriptionId(null);
               openSizePanel?.();
             },
@@ -168,7 +178,6 @@ export default function ShapeSwapper({
                   font="/fonts/ChopinScript.otf"
                   editable
                   selected={selectedInscriptionId === line.id}
-                  ref={selectedInscriptionId === line.id ? inscriptionRef : null}
                   onSelectInscription={() => {
                     // Single source of truth: id-based selection via store helper
                     setSelected(null);
@@ -178,6 +187,7 @@ export default function ShapeSwapper({
                   lift={0.002}
                   xPos={line.xPos}
                   yPos={line.yPos}
+                  rotationDeg={line.rotationDeg}
                   height={line.sizeMm / 10}
                   text={line.text}
                   // NEGATIVE bump so later items are slightly farther away

@@ -1,15 +1,15 @@
 // lib/scene-overlay-store.ts
-"use client";
+'use client';
 
-import { create } from "zustand";
-import type { ReactNode } from "react";
+import { create } from 'zustand';
+import type { ReactNode } from 'react';
 
-type Section = "size" | "shape" | "material" | (string & {});
+type Section = 'size' | 'shape' | 'material' | (string & {});
 
 const sectionTitle: Record<string, string> = {
-  size: "Select Size",
-  shape: "Select Shape",
-  material: "Select Material",
+  size: 'Select Size',
+  shape: 'Select Shape',
+  material: 'Select Material',
 };
 
 type Pos = { x: number; y: number };
@@ -23,7 +23,11 @@ type OverlayState = {
   pos: Pos;
   collapsed: boolean;
 
-  show: (args: { section?: Section; title?: string; content: ReactNode }) => void;
+  show: (args: {
+    section?: Section;
+    title?: string;
+    content: ReactNode;
+  }) => void;
   hide: () => void;
   setPos: (pos: Pos) => void;
   toggleCollapsed: () => void;
@@ -31,7 +35,7 @@ type OverlayState = {
 
 export const useSceneOverlayStore = create<OverlayState>((set) => ({
   open: false,
-  title: "",
+  title: '',
   section: undefined,
   content: null,
   pos: { x: 24, y: 24 },
@@ -41,7 +45,8 @@ export const useSceneOverlayStore = create<OverlayState>((set) => ({
     set({
       open: true,
       section,
-      title: title ?? (section ? sectionTitle[section] ?? "Overlay" : "Overlay"),
+      title:
+        title ?? (section ? (sectionTitle[section] ?? 'Overlay') : 'Overlay'),
       content,
     }),
   hide: () => set({ open: false, content: null }),

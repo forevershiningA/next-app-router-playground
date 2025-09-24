@@ -1,8 +1,8 @@
 // components/OverlayPortal.tsx
-"use client";
+'use client';
 
-import * as React from "react";
-import { createPortal } from "react-dom";
+import * as React from 'react';
+import { createPortal } from 'react-dom';
 
 /**
  * Generic portal for 2D overlays.
@@ -10,7 +10,7 @@ import { createPortal } from "react-dom";
  */
 export default function OverlayPortal({
   children,
-  containerId = "overlay-root",
+  containerId = 'overlay-root',
 }: {
   children: React.ReactNode;
   containerId?: string;
@@ -18,18 +18,18 @@ export default function OverlayPortal({
   const [el, setEl] = React.useState<HTMLElement | null>(null);
 
   React.useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     let container = document.getElementById(containerId) as HTMLElement | null;
 
     if (!container) {
-      container = document.createElement("div");
+      container = document.createElement('div');
       container.id = containerId;
       // make it a full-viewport layer above the app
-      container.style.position = "fixed";
-      container.style.inset = "0";
-      container.style.pointerEvents = "none";
-      container.style.zIndex = "1200";
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.pointerEvents = 'none';
+      container.style.zIndex = '1200';
       document.body.appendChild(container);
     }
 

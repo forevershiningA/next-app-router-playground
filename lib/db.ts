@@ -94,9 +94,7 @@ const db = {
       if (options.where?.id !== undefined) {
         shape = data.shapes.find((p) => p.id === options.where?.id);
       } else if (options.where?.category !== undefined) {
-        shape = data.shapes.find(
-          (p) => p.category === options.where?.category,
-        );
+        shape = data.shapes.find((p) => p.category === options.where?.category);
       }
 
       let prev: string | undefined = undefined;
@@ -172,18 +170,14 @@ const db = {
       let result = data.materials;
 
       if (options.where?.category) {
-        result = result.filter(
-          (m) => m.category === options.where!.category,
-        );
+        result = result.filter((m) => m.category === options.where!.category);
       }
 
       if (options.where?.section) {
         const sectionCategories = data.categories
           .filter((category) => category.section === options.where!.section)
           .map((category) => category.id);
-        result = result.filter((m) =>
-          sectionCategories.includes(m.category),
-        );
+        result = result.filter((m) => sectionCategories.includes(m.category));
       }
 
       if (options.limit !== undefined) {

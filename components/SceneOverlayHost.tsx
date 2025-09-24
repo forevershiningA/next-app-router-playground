@@ -1,9 +1,9 @@
 // components/SceneOverlayHost.tsx
-"use client";
+'use client';
 
-import * as React from "react";
-import { createPortal } from "react-dom";
-import { useSceneOverlayStore } from "#/lib/scene-overlay-store";
+import * as React from 'react';
+import { createPortal } from 'react-dom';
+import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 
 /**
  * 2D overlay host (portaled to <body> so it never lands inside <Canvas>).
@@ -16,16 +16,16 @@ export default function SceneOverlayHost() {
 
   // Mount (or reuse) a dedicated overlay root under <body>
   React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    let el = document.getElementById("overlay-root") as HTMLElement | null;
+    if (typeof window === 'undefined') return;
+    let el = document.getElementById('overlay-root') as HTMLElement | null;
     if (!el) {
-      el = document.createElement("div");
-      el.id = "overlay-root";
+      el = document.createElement('div');
+      el.id = 'overlay-root';
       // Make sure it covers the viewport and sits above the app by default
-      el.style.position = "fixed";
-      el.style.inset = "0";
-      el.style.pointerEvents = "none";
-      el.style.zIndex = "1200";
+      el.style.position = 'fixed';
+      el.style.inset = '0';
+      el.style.pointerEvents = 'none';
+      el.style.zIndex = '1200';
       document.body.appendChild(el);
     }
     setRoot(el);
@@ -43,7 +43,10 @@ export default function SceneOverlayHost() {
     if (!open || !root || !cardRef.current) return;
     const c = root.getBoundingClientRect();
     const r = cardRef.current.getBoundingClientRect();
-    setPos({ x: pos.x, y: Math.max(12, Math.round((c.height - r.height) / 2)) });
+    setPos({
+      x: pos.x,
+      y: Math.max(12, Math.round((c.height - r.height) / 2)),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, root]);
 
@@ -59,22 +62,29 @@ export default function SceneOverlayHost() {
     if (!container) return;
     const c = container.getBoundingClientRect();
 
-    dragData.current = { dx: e.clientX - (c.left + pos.x), dy: e.clientY - (c.top + pos.y) };
+    dragData.current = {
+      dx: e.clientX - (c.left + pos.x),
+      dy: e.clientY - (c.top + pos.y),
+    };
     const el = e.currentTarget as HTMLElement;
     downElRef.current = el;
-    try { el.setPointerCapture?.(e.pointerId); } catch {}
+    try {
+      el.setPointerCapture?.(e.pointerId);
+    } catch {}
     setDragging(true);
 
     const onMove = (ev: PointerEvent) => {
       if (!dragData.current) return;
       const c2 = container.getBoundingClientRect();
       const r = cardRef.current?.getBoundingClientRect();
-      const cw = c2.width, ch = c2.height;
+      const cw = c2.width,
+        ch = c2.height;
       const w = Math.round(r?.width ?? 380);
       const h = Math.round(r?.height ?? (collapsed ? 48 : 220));
       const x = ev.clientX - c2.left - dragData.current.dx;
       const y = ev.clientY - c2.top - dragData.current.dy;
-      const clamp = (n: number, mi: number, ma: number) => Math.max(mi, Math.min(ma, n));
+      const clamp = (n: number, mi: number, ma: number) =>
+        Math.max(mi, Math.min(ma, n));
       const nx = clamp(Math.round(x), 8, cw - w - 8);
       const ny = clamp(Math.round(y), 8, ch - h - 8);
       if (dragRaf.current) cancelAnimationFrame(dragRaf.current);
@@ -84,20 +94,25 @@ export default function SceneOverlayHost() {
     const end = (ev: PointerEvent) => {
       const el2 = downElRef.current;
       if (el2 && el2.hasPointerCapture?.(ev.pointerId)) {
-        try { el2.releasePointerCapture?.(ev.pointerId); } catch {}
+        try {
+          el2.releasePointerCapture?.(ev.pointerId);
+        } catch {}
       }
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", end);
-      window.removeEventListener("pointercancel", end);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
       dragData.current = null;
-      if (dragRaf.current) { cancelAnimationFrame(dragRaf.current); dragRaf.current = null; }
+      if (dragRaf.current) {
+        cancelAnimationFrame(dragRaf.current);
+        dragRaf.current = null;
+      }
       downElRef.current = null;
       setDragging(false);
     };
 
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", end);
-    window.addEventListener("pointercancel", end);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
   };
 
   if (!root || !open || !content) return null;
@@ -109,16 +124,16 @@ export default function SceneOverlayHost() {
         className="pointer-events-auto absolute"
         style={{ left: pos.x, top: pos.y }}
       >
-        <div className="w-[340px] md:w-[380px] bg-black/70 text-white backdrop-blur-sm shadow-lg overflow-hidden rounded-xl">
+        <div className="w-[340px] overflow-hidden rounded-xl bg-black/70 text-white shadow-lg backdrop-blur-sm md:w-[380px]">
           {/* header */}
           <div className="flex items-center justify-between gap-2 px-4 py-3 select-none">
             <div
               onPointerDown={onPointerDown}
               title="Drag"
               aria-label="Drag overlay"
-              className={`flex-1 h-8 flex items-center ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
+              className={`flex h-8 flex-1 items-center ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             >
-              <h2 className="text-base font-semibold leading-none">{title}</h2>
+              <h2 className="text-base leading-none font-semibold">{title}</h2>
             </div>
             <button
               onClick={(e) => {
@@ -135,14 +150,30 @@ export default function SceneOverlayHost() {
                 });
               }}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/15 active:bg-white/20"
-              aria-label={collapsed ? "Maximize" : "Minimize"}
+              aria-label={collapsed ? 'Maximize' : 'Minimize'}
             >
               {collapsed ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M8 3H3v5M3 16v5h5M21 8V3h-5M16 21h5v-5" stroke="currentColor" strokeWidth="2" />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M8 3H3v5M3 16v5h5M21 8V3h-5M16 21h5v-5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
                 </svg>
               ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
                   <path d="M5 12h14" stroke="currentColor" strokeWidth="2" />
                 </svg>
               )}
@@ -153,6 +184,6 @@ export default function SceneOverlayHost() {
         </div>
       </div>
     </div>,
-    root
+    root,
   );
 }

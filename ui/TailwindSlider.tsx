@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import React from 'react';
 
@@ -42,10 +41,26 @@ export default function TailwindSlider({
     }
   };
 
+  const decrement = () => {
+    const newValue = Math.max(min, value - step);
+    onChange(newValue);
+  };
+
+  const increment = () => {
+    const newValue = Math.min(max, value + step);
+    onChange(newValue);
+  };
+
   return (
     <div className="w-full">
       <label className="block text-sm font-medium text-white/70">{label}</label>
       <div className="flex items-center space-x-2">
+        <button
+          onClick={decrement}
+          className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-600 bg-gray-800 text-white hover:bg-gray-700"
+        >
+          -
+        </button>
         <input
           type="range"
           min={min}
@@ -53,14 +68,20 @@ export default function TailwindSlider({
           step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-700"
         />
+        <button
+          onClick={increment}
+          className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-600 bg-gray-800 text-white hover:bg-gray-700"
+        >
+          +
+        </button>
         <input
           type="text"
           value={textValue}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
-          className="w-20 px-2 py-1 text-sm text-white bg-gray-800 border border-gray-600 rounded-md"
+          className="w-20 rounded-md border border-gray-600 bg-gray-800 px-2 py-1 text-sm text-white"
         />
         {unit && <span className="text-sm text-white/70">{unit}</span>}
       </div>

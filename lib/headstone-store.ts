@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import React from 'react';
-import type { Group } from 'three'; 
+import type { Group } from 'three';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 
 const TEX_BASE = '/textures/forever/l/';
@@ -19,7 +19,7 @@ const MAX_INSCRIPTION_SIZE_MM = 1200;
 const clampInscriptionSize = (v: number) =>
   Math.min(
     MAX_INSCRIPTION_SIZE_MM,
-    Math.max(MIN_INSCRIPTION_SIZE_MM, Math.round(v))
+    Math.max(MIN_INSCRIPTION_SIZE_MM, Math.round(v)),
   );
 
 const MIN_INSCRIPTION_ROTATION_DEG = -45;
@@ -27,7 +27,7 @@ const MAX_INSCRIPTION_ROTATION_DEG = 45;
 const clampInscriptionRotation = (v: number) =>
   Math.max(
     MIN_INSCRIPTION_ROTATION_DEG,
-    Math.min(MAX_INSCRIPTION_ROTATION_DEG, Math.round(v))
+    Math.min(MAX_INSCRIPTION_ROTATION_DEG, Math.round(v)),
   );
 
 /* types */
@@ -39,7 +39,7 @@ export type Line = {
   xPos: number;
   yPos: number;
   rotationDeg: number;
-  ref: React.RefObject<Group | null>;  // ✅ allow null
+  ref: React.RefObject<Group | null>; // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
 export type PanelName = 'shape' | 'size' | 'material' | 'inscription' | null;
@@ -72,7 +72,9 @@ type HeadstoneState = {
   selectedInscriptionId: string | null;
   activeInscriptionText: string;
 
-  setInscriptions: (inscriptions: Line[] | ((inscriptions: Line[]) => Line[])) => void;
+  setInscriptions: (
+    inscriptions: Line[] | ((inscriptions: Line[]) => Line[]),
+  ) => void;
 
   addInscriptionLine: (patch?: LinePatch) => string;
   updateInscription: (id: string, patch: Partial<Line>) => void;
@@ -155,7 +157,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   activeInscriptionText: 'In Loving Memory',
 
   setInscriptions: (inscriptions) => {
-    if (typeof inscriptions === "function") {
+    if (typeof inscriptions === 'function') {
       set({ inscriptions: inscriptions(get().inscriptions) });
     } else {
       set({ inscriptions });
@@ -180,7 +182,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       rotationDeg,
       xPos,
       yPos,
-      ref: React.createRef(),
+      ref: React.createRef<Group>(),
     };
 
     set((s) => ({
@@ -207,7 +209,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
                   ? clampInscriptionRotation(patch.rotationDeg)
                   : l.rotationDeg,
             }
-          : l
+          : l,
       ),
     }));
   },
@@ -216,7 +218,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const src = get().inscriptions.find((l) => l.id === id);
     if (!src) return '';
     const newId = genId();
-    set((s) => ({ inscriptions: [...s.inscriptions, { ...src, id: newId }] }));
+
+    // Offset by the source inscription's height (scaled) plus a small gap to avoid overlapping
+    const offset = src.sizeMm / 10 + 5;
+
+    set((s) => ({
+      inscriptions: [
+        ...s.inscriptions,
+        {
+          ...src,
+          id: newId,
+          ref: React.createRef<Group>(),
+          yPos: src.yPos + offset, // Position below current position accounting for height
+        },
+      ],
+      selectedInscriptionId: newId, // Select the newly duplicated inscription
+    }));
     return newId;
   },
 
@@ -244,7 +261,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     }
   },
 
-  setActiveInscriptionText: (activeInscriptionText) => set({ activeInscriptionText }),
+  setActiveInscriptionText: (activeInscriptionText) =>
+    set({ activeInscriptionText }),
 
   /* router injection */
   navTo: undefined,

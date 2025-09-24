@@ -11,7 +11,6 @@ export default function Byline() {
       >
         &copy; 2025 by Forever Shining
       </a>
-    
     </div>
   );
 }

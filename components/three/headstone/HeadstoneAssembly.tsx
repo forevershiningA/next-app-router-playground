@@ -1,23 +1,25 @@
 // components/three/headstone/HeadstoneAssembly.tsx
-"use client";
+'use client';
 
-import React, { useRef } from "react";
-import * as THREE from "three";
+import React, { useRef } from 'react';
+import * as THREE from 'three';
 
-import ShapeSwapper from "./ShapeSwapper";
-import HeadstoneBaseAuto from "./HeadstoneBaseAuto";
-import BoxOutline from "../BoxOutline";
-import { useHeadstoneStore } from "#/lib/headstone-store";
+import ShapeSwapper from './ShapeSwapper';
+import HeadstoneBaseAuto from './HeadstoneBaseAuto';
+import BoxOutline from '../BoxOutline';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 const BASE_H = 2;
 
 export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
-  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedInscriptionId = useHeadstoneStore(
+    (s) => s.selectedInscriptionId,
+  );
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const setSelectedInscriptionId = useHeadstoneStore(
-    (s) => s.setSelectedInscriptionId
+    (s) => s.setSelectedInscriptionId,
   );
 
   const assemblyRef = useRef<THREE.Group>(null!);
@@ -25,7 +27,7 @@ export default function HeadstoneAssembly() {
   const baseRef = useRef<THREE.Mesh>(null!);
 
   const selectedInscription = inscriptions.find(
-    (inscription) => inscription.id === selectedInscriptionId
+    (inscription) => inscription.id === selectedInscriptionId,
   );
 
   return (
@@ -35,7 +37,7 @@ export default function HeadstoneAssembly() {
 
         <BoxOutline
           targetRef={tabletRef}
-          visible={selected === "headstone"}
+          visible={selected === 'headstone'}
           color="white"
           pad={0.004}
           through={false}
@@ -43,7 +45,7 @@ export default function HeadstoneAssembly() {
 
         <BoxOutline
           targetRef={baseRef}
-          visible={selected === "base"}
+          visible={selected === 'base'}
           color="white"
           pad={0.004}
           through={false}
@@ -67,7 +69,7 @@ export default function HeadstoneAssembly() {
           height={BASE_H}
           onClick={(e) => {
             e.stopPropagation();
-            setSelected("base");
+            setSelected('base');
             setSelectedInscriptionId(null);
           }}
         />

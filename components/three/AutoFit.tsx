@@ -1,21 +1,21 @@
 // components/three/AutoFit.tsx
-"use client";
+'use client';
 
-import * as React from "react";
-import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
-import { useHeadstoneStore } from "#/lib/headstone-store";
+import * as React from 'react';
+import * as THREE from 'three';
+import { useThree } from '@react-three/fiber';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type Props = {
   target: React.RefObject<THREE.Object3D>; // tablet/upright ONLY (no base/ground)
-  margin?: number;            // >=1, extra room from exact fit
-  baseHeight?: number;        // scene units BELOW tablet bottom to include
-  duration?: number;          // seconds for the move animation
-  pad?: number;               // extra distance in front (scene units)
-  yBias?: number;             // fraction of tablet height to nudge upward (e.g. 0.02)
-  readyTimeoutMs?: number;    // wait up to this long for a stable first fit
-  resizeDebounceMs?: number;  // debounce for resize refit
-  trigger?: unknown;          // bump to force a refit (e.g. after texture/shape is ready)
+  margin?: number; // >=1, extra room from exact fit
+  baseHeight?: number; // scene units BELOW tablet bottom to include
+  duration?: number; // seconds for the move animation
+  pad?: number; // extra distance in front (scene units)
+  yBias?: number; // fraction of tablet height to nudge upward (e.g. 0.02)
+  readyTimeoutMs?: number; // wait up to this long for a stable first fit
+  resizeDebounceMs?: number; // debounce for resize refit
+  trigger?: unknown; // bump to force a refit (e.g. after texture/shape is ready)
 };
 
 export default function AutoFit({
@@ -32,17 +32,17 @@ export default function AutoFit({
   const { camera, size, controls, invalidate } = useThree() as {
     camera: THREE.PerspectiveCamera;
     size: { width: number; height: number };
-    controls?: any;            // OrbitControls if makeDefault
+    controls?: any; // OrbitControls if makeDefault
     invalidate: () => void;
   };
 
   // if you drive size from a store, keep these so refits happen on changes
   const heightMm = useHeadstoneStore((s: any) => s.heightMm);
-  const widthMm  = useHeadstoneStore((s: any) => s.widthMm);
+  const widthMm = useHeadstoneStore((s: any) => s.widthMm);
 
-  const lastDims   = React.useRef({ h: heightMm, w: widthMm });
-  const animId     = React.useRef<number | null>(null);
-  const didFirst   = React.useRef(false);
+  const lastDims = React.useRef({ h: heightMm, w: widthMm });
+  const animId = React.useRef<number | null>(null);
+  const didFirst = React.useRef(false);
 
   const easeInOutCubic = (x: number) =>
     x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
@@ -70,8 +70,8 @@ export default function AutoFit({
     fitBox.getBoundingSphere(sphere);
 
     // Vertical midline between tablet top and base bottom
-    const topY       = boxTablet.max.y;
-    const bottomY    = boxTablet.min.y;
+    const topY = boxTablet.max.y;
+    const bottomY = boxTablet.min.y;
     const baseBottom = bottomY - Math.max(0, baseHeight);
 
     let midY = (topY + baseBottom) / 2;
@@ -81,12 +81,12 @@ export default function AutoFit({
     const toTgt = new THREE.Vector3(sphere.center.x, midY, sphere.center.z);
 
     // Distance needed to fit the sphere (respect V/H FOV)
-    const vFov   = THREE.MathUtils.degToRad(camera.fov);
+    const vFov = THREE.MathUtils.degToRad(camera.fov);
     const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
-    const hFov   = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
-    const dY     = sphere.radius / Math.tan(vFov / 2);
-    const dX     = sphere.radius / Math.tan(hFov / 2);
-    const dist   = Math.max(dX, dY) * Math.max(1, margin) + pad;
+    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
+    const dY = sphere.radius / Math.tan(vFov / 2);
+    const dX = sphere.radius / Math.tan(hFov / 2);
+    const dist = Math.max(dX, dY) * Math.max(1, margin) + pad;
 
     // Preserve current azimuth/elevation: move along vector from current target to camera
     const currTarget = controls?.target
@@ -106,57 +106,70 @@ export default function AutoFit({
 
     // Keep near/far sensible for any scene scale
     const near = Math.max(0.01, dist * 0.01);
-    const far  = Math.max(dist * 10, camera.far);
+    const far = Math.max(dist * 10, camera.far);
 
     return { toPos, toTgt, near, far };
-  }, [target, camera, size.width, size.height, margin, pad, baseHeight, yBias, controls]);
+  }, [
+    target,
+    camera,
+    size.width,
+    size.height,
+    margin,
+    pad,
+    baseHeight,
+    yBias,
+    controls,
+  ]);
 
   /** Move camera/controls to pose (with animation). */
-const moveTo = React.useCallback((toPos: THREE.Vector3, toTgt: THREE.Vector3, near: number, far: number) => {
-  const fromPos = camera.position.clone();
-  const fromTgt = controls?.target
-    ? (controls.target as THREE.Vector3).clone()
-    : (() => {
-        const forward = new THREE.Vector3();
-        camera.getWorldDirection(forward);
-        const dist = camera.position.distanceTo(toTgt);
-        return camera.position.clone().addScaledVector(forward, dist);
-      })();
+  const moveTo = React.useCallback(
+    (toPos: THREE.Vector3, toTgt: THREE.Vector3, near: number, far: number) => {
+      const fromPos = camera.position.clone();
+      const fromTgt = controls?.target
+        ? (controls.target as THREE.Vector3).clone()
+        : (() => {
+            const forward = new THREE.Vector3();
+            camera.getWorldDirection(forward);
+            const dist = camera.position.distanceTo(toTgt);
+            return camera.position.clone().addScaledVector(forward, dist);
+          })();
 
-  const t0 = performance.now();
-  const durMs = Math.max(1, duration * 1000);
+      const t0 = performance.now();
+      const durMs = Math.max(1, duration * 1000);
 
-  const step = () => {
-    const t = Math.min(1, (performance.now() - t0) / durMs);
-    const k = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // easeInOutCubic
+      const step = () => {
+        const t = Math.min(1, (performance.now() - t0) / durMs);
+        const k = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // easeInOutCubic
 
-    camera.position.lerpVectors(fromPos, toPos, k);
-    if (controls?.target) {
-      controls.target.lerpVectors(fromTgt, toTgt, k);
-      controls.update?.();
-    } else {
-      camera.lookAt(toTgt);
-    }
-    invalidate();
+        camera.position.lerpVectors(fromPos, toPos, k);
+        if (controls?.target) {
+          controls.target.lerpVectors(fromTgt, toTgt, k);
+          controls.update?.();
+        } else {
+          camera.lookAt(toTgt);
+        }
+        invalidate();
 
-    if (t < 1) {
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          camera.position.copy(toPos);
+          if (controls?.target) {
+            controls.target.copy(toTgt);
+            controls.update?.();
+          } else {
+            camera.lookAt(toTgt);
+          }
+          camera.near = near;
+          camera.far = far;
+          camera.updateProjectionMatrix();
+        }
+      };
+
       requestAnimationFrame(step);
-    } else {
-      camera.position.copy(toPos);
-      if (controls?.target) {
-        controls.target.copy(toTgt);
-        controls.update?.();
-      } else {
-        camera.lookAt(toTgt);
-      }
-      camera.near = near;
-      camera.far  = far;
-      camera.updateProjectionMatrix();
-    }
-  };
-
-  requestAnimationFrame(step);
-}, [camera, controls, duration, invalidate]);
+    },
+    [camera, controls, duration, invalidate],
+  );
 
   /** Perform (or retry) the fit. Always runs; no delta skipping. */
   const runFit = React.useCallback(() => {
@@ -171,7 +184,9 @@ const moveTo = React.useCallback((toPos: THREE.Vector3, toTgt: THREE.Vector3, ne
   React.useEffect(() => {
     if (didFirst.current) return;
 
-    let raf1 = 0, raf2 = 0, timeoutId: any;
+    let raf1 = 0,
+      raf2 = 0,
+      timeoutId: any;
 
     const tryFit = () => {
       if (runFit()) {
@@ -215,7 +230,7 @@ const moveTo = React.useCallback((toPos: THREE.Vector3, toTgt: THREE.Vector3, ne
   React.useEffect(() => {
     const changed =
       Math.abs(heightMm - lastDims.current.h) > 1e-6 ||
-      Math.abs(widthMm  - lastDims.current.w) > 1e-6;
+      Math.abs(widthMm - lastDims.current.w) > 1e-6;
     if (!changed) return;
 
     lastDims.current = { h: heightMm, w: widthMm };

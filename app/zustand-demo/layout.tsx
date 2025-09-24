@@ -31,10 +31,10 @@ export default async function Layout({
           color="blue"
           animateRerendering={false}
         >
-            <div className="flex flex-col gap-9">
-              <ContextClickCounter />
-              {children}
-            </div>
+          <div className="flex flex-col gap-9">
+            <ContextClickCounter />
+            {children}
+          </div>
         </Boundary>
       </Boundary>
     </>

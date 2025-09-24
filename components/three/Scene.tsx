@@ -1,6 +1,6 @@
-"use client";
-import { OrbitControls } from "@react-three/drei";
-import HeadstoneAssembly from "./headstone/HeadstoneAssembly";
+'use client';
+import { OrbitControls } from '@react-three/drei';
+import HeadstoneAssembly from './headstone/HeadstoneAssembly';
 
 export default function Scene() {
   return (
@@ -10,7 +10,11 @@ export default function Scene() {
 
       <HeadstoneAssembly />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow position={[0, -0.001, 0]}>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        receiveShadow
+        position={[0, -0.001, 0]}
+      >
         <planeGeometry args={[40, 40]} />
         <meshStandardMaterial color="#9faf3f" />
       </mesh>

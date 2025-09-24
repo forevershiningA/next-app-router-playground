@@ -41,7 +41,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         const centerW = new THREE.Vector3(
           (min.x + max.x) / 2,
           min.y - height * 0.5 + EPS,
-          min.z + baseD * 0.5
+          min.z + baseD * 0.5,
         );
 
         w.updateWorldMatrix(true, false);
@@ -81,10 +81,14 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         receiveShadow
       >
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#212529" metalness={0.1} roughness={0.55} />
+        <meshStandardMaterial
+          color="#212529"
+          metalness={0.1}
+          roughness={0.55}
+        />
       </mesh>
     );
-  }
+  },
 );
 
 HeadstoneBaseAuto.displayName = 'HeadstoneBaseAuto';

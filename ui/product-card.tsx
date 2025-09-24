@@ -1,43 +1,55 @@
-"use client";
+'use client';
 
-import { Product } from "#/lib/db";
-import clsx from "clsx";
-import Image from "next/image";
-import { useHeadstoneStore } from "#/lib/headstone-store";
-import { useRouter } from "next/navigation";
-import { toSlug } from "#/lib/slug";
-import { SHAPES_BASE } from "#/lib/headstone-constants";
+import { Product } from '#/lib/db';
+import clsx from 'clsx';
+import Image from 'next/image';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useRouter } from 'next/navigation';
+import { toSlug } from '#/lib/slug';
+import { SHAPES_BASE } from '#/lib/headstone-constants';
 import {
   ElementType,
   ComponentPropsWithoutRef,
   PropsWithChildren,
   ReactNode,
-} from "react";
+} from 'react';
 
-export type PolymorphicProps<E extends ElementType, P = {}> = PropsWithChildren<P> & {
-  as?: E;
-} & Omit<ComponentPropsWithoutRef<E>, keyof P | "as" | "children">;
+export type PolymorphicProps<
+  E extends ElementType,
+  P = {},
+> = PropsWithChildren<P> & { as?: E } & Omit<
+    ComponentPropsWithoutRef<E>,
+    keyof P | 'as' | 'children'
+  >;
 
-type CardKind = "shape" | "material" | "product";
+type CardKind = 'shape' | 'material' | 'product';
 
 type ProductCardOwnProps = {
   product: Product;
   animateEnter?: boolean;
-  type?: CardKind;     
+  type?: CardKind;
   assetBase?: string;
   routeBase?: string;
   className?: string;
   children?: ReactNode;
-  onPick?: (args: { product: Product; slug: string; type: CardKind; selectedUrl: string }) => void;
+  onPick?: (args: {
+    product: Product;
+    slug: string;
+    type: CardKind;
+    selectedUrl: string;
+  }) => void;
 };
 
-type ProductCardProps<E extends ElementType> = PolymorphicProps<E, ProductCardOwnProps>;
+type ProductCardProps<E extends ElementType> = PolymorphicProps<
+  E,
+  ProductCardOwnProps
+>;
 
-export function ProductCard<E extends ElementType = "div">({
+export function ProductCard<E extends ElementType = 'div'>({
   as,
   product,
   animateEnter, // unused for now
-  type = "shape",
+  type = 'shape',
   assetBase: assetBaseProp,
   routeBase: routeBaseProp,
   onPick,
@@ -45,26 +57,26 @@ export function ProductCard<E extends ElementType = "div">({
   children,
   ...rest
 }: ProductCardProps<E>) {
-  const Comp: any = as || "div";
+  const Comp: any = as || 'div';
 
   const router = useRouter();
   const { setProductUrl, setShapeUrl, setMaterialUrl } = useHeadstoneStore();
 
- const assetBase =
+  const assetBase =
     assetBaseProp ??
-    (type === "shape"
+    (type === 'shape'
       ? SHAPES_BASE
-      : type === "material"
-      ? "/textures/forever/l/"
-      : "/products/");
-  
+      : type === 'material'
+        ? '/textures/forever/l/'
+        : '/products/');
+
   const routeBase =
     routeBaseProp ??
-    (type === "shape"
-      ? "/select-shape/"
-      : type === "material"
-      ? "/select-material/"
-      : "/select-product/");
+    (type === 'shape'
+      ? '/select-shape/'
+      : type === 'material'
+        ? '/select-material/'
+        : '/select-product/');
 
   const slug = toSlug(product.name);
   const selectedUrl = assetBase + product.image;
@@ -72,7 +84,7 @@ export function ProductCard<E extends ElementType = "div">({
   return (
     <Comp
       {...(rest as any)}
-      className={clsx("group flex flex-col gap-2.5", className)}
+      className={clsx('group flex flex-col gap-2.5', className)}
     >
       <div className="overflow-hidden bg-gray-900/50 p-4 group-hover:bg-gray-900">
         <Image
@@ -86,9 +98,9 @@ export function ProductCard<E extends ElementType = "div">({
             if (onPick) {
               onPick({ product, slug, type, selectedUrl });
             } else {
-              if (type === "product") setProductUrl(selectedUrl);
-              if (type === "shape") setShapeUrl(selectedUrl);
-              if (type === "material") setMaterialUrl(selectedUrl);
+              if (type === 'product') setProductUrl(selectedUrl);
+              if (type === 'shape') setShapeUrl(selectedUrl);
+              if (type === 'material') setMaterialUrl(selectedUrl);
               window.scrollTo({ top: 0 });
               router.push(routeBase + slug);
             }
@@ -110,11 +122,11 @@ export function ProductCardSkeleton() {
     <div className="group flex flex-col gap-2.5">
       <div
         className={clsx(
-          "aspect-square overflow-hidden bg-gray-900/50",
-          "relative before:absolute before:inset-0",
-          "before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent",
-          "before:translate-x-[-50%] before:opacity-0",
-          "before:animate-shimmer"
+          'aspect-square overflow-hidden bg-gray-900/50',
+          'relative before:absolute before:inset-0',
+          'before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent',
+          'before:translate-x-[-50%] before:opacity-0',
+          'before:animate-shimmer',
         )}
       />
       <div className="flex flex-col gap-2">
@@ -138,14 +150,22 @@ export function ProductList({
     <div className="flex flex-col gap-4">
       <h1 className="flex items-center gap-2 text-xl font-medium text-gray-300">
         <div>{title}</div>
-        <span className="font-mono tracking-tighter text-gray-600">({count})</span>
+        <span className="font-mono tracking-tighter text-gray-600">
+          ({count})
+        </span>
       </h1>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">{children}</div>
     </div>
   );
 }
 
-export function ProductListSkeleton({ title, count = 3 }: { title: string; count?: number }) {
+export function ProductListSkeleton({
+  title,
+  count = 3,
+}: {
+  title: string;
+  count?: number;
+}) {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-xl font-medium text-gray-600">{title}</h1>

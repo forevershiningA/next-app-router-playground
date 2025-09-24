@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useHeadstoneStore } from "#/lib/headstone-store";
+import { useEffect, useMemo } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type Product = { id: string; name: string; image: string; category: string };
 
 const toKebab = (s: string) =>
-  (s || "")
+  (s || '')
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-");
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-');
 
 export default function ShapeTitle({
   products,
@@ -26,11 +26,11 @@ export default function ShapeTitle({
 
   // Get slug from URL (query first, then last path segment)
   const rawSlug = useMemo(() => {
-    const q = searchParams.get("slug");
+    const q = searchParams.get('slug');
     if (q) return q;
-    const seg = pathname?.split("/").filter(Boolean).pop() ?? null;
+    const seg = pathname?.split('/').filter(Boolean).pop() ?? null;
     // ignore base route itself
-    if (seg && seg !== "select-shape") return seg;
+    if (seg && seg !== 'select-shape') return seg;
     return null;
   }, [searchParams, pathname]);
 
@@ -50,7 +50,7 @@ export default function ShapeTitle({
   useEffect(() => {
     if (!slugMatch) return;
     const desired = `/shapes/headstones/${slugMatch.image}`;
-    if ((shapeUrl ?? "").toLowerCase() !== desired.toLowerCase()) {
+    if ((shapeUrl ?? '').toLowerCase() !== desired.toLowerCase()) {
       setShapeUrl(desired);
     }
   }, [slugMatch, shapeUrl, setShapeUrl]);
@@ -61,13 +61,13 @@ export default function ShapeTitle({
 
     // 2) Otherwise, fall back to store URL → product
     if (shapeUrl) {
-      const file = (shapeUrl.split("/").pop() || shapeUrl).toLowerCase();
+      const file = (shapeUrl.split('/').pop() || shapeUrl).toLowerCase();
       const byImage =
         products.find((p) => p.image.toLowerCase() === file) ||
         products.find(
           (p) =>
-            ("/shapes/headstones/" + p.image).toLowerCase() ===
-            shapeUrl.toLowerCase()
+            ('/shapes/headstones/' + p.image).toLowerCase() ===
+            shapeUrl.toLowerCase(),
         );
       if (byImage) return byImage.name;
     }
@@ -78,7 +78,7 @@ export default function ShapeTitle({
 
   return (
     <h1 className="text-xl font-semibold text-gray-300">
-      Select Shape{ name ? <span> - {name}</span> : null }
+      Select Shape{name ? <span> - {name}</span> : null}
     </h1>
   );
 }
