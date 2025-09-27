@@ -46,7 +46,6 @@ export default function RootLayout({
           <GlobalNav items={demos} />
         </div>
         <div className="lg:pl-72">
-          <div className="mx-auto -space-y-[1px] lg:px-8 lg:py-8">
             <Suspense
               fallback={
                 <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
@@ -55,9 +54,7 @@ export default function RootLayout({
               <SceneOverlayHost /> {/* ← one host, one overlay */}
               <ThreeScene />
             </Suspense>
-            <div className="pt-4 pb-10">{children}</div>
-            <Byline />
-          </div>
+            <div>{children}</div>
         </div>
       </body>
     </html>
