@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<product id="201" postage_cost="1" fixing_cost="0" code="full-colour-plaque" name="Full-colour Plaque" type="sizes" color="1" fixed="1" url="src/img/images/01.png" description="">
+		
+		<shapes code="MAS_SHS" path="src/img/images/">
+			<mask id="1" nr="1" code="SHE_OVL" name="Units" url_swf="01.swf" url_dxf="01.dxf" />
+		</shapes>
+		
+		<product_type code="full-colour-plaque">
+			<type id="1" nr="1" name="Units" code="full-colour-plaque" min_width="110" max_width="110" min_height="150" max_height="150" min_depth="0" max_depth="0" init_width="110" init_height="150" init_depth="0" note="" />
+            <type id="2" nr="2" name="Units" code="full-colour-plaque" min_width="122" max_width="122" min_height="152" max_height="152" min_depth="0" max_depth="0" init_width="122" init_height="152" init_depth="0" note="" />
+            <type id="3" nr="3" name="Units" code="full-colour-plaque" min_width="130" max_width="130" min_height="180" max_height="180" min_depth="0" max_depth="0" init_width="130" init_height="180" init_depth="0" note="" />
+            <type id="4" nr="4" name="Units" code="full-colour-plaque" min_width="150" max_width="150" min_height="200" max_height="200" min_depth="0" max_depth="0" init_width="150" init_height="200" init_depth="0" note="" />
+            <type id="5" nr="5" name="Units" code="full-colour-plaque" min_width="180" max_width="180" min_height="240" max_height="240" min_depth="0" max_depth="0" init_width="180" init_height="240" init_depth="0" note="" />
+            <type id="6" nr="6" name="Units" code="full-colour-plaque" min_width="200" max_width="200" min_height="250" max_height="250" min_depth="0" max_depth="0" init_width="200" init_height="250" init_depth="0" note="" />
+            <type id="7" nr="7" name="Units" code="full-colour-plaque" min_width="216" max_width="216" min_height="381" max_height="381" min_depth="0" max_depth="0" init_width="216" init_height="381" init_depth="0" note="" />
+            <type id="8" nr="8" name="Units" code="full-colour-plaque" min_width="240" max_width="240" min_height="300" max_height="300" min_depth="0" max_depth="0" init_width="240" init_height="300" init_depth="0" note="" />
+            <type id="9" nr="9" name="Units" code="full-colour-plaque" min_width="280" max_width="280" min_height="380" max_height="380" min_depth="0" max_depth="0" init_width="280" init_height="380" init_depth="0" note="" />
+		</product_type>
+
+		<price_model code="full-colour-plaque" name="Full-colour Plaque" quantity_type="Units" fixing="0" currency="Dollars" >
+			<price id="1" nr="1" code="full-colour-plaque" name="Units" model="289.00+0($q-0)" start_quantity="260" end_quantity="260" retail_multiplier="1.0000" note="" />
+			<price id="2" nr="2" code="full-colour-plaque" name="Units" model="300.00+0($q-0)" start_quantity="274" end_quantity="274" retail_multiplier="1.0000" note="" />
+			<price id="3" nr="3" code="full-colour-plaque" name="Units" model="329.00+0($q-0)" start_quantity="310" end_quantity="310" retail_multiplier="1.0000" note="" />
+			<price id="4" nr="4" code="full-colour-plaque" name="Units" model="349.00+0($q-0)" start_quantity="350" end_quantity="350" retail_multiplier="1.0000" note="" />
+            <price id="5" nr="5" code="full-colour-plaque" name="Units" model="500.00+0($q-0)" start_quantity="420" end_quantity="420" retail_multiplier="1.0000" note="" />
+            <price id="6" nr="6" code="full-colour-plaque" name="Units" model="549.00+0($q-0)" start_quantity="450" end_quantity="450" retail_multiplier="1.0000" note="" />
+            <price id="7" nr="7" code="full-colour-plaque" name="Units" model="699.00+0($q-0)" start_quantity="597" end_quantity="597" retail_multiplier="1.0000" note="" />
+            <price id="8" nr="8" code="full-colour-plaque" name="Units" model="599.00+0($q-0)" start_quantity="540" end_quantity="540" retail_multiplier="1.0000" note="" />
+            <price id="9" nr="9" code="full-colour-plaque" name="Units" model="899.00+0($q-0)" start_quantity="660" end_quantity="660" retail_multiplier="1.0000" note="" />
+		</price_model>
+		
+	</product>
+
+</data>

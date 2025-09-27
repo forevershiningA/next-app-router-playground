@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<product id="7" postage_cost="1" fixing_cost="0" code="Ceramic-Photo" name="Ceramic Photo" type="image" color="1" fixed="1" url="src/img/images/01.png" description="">
+		
+		<shapes code="MAS_SHS" path="src/img/images/">
+			<mask id="1" nr="1" code="SHE_OVL" name="Oval" url_swf="01.swf" url_dxf="01.dxf" url_3d="photo-owal.m3d" />
+		</shapes>
+		
+		<product_type code="IMA_TYE">
+			<type id="1" nr="1" name="Oval" code="CI-OVAL" min_width="40" max_width="40" min_height="60" max_height="60" min_depth="0" max_depth="0" init_width="50" init_height="70" init_depth="0" note="" />
+			<type id="2" nr="2" name="Oval" code="CI-OVAL" min_width="50" max_width="50" min_height="70" max_height="70" min_depth="0" max_depth="0" init_width="50" init_height="70" init_depth="0" note="" />
+			<type id="3" nr="3" name="Oval" code="CI-OVAL" min_width="60" max_width="60" min_height="80" max_height="80" min_depth="0" max_depth="0" init_width="60" init_height="80" init_depth="0" note="" />
+			<type id="4" nr="4" name="Oval" code="CI-OVAL" min_width="70" max_width="70" min_height="90" max_height="90" min_depth="0" max_depth="0" init_width="70" init_height="90" init_depth="0" note="" />
+			<type id="5" nr="5" name="Oval" code="CI-OVAL" min_width="80" max_width="80" min_height="100" max_height="100" min_depth="0" max_depth="0" init_width="80" init_height="100" init_depth="0" note="" />
+			<type id="6" nr="6" name="Oval" code="CI-OVAL" min_width="90" max_width="90" min_height="120" max_height="120" min_depth="0" max_depth="0" init_width="90" init_height="120" init_depth="0" note="" />
+			<type id="7" nr="7" name="Oval" code="CI-OVAL" min_width="110" max_width="110" min_height="150" max_height="150" min_depth="0" max_depth="0" init_width="110" init_height="150" init_depth="0" note="" />
+			<type id="8" nr="8" name="Oval" code="CI-OVAL" min_width="130" max_width="130" min_height="180" max_height="180" min_depth="0" max_depth="0" init_width="130" init_height="180" init_depth="0" note="" />
+			<type id="9" nr="9" name="Oval" code="CI-OVAL" min_width="180" max_width="180" min_height="240" max_height="240" min_depth="0" max_depth="0" init_width="180" init_height="240" init_depth="0" note="" />
+		</product_type>
+
+		<price_model code="Ceramic-Photo" name="Ceramic Photo" quantity_type="Width + Height" fixing="0" currency="Dollars" >
+
+			<price id="1" nr="1" code="Ceramic-Photo" name="Oval" model="140.00+0($q-100)" start_quantity="100" end_quantity="100" retail_multiplier="1.0000" note="bw" />
+			<price id="2" nr="2" code="Ceramic-Photo" name="Oval" model="140.00+0($q-100)" start_quantity="100" end_quantity="100" retail_multiplier="1.0000" note="color" />
+			
+			<price id="3" nr="3" code="Ceramic-Photo" name="Oval" model="180.00+0($q-120)" start_quantity="120" end_quantity="120" retail_multiplier="1.0000" note="bw" />
+			<price id="4" nr="4" code="Ceramic-Photo" name="Oval" model="180.00+0($q-120)" start_quantity="120" end_quantity="120" retail_multiplier="1.0000" note="color" />
+			
+			<price id="5" nr="5" code="Ceramic-Photo" name="Oval" model="210.00+0($q-140)" start_quantity="140" end_quantity="140" retail_multiplier="1.0000" note="bw" />
+			<price id="6" nr="6" code="Ceramic-Photo" name="Oval" model="210.00+0($q-140)" start_quantity="140" end_quantity="140" retail_multiplier="1.0000" note="color" />
+			
+			<price id="7" nr="7" code="Ceramic-Photo" name="Oval" model="232.00+0($q-160)" start_quantity="160" end_quantity="160" retail_multiplier="1.0000" note="bw" />
+			<price id="8" nr="8" code="Ceramic-Photo" name="Oval" model="232.00+0($q-160)" start_quantity="160" end_quantity="160" retail_multiplier="1.0000" note="color" />
+
+			<price id="9" nr="9" code="Ceramic-Photo" name="Oval" model="260.00+0($q-180)" start_quantity="180" end_quantity="180" retail_multiplier="1.0000" note="bw" />
+			<price id="10" nr="10" code="Ceramic-Photo" name="Oval" model="260.00+0($q-180)" start_quantity="180" end_quantity="180" retail_multiplier="1.0000" note="color" />
+
+			<price id="11" nr="11" code="Ceramic-Photo" name="Oval" model="285.00+0($q-210)" start_quantity="210" end_quantity="210" retail_multiplier="1.0000" note="bw" />
+			<price id="12" nr="12" code="Ceramic-Photo" name="Oval" model="285.00+0($q-210)" start_quantity="210" end_quantity="210" retail_multiplier="1.0000" note="color" />
+			
+			<price id="13" nr="13" code="Ceramic-Photo" name="Oval" model="300.00+0($q-260)" start_quantity="260" end_quantity="260" retail_multiplier="1.0000" note="bw" />
+			<price id="14" nr="14" code="Ceramic-Photo" name="Oval" model="300.00+0($q-260)" start_quantity="260" end_quantity="260" retail_multiplier="1.0000" note="color" />
+
+			<price id="15" nr="15" code="Ceramic-Photo" name="Oval" model="390.00+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="1.0000" note="bw" />
+			<price id="16" nr="16" code="Ceramic-Photo" name="Oval" model="390.00+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="1.0000" note="color" />
+
+			<price id="17" nr="17" code="Ceramic-Photo" name="Oval" model="520.00+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="1.0000" note="bw" />
+			<price id="18" nr="18" code="Ceramic-Photo" name="Oval" model="520.00+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="1.0000" note="color" />
+			
+		</price_model>
+		
+	</product>
+	
+	<product id="21" postage_cost="1" fixing_cost="0" code="Granite-Image" name="Image" type="image" color="0" fixed="0" url="src/img/images/G01.png" description="">
+		
+		<shapes code="MAS_SHS" path="src/img/images/">
+			<mask id="1" nr="1" code="SHE_OVL" name="Granite-Image-Oval" url_swf="01.swf" url_dxf="01.dxf" url_3d="src/m3d/motifs/motif-container.m3d" />
+		</shapes>
+		
+		<product_type code="IMA_TYE">
+			<type id="1" nr="1" name="Granite-Image-Oval" code="CER_LAS_PRI_Square" min_width="30" max_width="1200" min_height="30" max_height="1200" min_depth="0" max_depth="0" init_width="50" init_height="50" init_depth="0" note="" />
+		</product_type>
+		
+		<price_model code="Granite Image" name="Granite Image" quantity_type="Units" currency="Dollars" >
+			<price id="1" nr="1" code="Granite Image" name="Oval" model="00.00+80.00($q-0)" start_quantity="1" end_quantity="0" retail_multiplier="1.0000" note="" />
+		</price_model>
+		
+	</product>
+
+	<product id="136" postage_cost="1" fixing_cost="0" code="YAG Lasered Image" name="Image (free)" type="image" color="0" fixed="0" url="src/img/images/G01.png" description="">
+		
+		<shapes code="MAS_SHS" path="src/img/images/">
+			<mask id="1" nr="1" code="SHE_OVL" name="YAG Lasered" url_swf="01.swf" url_dxf="01.dxf" url_3d="src/m3d/motifs/motif-container.m3d" />
+		</shapes>
+		
+		<product_type code="IMA_TYE">
+			<type id="1" nr="1" name="YAG Lasered" code="CER_LAS_PRI_Square" min_width="30" max_width="300" min_height="30" max_height="300" min_depth="0" max_depth="0" init_width="50" init_height="50" init_depth="0" note="" />
+		</product_type>
+		
+		<price_model code="PRE_PON_PHO_OVY" name="YAG Lasered Image" quantity_type="Width + Height" currency="Dollars" >
+			<price id="1" nr="1" code="CER_LAS_PRI_Square" name="Oval" model="00.00+0($q-60)" start_quantity="60" end_quantity="2400" retail_multiplier="1.0000" note="bw" />
+			<price id="2" nr="2" code="CER_LAS_PRI_Square" name="Oval" model="00.00+0($q-60)" start_quantity="60" end_quantity="2400" retail_multiplier="1.0000" note="color" />
+		</price_model>
+		
+	</product>
+
+	<product id="137" postage_cost="1" fixing_cost="0" code="Image" name="Image (free)" type="image" color="1" fixed="0" url="src/img/images/G01.png" description="">
+		
+		<shapes code="MAS_SHS" path="src/img/images/">
+			<mask id="1" nr="1" code="SHE_OVL" name="Granite-Image-Oval" url_swf="01.swf" url_dxf="01.dxf" url_3d="src/m3d/motifs/motif-container.m3d" />
+		</shapes>
+		
+		<product_type code="IMA_TYE">
+			<type id="1" nr="1" name="Granite-Image-Oval" code="CER_LAS_PRI_Square" min_width="30" max_width="1200" min_height="30" max_height="1200" min_depth="0" max_depth="0" init_width="50" init_height="50" init_depth="0" note="" />
+		</product_type>
+		
+		<price_model code="PRE_PON_PHO_OVY" name="Granite Image" quantity_type="Width + Height" currency="Dollars" >
+			<price id="1" nr="1" code="CER_LAS_PRI_Square" name="Oval" model="00.00+0($q-60)" start_quantity="60" end_quantity="2400" retail_multiplier="1.0000" note="" />
+		</price_model>
+		
+	</product>
+
+	<product id="2300" postage_cost="1" fixing_cost="0" code="Vitreous-Enamel-Image" name="Vitreous Enamel Image" type="image" color="1" fixed="0" url="src/img/images/V01.png" description="">
+		
+		<shapes code="MAS_SHS" path="src/img/images/">
+			<mask id="1" nr="1" code="SHE_OVL" name="Vitreous-Enamel-Image-Oval" url_swf="01.swf" url_dxf="01.dxf" url_3d="src/m3d/motifs/motif-container.m3d" />
+		</shapes>
+		
+		<product_type code="IMA_TYE">			
+			<type id="1" nr="1" name="Oval" code="CI-OVAL" min_width="50" max_width="50" min_height="70" max_height="70" min_depth="0" max_depth="0" init_width="50" init_height="70" init_depth="0" note="" />
+			<type id="2" nr="2" name="Oval" code="CI-OVAL" min_width="60" max_width="60" min_height="80" max_height="80" min_depth="0" max_depth="0" init_width="60" init_height="80" init_depth="0" note="" />
+			<type id="3" nr="3" name="Oval" code="CI-OVAL" min_width="70" max_width="70" min_height="90" max_height="90" min_depth="0" max_depth="0" init_width="70" init_height="90" init_depth="0" note="" />
+			<type id="4" nr="4" name="Oval" code="CI-OVAL" min_width="80" max_width="80" min_height="100" max_height="100" min_depth="0" max_depth="0" init_width="80" init_height="100" init_depth="0" note="" />
+			<type id="5" nr="5" name="Oval" code="CI-OVAL" min_width="90" max_width="90" min_height="120" max_height="120" min_depth="0" max_depth="0" init_width="80" init_height="100" init_depth="0" note="" />
+			<type id="6" nr="6" name="Oval" code="CI-OVAL" min_width="110" max_width="110" min_height="150" max_height="150" min_depth="0" max_depth="0" init_width="110" init_height="150" init_depth="0" note="" />
+			<type id="7" nr="7" name="Oval" code="CI-OVAL" min_width="130" max_width="130" min_height="180" max_height="180" min_depth="0" max_depth="0" init_width="130" init_height="180" init_depth="0" note="" />
+			<type id="8" nr="8" name="Oval" code="CI-OVAL" min_width="180" max_width="180" min_height="240" max_height="240" min_depth="0" max_depth="0" init_width="180" init_height="240" init_depth="0" note="" />
+		</product_type>
+
+		<price_model code="Vitreous-Enamel-Photo" name="Vitreous Enamel Image" quantity_type="Width + Height" fixing="0" currency="Dollars" >
+
+			<price id="1" nr="1" code="Vitreous-Enamel-Photo" name="Oval" model="250.00+0($q-120)" start_quantity="120" end_quantity="120" retail_multiplier="1.0000" note="bw" />
+			<price id="2" nr="2" code="Vitreous-Enamel-Photo" name="Oval" model="250.00+0($q-120)" start_quantity="120" end_quantity="120" retail_multiplier="1.0000" note="color" />
+			
+			<price id="3" nr="3" code="Vitreous-Enamel-Photo" name="Oval" model="270.00+0($q-140)" start_quantity="140" end_quantity="140" retail_multiplier="1.0000" note="bw" />
+			<price id="4" nr="4" code="Vitreous-Enamel-Photo" name="Oval" model="270.00+0($q-140)" start_quantity="140" end_quantity="140" retail_multiplier="1.0000" note="color" />
+			
+			<price id="5" nr="5" code="Vitreous-Enamel-Photo" name="Oval" model="290.00+0($q-160)" start_quantity="160" end_quantity="160" retail_multiplier="1.0000" note="bw" />
+			<price id="6" nr="6" code="Vitreous-Enamel-Photo" name="Oval" model="290.00+0($q-160)" start_quantity="160" end_quantity="160" retail_multiplier="1.0000" note="color" />
+
+			<price id="7" nr="7" code="Vitreous-Enamel-Photo" name="Oval" model="330.00+0($q-180)" start_quantity="180" end_quantity="180" retail_multiplier="1.0000" note="bw" />
+			<price id="8" nr="8" code="Vitreous-Enamel-Photo" name="Oval" model="330.00+0($q-180)" start_quantity="180" end_quantity="180" retail_multiplier="1.0000" note="color" />
+
+			<price id="9" nr="9" code="Vitreous-Enamel-Photo" name="Oval" model="380.00+0($q-210)" start_quantity="210" end_quantity="210" retail_multiplier="1.0000" note="bw" />
+			<price id="10" nr="10" code="Vitreous-Enamel-Photo" name="Oval" model="380.00+0($q-210)" start_quantity="210" end_quantity="210" retail_multiplier="1.0000" note="color" />
+			
+			<price id="13" nr="13" code="Vitreous-Enamel-Photo" name="Oval" model="440.00+0($q-260)" start_quantity="260" end_quantity="260" retail_multiplier="1.0000" note="bw" />
+			<price id="14" nr="14" code="Vitreous-Enamel-Photo" name="Oval" model="440.00+0($q-260)" start_quantity="260" end_quantity="260" retail_multiplier="1.0000" note="color" />
+
+			<price id="15" nr="15" code="Vitreous-Enamel-Photo" name="Oval" model="490.00+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="1.0000" note="bw" />
+			<price id="16" nr="16" code="Vitreous-Enamel-Photo" name="Oval" model="490.00+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="1.0000" note="color" />
+
+			<price id="17" nr="17" code="Vitreous-Enamel-Photo" name="Oval" model="980.00+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="1.0000" note="bw" />
+			<price id="18" nr="18" code="Vitreous-Enamel-Photo" name="Oval" model="980.00+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="1.0000" note="color" />
+			
+		</price_model>
+
+	</product>
+
+</data>

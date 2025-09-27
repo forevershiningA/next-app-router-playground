@@ -11,11 +11,75 @@ import SvgHeadstone from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
+import { data } from '#/app/_internal/_data';
+import { Component, ReactNode } from 'react';
+
+const FONT_MAP: Record<string, string> = data.fonts.reduce(
+  (map, font) => {
+    map[font.name] = `/fonts/${font.image}`;
+    return map;
+  },
+  {} as Record<string, string>,
+);
+
+class ErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(_: Error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error('Font loading error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return null; // Render nothing instead of crashing
+    }
+
+    return this.props.children;
+  }
+}
+
+function HeadstoneAddition({
+  additionId,
+  frontZ,
+  index,
+}: {
+  additionId: string;
+  frontZ: number;
+  index: number;
+}) {
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const addition = catalog?.product.additions.find((a) => a.id === additionId);
+
+  if (!addition || (addition.type !== 'motif' && addition.type !== 'image'))
+    return null;
+
+  // Assume image URL based on type and id, e.g., /motifs/motif1.png
+  const imageUrl = `/${addition.type}s/${additionId}.png`; // placeholder
+
+  const texture = useLoader(THREE.TextureLoader, imageUrl);
+
+  return (
+    <mesh position={[0, 0, frontZ + 0.001 + index * 0.001]}>
+      <planeGeometry args={[0.2, 0.2]} />
+      <meshBasicMaterial map={texture} transparent />
+    </mesh>
+  );
+}
 
 /* ---------- constants ---------- */
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.jpg';
-const BASE_H = 2; // scene units (100mm)
+const BASE_H = 2; // scene units
 
 /* ---------- tiny preloaders (no DOM output) ---------- */
 function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
@@ -38,6 +102,15 @@ function PreloadTexture({
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
+  }, [onReady]);
+  return null;
+}
+
+function PreloadFont({ url, onReady }: { url: string; onReady?: () => void }) {
+  // For fonts, we can't preload easily, so just delay
+  React.useEffect(() => {
+    const id = setTimeout(() => onReady?.(), 500); // Simulate loading time
+    return () => clearTimeout(id);
   }, [onReady]);
   return null;
 }
@@ -107,6 +180,7 @@ export default function ShapeSwapper({
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const materialUrl = useHeadstoneStore((s) => s.materialUrl);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
+  const catalog = useHeadstoneStore((s) => s.catalog);
 
   const setSelected = useHeadstoneStore((s) => s.setSelected);
 
@@ -118,6 +192,8 @@ export default function ShapeSwapper({
   );
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
   const openSizePanel = useHeadstoneStore((s) => s.openSizePanel);
+  const fontLoading = useHeadstoneStore((s) => s.fontLoading);
+  const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
 
   const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 100, [widthMm]);
@@ -158,6 +234,7 @@ export default function ShapeSwapper({
           preserveTop
           showEdges={false}
           inscriptions={inscriptions}
+          selectedAdditions={selectedAdditions}
           meshProps={{
             name: 'headstone',
             onClick: (e) => {
@@ -168,30 +245,41 @@ export default function ShapeSwapper({
             },
           }}
         >
-          {(api: any) => (
+          {(api: any, selectedAdditions: string[]) => (
             <>
               {inscriptions.map((line: Line, i: number) => (
-                <HeadstoneInscription
-                  id={line.id}
-                  key={line.id}
-                  headstone={api}
-                  font="/fonts/ChopinScript.otf"
-                  editable
-                  selected={selectedInscriptionId === line.id}
-                  onSelectInscription={() => {
-                    // Single source of truth: id-based selection via store helper
-                    setSelected(null);
-                    openInscriptions?.(line.id);
-                  }}
-                  color="#fff8dc"
-                  lift={0.002}
-                  xPos={line.xPos}
-                  yPos={line.yPos}
-                  rotationDeg={line.rotationDeg}
-                  height={line.sizeMm / 10}
-                  text={line.text}
-                  // NEGATIVE bump so later items are slightly farther away
-                  zBump={-i * 0.00005}
+                <ErrorBoundary key={line.id}>
+                  <React.Suspense fallback={null}>
+                    <HeadstoneInscription
+                      id={line.id}
+                      headstone={api}
+                      font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
+                      editable
+                      selected={selectedInscriptionId === line.id}
+                      onSelectInscription={() => {
+                        // Single source of truth: id-based selection via store helper
+                        setSelected(null);
+                        openInscriptions?.(line.id);
+                      }}
+                      color="#fff8dc"
+                      lift={0.002}
+                      xPos={line.xPos}
+                      yPos={line.yPos}
+                      rotationDeg={line.rotationDeg}
+                      height={line.sizeMm}
+                      text={line.text}
+                      // NEGATIVE bump so later items are slightly farther away
+                      zBump={-i * 0.00005}
+                    />
+                  </React.Suspense>
+                </ErrorBoundary>
+              ))}
+              {selectedAdditions.map((additionId, i) => (
+                <HeadstoneAddition
+                  key={additionId}
+                  additionId={additionId}
+                  frontZ={api.frontZ}
+                  index={i}
                 />
               ))}
             </>
@@ -233,7 +321,7 @@ export default function ShapeSwapper({
         </React.Suspense>
       )}
 
-      <InlineCanvasLoader show={swapping} />
+      <InlineCanvasLoader show={swapping || fontLoading} />
     </>
   );
 }

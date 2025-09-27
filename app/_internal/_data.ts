@@ -240,21 +240,36 @@ const materials: Material[] = [
 ];
 
 const fonts: Font[] = [
-  { id: '1', name: 'Adorable', image: 'adorable.woff', category: '1' },
-  { id: '2', name: 'Arial', image: 'Arial.woff', category: '1' },
+  { id: '1', name: 'Adorable', image: 'Adorable.otf', category: '1' },
+  { id: '2', name: 'Arial', image: 'arial.ttf', category: '1' },
+  { id: '3', name: 'Chopin Script', image: 'ChopinScript.otf', category: '1' },
+  { id: '4', name: 'Dobkin', image: 'Dobkin.ttf', category: '1' },
   {
-    id: '3',
-    name: 'Chopin Script',
-    image: 'chopinscript-webfont.woff',
+    id: '5',
+    name: 'Franklin Gothic',
+    image: 'FranklinGothic.ttf',
     category: '1',
   },
-  { id: '4', name: 'Dobkin', image: 'DobkinPlain-webfont.woff', category: '1' },
-  { id: '5', name: 'Franklin Gothic', image: 'franklin.woff', category: '1' },
-  { id: '6', name: 'French Script', image: 'french.woff', category: '1' },
-  { id: '7', name: 'Garamond', image: 'garamond.woff', category: '1' },
-  { id: '8', name: 'Great Vibes', image: 'great_vibes.woff', category: '1' },
-  { id: '9', name: 'Lucida Calligraphy', image: 'lucida.woff', category: '1' },
-  { id: '10', name: 'Xirwena', image: 'xirwena1_0.woff', category: '1' },
+  {
+    id: '6',
+    name: 'French Script',
+    image: 'French Script Std Regular.otf',
+    category: '1',
+  },
+  { id: '7', name: 'Garamond', image: 'Garamond.ttf', category: '1' },
+  {
+    id: '8',
+    name: 'Great Vibes',
+    image: 'GreatVibes-Regular.ttf',
+    category: '1',
+  },
+  {
+    id: '9',
+    name: 'Lucida Calligraphy',
+    image: 'LucidaUnicodeCalligraphy.ttf',
+    category: '1',
+  },
+  { id: '10', name: 'Xirwena', image: 'xirwena1.ttf', category: '1' },
 ];
 
 const demos = [
@@ -362,5 +377,6 @@ export const data = {
   products,
   shapes,
   materials,
+  fonts,
   demos,
 };

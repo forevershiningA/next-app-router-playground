@@ -1,0 +1,1589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+
+<product id="101" code="Full Monument" base="1" holes="0" color="1" force="1" fixed="0" granites="0" thickness="1" border="0" monument="1" laser="0" biondan="0" price="1" formula="Engraved" formulaID="1600" name="Traditional Engraved Full Monument" translate="TRADITIONAL_ENGRAVED_FULL_MONUMENT" fontsize="50" bitmap-factor="3" default-color="#ffffff" material="stones" materialID = "17" scenery="src/m3d/ground/groundF2F2F2.m3d" type="full-monument" retail="1.3" formula-multiplier="1.276" description = "Our laser-etched black granite full monuments have been designed to compliment our range of funerary products and satisfy the needs of those customers who wish to continue to use a traditional material for their memorial. The laser etching process allows us to etch beautiful, complex and intricate images of motifs, logos and photos into the surface of the granite. This style of headstone is available in a range of shapes and sizes." >
+		
+<shapes>
+	
+	<shape type="full-monument" name="Cropped Peak" double="0" stand="0" url="src/img/headstones/cropped-peak.png">
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="data/jpg/granites/forever2/l/African-Black.jpg"
+			  color2="data/jpg/granites/forever2/l/African-Black.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="200" max_height="500" init_height="250" 
+			  color="data/jpg/granites/forever2/l/African-Black.jpg"
+			  color2="data/jpg/granites/forever2/l/African-Black.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2080"
+			  min_width="600" max_width="2400" init_width="1050"
+			  min_height="50" max_height="200" init_height="50" 
+			  color="data/jpg/granites/forever2/l/African-Black.jpg"
+			  color2="data/jpg/granites/forever2/l/African-Black.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="150" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="200" max_height="500" init_height="350" 
+			  color="data/jpg/granites/forever2/l/African-Black.jpg"
+			  color2="data/jpg/granites/forever2/l/African-Black.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="data/jpg/granites/forever2/l/African-Black.jpg"
+			  color2="data/jpg/granites/forever2/l/African-Black.jpg"
+			  url_3d="models/forevershining/headstones/serpentine.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="Curved Gable" double="0" stand="0" url="src/img/headstones/curved-gable.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/curved-gable.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="Curved Peak" double="0" stand="0" url="src/img/headstones/curved-peak.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/curved-peak.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="Curved Top" double="0" stand="0" url="src/img/headstones/curved-top.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/curved-top.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="Gable" double="0" stand="0" url="src/img/headstones/gable.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/gable.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="Half Round" double="0" stand="0" url="src/img/headstones/half-round.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/half-round.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="Left Wave" double="0" stand="0" url="src/img/headstones/left-wave.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/left-wave.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="Peak" double="0" stand="0" url="src/img/headstones/peak.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/peak.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="Right Wave" double="0" stand="0" url="src/img/headstones/right-wave.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/right-wave.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="Serpentine" double="0" stand="0" url="src/img/headstones/serpentine.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/serpentine.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="Square" double="0" stand="0" url="src/img/headstones/square.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/square.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="3" double="0" stand="0" url="src/img/headstones/003.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/3/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/3/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/3/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/3/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="6" double="0" stand="0" url="src/img/headstones/006.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700"  
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="11" double="0" stand="0" url="src/img/headstones/011.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/11/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/11/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/11/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/11/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/11/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="34" double="0" stand="0" url="src/img/headstones/034.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="42" double="1" stand="0" url="src/img/headstones/042.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/42/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1400" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="800" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/42/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="53" double="1" stand="0" url="src/img/headstones/053.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/53/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/53/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/53/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="1"
+			  min_width="300" max_width="2400" init_width="1" 
+			  min_height="50" max_height="500" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1" 
+			  min_depth="50" max_depth="500" init_depth="1" 
+			  min_height="300" max_height="1200" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/63/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="63" double="0" stand="0" url="src/img/headstones/063.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/63/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/63/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/63/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/63/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="68" double="0" stand="0" url="src/img/headstones/068.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/68/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/68/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/68/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/68/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/68/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="85" double="1" stand="0" url="src/img/headstones/085.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/85/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1400" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="800" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/85/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="111" double="0" stand="0" url="src/img/headstones/111.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/111/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/111/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/111/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/111/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="115" double="1" stand="0" url="src/img/headstones/115.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/115/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1100" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/115/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="116" double="1" stand="0" url="src/img/headstones/116.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/116/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1400" 
+			  min_depth="50" max_depth="500" init_depth="200" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/116/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="118" double="1" stand="0" url="src/img/headstones/118.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/118/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1400" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/118/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="126" double="0" stand="0" url="src/img/headstones/126.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/126/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/126/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/126/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="50" max_depth="500" init_depth="200" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/126/table.m3d"  />
+	</shape>	
+
+	<shape type="full-monument" name="157" double="0" stand="0" url="src/img/headstones/157.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/157/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/157/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/157/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/157/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="170" double="0" stand="0" url="src/img/headstones/170.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/170/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/170/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/170/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/170/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="171" double="0" stand="0" url="src/img/headstones/171.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/171/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="203" double="0" stand="0" url="src/img/headstones/203.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/203/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/203/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/203/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/203/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="204" double="0" stand="0" url="src/img/headstones/204.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/204/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/204/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/204/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="550" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/204/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="206" double="0" stand="0" url="src/img/headstones/206.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/206/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/206/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/206/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/206/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="211" double="0" stand="0" url="src/img/headstones/206.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/211/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/211/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/211/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="700" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/211/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="229" double="0" stand="0" url="src/img/headstones/229.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/229/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/229/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/229/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/229/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="290" double="0" stand="0" url="src/img/headstones/290.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/290/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/290/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/290/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1100" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/290/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="291" double="0" stand="0" url="src/img/headstones/291.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/291/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/291/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/3/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="800" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/291/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="294" double="0" stand="0" url="src/img/headstones/294.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="800" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="295" double="1" stand="0" url="src/img/headstones/295.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/295/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1400" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="1000" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/295/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="309" double="1" stand="0" url="src/img/headstones/309.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/309/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1600" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2050"
+			  min_width="600" max_width="2400" init_width="1400"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/34/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1600" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/6/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="1500" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="900" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/309/table.m3d"  />
+	</shape>
+
+	<shape type="full-monument" name="313" double="0" stand="0" url="src/img/headstones/313.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/313/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/313/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/313/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="800" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/313/table.m3d"  />
+	</shape>
+	
+	<shape type="full-monument" name="316" double="0" stand="0" url="src/img/headstones/316.png" >
+		<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/316/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2150" 
+			  min_width="500" max_width="2400" init_width="1200" 
+			  min_height="10" max_height="500" init_height="300" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/316/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="400" init_height="60" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/316/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="50" max_depth="500" init_depth="250"
+			  min_width="300" max_width="2400" init_width="1200" 
+			  min_height="50" max_height="500" init_height="400" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/294/stand.m3d"  />
+		<file type="table" 
+			  min_width="300" max_width="2400" init_width="900" 
+			  min_depth="80" max_depth="100" init_depth="80" 
+			  min_height="300" max_height="1200" init_height="800" 
+			  color="src/granites/forever/l/18.jpg"
+			  color2="src/granites/forever/l/18.jpg"
+			  url_3d="src/m3d/headstones24/316/table.m3d"  />
+	</shape>
+	
+</shapes>
+
+        <price_model id="101" code="H-TABLE" name="*" quantity_type="Width + Height" currency="Dollars" >
+            <price id="2" nr="2" code="PRE_LASER_ETCHED_BLACK_GRANITE_HEADSTONE" name="*" model="600.00+1.32($q-600)" start_quantity="600" end_quantity="1100" quantity_type="Width + Height" retail_multiplier="1.2400" note="" />
+            <price id="3" nr="3" code="PRE_LASER_ETCHED_BLACK_GRANITE_HEADSTONE" name="*" model="1260.00+2.8($q-1100)" start_quantity="1100" end_quantity="2400" quantity_type="Width + Height" retail_multiplier="1.2680" note="" />
+        </price_model>
+		
+		<additions>
+			<addition id="125" type="inscription" name="Inscription" />
+			<addition id="126" type="motif" name="Motif" formula="Engraved" />
+			<addition id="7" type="image" name="Ceramic Photo" />
+			<addition id="2300" type="image" name="Vitreous Enamel Image" />
+			<addition id="2400" type="image" name="Premium Plana" />
+            <addition id="48" type="base" name="Base" />
+            <addition id="49" type="ledger" name="Ledger" />
+            <addition id="50" type="kerbset" name="Kerbset" />
+		</additions>
+	</product>
+
+	<product id="48" code="Base" type="base" name="Base" >
+		<price_model code="H-TABLE" name="*" quantity_type="Width" currency="Dollars">
+			<price id="1" nr="1" code="PRE_LASER_ETCHED_BLACK_GRANITE_HEADSTONE" name="*" model="294.00+0.34($q-300)" start_quantity="600" end_quantity="2400" quantity_type="Width" retail_multiplier="1.2830" note="" />
+		</price_model>
+	</product>
+
+	<product id="49" code="Ledger" type="ledger" name="Ledger" >
+		<price_model code="H-TABLE" name="*" quantity_type="Width" currency="Dollars">
+			<price id="1" nr="1" code="PRE_LASER_ETCHED_BLACK_GRANITE_HEADSTONE" name="*" model="294.00+0.34($q-300)" start_quantity="600" end_quantity="2400" quantity_type="Width" retail_multiplier="1.2830" note="" />
+		</price_model>
+	</product>
+
+	<product id="50" code="Kerbset" type="kerbset" name="Kerbset" >
+		<price_model code="H-TABLE" name="*" quantity_type="Width" currency="Dollars">
+			<price id="1" nr="1" code="PRE_LASER_ETCHED_BLACK_GRANITE_HEADSTONE" name="*" model="294.00+0.34($q-300)" start_quantity="600" end_quantity="2400" quantity_type="Width" retail_multiplier="1.2830" note="" />
+		</price_model>
+	</product>
+
+	<product id="44" code="Postage" type="postage" name="Postage $9.90" >
+		<price_model code="Postage" name="Postage" quantity_type="Units" currency="Dollars" >
+			<price id="1" nr="1" code="Postage" name="Postage" model="0.00+9.90($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+		</price_model>
+	</product>
+
+	<product id="45" code="Fixing" type="fixing-cost" name="Fixing Cost $37" >
+		<price_model code="Fixing" name="Fixing Cost" quantity_type="Units" currency="Dollars" >
+			<price id="1" nr="1" code="Fixing" name="Fixing" model="0.00+37.00($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.3500" note="" />
+		</price_model>
+	</product>
+		
+	<product id="53" code="Flower-Pot-Hole" type="hole" name="Flower Pot Hole" >
+		<price_model code="Flower-Pot-Hole" name="Flower Pot Hole" quantity_type="Units" currency="Dollars" >
+			<price id="1" nr="1" code="Flower-Pot-Hole" name="Flower Pot Hole" model="33.00+33.00($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.3000" note="" />
+		</price_model>
+	</product>
+
+	<product id="54" code="Flower-Pot" type="pot" name="Flower Pot" >
+		<price_model code="Flower-Pot" name="Flower Pot" quantity_type="Units" currency="Dollars" >
+			<price id="1" nr="1" code="Flower-Pot" name="Flower Pot" model="26.00+26.00($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2500" note="" />
+		</price_model>
+	</product>
+	
+</data>

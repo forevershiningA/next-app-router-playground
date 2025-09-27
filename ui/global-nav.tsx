@@ -8,10 +8,27 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { Suspense, useState } from 'react';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { calculatePrice } from '#/lib/xml-parser';
 
 export function GlobalNav({ items }: { items: DemoCategory[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const close = () => setIsOpen(false);
+
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+
+  let quantity = widthMm * heightMm; // default to area
+  if (catalog) {
+    const qt = catalog.product.priceModel.quantityType;
+    if (qt === 'Width + Height') {
+      quantity = widthMm + heightMm;
+    }
+  }
+  const price = catalog
+    ? calculatePrice(catalog.product.priceModel, quantity)
+    : 0;
 
   return (
     <>
@@ -28,6 +45,9 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
           <h3 className="text-lg font-medium text-gray-200 group-hover:text-white">
             Design Your Own
           </h3>
+          <div className="text-sm font-normal text-gray-400">
+            Current Price: ${price.toFixed(2)}
+          </div>
         </Link>
       </div>
       <button

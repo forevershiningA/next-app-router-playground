@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+		
+<product id="11" code="Pet Urn" color="1" holes="0" force="0" fixed="1" granites="0" thickness="0" border="0" background="1" monument="0" laser="0" biondan="0" price="1" formula="Enamel" formulaID="1700" name="Stainless Steel Vitreous Enamel Inlaid Pet Urn" fontsize="20" bitmap-factor="30" default-color="0xffffff" material="backgrounds" materialID = "1" scenery="src/m3d/ground/groundF2F2F2.m3d" type="urn" retail="1.3" formula-multiplier="2.2" description = "A beautiful, unique porcelain inlaid stainless steel urn will be a permanent memorial for family and friends to remember and celebrate the life of a loved one. Our urns can be individualized and personalized to reflect the true nature and personality of the deceased. The porcelain printing process allows us to affix beautiful, complex and intricate images of motifs and photos, in full natural colour, onto the porcelain surface. This style of urn is available in a range of shapes." >
+
+<sizes>
+	<imperial>
+		<size id="1" type="urn" metric="0" width="304.8000" height="304.8000" length="76.20000" />
+		<size id="2" type="urn" metric="0" width="609.6000" height="609.6000" length="101.6000" />
+		<size id="3" type="urn" metric="0" width="914.4000" height="914.4000" length="101.6000" />
+		<size id="4" type="urn" metric="0" width="1219.200" height="1219.200" length="101.6000" />
+	</imperial>
+	<metric>
+		<size id="1" type="urn" metric="1" width="300" height="300" length="60" />
+		<size id="2" type="urn" metric="1" width="600" height="600" length="100" />
+		<size id="3" type="urn" metric="1" width="900" height="900" length="100" />
+		<size id="4" type="urn" metric="1" width="1200" height="1200" length="100" />
+	</metric>
+</sizes>
+
+<shapes>
+
+	<shape type="urn" name="Urn (Happy Heart)" code="Heart Happy" double="0" stand="0" url="src/img/urns/heart-happy.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="302" max_width="302" init_width="302" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="307" max_height="307" init_height="307" 
+			  color="src/granites/forever/l/18.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/urns/heart-happy.m3d" />
+	</shape>
+	
+	<shape type="urn" name="Urn (Oval)" code="Oval" double="0" stand="0" url="src/img/urns/oval.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="220" max_width="220" init_width="220" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="285" max_height="285" init_height="285" 
+			  color="src/granites/forever/l/18.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/urns/oval.m3d" />
+	</shape>
+	
+	<shape type="urn" name="Urn (Rectangle)" code="Rectangle" double="0" stand="0" url="src/img/urns/rectangle.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="200" max_width="200" init_width="200" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="270" max_height="270" init_height="270" 
+			  color="src/granites/forever/l/18.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/urns/rectangle.m3d" />
+	</shape>
+	
+	<shape type="urn" name="Urn (Triangle)" code="Triangle" double="0" stand="0" url="src/img/urns/triangle.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="199" max_width="199" init_width="199" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="172" max_height="172" init_height="172" 
+			  color="src/granites/forever/l/18.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/urns/triangle.m3d" />
+	</shape>
+	
+</shapes>
+
+<price_model code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" quantity_type="Units" currency="Dollars" >
+	<price id="1" nr="1" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="2016.88+2016.88($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Heart Happy" />
+	<price id="2" nr="2" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1987.06+1987.06($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Heart Slim" />
+	<price id="3" nr="3" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1937.67+1937.67($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Oval" />
+	<price id="4" nr="4" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1915.52+1915.52($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Rectangle" />
+	<price id="5" nr="5" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1945.34+1945.34($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Teardrop" />
+	<price id="6" nr="6" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1741.32+1741.32($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Triangle" />
+</price_model>
+
+<additions>
+	<addition id="75" type="inscription" name="Vitreous Enamel Inscription" />
+	
+	<addition id="1700" type="motif" name="Motif" formula="Enamel" />
+
+	<addition id="2300" type="image" name="Vitreous Enamel Image (No 1)" />
+	<addition id="2301" type="image" name="Vitreous Enamel Image (No 2)" />
+</additions>
+</product>
+
+<product id="1005" code="Stand" type="stand" name="Base">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="Stand" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Stand" name="*" model="1+1($q-1)" start_quantity="0" end_quantity="10" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>	
+
+<product id="1006" code="Ledger" type="lid" name="Ledger panel">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="Ledger" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Ledger" name="*" model="1+1($q-1)" start_quantity="1" end_quantity="0" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>	
+
+<product id="1007" code="Kerb" type="kerb" name="Kerb">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="Kerb" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Kerb" name="*" model="1+1($q-1)" start_quantity="1" end_quantity="0" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>	
+
+<product id="1008" code="Base" type="base" name="Skirting">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="H-BASE" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Base" name="*" model="1+1($q-1)" start_quantity="1" end_quantity="0" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>
+	
+<product id="1044" code="Postage" type="postage" name="Postage $9.90" >
+	<price_model code="Postage" name="Postage" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Postage" name="Postage" model="0.00+9.90($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+	</price_model>
+</product>
+
+<product id="1045" code="Fixing" type="fixing-cost" name="Fixing Cost $37" >
+	<price_model code="Fixing" name="Fixing Cost" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Fixing" name="Fixing" model="0.00+37.00($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.3500" note="" />
+	</price_model>
+</product>
+	
+<product id="10000" code="Transport-and-Install" type="install" name="Transport and Install" >
+	<price_model code="Transport-and-Install" name="Transport and Install" quantity_type="Install" currency="Dollars" >
+		<price id="1" nr="1" code="Transport-and-Install" name="Transport an Install" model="0.00+0.000($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+	</price_model>
+</product>
+
+</data>

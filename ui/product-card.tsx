@@ -22,7 +22,7 @@ export type PolymorphicProps<
     keyof P | 'as' | 'children'
   >;
 
-type CardKind = 'shape' | 'material' | 'product';
+type CardKind = 'shape' | 'material' | 'product' | 'addition';
 
 type ProductCardOwnProps = {
   product: Product;

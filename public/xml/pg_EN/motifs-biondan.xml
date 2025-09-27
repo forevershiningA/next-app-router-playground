@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	
+	<!-- Biondan - Categories-->
+	<product id="3001" postage_cost="0" fixing_cost="0" code="Biondan_Bronze" name="Biondan Bronze" type="motif" color="0" fixed="0" url="src/img/additions/biondan/emblems.png" path="src/img/additions/biondan/emblems/" path_3d="src/m3d/additions/biondan/emblems/" description="" />
+	
+	<product id="3002" postage_cost="0" fixing_cost="0" code="Biondan_Crosses" name="Crosses" type="motif" color="0" fixed="0" url="src/img/additions/biondan/crosses.png" path="src/img/additions/biondan/crosses/" path_3d="src/m3d/additions/biondan/crosses/" description="" />
+	
+	<product id="3003" postage_cost="0" fixing_cost="0" code="Biondan_Roses" name="Roses" type="motif" color="0" fixed="0" url="src/img/additions/biondan/roses.png" path="src/img/additions/biondan/roses/" path_3d="src/m3d/additions/biondan/roses/" description="" />
+	
+	<product id="3004" postage_cost="0" fixing_cost="0" code="Biondan_Statues" name="Statues" type="motif" color="0" fixed="0" url="src/img/additions/biondan/statues.png" path="src/img/additions/biondan/statues/" path_3d="src/m3d/additions/biondan/statues/" description="" />
+	
+	<product id="3005" postage_cost="0" fixing_cost="0" code="Biondan_Vases" name="Vases" type="motif" color="0" fixed="0" url="src/img/additions/biondan/vases.png" path="src/img/additions/biondan/vases/" path_3d="src/m3d/additions/biondan/vases/" description="" />
+
+	<!-- Biondan Products -->
+	<product id="B2497S" postage_cost="0" fixing_cost="0" code="Biondan_Emblems" name="Applicazione Preghiera" type="application" color="0" fixed="0" url="01.png" url_3d="B2497S.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Preghiera" code="Biondan_Emblems">
+			<type id="1" nr="1" name="Applicazione Preghiera"  code="B2497/S" min_width="95" max_width="95" min_height="150" max_height="150" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="Biondan_Emblems" name="Applicazione Preghiera" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Preghiera" code="B2497/S" model="76.11+0($q-245)" start_quantity="245" end_quantity="245" retail_multiplier="2.6000" wholesale="61.87" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2497D" postage_cost="0" fixing_cost="0" code="Biondan_Emblems" name="Applicazione Preghiera" type="application" color="0" fixed="0" url="02.png" url_3d="B2497D.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Preghiera" code="Biondan_Emblems">
+			<type id="1" nr="1" name="Applicazione Preghiera" code="B2497/D" min_width="95" max_width="95" min_height="150" max_height="150" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="Biondan_Emblems" name="Applicazione Preghiera" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Preghiera" code="B2497/D" model="76.11+0($q-245)" start_quantity="245" end_quantity="245" retail_multiplier="2.6000" wholesale="61.87" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2225" postage_cost="0" fixing_cost="0" code="Biondan_Emblems" name="Let Romano Spazzolato" type="application" color="0" fixed="0" url="03.png" url_3d="B2225.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Let Romano Spazzolato" code="Biondan_Emblems">
+			<type id="1" nr="1" name="Let Romano Spazzolato" code="B2225" min_width="100" max_width="100" min_height="100" max_height="100" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Let Romano Spazzolato" code="B2226" min_width="140" max_width="140" min_height="140" max_height="140" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="Biondan_Emblems" name="Let Romano Spazzolato" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Let Romano Spazzolato" code="B2225" model="62.32+0($q-200)" start_quantity="200" end_quantity="200" retail_multiplier="2.6000" wholesale="50.67" note="" />
+			<price id="2" nr="2" name="Let Romano Spazzolato" code="B2226" model="77.00+0($q-280)" start_quantity="280" end_quantity="280" retail_multiplier="2.6000" wholesale="62.61" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2074S" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Angelo" type="application" color="0" fixed="0" url="04.png" url_3d="B2074S.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Angelo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Angelo"  code="B2074/S" min_width="70" max_width="70" min_height="120" max_height="120" min_depth="20" max_depth="20" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Angelo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Angelo" code="B2074/S" model="58.88+0($q-190)" start_quantity="190" end_quantity="190" retail_multiplier="2.6000" wholesale="47.87" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2074D" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Angelo" type="application" color="0" fixed="0" url="05.png" url_3d="B2074D.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Angelo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Angelo"  code="B2074/D" min_width="70" max_width="70" min_height="120" max_height="120" min_depth="20" max_depth="20" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Angelo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Angelo" code="B2074/D" model="58.88+0($q-190)" start_quantity="190" end_quantity="190" retail_multiplier="2.6000" wholesale="47.87" note="" />
+		</price_model>
+	</product>
+
+	<product id="B1134S" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Angelo" type="application" color="0" fixed="0" url="06.png" url_3d="B1134S.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Angelo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Angelo"  code="B1134/S" min_width="90" max_width="90" min_height="180" max_height="180" min_depth="20" max_depth="20" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Angelo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Angelo" code="B1134/S" model="76.11+0($q-270)" start_quantity="270" end_quantity="270" retail_multiplier="2.6000" wholesale="61.87" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1134D" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Angelo" type="application" color="0" fixed="0" url="07.png" url_3d="B1134D.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Angelo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Angelo"  code="B1134/D" min_width="90" max_width="90" min_height="180" max_height="180" min_depth="20" max_depth="20" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Angelo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Angelo" code="B1134/D" model="76.11+0($q-270)" start_quantity="270" end_quantity="270" retail_multiplier="2.6000" wholesale="61.87" note="" />
+		</price_model>
+	</product>
+
+	<product id="B4599" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cacciatore" type="application" color="0" fixed="0" url="08.png" url_3d="B4599.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cacciatore" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cacciatore" code="B4599" min_width="190" max_width="190" min_height="95" max_height="95" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cacciatore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cacciatore" code="B4599" model="111.54+0($q-285)" start_quantity="285" end_quantity="285" retail_multiplier="2.6000" wholesale="90.68" note="" />
+		</price_model>
+	</product>
+
+	<product id="B4597" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Sachetto Pescatore" type="application" color="0" fixed="0" url="09.png" url_3d="B4597.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Sachetto Pescatore" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Sachetto Pescatore" code="B4597" min_width="185" max_width="185" min_height="110" max_height="110" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Sachetto Pescatore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Sachetto Pescatore" code="B4597" model="111.54+0($q-295)" start_quantity="295" end_quantity="295" retail_multiplier="2.6000" wholesale="90.68" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2600" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="10.png" url_3d="B2600.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2600" min_width="160" max_width="160" min_height="290" max_height="290" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2600" model="378.06+0($q-450)" start_quantity="450" end_quantity="450" retail_multiplier="2.6000" wholesale="307.36" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1990" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cristo" type="application" color="0" fixed="0" url="11.png" url_3d="B1990.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cristo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cristo" code="B1990" min_width="170" max_width="170" min_height="235" max_height="235" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cristo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cristo" code="B1990" model="186.74+0($q-405)" start_quantity="405" end_quantity="405" retail_multiplier="2.6000" wholesale="151.82" note="" />
+		</price_model>
+	</product>
+
+	<product id="B1212" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna Bambino" type="application" color="0" fixed="0" url="12.png" url_3d="B1212.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna Bambino" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna Bambino" code="B1212" min_width="135" max_width="135" min_height="235" max_height="235" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna Bambino" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna Bambino" code="B1212" model="245.10+0($q-370)" start_quantity="370" end_quantity="370" retail_multiplier="2.6000" wholesale="199.26" note="" />
+		</price_model>
+	</product>
+
+	<product id="B7076" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="13.png" url_3d="B1827.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B7076" min_width="100" max_width="100" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Applicazione Madonna" code="B1827" min_width="120" max_width="120" min_height="280" max_height="280" min_depth="20" max_depth="20" avail="1" />
+			<type id="3" nr="3" name="Applicazione Madonna" code="B1833" min_width="170" max_width="170" min_height="390" max_height="390" min_depth="20" max_depth="20" avail="1" />
+			<type id="4" nr="4" name="Applicazione Madonna" code="B2950" min_width="200" max_width="200" min_height="480" max_height="480" min_depth="20" max_depth="20" avail="0" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B7076" model="171.76+0($q-300)" start_quantity="300" end_quantity="300" retail_multiplier="2.6000" wholesale="139.64" note="" />
+			<price id="2" nr="2" name="Applicazione Madonna" code="B1827" model="210.19+0($q-400)" start_quantity="400" end_quantity="400" retail_multiplier="2.6000" wholesale="170.89" note="" />
+			<price id="3" nr="3" name="Applicazione Madonna" code="B1833" model="289.52+0($q-560)" start_quantity="560" end_quantity="560" retail_multiplier="2.6000" wholesale="235.38" note="" />
+			<price id="4" nr="4" name="Applicazione Madonna" code="B2950" model="491.02+0($q-680)" start_quantity="680" end_quantity="680" retail_multiplier="2.6000" wholesale="399.20" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2098S" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="14.png" url_3d="B2098.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2098/S" min_width="130" max_width="130" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2098/S" model="200.45+0($q-330)" start_quantity="330" end_quantity="330" retail_multiplier="2.6000" wholesale="162.97" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2098D" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="15.png" url_3d="B2098.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2098/D" min_width="130" max_width="130" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2098/D" model="200.45+0($q-330)" start_quantity="330" end_quantity="330" retail_multiplier="2.6000" wholesale="162.97" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2097" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cristo" type="application" color="0" fixed="0" url="16.png" url_3d="B2097.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cristo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cristo" code="B2097" min_width="125" max_width="125" min_height="190" max_height="190" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cristo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cristo" code="B2097" model="200.45+0($q-315)" start_quantity="315" end_quantity="315" retail_multiplier="2.6000" wholesale="162.97" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2304S" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="17.png" url_3d="B2304S.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2304/S" min_width="110" max_width="110" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2304/S" model="140.08+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="2.6000" wholesale="113.88" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2304D" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="18.png" url_3d="B2304D.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2304/D" min_width="110" max_width="110" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2304/D" model="140.08+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="2.6000" wholesale="113.88" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2830" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cristo" type="application" color="0" fixed="0" url="19.png" url_3d="B2830.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cristo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cristo" code="B2830" min_width="130" max_width="130" min_height="155" max_height="155" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cristo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cristo" code="B2830" model="111.54+0($q-285)" start_quantity="285" end_quantity="285" retail_multiplier="2.6000" wholesale="90.68" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1343D" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="20.png" url_3d="B1343D.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B1343/D" min_width="70" max_width="70" min_height="150" max_height="150" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B1343/D" model="84.12+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="68.39" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1343S" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="21.png" url_3d="B1343S.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B1343/S" min_width="70" max_width="70" min_height="150" max_height="150" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B1343/S" model="84.12+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="68.39" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2251" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cristo" type="application" color="0" fixed="0" url="22.png" url_3d="B2251.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cristo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cristo" code="B2251" min_width="130" max_width="130" min_height="165" max_height="165" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cristo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cristo" code="B2251" model="84.12+0($q-285)" start_quantity="295" end_quantity="295" retail_multiplier="2.6000" wholesale="68.39" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2675" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Pieta" type="application" color="0" fixed="0" url="23.png" url_3d="B2675.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Pieta" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Pieta" code="B2675" min_width="100" max_width="100" min_height="120" max_height="120" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Applicazione Pieta" code="B2680" min_width="130" max_width="130" min_height="160" max_height="160" min_depth="20" max_depth="20" avail="0" />
+			<type id="3" nr="3" name="Applicazione Pieta" code="B2676" min_width="155" max_width="155" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Pieta" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Pieta" code="B2675" model="100.15+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="81.42" note="" />
+			<price id="2" nr="2" name="Applicazione Pieta" code="B2680" model="156.33+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="127.10" note="" />
+			<price id="3" nr="3" name="Applicazione Pieta" code="B2676" model="228.92+0($q-355)" start_quantity="355" end_quantity="355" retail_multiplier="2.6000" wholesale="186.11" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1834" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="24.png" url_3d="B1834.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B1834" min_width="90" max_width="90" min_height="120" max_height="120" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Applicazione Madonna" code="B1835" min_width="130" max_width="130" min_height="170" max_height="170" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B1834" model="88.17+0($q-210)" start_quantity="210" end_quantity="210" retail_multiplier="2.6000" wholesale="71.68" note="" />
+			<price id="2" nr="2" name="Applicazione Madonna" code="B1835" model="111.54+0($q-300)" start_quantity="300" end_quantity="300" retail_multiplier="2.6000" wholesale="90.68" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1837" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cristo" type="application" color="0" fixed="0" url="25.png" url_3d="B1837.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cristo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cristo" code="B1837" min_width="80" max_width="80" min_height="120" max_height="120" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Applicazione Cristo" code="B1838" min_width="115" max_width="115" min_height="170" max_height="170" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cristo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cristo" code="B1837" model="88.17+0($q-200)" start_quantity="200" end_quantity="200" retail_multiplier="2.6000" wholesale="71.68" note="" />
+			<price id="2" nr="2" name="Applicazione Cristo" code="B1838" model="111.54+0($q-285)" start_quantity="285" end_quantity="285" retail_multiplier="2.6000" wholesale="90.68" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2735" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="26.png" url_3d="B2735.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2735" min_width="55" max_width="55" min_height="100" max_height="100" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Applicazione Madonna" code="B2743" min_width="80" max_width="80" min_height="140" max_height="140" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Applicazione Madonna" code="B2736" min_width="110" max_width="110" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2735" model="51.84+0($q-155)" start_quantity="155" end_quantity="155" retail_multiplier="2.6000" wholesale="42.14" note="" />
+			<price id="2" nr="2" name="Applicazione Madonna" code="B2743" model="97.30+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="79.11" note="" />
+			<price id="2" nr="2" name="Applicazione Madonna" code="B2736" model="140.08+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="2.6000" wholesale="113.88" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1334" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Cristo" type="application" color="0" fixed="0" url="27.png" url_3d="B1334.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Cristo" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Cristo" code="B1334" min_width="65" max_width="65" min_height="80" max_height="80" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Cristo" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Cristo" code="B1334" model="46.74+0($q-145)" start_quantity="145" end_quantity="145" retail_multiplier="2.6000" wholesale="38.00" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B4863" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Pergamena" type="application" color="0" fixed="0" url="28.png" url_3d="B4863.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Pergamena" code="BD-AP-SE">
+			<type id="1" nr="1" name="Pergamena" code="B4863" min_width="75" max_width="75" min_height="100" max_height="100" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Pergamena" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Pergamena" code="B4863" model="47.46+0($q-175)" start_quantity="175" end_quantity="175" retail_multiplier="2.6000" wholesale="38.59" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B4641" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Chiave" type="application" color="0" fixed="0" url="29.png" url_3d="B4641.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Chiave" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Chiave" code="B4641" min_width="80" max_width="80" min_height="140" max_height="140" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Chiave" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Chiave" code="B4641" model="51.56+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="41.91" note="" />
+		</price_model>
+	</product>	
+	
+	<product id="B4131" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Uccello Su Note" type="application" color="0" fixed="0" url="30.png" url_3d="B4131.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Uccello Su Note" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Uccello Su Note" code="B4131" min_width="130" max_width="130" min_height="90" max_height="90" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Uccello Su Note" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Uccello Su Note" code="B4131" model="53.57+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="43.55" note="" />
+		</price_model>
+	</product>	
+
+	<product id="B4844" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Candela" type="application" color="0" fixed="0" url="31.png" url_3d="B4844.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Candela" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Candela" code="B4844" min_width="180" max_width="180" min_height="160" max_height="160" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Candela" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Candela" code="B4844" model="75.49+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="61.38" note="" />
+		</price_model>
+	</product>	
+
+	<product id="B4882" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Lanterna" type="application" color="0" fixed="0" url="32.png" url_3d="B4882.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Lanterna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Lanterna" code="B4882" min_width="190" max_width="190" min_height="80" max_height="80" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Lanterna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Lanterna" code="B4882" model="71.75+0($q-270)" start_quantity="270" end_quantity="270" retail_multiplier="2.6000" wholesale="58.33" note="" />
+		</price_model>
+	</product>	
+	
+	<product id="B4640" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Lanterna" type="application" color="0" fixed="0" url="33.png" url_3d="B4640.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Lanterna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Lanterna" code="B4640" min_width="140" max_width="140" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Lanterna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Lanterna" code="B4640" model="144.53+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="117.51" note="" />
+		</price_model>
+	</product>	
+
+	<product id="B4824" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Scrittore" type="application" color="0" fixed="0" url="34.png" url_3d="B4824.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Scrittore" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Scrittore" code="B4824" min_width="130" max_width="130" min_height="190" max_height="190" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Scrittore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Scrittore" code="B4824" model="60.18+0($q-320)" start_quantity="320" end_quantity="320" retail_multiplier="2.6000" wholesale="48.84" note="" />
+		</price_model>
+	</product>	
+
+	<product id="B2743" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Applicazione Madonna" type="application" color="0" fixed="0" url="35.png" url_3d="B2743.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Applicazione Madonna" code="BD-AP-SE">
+			<type id="1" nr="1" name="Applicazione Madonna" code="B2743" min_width="80" max_width="80" min_height="140" max_height="140" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Applicazione Madonna" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Madonna" code="B2743" model="141.80+0($q-220)" start_quantity="220" end_quantity="220" retail_multiplier="2.6000" wholesale="115.28" note="" />
+		</price_model>
+	</product>	
+	
+	<product id="B0338" postage_cost="0" fixing_cost="0" code="BD-AP-SE" name="Cristo Par" type="application" color="0" fixed="0" url="36.png" url_3d="B0338.m3d" parent="3001" description="">
+		<product_type id="1" nr="1" name="Cristo Par" code="BD-AP-SE">
+			<type id="1" nr="1" name="Cristo Par" code="B0338" min_width="75" max_width="75" min_height="105" max_height="105" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Cristo Par" code="B0339" min_width="100" max_width="100" min_height="140" max_height="140" min_depth="20" max_depth="20" avail="1" />
+			<type id="3" nr="3" name="Cristo Par" code="B0340" min_width="140" max_width="140" min_height="215" max_height="215" min_depth="20" max_depth="20" avail="1" />
+			<type id="4" nr="4" name="Cristo Par" code="B0341" min_width="180" max_width="180" min_height="260" max_height="260" min_depth="20" max_depth="20" avail="0" />
+		</product_type>
+		<price_model code="BD-AP-SE" name="Cristo Par" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Cristo Par" code="B0338" model="41.35+0($q-180)" start_quantity="180" end_quantity="180" retail_multiplier="2.6000" wholesale="33.62" note="" />
+			<price id="2" nr="2" name="Cristo Par" code="B0339" model="57.08+0($q-240)" start_quantity="240" end_quantity="240" retail_multiplier="2.6000" wholesale="46.41" note="" />
+			<price id="3" nr="3" name="Cristo Par" code="B0340" model="70.56+0($q-355)" start_quantity="355" end_quantity="355" retail_multiplier="2.6000" wholesale="57.37" note="" />
+			<price id="4" nr="4" name="Cristo Par" code="B0341" model="128.39+0($q-440)" start_quantity="440" end_quantity="440" retail_multiplier="2.6000" wholesale="104.38" note="" />
+		</price_model>
+	</product>	
+	
+	<!-- Crosses -->
+	
+	<product id="B2127" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="01.png" url_3d="B2127.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B2127" min_width="100" max_width="100" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B2128" min_width="100" max_width="100" min_height="250" max_height="250" min_depth="20" max_depth="20" avail="1" />
+			<type id="3" nr="3" name="Croce PAR"  code="B2129" min_width="100" max_width="100" min_height="300" max_height="300" min_depth="20" max_depth="20" avail="1" />
+			<type id="4" nr="4" name="Croce PAR"  code="B2132" min_width="140" max_width="140" min_height="500" max_height="500" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B2127" model="93.63+0($q-300)" start_quantity="300" end_quantity="300" retail_multiplier="2.6000" wholesale="76.13" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B2128" model="104.79+0($q-350)" start_quantity="350" end_quantity="350" retail_multiplier="2.6000" wholesale="85.20" note="" />
+			<price id="3" nr="3" name="Croce PAR" code="B2129" model="116.71+0($q-400)" start_quantity="400" end_quantity="400" retail_multiplier="2.6000" wholesale="94.88" note="" />
+			<price id="4" nr="4" name="Croce PAR" code="B2132" model="316.78+0($q-640)" start_quantity="640" end_quantity="640" retail_multiplier="2.6000" wholesale="257.55" note="" />
+		</price_model>
+	</product>
+
+	<product id="B7647" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="02.png" url_3d="B7647.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B7647" min_width="215" max_width="215" min_height="410" max_height="410" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B7647" model="204.94+0($q-625)" start_quantity="625" end_quantity="625" retail_multiplier="2.6000" wholesale="166.62" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B4866" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="03.png" url_3d="B4866.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B4866" min_width="215" max_width="215" min_height="410" max_height="410" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B4866" model="269.37+0($q-625)" start_quantity="625" end_quantity="625" retail_multiplier="2.6000" wholesale="219.00" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2441" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="04.png" url_3d="B2441.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B2441" min_width="160" max_width="160" min_height="300" max_height="300" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B2442" min_width="180" max_width="180" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B2441" model="158.65+0($q-460)" start_quantity="460" end_quantity="460" retail_multiplier="2.6000" wholesale="128.99" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B2441" model="207.72+0($q-580)" start_quantity="580" end_quantity="580" retail_multiplier="2.6000" wholesale="168.88" note="" />
+		</price_model>
+	</product>
+
+	<product id="B4831" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="05.png" url_3d="B4816.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B4831" min_width="125" max_width="125" min_height="300" max_height="300" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B4816" min_width="160" max_width="160" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B4831" model="165.62+0($q-425)" start_quantity="425" end_quantity="425" retail_multiplier="2.6000" wholesale="134.65" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B4816" model="244.42+0($q-560)" start_quantity="560" end_quantity="560" retail_multiplier="2.6000" wholesale="198.72" note="" />
+		</price_model>
+	</product>	
+	
+	<product id="B2537" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="06.png" url_3d="B2537.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B2537" min_width="190" max_width="190" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B2537" model="217.68+0($q-590)" start_quantity="590" end_quantity="590" retail_multiplier="2.6000" wholesale="176.98" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2438" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="07.png" url_3d="B2438.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B2438" min_width="180" max_width="180" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B2438" model="322.16+0($q-580)" start_quantity="580" end_quantity="590" retail_multiplier="2.6000" wholesale="261.92" note="" />
+		</price_model>
+	</product>
+
+	<product id="B4814" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="08.png" url_3d="B4814.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B4814" min_width="180" max_width="180" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B4814" model="217.38+0($q-580)" start_quantity="580" end_quantity="590" retail_multiplier="2.6000" wholesale="176.71" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B4841" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="09.png" url_3d="B4841.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B4841" min_width="130" max_width="130" min_height="300" max_height="300" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B4802" min_width="160" max_width="160" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B4841" model="172.59+0($q-430)" start_quantity="430" end_quantity="430" retail_multiplier="2.6000" wholesale="140.31" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B4802" model="247.04+0($q-560)" start_quantity="560" end_quantity="560" retail_multiplier="2.6000" wholesale="200.85" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1774" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="10.png" url_3d="B1774.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B1774" min_width="90" max_width="90" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B1775" min_width="90" max_width="90" min_height="250" max_height="250" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B1774" model="93.68+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="93.68" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B1775" model="122.41+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="122.41" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2413" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="11.png" url_3d="B2413.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B2413" min_width="90" max_width="90" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B2414" min_width="90" max_width="90" min_height="250" max_height="250" min_depth="20" max_depth="20" avail="1" />
+			<type id="3" nr="3" name="Croce PAR"  code="B2415" min_width="120" max_width="120" min_height="300" max_height="300" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B2413" model="86.07+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="69.97" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B2414" model="98.80+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="80.33" note="" />
+			<price id="3" nr="3" name="Croce PAR" code="B2415" model="148.09+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="2.6000" wholesale="120.40" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2174" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="12.png" url_3d="B2174.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="B2174" min_width="230" max_width="230" min_height="480" max_height="480" min_depth="20" max_depth="20" avail="1" />
+			<type id="2" nr="2" name="Croce PAR"  code="B2175" min_width="250" max_width="250" min_height="570" max_height="570" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="B2174" model="86.07+0($q-710)" start_quantity="710" end_quantity="710" retail_multiplier="2.6000" wholesale="69.97" note="" />
+			<price id="2" nr="2" name="Croce PAR" code="B2175" model="98.80+0($q-820)" start_quantity="820" end_quantity="820" retail_multiplier="2.6000" wholesale="80.33" note="" />
+		</price_model>
+	</product>
+
+	<product id="RK44" postage_cost="0" fixing_cost="0" code="BD-KR-ZE" name="Croce PAR" type="application" color="0" fixed="0" url="13.png" url_3d="RK44.m3d" parent="3002" description="">
+		<product_type id="1" nr="1" name="Croce PAR" code="BD-KR-ZE">
+			<type id="1" nr="1" name="Croce PAR"  code="RK44" min_width="200" max_width="200" min_height="400" max_height="400" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-KR-ZE" name="Croce PAR" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Croce PAR" code="RK44" model="160.00+0($q-600)" start_quantity="600" end_quantity="600" retail_multiplier="2.6000" wholesale="130.08" note="" />
+		</price_model>
+	</product>
+
+	<!-- Roses -->
+	
+	<product id="B2581D" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="01.png" url_3d="B2581D.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2581D" min_width="105" max_width="105" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2581D" model="66.59+0($q-215)" start_quantity="215" end_quantity="215" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2581S" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="02.png" url_3d="B2581S.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2581S" min_width="105" max_width="105" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2581S" model="66.59+0($q-215)" start_quantity="215" end_quantity="215" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2652" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="03.png" url_3d="B2652.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2652" min_width="100" max_width="100" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2652" model="78.35+0($q-300)" start_quantity="300" end_quantity="300" retail_multiplier="2.6000" wholesale="63.70" note="" />
+		</price_model>
+	</product>
+		
+	<product id="B2375S" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="04.png" url_3d="B2375S.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2375S" min_width="100" max_width="100" min_height="240" max_height="240" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2375S" model="71.24+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="57.92" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2375D" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="05.png" url_3d="B2375D.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2375D" min_width="100" max_width="100" min_height="240" max_height="240" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2375D" model="71.24+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="57.92" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1188" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Let Romano Spazzolatto" type="application" color="0" fixed="0" url="06.png" url_3d="B1188.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Let Romano Spazzolatto" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Let Romano Spazzolatto"  code="B1188" min_width="85" max_width="85" min_height="320" max_height="320" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Let Romano Spazzolatto" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Let Romano Spazzolatto" code="B1188" model="168.99+0($q-405)" start_quantity="405" end_quantity="405" retail_multiplier="2.6000" wholesale="137.39" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2473" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="07.png" url_3d="B2473.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2473" min_width="70" max_width="70" min_height="130" max_height="130" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2473" model="63.89+0($q-200)" start_quantity="200" end_quantity="200" retail_multiplier="2.6000" wholesale="52.01" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2381" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="08.png" url_3d="B2381.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2381" min_width="130" max_width="130" min_height="280" max_height="280" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2381" model="138.73+0($q-410)" start_quantity="410" end_quantity="410" retail_multiplier="2.6000" wholesale="112.79" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2581S" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="09.png" url_3d="B2581S.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2581S" min_width="105" max_width="105" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2581S" model="66.59+0($q-410)" start_quantity="315" end_quantity="315" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2581D" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="10.png" url_3d="B2581D.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2581D" min_width="105" max_width="105" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2581D" model="66.59+0($q-410)" start_quantity="315" end_quantity="315" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+
+	<product id="B1881" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="11.png" url_3d="B1881.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B1881" min_width="65" max_width="65" min_height="220" max_height="220" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B1881" model="88.09+0($q-285)" start_quantity="285" end_quantity="285" retail_multiplier="2.6000" wholesale="71.62" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2649" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="12.png" url_3d="B2649.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2649" min_width="120" max_width="120" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2649" model="78.35+0($q-285)" start_quantity="285" end_quantity="285" retail_multiplier="2.6000" wholesale="63.70" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2650" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="13.png" url_3d="B2650.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2650" min_width="130" max_width="130" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2650" model="103.60+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="84.22" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2669" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="14.png" url_3d="B2669.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2669" min_width="130" max_width="130" min_height="235" max_height="235" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2669" model="88.09+0($q-365)" start_quantity="365" end_quantity="365" retail_multiplier="2.6000" wholesale="71.62" note="" />
+		</price_model>
+	</product>
+
+	<product id="B2653" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="15.png" url_3d="B2653.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2653" min_width="130" max_width="130" min_height="210" max_height="210" min_depth="20" max_depth="20" avail="0" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2653" model="102.27+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="102.27" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2471" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="16.png" url_3d="B2471.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2471" min_width="80" max_width="80" min_height="200" max_height="200" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2471" model="61.65+0($q-280)" start_quantity="280" end_quantity="280" retail_multiplier="2.6000" wholesale="50.12" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2581S" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="17.png" url_3d="B2581S.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2581S" min_width="70" max_width="70" min_height="120" max_height="120" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2581S" model="66.59+0($q-190)" start_quantity="190" end_quantity="190" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2581D" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="18.png" url_3d="B2581D.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2581D" min_width="70" max_width="70" min_height="120" max_height="120" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2581D" model="66.59+0($q-190)" start_quantity="190" end_quantity="190" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B4118" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="19.png" url_3d="B4118.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B4118" min_width="65" max_width="65" min_height="40" max_height="40" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B4118" model="66.59+0($q-105)" start_quantity="105" end_quantity="105" retail_multiplier="2.6000" wholesale="54.14" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B1649" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="20.png" url_3d="B1649.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B1649" min_width="70" max_width="70" min_height="130" max_height="130" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B1649" model="68.61+0($q-200)" start_quantity="200" end_quantity="200" retail_multiplier="2.6000" wholesale="55.78" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B2434" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="21.png" url_3d="B2434.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B2434" min_width="60" max_width="60" min_height="100" max_height="100" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B2434" model="68.61+0($q-160)" start_quantity="160" end_quantity="160" retail_multiplier="2.6000" wholesale="55.78" note="" />
+		</price_model>
+	</product>
+
+	<product id="B0933" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="22.png" url_3d="B0933.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B0933" min_width="50" max_width="50" min_height="150" max_height="150" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B0933" model="127.12+0($q-200)" start_quantity="200" end_quantity="200" retail_multiplier="2.6000" wholesale="103.35" note="" />
+		</price_model>
+	</product>
+	
+	<product id="B0533S" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="23.png" url_3d="B0533S.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B0533S" min_width="390" max_width="390" min_height="460" max_height="460" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B0533S" model="688.99+0($q-850)" start_quantity="850" end_quantity="850" retail_multiplier="2.6000" wholesale="560.16" note="" />
+		</price_model>
+	</product>
+
+	<product id="B0533D" postage_cost="0" fixing_cost="0" code="BD-RO-ZE" name="Applicazione Fiore" type="application" color="0" fixed="0" url="24.png" url_3d="B0533D.m3d" parent="3003" description="">
+		<product_type id="1" nr="1" name="Applicazione Fiore" code="BD-RO-ZE">
+			<type id="1" nr="1" name="Applicazione Fiore"  code="B0533D" min_width="390" max_width="390" min_height="460" max_height="460" min_depth="20" max_depth="20" avail="1" />
+		</product_type>
+		<price_model code="BD-RO-ZE" name="Applicazione Fiore" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Applicazione Fiore" code="B0533D" model="688.99+0($q-850)" start_quantity="850" end_quantity="850" retail_multiplier="2.6000" wholesale="560.16" note="" />
+		</price_model>
+	</product>
+
+	<!-- Statues -->
+	
+	<product id="K0320" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Angel" type="application" color="0" fixed="0" url="01.png" url_3d="K0320.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0320" min_width="95" max_width="95" min_height="195" max_height="195" min_depth="120" max_depth="120" kg="1" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0353" min_width="115" max_width="115" min_height="245" max_height="245" min_depth="140" max_depth="140" kg="2" avail="0" />
+			<type id="3" nr="3" name="Statue"  code="K0345" min_width="175" max_width="175" min_height="360" max_height="360" min_depth="200" max_depth="200" kg="6.5" avail="0" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0320" model="118.37+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="96.24" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0320" model="165.70+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="134.72" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0353" model="171.92+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="139.77" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0353" model="240.66+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="195.66" note="color" />
+			<price id="5" nr="5" name="Statue" code="K0345" model="361.29+0($q-535)" start_quantity="535" end_quantity="535" retail_multiplier="2.6000" wholesale="293.73" note="white" />
+			<price id="6" nr="6" name="Statue" code="K0345" model="487.87+0($q-535)" start_quantity="535" end_quantity="535" retail_multiplier="2.6000" wholesale="396.64" note="color" />
+		</price_model>
+	</product>
+
+	<product id="K0320" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Angel" type="application" color="0" fixed="0" url="02.png" url_3d="K0320.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0321" min_width="95" max_width="95" min_height="195" max_height="195" min_depth="120" max_depth="120" kg="1" avail="0" />
+			<type id="2" nr="2" name="Statue"  code="K0352" min_width="115" max_width="115" min_height="245" max_height="245" min_depth="140" max_depth="140" kg="2" avail="0" />
+			<type id="3" nr="3" name="Statue"  code="K0346" min_width="175" max_width="175" min_height="360" max_height="360" min_depth="200" max_depth="200" kg="6.5" avail="0" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0321" model="118.37+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="96.24" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0321" model="165.70+0($q-290)" start_quantity="290" end_quantity="290" retail_multiplier="2.6000" wholesale="134.72" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0352" model="171.92+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="139.77" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0352" model="240.66+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="195.66" note="color" />
+			<price id="5" nr="5" name="Statue" code="K0346" model="361.29+0($q-535)" start_quantity="535" end_quantity="535" retail_multiplier="2.6000" wholesale="293.73" note="white" />
+			<price id="6" nr="6" name="Statue" code="K0346" model="487.87+0($q-535)" start_quantity="535" end_quantity="535" retail_multiplier="2.6000" wholesale="396.64" note="color" />
+		</price_model>
+	</product>
+	
+	<product id="K2064" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Angel" type="application" color="0" fixed="0" url="03.png" url_3d="K2064.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K2064" min_width="100" max_width="100" min_height="200" max_height="200" min_depth="90" max_depth="90" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K2064" model="142.04+0($q-300)" start_quantity="300" end_quantity="300" retail_multiplier="2.6000" wholesale="115.48" note="white" />
+			<price id="2" nr="2" name="Statue" code="K2064" model="198.86+0($q-300)" start_quantity="300" end_quantity="300" retail_multiplier="2.6000" wholesale="161.67" note="color" />
+		</price_model>
+	</product>
+
+	<product id="K0096" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Madonna" type="application" color="0" fixed="0" url="04.png" url_3d="K0096.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0096" min_width="190" max_width="190" min_height="425" max_height="425" min_depth="100" max_depth="50" kg="4.8" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0222" min_width="400" max_width="400" min_height="970" max_height="970" min_depth="200" max_depth="150" kg="50" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0096" model="305.95+0($q-615)" start_quantity="615" end_quantity="615" retail_multiplier="2.6000" wholesale="248.74" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0096" model="413.02+0($q-615)" start_quantity="615" end_quantity="615" retail_multiplier="2.6000" wholesale="335.79" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0222" model="1922.26+0($q-1370)" start_quantity="1370" end_quantity="1370" retail_multiplier="2.6000" wholesale="1562.82" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0222" model="2306.42+0($q-1370)" start_quantity="1370" end_quantity="1370" retail_multiplier="2.6000" wholesale="1875.14" note="color" />
+		</price_model>
+	</product>	
+
+	<product id="K2011" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Madonna" type="application" color="0" fixed="0" url="05.png" url_3d="K0307.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K2011" min_width="85" max_width="85" min_height="425" max_height="425" min_depth="75" max_depth="75" kg="2.4" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0307" min_width="135" max_width="135" min_height="620" max_height="620" min_depth="100" max_depth="100" kg="6" avail="1" />
+			<type id="3" nr="3" name="Statue"  code="K2115" min_width="180" max_width="180" min_height="790" max_height="790" min_depth="140" max_depth="140" kg="17" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K2011" model="194.48+0($q-510)" start_quantity="510" end_quantity="510" retail_multiplier="2.6000" wholesale="158.11" note="white" />
+			<price id="2" nr="2" name="Statue" code="K2011" model="272.21+0($q-510)" start_quantity="510" end_quantity="510" retail_multiplier="2.6000" wholesale="221.31" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0307" model="379.34+0($q-755)" start_quantity="755" end_quantity="755" retail_multiplier="2.6000" wholesale="308.41" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0307" model="512.20+0($q-755)" start_quantity="755" end_quantity="755" retail_multiplier="2.6000" wholesale="416.43" note="color" />
+			<price id="5" nr="5" name="Statue" code="K2115" model="785.85+0($q-970)" start_quantity="970" end_quantity="970" retail_multiplier="2.6000" wholesale="638.90" note="white" />
+			<price id="6" nr="6" name="Statue" code="K2115" model="982.08+0($q-970)" start_quantity="970" end_quantity="970" retail_multiplier="2.6000" wholesale="798.44" note="color" />
+		</price_model>
+	</product>	
+	
+	<product id="K0383" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Angel" type="application" color="0" fixed="0" url="06.png" url_3d="K0383.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0383" min_width="70" max_width="70" min_height="270" max_height="270" min_depth="80" max_depth="80" kg="0.9" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0198" min_width="160" max_width="160" min_height="500" max_height="500" min_depth="170" max_depth="170" kg="7" avail="1" />
+			<type id="3" nr="3" name="Statue"  code="K0474" min_width="220" max_width="220" min_height="750" max_height="750" min_depth="250" max_depth="250" kg="27" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0383" model="115.54+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="93.94" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0383" model="161.79+0($q-340)" start_quantity="340" end_quantity="340" retail_multiplier="2.6000" wholesale="131.53" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0198" model="369.78+0($q-660)" start_quantity="660" end_quantity="660" retail_multiplier="2.6000" wholesale="322.59" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0198" model="535.58+0($q-660)" start_quantity="660" end_quantity="660" retail_multiplier="2.6000" wholesale="435.43" note="color" />
+			<price id="5" nr="5" name="Statue" code="K0474" model="1126.69+0($q-970)" start_quantity="970" end_quantity="970" retail_multiplier="2.6000" wholesale="916.00" note="white" />
+			<price id="6" nr="6" name="Statue" code="K0474" model="1408.60+0($q-970)" start_quantity="970" end_quantity="970" retail_multiplier="2.6000" wholesale="1145.20" note="color" />
+		</price_model>
+	</product>	
+
+	<product id="K0085" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Gettafiori" type="application" color="0" fixed="0" url="07.png" url_3d="K0083.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0085" min_width="110" max_width="110" min_height="200" max_height="200" min_depth="110" max_depth="110" kg="1" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0083" min_width="115" max_width="115" min_height="305" max_height="305" min_depth="110" max_depth="110" kg="1.5" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0085" model="143.38+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="2.6000" wholesale="116.57" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0085" model="200.76+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="2.6000" wholesale="163.22" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0083" model="160.68+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="2.6000" wholesale="130.63" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0083" model="224.89+0($q-420)" start_quantity="420" end_quantity="420" retail_multiplier="2.6000" wholesale="182.84" note="color" />
+		</price_model>
+	</product>	
+	
+	<product id="K2064" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Angel" type="application" color="0" fixed="0" url="08.png" url_3d="K2064.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K2064" min_width="100" max_width="100" min_height="260" max_height="260" min_depth="90" max_depth="90" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K2064" model="142.04+0($q-260)" start_quantity="260" end_quantity="260" retail_multiplier="2.6000" wholesale="115.48" note="white" />
+			<price id="2" nr="2" name="Statue" code="K2064" model="198.86+0($q-260)" start_quantity="260" end_quantity="260" retail_multiplier="2.6000" wholesale="161.67" note="color" />
+		</price_model>
+	</product>	
+	
+	<product id="K0397" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Angel" type="application" color="0" fixed="0" url="09.png" url_3d="K0397.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0397" min_width="190" max_width="190" min_height="385" max_height="385" min_depth="125" max_depth="125" kg="5.5" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0397" model="384.95+0($q-575)" start_quantity="575" end_quantity="575" retail_multiplier="2.6000" wholesale="312.97" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0397" model="519.51+0($q-575)" start_quantity="575" end_quantity="575" retail_multiplier="2.6000" wholesale="422.36" note="color" />
+		</price_model>
+	</product>	
+	
+	<product id="K0146" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Christs" type="application" color="0" fixed="0" url="10.png" url_3d="K0146.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0146" min_width="180" max_width="180" min_height="510" max_height="510" min_depth="115" max_depth="115" kg="6.5" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0272" min_width="280" max_width="280" min_height="825" max_height="825" min_depth="190" max_depth="190" kg="30" avail="1" />
+			<type id="3" nr="3" name="Statue"  code="K0217" min_width="330" max_width="330" min_height="975" max_height="975" min_depth="245" max_depth="245" kg="46" avail="1" />
+			<type id="4" nr="4" name="Statue"  code="K0274" min_width="430" max_width="430" min_height="1220" max_height="1220" min_depth="240" max_depth="240" kg="50" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0146" model="369.20+0($q-690)" start_quantity="690" end_quantity="690" retail_multiplier="2.6000" wholesale="300.17" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0146" model="498.59+0($q-690)" start_quantity="690" end_quantity="690" retail_multiplier="2.6000" wholesale="405.36" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0272" model="1168.55+0($q-1105)" start_quantity="1105" end_quantity="1105" retail_multiplier="2.6000" wholesale="950.04" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0272" model="1460.69+0($q-1105)" start_quantity="1105" end_quantity="1105" retail_multiplier="2.6000" wholesale="1187.55" note="color" />
+			<price id="5" nr="5" name="Statue" code="K0217" model="1573.16+0($q-1305)" start_quantity="1305" end_quantity="1305" retail_multiplier="2.6000" wholesale="1278.99" note="white" />
+			<price id="6" nr="6" name="Statue" code="K0217" model="1887.70+0($q-1305)" start_quantity="1305" end_quantity="1305" retail_multiplier="2.6000" wholesale="1534.72" note="color" />
+			<price id="7" nr="7" name="Statue" code="K0274" model="2355.59+0($q-1650)" start_quantity="1650" end_quantity="1650" retail_multiplier="2.6000" wholesale="1915.11" note="white" />
+			<price id="8" nr="8" name="Statue" code="K0274" model="2826.93+0($q-1650)" start_quantity="1650" end_quantity="1650" retail_multiplier="2.6000" wholesale="2298.31" note="color" />
+		</price_model>
+	</product>	
+	
+	<product id="K0146" postage_cost="0" fixing_cost="0" code="BD-RZ-ST" name="Statue Christs" type="application" color="0" fixed="0" url="10.png" url_3d="K0146.m3d" parent="3004" description="">
+		<product_type id="1" nr="1" name="Statue" code="BD-RZ-ST">
+			<type id="1" nr="1" name="Statue"  code="K0146" min_width="180" max_width="180" min_height="510" max_height="510" min_depth="115" max_depth="115" kg="6.5" avail="1" />
+			<type id="2" nr="2" name="Statue"  code="K0272" min_width="280" max_width="280" min_height="825" max_height="825" min_depth="190" max_depth="190" kg="30" avail="1" />
+			<type id="3" nr="3" name="Statue"  code="K0217" min_width="330" max_width="330" min_height="975" max_height="975" min_depth="245" max_depth="245" kg="46" avail="1" />
+			<type id="4" nr="4" name="Statue"  code="K0274" min_width="430" max_width="430" min_height="1220" max_height="1220" min_depth="240" max_depth="240" kg="50" avail="1" />
+		</product_type>
+		<price_model code="BD-RZ-ST" name="Statue" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Statue" code="K0146" model="369.20+0($q-690)" start_quantity="690" end_quantity="690" retail_multiplier="2.6000" wholesale="300.17" note="white" />
+			<price id="2" nr="2" name="Statue" code="K0146" model="498.59+0($q-690)" start_quantity="690" end_quantity="690" retail_multiplier="2.6000" wholesale="405.36" note="color" />
+			<price id="3" nr="3" name="Statue" code="K0272" model="1168.55+0($q-1105)" start_quantity="1105" end_quantity="1105" retail_multiplier="2.6000" wholesale="950.04" note="white" />
+			<price id="4" nr="4" name="Statue" code="K0272" model="1460.69+0($q-1105)" start_quantity="1105" end_quantity="1105" retail_multiplier="2.6000" wholesale="1187.55" note="color" />
+			<price id="5" nr="5" name="Statue" code="K0217" model="1573.16+0($q-1305)" start_quantity="1305" end_quantity="1305" retail_multiplier="2.6000" wholesale="1278.99" note="white" />
+			<price id="6" nr="6" name="Statue" code="K0217" model="1887.70+0($q-1305)" start_quantity="1305" end_quantity="1305" retail_multiplier="2.6000" wholesale="1534.72" note="color" />
+			<price id="7" nr="7" name="Statue" code="K0274" model="2355.59+0($q-1650)" start_quantity="1650" end_quantity="1650" retail_multiplier="2.6000" wholesale="1915.11" note="white" />
+			<price id="8" nr="8" name="Statue" code="K0274" model="2826.93+0($q-1650)" start_quantity="1650" end_quantity="1650" retail_multiplier="2.6000" wholesale="2298.31" note="color" />
+		</price_model>
+	</product>	
+	
+	<!-- Vases -->
+	
+	<product id="K2213" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Vase Tedesche Base Mounted" type="vase" surface="lid" color="0" fixed="0" url="01.png" url_3d="K2213.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Vase Tedesche Base Mounted" code="BD-WA-LA">
+			<type id="1" nr="1" name="Vase Tedesche Base Mounted"  code="K2213" min_width="140" max_width="140" min_height="270" max_height="270" min_depth="140" max_depth="140" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Vase Tedesche Base Mounted" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Vase Tedesche Base Mounted" code="K2213" model="180.81+0($q-410)" start_quantity="410" end_quantity="410" retail_multiplier="2.6000" wholesale="147.00" note="" />
+		</price_model>
+	</product>
+
+	<product id="K2254" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Vase Tedesche Base Mounted" type="vase" surface="lid" color="0" fixed="0" url="02.png" url_3d="K2254.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Vase Tedesche Base Mounted" code="BD-WA-LA">
+			<type id="1" nr="1" name="Vase Tedesche Base Mounted"  code="K2254" min_width="145" max_width="145" min_height="240" max_height="240" min_depth="145" max_depth="145" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Vase Tedesche Base Mounted" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Vase Tedesche Base Mounted" code="K2254" model="200.49+0($q-385)" start_quantity="385" end_quantity="385" retail_multiplier="2.6000" wholesale="163.00" note="" />
+		</price_model>
+	</product>
+
+	<product id="K2638" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Vase Table Mounted" type="vase" surface="lid" color="0" fixed="0" url="03.png" url_3d="K2638.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Vase Table Mounted" code="BD-WA-LA">
+			<type id="1" nr="1" name="Vase Table Mounted"  code="K2638" min_width="135" max_width="135" min_height="290" max_height="290" min_depth="135" max_depth="135" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Vase Table Mounted" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Vase Table Mounted" code="K2638" model="186.74+0($q-425)" start_quantity="425" end_quantity="425" retail_multiplier="2.6000" wholesale="151.82" note="" />
+		</price_model>
+	</product>
+	
+	<product id="K2975" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Vase Floris Base Mounted" type="vase" surface="lid" color="0" fixed="0" url="04.png" url_3d="K2975.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Vase Floris Base Mounted" code="BD-WA-LA">
+			<type id="1" nr="1" name="Vase Floris Base Mounted"  code="K2975" min_width="145" max_width="145" min_height="270" max_height="270" min_depth="145" max_depth="145" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Vase Floris Base Mounted" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Vase Floris Base Mounted" code="K2975" model="381.80+0($q-415)" start_quantity="415" end_quantity="415" retail_multiplier="2.6000" wholesale="310.41" note="" />
+		</price_model>
+	</product>
+	
+	<product id="K7248" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Vase Floris Base Mounted" type="vase" surface="lid" color="0" fixed="0" url="05.png" url_3d="K7248.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Vase Floris Base Mounted" code="BD-WA-LA">
+			<type id="1" nr="1" name="Vase Floris Base Mounted"  code="K7248" min_width="120" max_width="120" min_height="190" max_height="190" min_depth="120" max_depth="120" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Vase Floris Base Mounted" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Vase Floris Base Mounted" code="K7248" model="420.00+0($q-310)" start_quantity="310" end_quantity="310" retail_multiplier="2.6000" wholesale="365.80" note="" />
+		</price_model>
+	</product>
+	
+	<product id="K4405" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Vase Floris Base Mounted" type="vase" surface="lid" color="0" fixed="0" url="06.png" url_3d="K4405.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Vase Floris Base Mounted" code="BD-WA-LA">
+			<type id="1" nr="1" name="Vase Floris Base Mounted"  code="K4405" min_width="120" max_width="120" min_height="240" max_height="240" min_depth="120" max_depth="120" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Vase Floris Base Mounted" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Vase Floris Base Mounted" code="K4405" model="277.00+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="225.20" note="" />
+		</price_model>
+	</product>
+	
+	<product id="K7262" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Lampada Cero Ter" type="vase" surface="lid" color="0" fixed="0" url="07.png" url_3d="K7262.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Lampada Cero Ter" code="BD-WA-LA">
+			<type id="1" nr="1" name="Lampada Cero Ter"  code="K7262" min_width="140" max_width="140" min_height="220" max_height="220" min_depth="140" max_depth="140" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Lampada Cero Ter" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Lampada Cero Ter" code="K7262" model="299.00+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="243.09" note="" />
+		</price_model>
+	</product>
+	
+	<product id="K7252" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Lampada Cero Rose" type="vase" surface="lid" color="0" fixed="0" url="08.png" url_3d="K7252.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Lampada Cero Ter" code="BD-WA-LA">
+			<type id="1" nr="1" name="Lampada Cero Ter"  code="K7252" min_width="140" max_width="140" min_height="220" max_height="220" min_depth="140" max_depth="140" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Lampada Cero Ter" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Lampada Cero Ter" code="K7252" model="494.91+0($q-360)" start_quantity="360" end_quantity="360" retail_multiplier="2.6000" wholesale="402.37" note="" />
+		</price_model>
+	</product>
+	
+	<product id="K4404" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Lampada Cero Rose" type="vase" surface="lid" color="0" fixed="0" url="09.png" url_3d="K4404.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Lampada Cero Ter" code="BD-WA-LA">
+			<type id="1" nr="1" name="Lampada Cero Ter"  code="K4404" min_width="140" max_width="140" min_height="250" max_height="250" min_depth="140" max_depth="140" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Lampada Cero Ter" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Lampada Cero Ter" code="K4404" model="380.00+0($q-390)" start_quantity="390" end_quantity="390" retail_multiplier="2.6000" wholesale="308.94" note="" />
+		</price_model>
+	</product>
+
+	<product id="K2180" postage_cost="0" fixing_cost="0" code="BD-WA-LA" name="Lampada Cero Rose" type="vase" surface="lid" color="0" fixed="0" url="10.png" url_3d="K2180.m3d" parent="3005" description="">
+		<product_type id="1" nr="1" name="Lampada Cero Ter" code="BD-WA-LA">
+			<type id="1" nr="1" name="Lampada Cero Ter"  code="K2180" min_width="140" max_width="140" min_height="250" max_height="250" min_depth="140" max_depth="140" kg="1" avail="1" />
+		</product_type>
+		<price_model code="BD-WA-LA" name="Lampada Cero Ter" quantity_type="Width + Height" currency="Dollar" >
+			<price id="1" nr="1" name="Lampada Cero Ter" code="K2180" model="440.00+0($q-390)" start_quantity="390" end_quantity="390" retail_multiplier="2.6000" wholesale="357.72" note="" />
+		</price_model>
+	</product>
+
+</data>

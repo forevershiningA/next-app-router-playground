@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import React from 'react';
 import type { Group } from 'three';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
+import type { CatalogData, AdditionData } from '#/lib/xml-parser';
 
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.jpg';
@@ -42,7 +43,13 @@ export type Line = {
   ref: React.RefObject<Group | null>; // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
-export type PanelName = 'shape' | 'size' | 'material' | 'inscription' | null;
+export type PanelName =
+  | 'shape'
+  | 'size'
+  | 'material'
+  | 'inscription'
+  | 'additions'
+  | null;
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 
 type LinePatch = Partial<
@@ -50,6 +57,13 @@ type LinePatch = Partial<
 >;
 
 type HeadstoneState = {
+  catalog: CatalogData | null;
+  setCatalog: (catalog: CatalogData) => void;
+
+  selectedAdditions: string[];
+  addAddition: (id: string) => void;
+  removeAddition: (id: string) => void;
+
   productUrl: string | null;
   setProductUrl: (url: string) => void;
 
@@ -71,6 +85,9 @@ type HeadstoneState = {
   inscriptions: Line[];
   selectedInscriptionId: string | null;
   activeInscriptionText: string;
+  inscriptionMinHeight: number;
+  inscriptionMaxHeight: number;
+  fontLoading: boolean;
 
   setInscriptions: (
     inscriptions: Line[] | ((inscriptions: Line[]) => Line[]),
@@ -83,6 +100,8 @@ type HeadstoneState = {
 
   setSelectedInscriptionId: (id: string | null) => void;
   setActiveInscriptionText: (t: string) => void;
+  setInscriptionHeightLimits: (min: number, max: number) => void;
+  setFontLoading: (loading: boolean) => void;
 
   /* router injection */
   navTo?: NavFn;
@@ -94,6 +113,7 @@ type HeadstoneState = {
 
   openInscriptions: (id: string | null) => void;
   openSizePanel: () => void;
+  openAdditionsPanel: () => void;
   closeInscriptions: () => void;
 };
 
@@ -101,6 +121,21 @@ let nextId = 0;
 const genId = () => `l-${nextId++}`;
 
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
+  catalog: null,
+  setCatalog(catalog) {
+    set({ catalog });
+  },
+
+  selectedAdditions: [],
+  addAddition: (id) => {
+    set((s) => ({ selectedAdditions: [...s.selectedAdditions, id] }));
+  },
+  removeAddition: (id) => {
+    set((s) => ({
+      selectedAdditions: s.selectedAdditions.filter((aid) => aid !== id),
+    }));
+  },
+
   productUrl: null,
   setProductUrl(productUrl) {
     set({ productUrl });
@@ -135,7 +170,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     {
       id: genId(),
       text: 'In Loving Memory',
-      font: 'Garamond',
+      font: 'Chopin Script',
       sizeMm: 80,
       xPos: 0,
       yPos: 0,
@@ -145,7 +180,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     {
       id: genId(),
       text: 'of General Admiral Aladeen',
-      font: 'Garamond',
+      font: 'Chopin Script',
       sizeMm: 120,
       xPos: 0,
       yPos: 20,
@@ -155,6 +190,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   ],
   selectedInscriptionId: null,
   activeInscriptionText: 'In Loving Memory',
+  inscriptionMinHeight: 5,
+  inscriptionMaxHeight: 1200,
+  fontLoading: false,
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
@@ -219,8 +257,24 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     if (!src) return '';
     const newId = genId();
 
-    // Offset by the source inscription's height (scaled) plus a small gap to avoid overlapping
-    const offset = src.sizeMm / 10 + 5;
+    // Measure the actual text height using canvas
+    let offset = src.sizeMm / 10 + 5; // fallback
+    if (typeof window !== 'undefined') {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.font = `${src.sizeMm}px "${src.font}"`;
+        const metrics = ctx.measureText(src.text);
+        if (
+          metrics.fontBoundingBoxAscent !== undefined &&
+          metrics.fontBoundingBoxDescent !== undefined
+        ) {
+          const heightPx =
+            metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+          offset = heightPx + 5; // actual height in mm + gap
+        }
+      }
+    }
 
     set((s) => ({
       inscriptions: [
@@ -229,7 +283,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           ...src,
           id: newId,
           ref: React.createRef<Group>(),
-          yPos: src.yPos + offset, // Position below current position accounting for height
+          yPos: src.yPos + offset, // Position below current position accounting for actual text height
         },
       ],
       selectedInscriptionId: newId, // Select the newly duplicated inscription
@@ -264,6 +318,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setActiveInscriptionText: (activeInscriptionText) =>
     set({ activeInscriptionText }),
 
+  setInscriptionHeightLimits: (min, max) =>
+    set({ inscriptionMinHeight: min, inscriptionMaxHeight: max }),
+
+  setFontLoading: (fontLoading) => set({ fontLoading }),
+
   /* router injection */
   navTo: undefined,
   setNavTo: (fn) => set({ navTo: fn }),
@@ -285,6 +344,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   openSizePanel: () => {
     get().setActivePanel('size');
     get().navTo?.('/select-size');
+  },
+
+  openAdditionsPanel: () => {
+    get().setActivePanel('additions');
+    get().navTo?.('/select-additions');
   },
 
   closeInscriptions: () => {

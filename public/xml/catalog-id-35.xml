@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+<product id="35" code="Plaque" color="0" holes="0" force="0" fixed="0" granites="0" thickness="0" border="0" background="1" monument="0" laser="0" biondan="0" price="1" formula="Enamel" formulaID="1700" name="Vitreous Enameled Plaque" translate="VITREOUS_ENAMELED_PLAQUE" fontsize="2" bitmap-factor="15" default-color="0xffffff" material="backgrounds" materialID = "1" scenery="src/m3d/ground/groundF2F2F2.m3d" type="plaque" retail="1.3" formula-multiplier="1.6" description = "Our traditional inscription granite or sandstone headstones have been designed to compliment our range of funerary products and satisfy the needs of those customers who wish to continue to use a traditional material for their memorial." >
+
+<shapes>
+	<shape type="plaque" name="Plaque (Landscape)" code="Landscape" double="0" stand="0" url="src/img/headstones/base/landscape.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="560" init_width="300" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="60" max_height="400" init_height="200" 
+			  color="src/backgrounds/forever/l/01.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+	
+	<shape type="plaque" name="Plaque (Portrait)" code="Portrait" double="0" stand="0" url="src/img/headstones/base/portrait.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="400" init_width="200" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="60" max_height="560" init_height="300" 
+			  color="src/backgrounds/forever/l/01.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+	
+	<shape type="plaque" name="Plaque (Square)" code="Square" double="0" stand="0" url="src/img/headstones/base/square.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="400" init_width="300" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="100" max_height="400" init_height="300" 
+			  color="src/backgrounds/forever/l/01.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+	
+</shapes>
+
+<price_model id="35" code="H-TABLE" name="*" quantity_type="Area" currency="Dollars" >
+	<price id="1" nr="1" code="PRE_LASER_ETCHED_BLACK_GRANITE_HEADSTONE" name="*" model="1+1($q-1)" start_quantity="0" end_quantity="10" quantity_type="Area" retail_multiplier="1.3000" note="" />
+</price_model>
+
+<additions>
+		<addition id="74" type="inscription" name="Inscription" />
+		<addition id="1700" type="motif" name="Motif" formula="Enamel" />
+		<addition id="2300" type="image" name="Vitreous Enamel Image (No 1)" />
+		<addition id="2301" type="image" name="Vitreous Enamel Image (No 2)" />
+</additions>
+</product>
+
+<product id="1005" code="Stand" type="stand" name="Base">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="Stand" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Stand" name="*" model="1+1($q-1)" start_quantity="0" end_quantity="10" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>	
+
+<product id="1006" code="Ledger" type="lid" name="Ledger panel">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="Ledger" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Ledger" name="*" model="1+1($q-1)" start_quantity="1" end_quantity="0" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>	
+
+<product id="1007" code="Kerb" type="kerb" name="Kerb">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="Kerb" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Kerb" name="*" model="1+1($q-1)" start_quantity="1" end_quantity="0" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>	
+
+<product id="1008" code="Base" type="base" name="Skirting">
+	<shapes total="*" path="">
+	</shapes>
+	<price_model code="H-BASE" name="*" quantity_type="Area" currency="Dollars" >
+		<price id="1" nr="1" code="Base" name="*" model="1+1($q-1)" start_quantity="1" end_quantity="0" quantity_type="Area" retail_multiplier="1.5000" note="" />
+	</price_model>
+</product>
+	
+<product id="78" postage_cost="0" fixing_cost="0" code="Border" name="Laser Etched Border (free)" type="border" color="1" fixed="0" url="*">
+	<price_model code="Border" name="Laser Etched Border (free)" quantity_type="Width + Height" currency="Dollar" >
+		<price id="1" nr="1" name="Laser Etched Border (free)" code="border" model="0.00+0.000($q-1)" start_quantity="1" end_quantity="0" retail_multiplier="0.0000" wholesale="0.0" note="" />
+	</price_model>
+</product>
+
+<product id="1044" code="Postage" type="postage" name="Postage $9.90" >
+	<price_model code="Postage" name="Postage" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Postage" name="Postage" model="0.00+9.90($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+	</price_model>
+</product>
+
+<product id="1045" code="Fixing" type="fixing-cost" name="Fixing Cost $37" >
+	<price_model code="Fixing" name="Fixing Cost" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Fixing" name="Fixing" model="0.00+37.00($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.3500" note="" />
+	</price_model>
+</product>
+	
+<product id="9000" code="Flower-Pot-Hole" type="hole" name="Flower Pot Hole" >
+	<price_model code="Flower-Pot-Hole" name="Flower Pot Hole" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Flower-Pot-Hole" name="Flower Pot Hole" model="33.00+33.00($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.3000" note="" />
+	</price_model>
+</product>
+
+<product id="9001" code="Flower-Pot" type="pot" name="Flower Pot" >
+	<price_model code="Flower-Pot" name="Flower Pot" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Flower-Pot" name="Flower Pot" model="26.00+26.00($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2500" note="" />
+	</price_model>
+</product>
+
+<product id="10000" code="Transport-and-Install" type="install" name="Transport and Install" >
+	<price_model code="Transport-and-Install" name="Transport and Install" quantity_type="Install" currency="Dollars" >
+		<price id="1" nr="1" code="Transport-and-Install" name="Transport an Install" model="0.00+0.000($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+	</price_model>
+</product>
+
+</data>

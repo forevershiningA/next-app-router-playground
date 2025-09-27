@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<sections lang="en_EN" code="SEC_EN_EN" creation-date="2013-03-11" last-revision="2013-03-11">
+		
+		<section nr="2" id="2" name="images">
+			
+			<group id="1" title="Tools" type="Images">
+				<item id="1" nr="1" title="Upload your Photo here" x="@center" y="@center" hover="true">
+					<image>src/img/misc/upload.png</image>
+					<action>Img_Add</action>
+				</item>
+				<item id="2" nr="2" title="Rotate Image" x="@left" y="@top" hover="false">
+					<image>src/img/misc/rotate.png</image>
+					<action>Img_Rotate</action>
+				</item>
+			</group>
+			
+			<group id="2" name="Control" type="Buttons">
+				<item id="Button" visible="true">
+					<x>10</x>
+					<y>120</y>
+					<width>230</width>
+					<height>28</height>
+					<title>upload</title>
+					<action>Img_Add</action>
+				</item>
+				<item id="Button" visible="true">
+					<x>43</x>
+					<y>445</y>
+					<width>160</width>
+					<height>28</height>
+					<title>ok</title>
+					<action>Img_Crop</action>
+				</item>
+				<item id="Button" visible="true">
+					<x>250</x>
+					<y>445</y>
+					<width>70</width>
+					<height>28</height>
+					<title>cancel</title>
+					<action>Img_Cancel</action>
+				</item>
+				<item id="Button" visible="true">
+					<x>65</x>
+					<y>205</y>
+					<width>120</width>
+					<height>28</height>
+					<title>blackandwhite</title>
+					<action>Img_BlackAndWhite</action>
+				</item>
+				<item id="Button" visible="true">
+					<x>65</x>
+					<y>240</y>
+					<width>120</width>
+					<height>28</height>
+					<title>sepia</title>
+					<action>Img_Sepia</action>
+				</item>
+				<item id="Button" visible="true">
+					<x>65</x>
+					<y>275</y>
+					<width>120</width>
+					<height>28</height>
+					<title>fullcolor</title>
+					<action>Img_FullColor</action>
+				</item>
+			</group>
+
+		</section>
+
+	</sections>
+</data>

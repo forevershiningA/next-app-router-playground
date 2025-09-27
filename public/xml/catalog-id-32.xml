@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+
+<product id="32" code="Plaque" color="1" force="0" holes="0" fixed="1" granites="1" thickness="0" border="1" background="1" monument="0" 
+laser="0" biondan="0" price="0" formula="Enamel" formulaID="1700" name="Full-colour Plaque" translate="FULL_COLOUR_PLAQUE" fontsize="20" bitmap-factor="20" 
+default-color="#000000" material="backgrounds" materialID = "17" scenery="src/m3d/ground/groundF2F2F2.m3d" type="plaque" 
+img="boot/img/APP_ID_32.jpg" step="50" sizes="9" retail="1.3" formula-multiplier="1" 
+description = "Our full colour plaques are made with kiln-fired porcelain. These plaques have been designed to complement our range of funerary products adding colour to a traditional-era design. The kiln-firing process fuses the colour and glaze together to form a permanent structure that gives the plaque its durability and longevity. Improved technology is coming very soon to full colour plaques in the form of vitreous enamel. This is glass on metal and is the most durable of full colour products and will be available in smaller sizes. See also Full-colour Image for vitreous enamel products." >
+
+<shapes>
+
+	<shape type="plaque" name="Full-colour Plaque" code="Landscape" double="0" stand="0" url="src/img/headstones/base/landscape.png">
+   		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+        <file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="560" init_width="250" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="60" max_height="400" init_height="200"  
+			  color="src/ceramic/l/01.jpg"
+			  color2="src/ceramic/l/01.jpg"
+			  url_3d="models/forevershining/headstones/square.m3d"  />
+	</shape>
+	
+</shapes>
+
+<price_model id="32" code="H-TABLE" name="*" quantity_type="Width + Height" currency="Dollars" >
+	<price id="1" nr="1" code="FULL-COLOUR-PLAQUE" name="*" model="350.00+0($q-260)" start_quantity="260" end_quantity="260" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="2" nr="2" code="FULL-COLOUR-PLAQUE" name="*" model="390.00+0($q-274)" start_quantity="274" end_quantity="274" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="3" nr="3" code="FULL-COLOUR-PLAQUE" name="*" model="440.00+0($q-310)" start_quantity="310" end_quantity="310" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="3" nr="3" code="FULL-COLOUR-PLAQUE" name="*" model="500.00+0($q-350)" start_quantity="350" end_quantity="350" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="4" nr="4" code="FULL-COLOUR-PLAQUE" name="*" model="570.00+0($q-420)" start_quantity="420" end_quantity="420" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="5" nr="5" code="FULL-COLOUR-PLAQUE" name="*" model="600.00+0($q-450)" start_quantity="450" end_quantity="450" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="6" nr="6" code="FULL-COLOUR-PLAQUE" name="*" model="700.00+0($q-540)" start_quantity="540" end_quantity="540" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="7" nr="7" code="FULL-COLOUR-PLAQUE" name="*" model="780.00+0($q-597)" start_quantity="597" end_quantity="597" quantity_type="Width + Height" retail_multiplier="1" note="" />
+	<price id="8" nr="8" code="FULL-COLOUR-PLAQUE" name="*" model="990.00+0($q-660)" start_quantity="660" end_quantity="660" quantity_type="Width + Height" retail_multiplier="1" note="" />
+</price_model>
+
+<additions>
+	<addition id="1701" type="inscription" name="Inscription" />
+	<addition id="1700" type="motif" name="Motif" formula="Enamel" />
+	<addition id="7" type="image" name="Ceramic Image" />
+	<addition id="137" type="image" name="Free Image" />
+	<addition id="201" type="sizes" name="Full-colour Plaque" />
+</additions>
+</product>
+
+<product id="79" postage_cost="0" fixing_cost="0" code="Border" name="Bronze Border" type="border" color="1" fixed="0" url="*">
+	<price_model code="Border" name="Bronze Border" quantity_type="Width + Height" currency="Dollar" >
+		<price id="1" nr="1" name="Bronze Border" code="border" model="0.00+0.000($q-1)" start_quantity="1" end_quantity="0" retail_multiplier="0.0000" wholesale="0.0" note="" />
+	</price_model>
+</product>
+
+<product id="44" code="Postage" type="postage" name="Postage $9.90" >
+	<price_model code="Postage" name="Postage" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Postage" name="Postage" model="0.00+9.90($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+	</price_model>
+</product>
+
+<product id="45" code="Fixing" type="fixing-cost" name="Fixing Cost $37" >
+	<price_model code="Fixing" name="Fixing Cost" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Fixing" name="Fixing" model="0.00+37.00($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.3500" note="" />
+	</price_model>
+</product>
+
+</data>

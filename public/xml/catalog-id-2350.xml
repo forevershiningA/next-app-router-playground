@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+
+<product id="2350" code="Urn" color="1" holes="0" force="0" fixed="1" granites="0" thickness="0" border="0" background="1" 
+monument="0" laser="0" biondan="0" price="1" formula="Enamel" formulaID="1700" name="Stainless Steel Vitreous Enamel Inlaid Urn" translate="STAINLESS_STEEL_VITREOUS_URN" 
+fontsize="20" bitmap-factor="30" default-color="#000000" material="backgrounds" materialID = "1" 
+scenery="src/m3d/ground/groundF2F2F2.m3d" type="urn" retail="1.3" formula-multiplier="1" 
+description = "A beautiful, unique porcelain inlaid stainless steel urn will be a permanent memorial for family and friends to remember and celebrate the life of a loved one. Our urns can be individualized and personalized to reflect the true nature and personality of the deceased. The porcelain printing process allows us to affix beautiful, complex and intricate images of motifs and photos, in full natural colour, onto the porcelain surface. This style of urn is available in a range of shapes." >
+
+<shapes>
+
+<shape type="urn" name="Urn Heart" code="Heart" double="0" stand="0" url="src/img/urns/heart-happy.png">
+        <file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2230" 
+			  min_width="500" max_width="2400" init_width="1150" 
+			  min_height="200" max_height="500" init_height="300" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="200" init_height="60" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/lid.m3d"  />
+        <file type="stand" 
+			  min_depth="50" max_depth="300" init_depth="250"
+			  min_width="300" max_width="1200" init_width="700" 
+			  min_height="100" max_height="200" init_height="100" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/stand.m3d"  />
+		<file type="table" 
+			  min_width="302" max_width="302" init_width="302" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="307" max_height="307" init_height="307"  
+			  color="src/backgrounds/colors/l/34.jpg"
+			  color2="src/backgrounds/colors/l/34.jpg"
+			  url_3d="models/forevershining/urns/heart.m3d"  />
+	</shape>
+
+	<shape type="urn" name="Oval" code="Oval" double="0" stand="0" url="src/img/urns/oval.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="206" max_width="206" init_width="206" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="285" max_height="285" init_height="285"  
+			  color="src/backgrounds/colors/l/34.jpg"
+			  color2="src/backgrounds/colors/l/34.jpg"
+			  url_3d="models/forevershining/urns/oval.m3d"  />
+	</shape>
+	
+	<shape type="urn" name="Rectangle" code="Rectangle" double="0" stand="0" url="src/img/urns/rectangle.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="200" max_width="200" init_width="200" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="270" max_height="270" init_height="270" 
+			  color="src/granites/forever/l/18.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="models/forevershining/urns/rectangle.m3d" />
+	</shape>
+	
+	<shape type="urn" name="Triangle" code="Triangle" double="0" stand="0" url="src/img/urns/triangle.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="242" max_width="242" init_width="242" 
+			  min_depth="50" max_depth="50" init_depth="50" 
+			  min_height="211" max_height="211" init_height="211" 
+			  color="src/granites/forever/l/18.jpg" 
+			  color2="src/granites/forever/l/18.jpg" 
+			  url_3d="models/forevershining/urns/triangle.m3d" />
+	</shape>
+	
+</shapes>
+
+<price_model id="2350" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" quantity_type="Units" currency="Dollars" >
+	<price id="1" nr="1" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="2016.88+2016.88($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Urn Heart" />
+	<price id="1" nr="1" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="2016.88+2016.88($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Heart" />
+	<price id="3" nr="3" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1937.67+1937.67($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Oval" />
+	<price id="4" nr="4" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1915.52+1915.52($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Rectangle" />
+	<price id="5" nr="5" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1945.34+1945.34($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Teardrop" />
+	<price id="6" nr="6" code="Stainless Steel Vitreous Enamel Inlaid Urn" name="*" model="1741.32+1741.32($q-1)" start_quantity="1" end_quantity="0" quantity_type="Units" retail_multiplier="1.2924" note="Triangle" />
+</price_model>
+
+<additions>
+	<addition id="1701" type="inscription" name="Vitreous Enamel Inscription" />
+	<addition id="1700" type="motif" name="Motif" formula="Enamel" />
+	<addition id="137" type="image" name="Free Image" />
+</additions>
+</product>
+
+</data>

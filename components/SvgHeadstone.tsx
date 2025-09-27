@@ -45,8 +45,12 @@ type Props = {
   showEdges?: boolean;
 
   meshProps?: ThreeElements['mesh'];
-  children?: (api: HeadstoneAPI) => React.ReactNode;
+  children?: (
+    api: HeadstoneAPI,
+    selectedAdditions: string[],
+  ) => React.ReactNode;
   inscriptions: Line[];
+  selectedAdditions?: string[];
 };
 
 /* ---------------- helpers ---------------- */
@@ -185,6 +189,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       meshProps,
       children,
       inscriptions,
+      selectedAdditions = [],
     },
     ref,
   ) => {
@@ -418,12 +423,15 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
         <group ref={ref} scale={[scale * sCore, -scale * sCore, scale]}>
           {meshes}
           {typeof children === 'function' &&
-            children({
-              group: ref as React.RefObject<THREE.Group>,
-              mesh: firstMeshRef,
-              frontZ: depth / 2,
-              unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
-            })}
+            children(
+              {
+                group: ref as React.RefObject<THREE.Group>,
+                mesh: firstMeshRef,
+                frontZ: depth / 2,
+                unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+              },
+              selectedAdditions,
+            )}
         </group>
       );
     }, [
@@ -448,6 +456,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       meshProps,
       children,
       inscriptions,
+      selectedAdditions,
     ]);
 
     return node;

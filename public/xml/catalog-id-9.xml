@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+<product id="9" code="Plaque" color="0" holes="0" force="0" fixed="1" granites="0" thickness="10" border="0" background="0" monument="0" laser="1" biondan="0" price="1" formula="Laser" formulaID="1100" name="Laser Etched Black Granite Pet Plaque" translate="LASER_ETCHED_BLACK_GRANITE_PET_PLAQUE" fontsize="2" bitmap-factor="15" default-color="0xffffff" material="stones" materialID = "17" scenery="src/m3d/ground/groundF2F2F2.m3d" type="plaque" step="50" sizes="9" retail="1.3" formula-multiplier="10" description = "Our laser-etched black granite pet plaques have been designed to compliment our range of funerary products and satisfy the needs of those customers who wish to continue to use a traditional material for their memorial. The laser etching process allows us to etch beautiful, complex and intricate images of motifs, logos and photos into the surface of the granite. This style of plaque is available in a range of rectangular shapes and sizes." >
+
+<shapes>
+
+	<shape type="plaque" name="Plaque (Landscape)" code="Landscape" double="0" stand="0" url="src/img/headstones/base/landscape.png">
+<file type="base" 
+			  min_depth="300" max_depth="2400" init_depth="1" 
+			  min_width="500" max_width="2400" init_width="1" 
+			  min_height="10" max_height="300" init_height="1" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/base.m3d"  />
+		<file type="kerb" 
+			  min_depth="300" max_depth="2400" init_depth="2230" 
+			  min_width="500" max_width="2400" init_width="1150" 
+			  min_height="200" max_height="500" init_height="300" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/kerb.m3d"  />
+		<file type="lid" 
+			  min_depth="300" max_depth="2400" init_depth="2030"
+			  min_width="600" max_width="2400" init_width="950"
+			  min_height="50" max_height="200" init_height="60" 
+			  color="data/jpg/granites/forever2/l/18.jpg"
+			  color2="data/jpg/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/lid.m3d"  />
+		<file type="stand" 
+			  min_depth="100" max_depth="100" init_depth="100"
+			  min_width="200" max_width="200" init_width="200" 
+			  min_height="50" max_height="50" init_height="50" 
+			  color="src/granites/forever2/l/18.jpg"
+			  color2="src/granites/forever2/l/18.jpg"
+			  url_3d="models/tempus/tombstones/tomb_006/stand.m3d"  />
+		<file type="table" 
+			  min_width="50" max_width="400" init_width="125" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="50" max_height="400" init_height="175" 
+			  color="src/granites/forever2/l/18.jpg" 
+			  color2="src/granites/forever2/l/18.jpg" 
+			  url_3d="models/forevershining/headstones/square.m3d"  />
+	</shape>
+	
+	<shape type="plaque" name="Plaque (Portrait)" code="Portrait" double="0" stand="0" url="src/img/headstones/base/portrait.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="50" max_width="400" init_width="200" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="50" max_height="400" init_height="300" 
+			  color="src/granites/forever2/l/18.jpg" 
+			  color2="src/granites/forever2/l/18.jpg" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+	
+</shapes>
+
+<price_model id="9" code="H-TABLE" name="*" quantity_type="Width + Height" currency="Dollars" >
+	<price id="1" nr="1" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="147.70+0($q-250)" start_quantity="250" end_quantity="250" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+	<price id="2" nr="2" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="159.03+0($q-300)" start_quantity="300" end_quantity="300" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+	<price id="3" nr="3" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="176.60+0($q-400)" start_quantity="400" end_quantity="400" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+	<price id="4" nr="4" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="187.60+0($q-450)" start_quantity="450" end_quantity="450" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+	<price id="4" nr="4" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="199.42+0($q-480)" start_quantity="480" end_quantity="480" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+	<price id="4" nr="4" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="202.00+0($q-500)" start_quantity="500" end_quantity="500" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+	<price id="4" nr="4" code="PRE_LASER_ETCHED_BLACK_GRANITE_PLAQUE" name="*" model="238.40+0($q-600)" start_quantity="600" end_quantity="600" quantity_type="Width + Height" retail_multiplier="1.6100" note="" />
+</price_model>
+
+<additions>
+	<addition id="16" type="inscription" name="Inscription" />
+	<addition id="60" type="motif" name="Motif" formula="Laser" />
+	<addition id="21" type="image" name="Granite Image" />
+	<addition id="7" type="image" name="Ceramic Photo" />
+	<addition id="2300" type="image" name="Vitreous Enamel Image" />
+	<addition id="2400" type="image" name="Premium Plana" />
+</additions>
+
+</product>
+
+<product id="44" code="Postage" type="postage" name="Postage $9.90" >
+	<price_model code="Postage" name="Postage" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Postage" name="Postage" model="0.00+9.90($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.0000" note="" />
+	</price_model>
+</product>
+
+<product id="45" code="Fixing" type="fixing-cost" name="Fixing Cost $37" >
+	<price_model code="Fixing" name="Fixing Cost" quantity_type="Units" currency="Dollars" >
+		<price id="1" nr="1" code="Fixing" name="Fixing" model="0.00+37.00($q-0)" start_quantity="0" end_quantity="0" quantity_type="Units" retail_multiplier="1.3500" note="" />
+	</price_model>
+</product>
+
+</data>

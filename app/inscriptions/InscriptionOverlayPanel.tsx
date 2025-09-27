@@ -1,21 +1,24 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import SceneOverlayController from '#/components/SceneOverlayController';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
+import Loader from '#/ui/loader';
+import { data } from '#/app/_internal/_data';
 
 /* --------------------------- types + helpers --------------------------- */
 
-const FONTS = [
-  'Garamond',
-  'Times New Roman',
-  'Palatino',
-  'Helvetica',
-  'Arial',
-  'Optima',
-  'Trajan Pro',
-];
+const FONTS = data.fonts;
+
+const FONT_FILE_MAP: Record<string, string> = FONTS.reduce(
+  (map, font) => {
+    const base = font.image.replace(/\.(otf|ttf|woff|woff2)$/i, '');
+    map[font.name] = `/fonts/${base}.woff2`; // Prefer woff2 for better compression
+    return map;
+  },
+  {} as Record<string, string>,
+);
 
 /* --------------------------- component --------------------------- */
 
@@ -24,6 +27,7 @@ export default function InscriptionOverlayPanel() {
   const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
   const duplicateInscription = useHeadstoneStore((s) => s.duplicateInscription);
   const deleteInscription = useHeadstoneStore((s) => s.deleteInscription);
+  const addInscriptionLine = useHeadstoneStore((s) => s.addInscriptionLine);
 
   const incomingText = useHeadstoneStore((s) => s.activeInscriptionText);
   const setActiveInscriptionText = useHeadstoneStore(
@@ -34,9 +38,42 @@ export default function InscriptionOverlayPanel() {
   );
   const closeInscriptions = useHeadstoneStore((s) => s.closeInscriptions);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
+  const inscriptionMinHeight = useHeadstoneStore((s) => s.inscriptionMinHeight);
+  const inscriptionMaxHeight = useHeadstoneStore((s) => s.inscriptionMaxHeight);
+  const setFontLoading = useHeadstoneStore((s) => s.setFontLoading);
 
   const activeId = selectedInscriptionId;
   const active = lines.find((l) => l.id === activeId) ?? null;
+
+  const [selectedFont, setSelectedFont] = useState('Chopin Script');
+  const [overlayFontLoading, setOverlayFontLoading] = useState(false);
+
+  const preloadFont = useCallback(async (fontName: string) => {
+    const font = FONTS.find((f) => f.name === fontName);
+    if (!font) return;
+
+    const base = font.image.replace(/\.(otf|ttf|woff|woff2)$/i, '');
+    const woff2Url = `/fonts/${base}.woff2`;
+    const fallbackUrl = `/fonts/${font.image}`;
+
+    try {
+      // Try woff2 first for better performance
+      await fetch(woff2Url);
+    } catch {
+      try {
+        // Fallback to original format
+        await fetch(fallbackUrl);
+      } catch (error) {
+        console.error('Failed to preload font:', fontName, error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!active) {
+      setActiveInscriptionText('');
+    }
+  }, [active, setActiveInscriptionText]);
 
   const updateLine = useCallback(
     (id: string, patch: Partial<Line>) => {
@@ -44,6 +81,15 @@ export default function InscriptionOverlayPanel() {
     },
     [updateLineStore],
   );
+
+  const handleAddNewLine = useCallback(() => {
+    const maxY = lines.length > 0 ? Math.max(...lines.map((l) => l.yPos)) : 0;
+    const lastLine = lines.find((l) => l.yPos === maxY);
+    const offset = lastLine ? lastLine.sizeMm / 10 + 5 : 0;
+    const newY = maxY + offset;
+    const text = incomingText.trim() || 'New line';
+    addInscriptionLine({ text, font: selectedFont, yPos: newY });
+  }, [lines, addInscriptionLine, incomingText, selectedFont]);
 
   return (
     <SceneOverlayController
@@ -76,26 +122,37 @@ export default function InscriptionOverlayPanel() {
       </div>
 
       <div className="mb-4 flex space-x-2">
-        <button
-          className="flex-1 cursor-pointer rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none"
-          onClick={() => {
-            if (active) {
-              duplicateInscription(active.id);
-            }
-          }}
-        >
-          Duplicate
-        </button>
-        <button
-          className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
-          onClick={() => {
-            if (active) {
-              deleteInscription(active.id);
-            }
-          }}
-        >
-          Delete
-        </button>
+        {active ? (
+          <>
+            <button
+              className="flex-1 cursor-pointer rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none"
+              onClick={() => {
+                if (active) {
+                  duplicateInscription(active.id);
+                }
+              }}
+            >
+              Duplicate
+            </button>
+            <button
+              className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+              onClick={() => {
+                if (active) {
+                  deleteInscription(active.id);
+                }
+              }}
+            >
+              Delete
+            </button>
+          </>
+        ) : (
+          <button
+            className="flex-1 cursor-pointer rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+            onClick={handleAddNewLine}
+          >
+            Add New Line
+          </button>
+        )}
       </div>
 
       <div className="mb-4">
@@ -109,14 +166,34 @@ export default function InscriptionOverlayPanel() {
           <select
             id="inscriptionFontSelect"
             className="w-full appearance-none rounded-md border border-white/15 bg-neutral-900 px-3 py-2 pr-8 text-sm outline-none"
-            value={active?.font ?? FONTS[0]}
-            onChange={(e) =>
-              active && updateLine(active.id, { font: e.target.value })
-            }
+            value={active?.font ?? selectedFont}
+            onChange={async (e) => {
+              const font = e.target.value;
+              setOverlayFontLoading(true);
+              setFontLoading(true); // Store for scene loader
+              const start = Date.now();
+              try {
+                await preloadFont(font);
+              } catch (error) {
+                console.error('Font preload failed:', error);
+              }
+              const elapsed = Date.now() - start;
+              const minTime = 500;
+              const remaining = Math.max(0, minTime - elapsed);
+              setTimeout(() => {
+                setOverlayFontLoading(false);
+                setFontLoading(false);
+                if (active) {
+                  updateLine(active.id, { font });
+                } else {
+                  setSelectedFont(font);
+                }
+              }, remaining);
+            }}
           >
             {FONTS.map((f) => (
-              <option key={f} value={f}>
-                {f}
+              <option key={f.id} value={f.name}>
+                {f.name}
               </option>
             ))}
           </select>
@@ -124,14 +201,19 @@ export default function InscriptionOverlayPanel() {
             ▾
           </span>
         </div>
+        {overlayFontLoading && (
+          <div className="mt-2 flex justify-center">
+            <Loader />
+          </div>
+        )}
       </div>
 
       <div className="space-y-4">
         <TailwindSlider
           label="Size"
           value={active?.sizeMm ?? 30}
-          min={5}
-          max={1200}
+          min={inscriptionMinHeight}
+          max={inscriptionMaxHeight}
           step={1}
           onChange={(v) => active && updateLine(active.id, { sizeMm: v })}
           unit="mm"
