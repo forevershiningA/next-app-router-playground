@@ -39,7 +39,6 @@ function useNormalizedGLTF(id: string) {
 }
 
 export default function AdditionModel({ id, headstone, index = 0 }: Props) {
-  console.log("Rendering AdditionModel");
   const numericId = id.replace(/[^\d]/g, '') || id;
 
   // store
@@ -63,10 +62,8 @@ export default function AdditionModel({ id, headstone, index = 0 }: Props) {
   const colorMap = useTexture(`/additions/${numericId}/colorMap.png`);
 
   React.useEffect(() => {
-    console.log("Applying texture");
-    scene.traverse((child) => {
+    scene.traverse((child: THREE.Object3D) => {
       if (child instanceof THREE.Mesh) {
-        console.log("Updating material for mesh:", child);
         child.material.map = colorMap;
         child.material.needsUpdate = true;
       }

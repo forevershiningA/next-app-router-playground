@@ -314,7 +314,12 @@ function HeadstoneAddition({
       next.x = Math.max(minX, Math.min(maxX, next.x));
       next.y = Math.max(minY, Math.min(maxY, next.y));
 
-      setAdditionOffset(additionId, { xPos: next.x, yPos: next.y });
+      setAdditionOffset(additionId, {
+        xPos: next.x,
+        yPos: next.y,
+        scale: offset.scale,
+        rotationZ: offset.rotationZ,
+      });
     },
     [
       camera,

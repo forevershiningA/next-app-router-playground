@@ -100,7 +100,7 @@ type HeadstoneState = {
 
   selectedAdditionId: string | null;
   additionRefs: Record<string, React.RefObject<Group | null>>;
-  additionOffsets: Record<string, { xPos: number; yPos: number }>;
+  additionOffsets: Record<string, { xPos: number; yPos: number; scale: number; rotationZ: number }>;
 
   setInscriptions: (
     inscriptions: Line[] | ((inscriptions: Line[]) => Line[]),
@@ -120,7 +120,7 @@ type HeadstoneState = {
   setAdditionRef: (id: string, ref: React.RefObject<Group | null>) => void;
   setAdditionOffset: (
     id: string,
-    offset: { xPos: number; yPos: number },
+    offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
   ) => void;
 
   /* router injection */
@@ -363,7 +363,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setSelectedAdditionId: (id) => set({ selectedAdditionId: id }),
   setAdditionRef: (id, ref) =>
     set((s) => ({ additionRefs: { ...s.additionRefs, [id]: ref } })),
-  setAdditionOffset: (id, offset) => {
+setAdditionOffset: (
+    id: string,
+    offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
+  ) => {
     //console.log("setAdditionOffset:", offset);
     //offset = { xPos: 100, yPos: -200 }
     set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
