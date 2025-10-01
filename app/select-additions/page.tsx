@@ -11,7 +11,10 @@ export default function Page() {
 
   if (!catalog) return <div>Loading...</div>;
 
-  const additions = catalog.product.additions;
+  const additions = [
+    ...catalog.product.additions,
+    { id: 'B1134S', type: 'application', name: 'Applicazione Angelo' },
+  ];
 
   return (
     <Suspense fallback={null}>

@@ -21,6 +21,8 @@ export default function HeadstoneAssembly() {
   const setSelectedInscriptionId = useHeadstoneStore(
     (s) => s.setSelectedInscriptionId,
   );
+  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const additionRefs = useHeadstoneStore((s) => s.additionRefs);
 
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
@@ -54,6 +56,16 @@ export default function HeadstoneAssembly() {
         {selectedInscription && (
           <BoxOutline
             targetRef={selectedInscription.ref}
+            visible={true}
+            color="white"
+            pad={0.02}
+            through={false}
+          />
+        )}
+
+        {selectedAdditionId && additionRefs[selectedAdditionId] && (
+          <BoxOutline
+            targetRef={additionRefs[selectedAdditionId]}
             visible={true}
             color="white"
             pad={0.02}

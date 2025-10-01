@@ -35,18 +35,25 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
       <div className="flex h-14 items-center px-4 py-4 lg:h-auto">
         <Link
           href="/"
-          className="group flex w-full items-center gap-x-2.5"
+          className="group flex w-full flex-col gap-1"
           onClick={close}
         >
-          <div className="size-9 rounded-full border-2 border-gray-800 group-hover:border-gray-700">
-            <NextLogoDark />
-          </div>
+          <div className="flex items-center gap-x-2.5">
+            <div className="size-9 rounded-full border-2 border-gray-800 group-hover:border-gray-700">
+              <img
+                src="/ico/dyo.webp"
+                alt="DYO Logo"
+                className="size-full rounded-full"
+              />
+            </div>
 
-          <h3 className="text-lg font-medium text-gray-200 group-hover:text-white">
-            Design Your Own
-          </h3>
-          <div className="text-sm font-normal text-gray-400">
-            Current Price: ${price.toFixed(2)}
+            <h3 className="text-lg font-medium text-gray-200 group-hover:text-white">
+              Design Your Own
+            </h3>
+          </div>
+          <div className="ml-[46px] flex flex-col text-sm font-normal text-gray-400">
+            <div>Current Price:</div>
+            <div className="text-white">${price.toFixed(2)}</div>
           </div>
         </Link>
       </div>

@@ -46,15 +46,15 @@ export default function RootLayout({
           <GlobalNav items={demos} />
         </div>
         <div className="lg:pl-72">
-            <Suspense
-              fallback={
-                <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
-              }
-            >
-              <SceneOverlayHost /> {/* ← one host, one overlay */}
-              <ThreeScene />
-            </Suspense>
-            <div>{children}</div>
+          <Suspense
+            fallback={
+              <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
+            }
+          >
+            <SceneOverlayHost /> {/* ← one host, one overlay */}
+            <ThreeScene />
+          </Suspense>
+          <div>{children}</div>
         </div>
       </body>
     </html>

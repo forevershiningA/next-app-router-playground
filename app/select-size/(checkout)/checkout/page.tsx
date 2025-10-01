@@ -17,7 +17,9 @@ export default function Page() {
       quantity = widthMm + heightMm;
     }
   }
-  const price = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+  const price = catalog
+    ? calculatePrice(catalog.product.priceModel, quantity)
+    : 0;
 
   return (
     <Boundary label="(checkout)/page.tsx" className="flex flex-col gap-9">
@@ -32,7 +34,8 @@ export default function Page() {
             Total Price: ${price.toFixed(2)}
           </div>
           <div className="text-sm text-gray-400">
-            Size: {widthMm}mm x {heightMm}mm ({(widthMm * heightMm / 1000000).toFixed(2)} m²)
+            Size: {widthMm}mm x {heightMm}mm (
+            {((widthMm * heightMm) / 1000000).toFixed(2)} m²)
           </div>
           <div className="h-2 w-4/5 rounded-full bg-gray-800" />
           <div className="h-2 w-1/3 rounded-full bg-gray-800" />

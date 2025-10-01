@@ -73,6 +73,15 @@ type HeadstoneState = {
   materialUrl: string | null;
   setMaterialUrl: (url: string) => void;
 
+  headstoneMaterialUrl: string | null;
+  setHeadstoneMaterialUrl: (url: string) => void;
+
+  baseMaterialUrl: string | null;
+  setBaseMaterialUrl: (url: string) => void;
+
+  baseSwapping: boolean;
+  setBaseSwapping: (swapping: boolean) => void;
+
   widthMm: number;
   setWidthMm: (v: number) => void;
 
@@ -89,6 +98,10 @@ type HeadstoneState = {
   inscriptionMaxHeight: number;
   fontLoading: boolean;
 
+  selectedAdditionId: string | null;
+  additionRefs: Record<string, React.RefObject<Group | null>>;
+  additionOffsets: Record<string, { xPos: number; yPos: number }>;
+
   setInscriptions: (
     inscriptions: Line[] | ((inscriptions: Line[]) => Line[]),
   ) => void;
@@ -102,6 +115,13 @@ type HeadstoneState = {
   setActiveInscriptionText: (t: string) => void;
   setInscriptionHeightLimits: (min: number, max: number) => void;
   setFontLoading: (loading: boolean) => void;
+
+  setSelectedAdditionId: (id: string | null) => void;
+  setAdditionRef: (id: string, ref: React.RefObject<Group | null>) => void;
+  setAdditionOffset: (
+    id: string,
+    offset: { xPos: number; yPos: number },
+  ) => void;
 
   /* router injection */
   navTo?: NavFn;
@@ -126,7 +146,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ catalog });
   },
 
-  selectedAdditions: [],
+  selectedAdditions: ['B1134S'],
   addAddition: (id) => {
     set((s) => ({ selectedAdditions: [...s.selectedAdditions, id] }));
   },
@@ -150,6 +170,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setMaterialUrl(materialUrl) {
     set({ materialUrl });
   },
+
+  headstoneMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
+  setHeadstoneMaterialUrl(url) {
+    set({ headstoneMaterialUrl: url });
+  },
+
+  baseMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
+  setBaseMaterialUrl(url) {
+    set({ baseMaterialUrl: url, baseSwapping: true });
+  },
+
+  baseSwapping: false,
+  setBaseSwapping: (swapping) => set({ baseSwapping: swapping }),
 
   widthMm: 900,
   setWidthMm(v) {
@@ -193,6 +226,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   inscriptionMinHeight: 5,
   inscriptionMaxHeight: 1200,
   fontLoading: false,
+
+  selectedAdditionId: null,
+  additionRefs: {},
+  additionOffsets: {},
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
@@ -322,6 +359,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ inscriptionMinHeight: min, inscriptionMaxHeight: max }),
 
   setFontLoading: (fontLoading) => set({ fontLoading }),
+
+  setSelectedAdditionId: (id) => set({ selectedAdditionId: id }),
+  setAdditionRef: (id, ref) =>
+    set((s) => ({ additionRefs: { ...s.additionRefs, [id]: ref } })),
+  setAdditionOffset: (id, offset) => {
+    //console.log("setAdditionOffset:", offset);
+    //offset = { xPos: 100, yPos: -200 }
+    set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
+  },
 
   /* router injection */
   navTo: undefined,

@@ -213,7 +213,7 @@ const materials: Material[] = [
   { id: '19', name: 'Glory Black', image: 'Glory-Black-2.jpg', category: '2' },
   { id: '20', name: 'G9426', image: 'G9426.jpg', category: '2' },
   { id: '21', name: 'Imperial Red', image: 'Imperial-Red.jpg', category: '2' },
-  { id: '22', name: 'Maroon Brown', image: 'Maroon-Brown.jpg', category: '2' },
+  { id: '22', name: 'Marron Brown', image: 'Marron-Brown.jpg', category: '2' },
   {
     id: '23',
     name: 'Multicolour Red',

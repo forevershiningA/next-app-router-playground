@@ -60,7 +60,14 @@ export function ProductCard<E extends ElementType = 'div'>({
   const Comp: any = as || 'div';
 
   const router = useRouter();
-  const { setProductUrl, setShapeUrl, setMaterialUrl } = useHeadstoneStore();
+  const {
+    setProductUrl,
+    setShapeUrl,
+    setMaterialUrl,
+    setHeadstoneMaterialUrl,
+    setBaseMaterialUrl,
+    selected,
+  } = useHeadstoneStore();
 
   const assetBase =
     assetBaseProp ??
@@ -100,7 +107,12 @@ export function ProductCard<E extends ElementType = 'div'>({
             } else {
               if (type === 'product') setProductUrl(selectedUrl);
               if (type === 'shape') setShapeUrl(selectedUrl);
-              if (type === 'material') setMaterialUrl(selectedUrl);
+              if (type === 'material') {
+                if (selected === 'headstone')
+                  setHeadstoneMaterialUrl(selectedUrl);
+                else if (selected === 'base') setBaseMaterialUrl(selectedUrl);
+                else setMaterialUrl(selectedUrl); // fallback
+              }
               window.scrollTo({ top: 0 });
               router.push(routeBase + slug);
             }

@@ -13,6 +13,7 @@ const nextConfig = {
     prerenderEarlyExit: false,
     routerBFCache: true,
   },
+  turbopack: { root: process.cwd() },
 } satisfies NextConfig;
 
 const codeHikeConfig = {
