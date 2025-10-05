@@ -3,7 +3,7 @@ import { Boundary } from '#/ui/boundary';
 import { Tab } from '#/ui/tabs';
 
 export default function NotFound() {
-  const demo = db.demo.find({ where: { slug: 'not-found' } });
+  const demo = db.demo.find({ where: { slug: 'additions' } });
 
   return (
     <Boundary label="[section]/not-found.tsx" className="flex flex-col gap-4">

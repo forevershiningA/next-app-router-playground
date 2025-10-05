@@ -214,13 +214,13 @@ export default function SceneOverlayController({
       >
         {/* Header (drag handle) */}
         <div
-          className="flex cursor-grab items-center justify-between px-4 pt-1 select-none"
+          className="flex cursor-grab items-center justify-between px-4 select-none"
           onPointerDown={onHeaderPointerDown}
           onPointerMove={onHeaderPointerMove}
           onPointerUp={onHeaderPointerUp}
           onDoubleClick={() => setCollapsed((c) => !c)}
         >
-          <h3 className="font-semibold text-white">{title}</h3>
+          <h1 className="font-semibold text-white">{title}</h1>
 
           <button
             type="button"

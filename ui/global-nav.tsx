@@ -7,13 +7,29 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
 
 export function GlobalNav({ items }: { items: DemoCategory[] }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem('sidebar-open');
+    if (saved !== null) return saved === 'true';
+    return window.innerWidth >= 1024; // default open on desktop, closed on mobile
+  });
   const close = () => setIsOpen(false);
+
+  useEffect(() => {
+    const handler = () => setIsSidebarOpen((s) => !s);
+    window.addEventListener('toggle-sidebar', handler);
+    return () => window.removeEventListener('toggle-sidebar', handler);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('sidebar-open', isSidebarOpen.toString());
+  }, [isSidebarOpen]);
 
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
@@ -31,27 +47,25 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     : 0;
 
   return (
-    <>
+    <div
+      className={clsx(
+        'fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 bg-black lg:bottom-0 lg:z-auto lg:w-72 lg:border-r lg:border-b-0 lg:border-gray-800',
+        { hidden: !isSidebarOpen },
+      )}
+    >
       <div className="flex h-14 items-center px-4 py-4 lg:h-auto">
         <Link
           href="/"
-          className="group flex w-full flex-col gap-1"
+          className="group flex hidden w-full flex-col gap-1"
           onClick={close}
         >
-          <div className="flex items-center gap-x-2.5">
-            <div className="size-9 rounded-full border-2 border-gray-800 group-hover:border-gray-700">
-              <img
-                src="/ico/dyo.webp"
-                alt="DYO Logo"
-                className="size-full rounded-full"
-              />
-            </div>
-
-            <h3 className="text-lg font-medium text-gray-200 group-hover:text-white">
-              Design Your Own
-            </h3>
-          </div>
-          <div className="ml-[46px] flex flex-col text-sm font-normal text-gray-400">
+          <h2 className="text-lg font-medium text-gray-200 group-hover:text-white">
+            Design Your Own Traditional Engraved Headstone
+          </h2>
+          <h3 className="text-sm font-normal text-gray-400">
+            Current size: {widthMm} x {heightMm} mm
+          </h3>
+          <div className="flex gap-1 text-sm font-normal text-gray-400">
             <div>Current Price:</div>
             <div className="text-white">${price.toFixed(2)}</div>
           </div>
@@ -104,7 +118,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
           })}
         </nav>
       </div>
-    </>
+    </div>
   );
 }
 

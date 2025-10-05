@@ -22,7 +22,10 @@ export default async function Layout({
 
   return (
     <div className="relative w-full">
-      <SceneOverlayController section="shape" title="Select Shape">
+      <SceneOverlayController
+        section="shape"
+        title="Select Shape of Traditional Engraved Headstone"
+      >
         <div className="mb-3 text-sm leading-relaxed text-white/85">
           Pick a headstone outline. Click any card to apply it.
         </div>

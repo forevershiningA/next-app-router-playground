@@ -94,7 +94,7 @@ export default function InscriptionOverlayPanel() {
   return (
     <SceneOverlayController
       section="inscriptions"
-      title="Edit Your Inscription"
+      title="Edit Your Inscription of Traditional Engraved Headstone"
       persistKey="inscriptions"
       isOpen={activePanel === 'inscription'}
       onClose={closeInscriptions}

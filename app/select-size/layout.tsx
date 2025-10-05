@@ -18,7 +18,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SizeSelector>
       {/* Mobile fallback below the canvas if you still want MDX */}
       <div className="p-8 pt-0 md:hidden">
-        <h1 className="text-xl font-semibold text-gray-300">Select Size</h1>
+        <h1 className="text-xl font-semibold text-gray-300">
+          Select size of Traditional Engraved Headstone
+        </h1>
         <div className="text-sm text-gray-600">
           <Suspense fallback={null}>
             <Mdx source={Readme} collapsed={true} />

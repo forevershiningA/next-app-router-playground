@@ -19,7 +19,7 @@ export default function SizeSelector({
     <div className="relative w-full">
       <SceneOverlayController
         section="size"
-        title="Select Size"
+        title="Select size of Traditional Engraved Headstone"
         persistKey="size"
       >
         <p className="mb-3 text-sm leading-relaxed text-white/85">

@@ -9,6 +9,8 @@ import ThreeScene from '#/components/ThreeScene';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
 import { Suspense } from 'react';
 import RouterBinder from '#/components/system/RouterBinder'; // ← ADD
+import MobileHeader from '#/components/MobileHeader';
+import MainContent from '#/components/MainContent';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -42,10 +44,9 @@ export default function RootLayout({
         className={`overflow-y-scroll bg-gray-950 font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <RouterBinder /> {/* ← mount once, early */}
-        <div className="fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 bg-black lg:bottom-0 lg:z-auto lg:w-72 lg:border-r lg:border-b-0 lg:border-gray-800">
-          <GlobalNav items={demos} />
-        </div>
-        <div className="lg:pl-72">
+        <GlobalNav items={demos} />
+        <MainContent>
+          <MobileHeader />
           <Suspense
             fallback={
               <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
@@ -55,7 +56,7 @@ export default function RootLayout({
             <ThreeScene />
           </Suspense>
           <div>{children}</div>
-        </div>
+        </MainContent>
       </body>
     </html>
   );

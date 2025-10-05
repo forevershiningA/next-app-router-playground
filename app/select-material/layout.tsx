@@ -21,7 +21,10 @@ export default async function Layout({
 
   return (
     <div className="relative w-full">
-      <SceneOverlayController section="material" title="Select Material">
+      <SceneOverlayController
+        section="material"
+        title="Select Material of Traditional Engraved Headstone"
+      >
         <div className="mb-3 text-sm leading-relaxed text-white/85">
           Choose a stone material to preview on the headstone.
         </div>
