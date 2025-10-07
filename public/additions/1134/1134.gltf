@@ -5,15 +5,9 @@
       "componentType": 5126,
       "count": 3522,
       "min": [
-        -0.10558462142944336,
-        -0.004646319430321455,
-        -0.12204276770353317
+        -0.10558462142944336, -0.004646319430321455, -0.12204276770353317
       ],
-      "max": [
-        0.07867948710918427,
-        0.015288895927369595,
-        0.20210732519626617
-      ],
+      "max": [0.07867948710918427, 0.015288895927369595, 0.20210732519626617],
       "type": "VEC3",
       "name": "1_"
     },
@@ -39,16 +33,9 @@
       "name": "1_"
     }
   ],
-  "asset": {
-    "version": "2.0"
-  },
+  "asset": { "version": "2.0" },
   "bufferViews": [
-    {
-      "buffer": 0,
-      "byteLength": 42264,
-      "target": 34962,
-      "name": "1_"
-    },
+    { "buffer": 0, "byteLength": 42264, "target": 34962, "name": "1_" },
     {
       "buffer": 0,
       "byteLength": 28176,
@@ -70,27 +57,15 @@
       "target": 34963,
       "name": "1_"
     },
-    {
-      "buffer": 0,
-      "byteLength": 1515,
-      "byteOffset": 160176,
-      "name": "1_"
-    }
+    { "buffer": 0, "byteLength": 1515, "byteOffset": 160176, "name": "1_" }
   ],
   "materials": [
-    {
-      "name": "mask material",
-      "extensions": {
-        "GOOG_mask": {}
-      }
-    },
+    { "name": "mask material", "extensions": { "GOOG_mask": {} } },
     {
       "name": "1_mat",
       "pbrMetallicRoughness": {
         "metallicFactor": 0.4000000059604645,
-        "baseColorTexture": {
-          "index": 0
-        }
+        "baseColorTexture": { "index": 0 }
       }
     }
   ],
@@ -98,11 +73,7 @@
     {
       "primitives": [
         {
-          "attributes": {
-            "NORMAL": 2,
-            "POSITION": 0,
-            "TEXCOORD_0": 1
-          },
+          "attributes": { "NORMAL": 2, "POSITION": 0, "TEXCOORD_0": 1 },
           "indices": 3,
           "material": 1,
           "mode": 4
@@ -113,161 +84,57 @@
   ],
   "nodes": [
     {
-      "translation": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "scale": [
-        0.0,
-        0.0,
-        0.0
-      ],
+      "translation": [0.0, 0.0, 0.0],
+      "scale": [0.0, 0.0, 0.0],
       "name": "0_Dummy node"
     },
-    {
-      "name": "1_RootNode",
-      "children": [
-        2,
-        3
-      ]
-    },
+    { "name": "1_RootNode", "children": [2, 3] },
     {
       "matrix": [
-        0.3937007784843445,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        -4.693279009870821e-8,
-        0.39370083808898926,
-        0.0,
-        0.0,
-        -0.39370083808898926,
-        -4.693279009870821e-8,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
+        0.3937007784843445, 0.0, 0.0, 0.0, 0.0, -4.693279009870821e-8,
+        0.39370083808898926, 0.0, 0.0, -0.39370083808898926,
+        -4.693279009870821e-8, 0.0, 0.0, 0.0, 0.0, 1.0
       ],
       "name": "1_$$$DUMMY.Texture Gr"
     },
     {
       "matrix": [
-        0.3937007784843445,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        -4.693279009870821e-8,
-        0.39370083808898926,
-        0.0,
-        0.0,
-        -0.39370083808898926,
-        -4.693279009870821e-8,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
+        0.3937007784843445, 0.0, 0.0, 0.0, 0.0, -4.693279009870821e-8,
+        0.39370083808898926, 0.0, 0.0, -0.39370083808898926,
+        -4.693279009870821e-8, 0.0, 0.0, 0.0, 0.0, 1.0
       ],
       "mesh": 0,
       "name": "1_Mesh_primitive_primitive"
     },
     {
-      "translation": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "rotation": [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "scale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "extensions": {
-        "KHR_visibility": {
-          "visible": true
-        }
-      },
+      "translation": [0.0, 0.0, 0.0],
+      "rotation": [0.0, 0.0, 0.0, 1.0],
+      "scale": [1.0, 1.0, 1.0],
+      "extensions": { "KHR_visibility": { "visible": true } },
       "name": "AERO_NODE_ROOT",
-      "children": [
-        6
-      ]
+      "children": [6]
     },
     {
-      "translation": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "rotation": [
-        -0.7071068286895752,
-        0.0,
-        0.0,
-        0.7071067094802856
-      ],
-      "scale": [
-        2.5399999618530273,
-        2.5399997234344482,
-        2.5399997234344482
-      ],
+      "translation": [0.0, 0.0, 0.0],
+      "rotation": [-0.7071068286895752, 0.0, 0.0, 0.7071067094802856],
+      "scale": [2.5399999618530273, 2.5399997234344482, 2.5399997234344482],
       "name": "AERO_NODE_Art1134",
-      "children": [
-        1
-      ]
+      "children": [1]
     },
     {
       "translation": [
-        0.013452567160129547,
-        0.04003226011991501,
-        0.004646319895982742
+        0.013452567160129547, 0.04003226011991501, 0.004646319895982742
       ],
-      "rotation": [
-        0.7071067690849304,
-        0.0,
-        0.0,
-        0.7071067690849304
-      ],
-      "scale": [
-        1.0,
-        0.9999997019767761,
-        0.9999997019767761
-      ],
-      "extensions": {
-        "KHR_visibility": {
-          "visible": true
-        }
-      },
+      "rotation": [0.7071067690849304, 0.0, 0.0, 0.7071067690849304],
+      "scale": [1.0, 0.9999997019767761, 0.9999997019767761],
+      "extensions": { "KHR_visibility": { "visible": true } },
       "name": "AERO_NODE_HELPER_Art1134",
-      "children": [
-        5
-      ]
+      "children": [5]
     }
   ],
   "scene": 0,
-  "scenes": [
-    {
-      "nodes": [
-        0,
-        4
-      ]
-    }
-  ],
-  "textures": [
-    {
-      "sampler": 0,
-      "source": 0,
-      "name": "1_"
-    }
-  ],
+  "scenes": [{ "nodes": [0, 4] }],
+  "textures": [{ "sampler": 0, "source": 0, "name": "1_" }],
   "samplers": [
     {
       "name": "1_",
@@ -280,84 +147,40 @@
   "extensions": {
     "KHR_behavior": {
       "customEvents": [
-        {
-          "id": "openUrl",
-          "values": [
-            {
-              "id": "url",
-              "type": 1,
-              "value": 0
-            }
-          ]
-        }
+        { "id": "openUrl", "values": [{ "id": "url", "type": 1, "value": 0 }] }
       ],
       "nodes": [
         {
-          "flows": [
-            {
-              "id": "out",
-              "node": 2,
-              "socket": "in"
-            }
-          ],
+          "flows": [{ "id": "out", "node": 2, "socket": "in" }],
           "index": 0,
           "type": "lifecycle/onTick"
         },
         {
-          "configuration": [
-            {
-              "id": "customEvent",
-              "value": 0
-            }
-          ],
+          "configuration": [{ "id": "customEvent", "value": 0 }],
           "index": 1,
           "type": "customEvent/receive"
         },
         {
           "configuration": [
-            {
-              "id": "numberOutputFlows",
-              "type": 1,
-              "value": 1
-            }
+            { "id": "numberOutputFlows", "type": 1, "value": 1 }
           ],
           "index": 2,
           "type": "flow/sequence"
         }
       ],
       "types": [
-        {
-          "signature": "bool"
-        },
-        {
-          "signature": "int"
-        },
-        {
-          "signature": "float"
-        },
-        {
-          "signature": "float2"
-        },
-        {
-          "signature": "float3"
-        },
-        {
-          "signature": "float4"
-        },
-        {
-          "signature": "float4x4"
-        },
-        {
-          "signature": "custom"
-        }
+        { "signature": "bool" },
+        { "signature": "int" },
+        { "signature": "float" },
+        { "signature": "float2" },
+        { "signature": "float3" },
+        { "signature": "float4" },
+        { "signature": "float4x4" },
+        { "signature": "custom" }
       ]
     }
   },
-  "extensionsUsed": [
-    "GOOG_mask",
-    "KHR_visibility",
-    "KHR_behavior"
-  ],
+  "extensionsUsed": ["GOOG_mask", "KHR_visibility", "KHR_behavior"],
   "buffers": [
     {
       "byteLength": 161691,
@@ -366,10 +189,6 @@
     }
   ],
   "images": [
-    {
-      "mimeType": "image/png",
-      "bufferView": 4,
-      "name": "1_DIFFUSEM.png"
-    }
+    { "mimeType": "image/png", "bufferView": 4, "name": "1_DIFFUSEM.png" }
   ]
 }

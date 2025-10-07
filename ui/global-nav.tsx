@@ -50,7 +50,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     <div
       className={clsx(
         'fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 bg-black lg:bottom-0 lg:z-auto lg:w-72 lg:border-r lg:border-b-0 lg:border-gray-800',
-        { hidden: !isSidebarOpen },
+        !isSidebarOpen && 'hidden',
       )}
     >
       <div className="flex h-14 items-center px-4 py-4 lg:h-auto">

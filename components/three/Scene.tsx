@@ -1,8 +1,11 @@
 'use client';
 import { OrbitControls } from '@react-three/drei';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function Scene() {
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+
   return (
     <>
       <ambientLight intensity={0.9} />
@@ -19,7 +22,14 @@ export default function Scene() {
         <meshStandardMaterial color="#9faf3f" />
       </mesh>
 
-      <OrbitControls makeDefault enableDamping dampingFactor={0.08} />
+      <OrbitControls
+        makeDefault
+        enableDamping
+        dampingFactor={0.08}
+        enableRotate={!is2DMode}
+        enableZoom={!is2DMode}
+        enablePan={!is2DMode}
+      />
     </>
   );
 }

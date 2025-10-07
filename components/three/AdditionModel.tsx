@@ -30,7 +30,7 @@ function useNormalizedGLTF(id: string) {
     box.getSize(sz);
     box.getCenter(center);
     scene.position.sub(center); // center origin
-    
+
     scene.traverse((o: any) => (o.frustumCulled = false));
     return sz;
   }, [scene]);
@@ -92,8 +92,6 @@ export default function AdditionModel({ id, headstone, index = 0 }: Props) {
   );
 
   const offset = additionOffsets[id] ?? defaultOffset;
-
-
 
   // scale: make model about 18 cm tall by default
   const targetH = 0.18;

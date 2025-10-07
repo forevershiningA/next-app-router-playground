@@ -9,8 +9,7 @@ export default async function Page() {
 
   return (
     <Boundary label="page.tsx">
-      <div className="flex flex-col gap-4">
-      </div>
+      <div className="flex flex-col gap-4"></div>
     </Boundary>
   );
 }

@@ -25,9 +25,5 @@ export default async function Layout({
   const demo = db.demo.find({ where: { slug: 'additions' } });
   const sections = db.section.findMany({ limit: 1 });
 
-  return (
-    <>
-        {children}
-    </>
-  );
+  return <>{children}</>;
 }

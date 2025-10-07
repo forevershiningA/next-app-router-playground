@@ -100,7 +100,10 @@ type HeadstoneState = {
 
   selectedAdditionId: string | null;
   additionRefs: Record<string, React.RefObject<Group | null>>;
-  additionOffsets: Record<string, { xPos: number; yPos: number; scale: number; rotationZ: number }>;
+  additionOffsets: Record<
+    string,
+    { xPos: number; yPos: number; scale: number; rotationZ: number }
+  >;
 
   setInscriptions: (
     inscriptions: Line[] | ((inscriptions: Line[]) => Line[]),
@@ -130,6 +133,10 @@ type HeadstoneState = {
   /* overlay / panel control */
   activePanel: PanelName;
   setActivePanel: (p: PanelName) => void;
+
+  /* view mode */
+  is2DMode: boolean;
+  toggleViewMode: () => void;
 
   openInscriptions: (id: string | null) => void;
   openSizePanel: () => void;
@@ -363,7 +370,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setSelectedAdditionId: (id) => set({ selectedAdditionId: id }),
   setAdditionRef: (id, ref) =>
     set((s) => ({ additionRefs: { ...s.additionRefs, [id]: ref } })),
-setAdditionOffset: (
+  setAdditionOffset: (
     id: string,
     offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
   ) => {
@@ -380,6 +387,12 @@ setAdditionOffset: (
   activePanel: null,
   setActivePanel: (p) => {
     set({ activePanel: p });
+  },
+
+  /* view mode */
+  is2DMode: false,
+  toggleViewMode: () => {
+    set((s) => ({ is2DMode: !s.is2DMode }));
   },
 
   openInscriptions: (id) => {

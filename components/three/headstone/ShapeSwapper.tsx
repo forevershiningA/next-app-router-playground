@@ -67,8 +67,6 @@ function AdditionImage({
   );
 }
 
-
-
 function AdditionApplication({
   index,
   number,
@@ -119,8 +117,6 @@ function AdditionApplication({
     />
   );
 }
-
-
 
 /* ------------------------------ preload helpers ----------------------------- */
 function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
@@ -278,15 +274,10 @@ function HeadstoneAddition({
 
   // Store offsets in headstone local space; clamp them to bbox
   const defaultOffset = React.useMemo(
-    () => ({
-      xPos: THREE.MathUtils.lerp(minX, maxX, 0.5),
-      yPos: -100,
-    }),
+    () => ({ xPos: THREE.MathUtils.lerp(minX, maxX, 0.5), yPos: -100 }),
     [minX, maxX, minY, maxY],
   );
   const offset = additionOffsets?.[additionId] || defaultOffset;
-
-
 
   /* ------------------------------- pointer logic ----------------------------- */
   const placeFromClientXY = React.useCallback(
@@ -490,6 +481,7 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
   const fontLoading = useHeadstoneStore((s) => s.fontLoading);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
 
   // Preload addition assets
   selectedAdditions.forEach((additionId) => {
@@ -501,8 +493,6 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
     useLoader(THREE.TextureLoader, `/additions/${number}/diffuseMap.png`);
     useLoader(THREE.TextureLoader, `/additions/${number}/normalMap.png`);
   });
-
-
 
   const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 100, [widthMm]);
@@ -597,13 +587,15 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
           )}
         </SvgHeadstone>
 
-        <AutoFit
-          target={tabletRef}
-          baseHeight={BASE_H}
-          margin={1.15}
-          pad={0.04}
-          trigger={fitTick}
-        />
+        {!is2DMode && (
+          <AutoFit
+            target={tabletRef}
+            baseHeight={BASE_H}
+            margin={1.15}
+            pad={0.04}
+            trigger={fitTick}
+          />
+        )}
       </group>
 
       {requestedUrl !== visibleUrl && (
