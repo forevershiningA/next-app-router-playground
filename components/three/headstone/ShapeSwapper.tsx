@@ -120,21 +120,26 @@ function AdditionApplication({
 
 /* ------------------------------ preload helpers ----------------------------- */
 function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
-  try {
-    useLoader(SVGLoader, url);
-  } catch (error) {
-    console.warn('Failed to preload shape:', url, error);
-    // Call onReady even on failure to prevent hanging
-    React.useEffect(() => {
-      const id = requestAnimationFrame(() => onReady?.());
-      return () => cancelAnimationFrame(id);
-    }, [onReady]);
-    return null;
-  }
+  const [loaded, setLoaded] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
   React.useEffect(() => {
-    const id = requestAnimationFrame(() => onReady?.());
-    return () => cancelAnimationFrame(id);
-  }, [onReady]);
+    const loader = new SVGLoader();
+    loader.load(
+      url,
+      (data) => {
+        setLoaded(true);
+        onReady?.();
+      },
+      undefined,
+      (err) => {
+        console.warn('Failed to preload shape:', url, err);
+        setError(true);
+        onReady?.(); // Call onReady even on failure
+      },
+    );
+  }, [url, onReady]);
+
   return null;
 }
 
@@ -145,21 +150,26 @@ function PreloadTexture({
   url: string;
   onReady?: () => void;
 }) {
-  try {
-    useTexture(url);
-  } catch (error) {
-    console.warn('Failed to preload texture:', url, error);
-    // Call onReady even on failure to prevent hanging
-    React.useEffect(() => {
-      const id = requestAnimationFrame(() => onReady?.());
-      return () => cancelAnimationFrame(id);
-    }, [onReady]);
-    return null;
-  }
+  const [loaded, setLoaded] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
   React.useEffect(() => {
-    const id = requestAnimationFrame(() => onReady?.());
-    return () => cancelAnimationFrame(id);
-  }, [onReady]);
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      url,
+      (texture) => {
+        setLoaded(true);
+        onReady?.();
+      },
+      undefined,
+      (err) => {
+        console.warn('Failed to preload texture:', url, err);
+        setError(true);
+        onReady?.(); // Call onReady even on failure
+      },
+    );
+  }, [url, onReady]);
+
   return null;
 }
 
