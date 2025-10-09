@@ -169,36 +169,6 @@ function PreloadTexture({
   return null;
 }
 
-function PreloadTexture({
-  url,
-  onReady,
-}: {
-  url: string;
-  onReady?: () => void;
-}) {
-  const [loaded, setLoaded] = React.useState(false);
-  const [error, setError] = React.useState(false);
-
-  React.useEffect(() => {
-    const loader = new THREE.TextureLoader();
-    loader.load(
-      url,
-      (texture) => {
-        setLoaded(true);
-        onReady?.();
-      },
-      undefined,
-      (err) => {
-        console.warn('Failed to preload texture:', url, err);
-        setError(true);
-        onReady?.(); // Call onReady even on failure
-      },
-    );
-  }, [url, onReady]);
-
-  return null;
-}
-
 function InlineCanvasLoader({ show }: { show: boolean }) {
   const [mounted, setMounted] = React.useState(show);
   const [visible, setVisible] = React.useState(show);

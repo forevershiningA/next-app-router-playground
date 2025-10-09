@@ -142,6 +142,10 @@ type HeadstoneState = {
   loading: boolean;
   setLoading: (loading: boolean) => void;
 
+  /* error handling */
+  errorMessage: string | null;
+  setErrorMessage: (message: string | null) => void;
+
   openInscriptions: (id: string | null) => void;
   openSizePanel: () => void;
   openAdditionsPanel: () => void;
@@ -402,6 +406,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   /* loading */
   loading: false,
   setLoading: (loading) => set({ loading }),
+
+  errorMessage: null,
+  setErrorMessage: (message) => set({ errorMessage: message }),
 
   openInscriptions: (id) => {
     if (id) {

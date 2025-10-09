@@ -23,11 +23,18 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem('sidebar-open');
-    if (saved !== null) {
-      setIsSidebarOpen(saved === 'true');
-    } else {
-      setIsSidebarOpen(window.innerWidth >= 1024);
+    try {
+      const saved = localStorage.getItem('sidebar-open');
+      if (saved !== null) {
+        setIsSidebarOpen(saved === 'true');
+      } else if (typeof window !== 'undefined') {
+        setIsSidebarOpen(window.innerWidth >= 1024);
+      }
+    } catch (error) {
+      // Fallback if localStorage is not available
+      if (typeof window !== 'undefined') {
+        setIsSidebarOpen(window.innerWidth >= 1024);
+      }
     }
   }, []);
 
@@ -60,7 +67,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
       <div className="flex h-14 items-center px-4 py-4 lg:h-auto">
         <Link
           href="/"
-          className="group flex hidden w-full flex-col gap-1"
+          className="group flex w-full flex-col gap-1"
           onClick={close}
         >
           <h2 className="text-lg font-medium text-gray-200 group-hover:text-white">
@@ -97,29 +104,31 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
         })}
       >
         <nav className="space-y-6 px-2 pt-5 pb-24">
-          {items.map((section) => {
-            return (
-              <div key={section.name}>
-                <div className="mb-2 px-3 font-mono text-xs font-semibold tracking-wide text-gray-600 uppercase">
-                  <div>{section.name}</div>
-                </div>
+          {items && items.length > 0 ? (
+            items.map((section) => {
+              return (
+                <div key={section.name}>
+                  <div className="mb-2 px-3 font-mono text-xs font-semibold tracking-wide text-gray-600 uppercase">
+                    <div>{section.name}</div>
+                  </div>
 
-                <div className="flex flex-col gap-1">
-                  {section.items.map((item) => (
-                    // `useSelectedLayoutSegment` suspends, so we place
-                    // a Suspense boundary as deep as possible to allow
-                    // the route's fallback shell to include these elements
-                    <Suspense
-                      key={item.slug}
-                      fallback={<NavItem item={item} close={close} />}
-                    >
-                      <DynamicNavItem item={item} close={close} />
-                    </Suspense>
-                  ))}
+                  <div className="flex flex-col gap-1">
+                    {section.items.map((item) => (
+                      <DynamicNavItem
+                        key={item.slug}
+                        item={item}
+                        close={close}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="px-3 py-2 text-sm text-gray-400">
+              No navigation items available
+            </div>
+          )}
         </nav>
       </div>
     </div>
