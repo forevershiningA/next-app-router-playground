@@ -686,10 +686,15 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
         <React.Suspense fallback={null}>
           <PreloadShape
             url={requestedUrl}
-            onReady={() => {
-              setVisibleUrl(requestedUrl);
-              requestAnimationFrame(() => setFitTick((n) => n + 1));
-              invalidate();
+            onReady={(success) => {
+              if (success) {
+                setVisibleUrl(requestedUrl);
+                requestAnimationFrame(() => setFitTick((n) => n + 1));
+                invalidate();
+              } else {
+                // Keep current visibleUrl (which should be the default or last working one)
+                console.warn('Shape failed to load, keeping current shape');
+              }
             }}
           />
         </React.Suspense>
@@ -699,10 +704,15 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
         <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
-            onReady={() => {
-              setVisibleTex(requestedTex);
-              requestAnimationFrame(() => setFitTick((n) => n + 1));
-              invalidate();
+            onReady={(success) => {
+              if (success) {
+                setVisibleTex(requestedTex);
+                requestAnimationFrame(() => setFitTick((n) => n + 1));
+                invalidate();
+              } else {
+                // Keep current visibleTex (which should be the default or last working one)
+                console.warn('Texture failed to load, keeping current texture');
+              }
             }}
           />
         </React.Suspense>
