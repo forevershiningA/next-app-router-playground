@@ -21,6 +21,7 @@ export interface ShapeData {
     minHeight: number;
     maxHeight: number;
     initHeight: number;
+    color?: string;
   };
 }
 
@@ -43,6 +44,15 @@ export interface PriceModel {
     endQuantity: number;
     retailMultiplier: number;
   }>;
+}
+
+export async function loadCatalogById(id: string): Promise<CatalogData> {
+  const response = await fetch(`/xml/catalog-id-${id}.xml`);
+  if (!response.ok) {
+    throw new Error(`Failed to load catalog ${id}`);
+  }
+  const xmlText = await response.text();
+  return parseCatalogXML(xmlText);
 }
 
 export function calculatePrice(
@@ -79,6 +89,7 @@ export interface CatalogData {
   product: {
     id: string;
     name: string;
+    type: string;
     shapes: ShapeData[];
     additions: AdditionData[];
     priceModel: PriceModel;
@@ -94,6 +105,7 @@ export function parseCatalogXML(xmlText: string): CatalogData {
 
   const id = productElement.getAttribute('id') || '';
   const name = productElement.getAttribute('name') || '';
+  const type = productElement.getAttribute('type') || 'headstone';
 
   // Parse shapes
   const shapes: ShapeData[] = [];
@@ -126,6 +138,7 @@ export function parseCatalogXML(xmlText: string): CatalogData {
         minHeight: parseInt(tableEl.getAttribute('min_height') || '0'),
         maxHeight: parseInt(tableEl.getAttribute('max_height') || '0'),
         initHeight: parseInt(tableEl.getAttribute('init_height') || '0'),
+        color: tableEl.getAttribute('color') || undefined,
       };
 
       shapes.push({ name, stand, table });
@@ -184,5 +197,5 @@ export function parseCatalogXML(xmlText: string): CatalogData {
     priceModel = { id, code, name, quantityType, currency, prices };
   }
 
-  return { product: { id, name, shapes, additions, priceModel } };
+  return { product: { id, name, type, shapes, additions, priceModel } };
 }

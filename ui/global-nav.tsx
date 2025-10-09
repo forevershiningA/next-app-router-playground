@@ -13,18 +13,22 @@ import { calculatePrice } from '#/lib/xml-parser';
 
 export function GlobalNav({ items }: { items: DemoCategory[] }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    const saved = localStorage.getItem('sidebar-open');
-    if (saved !== null) return saved === 'true';
-    return window.innerWidth >= 1024; // default open on desktop, closed on mobile
-  });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const close = () => setIsOpen(false);
 
   useEffect(() => {
     const handler = () => setIsSidebarOpen((s) => !s);
     window.addEventListener('toggle-sidebar', handler);
     return () => window.removeEventListener('toggle-sidebar', handler);
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('sidebar-open');
+    if (saved !== null) {
+      setIsSidebarOpen(saved === 'true');
+    } else {
+      setIsSidebarOpen(window.innerWidth >= 1024);
+    }
   }, []);
 
   useEffect(() => {

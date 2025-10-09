@@ -12,6 +12,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 const BASE_H = 2;
 
 export default function HeadstoneAssembly() {
+  const catalog = useHeadstoneStore((s) => s.catalog);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const selectedInscriptionId = useHeadstoneStore(
@@ -23,6 +24,7 @@ export default function HeadstoneAssembly() {
   );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const additionRefs = useHeadstoneStore((s) => s.additionRefs);
+  const loading = useHeadstoneStore((s) => s.loading);
 
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
@@ -34,7 +36,7 @@ export default function HeadstoneAssembly() {
 
   return (
     <>
-      <group ref={assemblyRef} position={[0, BASE_H, 0]}>
+      <group ref={assemblyRef} position={[0, BASE_H, 0]} visible={!loading}>
         <ShapeSwapper tabletRef={tabletRef} />
 
         <BoxOutline
@@ -45,13 +47,16 @@ export default function HeadstoneAssembly() {
           through={false}
         />
 
-        <BoxOutline
-          targetRef={baseRef}
-          visible={selected === 'base'}
-          color="white"
-          pad={0.004}
-          through={false}
-        />
+        {/* Only show base outline for non-plaque products */}
+        {catalog?.product.type !== 'plaque' && (
+          <BoxOutline
+            targetRef={baseRef}
+            visible={selected === 'base'}
+            color="white"
+            pad={0.004}
+            through={false}
+          />
+        )}
 
         {selectedInscription && (
           <BoxOutline
@@ -73,18 +78,21 @@ export default function HeadstoneAssembly() {
           />
         )}
 
-        <HeadstoneBaseAuto
-          ref={baseRef}
-          headstoneObject={tabletRef}
-          wrapper={assemblyRef}
-          name="base"
-          height={BASE_H}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelected('base');
-            setSelectedInscriptionId(null);
-          }}
-        />
+        {/* Only show base for non-plaque products */}
+        {catalog?.product.type !== 'plaque' && (
+          <HeadstoneBaseAuto
+            ref={baseRef}
+            headstoneObject={tabletRef}
+            wrapper={assemblyRef}
+            name="base"
+            height={BASE_H}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelected('base');
+              setSelectedInscriptionId(null);
+            }}
+          />
+        )}
       </group>
     </>
   );

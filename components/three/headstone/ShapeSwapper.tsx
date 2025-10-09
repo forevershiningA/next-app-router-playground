@@ -120,7 +120,17 @@ function AdditionApplication({
 
 /* ------------------------------ preload helpers ----------------------------- */
 function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
-  useLoader(SVGLoader, url);
+  try {
+    useLoader(SVGLoader, url);
+  } catch (error) {
+    console.warn('Failed to preload shape:', url, error);
+    // Call onReady even on failure to prevent hanging
+    React.useEffect(() => {
+      const id = requestAnimationFrame(() => onReady?.());
+      return () => cancelAnimationFrame(id);
+    }, [onReady]);
+    return null;
+  }
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
@@ -135,7 +145,17 @@ function PreloadTexture({
   url: string;
   onReady?: () => void;
 }) {
-  useTexture(url);
+  try {
+    useTexture(url);
+  } catch (error) {
+    console.warn('Failed to preload texture:', url, error);
+    // Call onReady even on failure to prevent hanging
+    React.useEffect(() => {
+      const id = requestAnimationFrame(() => onReady?.());
+      return () => cancelAnimationFrame(id);
+    }, [onReady]);
+    return null;
+  }
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
@@ -482,6 +502,8 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const loading = useHeadstoneStore((s) => s.loading);
+  const setLoading = useHeadstoneStore((s) => s.setLoading);
 
   // Preload addition assets
   selectedAdditions.forEach((additionId) => {
@@ -506,9 +528,33 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
 
   const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);
   const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
+
+  // Ensure visible URLs match requested URLs initially
+  React.useEffect(() => {
+    if (visibleUrl !== requestedUrl) {
+      setVisibleUrl(requestedUrl);
+    }
+    if (visibleTex !== requestedTex) {
+      setVisibleTex(requestedTex);
+    }
+  }, [requestedUrl, requestedTex, visibleUrl, visibleTex]);
   const [fitTick, setFitTick] = React.useState(0);
 
   const swapping = requestedUrl !== visibleUrl || requestedTex !== visibleTex;
+
+  // Trigger fit when switching to 3D mode and assets are ready
+  React.useEffect(() => {
+    if (
+      !is2DMode &&
+      visibleUrl === requestedUrl &&
+      visibleTex === requestedTex
+    ) {
+      // Trigger fit immediately and again after a short delay to ensure geometry is ready
+      setFitTick((n) => n + 1);
+      const timeoutId = setTimeout(() => setFitTick((n) => n + 1), 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [is2DMode, visibleUrl, requestedUrl, visibleTex, requestedTex]);
 
   React.useEffect(() => {
     const id = requestAnimationFrame(() => setFitTick((n) => n + 1));
@@ -517,7 +563,7 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
 
   return (
     <>
-      <group ref={tabletRef}>
+      <group ref={tabletRef} visible={!loading}>
         <SvgHeadstone
           key={`${visibleUrl}::${visibleTex}`}
           url={visibleUrl}
@@ -593,6 +639,8 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
             baseHeight={BASE_H}
             margin={1.15}
             pad={0.04}
+            duration={0}
+            readyTimeoutMs={100}
             trigger={fitTick}
           />
         )}
@@ -624,7 +672,9 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
         </React.Suspense>
       )}
 
-      <InlineCanvasLoader show={swapping || fontLoading || baseSwapping} />
+      <InlineCanvasLoader
+        show={(swapping || fontLoading || baseSwapping) && !loading}
+      />
     </>
   );
 }

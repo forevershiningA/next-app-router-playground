@@ -7,6 +7,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useRouter } from 'next/navigation';
 import { toSlug } from '#/lib/slug';
 import { SHAPES_BASE } from '#/lib/headstone-constants';
+import { loadCatalogById } from '#/lib/xml-parser';
 import {
   ElementType,
   ComponentPropsWithoutRef,
@@ -66,6 +67,11 @@ export function ProductCard<E extends ElementType = 'div'>({
     setMaterialUrl,
     setHeadstoneMaterialUrl,
     setBaseMaterialUrl,
+    setCatalog,
+    setWidthMm,
+    setHeightMm,
+    setShapeUrl: setShape,
+    setLoading,
     selected,
   } = useHeadstoneStore();
 
@@ -101,13 +107,68 @@ export function ProductCard<E extends ElementType = 'div'>({
           quality={90}
           width={400}
           height={400}
-          onClick={() => {
+          onClick={async () => {
             if (onPick) {
               onPick({ product, slug, type, selectedUrl });
             } else {
-              if (type === 'product') setProductUrl(selectedUrl);
-              if (type === 'shape') setShapeUrl(selectedUrl);
-              if (type === 'material') {
+              if (type === 'product') {
+                try {
+                  // Start loading - ensure it's set to true
+                  setLoading(true);
+
+                  // Load catalog data by product ID
+                  const catalog = await loadCatalogById(product.id);
+                  setCatalog(catalog);
+
+                  // Set default shape (first available shape)
+                  if (catalog.product.shapes.length > 0) {
+                    const defaultShape = catalog.product.shapes[0];
+                    // Convert shape name to filename (e.g., "Cropped Peak" -> "cropped_peak.svg")
+                    const shapeFilename =
+                      defaultShape.name.toLowerCase().replace(/\s+/g, '_') +
+                      '.svg';
+                    const shapeUrl = `/shapes/headstones/${shapeFilename}`;
+                    setShape(shapeUrl);
+
+                    // Set initial dimensions from the shape (use table dimensions for headstone size)
+                    setWidthMm(defaultShape.table.initWidth);
+                    setHeightMm(defaultShape.table.initHeight);
+
+                    // Try to load material from shape data
+                    if (defaultShape.table.color) {
+                      // Convert XML path to web path (e.g., "src/granites/forever2/l/17.jpg" -> "/textures/forever/l/17.jpg")
+                      const materialPath = defaultShape.table.color.replace(
+                        'src/granites/forever2/l/',
+                        '/textures/forever/l/',
+                      );
+                      setHeadstoneMaterialUrl(materialPath);
+                      setBaseMaterialUrl(materialPath);
+                    }
+                  }
+
+                  // Set default material (Imperial Red as fallback) if no shape material found
+                  if (
+                    !catalog.product.shapes.length ||
+                    !catalog.product.shapes[0].table.color
+                  ) {
+                    setHeadstoneMaterialUrl(
+                      '/textures/forever/l/Imperial-Red.jpg',
+                    );
+                    setBaseMaterialUrl('/textures/forever/l/Imperial-Red.jpg');
+                  }
+
+                  setProductUrl(selectedUrl);
+
+                  // Set loading to false after a short delay to allow UI to update
+                  setTimeout(() => setLoading(false), 200);
+                } catch (error) {
+                  console.error('Failed to load catalog:', error);
+                  // Fallback to basic setup
+                  setProductUrl(selectedUrl);
+                  setLoading(false);
+                }
+              } else if (type === 'shape') setShapeUrl(selectedUrl);
+              else if (type === 'material') {
                 if (selected === 'headstone')
                   setHeadstoneMaterialUrl(selectedUrl);
                 else if (selected === 'base') setBaseMaterialUrl(selectedUrl);

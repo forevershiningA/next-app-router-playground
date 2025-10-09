@@ -138,6 +138,10 @@ type HeadstoneState = {
   is2DMode: boolean;
   toggleViewMode: () => void;
 
+  /* loading */
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+
   openInscriptions: (id: string | null) => void;
   openSizePanel: () => void;
   openAdditionsPanel: () => void;
@@ -394,6 +398,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   toggleViewMode: () => {
     set((s) => ({ is2DMode: !s.is2DMode }));
   },
+
+  /* loading */
+  loading: false,
+  setLoading: (loading) => set({ loading }),
 
   openInscriptions: (id) => {
     if (id) {

@@ -124,6 +124,22 @@ export default function AutoFit({
   /** Move camera/controls to pose (with animation). */
   const moveTo = React.useCallback(
     (toPos: THREE.Vector3, toTgt: THREE.Vector3, near: number, far: number) => {
+      // For instant positioning (duration = 0), set directly to avoid any animation
+      if (duration <= 0) {
+        camera.position.copy(toPos);
+        if (controls?.target) {
+          controls.target.copy(toTgt);
+          controls.update?.();
+        } else {
+          camera.lookAt(toTgt);
+        }
+        camera.near = near;
+        camera.far = far;
+        camera.updateProjectionMatrix();
+        invalidate();
+        return;
+      }
+
       const fromPos = camera.position.clone();
       const fromTgt = controls?.target
         ? (controls.target as THREE.Vector3).clone()
