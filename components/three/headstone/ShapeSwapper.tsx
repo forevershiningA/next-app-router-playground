@@ -119,23 +119,49 @@ function AdditionApplication({
 }
 
 /* ------------------------------ preload helpers ----------------------------- */
-function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
-  const [loaded, setLoaded] = React.useState(false);
-  const [error, setError] = React.useState(false);
-
+function PreloadShape({
+  url,
+  onReady,
+}: {
+  url: string;
+  onReady?: (success: boolean) => void;
+}) {
   React.useEffect(() => {
     const loader = new SVGLoader();
     loader.load(
       url,
       (data) => {
-        setLoaded(true);
-        onReady?.();
+        onReady?.(true);
       },
       undefined,
       (err) => {
         console.warn('Failed to preload shape:', url, err);
-        setError(true);
-        onReady?.(); // Call onReady even on failure
+        onReady?.(false);
+      },
+    );
+  }, [url, onReady]);
+
+  return null;
+}
+
+function PreloadTexture({
+  url,
+  onReady,
+}: {
+  url: string;
+  onReady?: (success: boolean) => void;
+}) {
+  React.useEffect(() => {
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      url,
+      (texture) => {
+        onReady?.(true);
+      },
+      undefined,
+      (err) => {
+        console.warn('Failed to preload texture:', url, err);
+        onReady?.(false);
       },
     );
   }, [url, onReady]);
