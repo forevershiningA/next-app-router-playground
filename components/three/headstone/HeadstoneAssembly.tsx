@@ -12,7 +12,6 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 const BASE_H = 2;
 
 export default function HeadstoneAssembly() {
-  const catalog = useHeadstoneStore((s) => s.catalog);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const selectedInscriptionId = useHeadstoneStore(
@@ -25,6 +24,7 @@ export default function HeadstoneAssembly() {
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const additionRefs = useHeadstoneStore((s) => s.additionRefs);
   const loading = useHeadstoneStore((s) => s.loading);
+  const showBase = useHeadstoneStore((s) => s.showBase);
 
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
@@ -47,16 +47,13 @@ export default function HeadstoneAssembly() {
           through={false}
         />
 
-        {/* Only show base outline for non-plaque products */}
-        {catalog?.product.type !== 'plaque' && (
-          <BoxOutline
-            targetRef={baseRef}
-            visible={selected === 'base'}
-            color="white"
-            pad={0.004}
-            through={false}
-          />
-        )}
+        <BoxOutline
+          targetRef={baseRef}
+          visible={selected === 'base'}
+          color="white"
+          pad={0.004}
+          through={false}
+        />
 
         {selectedInscription && (
           <BoxOutline
@@ -78,8 +75,7 @@ export default function HeadstoneAssembly() {
           />
         )}
 
-        {/* Only show base for non-plaque products */}
-        {catalog?.product.type !== 'plaque' && (
+        {showBase && (
           <HeadstoneBaseAuto
             ref={baseRef}
             headstoneObject={tabletRef}

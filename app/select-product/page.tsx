@@ -21,7 +21,7 @@ export default async function Page() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} type="product" />
           ))}
         </div>
       </div>

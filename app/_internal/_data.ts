@@ -24,6 +24,14 @@ export type Material = {
   category: string;
 };
 
+export type Color = {
+  id: string;
+  name: string;
+  image: string;
+  hex: string;
+  category: string;
+};
+
 export type Font = {
   id: string;
   name: string;
@@ -239,6 +247,43 @@ const materials: Material[] = [
   },
 ];
 
+const colors: Color[] = [
+  { id: '1', name: 'Gold Gilding', image: '01.jpg', hex: '#c99d44', category: '3' },
+  { id: '2', name: 'Silver Gilding', image: '35.jpg', hex: '#eeeeee', category: '3' },
+  { id: '3', name: 'Alizarin', image: '02.jpg', hex: '#f6303e', category: '3' },
+  { id: '4', name: 'Tangerine (gold drop)', image: '03.jpg', hex: '#f28b00', category: '3' },
+  { id: '5', name: 'Tangerine yellow', image: '04.jpg', hex: '#ffce00', category: '3' },
+  { id: '6', name: 'Sherwood Green', image: '05.jpg', hex: '#154733', category: '3' },
+  { id: '7', name: 'Java', image: '06.jpg', hex: '#19988b', category: '3' },
+  { id: '8', name: 'Indigo', image: '07.jpg', hex: '#510b76', category: '3' },
+  { id: '9', name: 'Black', image: '08.jpg', hex: '#000000', category: '3' },
+  { id: '10', name: 'Brown', image: '09.jpg', hex: '#a22b2a', category: '3' },
+  { id: '11', name: 'International Orange', image: '10.jpg', hex: '#fd4f00', category: '3' },
+  { id: '12', name: 'Gorse', image: '11.jpg', hex: '#fee123', category: '3' },
+  { id: '13', name: 'La Rioja', image: '12.jpg', hex: '#c3d600', category: '3' },
+  { id: '14', name: 'Dark Turquoise', image: '13.jpg', hex: '#00c2df', category: '3' },
+  { id: '15', name: 'East Side', image: '14.jpg', hex: '#bd83cb', category: '3' },
+  { id: '16', name: 'Mako', image: '15.jpg', hex: '#4e5859', category: '3' },
+  { id: '17', name: 'Chantilly', image: '16.jpg', hex: '#f0b3cb', category: '3' },
+  { id: '18', name: 'Texas Rose', image: '17.jpg', hex: '#ffb35a', category: '3' },
+  { id: '19', name: 'Vis Vis', image: '18.jpg', hex: '#f7de8c', category: '3' },
+  { id: '20', name: 'Caribbean Green', image: '19.jpg', hex: '#00ce7d', category: '3' },
+  { id: '21', name: 'Summer Sky', image: '20.jpg', hex: '#3b8ede', category: '3' },
+  { id: '22', name: 'Wistful', image: '21.jpg', hex: '#a8a4e0', category: '3' },
+  { id: '23', name: 'Submarine', image: '22.jpg', hex: '#8f9d9d', category: '3' },
+  { id: '24', name: 'Ruby', image: '23.jpg', hex: '#d41568', category: '3' },
+  { id: '25', name: 'Dark Brown', image: '24.jpg', hex: '#643c1f', category: '3' },
+  { id: '26', name: 'Watercourse', image: '25.jpg', hex: '#006746', category: '3' },
+  { id: '27', name: 'Riptide', image: '26.jpg', hex: '#87e2d1', category: '3' },
+  { id: '28', name: 'Smalt', image: '27.jpg', hex: '#00269a', category: '3' },
+  { id: '29', name: 'Tiara', image: '28.jpg', hex: '#bdc6c2', category: '3' },
+  { id: '30', name: 'Chocolate', image: '30.jpg', hex: '#c26b13', category: '3' },
+  { id: '31', name: 'Christi', image: '31.jpg', hex: '#799a05', category: '3' },
+  { id: '32', name: 'Robins Egg Blue', image: '32.jpg', hex: '#1fcfcb', category: '3' },
+  { id: '33', name: 'Jordy Blue', image: '33.jpg', hex: '#7aa4dd', category: '3' },
+  { id: '34', name: 'White', image: '34.jpg', hex: '#ffffff', category: '3' },
+];
+
 const fonts: Font[] = [
   { id: '1', name: 'Adorable', image: 'Adorable.otf', category: '1' },
   { id: '2', name: 'Arial', image: 'arial.ttf', category: '1' },
@@ -378,6 +423,7 @@ export const data = {
   products,
   shapes,
   materials,
+  colors,
   fonts,
   demos,
 };

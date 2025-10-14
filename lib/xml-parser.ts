@@ -10,6 +10,7 @@ export interface ShapeData {
     minHeight: number;
     maxHeight: number;
     initHeight: number;
+    color?: string;
   };
   table: {
     minWidth: number;
@@ -29,6 +30,10 @@ export interface AdditionData {
   id: string;
   type: string;
   name: string;
+  minHeight?: number;
+  maxHeight?: number;
+  initHeight?: number;
+  priceModel?: PriceModel;
 }
 
 export interface PriceModel {
@@ -43,16 +48,20 @@ export interface PriceModel {
     startQuantity: number;
     endQuantity: number;
     retailMultiplier: number;
+    note?: string;
   }>;
 }
 
-export async function loadCatalogById(id: string): Promise<CatalogData> {
-  const response = await fetch(`/xml/catalog-id-${id}.xml`);
-  if (!response.ok) {
-    throw new Error(`Failed to load catalog ${id}`);
-  }
-  const xmlText = await response.text();
-  return parseCatalogXML(xmlText);
+export interface CatalogData {
+  product: {
+    id: string;
+    name: string;
+    type: string;
+    laser: string;
+    shapes: ShapeData[];
+    additions: AdditionData[];
+    priceModel: PriceModel;
+  };
 }
 
 export function calculatePrice(
@@ -85,31 +94,101 @@ export function calculatePrice(
   return price * applicablePrice.retailMultiplier;
 }
 
-export interface CatalogData {
-  product: {
-    id: string;
-    name: string;
-    type: string;
-    shapes: ShapeData[];
-    additions: AdditionData[];
-    priceModel: PriceModel;
-  };
+export function parsePriceModel(priceModelEl: Element): PriceModel {
+  const id = priceModelEl.getAttribute('id') || '';
+  const code = priceModelEl.getAttribute('code') || '';
+  const name = priceModelEl.getAttribute('name') || '';
+  const quantityType = priceModelEl.getAttribute('quantity_type') || '';
+  const currency = priceModelEl.getAttribute('currency') || '';
+
+  const prices: PriceModel['prices'] = [];
+  const priceElements = priceModelEl.querySelectorAll('price');
+  priceElements.forEach((priceEl) => {
+    const pid = priceEl.getAttribute('id') || '';
+    const model = priceEl.getAttribute('model') || '';
+    const startQuantity = parseInt(
+      priceEl.getAttribute('start_quantity') || '0',
+    );
+    const endQuantity = parseInt(priceEl.getAttribute('end_quantity') || '0');
+    const retailMultiplier = parseFloat(
+      priceEl.getAttribute('retail_multiplier') || '1',
+    );
+    const note = priceEl.getAttribute('note') || undefined;
+    prices.push({
+      id: pid,
+      model,
+      startQuantity,
+      endQuantity,
+      retailMultiplier,
+      note,
+    });
+  });
+
+  return { id, code, name, quantityType, currency, prices };
 }
 
-export function parseCatalogXML(xmlText: string): CatalogData {
+export interface InscriptionDetails {
+  priceModel: PriceModel;
+  minHeight: number;
+  maxHeight: number;
+  initHeight: number;
+}
+
+export async function fetchAndParseInscriptionDetails(
+  inscriptionId: string,
+): Promise<InscriptionDetails | undefined> {
+  try {
+    const response = await fetch('/xml/au_EN/inscriptions.xml');
+    const xmlText = await response.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+    const productElement = xmlDoc.querySelector(
+      `product[id="${inscriptionId}"]`,
+    );
+    if (!productElement) return undefined;
+
+    const priceModelEl = productElement.querySelector('price_model');
+    if (!priceModelEl) return undefined;
+
+    const priceModel = parsePriceModel(priceModelEl);
+    const minHeight = parseInt(
+      productElement.getAttribute('min_height') || '0',
+    );
+    const maxHeight = parseInt(
+      productElement.getAttribute('max_height') || '0',
+    );
+    const initHeight = parseInt(
+      productElement.getAttribute('init_height') || '0',
+    );
+
+    return { priceModel, minHeight, maxHeight, initHeight };
+  } catch (error) {
+    console.error('Failed to fetch or parse inscriptions XML:', error);
+    return undefined;
+  }
+}
+
+export async function parseCatalogXML(
+  xmlText: string,
+  productId: string,
+): Promise<CatalogData> {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
 
-  const productElement = xmlDoc.querySelector('product');
+  const productElement = xmlDoc.querySelector(`product[id="${productId}"]`);
   if (!productElement) throw new Error('No product element found');
 
   const id = productElement.getAttribute('id') || '';
   const name = productElement.getAttribute('name') || '';
-  const type = productElement.getAttribute('type') || 'headstone';
+  const type = productElement.getAttribute('type') || '';
+  const laser = productElement.getAttribute('laser') || '0';
 
   // Parse shapes
   const shapes: ShapeData[] = [];
-  const shapeElements = xmlDoc.querySelectorAll('shape[type="headstone"]');
+  const shapeElements = xmlDoc.querySelectorAll(
+    'shape[type="headstone"], shape[type="plaque"]',
+  );
   shapeElements.forEach((shapeEl) => {
     const name = shapeEl.getAttribute('name') || '';
     const standEl = shapeEl.querySelector('file[type="stand"]');
@@ -126,6 +205,7 @@ export function parseCatalogXML(xmlText: string): CatalogData {
         minHeight: parseInt(standEl.getAttribute('min_height') || '0'),
         maxHeight: parseInt(standEl.getAttribute('max_height') || '0'),
         initHeight: parseInt(standEl.getAttribute('init_height') || '0'),
+        color: standEl.getAttribute('color') || undefined,
       };
 
       const table = {
@@ -147,16 +227,33 @@ export function parseCatalogXML(xmlText: string): CatalogData {
 
   // Parse additions
   const additions: AdditionData[] = [];
-  const additionElements = xmlDoc.querySelectorAll('addition');
-  additionElements.forEach((addEl) => {
-    const id = addEl.getAttribute('id') || '';
-    const type = addEl.getAttribute('type') || '';
-    const name = addEl.getAttribute('name') || '';
-    additions.push({ id, type, name });
-  });
+  const additionElements = productElement.querySelectorAll(
+    'additions > addition',
+  );
+  for (const addEl of Array.from(additionElements)) {
+    const addId = addEl.getAttribute('id') || '';
+    const addType = addEl.getAttribute('type') || '';
+    const addName = addEl.getAttribute('name') || '';
+
+    let addition: AdditionData = { id: addId, type: addType, name: addName };
+
+    if (addType === 'inscription') {
+      const inscriptionDetails = await fetchAndParseInscriptionDetails(addId);
+      if (inscriptionDetails) {
+        addition = {
+          ...addition,
+          priceModel: inscriptionDetails.priceModel,
+          minHeight: inscriptionDetails.minHeight,
+          maxHeight: inscriptionDetails.maxHeight,
+          initHeight: inscriptionDetails.initHeight,
+        };
+      }
+    }
+    additions.push(addition);
+  }
 
   // Parse price model
-  const priceModelEl = xmlDoc.querySelector('price_model');
+  const priceModelEl = productElement.querySelector('price_model'); // Use productElement here
   let priceModel: PriceModel = {
     id: '',
     code: '',
@@ -167,35 +264,8 @@ export function parseCatalogXML(xmlText: string): CatalogData {
   };
 
   if (priceModelEl) {
-    const id = priceModelEl.getAttribute('id') || '';
-    const code = priceModelEl.getAttribute('code') || '';
-    const name = priceModelEl.getAttribute('name') || '';
-    const quantityType = priceModelEl.getAttribute('quantity_type') || '';
-    const currency = priceModelEl.getAttribute('currency') || '';
-
-    const prices: PriceModel['prices'] = [];
-    const priceElements = priceModelEl.querySelectorAll('price');
-    priceElements.forEach((priceEl) => {
-      const pid = priceEl.getAttribute('id') || '';
-      const model = priceEl.getAttribute('model') || '';
-      const startQuantity = parseInt(
-        priceEl.getAttribute('start_quantity') || '0',
-      );
-      const endQuantity = parseInt(priceEl.getAttribute('end_quantity') || '0');
-      const retailMultiplier = parseFloat(
-        priceEl.getAttribute('retail_multiplier') || '1',
-      );
-      prices.push({
-        id: pid,
-        model,
-        startQuantity,
-        endQuantity,
-        retailMultiplier,
-      });
-    });
-
-    priceModel = { id, code, name, quantityType, currency, prices };
+    priceModel = parsePriceModel(priceModelEl);
   }
 
-  return { product: { id, name, type, shapes, additions, priceModel } };
+  return { product: { id, name, type, laser, shapes, additions, priceModel } };
 }

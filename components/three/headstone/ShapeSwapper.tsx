@@ -13,7 +13,9 @@ import HeadstoneInscription from '../../HeadstoneInscription';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
+import { usePathname } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
+import type { AdditionData } from '#/lib/xml-parser';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -119,28 +121,12 @@ function AdditionApplication({
 }
 
 /* ------------------------------ preload helpers ----------------------------- */
-function PreloadShape({
-  url,
-  onReady,
-}: {
-  url: string;
-  onReady?: (success: boolean) => void;
-}) {
+function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
+  useLoader(SVGLoader, url);
   React.useEffect(() => {
-    const loader = new SVGLoader();
-    loader.load(
-      url,
-      (data) => {
-        onReady?.(true);
-      },
-      undefined,
-      (err) => {
-        console.warn('Failed to preload shape:', url, err);
-        onReady?.(false);
-      },
-    );
-  }, [url, onReady]);
-
+    const id = requestAnimationFrame(() => onReady?.());
+    return () => cancelAnimationFrame(id);
+  }, [onReady]);
   return null;
 }
 
@@ -149,23 +135,13 @@ function PreloadTexture({
   onReady,
 }: {
   url: string;
-  onReady?: (success: boolean) => void;
+  onReady?: () => void;
 }) {
+  useTexture(url);
   React.useEffect(() => {
-    const loader = new THREE.TextureLoader();
-    loader.load(
-      url,
-      (texture) => {
-        onReady?.(true);
-      },
-      undefined,
-      (err) => {
-        console.warn('Failed to preload texture:', url, err);
-        onReady?.(false);
-      },
-    );
-  }, [url, onReady]);
-
+    const id = requestAnimationFrame(() => onReady?.());
+    return () => cancelAnimationFrame(id);
+  }, [onReady]);
   return null;
 }
 
@@ -202,7 +178,7 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
       zIndexRange={[1000, 0]}
     >
       <div
-        className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-200 lg:ml-72"
+        className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-200"
         style={{ opacity: visible ? 1 : 0 }}
       >
         <div className="flex flex-col items-center gap-4 text-white drop-shadow">
@@ -259,7 +235,9 @@ function HeadstoneAddition({
   const hasReset = React.useRef(false);
 
   /* ----------------------- data lookups (no early return) -------------------- */
-  let addition = catalog?.product.additions.find((a) => a.id === additionId);
+  let addition = catalog?.product.additions.find(
+    (a: AdditionData) => a.id === additionId,
+  );
   if (!addition && additionId === 'B1134S') {
     addition = {
       id: 'B1134S',
@@ -368,12 +346,12 @@ function HeadstoneAddition({
     const onUp = (e: PointerEvent) => {
       e.preventDefault();
       setDragging(false);
-      if (controls) controls.enabled = true;
+      if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
       (e.target as any)?.releasePointerCapture?.(e.pointerId);
     };
 
-    if (controls) controls.enabled = false;
+    if (controls) (controls as any).enabled = false;
     canvas.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp, { once: true });
     document.body.style.cursor = 'grabbing';
@@ -381,7 +359,7 @@ function HeadstoneAddition({
     return () => {
       canvas.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
-      if (controls) controls.enabled = true;
+      if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
     };
   }, [dragging, gl, controls, placeFromClientXY]);
@@ -488,7 +466,7 @@ export interface ShapeSwapperProps {
 
 /* ----------------------------------- main ----------------------------------- */
 export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
-  const { invalidate } = useThree();
+  const { invalidate, controls, camera } = useThree();
 
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
@@ -508,8 +486,42 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const loading = useHeadstoneStore((s) => s.loading);
+  const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const isPlaque = catalog?.product.type === 'plaque';
+
+  const prevIs2DMode = React.useRef(is2DMode);
+
+  React.useEffect(() => {
+    if (controls) {
+      (controls as any).enabled = !baseSwapping;
+    }
+  }, [baseSwapping, controls]);
+
+  React.useEffect(() => {
+    if (controls && prevIs2DMode.current !== is2DMode) {
+      (controls as any).enabled = false;
+
+      // Explicitly set camera position and target for 2D/3D switch
+      if (is2DMode) {
+        camera.position.set(0, 0, 5); // Example 2D position
+        camera.lookAt(0, 0, 0); // Example 2D target
+      } else {
+        camera.position.set(0, 2, 5); // Example 3D position (slightly elevated)
+        camera.lookAt(0, 0, 0); // Example 3D target
+      }
+      camera.updateProjectionMatrix();
+      invalidate();
+
+      setTimeout(() => {
+        (controls as any).enabled = true;
+      }, 100); // Re-enable controls after a short delay
+    }
+    prevIs2DMode.current = is2DMode;
+  }, [is2DMode, controls, invalidate, camera]);
 
   // Preload addition assets
   selectedAdditions.forEach((additionId) => {
@@ -527,6 +539,9 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
 
   const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
   const requestedTex = React.useMemo(() => {
+    if (headstoneMaterialUrl?.startsWith('textures/')) {
+      return `/${headstoneMaterialUrl}`;
+    }
     const file = headstoneMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
     const jpg = file.replace(/\.(png|webp|jpeg)$/i, '.jpg');
     return TEX_BASE + jpg;
@@ -534,16 +549,6 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
 
   const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);
   const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
-
-  // Ensure visible URLs match requested URLs initially
-  React.useEffect(() => {
-    if (visibleUrl !== requestedUrl) {
-      setVisibleUrl(requestedUrl);
-    }
-    if (visibleTex !== requestedTex) {
-      setVisibleTex(requestedTex);
-    }
-  }, [requestedUrl, requestedTex, visibleUrl, visibleTex]);
   const [fitTick, setFitTick] = React.useState(0);
 
   const swapping = requestedUrl !== visibleUrl || requestedTex !== visibleTex;
@@ -552,6 +557,7 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
   React.useEffect(() => {
     if (
       !is2DMode &&
+      !isMaterialChange &&
       visibleUrl === requestedUrl &&
       visibleTex === requestedTex
     ) {
@@ -560,12 +566,24 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
       const timeoutId = setTimeout(() => setFitTick((n) => n + 1), 100);
       return () => clearTimeout(timeoutId);
     }
-  }, [is2DMode, visibleUrl, requestedUrl, visibleTex, requestedTex]);
+  }, [
+    is2DMode,
+    isMaterialChange,
+    visibleUrl,
+    requestedUrl,
+    visibleTex,
+    requestedTex,
+  ]);
 
   React.useEffect(() => {
     const id = requestAnimationFrame(() => setFitTick((n) => n + 1));
     return () => cancelAnimationFrame(id);
   }, []);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, [setLoading]);
 
   return (
     <>
@@ -573,7 +591,7 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
         <SvgHeadstone
           key={`${visibleUrl}::${visibleTex}`}
           url={visibleUrl}
-          depth={100}
+          depth={isPlaque ? 5 : 100}
           scale={0.01}
           faceTexture={visibleTex}
           sideTexture={visibleTex}
@@ -592,7 +610,9 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
               e.stopPropagation();
               setSelected('headstone');
               setSelectedInscriptionId(null);
-              openSizePanel?.();
+              if (pathname === '/') {
+                openSizePanel?.();
+              }
             },
           }}
         >
@@ -611,7 +631,7 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
                         setSelected(null);
                         openInscriptions?.(line.id);
                       }}
-                      color="#fff8dc"
+                      color={line.color}
                       lift={0.002}
                       xPos={line.xPos}
                       yPos={line.yPos}
@@ -639,32 +659,25 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
           )}
         </SvgHeadstone>
 
-        {!is2DMode && (
-          <AutoFit
-            target={tabletRef}
-            baseHeight={BASE_H}
-            margin={1.15}
-            pad={0.04}
-            duration={0}
-            readyTimeoutMs={100}
-            trigger={fitTick}
-          />
-        )}
+        <AutoFit
+          target={tabletRef}
+          margin={1.15}
+          pad={0.04}
+          duration={0.25}
+          readyTimeoutMs={100}
+          trigger={fitTick}
+          view={is2DMode ? '2d' : '3d'}
+        />
       </group>
 
       {requestedUrl !== visibleUrl && (
         <React.Suspense fallback={null}>
           <PreloadShape
             url={requestedUrl}
-            onReady={(success) => {
-              if (success) {
-                setVisibleUrl(requestedUrl);
-                requestAnimationFrame(() => setFitTick((n) => n + 1));
-                invalidate();
-              } else {
-                // Keep current visibleUrl (which should be the default or last working one)
-                console.warn('Shape failed to load, keeping current shape');
-              }
+            onReady={() => {
+              setVisibleUrl(requestedUrl);
+              requestAnimationFrame(() => setFitTick((n) => n + 1));
+              invalidate();
             }}
           />
         </React.Suspense>
@@ -674,23 +687,16 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
         <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
-            onReady={(success) => {
-              if (success) {
-                setVisibleTex(requestedTex);
-                requestAnimationFrame(() => setFitTick((n) => n + 1));
-                invalidate();
-              } else {
-                // Keep current visibleTex (which should be the default or last working one)
-                console.warn('Texture failed to load, keeping current texture');
-              }
+            onReady={() => {
+              setVisibleTex(requestedTex);
+              requestAnimationFrame(() => setFitTick((n) => n + 1));
+              invalidate();
             }}
           />
         </React.Suspense>
       )}
 
-      <InlineCanvasLoader
-        show={(swapping || fontLoading || baseSwapping) && !loading}
-      />
+      <InlineCanvasLoader show={swapping || fontLoading} />
     </>
   );
 }

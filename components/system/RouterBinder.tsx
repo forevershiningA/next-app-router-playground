@@ -12,7 +12,7 @@ import { parseCatalogXML } from '#/lib/xml-parser';
 export default function RouterBinder() {
   const router = useRouter();
   const setNavTo = useHeadstoneStore((s) => s.setNavTo);
-  const setCatalog = useHeadstoneStore((s) => s.setCatalog);
+  const setProductId = useHeadstoneStore((s) => s.setProductId);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
   const setInscriptions = useHeadstoneStore((s) => s.setInscriptions);
@@ -27,21 +27,10 @@ export default function RouterBinder() {
   }, [router, setNavTo]);
 
   useEffect(() => {
-    // Load catalog XML and set init sizes
-    fetch('/xml/catalog-id-124.xml')
-      .then((res) => res.text())
-      .then((xmlText) => {
-        const catalog = parseCatalogXML(xmlText);
-        setCatalog(catalog);
-        const firstShape = catalog.product.shapes[0];
-        if (firstShape) {
-          // Set headstone init size from table
-          setWidthMm(firstShape.table.initWidth);
-          setHeightMm(firstShape.table.initHeight);
-        }
-      })
-      .catch((err) => console.error('Failed to load catalog XML:', err));
+    setProductId('124');
+  }, [setProductId]);
 
+  useEffect(() => {
     // Load inscriptions XML for init size
     fetch('/xml/au_EN/inscriptions.xml')
       .then((res) => res.text())

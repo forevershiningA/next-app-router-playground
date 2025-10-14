@@ -4,7 +4,13 @@ import { create } from 'zustand';
 import React from 'react';
 import type { Group } from 'three';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
-import type { CatalogData, AdditionData } from '#/lib/xml-parser';
+import type { CatalogData, AdditionData, PriceModel } from '#/lib/xml-parser';
+import {
+  parseCatalogXML,
+  calculatePrice,
+  fetchAndParseInscriptionDetails,
+} from '#/lib/xml-parser';
+import { data } from '#/app/_internal/_data';
 
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.jpg';
@@ -37,6 +43,7 @@ export type Line = {
   text: string;
   sizeMm: number;
   font: string;
+  color: string;
   xPos: number;
   yPos: number;
   rotationDeg: number;
@@ -53,7 +60,10 @@ export type PanelName =
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 
 type LinePatch = Partial<
-  Pick<Line, 'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos'>
+  Pick<
+    Line,
+    'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos' | 'color'
+  >
 >;
 
 type HeadstoneState = {
@@ -64,8 +74,14 @@ type HeadstoneState = {
   addAddition: (id: string) => void;
   removeAddition: (id: string) => void;
 
-  productUrl: string | null;
-  setProductUrl: (url: string) => void;
+  productId: string | null;
+  setProductId: (id: string) => void;
+
+  showBase: boolean;
+  setShowBase: (showBase: boolean) => void;
+
+  showInscriptionColor: boolean;
+  inscriptionPriceModel: PriceModel | null;
 
   shapeUrl: string | null;
   setShapeUrl: (url: string) => void;
@@ -97,6 +113,8 @@ type HeadstoneState = {
   inscriptionMinHeight: number;
   inscriptionMaxHeight: number;
   fontLoading: boolean;
+  inscriptionCost: number;
+  calculateInscriptionCost: () => void;
 
   selectedAdditionId: string | null;
   additionRefs: Record<string, React.RefObject<Group | null>>;
@@ -142,9 +160,8 @@ type HeadstoneState = {
   loading: boolean;
   setLoading: (loading: boolean) => void;
 
-  /* error handling */
-  errorMessage: string | null;
-  setErrorMessage: (message: string | null) => void;
+  isMaterialChange: boolean;
+  setIsMaterialChange: (isMaterialChange: boolean) => void;
 
   openInscriptions: (id: string | null) => void;
   openSizePanel: () => void;
@@ -171,10 +188,83 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     }));
   },
 
-  productUrl: null,
-  setProductUrl(productUrl) {
-    set({ productUrl });
+  productId: null,
+  setProductId: async (id) => {
+    try {
+      const response = await fetch(`/xml/catalog-id-${id}.xml`);
+      const xmlText = await response.text();
+      const catalog = await parseCatalogXML(xmlText, id);
+      set({ catalog, productId: id });
+
+      const isPlaque = catalog.product.type === 'plaque';
+      const showBase = catalog.product.type === 'headstone';
+      const showInscriptionColor = catalog.product.laser !== '1';
+      set({ showBase, showInscriptionColor });
+      if (isPlaque) {
+        set({ shapeUrl: '/shapes/headstones/square.svg' });
+      }
+      if (!showInscriptionColor) {
+        set((s) => ({
+          inscriptions: s.inscriptions.map((line) => ({
+            ...line,
+            color: '#ffffff',
+          })),
+        }));
+      }
+
+      const inscriptionAddition = catalog.product.additions.find(
+        (add) => add.id === '125' && add.type === 'inscription',
+      );
+      if (inscriptionAddition) {
+        const minHeight =
+          inscriptionAddition.minHeight ?? MIN_INSCRIPTION_SIZE_MM;
+        const maxHeight =
+          inscriptionAddition.maxHeight ?? MAX_INSCRIPTION_SIZE_MM;
+        const initHeight =
+          inscriptionAddition.initHeight ?? MIN_INSCRIPTION_SIZE_MM;
+        set({
+          inscriptionMinHeight: minHeight,
+          inscriptionMaxHeight: maxHeight,
+        });
+        set((s) => ({
+          inscriptions: s.inscriptions.map((line) => ({
+            ...line,
+            sizeMm: initHeight,
+          })),
+        }));
+      }
+      if (inscriptionAddition) {
+        const inscriptionDetails = await fetchAndParseInscriptionDetails(
+          inscriptionAddition.id,
+        );
+        if (inscriptionDetails) {
+          set({ inscriptionPriceModel: inscriptionDetails.priceModel });
+        }
+      }
+
+      if (catalog.product.shapes.length > 0) {
+        const shape = catalog.product.shapes[0];
+        set({
+          widthMm: shape.table.initWidth,
+          heightMm: shape.table.initHeight,
+        });
+        if (shape.table.color) {
+          set({ headstoneMaterialUrl: shape.table.color });
+        }
+        if (shape.stand.color) {
+          set({ baseMaterialUrl: shape.stand.color });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load or parse catalog XML:', error);
+    }
   },
+
+  showBase: true,
+  setShowBase: (showBase) => set({ showBase }),
+
+  showInscriptionColor: true,
+  inscriptionPriceModel: null,
 
   shapeUrl: DEFAULT_SHAPE_URL,
   setShapeUrl(shapeUrl) {
@@ -220,6 +310,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       text: 'In Loving Memory',
       font: 'Chopin Script',
       sizeMm: 80,
+      color: '#c99d44',
       xPos: 0,
       yPos: 0,
       rotationDeg: 0,
@@ -230,6 +321,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       text: 'of General Admiral Aladeen',
       font: 'Chopin Script',
       sizeMm: 120,
+      color: '#c99d44',
       xPos: 0,
       yPos: 20,
       rotationDeg: 0,
@@ -241,6 +333,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   inscriptionMinHeight: 5,
   inscriptionMaxHeight: 1200,
   fontLoading: false,
+  inscriptionCost: 0,
 
   selectedAdditionId: null,
   additionRefs: {},
@@ -252,6 +345,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     } else {
       set({ inscriptions });
     }
+    get().calculateInscriptionCost();
   },
 
   addInscriptionLine: (patch: LinePatch = {}) => {
@@ -259,10 +353,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
     const text = patch.text ?? 'New line';
     const font = patch.font ?? 'Garamond';
-    const sizeMm = clampInscriptionSize(patch.sizeMm ?? 30);
+    const sizeMm = clampInscriptionSize(
+      patch.sizeMm ?? get().inscriptionMinHeight,
+    );
     const rotationDeg = clampInscriptionRotation(patch.rotationDeg ?? 0);
     const xPos = patch.xPos ?? 0;
     const yPos = patch.yPos ?? 0;
+    const color =
+      get().showInscriptionColor === false
+        ? '#ffffff'
+        : (patch.color ?? '#c99d44');
 
     const newLine: Line = {
       id,
@@ -272,6 +372,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       rotationDeg,
       xPos,
       yPos,
+      color,
       ref: React.createRef<Group>(),
     };
 
@@ -279,7 +380,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       inscriptions: [...s.inscriptions, newLine],
       selectedInscriptionId: id,
     }));
-
+    get().calculateInscriptionCost();
     return id;
   },
 
@@ -302,6 +403,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           : l,
       ),
     }));
+    get().calculateInscriptionCost();
   },
 
   duplicateInscription: (id) => {
@@ -340,6 +442,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       ],
       selectedInscriptionId: newId, // Select the newly duplicated inscription
     }));
+    get().calculateInscriptionCost();
     return newId;
   },
 
@@ -349,6 +452,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const next = rest[0]?.id ?? null;
       return { inscriptions: rest, selectedInscriptionId: next };
     });
+    get().calculateInscriptionCost();
   },
 
   setSelectedInscriptionId: (id) => {
@@ -387,6 +491,45 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
   },
 
+  calculateInscriptionCost: () => {
+    const { inscriptions, inscriptionPriceModel, showInscriptionColor } = get();
+    if (!inscriptionPriceModel || !showInscriptionColor) {
+      set({ inscriptionCost: 0 });
+      return;
+    }
+
+    let totalCost = 0;
+    inscriptions.forEach((line) => {
+      const quantity = line.sizeMm; // quantity_type="Height"
+      const colorName = data.colors.find((c) => c.hex === line.color)?.name;
+
+      // Map the colorName from data.colors to the 'note' values used in inscriptions.xml
+      // Assuming all non-gilding colors map to 'Paint Fill' for pricing purposes.
+      let mappedColorNote = colorName;
+      if (
+        colorName &&
+        !['Gold Gilding', 'Silver Gilding'].includes(colorName)
+      ) {
+        mappedColorNote = 'Paint Fill';
+      }
+
+      const applicablePrice = inscriptionPriceModel.prices.find(
+        (p) =>
+          quantity >= p.startQuantity &&
+          quantity <= p.endQuantity &&
+          p.note === mappedColorNote,
+      );
+
+      if (applicablePrice) {
+        totalCost += calculatePrice(
+          { ...inscriptionPriceModel, prices: [applicablePrice] },
+          quantity,
+        );
+      }
+    });
+    set({ inscriptionCost: totalCost });
+  },
+
   /* router injection */
   navTo: undefined,
   setNavTo: (fn) => set({ navTo: fn }),
@@ -404,11 +547,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   /* loading */
-  loading: false,
+  loading: true,
   setLoading: (loading) => set({ loading }),
 
-  errorMessage: null,
-  setErrorMessage: (message) => set({ errorMessage: message }),
+  isMaterialChange: false,
+  setIsMaterialChange: (isMaterialChange) => set({ isMaterialChange }),
 
   openInscriptions: (id) => {
     if (id) {

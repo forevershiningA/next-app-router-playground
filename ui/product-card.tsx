@@ -7,7 +7,6 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useRouter } from 'next/navigation';
 import { toSlug } from '#/lib/slug';
 import { SHAPES_BASE } from '#/lib/headstone-constants';
-import { loadCatalogById, CatalogData } from '#/lib/xml-parser';
 import {
   ElementType,
   ComponentPropsWithoutRef,
@@ -62,17 +61,13 @@ export function ProductCard<E extends ElementType = 'div'>({
 
   const router = useRouter();
   const {
-    setProductUrl,
+    setProductId,
     setShapeUrl,
     setMaterialUrl,
     setHeadstoneMaterialUrl,
     setBaseMaterialUrl,
-    setCatalog,
-    setWidthMm,
-    setHeightMm,
-    setShapeUrl: setShape,
-    setLoading,
     selected,
+    setIsMaterialChange,
   } = useHeadstoneStore();
 
   const assetBase =
@@ -107,123 +102,19 @@ export function ProductCard<E extends ElementType = 'div'>({
           quality={90}
           width={400}
           height={400}
-          onClick={async () => {
+          onClick={() => {
             if (onPick) {
               onPick({ product, slug, type, selectedUrl });
             } else {
-              if (type === 'product') {
-                try {
-                  // Start loading - ensure it's set to true
-                  setLoading(true);
-
-                  // Load catalog data by product ID
-                  const catalog = await loadCatalogById(product.id);
-                  setCatalog(catalog);
-
-                  // Set default shape (first available shape)
-                  if (catalog.product.shapes.length > 0) {
-                    const defaultShape = catalog.product.shapes[0];
-                    // Convert shape name to filename (e.g., "Cropped Peak" -> "cropped_peak.svg")
-                    const shapeFilename =
-                      defaultShape.name.toLowerCase().replace(/\s+/g, '_') +
-                      '.svg';
-                    const shapeUrl = `/shapes/headstones/${shapeFilename}`;
-                    setShape(shapeUrl);
-
-                    // Set initial dimensions from the shape (use table dimensions for headstone size)
-                    setWidthMm(defaultShape.table.initWidth);
-                    setHeightMm(defaultShape.table.initHeight);
-
-                    // Try to load material from shape data
-                    if (defaultShape.table.color) {
-                      // Convert XML path to web path (e.g., "src/granites/forever2/l/17.jpg" -> "/textures/forever/l/17.jpg")
-                      const materialPath = defaultShape.table.color.replace(
-                        'src/granites/forever2/l/',
-                        '/textures/forever/l/',
-                      );
-                      setHeadstoneMaterialUrl(materialPath);
-                      setBaseMaterialUrl(materialPath);
-                    }
-                  }
-
-                  // Set default material (Imperial Red as fallback) if no shape material found
-                  if (
-                    !catalog.product.shapes.length ||
-                    !catalog.product.shapes[0].table.color
-                  ) {
-                    setHeadstoneMaterialUrl(
-                      '/textures/forever/l/Imperial-Red.jpg',
-                    );
-                    setBaseMaterialUrl('/textures/forever/l/Imperial-Red.jpg');
-                  }
-
-                  setProductUrl(selectedUrl);
-
-                  // Set loading to false after a short delay to allow UI to update
-                  setTimeout(() => setLoading(false), 200);
-                } catch (error) {
-                  console.error('Failed to load catalog:', error);
-                  // Fallback to default catalog
-                  const defaultCatalog: CatalogData = {
-                    product: {
-                      id: product.id,
-                      name: product.name,
-                      type: 'headstone',
-                      shapes: [
-                        {
-                          name: 'Default Shape',
-                          stand: {
-                            minDepth: 100,
-                            maxDepth: 300,
-                            initDepth: 130,
-                            minWidth: 300,
-                            maxWidth: 1200,
-                            initWidth: 600,
-                            minHeight: 100,
-                            maxHeight: 200,
-                            initHeight: 100,
-                          },
-                          table: {
-                            minWidth: 300,
-                            maxWidth: 1200,
-                            initWidth: 600,
-                            minDepth: 100,
-                            maxDepth: 300,
-                            initDepth: 100,
-                            minHeight: 300,
-                            maxHeight: 1200,
-                            initHeight: 600,
-                          },
-                        },
-                      ],
-                      additions: [],
-                      priceModel: {
-                        id: 'default',
-                        code: 'DEFAULT',
-                        name: 'Default',
-                        quantityType: 'Width + Height',
-                        currency: 'Dollars',
-                        prices: [],
-                      },
-                    },
-                  };
-                  setCatalog(defaultCatalog);
-                  setShapeUrl('/shapes/headstones/default.svg');
-                  setWidthMm(600);
-                  setHeightMm(600);
-                  setHeadstoneMaterialUrl(
-                    '/textures/forever/l/Imperial-Red.jpg',
-                  );
-                  setBaseMaterialUrl('/textures/forever/l/Imperial-Red.jpg');
-                  setProductUrl(selectedUrl);
-                  setLoading(false);
-                }
-              } else if (type === 'shape') setShapeUrl(selectedUrl);
-              else if (type === 'material') {
+              if (type === 'product') setProductId(product.id);
+              if (type === 'shape') setShapeUrl(selectedUrl);
+              if (type === 'material') {
+                setIsMaterialChange(true);
                 if (selected === 'headstone')
                   setHeadstoneMaterialUrl(selectedUrl);
                 else if (selected === 'base') setBaseMaterialUrl(selectedUrl);
                 else setMaterialUrl(selectedUrl); // fallback
+                setTimeout(() => setIsMaterialChange(false), 100);
               }
               window.scrollTo({ top: 0 });
               router.push(routeBase + slug);

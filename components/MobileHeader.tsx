@@ -16,8 +16,10 @@ export default function MobileHeader() {
       quantity = widthMm + heightMm;
     }
   }
+  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
+
   const price = catalog
-    ? calculatePrice(catalog.product.priceModel, quantity)
+    ? calculatePrice(catalog.product.priceModel, quantity) + inscriptionCost
     : 0;
 
   return (

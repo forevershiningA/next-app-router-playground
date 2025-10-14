@@ -41,6 +41,10 @@ export default function InscriptionOverlayPanel() {
   const inscriptionMinHeight = useHeadstoneStore((s) => s.inscriptionMinHeight);
   const inscriptionMaxHeight = useHeadstoneStore((s) => s.inscriptionMaxHeight);
   const setFontLoading = useHeadstoneStore((s) => s.setFontLoading);
+  const showInscriptionColor = useHeadstoneStore(
+    (s) => s.showInscriptionColor,
+  );
+  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
 
   const activeId = selectedInscriptionId;
   const active = lines.find((l) => l.id === activeId) ?? null;
@@ -227,6 +231,57 @@ export default function InscriptionOverlayPanel() {
           onChange={(v) => active && updateLine(active.id, { rotationDeg: v })}
           unit="°"
         />
+      </div>
+
+      {showInscriptionColor && (
+        <div className="mt-6">
+          <h3 className="mb-2 text-xs font-semibold text-violet-300">
+            Select Color
+          </h3>
+          <div className="grid grid-cols-2 gap-1">
+            <div
+              className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-white/20 p-2 transition-colors hover:bg-white/10"
+              onClick={() => {
+                if (active) updateLine(active.id, { color: '#c99d44' });
+              }}
+            >
+              <div
+                className="h-5 w-5 rounded-md border border-white/20"
+                style={{ backgroundColor: '#c99d44' }}
+              />
+              <span className="text-xs">Gold Gilding</span>
+            </div>
+            <div
+              className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-white/20 p-2 transition-colors hover:bg-white/10"
+              onClick={() => {
+                if (active) updateLine(active.id, { color: '#eeeeee' });
+              }}
+            >
+              <div
+                className="h-5 w-5 rounded-md border border-white/20"
+                style={{ backgroundColor: '#eeeeee' }}
+              />
+              <span className="text-xs">Silver Gilding</span>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-7 gap-1">
+            {data.colors.map((color) => (
+              <div
+                key={color.id}
+                className="h-6 w-6 cursor-pointer rounded-md border border-white/20"
+                style={{ backgroundColor: color.hex }}
+                onClick={() => {
+                  if (active) updateLine(active.id, { color: color.hex });
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-6 text-right text-lg font-semibold text-white">
+        Inscription Cost: ${inscriptionCost.toFixed(2)}
       </div>
     </SceneOverlayController>
   );

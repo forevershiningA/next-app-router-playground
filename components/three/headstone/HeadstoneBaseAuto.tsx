@@ -67,12 +67,13 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const LERP = 0.25;
     const EPS = 1e-3;
 
-    useFrame(() => {
+    useFrame((_, delta) => {
       const t = headstoneObject.current;
       const w = wrapper.current;
       const b = baseRef.current;
       if (!t || !w || !b) return;
 
+      // Update bounding box and target dimensions
       t.updateWorldMatrix(true, true);
       const bb = new THREE.Box3().setFromObject(t);
 
@@ -86,7 +87,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         const centerW = new THREE.Vector3(
           (min.x + max.x) / 2,
           min.y - height * 0.5 + EPS,
-          min.z + baseD * 0.5,
+          min.z + baseD * 0.5
         );
 
         w.updateWorldMatrix(true, false);
@@ -112,9 +113,13 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         return;
       }
 
-      b.position.lerp(targetPos.current, LERP);
-      b.scale.lerp(targetScale.current, LERP);
-      b.visible = true;
+      // Conditionally update position and scale
+      if (!baseSwapping) {
+        b.position.lerp(targetPos.current, LERP);
+        b.scale.lerp(targetScale.current, LERP);
+      }
+
+      b.visible = !baseSwapping;
     });
 
     return (
