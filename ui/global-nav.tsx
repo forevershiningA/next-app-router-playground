@@ -13,27 +13,7 @@ import { calculatePrice } from '#/lib/xml-parser';
 
 export function GlobalNav({ items }: { items: DemoCategory[] }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const close = () => setIsOpen(false);
-
-  useEffect(() => {
-    const handler = () => setIsSidebarOpen((s) => !s);
-    window.addEventListener('toggle-sidebar', handler);
-    return () => window.removeEventListener('toggle-sidebar', handler);
-  }, []);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('sidebar-open');
-    if (saved !== null) {
-      setIsSidebarOpen(saved === 'true');
-    } else {
-      setIsSidebarOpen(window.innerWidth >= 1024);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('sidebar-open', isSidebarOpen.toString());
-  }, [isSidebarOpen]);
 
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
@@ -54,7 +34,6 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     <div
       className={clsx(
         'fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 bg-black lg:bottom-0 lg:z-auto lg:w-72 lg:border-r lg:border-b-0 lg:border-gray-800',
-        !isSidebarOpen && 'hidden',
       )}
     >
       <div className="flex h-14 items-center px-4 py-4 lg:h-auto">

@@ -469,6 +469,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     } else {
       set({ selectedInscriptionId: id, activeInscriptionText: '' });
     }
+    get().calculateInscriptionCost();
   },
 
   setActiveInscriptionText: (activeInscriptionText) =>
