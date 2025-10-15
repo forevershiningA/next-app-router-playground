@@ -13,17 +13,53 @@ type Props = {
 };
 
 function useNormalizedGLTF(id: string) {
-  // try /additions/1134/1134.gltf ; fallback /additions/1134/Art1134.gltf
-  let gltf: any;
+  const [error, setError] = React.useState<Error | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  
+  // Sanitize the ID to prevent path traversal
+  const sanitizedId = React.useMemo(() => {
+    try {
+      // Basic sanitization - remove any non-alphanumeric characters except hyphen/underscore
+      const cleaned = id.replace(/[^a-zA-Z0-9_-]/g, '');
+      if (!cleaned) throw new Error('Invalid addition ID');
+      return cleaned;
+    } catch (err) {
+      setError(err as Error);
+      return '';
+    }
+  }, [id]);
+
+  // Try primary path first, fallback to Art{id} path
+  let gltf: any = null;
+  
   try {
-    gltf = useGLTF(`/additions/${id}/${id}.gltf`);
-  } catch {
-    gltf = useGLTF(`/additions/${id}/Art${id}.gltf`);
+    if (sanitizedId) {
+      try {
+        gltf = useGLTF(`/additions/${sanitizedId}/${sanitizedId}.gltf`);
+        setLoading(false);
+      } catch (primaryError) {
+        try {
+          gltf = useGLTF(`/additions/${sanitizedId}/Art${sanitizedId}.gltf`);
+          setLoading(false);
+        } catch (fallbackError) {
+          setError(new Error(`Failed to load model for ID: ${sanitizedId}`));
+          setLoading(false);
+        }
+      }
+    }
+  } catch (err) {
+    setError(err as Error);
+    setLoading(false);
   }
 
-  const scene = React.useMemo(() => gltf.scene.clone(true), [gltf.scene]);
+  const scene = React.useMemo(() => {
+    if (!gltf?.scene) return null;
+    return gltf.scene.clone(true);
+  }, [gltf?.scene]);
 
   const size = React.useMemo(() => {
+    if (!scene) return new THREE.Vector3(1, 1, 1);
+    
     const box = new THREE.Box3().setFromObject(scene);
     const sz = new THREE.Vector3();
     const center = new THREE.Vector3();
@@ -35,7 +71,7 @@ function useNormalizedGLTF(id: string) {
     return sz;
   }, [scene]);
 
-  return { scene, size };
+  return { scene, size, loading, error };
 }
 
 export default function AdditionModel({ id, headstone, index = 0 }: Props) {
@@ -57,15 +93,44 @@ export default function AdditionModel({ id, headstone, index = 0 }: Props) {
     return null;
   }
 
-  // load model
-  const { scene, size } = useNormalizedGLTF(numericId);
-  const colorMap = useTexture(`/additions/${numericId}/colorMap.png`);
+  // load model with error handling
+  const { scene, size, loading, error } = useNormalizedGLTF(numericId);
+  
+  // Handle loading error - show placeholder
+  if (error) {
+    console.error('AdditionModel error:', error);
+    return (
+      <group ref={ref}>
+        <mesh>
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+          <meshStandardMaterial color="red" opacity={0.5} transparent />
+        </mesh>
+      </group>
+    );
+  }
+  
+  // Handle loading state
+  if (loading || !scene) {
+    return null;
+  }
+
+  // Load texture with error handling
+  let colorMap: THREE.Texture | null = null;
+  try {
+    colorMap = useTexture(`/additions/${numericId}/colorMap.png`);
+  } catch (texError) {
+    console.warn(`Failed to load texture for addition ${numericId}:`, texError);
+  }
 
   React.useEffect(() => {
+    if (!scene || !colorMap) return;
+    
     scene.traverse((child: THREE.Object3D) => {
       if (child instanceof THREE.Mesh) {
-        child.material.map = colorMap;
-        child.material.needsUpdate = true;
+        if (colorMap) {
+          child.material.map = colorMap;
+          child.material.needsUpdate = true;
+        }
       }
     });
   }, [scene, colorMap]);

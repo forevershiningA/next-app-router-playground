@@ -219,6 +219,8 @@ export default function SceneOverlayController({
           onPointerMove={onHeaderPointerMove}
           onPointerUp={onHeaderPointerUp}
           onDoubleClick={() => setCollapsed((c) => !c)}
+          role="banner"
+          aria-label="Draggable overlay header"
         >
           <h1 className="font-semibold text-white">{title}</h1>
 
@@ -230,8 +232,14 @@ export default function SceneOverlayController({
               e.stopPropagation();
               setCollapsed((c) => !c);
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setCollapsed((c) => !c);
+              }
+            }}
             aria-expanded={!collapsed}
-            aria-label={collapsed ? 'Expand' : 'Collapse'}
+            aria-label={collapsed ? 'Expand panel' : 'Collapse panel'}
             title={collapsed ? 'Expand' : 'Collapse'}
           >
             {collapsed ? '+' : '–'}

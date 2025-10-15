@@ -6,6 +6,7 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import type { ThreeContextValue } from '#/lib/three-types';
 
 /* ------------------------------------------------------------------ */
 /* Props                                                               */
@@ -55,7 +56,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     },
     ref,
   ) => {
-    const { camera, gl, controls, scene } = useThree() as any;
+    const threeContext = useThree() as ThreeContextValue;
+    const { camera, gl, controls, scene } = threeContext;
 
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
@@ -64,7 +66,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const helperRef = React.useRef<THREE.BoxHelper | null>(null);
     const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
 
-    // tools reused during pointer placement
+    // tools reused during pointer placement - memoized to prevent recreating
     const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
     const mouse = React.useMemo(() => new THREE.Vector2(), []);
 
@@ -152,8 +154,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         liftLocal,
         mouse,
         dragOffset,
-        xPos,
-        yPos,
+        id,
+        updateLineStore,
       ],
     );
 
@@ -169,7 +171,10 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         setDragging(false);
         if (controls) controls.enabled = true;
         document.body.style.cursor = 'auto';
-        (e.target as any)?.releasePointerCapture?.(e.pointerId);
+        const target = e.target as Element;
+        if (target && 'releasePointerCapture' in target) {
+          (target as HTMLElement).releasePointerCapture?.(e.pointerId);
+        }
       };
 
       if (controls) controls.enabled = false;
@@ -191,8 +196,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       if (!obj || !selected) return;
 
       const helper = new THREE.BoxHelper(obj, 0xffff00);
-      // keep helper out of picking
-      (helper as any).raycast = () => null;
+      // keep helper out of picking by disabling raycast
+      helper.raycast = () => null;
       helper.layers.set(obj.layers.mask);
       scene.add(helper);
       helperRef.current = helper;
@@ -205,8 +210,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       };
     }, [selected, scene]);
 
+    // Only update helper when selection state changes or text updates
+    const textRef = React.useRef<string>(text);
+    const needsHelperUpdate = textRef.current !== text || selected;
+    textRef.current = text;
+
     useFrame(() => {
-      if (selected && helperRef.current && groupRef.current) {
+      if (selected && helperRef.current && groupRef.current && needsHelperUpdate) {
         helperRef.current.update();
         helperRef.current.scale.setScalar(1.01);
       }
@@ -256,15 +266,22 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             }
 
             // capture & start drag
-            (e.target as any)?.setPointerCapture?.(e.pointerId);
+            const target = e.target as Element;
+            if (target && 'setPointerCapture' in target) {
+              (target as HTMLElement).setPointerCapture?.(e.pointerId);
+            }
             onSelect?.();
             setDragging(true);
           }}
           onPointerOver={() => {
-            if (editable) document.body.style.cursor = 'grab';
+            if (editable && document.body) {
+              document.body.style.cursor = 'grab';
+            }
           }}
           onPointerOut={() => {
-            if (editable && !dragging) document.body.style.cursor = 'auto';
+            if (editable && !dragging && document.body) {
+              document.body.style.cursor = 'auto';
+            }
           }}
         >
           {text}

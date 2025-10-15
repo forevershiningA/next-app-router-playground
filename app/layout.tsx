@@ -7,8 +7,9 @@ import { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import ThreeScene from '#/components/ThreeScene';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
+import ErrorBoundary from '#/components/ErrorBoundary';
 import { Suspense } from 'react';
-import RouterBinder from '#/components/system/RouterBinder'; // ← ADD
+import RouterBinder from '#/components/system/RouterBinder';
 import MobileHeader from '#/components/MobileHeader';
 import MainContent from '#/components/MainContent';
 
@@ -43,20 +44,43 @@ export default function RootLayout({
       <body
         className={`overflow-y-scroll bg-gray-950 font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <RouterBinder /> {/* ← mount once, early */}
-        <GlobalNav items={demos} />
-        <MainContent>
-          <MobileHeader />
-          <Suspense
-            fallback={
-              <div className="aspect-[16/9] w-full rounded-md bg-gray-900/50" />
-            }
-          >
-            <SceneOverlayHost /> {/* ← one host, one overlay */}
-            <ThreeScene />
-          </Suspense>
-          <div>{children}</div>
-        </MainContent>
+        <ErrorBoundary>
+          <RouterBinder /> {/* ← mount once, early */}
+          <GlobalNav items={demos} />
+          <MainContent>
+            <MobileHeader />
+            <Suspense
+              fallback={
+                <div className="flex min-h-[400px] items-center justify-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
+                    <p className="text-sm text-gray-400">Loading scene...</p>
+                  </div>
+                </div>
+              }
+            >
+              <ErrorBoundary
+                fallback={
+                  <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-red-500/20 bg-red-950/10">
+                    <div className="flex flex-col items-center gap-4 p-8">
+                      <div className="text-4xl">⚠️</div>
+                      <h2 className="text-lg font-semibold text-red-400">
+                        Failed to load 3D scene
+                      </h2>
+                      <p className="text-sm text-gray-400">
+                        Please refresh the page to try again
+                      </p>
+                    </div>
+                  </div>
+                }
+              >
+                <SceneOverlayHost />
+                <ThreeScene />
+              </ErrorBoundary>
+            </Suspense>
+            <div>{children}</div>
+          </MainContent>
+        </ErrorBoundary>
       </body>
     </html>
   );

@@ -9,6 +9,16 @@ import React, {
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import {
+  TEX_BASE,
+  DEFAULT_TEX,
+  BASE_WIDTH_MULTIPLIER,
+  BASE_DEPTH_MULTIPLIER,
+  BASE_MIN_WIDTH,
+  BASE_MIN_DEPTH,
+  LERP_FACTOR,
+  EPSILON,
+} from '#/lib/headstone-constants';
 
 type HeadstoneBaseAutoProps = {
   headstoneObject: React.RefObject<THREE.Object3D>;
@@ -41,9 +51,6 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
     const setBaseSwapping = useHeadstoneStore((s) => s.setBaseSwapping);
 
-    const TEX_BASE = '/textures/forever/l/';
-    const DEFAULT_TEX = 'Imperial-Red.jpg';
-
     const requestedBaseTex = React.useMemo(() => {
       const file = baseMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
       const jpg = file.replace(/\.(png|webp|jpeg)$/i, '.jpg');
@@ -64,10 +71,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const hasTx = useRef(false);
     const targetPos = useRef(new THREE.Vector3());
     const targetScale = useRef(new THREE.Vector3(1, height, 1));
-    const LERP = 0.25;
-    const EPS = 1e-3;
 
-    useFrame((_, delta) => {
+    useFrame(() => {
       const t = headstoneObject.current;
       const w = wrapper.current;
       const b = baseRef.current;
@@ -81,12 +86,12 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         const { min, max } = bb;
         const hsW = Math.max(max.x - min.x, 1e-6);
         const hsD = Math.max(max.z - min.z, 1e-6);
-        const baseW = Math.max(hsW * 1.4, 0.05);
-        const baseD = Math.max(hsD * 2.0, 0.05);
+        const baseW = Math.max(hsW * BASE_WIDTH_MULTIPLIER, BASE_MIN_WIDTH);
+        const baseD = Math.max(hsD * BASE_DEPTH_MULTIPLIER, BASE_MIN_DEPTH);
 
         const centerW = new THREE.Vector3(
           (min.x + max.x) / 2,
-          min.y - height * 0.5 + EPS,
+          min.y - height * 0.5 + EPSILON,
           min.z + baseD * 0.5
         );
 
@@ -115,8 +120,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
 
       // Conditionally update position and scale
       if (!baseSwapping) {
-        b.position.lerp(targetPos.current, LERP);
-        b.scale.lerp(targetScale.current, LERP);
+        b.position.lerp(targetPos.current, LERP_FACTOR);
+        b.scale.lerp(targetScale.current, LERP_FACTOR);
       }
 
       b.visible = !baseSwapping;

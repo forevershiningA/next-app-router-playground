@@ -1,12 +1,17 @@
 'use client';
-import { OrbitControls, Html } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import {
+  SKY_TOP_COLOR,
+  SKY_BOTTOM_COLOR,
+  GRASS_DARK_COLOR,
+  GRASS_LIGHT_COLOR,
+} from '#/lib/headstone-constants';
 
 export default function Scene() {
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
-  const loading = useHeadstoneStore((s) => s.loading);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
 
   return (
@@ -27,8 +32,8 @@ export default function Scene() {
             varying vec3 vPosition;
             void main() {
               float h = normalize(vPosition).y;
-              vec3 topColor = vec3(0.4, 0.7, 1.0);    // Light blue at top
-              vec3 bottomColor = vec3(0.7, 0.9, 1.0);  // Lighter blue at horizon
+              vec3 topColor = vec3(${SKY_TOP_COLOR.r}, ${SKY_TOP_COLOR.g}, ${SKY_TOP_COLOR.b});
+              vec3 bottomColor = vec3(${SKY_BOTTOM_COLOR.r}, ${SKY_BOTTOM_COLOR.g}, ${SKY_BOTTOM_COLOR.b});
               vec3 color = mix(bottomColor, topColor, smoothstep(-0.2, 0.8, h));
               gl_FragColor = vec4(color, 1.0);
             }
@@ -59,8 +64,8 @@ export default function Scene() {
             varying vec3 vPosition;
 
             void main() {
-              vec3 darkGrass = vec3(0.3, 0.5, 0.2);   // Dark green
-              vec3 lightGrass = vec3(0.4, 0.6, 0.3);  // Light green
+              vec3 darkGrass = vec3(${GRASS_DARK_COLOR.r}, ${GRASS_DARK_COLOR.g}, ${GRASS_DARK_COLOR.b});
+              vec3 lightGrass = vec3(${GRASS_LIGHT_COLOR.r}, ${GRASS_LIGHT_COLOR.g}, ${GRASS_LIGHT_COLOR.b});
 
               // Create distance-based gradient (closer = lighter)
               float dist = length(vPosition.xz);

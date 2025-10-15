@@ -139,33 +139,72 @@ export async function fetchAndParseInscriptionDetails(
 ): Promise<InscriptionDetails | undefined> {
   try {
     const response = await fetch('/xml/au_EN/inscriptions.xml');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const xmlText = await response.text();
+    
+    // Validate XML content for security
+    if (xmlText.includes('<!ENTITY')) {
+      throw new Error('Invalid XML: External entities are not allowed');
+    }
+    
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+    
+    // Check for parsing errors
+    const parserError = xmlDoc.querySelector('parsererror');
+    if (parserError) {
+      throw new Error('XML parsing error: ' + parserError.textContent);
+    }
 
     const productElement = xmlDoc.querySelector(
-      `product[id="${inscriptionId}"]`,
+      `product[id="${CSS.escape(inscriptionId)}"]`,
     );
-    if (!productElement) return undefined;
+    if (!productElement) {
+      console.warn(`No inscription product found with id: ${inscriptionId}`);
+      return undefined;
+    }
 
     const priceModelEl = productElement.querySelector('price_model');
-    if (!priceModelEl) return undefined;
+    if (!priceModelEl) {
+      console.warn(`No price model found for inscription: ${inscriptionId}`);
+      return undefined;
+    }
 
     const priceModel = parsePriceModel(priceModelEl);
     const minHeight = parseInt(
-      productElement.getAttribute('min_height') || '0',
+      productElement.getAttribute('min_height') || '5',
+      10,
     );
     const maxHeight = parseInt(
-      productElement.getAttribute('max_height') || '0',
+      productElement.getAttribute('max_height') || '1200',
+      10,
     );
     const initHeight = parseInt(
-      productElement.getAttribute('init_height') || '0',
+      productElement.getAttribute('init_height') || '30',
+      10,
     );
 
     return { priceModel, minHeight, maxHeight, initHeight };
   } catch (error) {
     console.error('Failed to fetch or parse inscriptions XML:', error);
-    return undefined;
+    // Return sensible defaults instead of undefined
+    return {
+      priceModel: {
+        id: '',
+        code: '',
+        name: '',
+        quantityType: 'Height',
+        currency: 'USD',
+        prices: [],
+      },
+      minHeight: 5,
+      maxHeight: 1200,
+      initHeight: 30,
+    };
   }
 }
 
@@ -173,11 +212,24 @@ export async function parseCatalogXML(
   xmlText: string,
   productId: string,
 ): Promise<CatalogData> {
+  // Validate XML content for security
+  if (xmlText.includes('<!ENTITY')) {
+    throw new Error('Invalid XML: External entities are not allowed');
+  }
+  
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+  
+  // Check for parsing errors
+  const parserError = xmlDoc.querySelector('parsererror');
+  if (parserError) {
+    throw new Error('XML parsing error: ' + parserError.textContent);
+  }
 
-  const productElement = xmlDoc.querySelector(`product[id="${productId}"]`);
-  if (!productElement) throw new Error('No product element found');
+  const productElement = xmlDoc.querySelector(`product[id="${CSS.escape(productId)}"]`);
+  if (!productElement) {
+    throw new Error(`No product element found for id: ${productId}`);
+  }
 
   const id = productElement.getAttribute('id') || '';
   const name = productElement.getAttribute('name') || '';
