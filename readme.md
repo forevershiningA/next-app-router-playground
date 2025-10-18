@@ -4,6 +4,8 @@
 
 An interactive 3D web application that allows families to design custom memorial headstones online with real-time visualization, material selection, laser etching, and personalized inscriptions.
 
+**Live Demo**: [https://next-app-router-playground-phi.vercel.app/](https://next-app-router-playground-phi.vercel.app/)
+
 ![DYO Screenshot](screen.jpg)
 
 ## Overview

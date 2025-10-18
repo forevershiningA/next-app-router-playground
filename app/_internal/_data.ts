@@ -458,12 +458,6 @@ const demos = [
           'Inscriptions commemorate the lost family member or friend in an individual way.',
       },
       {
-        slug: 'additions',
-        name: 'Additions',
-        description:
-          'Browse and add three dimensional decorative elements to your headstone.',
-      },
-      {
         slug: 'select-additions',
         name: 'Select Additions',
         description:
