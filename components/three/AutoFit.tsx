@@ -37,6 +37,7 @@ export default function AutoFit({
   // if you drive size from a store, keep these so refits happen on changes
   const heightMm = useHeadstoneStore((s: any) => s.heightMm);
   const widthMm = useHeadstoneStore((s: any) => s.widthMm);
+  const showBase = useHeadstoneStore((s: any) => s.showBase);
 
   const lastDims = React.useRef({ h: heightMm, w: widthMm });
   const animId = React.useRef<number | null>(null);
@@ -58,7 +59,25 @@ export default function AutoFit({
     const sphere = new THREE.Sphere();
     box.getBoundingSphere(sphere);
 
+    const boxSize = new THREE.Vector3();
+    box.getSize(boxSize);
+    
+    // Calculate proportional offset based on object height and whether base is shown
+    // For plaques (no base), center more precisely without accounting for ground
+    // For headstones with base, offset to account for header
+    let verticalOffset;
+    if (!showBase) {
+      // Plaque: minimal offset, just center it
+      verticalOffset = 0;
+    } else {
+      // Headstone with base: use proportional offset for header
+      const heightRatio = boxSize.y > 1 ? 0.15 : 0.25;
+      verticalOffset = boxSize.y * heightRatio;
+    }
+    
+    // Offset the target downward so camera shows more of the top
     const toTgt = sphere.center.clone();
+    toTgt.y -= verticalOffset; // Dynamic offset based on object size and type
 
     const vFov = THREE.MathUtils.degToRad(camera.fov);
     const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
@@ -93,7 +112,7 @@ export default function AutoFit({
     camera.far = far;
     camera.updateProjectionMatrix();
     invalidate();
-  }, [target, camera, size.width, size.height, margin, pad, controls, view, trigger]);
+  }, [target, camera, size.width, size.height, margin, pad, controls, view, trigger, heightMm, widthMm, showBase]);
 
   return null;
 }

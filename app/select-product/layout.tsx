@@ -3,6 +3,7 @@ import { type Metadata } from 'next';
 import db from '#/lib/db';
 import ProductCard from '#/ui/product-card';
 import SceneOverlayController from '#/components/SceneOverlayController';
+import OverlayTitle from '#/ui/overlay-title';
 
 export async function generateMetadata(): Promise<Metadata> {
   const demo = db.demo.find({ where: { slug: 'select-product' } });
@@ -18,12 +19,13 @@ export default async function Layout() {
 
   return (
     <div className="relative w-full">
-      <SceneOverlayController section="product" title="Select Product">
+      <SceneOverlayController section="product">
+        <h2 className="text-xl font-semibold text-gray-300">Select Product</h2>
         <div className="mb-3 text-sm leading-relaxed text-white/85">
           Choose a product. Click any card to apply it.
         </div>
 
-        <div className="grid max-h-[320px] grid-cols-3 gap-3 overflow-auto pr-1">
+        <div className="grid grid-cols-3 gap-3">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} type="product" />
           ))}

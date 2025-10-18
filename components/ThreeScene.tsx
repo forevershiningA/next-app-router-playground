@@ -23,11 +23,11 @@ function CameraController() {
     if (!controls) return;
     
     if (is2DMode) {
-      (controls as any).target.set(0, 4, 0);
+      (controls as any).target.set(0, 4.2, 0);
       (controls as any).update();
     } else {
       // Set en face view for 3D mode
-      (controls as any).target.set(0, 1, 0);
+      (controls as any).target.set(0, 4.2, 0);
       (controls as any).update();
     }
   }, [is2DMode, controls]);
@@ -39,7 +39,7 @@ function CameraController() {
         makeDefault
         position={[
           0,
-          2 + CAMERA_2D_DISTANCE * Math.tan(tiltRad),
+          4.2 + CAMERA_2D_DISTANCE * Math.sin(tiltRad),
           CAMERA_2D_DISTANCE * Math.cos(tiltRad),
         ]}
         fov={CAMERA_FOV}
@@ -52,7 +52,7 @@ function CameraController() {
   return (
     <PerspectiveCamera
       makeDefault
-      position={[0, CAMERA_3D_POSITION_Y, CAMERA_3D_POSITION_Z]}
+      position={[0, 4.8, CAMERA_3D_POSITION_Z]}
       fov={CAMERA_FOV}
       near={CAMERA_NEAR}
       far={CAMERA_FAR}
@@ -66,6 +66,7 @@ function ViewToggleButton() {
 
   return (
     <button
+      data-view-toggle
       onClick={toggleViewMode}
       className="fixed top-20 right-4 z-50 cursor-pointer rounded border border-white/20 bg-black/50 px-3 py-2 text-2xl font-bold text-white backdrop-blur-sm hover:bg-black/70"
       aria-label={`Switch to ${is2DMode ? '3D' : '2D'} view`}

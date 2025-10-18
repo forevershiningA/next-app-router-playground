@@ -13,20 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <SizeSelector>
-      {/* Mobile fallback below the canvas if you still want MDX */}
-      <div className="p-8 pt-0 md:hidden">
-        <h1 className="text-xl font-semibold text-gray-300">
-          Select size of Traditional Engraved Headstone
-        </h1>
-        <div className="text-sm text-gray-600">
-          <Suspense fallback={null}>
-            <Mdx source={Readme} collapsed={true} />
-          </Suspense>
-        </div>
-      </div>
-    </SizeSelector>
-  );
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const shapes = await db.shape.findMany({ limit: 32 });
+
+  return <SizeSelector products={shapes}>{children}</SizeSelector>;
 }

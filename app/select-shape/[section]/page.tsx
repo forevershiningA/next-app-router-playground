@@ -45,3 +45,4 @@ export async function generateMetadata({
   const title = `Select Shape - ${formatSlug(section)}`;
   return { title };
 }
+

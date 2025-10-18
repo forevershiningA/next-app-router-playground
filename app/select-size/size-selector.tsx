@@ -4,11 +4,16 @@ import React from 'react';
 import TailwindSlider from '#/ui/TailwindSlider';
 import SceneOverlayController from '#/components/SceneOverlayController';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import OverlayTitle from '#/ui/overlay-title';
+
+type Product = { id: string; name: string; image: string; category: string };
 
 export default function SizeSelector({
   children,
+  products,
 }: {
   children: React.ReactNode;
+  products: Product[];
 }) {
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
@@ -17,11 +22,8 @@ export default function SizeSelector({
 
   return (
     <div className="relative w-full">
-      <SceneOverlayController
-        section="size"
-        title="Select size of Traditional Engraved Headstone"
-        persistKey="size"
-      >
+      <SceneOverlayController section="size" persistKey="size">
+        <h2 className="text-xl font-semibold text-gray-300">Select Size</h2>
         <p className="mb-3 text-sm leading-relaxed text-white/85">
           Choose the headstone width &amp; height in millimetres. Thickness is
           computed from size; cemeteries may have regulations on allowable
@@ -48,8 +50,6 @@ export default function SizeSelector({
           />
         </div>
       </SceneOverlayController>
-
-      {children}
     </div>
   );
 }

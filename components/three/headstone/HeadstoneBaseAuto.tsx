@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useEffect,
+  Suspense,
 } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
@@ -41,6 +42,35 @@ function PreloadTexture({
     return () => cancelAnimationFrame(id);
   }, [onReady]);
   return null;
+}
+
+function BaseMesh({
+  baseRef,
+  baseTexture,
+  onClick,
+  name,
+}: {
+  baseRef: React.RefObject<THREE.Mesh>;
+  baseTexture: THREE.Texture;
+  onClick?: (e: any) => void;
+  name?: string;
+}) {
+  return (
+    <mesh
+      ref={baseRef}
+      name={name}
+      onClick={onClick}
+      castShadow
+      receiveShadow
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial
+        map={baseTexture}
+        metalness={0.1}
+        roughness={0.55}
+      />
+    </mesh>
+  );
 }
 
 const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
@@ -124,33 +154,30 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         b.scale.lerp(targetScale.current, LERP_FACTOR);
       }
 
-      b.visible = !baseSwapping;
+      // Keep base visible even during swapping to avoid black flash
+      b.visible = true;
     });
 
     return (
       <React.Fragment>
-        <mesh
-          ref={baseRef}
-          name={name}
-          onClick={onClick}
-          castShadow
-          receiveShadow
-        >
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial
-            map={baseTexture}
-            metalness={0.1}
-            roughness={0.55}
+        <Suspense fallback={null}>
+          <BaseMesh
+            baseRef={baseRef}
+            baseTexture={baseTexture}
+            onClick={onClick}
+            name={name}
           />
-        </mesh>
+        </Suspense>
 
         {requestedBaseTex !== visibleBaseTex && (
-          <PreloadTexture
-            url={requestedBaseTex}
-            onReady={() => {
-              setVisibleBaseTex(requestedBaseTex);
-            }}
-          />
+          <Suspense fallback={null}>
+            <PreloadTexture
+              url={requestedBaseTex}
+              onReady={() => {
+                setVisibleBaseTex(requestedBaseTex);
+              }}
+            />
+          </Suspense>
         )}
       </React.Fragment>
     );

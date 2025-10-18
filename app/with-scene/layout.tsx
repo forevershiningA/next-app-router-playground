@@ -2,6 +2,7 @@ import '#/styles/globals.css';
 
 import ThreeScene from '#/components/ThreeScene';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
+import CanvasFallback from '#/components/CanvasFallback';
 import { Suspense } from 'react';
 import { SkeletonCard } from '#/ui/skeleton-card';
 
@@ -16,7 +17,9 @@ export default function WithSceneLayout({
         <SceneOverlayHost /> {/* ← one host, one overlay */}
         <ThreeScene />
       </Suspense>
-      <div className="pt-4 pb-10">{children}</div>
+      <CanvasFallback>
+        <div className="pt-4 pb-10">{children}</div>
+      </CanvasFallback>
     </>
   );
 }

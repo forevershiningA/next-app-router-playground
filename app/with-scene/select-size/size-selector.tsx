@@ -3,6 +3,7 @@
 import React from 'react';
 import TailwindSlider from '#/ui/TailwindSlider';
 import SceneOverlayController from '#/components/SceneOverlayController';
+import CanvasFallback from '#/components/CanvasFallback';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function SizeSelector({
@@ -49,7 +50,9 @@ export default function SizeSelector({
         </div>
       </SceneOverlayController>
 
-      {children}
+      <CanvasFallback>
+        {children}
+      </CanvasFallback>
     </div>
   );
 }

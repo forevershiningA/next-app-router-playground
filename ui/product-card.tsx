@@ -110,10 +110,9 @@ export function ProductCard<E extends ElementType = 'div'>({
               if (type === 'shape') setShapeUrl(selectedUrl);
               if (type === 'material') {
                 setIsMaterialChange(true);
-                if (selected === 'headstone')
+                if (selected === 'headstone' || selected === null)
                   setHeadstoneMaterialUrl(selectedUrl);
                 else if (selected === 'base') setBaseMaterialUrl(selectedUrl);
-                else setMaterialUrl(selectedUrl); // fallback
                 setTimeout(() => setIsMaterialChange(false), 100);
               }
               window.scrollTo({ top: 0 });

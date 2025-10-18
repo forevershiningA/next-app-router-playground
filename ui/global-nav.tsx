@@ -15,6 +15,33 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const close = () => setIsOpen(false);
 
+  // Listen for toggle-sidebar event from MobileHeader
+  useEffect(() => {
+    const handler = () => setIsOpen((prev) => !prev);
+    window.addEventListener('toggle-sidebar', handler);
+    return () => window.removeEventListener('toggle-sidebar', handler);
+  }, []);
+
+  // Hide/show overlays when mobile nav opens/closes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const overlays = document.querySelectorAll('[data-scene-overlay]');
+    const viewToggle = document.querySelector('[data-view-toggle]');
+    
+    const hideOnMobile = isOpen && window.innerWidth < 1024; // lg breakpoint is 1024px
+    
+    overlays.forEach((overlay) => {
+      if (overlay instanceof HTMLElement) {
+        overlay.style.display = hideOnMobile ? 'none' : '';
+      }
+    });
+    
+    if (viewToggle instanceof HTMLElement) {
+      viewToggle.style.display = hideOnMobile ? 'none' : '';
+    }
+  }, [isOpen]);
+
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
@@ -75,11 +102,11 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
           hidden: !isOpen,
         })}
       >
-        <nav className="space-y-6 px-2 pt-5 pb-24">
+        <nav className="space-y-6 px-2 pb-24 pt-[80px] lg:pt-[76px]">
           {items.map((section) => {
             return (
               <div key={section.name}>
-                <div className="mb-2 px-3 font-mono text-xs font-semibold tracking-wide text-gray-600 uppercase">
+                <div className="mb-2 px-3 font-mono text-sm font-semibold tracking-wide text-gray-600 uppercase">
                   <div>{section.name}</div>
                 </div>
 
@@ -132,7 +159,7 @@ function NavItem({
       onClick={close}
       href={`/${item.slug}`}
       className={clsx(
-        'flex justify-between rounded-md px-3 py-2 text-sm font-medium hover:text-gray-300',
+        'flex justify-between rounded-md px-3 py-2 text-base font-medium hover:text-gray-300',
         {
           'text-gray-400 hover:bg-gray-800': !isActive,
           'text-white': isActive,

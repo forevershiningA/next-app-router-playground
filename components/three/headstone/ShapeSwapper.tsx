@@ -5,9 +5,9 @@ import * as THREE from 'three';
 import { useThree, useLoader } from '@react-three/fiber';
 import { Html, useTexture } from '@react-three/drei';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 
 import AutoFit from '../AutoFit';
+import AdditionModel from '../AdditionModel';
 import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
@@ -15,7 +15,6 @@ import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
 import { usePathname } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
-import type { AdditionData } from '#/lib/xml-parser';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -53,73 +52,6 @@ class ErrorBoundary extends (
 }
 
 /* ------------------------- isolated loader subcomponents --------------------- */
-function AdditionImage({
-  index,
-  imageUrl,
-}: {
-  index: number;
-  imageUrl: string;
-}) {
-  const texture = useLoader(THREE.TextureLoader, imageUrl);
-  return (
-    <mesh position={[0, 0, 0.001 + index * 0.001]}>
-      <planeGeometry args={[0.2, 0.2]} />
-      <meshBasicMaterial map={texture} transparent />
-    </mesh>
-  );
-}
-
-function AdditionApplication({
-  index,
-  number,
-}: {
-  index: number;
-  number: string;
-}) {
-  const fbxUrl = `/additions/${number}/Art${number}.fbx`;
-  const model = useLoader(FBXLoader, fbxUrl, (loader) => {
-    loader.setResourcePath(`/additions/${number}/`);
-  });
-  const colorTexture = useLoader(
-    THREE.TextureLoader,
-    `/additions/${number}/colorMap.png`,
-  );
-  const diffuseTexture = useLoader(
-    THREE.TextureLoader,
-    `/additions/${number}/diffuseMap.png`,
-  );
-  const normalTexture = useLoader(
-    THREE.TextureLoader,
-    `/additions/${number}/normalMap.png`,
-  );
-
-  React.useEffect(() => {
-    model.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material) {
-        const apply = (mat: any) => {
-          mat.map = colorTexture || diffuseTexture;
-          mat.normalMap = normalTexture;
-          mat.metalness = 0.7;
-          mat.roughness = 0.3;
-          mat.needsUpdate = true;
-        };
-        Array.isArray(child.material)
-          ? child.material.forEach(apply)
-          : apply(child.material);
-      }
-    });
-  }, [model, colorTexture, diffuseTexture, normalTexture]);
-
-  return (
-    <primitive
-      object={model}
-      rotation={[-Math.PI, Math.PI, 0]}
-      scale={[7.5, 7.5, 7.5]}
-      position={[0, 0, 0.1 + index * 0.001]}
-    />
-  );
-}
-
 /* ------------------------------ preload helpers ----------------------------- */
 function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
   useLoader(SVGLoader, url);
@@ -495,11 +427,8 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
 
   const prevIs2DMode = React.useRef(is2DMode);
 
-  React.useEffect(() => {
-    if (controls) {
-      (controls as any).enabled = !baseSwapping;
-    }
-  }, [baseSwapping, controls]);
+  // Removed: Controls disabling during baseSwapping was causing camera rotation issues
+  // The texture loading is now handled properly with Suspense boundaries
 
   React.useEffect(() => {
     if (controls && prevIs2DMode.current !== is2DMode) {
@@ -522,17 +451,6 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
     }
     prevIs2DMode.current = is2DMode;
   }, [is2DMode, controls, invalidate, camera]);
-
-  // Preload addition assets
-  selectedAdditions.forEach((additionId) => {
-    const number = additionId.replace(/[^\d]/g, '') || '0000';
-    useLoader(FBXLoader, `/additions/${number}/Art${number}.fbx`, (loader) => {
-      loader.setResourcePath(`/additions/${number}/`);
-    });
-    useLoader(THREE.TextureLoader, `/additions/${number}/colorMap.png`);
-    useLoader(THREE.TextureLoader, `/additions/${number}/diffuseMap.png`);
-    useLoader(THREE.TextureLoader, `/additions/${number}/normalMap.png`);
-  });
 
   const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 100, [widthMm]);
@@ -645,15 +563,15 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
               ))}
 
               {selectedAdditionIds.map((additionId, i) => (
-                <HeadstoneAddition
-                  key={additionId}
-                  additionId={additionId}
-                  index={i}
-                  widthM={widthM}
-                  heightM={heightM}
-                  headstone={api}
-                  frontZ={api.frontZ} // ✅ render-visibility fix
-                />
+                <ErrorBoundary key={additionId}>
+                  <React.Suspense fallback={null}>
+                    <AdditionModel
+                      id={additionId}
+                      headstone={api}
+                      index={i}
+                    />
+                  </React.Suspense>
+                </ErrorBoundary>
               ))}
             </>
           )}
@@ -700,3 +618,4 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
     </>
   );
 }
+

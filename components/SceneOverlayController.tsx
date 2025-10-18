@@ -203,8 +203,19 @@ export default function SceneOverlayController({
   return (
     <div
       ref={rootRef}
-      className={clsx('pointer-events-auto fixed z-[9998]', className)}
-      style={{ left: pos.x, top: pos.y, width: 380, maxWidth: '92vw' }}
+      data-scene-overlay
+      className={clsx(
+        'pointer-events-auto fixed z-[9998]',
+        // Mobile portrait: stick to bottom, full width
+        'max-md:!left-0 max-md:!bottom-0 max-md:!top-auto max-md:!w-full max-md:!max-w-full',
+        className
+      )}
+      style={{ 
+        left: pos.x, 
+        top: pos.y, 
+        width: 380, 
+        maxWidth: '92vw' 
+      }}
     >
       <div
         className={clsx(
@@ -222,7 +233,7 @@ export default function SceneOverlayController({
           role="banner"
           aria-label="Draggable overlay header"
         >
-          <h1 className="font-semibold text-white">{title}</h1>
+          <h2 className="font-semibold text-white">{title}</h2>
 
           <button
             type="button"
@@ -252,7 +263,7 @@ export default function SceneOverlayController({
             'px-4 pt-2 pb-4 transition-[max-height,opacity] duration-200',
             collapsed
               ? 'max-h-0 overflow-hidden opacity-0'
-              : 'max-h-[75vh] overflow-auto opacity-100',
+              : 'max-h-[75vh] max-md:max-h-[30vh] overflow-auto opacity-100',
           )}
         >
           {children}

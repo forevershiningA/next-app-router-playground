@@ -26,7 +26,7 @@ export default async function Layout({
         <div className="mb-3 text-sm leading-relaxed text-white/85">
           Pick a headstone outline. Click any card to apply it.
         </div>
-        <div className="grid max-h-[320px] grid-cols-3 gap-3 overflow-auto pr-1">
+        <div className="grid max-h-[320px] grid-cols-3 gap-3 overflow-auto pr-1 max-md:flex max-md:max-h-none max-md:flex-row max-md:gap-2 max-md:overflow-x-auto max-md:pb-2">
           {shapes.map((p) => (
             <ProductCard key={p.id} product={p} type="shape" />
           ))}

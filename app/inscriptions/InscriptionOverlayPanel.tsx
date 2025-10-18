@@ -6,8 +6,11 @@ import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
 import Loader from '#/ui/loader';
 import { data } from '#/app/_internal/_data';
+import OverlayTitle from '#/ui/overlay-title';
 
 /* --------------------------- types + helpers --------------------------- */
+
+type Product = { id: string; name: string; image: string; category: string };
 
 const FONTS = data.fonts;
 
@@ -22,7 +25,7 @@ const FONT_FILE_MAP: Record<string, string> = FONTS.reduce(
 
 /* --------------------------- component --------------------------- */
 
-export default function InscriptionOverlayPanel() {
+export default function InscriptionOverlayPanel({ products }: { products: Product[] }) {
   const lines = useHeadstoneStore((s) => s.inscriptions);
   const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
   const duplicateInscription = useHeadstoneStore((s) => s.duplicateInscription);
@@ -98,7 +101,7 @@ export default function InscriptionOverlayPanel() {
   return (
     <SceneOverlayController
       section="inscriptions"
-      title="Edit Your Inscription of Traditional Engraved Headstone"
+      title="Edit Inscription"
       persistKey="inscriptions"
       isOpen={activePanel === 'inscription'}
       onClose={closeInscriptions}

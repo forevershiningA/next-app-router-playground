@@ -165,9 +165,35 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       const canvas: HTMLElement | undefined = gl?.domElement;
       if (!canvas) return;
 
-      const onMove = (e: PointerEvent) =>
-        placeFromClientXY(e.clientX, e.clientY);
+      let rafId: number | null = null;
+      let pendingUpdate: { x: number; y: number } | null = null;
+
+      const onMove = (e: PointerEvent) => {
+        e.preventDefault();
+        // Store the latest pointer position
+        pendingUpdate = { x: e.clientX, y: e.clientY };
+
+        // Only schedule one RAF at a time for smooth updates
+        if (rafId === null) {
+          rafId = requestAnimationFrame(() => {
+            if (pendingUpdate) {
+              placeFromClientXY(pendingUpdate.x, pendingUpdate.y);
+              pendingUpdate = null;
+            }
+            rafId = null;
+          });
+        }
+      };
+
       const onUp = (e: PointerEvent) => {
+        e.preventDefault();
+        
+        // Cancel any pending RAF
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        
         setDragging(false);
         if (controls) controls.enabled = true;
         document.body.style.cursor = 'auto';
@@ -178,11 +204,14 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       };
 
       if (controls) controls.enabled = false;
-      canvas.addEventListener('pointermove', onMove);
-      window.addEventListener('pointerup', onUp, { once: true });
+      canvas.addEventListener('pointermove', onMove, { passive: false });
+      window.addEventListener('pointerup', onUp);
       document.body.style.cursor = 'grabbing';
 
       return () => {
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+        }
         canvas.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
         if (controls) controls.enabled = true;
