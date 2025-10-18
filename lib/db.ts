@@ -13,6 +13,7 @@ import {
   type Shape,
   type Material,
   type Section,
+  type Addition,
 } from '../app/_internal/_data';
 
 type ProductWhere = { id?: string; category?: string; section?: string };
@@ -32,6 +33,9 @@ type CategoryFindOptions = { where?: CategoryWhere };
 
 type DemoWhere = { slug?: DemoSlug };
 type DemoFindOptions = { where?: DemoWhere };
+
+type AdditionWhere = { id?: string; category?: string; type?: string };
+type AdditionFindOptions = { where?: AdditionWhere; limit?: number };
 
 const db = {
   product: {
@@ -288,8 +292,37 @@ const db = {
       return data.demos;
     },
   },
+
+  addition: {
+    find: (options: AdditionFindOptions) => {
+      let addition: Addition | undefined;
+
+      if (options.where?.id !== undefined) {
+        addition = data.additions.find((a) => a.id === options.where?.id);
+      }
+
+      return addition || null;
+    },
+    findMany: (options: AdditionFindOptions = {}) => {
+      let result = data.additions;
+
+      if (options.where?.category) {
+        result = result.filter((a) => a.category === options.where!.category);
+      }
+
+      if (options.where?.type) {
+        result = result.filter((a) => a.type === options.where!.type);
+      }
+
+      if (options.limit !== undefined) {
+        result = result.slice(0, options.limit);
+      }
+
+      return result;
+    },
+  },
 };
 
 export default db;
 
-export type { Demo, Product, Section, Shape, Material, Category, DemoCategory };
+export type { Demo, Product, Section, Shape, Material, Category, DemoCategory, Addition };

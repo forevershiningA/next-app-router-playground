@@ -22,8 +22,7 @@ export default function SizeSelector({
 
   return (
     <div className="relative w-full">
-      <SceneOverlayController section="size" persistKey="size">
-        <h2 className="text-xl font-semibold text-gray-300">Select Size</h2>
+      <SceneOverlayController section="size" title="Select Size" persistKey="size">
         <p className="mb-3 text-sm leading-relaxed text-white/85">
           Choose the headstone width &amp; height in millimetres. Thickness is
           computed from size; cemeteries may have regulations on allowable

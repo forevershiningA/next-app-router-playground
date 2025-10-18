@@ -19,8 +19,7 @@ export default async function Layout() {
 
   return (
     <div className="relative w-full">
-      <SceneOverlayController section="product">
-        <h2 className="text-xl font-semibold text-gray-300">Select Product</h2>
+      <SceneOverlayController section="product" title="Select Product">
         <div className="mb-3 text-sm leading-relaxed text-white/85">
           Choose a product. Click any card to apply it.
         </div>

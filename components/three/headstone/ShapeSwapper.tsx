@@ -13,6 +13,7 @@ import HeadstoneInscription from '../../HeadstoneInscription';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
+import { AdditionData } from '#/lib/xml-parser';
 import { usePathname } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
 
@@ -49,6 +50,17 @@ class ErrorBoundary extends (
     if (this.state.hasError) return null;
     return this.props.children;
   }
+}
+
+/* ------------------------ addition image/application placeholders ----------------------- */
+function AdditionImage({ index, imageUrl }: { index: number; imageUrl: string }) {
+  // Placeholder for image-based additions (motifs/images)
+  return null;
+}
+
+function AdditionApplication({ index, number }: { index: number; number: string }) {
+  // Placeholder for 3D application additions
+  return null;
 }
 
 /* ------------------------- isolated loader subcomponents --------------------- */

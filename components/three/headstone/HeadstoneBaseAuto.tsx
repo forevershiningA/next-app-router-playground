@@ -50,7 +50,7 @@ function BaseMesh({
   onClick,
   name,
 }: {
-  baseRef: React.RefObject<THREE.Mesh>;
+  baseRef: React.RefObject<THREE.Mesh | null>;
   baseTexture: THREE.Texture;
   onClick?: (e: any) => void;
   name?: string;
