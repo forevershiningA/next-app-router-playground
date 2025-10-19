@@ -405,11 +405,12 @@ function HeadstoneAddition({
 /* ----------------------------------- props ---------------------------------- */
 export interface ShapeSwapperProps {
   tabletRef: React.RefObject<THREE.Object3D>;
+  headstoneMeshRef?: React.RefObject<THREE.Mesh>;
   inscriptionRef?: React.MutableRefObject<THREE.Object3D | null>; // deprecated
 }
 
 /* ----------------------------------- main ----------------------------------- */
-export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
+export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapperProps) {
   const { invalidate, controls, camera } = useThree();
 
   const heightMm = useHeadstoneStore((s) => s.heightMm);
@@ -546,7 +547,20 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
             },
           }}
         >
-          {(api: HeadstoneAPI, selectedAdditionIds: string[]) => (
+          {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
+            // Set the headstone mesh ref directly (safe in render since it's just a ref assignment)
+            if (headstoneMeshRef && api.mesh.current) {
+              // Use queueMicrotask to avoid setState during render
+              if (headstoneMeshRef.current !== api.mesh.current) {
+                queueMicrotask(() => {
+                  if (headstoneMeshRef) {
+                    (headstoneMeshRef as any).current = api.mesh.current;
+                  }
+                });
+              }
+            }
+            
+            return (
             <>
               {inscriptions.map((line: Line, i: number) => (
                 <ErrorBoundary key={line.id}>
@@ -586,7 +600,8 @@ export default function ShapeSwapper({ tabletRef }: ShapeSwapperProps) {
                 </ErrorBoundary>
               ))}
             </>
-          )}
+            );
+          }}
         </SvgHeadstone>
 
         <AutoFit

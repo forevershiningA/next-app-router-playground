@@ -20,8 +20,6 @@ export default function AdditionModel({ id, headstone, index = 0 }: Props) {
     return data.additions.find((a) => a.id === id);
   }, [id]);
 
-  console.log('AdditionModel rendering:', { id, hasAddition: !!addition, hasFile: !!addition?.file });
-
   // Early return if no addition or no file - before any hooks
   if (!addition || !addition.file) {
     console.warn(`Addition ${id} has no file data`);
@@ -45,7 +43,7 @@ function AdditionModelInner({
   index: number;
 }) {
   // ALL hooks must be called unconditionally at the top - before any early returns
-  const { gl, camera, controls } = useThree();
+  const { gl, camera, controls, scene: threeScene } = useThree();
   const setAdditionRef = useHeadstoneStore((s) => s.setAdditionRef);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
@@ -59,7 +57,6 @@ function AdditionModelInner({
   const dirNum = addition.file.split('/')[0];
   
   // Load GLB and texture - these must be called unconditionally
-  console.log('Loading GLB:', glbPath);
   const gltf = useGLTF(glbPath);
   const colorMap = useTexture(`/additions/${dirNum}/colorMap.png`);
   
@@ -70,7 +67,6 @@ function AdditionModelInner({
   // Create scene
   const scene = React.useMemo(() => {
     if (!gltf?.scene) return null;
-    console.log('GLTF scene loaded for', id);
     const cloned = gltf.scene.clone(true);
     
     // First, reset all child scales and calculate original bounding box
@@ -90,8 +86,6 @@ function AdditionModelInner({
     const tempSize = new THREE.Vector3();
     tempBox.getSize(tempSize);
     
-    console.log('Model dimensions at identity scale:', { id, size: tempSize });
-    
     // Center the model at origin
     const tempCenter = new THREE.Vector3();
     tempBox.getCenter(tempCenter);
@@ -99,8 +93,6 @@ function AdditionModelInner({
     
     // Now rotate 180 degrees around Z to flip it right-side up
     cloned.rotation.z = Math.PI;
-    
-    console.log('Model setup complete:', { id });
     
     return cloned;
   }, [gltf?.scene, id]);
@@ -117,11 +109,6 @@ function AdditionModelInner({
     // Convert to headstone units (1 unit = 10mm)
     const sz = szMM.divideScalar(10);
     
-    console.log('Model size:', { 
-      id, 
-      mm: szMM,
-      headstonUnits: sz
-    });
     return sz;
   }, [scene, id]);
 
@@ -135,16 +122,27 @@ function AdditionModelInner({
     mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
     
     raycaster.setFromCamera(mouse, camera);
-    const stone = headstone.mesh.current as THREE.Mesh;
-    const intersects = raycaster.intersectObject(stone, false);
+    
+    // For statues, raycast against the base instead of the headstone
+    let targetMesh: THREE.Mesh;
+    if (addition.type === 'statue' || addition.type === 'vase') {
+      // Find the base mesh in the scene
+      const baseMesh = threeScene.getObjectByName('base') as THREE.Mesh;
+      if (!baseMesh) return;
+      targetMesh = baseMesh;
+    } else {
+      targetMesh = headstone.mesh.current as THREE.Mesh;
+    }
+    
+    const intersects = raycaster.intersectObject(targetMesh, false);
     
     if (intersects.length > 0) {
       const point = intersects[0].point;
-      const localPt = stone.worldToLocal(point.clone());
+      const localPt = targetMesh.worldToLocal(point.clone());
       
       // Apply bounds checking
-      if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
-      const bbox = stone.geometry.boundingBox!;
+      if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+      const bbox = targetMesh.geometry.boundingBox!;
       const inset = 0.01;
       const spanY = bbox.max.y - bbox.min.y;
       const minX = bbox.min.x + inset;
@@ -162,7 +160,7 @@ function AdditionModelInner({
         yPos: localPt.y,
       });
     }
-  }, [headstone, gl, camera, raycaster, mouse, id, additionOffsets, setAdditionOffset]);
+  }, [headstone, gl, camera, raycaster, mouse, id, additionOffsets, setAdditionOffset, addition.type, threeScene]);
 
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
@@ -176,13 +174,8 @@ function AdditionModelInner({
   }, [id, setAdditionRef]);
 
   React.useEffect(() => {
-    console.log('Texture state:', { id, hasColorMap: !!colorMap, hasScene: !!scene });
-  }, [id, colorMap, scene]);
-
-  React.useEffect(() => {
     if (!scene) return;
     
-    console.log('Setting up materials for scene:', id);
     let meshCount = 0;
     scene.traverse((child: THREE.Object3D) => {
       if (child instanceof THREE.Mesh) {
@@ -209,7 +202,6 @@ function AdditionModelInner({
         }
       }
     });
-    console.log(`Configured ${meshCount} meshes in`, id);
   }, [scene, colorMap, id]);
 
   React.useEffect(() => {
@@ -243,12 +235,6 @@ function AdditionModelInner({
   // This must come AFTER all hooks
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
   if (!headstone || !stone || !scene) {
-    console.log('AdditionModelInner early return:', { 
-      id, 
-      hasHeadstone: !!headstone, 
-      hasStone: !!stone, 
-      hasScene: !!scene 
-    });
     return null;
   }
 
@@ -269,11 +255,15 @@ function AdditionModelInner({
     defaultX = THREE.MathUtils.lerp(minX, maxX, 0.5);
     defaultY = THREE.MathUtils.lerp(minY, maxY, 0.6);
   } else if (addition.type === 'statue') {
-    defaultX = minX - 0.3;
-    defaultY = minY - 1.8;
+    // Position on the base, left of headstone
+    // NOTE: Y axis is FLIPPED (negative scale in SvgHeadstone group)
+    // So MORE POSITIVE Y = LOWER in world space
+    const headstoneHeight = Math.abs(bbox.max.y - bbox.min.y);
+    defaultX = minX - 80; // Left of the headstone
+    defaultY = bbox.max.y + headstoneHeight * 0.15; // Slightly less down (was 0.2, now 0.15 to move up a bit)
   } else if (addition.type === 'vase') {
-    defaultX = maxX + 0.3;
-    defaultY = minY - 1.8;
+    defaultX = maxX + 30; // 30mm right
+    defaultY = bbox.max.y; // Also at bottom of headstone
   }
 
   const defaultOffset = {
@@ -296,52 +286,23 @@ function AdditionModelInner({
   const auto = targetH / h;
   const user = Math.max(0.05, Math.min(5, offset.scale ?? 1));
   const finalScale = auto * user;
-  
-  console.log('Scale calculation:', { 
-    id, 
-    sizeUnits: { x: size.x, y: size.y, z: size.z },
-    maxDim,
-    targetH, 
-    auto, 
-    user, 
-    finalScale 
-  });
 
   // Determine Z position based on type
   // Models are centered at origin after rotation
   // For applications: position so model sits on headstone surface
-  // For statues/vases: on the base (z=0)
+  // For statues/vases: on the base (z=0 or below)
   const modelDepth = size.z * finalScale;
   let zPosition = 0;
   
   if (addition.type === 'statue' || addition.type === 'vase') {
-    zPosition = 0; // On the base
+    // Statues and vases sit on the base at z=0
+    // Move to the front by using positive Z (same as headstone front)
+    zPosition = headstone.frontZ;
   } else if (addition.type === 'application') {
     // Position so the front of the model is at headstone surface
     // Model is centered, so we need to offset by half depth + headstone surface
     zPosition = headstone.frontZ + modelDepth / 2 + 0.1; // half depth + small offset
   }
-
-  console.log('Z Position calculation:', {
-    id,
-    type: addition.type,
-    sizeZ: size.z,
-    finalScale,
-    modelDepth,
-    headstoneFrontZ: headstone.frontZ,
-    calculatedZ: zPosition
-  });
-
-  console.log('AdditionModelInner rendering:', { 
-    id, 
-    type: addition.type, 
-    offset,
-    finalScale,
-    zPosition,
-    finalPosition: [offset.xPos, offset.yPos, zPosition],
-    bbox: { min: bbox.min, max: bbox.max },
-    headstone: { frontZ: headstone.frontZ }
-  });
 
   const isSelected = selectedAdditionId === id;
 

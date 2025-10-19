@@ -29,6 +29,7 @@ export default function HeadstoneAssembly() {
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
   const baseRef = useRef<THREE.Mesh>(null!);
+  const headstoneMeshRef = useRef<THREE.Mesh>(null!);
 
   const selectedInscription = inscriptions.find(
     (inscription) => inscription.id === selectedInscriptionId,
@@ -37,10 +38,10 @@ export default function HeadstoneAssembly() {
   return (
     <>
       <group ref={assemblyRef} position={[0, BASE_H, 0]} visible={!loading}>
-        <ShapeSwapper tabletRef={tabletRef} />
+        <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
         <BoxOutline
-          targetRef={tabletRef}
+          targetRef={headstoneMeshRef}
           visible={selected === 'headstone'}
           color="white"
           pad={0.004}

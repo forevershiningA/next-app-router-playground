@@ -73,6 +73,7 @@ type HeadstoneState = {
   selectedAdditions: string[];
   addAddition: (id: string) => void;
   removeAddition: (id: string) => void;
+  hasStatue: () => boolean;
 
   productId: string | null;
   setProductId: (id: string) => void;
@@ -186,6 +187,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({
       selectedAdditions: s.selectedAdditions.filter((aid) => aid !== id),
     }));
+  },
+  hasStatue: () => {
+    const { selectedAdditions } = get();
+    // Check if any selected addition is a statue
+    return selectedAdditions.some((id) => {
+      const addition = data.additions.find((a) => a.id === id);
+      return addition?.type === 'statue';
+    });
   },
 
   productId: null,

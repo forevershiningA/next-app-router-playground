@@ -80,6 +80,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
 
     const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
     const setBaseSwapping = useHeadstoneStore((s) => s.setBaseSwapping);
+    const hasStatue = useHeadstoneStore((s) => s.hasStatue);
 
     const requestedBaseTex = React.useMemo(() => {
       const file = baseMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
@@ -109,18 +110,66 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       if (!t || !w || !b) return;
 
       // Update bounding box and target dimensions
+      // Calculate bbox ONLY from headstone geometry, excluding additions and text
       t.updateWorldMatrix(true, true);
-      const bb = new THREE.Box3().setFromObject(t);
+      const bb = new THREE.Box3();
+      
+      // Only include objects that are NOT additions or text in the bounding box
+      t.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.geometry) {
+          // Get all identifying info
+          const parentName = child.parent?.name || '';
+          const childName = child.name || '';
+          const grandparentName = child.parent?.parent?.name || '';
+          const geometryType = child.geometry.type || '';
+          
+          // Check for additions
+          const isAddition = parentName.startsWith('addition-') || 
+                            childName.startsWith('addition-') ||
+                            grandparentName.startsWith('addition-');
+          
+          // Check for text/inscriptions - Text meshes from @react-three/drei
+          const isText = geometryType === 'TextGeometry' || 
+                        geometryType === 'ShapeGeometry' || // Text often uses ShapeGeometry
+                        childName.toLowerCase().includes('text') || 
+                        parentName.toLowerCase().includes('text') ||
+                        grandparentName.toLowerCase().includes('text') ||
+                        child.userData?.isText ||
+                        // Check if it's a Text component by checking material
+                        (child.material as any)?.uniforms?.map; // drei Text uses special shader
+          
+          // Only include headstone mesh (usually has ExtrudeGeometry)
+          const isHeadstoneMesh = geometryType === 'ExtrudeGeometry';
+          
+          if (!isAddition && !isText && isHeadstoneMesh) {
+            const childBox = new THREE.Box3().setFromObject(child);
+            bb.union(childBox);
+          }
+        }
+      });
 
       if (!bb.isEmpty()) {
         const { min, max } = bb;
         const hsW = Math.max(max.x - min.x, 1e-6);
         const hsD = Math.max(max.z - min.z, 1e-6);
-        const baseW = Math.max(hsW * BASE_WIDTH_MULTIPLIER, BASE_MIN_WIDTH);
+        
+        // Extend base width by 200mm (0.2 units) if a statue is present
+        const statueExtension = hasStatue() ? 0.2 : 0;
+        let baseW = Math.max(hsW * BASE_WIDTH_MULTIPLIER + statueExtension, BASE_MIN_WIDTH);
+        
+        // Make the base 25% wider when statue is added
+        if (hasStatue()) {
+          baseW = baseW * 1.25;
+        }
+        
         const baseD = Math.max(hsD * BASE_DEPTH_MULTIPLIER, BASE_MIN_DEPTH);
 
+        // Shift base center to the left when statue is present
+        // The extension is only on the left side, so move center by half the extension
+        const xOffset = statueExtension / 2;
+        
         const centerW = new THREE.Vector3(
-          (min.x + max.x) / 2,
+          (min.x + max.x) / 2 - xOffset,
           min.y - height * 0.5 + EPSILON,
           min.z + baseD * 0.5
         );

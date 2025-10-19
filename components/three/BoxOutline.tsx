@@ -18,6 +18,8 @@ type BoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   through?: boolean;
   /** Render order for the helper (bigger = later). */
   renderOrder?: number;
+  /** If true, exclude addition models from bounding box calculation */
+  excludeAdditions?: boolean;
 };
 
 /**
@@ -31,6 +33,7 @@ export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   pad = 0.004,
   through = true,
   renderOrder = 1000,
+  excludeAdditions = false,
 }: BoxOutlineProps) {
   const { scene } = useThree();
   const helperRef = React.useRef<THREE.Box3Helper | null>(null);
@@ -82,7 +85,34 @@ export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
     if (!obj || !helper) return;
 
     obj.updateWorldMatrix(true, true);
-    boxRef.current.setFromObject(obj);
+    
+    if (excludeAdditions) {
+      // Calculate bounding box excluding addition models and text
+      const box = new THREE.Box3();
+      obj.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.geometry) {
+          // Only include the main headstone mesh
+          // Exclude: additions (parent name starts with 'addition-')
+          // Exclude: text meshes (check if geometry is a TextGeometry or if it's a Text component)
+          const parentName = child.parent?.name || '';
+          const childName = child.name || '';
+          
+          const isAddition = parentName.startsWith('addition-') || childName.startsWith('addition-');
+          const isText = child.geometry.type === 'TextGeometry' || 
+                        childName.includes('text') || 
+                        parentName.includes('text') ||
+                        child.userData?.isText;
+          
+          if (!isAddition && !isText) {
+            const childBox = new THREE.Box3().setFromObject(child);
+            box.union(childBox);
+          }
+        }
+      });
+      boxRef.current.copy(box);
+    } else {
+      boxRef.current.setFromObject(obj);
+    }
 
     if (boxRef.current.isEmpty()) {
       helper.visible = false;
