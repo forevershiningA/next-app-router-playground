@@ -514,46 +514,6 @@ const demos = [
         description:
           'Traditional Engraved Plaques and Headstones are available in a number of different granites, marbles and sandstone. Our most popular material for this product is Blue Pearl.',
       },
-      {
-        slug: 'cached-components',
-        name: 'Cached Components',
-        description: 'Example of cached components',
-      },
-      {
-        slug: 'cached-functions',
-        name: 'Cached Functions',
-        description: 'Example of cached functions',
-      },
-      {
-        slug: 'cached-routes',
-        name: 'Cached Routes',
-        description: 'Example of cached routes',
-      },
-      {
-        slug: 'use-link-status',
-        name: 'Use Link Status',
-        description: 'Example of using link status',
-      },
-      {
-        slug: 'view-transitions',
-        name: 'View Transitions',
-        description: 'Example of view transitions',
-      },
-      {
-        slug: 'zustand-demo',
-        name: 'Zustand Demo',
-        description: 'Example of Zustand state management',
-      },
-      {
-        slug: 'traditional-engraved-headstone',
-        name: 'Traditional Engraved Headstone',
-        description: 'Traditional engraved headstone example',
-      },
-      {
-        slug: 'additions',
-        name: 'Additions',
-        description: 'Additions example',
-      },
     ],
   },
   {
