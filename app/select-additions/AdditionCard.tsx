@@ -15,7 +15,15 @@ export default function AdditionCard({ addition }: AdditionCardProps) {
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
   const [imgError, setImgError] = useState(false);
 
-  const isSelected = selectedAdditions.includes(addition.id);
+  // Check if this addition type is selected (check base ID in any instance)
+  const isSelected = selectedAdditions.some(id => {
+    // Extract base ID from instance ID (remove timestamp suffix)
+    const parts = id.split('_');
+    const baseId = parts.length > 1 && !isNaN(Number(parts[parts.length - 1])) 
+      ? parts.slice(0, -1).join('_')
+      : id;
+    return baseId === addition.id;
+  });
 
   // Extract directory from file path if available, otherwise from ID
   let dirNum: string;
@@ -52,13 +60,8 @@ export default function AdditionCard({ addition }: AdditionCardProps) {
     <div
       className="group flex cursor-pointer flex-col gap-2.5"
       onClick={() => {
-        if (isSelected) {
-          removeAddition(addition.id);
-        } else {
-          // Clear previous additions and add the new one
-          selectedAdditions.forEach((id) => removeAddition(id));
-          addAddition(addition.id);
-        }
+        // Always add a new instance of this addition
+        addAddition(addition.id);
       }}
     >
       <div className={`relative overflow-hidden ${

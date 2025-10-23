@@ -8,6 +8,7 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
 import AutoFit from '../AutoFit';
 import AdditionModel from '../AdditionModel';
+import MotifModel from '../MotifModel';
 import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
@@ -418,6 +419,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
+  const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
@@ -425,11 +427,18 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setSelectedInscriptionId = useHeadstoneStore(
     (s) => s.setSelectedInscriptionId,
   );
+  const setSelectedAdditionId = useHeadstoneStore(
+    (s) => s.setSelectedAdditionId,
+  );
+  const setSelectedMotifId = useHeadstoneStore(
+    (s) => s.setSelectedMotifId,
+  );
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
   const openSizePanel = useHeadstoneStore((s) => s.openSizePanel);
   const fontLoading = useHeadstoneStore((s) => s.fontLoading);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
+  const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const loading = useHeadstoneStore((s) => s.loading);
@@ -539,8 +548,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             name: 'headstone',
             onClick: (e) => {
               e.stopPropagation();
+              console.log('Headstone clicked');
+              console.log('Before - selected:', selected);
               setSelected('headstone');
+              console.log('After setSelected - should be headstone');
               setSelectedInscriptionId(null);
+              setSelectedAdditionId(null); // Close addition panel
+              setSelectedMotifId(null); // Close motif panel
               if (pathname === '/') {
                 openSizePanel?.();
               }
@@ -589,10 +603,24 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
               ))}
 
               {selectedAdditionIds.map((additionId, i) => (
-                <ErrorBoundary key={additionId}>
+                <ErrorBoundary key={`${additionId}-${i}`}>
                   <React.Suspense fallback={null}>
                     <AdditionModel
                       id={additionId}
+                      headstone={api}
+                      index={i}
+                    />
+                  </React.Suspense>
+                </ErrorBoundary>
+              ))}
+
+              {selectedMotifs.map((motif, i) => (
+                <ErrorBoundary key={`${motif.id}-${i}`}>
+                  <React.Suspense fallback={null}>
+                    <MotifModel
+                      id={motif.id}
+                      svgPath={motif.svgPath}
+                      color={motif.color}
                       headstone={api}
                       index={i}
                     />

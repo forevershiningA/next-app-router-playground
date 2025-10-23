@@ -12,6 +12,10 @@ import { Suspense } from 'react';
 import RouterBinder from '#/components/system/RouterBinder';
 import MobileHeader from '#/components/MobileHeader';
 import MainContent from '#/components/MainContent';
+import AdditionOverlayPanel from '#/components/AdditionOverlayPanel';
+import EditMotifPanel from '#/components/EditMotifPanel';
+import MotifOverlayPanel from '#/components/MotifOverlayPanel';
+import CheckPricePanel from '#/components/CheckPricePanel';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -75,6 +79,10 @@ export default function RootLayout({
                 }
               >
                 <SceneOverlayHost />
+                <AdditionOverlayPanel />
+                <EditMotifPanel />
+                <MotifOverlayPanel />
+                <CheckPricePanel />
                 <ThreeScene />
               </ErrorBoundary>
             </Suspense>

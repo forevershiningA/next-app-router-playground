@@ -19,6 +19,17 @@ export default function SizeSelector({
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
+  const activePanel = useHeadstoneStore((s) => s.activePanel);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+
+  // Close addition panel when this panel mounts
+  React.useEffect(() => {
+    if (activePanel === 'addition') {
+      setSelectedAdditionId(null);
+      setActivePanel(null);
+    }
+  }, []); // Run once on mount
 
   return (
     <div className="relative w-full">

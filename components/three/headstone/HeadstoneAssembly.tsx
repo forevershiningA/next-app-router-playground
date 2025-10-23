@@ -23,6 +23,8 @@ export default function HeadstoneAssembly() {
   );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const additionRefs = useHeadstoneStore((s) => s.additionRefs);
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const motifRefs = useHeadstoneStore((s) => s.motifRefs);
   const loading = useHeadstoneStore((s) => s.loading);
   const showBase = useHeadstoneStore((s) => s.showBase);
 
@@ -35,6 +37,12 @@ export default function HeadstoneAssembly() {
     (inscription) => inscription.id === selectedInscriptionId,
   );
 
+  // Debug: log when selected changes
+  React.useEffect(() => {
+    console.log('HeadstoneAssembly - selected changed to:', selected);
+    console.log('HeadstoneAssembly - headstoneMeshRef.current exists:', !!headstoneMeshRef.current);
+  }, [selected]);
+
   return (
     <>
       <group ref={assemblyRef} position={[0, BASE_H, 0]} visible={!loading}>
@@ -44,7 +52,7 @@ export default function HeadstoneAssembly() {
           targetRef={headstoneMeshRef}
           visible={selected === 'headstone'}
           color="white"
-          pad={0.004}
+          pad={0.01}
           through={false}
         />
 
@@ -69,6 +77,16 @@ export default function HeadstoneAssembly() {
         {selectedAdditionId && additionRefs[selectedAdditionId] && (
           <BoxOutline
             targetRef={additionRefs[selectedAdditionId]}
+            visible={true}
+            color="white"
+            pad={0.02}
+            through={false}
+          />
+        )}
+
+        {selectedMotifId && motifRefs[selectedMotifId] && (
+          <BoxOutline
+            targetRef={motifRefs[selectedMotifId]}
             visible={true}
             color="white"
             pad={0.02}

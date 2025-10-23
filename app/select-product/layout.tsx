@@ -1,9 +1,7 @@
 import React from 'react';
 import { type Metadata } from 'next';
 import db from '#/lib/db';
-import ProductCard from '#/ui/product-card';
-import SceneOverlayController from '#/components/SceneOverlayController';
-import OverlayTitle from '#/ui/overlay-title';
+import ProductPanelWrapper from './ProductPanelWrapper';
 
 export async function generateMetadata(): Promise<Metadata> {
   const demo = db.demo.find({ where: { slug: 'select-product' } });
@@ -17,19 +15,5 @@ export default async function Layout() {
   // fetch a handful to keep overlay snappy (tweak limit as you like)
   const products = await db.product.findMany({ limit: 32 });
 
-  return (
-    <div className="relative w-full">
-      <SceneOverlayController section="product" title="Select Product">
-        <div className="mb-3 text-sm leading-relaxed text-white/85">
-          Choose a product. Click any card to apply it.
-        </div>
-
-        <div className="grid grid-cols-3 gap-3">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} type="product" />
-          ))}
-        </div>
-      </SceneOverlayController>
-    </div>
-  );
+  return <ProductPanelWrapper products={products} />;
 }

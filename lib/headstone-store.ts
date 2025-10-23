@@ -11,6 +11,11 @@ import {
   fetchAndParseInscriptionDetails,
 } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
+import {
+  fetchAndParseMotifPricing,
+  calculateMotifPrice,
+  type MotifProductData,
+} from '#/lib/motif-pricing';
 
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.jpg';
@@ -56,6 +61,10 @@ export type PanelName =
   | 'material'
   | 'inscription'
   | 'additions'
+  | 'addition'
+  | 'motifs'
+  | 'motif'
+  | 'checkprice'
   | null;
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 
@@ -74,6 +83,11 @@ type HeadstoneState = {
   addAddition: (id: string) => void;
   removeAddition: (id: string) => void;
   hasStatue: () => boolean;
+
+  selectedMotifs: Array<{ id: string; svgPath: string; color: string }>;
+  addMotif: (svgPath: string) => void;
+  removeMotif: (id: string) => void;
+  setMotifColor: (id: string, color: string) => void;
 
   productId: string | null;
   setProductId: (id: string) => void;
@@ -117,11 +131,22 @@ type HeadstoneState = {
   inscriptionCost: number;
   calculateInscriptionCost: () => void;
 
+  motifPriceModel: MotifProductData | null;
+  motifCost: number;
+  calculateMotifCost: () => void;
+
   selectedAdditionId: string | null;
   additionRefs: Record<string, React.RefObject<Group | null>>;
   additionOffsets: Record<
     string,
     { xPos: number; yPos: number; scale: number; rotationZ: number }
+  >;
+
+  selectedMotifId: string | null;
+  motifRefs: Record<string, React.RefObject<Group | null>>;
+  motifOffsets: Record<
+    string,
+    { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number }
   >;
 
   setInscriptions: (
@@ -144,6 +169,15 @@ type HeadstoneState = {
     id: string,
     offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
   ) => void;
+  duplicateAddition: (id: string) => void;
+
+  setSelectedMotifId: (id: string | null) => void;
+  setMotifRef: (id: string, ref: React.RefObject<Group | null>) => void;
+  setMotifOffset: (
+    id: string,
+    offset: { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number },
+  ) => void;
+  duplicateMotif: (id: string) => void;
 
   /* router injection */
   navTo?: NavFn;
@@ -181,20 +215,72 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   selectedAdditions: ['B1134S'],
   addAddition: (id) => {
-    set((s) => ({ selectedAdditions: [...s.selectedAdditions, id] }));
+    // Create a unique instance ID with timestamp
+    const instanceId = `${id}_${Date.now()}`;
+    set((s) => ({ selectedAdditions: [...s.selectedAdditions, instanceId] }));
   },
   removeAddition: (id) => {
-    set((s) => ({
-      selectedAdditions: s.selectedAdditions.filter((aid) => aid !== id),
-    }));
+    set((s) => {
+      const newAdditions = s.selectedAdditions.filter((aid) => aid !== id);
+      const newRefs = { ...s.additionRefs };
+      delete newRefs[id];
+      const newOffsets = { ...s.additionOffsets };
+      delete newOffsets[id];
+      
+      return {
+        selectedAdditions: newAdditions,
+        additionRefs: newRefs,
+        additionOffsets: newOffsets,
+        selectedAdditionId: s.selectedAdditionId === id ? null : s.selectedAdditionId,
+      };
+    });
   },
   hasStatue: () => {
     const { selectedAdditions } = get();
-    // Check if any selected addition is a statue
-    return selectedAdditions.some((id) => {
-      const addition = data.additions.find((a) => a.id === id);
-      return addition?.type === 'statue';
+    // Check if any selected addition is a statue or vase
+    return selectedAdditions.some((instanceId) => {
+      // Extract base ID from instance ID (remove timestamp suffix)
+      const parts = instanceId.split('_');
+      const baseId = parts.length > 1 && !isNaN(Number(parts[parts.length - 1])) 
+        ? parts.slice(0, -1).join('_')
+        : instanceId;
+      
+      const addition = data.additions.find((a) => a.id === baseId);
+      return addition?.type === 'statue' || addition?.type === 'vase';
     });
+  },
+
+  selectedMotifs: [],
+  addMotif: (svgPath) => {
+    const id = `motif_${Date.now()}`;
+    const { catalog } = get();
+    const isLaser = catalog?.product.laser === '1';
+    const defaultColor = isLaser ? '#ffffff' : '#c99d44'; // White for laser, gold for others
+    set((s) => {
+      const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
+      return {
+        selectedMotifs: newMotifs,
+        activePanel: null, // Close the motifs panel after selecting
+      };
+    });
+    // Calculate cost after adding
+    setTimeout(() => get().calculateMotifCost(), 0);
+  },
+  removeMotif: (id) => {
+    set((s) => ({
+      selectedMotifs: s.selectedMotifs.filter((m) => m.id !== id),
+    }));
+    // Calculate cost after removing
+    setTimeout(() => get().calculateMotifCost(), 0);
+  },
+  setMotifColor: (id, color) => {
+    set((s) => ({
+      selectedMotifs: s.selectedMotifs.map((m) =>
+        m.id === id ? { ...m, color } : m
+      ),
+    }));
+    // Recalculate cost when color changes
+    setTimeout(() => get().calculateMotifCost(), 0);
   },
 
   productId: null,
@@ -263,6 +349,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         if (shape.stand.color) {
           set({ baseMaterialUrl: shape.stand.color });
         }
+      }
+
+      // Load motif pricing based on product type
+      const isBronze = catalog.product.type === 'bronze_plaque';
+      const isLaser = catalog.product.laser === '1';
+      const motifType = isBronze ? 'bronze' : isLaser ? 'laser' : 'engraved';
+      
+      const motifPricing = await fetchAndParseMotifPricing(motifType);
+      if (motifPricing) {
+        set({ motifPriceModel: motifPricing });
       }
     } catch (error) {
       console.error('Failed to load or parse catalog XML:', error);
@@ -344,9 +440,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   fontLoading: false,
   inscriptionCost: 0,
 
+  motifPriceModel: null,
+  motifCost: 0,
+
   selectedAdditionId: null,
   additionRefs: {},
   additionOffsets: {},
+
+  selectedMotifId: null,
+  motifRefs: {},
+  motifOffsets: {},
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
@@ -489,7 +592,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   setFontLoading: (fontLoading) => set({ fontLoading }),
 
-  setSelectedAdditionId: (id) => set({ selectedAdditionId: id }),
+  setSelectedAdditionId: (id) => {
+    set({ selectedAdditionId: id });
+    if (id) {
+      // Close other panels when opening addition panel
+      set({ 
+        activePanel: 'addition',
+        selectedInscriptionId: null, // Deselect any inscription
+        selectedMotifId: null, // Deselect any motif
+      });
+    }
+  },
   setAdditionRef: (id, ref) =>
     set((s) => ({ additionRefs: { ...s.additionRefs, [id]: ref } })),
   setAdditionOffset: (
@@ -499,6 +612,94 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     //console.log("setAdditionOffset:", offset);
     //offset = { xPos: 100, yPos: -200 }
     set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
+  },
+  duplicateAddition: (id: string) => {
+    const { selectedAdditions, additionOffsets } = get();
+    
+    // Check if the addition exists in selected additions
+    if (!selectedAdditions.includes(id)) return;
+    
+    // Generate a unique instance ID for the duplicate
+    const instanceId = `${id}_${Date.now()}`;
+    
+    // Add the duplicate with unique instance ID
+    set((s) => ({ 
+      selectedAdditions: [...s.selectedAdditions, instanceId] 
+    }));
+    
+    // Get the current offset for the original
+    const currentOffset = additionOffsets[id];
+    
+    if (currentOffset) {
+      // Create a new offset slightly offset from the original
+      // Offset by 30 units to the right and 30 units down
+      const newOffset = {
+        ...currentOffset,
+        xPos: currentOffset.xPos + 30,
+        yPos: currentOffset.yPos + 30,
+      };
+      
+      // Set the offset for the duplicate with its instance ID
+      set((s) => ({ 
+        additionOffsets: { ...s.additionOffsets, [instanceId]: newOffset },
+        selectedAdditionId: instanceId, // Select the new duplicate
+      }));
+    }
+  },
+
+  setSelectedMotifId: (id) => {
+    set({ selectedMotifId: id });
+    if (id) {
+      // Close other panels when opening motif panel
+      set({ 
+        activePanel: 'motif',
+        selectedInscriptionId: null, // Deselect any inscription
+        selectedAdditionId: null, // Deselect any addition
+      });
+    }
+  },
+  setMotifRef: (id, ref) =>
+    set((s) => ({ motifRefs: { ...s.motifRefs, [id]: ref } })),
+  setMotifOffset: (
+    id: string,
+    offset: { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number },
+  ) => {
+    set((s) => ({ motifOffsets: { ...s.motifOffsets, [id]: offset } }));
+    // Recalculate cost when height changes
+    setTimeout(() => get().calculateMotifCost(), 0);
+  },
+  duplicateMotif: (id: string) => {
+    const { selectedMotifs, motifOffsets } = get();
+    
+    // Find the motif with this ID
+    const motif = selectedMotifs.find((m) => m.id === id);
+    if (!motif) return;
+    
+    // Generate a unique instance ID for the duplicate
+    const newId = `motif_${Date.now()}`;
+    
+    // Add the duplicate
+    set((s) => ({ 
+      selectedMotifs: [...s.selectedMotifs, { id: newId, svgPath: motif.svgPath, color: motif.color }] 
+    }));
+    
+    // Get the current offset for the original
+    const currentOffset = motifOffsets[id];
+    
+    if (currentOffset) {
+      // Create a new offset slightly offset from the original
+      const newOffset = {
+        ...currentOffset,
+        xPos: currentOffset.xPos + 30,
+        yPos: currentOffset.yPos + 30,
+      };
+      
+      // Set the offset for the duplicate
+      set((s) => ({ 
+        motifOffsets: { ...s.motifOffsets, [newId]: newOffset },
+        selectedMotifId: newId, // Select the new duplicate
+      }));
+    }
   },
 
   calculateInscriptionCost: () => {
@@ -540,6 +741,33 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ inscriptionCost: totalCost });
   },
 
+  calculateMotifCost: () => {
+    const { selectedMotifs, motifOffsets, motifPriceModel, catalog } = get();
+    if (!motifPriceModel) {
+      set({ motifCost: 0 });
+      return;
+    }
+
+    const isLaser = catalog?.product.laser === '1';
+    let totalCost = 0;
+    selectedMotifs.forEach((motif) => {
+      const offset = motifOffsets[motif.id];
+      const heightMm = offset?.heightMm ?? 100;
+      const color = motif.color;
+
+      const motifPrice = calculateMotifPrice(
+        heightMm,
+        color,
+        motifPriceModel.priceModel,
+        isLaser
+      );
+
+      totalCost += motifPrice;
+    });
+
+    set({ motifCost: totalCost });
+  },
+
   /* router injection */
   navTo: undefined,
   setNavTo: (fn) => set({ navTo: fn }),
@@ -564,6 +792,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setIsMaterialChange: (isMaterialChange) => set({ isMaterialChange }),
 
   openInscriptions: (id) => {
+    // Close addition panel when opening inscriptions
+    set({ selectedAdditionId: null });
     if (id) {
       get().setSelectedInscriptionId(id);
     }
@@ -572,11 +802,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   openSizePanel: () => {
+    // Close addition panel when opening size panel
+    set({ selectedAdditionId: null });
     get().setActivePanel('size');
     get().navTo?.('/select-size');
   },
 
   openAdditionsPanel: () => {
+    // Close addition panel when opening additions panel
+    set({ selectedAdditionId: null });
     get().setActivePanel('additions');
     get().navTo?.('/select-additions');
   },

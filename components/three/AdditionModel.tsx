@@ -15,29 +15,42 @@ type Props = {
 };
 
 export default function AdditionModel({ id, headstone, index = 0 }: Props) {
-  // Find the addition data first
-  const addition = React.useMemo(() => {
-    return data.additions.find((a) => a.id === id);
+  // Extract base ID (remove timestamp suffix if present)
+  // e.g., "B1134S_1234567890" => "B1134S"
+  const baseId = React.useMemo(() => {
+    const parts = id.split('_');
+    // If last part is a number (timestamp), remove it
+    if (parts.length > 1 && !isNaN(Number(parts[parts.length - 1]))) {
+      return parts.slice(0, -1).join('_');
+    }
+    return id;
   }, [id]);
+
+  // Find the addition data using base ID
+  const addition = React.useMemo(() => {
+    return data.additions.find((a) => a.id === baseId);
+  }, [baseId]);
 
   // Early return if no addition or no file - before any hooks
   if (!addition || !addition.file) {
-    console.warn(`Addition ${id} has no file data`);
+    console.warn(`Addition ${id} (base: ${baseId}) has no file data`);
     return null;
   }
 
   // Now we can safely use hooks knowing we have valid data
-  return <AdditionModelInner id={id} addition={addition} headstone={headstone} index={index} />;
+  return <AdditionModelInner id={id} baseId={baseId} addition={addition} headstone={headstone} index={index} />;
 }
 
 // Separate component where we can safely use hooks
 function AdditionModelInner({ 
   id, 
+  baseId,
   addition, 
   headstone, 
   index 
 }: { 
-  id: string; 
+  id: string;
+  baseId: string;
   addition: any; 
   headstone?: HeadstoneAPI; 
   index: number;
@@ -162,11 +175,29 @@ function AdditionModelInner({
     }
   }, [headstone, gl, camera, raycaster, mouse, id, additionOffsets, setAdditionOffset, addition.type, threeScene]);
 
+  const handleClick = React.useCallback((e: any) => {
+    e.stopPropagation();
+    console.log('Addition clicked:', id);
+    setSelectedAdditionId(id);
+  }, [id, setSelectedAdditionId]);
+
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
-    setSelectedAdditionId(id);
+    // Note: Selection happens on click, this just prepares for drag
     setDragging(true);
-  }, [id, setSelectedAdditionId]);
+  }, []);
+
+  const handlePointerOver = React.useCallback(() => {
+    if (document.body) {
+      document.body.style.cursor = 'grab';
+    }
+  }, []);
+
+  const handlePointerOut = React.useCallback(() => {
+    if (document.body && !dragging) {
+      document.body.style.cursor = 'auto';
+    }
+  }, [dragging]);
 
   // Effects after all hooks
   React.useEffect(() => {
@@ -315,7 +346,10 @@ function AdditionModelInner({
         scale={[finalScale, finalScale, finalScale]}
         visible={true}
         name={`addition-${id}`}
+        onClick={handleClick}
         onPointerDown={handlePointerDown}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
       >
         <primitive object={scene} />
       </group>

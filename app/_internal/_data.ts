@@ -48,6 +48,18 @@ export type Addition = {
   file?: string;
 };
 
+export type Motif = {
+  id: number;
+  class: string;
+  name: string;
+  src: string;
+  img: string;
+  traditional: boolean;
+  ss: boolean;
+  col2: boolean;
+  col1: boolean;
+};
+
 export type Section = {
   id: string;
   name: string;
@@ -326,6 +338,62 @@ const fonts: Font[] = [
   { id: '10', name: 'Xirwena', image: 'xirwena1.ttf', category: '1' },
 ];
 
+const c = "motif"; // class name for all motifs
+const p = "/motifs/"; // base path for motif images
+
+// Translation keys match the Lang constants from Const.js
+const motifs: Motif[] = [
+  { id: 0, class: c, name: "AQUATIC", src: "Animals/Aquatic", img: p + "whale_002.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 1, class: c, name: "BIRDS", src: "Animals/Birds", img: p + "dove_002.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 2, class: c, name: "BUTTERFLIES", src: "Animals/Butterflies", img: p + "butterfly_005.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 3, class: c, name: "CATS", src: "Animals/Cats", img: p + "2_056_04.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 4, class: c, name: "DOGS", src: "Animals/Dogs", img: p + "1_137_10.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 5, class: c, name: "FARM_ANIMAL", src: "Animals/Farm-Animal", img: p + "1_138_12.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 6, class: c, name: "HORSES", src: "Animals/Horses", img: p + "horse_009.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 7, class: c, name: "INSECTS", src: "Animals/Insects", img: p + "dragonfly_03.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 8, class: c, name: "MYSTICAL_ANIMALS", src: "Animals/Mystical-Animals", img: p + "2_061_17.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 9, class: c, name: "PREHISTORIC", src: "Animals/Prehistoric", img: p + "1_135_02.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 10, class: c, name: "REPTILES", src: "Animals/Reptiles", img: p + "1_173_05.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 11, class: c, name: "WORLD_ANIMALS", src: "Animals/World-Animals", img: p + "1_145_20.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 12, class: c, name: "AUS_WILDLIFE", src: "Aus-Wildlife", img: p + "gecko_003.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 13, class: c, name: "AUS_FLORA", src: "Australiana-Flora", img: p + "banksiarufa.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 14, class: c, name: "ARCHITECTURAL", src: "Architectural", img: p + "1_217_23.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 15, class: c, name: "ARROW", src: "Arrow", img: p + "1_207_07.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 16, class: c, name: "BORDERS", src: "Borders", img: p + "1_018_10.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 17, class: c, name: "CARTOONS_AND_ANIMALS", src: "Animals", img: p + "1_055_01.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 18, class: c, name: "CORNERS", src: "Borders-Corners", img: p + "1_208_03.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 19, class: c, name: "CHILDREN_TOYS", src: "Children-Toys", img: p + "teddy-bear_003.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 20, class: c, name: "FLORISH", src: "Florish", img: p + "1_011_09.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 21, class: c, name: "FLOURISHES", src: "Flourishes", img: p + "2_139_07.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 22, class: c, name: "FLOWER_INSERTS", src: "Flowers", img: p + "flower rose_03.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 23, class: c, name: "FLOWER_INSERTS", src: "1ColRaisedMotif", img: p + "f1_0.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 24, class: c, name: "FOOD_AND_DRINK", src: "Food-and-Drink", img: p + "2_117_01.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 25, class: c, name: "HEARTS", src: "Hearts-and-Ribbons", img: p + "2_155_14.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 26, class: c, name: "HISTORY", src: "History-and-Culture", img: p + "2_079_03.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 27, class: c, name: "HOLIDAY", src: "Holiday", img: p + "clover_001.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 28, class: c, name: "HOUSEHOLD_ITEMS", src: "Household-Items", img: p + "2_092_15.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 29, class: c, name: "ISLANDER", src: "Islander", img: p + "1_140_12.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 30, class: c, name: "ICONIC_PLACES", src: "Iconic-Places", img: p + "2_111_05.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 31, class: c, name: "MOON_AND_STARS", src: "Moon-Stars-Sun", img: p + "2_082_17.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 32, class: c, name: "MUSIC_AND_DANCE", src: "Music-and-Dance", img: p + "1_172_08.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 33, class: c, name: "NAUTICLE", src: "Nauticle", img: p + "anchor_001.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 34, class: c, name: "OFFICIAL", src: "Official", img: p + "1_127_06.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 35, class: c, name: "PETS", src: "Pets", img: p + "paw_001.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 36, class: c, name: "PLANTS_AND_TREES", src: "Plants-and-Trees", img: p + "1_158_16.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 37, class: c, name: "RELIGIOUS", src: "Religious", img: p + "angel_001.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 38, class: c, name: "SHAPES_AND_PATTERNS", src: "Shapes-and-Patterns", img: p + "2_147_09.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 39, class: c, name: "SKULLS_AND_WEAPONS", src: "Skulls-and-Weapons", img: p + "1_061_07.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 40, class: c, name: "SPORT_AND_FITNESS", src: "Sport-and-Fitness", img: p + "2_120_13.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 41, class: c, name: "SYMBOLS_ZODIAC", src: "Symbols-Zodiac", img: p + "zodiac_003.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 42, class: c, name: "TEXT", src: "Text", img: p + "2_172_21.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 43, class: c, name: "TOOLS_OFFICE", src: "Tools-Office-Trades-and-Professions", img: p + "2_124_26.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 44, class: c, name: "TRIBAL", src: "Tribal", img: p + "1_206_16.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 45, class: c, name: "USA", src: "American", img: p + "1_127_23.png", traditional: true, ss: false, col2: false, col1: false },
+  { id: 46, class: c, name: "VEHICLES", src: "Vehicles", img: p + "1_188_24.png", traditional: true, ss: true, col2: false, col1: false },
+  { id: 47, class: c, name: "2 Colour Motifs", src: "2ColRaisedMotif", img: p + "01.png", traditional: false, ss: false, col2: true, col1: false },
+  { id: 48, class: c, name: "1 Colour Motifs", src: "1ColRaisedMotif", img: p + "f1_1.png", traditional: false, ss: false, col2: false, col1: true }
+];
+
 const additions: Addition[] = [
   // Applications (parent="3001" - Biondan_Emblems)
   { id: 'B2497S', file: "2497/Art2497.glb", name: 'Applicazione Preghiera', image: '_2497.jpg', type: 'application', category: '1' },
@@ -446,6 +514,46 @@ const demos = [
         description:
           'Traditional Engraved Plaques and Headstones are available in a number of different granites, marbles and sandstone. Our most popular material for this product is Blue Pearl.',
       },
+      {
+        slug: 'cached-components',
+        name: 'Cached Components',
+        description: 'Example of cached components',
+      },
+      {
+        slug: 'cached-functions',
+        name: 'Cached Functions',
+        description: 'Example of cached functions',
+      },
+      {
+        slug: 'cached-routes',
+        name: 'Cached Routes',
+        description: 'Example of cached routes',
+      },
+      {
+        slug: 'use-link-status',
+        name: 'Use Link Status',
+        description: 'Example of using link status',
+      },
+      {
+        slug: 'view-transitions',
+        name: 'View Transitions',
+        description: 'Example of view transitions',
+      },
+      {
+        slug: 'zustand-demo',
+        name: 'Zustand Demo',
+        description: 'Example of Zustand state management',
+      },
+      {
+        slug: 'traditional-engraved-headstone',
+        name: 'Traditional Engraved Headstone',
+        description: 'Traditional engraved headstone example',
+      },
+      {
+        slug: 'additions',
+        name: 'Additions',
+        description: 'Additions example',
+      },
     ],
   },
   {
@@ -463,55 +571,17 @@ const demos = [
         description:
           'Additions are three dimensional mouldings highlighted in bronze. They come in a variety of themes in a number of fixed sizes. Emblems help express feelings and ideas that might not be possible with words.',
       },
-    ],
-  },
-  {
-    name: 'Caching',
-    items: [
       {
-        slug: 'cached-routes',
-        name: 'Cached Route Segments',
-        nav_title: 'Cached Routes',
-        description: 'Cache the rendered output of a route segment',
-      },
-      {
-        slug: 'cached-components',
-        name: 'Cached React Server Components',
-        nav_title: 'Cached Components',
+        slug: 'select-motifs',
+        name: 'Select Motifs',
         description:
-          'Cache the rendered output of an individual React Server Component',
+          'Browse and select from 49 categories of decorative motifs to personalize your memorial. Choose from traditional engravings, religious symbols, nature themes, and more.',
       },
       {
-        slug: 'cached-functions',
-        name: 'Cached Functions',
-        description: 'Cache the computed result of a regular function',
-      },
-    ],
-  },
-  {
-    name: 'APIs',
-    items: [
-      {
-        slug: 'use-link-status',
-        name: 'useLinkStatus',
-        description: 'Create inline visual feedback for link interactions',
-      },
-    ],
-  },
-  {
-    name: 'Misc',
-    items: [
-      {
-        slug: 'view-transitions',
-        name: 'View Transitions',
+        slug: 'check-price',
+        name: 'Check Price',
         description:
-          'Use animations to help users understand the relationship between the two views',
-      },
-      {
-        slug: 'context',
-        name: 'Client Context',
-        description:
-          'Pass context between Client Components that cross Server/Client Component boundary',
+          'View a detailed breakdown of your headstone pricing including all inscriptions, motifs, and additions.',
       },
     ],
   },
@@ -527,6 +597,7 @@ export const data = {
   materials,
   colors,
   fonts,
+  motifs,
   additions,
   demos,
 };
