@@ -61,7 +61,8 @@ export default function AdditionOverlayPanel() {
     [activeId, activeOffset, setAdditionOffset],
   );
 
-  // Only show panel if an addition is selected
+  // Only show panel if addition panel is active and an addition is selected
+  // Hide if any other panel is active
   const isOpen = activePanel === 'addition' && !!activeId;
 
   // Don't render at all if not open

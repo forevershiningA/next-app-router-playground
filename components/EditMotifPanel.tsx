@@ -81,7 +81,8 @@ export default function EditMotifPanel() {
     [activeId, activeOffset, setMotifOffset],
   );
 
-  // Only show panel if a motif is selected
+  // Only show panel if motif panel is active and a motif is selected
+  // Hide if any other panel is active
   const isOpen = activePanel === 'motif' && !!activeId;
 
   // Calculate individual motif price (free for laser products)

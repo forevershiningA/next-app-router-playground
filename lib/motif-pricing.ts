@@ -182,9 +182,8 @@ export function calculateMotifPrice(
   
   switch (priceModel.quantityType) {
     case 'Surfacearea':
-      // For engraved: surface area = width * height in mm
-      // Assuming square motif: heightMm * heightMm
-      quantity = heightMm * heightMm;
+      // For engraved: quantity is just the height dimension
+      quantity = heightMm;
       break;
     
     case 'Units':

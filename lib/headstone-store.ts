@@ -217,7 +217,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   addAddition: (id) => {
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
-    set((s) => ({ selectedAdditions: [...s.selectedAdditions, instanceId] }));
+    set((s) => ({ 
+      selectedAdditions: [...s.selectedAdditions, instanceId],
+      selectedAdditionId: instanceId, // Auto-select the newly added addition
+      activePanel: 'addition', // Open the edit panel
+    }));
   },
   removeAddition: (id) => {
     set((s) => {
@@ -260,7 +264,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
       return {
         selectedMotifs: newMotifs,
-        activePanel: null, // Close the motifs panel after selecting
+        selectedMotifId: id, // Auto-select the newly added motif
+        activePanel: 'motif', // Open the edit panel instead of closing
       };
     });
     // Calculate cost after adding
@@ -417,7 +422,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       sizeMm: 80,
       color: '#c99d44',
       xPos: 0,
-      yPos: 0,
+      yPos: -60,
       rotationDeg: 0,
       ref: React.createRef<Group>(), // ✅
     },
@@ -428,7 +433,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       sizeMm: 120,
       color: '#c99d44',
       xPos: 0,
-      yPos: 20,
+      yPos: -40,
       rotationDeg: 0,
       ref: React.createRef<Group>(), // ✅
     },

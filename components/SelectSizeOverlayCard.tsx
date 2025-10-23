@@ -3,8 +3,23 @@
 
 import * as React from 'react';
 import OverlayPortal from '#/components/OverlayPortal';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function SelectSizeOverlayCard() {
+  const activePanel = useHeadstoneStore((s) => s.activePanel);
+  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  
+  // Hide when addition, motif, or inscription panel is active
+  if (
+    (activePanel === 'addition' && selectedAdditionId) ||
+    (activePanel === 'motif' && selectedMotifId) ||
+    (activePanel === 'inscription' && selectedInscriptionId)
+  ) {
+    return null;
+  }
+  
   const cardRef = React.useRef<HTMLDivElement | null>(null);
   const [collapsed, setCollapsed] = React.useState(false);
   const [pos, setPos] = React.useState<{ x: number; y: number }>({

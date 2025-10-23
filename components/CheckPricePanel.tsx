@@ -3,6 +3,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
+import { calculateMotifPrice } from '#/lib/motif-pricing';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -16,6 +17,7 @@ export default function CheckPricePanel() {
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
+  const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
@@ -93,8 +95,14 @@ export default function CheckPricePanel() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden bg-white shadow-2xl">
+    <div 
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50"
+      onClick={handleClose}
+    >
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden bg-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
           <h2 className="text-2xl font-bold text-white">Check Price</h2>
@@ -116,7 +124,7 @@ export default function CheckPricePanel() {
                   <div className="mt-1 space-y-1 text-sm text-gray-600">
                     <div>Shape: <span className="capitalize">{shapeName}</span></div>
                     <div>Material: {getMaterialName(headstoneMaterialUrl)}</div>
-                    <div>Size: {mmToInches(widthMm)} x {mmToInches(heightMm)}</div>
+                    <div>Size: {widthMm} x {heightMm} mm</div>
                   </div>
                 </div>
                 <div className="ml-4 text-right">
@@ -140,7 +148,7 @@ export default function CheckPricePanel() {
                     <div className="mt-1 space-y-1 text-sm text-gray-600">
                       <div>Shape: Rectangle</div>
                       <div>Material: {getMaterialName(baseMaterialUrl)}</div>
-                      <div>Size: {mmToInches(widthMm + 50)} x {mmToInches(100)}</div>
+                      <div>Size: {widthMm + 50} x {100} mm</div>
                     </div>
                   </div>
                   <div className="ml-4 text-right">
@@ -171,7 +179,7 @@ export default function CheckPricePanel() {
                       <div className="mt-1 space-y-1 text-sm text-gray-600">
                         <div>"{line.text}"</div>
                         <div>
-                          {mmToInches(line.sizeMm)} {line.font}, color: {colorName} ({line.color})
+                          {line.sizeMm} mm {line.font}, color: {colorName} ({line.color})
                         </div>
                       </div>
                     </div>
@@ -193,28 +201,61 @@ export default function CheckPricePanel() {
             {selectedMotifs.map((motif) => {
               const offset = motifOffsets[motif.id];
               const heightMm = offset?.heightMm ?? 100;
-              const colorName = data.colors.find((c) => c.hex === motif.color)?.name || motif.color;
-              const motifFileName = motif.svgPath.split('/').pop()?.replace('.svg', '') || 'Motif';
+              
+              // Get color display name
+              let colorDisplay = 'Standard';
+              if (motif.color === '#c99d44') {
+                colorDisplay = 'Gold Gilding';
+              } else if (motif.color === '#eeeeee') {
+                colorDisplay = 'Silver Gilding';
+              } else if (motif.color !== '#000000' && motif.color !== '#ffffff') {
+                const colorName = data.colors.find((c) => c.hex === motif.color)?.name;
+                colorDisplay = colorName ? `Paint Fill (${colorName})` : 'Paint Fill';
+              }
+              
+              // Get motif file name
+              const motifFileName = motif.svgPath.split('/').pop()?.replace('.svg', '') || 'unknown';
+              
+              // Calculate individual motif price
+              const isLaser = catalog?.product.laser === '1';
+              let individualPrice = 0;
+              
+              if (!isLaser && motifPriceModel) {
+                individualPrice = calculateMotifPrice(
+                  heightMm,
+                  motif.color,
+                  motifPriceModel.priceModel,
+                  isLaser
+                );
+              }
+              
+              // Get product type for display
+              let productType = 'Traditional Engraved';
+              if (catalog?.product.type === 'bronze_plaque') {
+                productType = 'Bronze';
+              } else if (isLaser) {
+                productType = 'Laser Etched (free)';
+              }
               
               return (
                 <div key={motif.id} className="border-b border-gray-200 pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900">
-                        Motif: {motifFileName}
+                        Product ID: 126 - Motif ({productType})
                       </div>
                       <div className="mt-1 space-y-1 text-sm text-gray-600">
-                        <div>Height: {mmToInches(heightMm)}</div>
-                        <div>Color: {colorName} ({motif.color})</div>
+                        <div>File: {motifFileName}</div>
+                        <div>{heightMm} mm, colour: {colorDisplay} ({motif.color})</div>
                       </div>
                     </div>
                     <div className="ml-4 text-right">
                       <div className="text-sm text-gray-600">Qty: 1</div>
                       <div className="text-sm text-gray-600">
-                        Price: ${(motifCost / selectedMotifs.length).toFixed(2)}
+                        Price: ${individualPrice.toFixed(2)}
                       </div>
                       <div className="font-semibold text-gray-900">
-                        Item Total: ${(motifCost / selectedMotifs.length).toFixed(2)}
+                        Item Total: ${individualPrice.toFixed(2)}
                       </div>
                     </div>
                   </div>
