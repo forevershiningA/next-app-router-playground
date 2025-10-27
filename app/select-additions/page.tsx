@@ -9,11 +9,11 @@ export default function Page() {
 
   return (
     <Suspense fallback={null}>
-      <div className="space-y-9">
+      <div className="space-y-6">
         {/* Statues */}
         <div>
-          <h2 className="mb-3 text-lg font-medium text-white/80">Statues</h2>
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          <h2 className="mb-3 text-sm font-medium text-white/60">Statues</h2>
+          <div className="grid grid-cols-3 gap-2">
             {additions
               .filter((add) => add.type === 'statue')
               .map((add) => (
@@ -24,8 +24,8 @@ export default function Page() {
 
         {/* Vases */}
         <div>
-          <h2 className="mb-3 text-lg font-medium text-white/80">Vases</h2>
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          <h2 className="mb-3 text-sm font-medium text-white/60">Vases</h2>
+          <div className="grid grid-cols-3 gap-2">
             {additions
               .filter((add) => add.type === 'vase')
               .map((add) => (
@@ -36,8 +36,8 @@ export default function Page() {
 
         {/* Applications */}
         <div>
-          <h2 className="mb-3 text-lg font-medium text-white/80">Applications</h2>
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          <h2 className="mb-3 text-sm font-medium text-white/60">Applications</h2>
+          <div className="grid grid-cols-3 gap-2">
             {additions
               .filter((add) => add.type === 'application')
               .map((add) => (

@@ -489,7 +489,7 @@ const additions: Addition[] = [
 
 const demos = [
   {
-    name: 'Start',
+    name: 'Design Your Own',
     items: [
       {
         slug: 'select-product',
@@ -514,11 +514,6 @@ const demos = [
         description:
           'Traditional Engraved Plaques and Headstones are available in a number of different granites, marbles and sandstone. Our most popular material for this product is Blue Pearl.',
       },
-    ],
-  },
-  {
-    name: 'Personalization',
-    items: [
       {
         slug: 'inscriptions',
         name: 'Inscriptions',

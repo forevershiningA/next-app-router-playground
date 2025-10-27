@@ -15,5 +15,5 @@ export default function MainContent({
     return () => window.removeEventListener('toggle-sidebar', handler);
   }, []);
 
-  return <div className={isSidebarOpen ? 'lg:pl-72' : ''}>{children}</div>;
+  return <div className={isSidebarOpen ? 'lg:pl-[400px]' : ''}>{children}</div>;
 }

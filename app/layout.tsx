@@ -14,7 +14,6 @@ import MobileHeader from '#/components/MobileHeader';
 import MainContent from '#/components/MainContent';
 import AdditionOverlayPanel from '#/components/AdditionOverlayPanel';
 import EditMotifPanel from '#/components/EditMotifPanel';
-import MotifOverlayPanel from '#/components/MotifOverlayPanel';
 import CheckPricePanel from '#/components/CheckPricePanel';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
@@ -46,13 +45,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="[color-scheme:dark]">
       <body
-        className={`overflow-y-scroll bg-gray-950 font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`overflow-y-scroll bg-black font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ErrorBoundary>
           <RouterBinder /> {/* ← mount once, early */}
           <GlobalNav items={demos} />
           <MainContent>
-            <MobileHeader />
             <Suspense
               fallback={
                 <div className="flex min-h-[400px] items-center justify-center">
@@ -81,7 +79,6 @@ export default function RootLayout({
                 <SceneOverlayHost />
                 <AdditionOverlayPanel />
                 <EditMotifPanel />
-                <MotifOverlayPanel />
                 <CheckPricePanel />
                 <ThreeScene />
               </ErrorBoundary>

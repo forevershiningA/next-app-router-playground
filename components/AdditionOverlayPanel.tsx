@@ -24,16 +24,6 @@ export default function AdditionOverlayPanel() {
     rotationZ: 0,
   }) : null;
 
-  // Debug logging
-  React.useEffect(() => {
-    console.log('AdditionOverlayPanel state:', {
-      selectedAdditionId,
-      activePanel,
-      activeOffset,
-      isOpen: activePanel === 'addition' && !!activeId,
-    });
-  }, [selectedAdditionId, activePanel, activeOffset, activeId]);
-
   const handleClose = useCallback(() => {
     setSelectedAdditionId(null);
     setActivePanel(null);
@@ -67,11 +57,8 @@ export default function AdditionOverlayPanel() {
 
   // Don't render at all if not open
   if (!isOpen || !activeId || !activeOffset) {
-    console.log('AdditionOverlayPanel NOT rendering:', { isOpen, activeId, hasOffset: !!activeOffset });
     return null;
   }
-
-  console.log('AdditionOverlayPanel IS rendering!');
 
   return (
     <SceneOverlayController
@@ -81,46 +68,48 @@ export default function AdditionOverlayPanel() {
       isOpen={isOpen}
       onClose={handleClose}
     >
-      <div className="mb-4 text-sm text-white/70">
-        Selected Addition: <span className="font-semibold text-white">{activeId}</span>
-      </div>
+      <div className="bg-gray-900/50 p-4 space-y-4">
+        <div className="text-sm text-white/70">
+          Selected Addition: <span className="font-semibold text-white">{activeId}</span>
+        </div>
 
-      <div className="mb-4 flex space-x-2">
-        <button
-          className="flex-1 cursor-pointer rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none"
-          onClick={handleDuplicate}
-          title="Duplicate this addition"
-        >
-          Duplicate
-        </button>
-        <button
-          className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
-          onClick={handleDelete}
-          title="Remove this addition"
-        >
-          Delete
-        </button>
-      </div>
+        <div className="flex space-x-2">
+          <button
+            className="flex-1 cursor-pointer rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none"
+            onClick={handleDuplicate}
+            title="Duplicate this addition"
+          >
+            Duplicate
+          </button>
+          <button
+            className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+            onClick={handleDelete}
+            title="Remove this addition"
+          >
+            Delete
+          </button>
+        </div>
 
-      <div className="space-y-4">
-        <TailwindSlider
-          label="Size"
-          value={activeOffset.scale ?? 1}
-          min={0.1}
-          max={3}
-          step={0.05}
-          onChange={(v) => updateOffset({ scale: v })}
-          unit="×"
-        />
-        <TailwindSlider
-          label="Rotation"
-          value={((activeOffset.rotationZ ?? 0) * 180) / Math.PI}
-          min={-180}
-          max={180}
-          step={1}
-          onChange={(v) => updateOffset({ rotationZ: (v * Math.PI) / 180 })}
-          unit="°"
-        />
+        <div className="space-y-4">
+          <TailwindSlider
+            label="Size"
+            value={activeOffset.scale ?? 1}
+            min={0.1}
+            max={3}
+            step={0.05}
+            onChange={(v) => updateOffset({ scale: v })}
+            unit="×"
+          />
+          <TailwindSlider
+            label="Rotation"
+            value={((activeOffset.rotationZ ?? 0) * 180) / Math.PI}
+            min={-180}
+            max={180}
+            step={1}
+            onChange={(v) => updateOffset({ rotationZ: (v * Math.PI) / 180 })}
+            unit="°"
+          />
+        </div>
       </div>
     </SceneOverlayController>
   );

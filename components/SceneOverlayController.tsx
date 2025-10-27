@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { usePathname, useRouter } from 'next/navigation';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type Props = {
   section: string;
@@ -41,6 +43,19 @@ export default function SceneOverlayController({
 }: Props) {
   const controlled = typeof isOpen === 'boolean';
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isClient, setIsClient] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  
+  // Detect client-side mounting
+  React.useEffect(() => {
+    setIsClient(true);
+    // Fade in after a brief delay
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Keys
   const globalKey = React.useMemo(() => `overlay-pos:_global`, []);
@@ -50,8 +65,9 @@ export default function SceneOverlayController({
   );
 
   // Initial from in-memory to prevent default flash
+  // Position to align panel below the header (header is ~72-80px with padding and 2 lines)
   const initialPos: Pos = (typeof window !== 'undefined' && getUI().pos) || {
-    x: 16,
+    x: -10,
     y: 80,
   };
 
@@ -61,13 +77,15 @@ export default function SceneOverlayController({
   React.useEffect(() => {
     try {
       let loaded: Pos | null = null;
+      const MIN_Y = 80; // Minimum Y to stay below header
 
       if (specificKey) {
         const raw = window.localStorage.getItem(specificKey);
         if (raw) {
           const parsed = JSON.parse(raw) as Pos;
           if (Number.isFinite(parsed?.x) && Number.isFinite(parsed?.y)) {
-            loaded = parsed;
+            // Ensure Y is below header
+            loaded = { x: parsed.x, y: Math.max(parsed.y, MIN_Y) };
           }
         }
       }
@@ -77,7 +95,8 @@ export default function SceneOverlayController({
         if (rawG) {
           const parsedG = JSON.parse(rawG) as Pos;
           if (Number.isFinite(parsedG?.x) && Number.isFinite(parsedG?.y)) {
-            loaded = parsedG;
+            // Ensure Y is below header
+            loaded = { x: parsedG.x, y: Math.max(parsedG.y, MIN_Y) };
           }
         }
       }
@@ -114,9 +133,10 @@ export default function SceneOverlayController({
       const vh = window.innerHeight;
       const w = el?.offsetWidth ?? 380;
       const h = el?.offsetHeight ?? 300;
+      const MIN_Y = 80; // Minimum Y to stay below header
       setPos((p) => ({
         x: Math.max(8, Math.min(vw - w - 8, p.x)),
-        y: Math.max(8, Math.min(vh - 60, p.y)),
+        y: Math.max(MIN_Y, Math.min(vh - 60, p.y)),
       }));
     };
     clampIntoViewport();
@@ -183,9 +203,10 @@ export default function SceneOverlayController({
     const vh = window.innerHeight;
     const w = el?.offsetWidth ?? 380;
     const h = el?.offsetHeight ?? 300;
+    const MIN_Y = 80; // Minimum Y to stay below header
 
     next.x = Math.max(8, Math.min(vw - w - 8, next.x));
-    next.y = Math.max(8, Math.min(vh - 60, next.y));
+    next.y = Math.max(MIN_Y, Math.min(vh - 60, next.y));
     setPos(next);
   };
 
@@ -200,14 +221,21 @@ export default function SceneOverlayController({
     document.body.style.cursor = 'auto';
   };
 
+  // Regular floating overlay mode
+  // Don't render if controlled and not open
+  if (controlled && !isOpen) {
+    return null;
+  }
+
   return (
     <div
       ref={rootRef}
       data-scene-overlay
       className={clsx(
-        'pointer-events-auto fixed z-[9998]',
+        'pointer-events-auto fixed z-[9998] transition-opacity duration-200',
         // Mobile portrait: stick to bottom, full width
         'max-md:!left-0 max-md:!bottom-0 max-md:!top-auto max-md:!w-full max-md:!max-w-full',
+        isVisible ? 'opacity-100' : 'opacity-0',
         className
       )}
       style={{ 
@@ -219,17 +247,16 @@ export default function SceneOverlayController({
     >
       <div
         className={clsx(
-          'bg-[rgba(0,0,0,0.79)] transition-opacity',
+          'bg-[rgba(0,0,0,0.79)]',
           collapsed ? 'opacity-80' : 'opacity-100',
         )}
       >
         {/* Header (drag handle) */}
         <div
-          className="flex cursor-grab items-center justify-between px-4 select-none"
+          className="flex cursor-grab items-center justify-between px-4 py-3 select-none"
           onPointerDown={onHeaderPointerDown}
           onPointerMove={onHeaderPointerMove}
           onPointerUp={onHeaderPointerUp}
-          onDoubleClick={() => setCollapsed((c) => !c)}
           role="banner"
           aria-label="Draggable overlay header"
         >
@@ -238,34 +265,28 @@ export default function SceneOverlayController({
           <button
             type="button"
             data-nodrag
-            className="bg-white/10 px-2 py-1 text-sm text-white hover:bg-white/20"
             onClick={(e) => {
               e.stopPropagation();
-              setCollapsed((c) => !c);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setCollapsed((c) => !c);
+              if (onClose) {
+                onClose();
+              } else {
+                setActivePanel(null);
               }
+              // Dispatch event to show all sections in nav
+              window.dispatchEvent(new CustomEvent('back-to-menu'));
+              // Navigate to home to hide the section panels
+              router.push('/');
             }}
-            aria-expanded={!collapsed}
-            aria-label={collapsed ? 'Expand panel' : 'Collapse panel'}
-            title={collapsed ? 'Expand' : 'Collapse'}
+            className="flex items-center space-x-1 bg-white/10 px-3 py-1.5 text-xs text-white hover:bg-white/20 rounded transition-colors"
+            title="Back to menu"
           >
-            {collapsed ? '+' : '–'}
+            <span>←</span>
+            <span>Back to menu</span>
           </button>
         </div>
 
         {/* Body */}
-        <div
-          className={clsx(
-            'px-4 pt-2 pb-4 transition-[max-height,opacity] duration-200',
-            collapsed
-              ? 'max-h-0 overflow-hidden opacity-0'
-              : 'max-h-[75vh] max-md:max-h-[30vh] overflow-auto opacity-100',
-          )}
-        >
+        <div className="px-4 pt-2 pb-4 max-h-[75vh] max-md:max-h-[30vh] overflow-auto">
           {children}
         </div>
       </div>

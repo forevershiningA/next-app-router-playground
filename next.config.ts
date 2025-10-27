@@ -14,6 +14,9 @@ const nextConfig = {
     routerBFCache: true,
   },
   turbopack: { root: process.cwd() },
+  images: {
+    qualities: [75, 90, 100],
+  },
 } satisfies NextConfig;
 
 const codeHikeConfig = {

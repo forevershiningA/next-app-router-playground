@@ -24,9 +24,9 @@ const DEFAULT_TEX = 'Imperial-Red.jpg';
 const BASE_H = 2; // used by AutoFit only
 
 /* --------------------------------- font map --------------------------------- */
+// Simply use the font files as specified in the data
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
   (map, font) => {
-    // If your dataset stores previews, swap to actual .woff/.woff2 paths here.
     map[font.name] = `/fonts/${font.image}`;
     return map;
   },
@@ -548,10 +548,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             name: 'headstone',
             onClick: (e) => {
               e.stopPropagation();
-              console.log('Headstone clicked');
-              console.log('Before - selected:', selected);
               setSelected('headstone');
-              console.log('After setSelected - should be headstone');
               setSelectedInscriptionId(null);
               setSelectedAdditionId(null); // Close addition panel
               setSelectedMotifId(null); // Close motif panel
@@ -564,14 +561,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
             // Set the headstone mesh ref directly (safe in render since it's just a ref assignment)
             if (headstoneMeshRef && api.mesh.current) {
-              // Use queueMicrotask to avoid setState during render
-              if (headstoneMeshRef.current !== api.mesh.current) {
-                queueMicrotask(() => {
-                  if (headstoneMeshRef) {
-                    (headstoneMeshRef as any).current = api.mesh.current;
-                  }
-                });
-              }
+              // Direct assignment - refs can be updated synchronously in render
+              (headstoneMeshRef as any).current = api.mesh.current;
             }
             
             return (

@@ -54,6 +54,16 @@ export default function EditMotifPanel() {
     initHeight = 100;
   }
 
+  // Calculate individual motif price (free for laser products)
+  const motifPrice = motifPriceModel
+    ? calculateMotifPrice(
+        activeOffset?.heightMm ?? 100,
+        activeMotif?.color ?? '#c99d44',
+        motifPriceModel.priceModel,
+        isLaser
+      )
+    : 0;
+
   const handleClose = useCallback(() => {
     setSelectedMotifId(null);
     setActivePanel(null);
@@ -85,16 +95,6 @@ export default function EditMotifPanel() {
   // Hide if any other panel is active
   const isOpen = activePanel === 'motif' && !!activeId;
 
-  // Calculate individual motif price (free for laser products)
-  const motifPrice = motifPriceModel
-    ? calculateMotifPrice(
-        activeOffset?.heightMm ?? 100,
-        activeMotif?.color ?? '#c99d44',
-        motifPriceModel.priceModel,
-        isLaser
-      )
-    : 0;
-
   // Don't render at all if not open
   if (!isOpen || !activeId || !activeOffset || !activeMotif) {
     return null;
@@ -108,98 +108,100 @@ export default function EditMotifPanel() {
       isOpen={isOpen}
       onClose={handleClose}
     >
-      <div className="mb-4 text-sm text-white/70">
-        Selected Motif: <span className="font-semibold text-white">{activeId}</span>
-      </div>
-
-      {motifPrice > 0 && (
-        <div className="mb-4 border border-white/20 bg-white/5 p-3">
-          <div className="text-xs text-white/70 mb-1">Motif Price</div>
-          <div className="text-2xl font-bold text-white">
-            ${motifPrice.toFixed(2)}
-          </div>
+      <div className="bg-gray-900/50 p-4 space-y-4">
+        <div className="text-sm text-white/70">
+          Selected Motif: <span className="font-semibold text-white">{activeId}</span>
         </div>
-      )}
 
-      <div className="mb-4 flex space-x-2">
-        <button
-          className="flex-1 cursor-pointer bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none"
-          onClick={handleDuplicate}
-          title="Duplicate this motif"
-        >
-          Duplicate
-        </button>
-        <button
-          className="flex-1 cursor-pointer bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
-          onClick={handleDelete}
-          title="Remove this motif"
-        >
-          Delete
-        </button>
-      </div>
-
-      <div className="space-y-4">
-        <TailwindSlider
-          label="Height (mm)"
-          value={activeOffset.heightMm ?? initHeight}
-          min={minHeight}
-          max={maxHeight}
-          step={1}
-          onChange={(v) => updateOffset({ heightMm: v })}
-          unit="mm"
-        />
-        <TailwindSlider
-          label="Rotation"
-          value={((activeOffset.rotationZ ?? 0) * 180) / Math.PI}
-          min={-180}
-          max={180}
-          step={1}
-          onChange={(v) => updateOffset({ rotationZ: (v * Math.PI) / 180 })}
-          unit="°"
-        />
-
-        {/* Color Selection - Hidden for laser products */}
-        {!isLaser && (
-          <div>
-            <label className="mb-2 block text-sm font-medium text-white">
-              Select Color
-            </label>
-            <div className="grid grid-cols-2 gap-1 mb-2">
-              <div
-                className="flex cursor-pointer flex-col items-center gap-1.5 border border-white/20 p-2 transition-colors hover:bg-white/10"
-                onClick={() => setMotifColor(activeId, '#c99d44')}
-              >
-                <div
-                  className="h-5 w-5 border border-white/20"
-                  style={{ backgroundColor: '#c99d44' }}
-                />
-                <span className="text-xs">Gold Gilding</span>
-              </div>
-              <div
-                className="flex cursor-pointer flex-col items-center gap-1.5 border border-white/20 p-2 transition-colors hover:bg-white/10"
-                onClick={() => setMotifColor(activeId, '#eeeeee')}
-              >
-                <div
-                  className="h-5 w-5 border border-white/20"
-                  style={{ backgroundColor: '#eeeeee' }}
-                />
-                <span className="text-xs">Silver Gilding</span>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-7 gap-1">
-              {data.colors.map((color) => (
-                <div
-                  key={color.id}
-                  className="h-6 w-6 cursor-pointer border border-white/20"
-                  style={{ backgroundColor: color.hex }}
-                  onClick={() => setMotifColor(activeId, color.hex)}
-                  title={color.name}
-                />
-              ))}
+        {motifPrice > 0 && (
+          <div className="border border-white/20 bg-white/5 p-3">
+            <div className="text-xs text-white/70 mb-1">Motif Price</div>
+            <div className="text-2xl font-bold text-white">
+              ${motifPrice.toFixed(2)}
             </div>
           </div>
         )}
+
+        <div className="flex space-x-2">
+          <button
+            className="flex-1 cursor-pointer bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none"
+            onClick={handleDuplicate}
+            title="Duplicate this motif"
+          >
+            Duplicate
+          </button>
+          <button
+            className="flex-1 cursor-pointer bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+            onClick={handleDelete}
+            title="Remove this motif"
+          >
+            Delete
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <TailwindSlider
+            label="Height (mm)"
+            value={activeOffset.heightMm ?? initHeight}
+            min={minHeight}
+            max={maxHeight}
+            step={1}
+            onChange={(v) => updateOffset({ heightMm: v })}
+            unit="mm"
+          />
+          <TailwindSlider
+            label="Rotation"
+            value={((activeOffset.rotationZ ?? 0) * 180) / Math.PI}
+            min={-180}
+            max={180}
+            step={1}
+            onChange={(v) => updateOffset({ rotationZ: (v * Math.PI) / 180 })}
+            unit="°"
+          />
+
+          {/* Color Selection - Hidden for laser products */}
+          {!isLaser && (
+            <div>
+              <label className="mb-2 block text-sm font-medium text-white">
+                Select Color
+              </label>
+              <div className="grid grid-cols-2 gap-1 mb-2">
+                <div
+                  className="flex cursor-pointer flex-col items-center gap-1.5 border border-white/20 p-2 transition-colors hover:bg-white/10"
+                  onClick={() => setMotifColor(activeId, '#c99d44')}
+                >
+                  <div
+                    className="h-5 w-5 border border-white/20"
+                    style={{ backgroundColor: '#c99d44' }}
+                  />
+                  <span className="text-xs">Gold Gilding</span>
+                </div>
+                <div
+                  className="flex cursor-pointer flex-col items-center gap-1.5 border border-white/20 p-2 transition-colors hover:bg-white/10"
+                  onClick={() => setMotifColor(activeId, '#eeeeee')}
+                >
+                  <div
+                    className="h-5 w-5 border border-white/20"
+                    style={{ backgroundColor: '#eeeeee' }}
+                  />
+                  <span className="text-xs">Silver Gilding</span>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-7 gap-1">
+                {data.colors.map((color) => (
+                  <div
+                    key={color.id}
+                    className="h-6 w-6 cursor-pointer border border-white/20"
+                    style={{ backgroundColor: color.hex }}
+                    onClick={() => setMotifColor(activeId, color.hex)}
+                    title={color.name}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </SceneOverlayController>
   );

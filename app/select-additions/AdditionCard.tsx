@@ -64,7 +64,7 @@ export default function AdditionCard({ addition }: AdditionCardProps) {
         addAddition(addition.id);
       }}
     >
-      <div className={`relative overflow-hidden ${
+      <div className={`relative overflow-hidden p-4 ${
         isSelected 
           ? 'bg-gray-800' 
           : 'bg-gray-900/50 group-hover:bg-gray-900'
@@ -83,11 +83,6 @@ export default function AdditionCard({ addition }: AdditionCardProps) {
             }
           }}
         />
-        {isSelected && (
-          <div className="absolute top-2 right-2 rounded bg-green-500 px-2 py-1 text-xs text-white shadow-lg">
-            ✓
-          </div>
-        )}
       </div>
     </div>
   );

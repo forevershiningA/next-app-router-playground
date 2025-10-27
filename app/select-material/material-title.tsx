@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
@@ -23,6 +23,17 @@ export default function MaterialTitle({
   const { materialUrl, setMaterialUrl } = useHeadstoneStore();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
 
   // Prefer ?slug=..., else last path segment (ignore base route)
   const rawSlug = useMemo(() => {
@@ -73,6 +84,11 @@ export default function MaterialTitle({
     // 3) Fallback
     return initialName ?? null;
   }, [slugMatch, materialUrl, materials, initialName]);
+
+  // Don't render title on desktop
+  if (isDesktop) {
+    return null;
+  }
 
   return (
     <h1 className="text-xl font-semibold text-gray-300">

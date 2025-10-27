@@ -213,7 +213,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ catalog });
   },
 
-  selectedAdditions: ['B1134S'],
+  // Sample template: Beautiful headstone with angel, rose, and cross (all with colorMap textures)
+  selectedAdditions: [
+    'B1134S', // Angel application (centered top) - has colorMap
+    'B1649',  // Rose flower application (bottom left) - has colorMap
+    'B2127',  // Cross (bottom right) - has colorMap
+  ],
   addAddition: (id) => {
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
@@ -254,7 +259,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
   },
 
-  selectedMotifs: [],
+  // Sample template: Add dove and cross motifs
+  selectedMotifs: [
+    { 
+      id: 'motif_dove_1', 
+      svgPath: '/shapes/motifs/dove_002.svg', 
+      color: '#c99d44' 
+    },
+    { 
+      id: 'motif_cross_1', 
+      svgPath: '/shapes/motifs/cross_001.svg', 
+      color: '#c99d44' 
+    },
+  ],
   addMotif: (svgPath) => {
     const id = `motif_${Date.now()}`;
     const { catalog } = get();
@@ -414,28 +431,62 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ selected: p });
   },
 
+  // Sample template: Beautiful memorial inscriptions with much larger spacing
   inscriptions: [
     {
       id: genId(),
       text: 'In Loving Memory',
       font: 'Chopin Script',
-      sizeMm: 80,
+      sizeMm: 55,
       color: '#c99d44',
       xPos: 0,
-      yPos: -60,
+      yPos: 50,  // Moved higher for more space
       rotationDeg: 0,
-      ref: React.createRef<Group>(), // ✅
+      ref: React.createRef<Group>(),
     },
     {
       id: genId(),
-      text: 'of General Admiral Aladeen',
+      text: 'Sarah Elizabeth Thompson',
       font: 'Chopin Script',
-      sizeMm: 120,
+      sizeMm: 75,
       color: '#c99d44',
       xPos: 0,
-      yPos: -40,
+      yPos: 20,  // Larger gap (30mm from above)
       rotationDeg: 0,
-      ref: React.createRef<Group>(), // ✅
+      ref: React.createRef<Group>(),
+    },
+    {
+      id: genId(),
+      text: '1945 - 2023',
+      font: 'Franklin Gothic',  // Different font for dates
+      sizeMm: 50,
+      color: '#ffffff',  // White for contrast
+      xPos: 0,
+      yPos: -12,  // Larger gap (32mm from above)
+      rotationDeg: 0,
+      ref: React.createRef<Group>(),
+    },
+    {
+      id: genId(),
+      text: 'Forever in Our Hearts',
+      font: 'Chopin Script',
+      sizeMm: 45,
+      color: '#c99d44',
+      xPos: 0,
+      yPos: -38,  // Larger gap (26mm from above)
+      rotationDeg: 0,
+      ref: React.createRef<Group>(),
+    },
+    {
+      id: genId(),
+      text: 'Beloved Mother & Grandmother',
+      font: 'Chopin Script',
+      sizeMm: 38,
+      color: '#c99d44',
+      xPos: 0,
+      yPos: -60,  // Larger gap (22mm from above)
+      rotationDeg: 0,
+      ref: React.createRef<Group>(),
     },
   ],
   selectedInscriptionId: null,
@@ -450,11 +501,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   selectedAdditionId: null,
   additionRefs: {},
-  additionOffsets: {},
+  // Sample template: Pre-positioned additions for beautiful composition
+  additionOffsets: {
+    'B1134S': { xPos: -35, yPos: 55, scale: 0.7, rotationZ: 0 },      // Angel at left top
+    'B1649': { xPos: -40, yPos: -65, scale: 0.55, rotationZ: 0 },     // Rose at left side bottom (below last inscription)
+    'B2127': { xPos: 0, yPos: 60, scale: 0.6, rotationZ: 0 },         // Cross at center top
+  },
 
   selectedMotifId: null,
   motifRefs: {},
-  motifOffsets: {},
+  // Sample template: Pre-positioned motifs with increased size for visibility
+  motifOffsets: {
+    'motif_dove_1': { xPos: -40, yPos: 55, scale: 1.2, rotationZ: 0, heightMm: 100 },   // Dove - larger and higher
+    'motif_cross_1': { xPos: 40, yPos: 55, scale: 1.2, rotationZ: 0, heightMm: 100 },    // Cross - larger and higher
+  },
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
@@ -614,8 +674,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     id: string,
     offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
   ) => {
-    //console.log("setAdditionOffset:", offset);
-    //offset = { xPos: 100, yPos: -200 }
     set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
   },
   duplicateAddition: (id: string) => {

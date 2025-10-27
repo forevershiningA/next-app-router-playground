@@ -61,7 +61,7 @@ export function MotifCategoryList({ categoryIndex, formula }: MotifCategoryListP
             <button
               key={fileName}
               className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white transition hover:border-gray-400 hover:shadow-md"
-              onClick={() => console.log('Selected motif:', fileName)}
+              onClick={() => {/* Selected motif */}}
             >
               <img
                 src={filePath}

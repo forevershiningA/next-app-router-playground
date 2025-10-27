@@ -123,7 +123,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const handleClick = React.useCallback(
     (e: any) => {
       e.stopPropagation();
-      console.log('Motif clicked:', id);
+
       setSelectedMotifId(id);
     },
     [id, setSelectedMotifId]
@@ -218,16 +218,6 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   
   // Calculate scale to make the motif's height match the heightMm value
   const finalScale = meshHeight > 0 ? targetHeightInUnits / meshHeight : 1;
-
-  console.log('Motif scaling debug:', {
-    id,
-    heightMm: offset.heightMm ?? 100,
-    targetHeightInUnits,
-    meshSize: mesh.size,
-    meshHeight,
-    finalScale,
-    resultingHeightInUnits: meshHeight * finalScale
-  });
 
   // Position on headstone surface (front)
   const zPosition = headstone.frontZ + 0.01;

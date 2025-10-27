@@ -38,6 +38,14 @@ export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   const { scene } = useThree();
   const helperRef = React.useRef<THREE.Box3Helper | null>(null);
   const boxRef = React.useRef(new THREE.Box3());
+  const [targetReady, setTargetReady] = React.useState(false);
+
+  // Check if target becomes available
+  React.useEffect(() => {
+    if (targetRef.current && !targetReady) {
+      setTargetReady(true);
+    }
+  });
 
   // Create / recreate helper when color/through/target changes
   React.useEffect(() => {
@@ -76,7 +84,7 @@ export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
         helperRef.current = null;
       }
     };
-  }, [scene, targetRef, color, through, renderOrder]);
+  }, [scene, targetRef, color, through, renderOrder, targetReady]);
 
   // Follow the target's world bbox each frame
   useFrame(() => {

@@ -177,8 +177,11 @@ function AdditionModelInner({
 
   const handleClick = React.useCallback((e: any) => {
     e.stopPropagation();
-    console.log('Addition clicked:', id);
+
     setSelectedAdditionId(id);
+    
+    // Dispatch event to hide nav when clicking on addition
+    window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'addition' } }));
   }, [id, setSelectedAdditionId]);
 
   const handlePointerDown = React.useCallback((e: any) => {
@@ -332,7 +335,8 @@ function AdditionModelInner({
   } else if (addition.type === 'application') {
     // Position so the front of the model is at headstone surface
     // Model is centered, so we need to offset by half depth + headstone surface
-    zPosition = headstone.frontZ + modelDepth / 2 + 0.1; // half depth + small offset
+    // Increased offset from 0.1 to 1.5 to bring applications more forward (less embedded)
+    zPosition = headstone.frontZ + modelDepth / 2 + 1.5; // half depth + larger offset to prevent deep embedding
   }
 
   const isSelected = selectedAdditionId === id;

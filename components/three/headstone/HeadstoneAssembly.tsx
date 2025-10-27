@@ -37,12 +37,6 @@ export default function HeadstoneAssembly() {
     (inscription) => inscription.id === selectedInscriptionId,
   );
 
-  // Debug: log when selected changes
-  React.useEffect(() => {
-    console.log('HeadstoneAssembly - selected changed to:', selected);
-    console.log('HeadstoneAssembly - headstoneMeshRef.current exists:', !!headstoneMeshRef.current);
-  }, [selected]);
-
   return (
     <>
       <group ref={assemblyRef} position={[0, BASE_H, 0]} visible={!loading}>

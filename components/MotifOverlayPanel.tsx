@@ -131,7 +131,7 @@ export default function MotifOverlayPanel() {
               {filteredCategories.length} {filteredCategories.length === 1 ? 'category' : 'categories'}
             </div>
             
-            <div className="grid max-h-[60vh] grid-cols-1 gap-2 overflow-y-auto pr-2">
+            <div className="grid grid-cols-3 gap-2">
               {filteredCategories.map((motif, index) => {
                 // Find the actual index in the full array
                 const actualIndex = data.motifs.indexOf(motif);
@@ -142,10 +142,10 @@ export default function MotifOverlayPanel() {
                   <button
                     key={motif.id}
                     onClick={() => handleCategorySelect(actualIndex)}
-                    className="group flex items-center space-x-3 bg-white/10 p-3 text-left transition hover:bg-white/20"
+                    className="group relative flex flex-col overflow-hidden bg-gray-900/50 hover:bg-gray-900 p-4 cursor-pointer"
                   >
                     {/* Category Preview Image */}
-                    <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden bg-white">
+                    <div className="relative aspect-square w-full overflow-hidden bg-white mb-2">
                       <img
                         src={thumbnailPath}
                         alt={motif.name}
@@ -154,38 +154,9 @@ export default function MotifOverlayPanel() {
                       />
                     </div>
                     
-                    {/* Category Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-white truncate">
-                        {getMotifCategoryName(motif.name)}
-                      </div>
-                      <div className="text-xs text-white/50 truncate">
-                        {motif.src}
-                      </div>
-                    </div>
-
-                    {/* Badges */}
-                    <div className="flex flex-col items-end space-y-1">
-                      {motif.traditional && (
-                        <span className="rounded bg-blue-500/30 px-1.5 py-0.5 text-[10px] text-blue-200">
-                          Traditional
-                        </span>
-                      )}
-                      {motif.ss && (
-                        <span className="rounded bg-gray-500/30 px-1.5 py-0.5 text-[10px] text-gray-200">
-                          SS
-                        </span>
-                      )}
-                      {motif.col1 && (
-                        <span className="rounded bg-purple-500/30 px-1.5 py-0.5 text-[10px] text-purple-200">
-                          1 Color
-                        </span>
-                      )}
-                      {motif.col2 && (
-                        <span className="rounded bg-pink-500/30 px-1.5 py-0.5 text-[10px] text-pink-200">
-                          2 Color
-                        </span>
-                      )}
+                    {/* Category Name */}
+                    <div className="text-xs text-white text-center truncate">
+                      {getMotifCategoryName(motif.name)}
                     </div>
                   </button>
                 );

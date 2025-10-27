@@ -28,19 +28,20 @@ export default function ShapePanelWrapper({
     }
   }, []); // Run once on mount
 
+  // Hide this panel when addition, motif, or inscription panels are active
+  const isOpen = activePanel !== 'addition' && activePanel !== 'motif' && activePanel !== 'inscription';
+
   return (
-    <div className="relative w-full">
-      <SceneOverlayController section="shape" title="Select Shape">
-        <ShapeTitle products={products} />
-        <div className="mb-3 text-sm leading-relaxed text-white/85">
-          Pick a headstone outline. Click any card to apply it.
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {shapes.map((p) => (
-            <ProductCard key={p.id} product={p} type="shape" />
-          ))}
-        </div>
-      </SceneOverlayController>
-    </div>
+    <SceneOverlayController section="shape" title="Select Shape" isOpen={isOpen}>
+      <ShapeTitle products={products} />
+      <div className="mb-3 text-sm leading-relaxed text-white/85">
+        Pick a headstone outline. Click any card to apply it.
+      </div>
+      <div className="grid grid-cols-3 gap-2 w-full">
+        {shapes.map((p) => (
+          <ProductCard key={p.id} product={p} type="shape" />
+        ))}
+      </div>
+    </SceneOverlayController>
   );
 }

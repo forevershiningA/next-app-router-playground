@@ -80,7 +80,7 @@ function ViewToggleButton() {
 export default function ThreeScene() {
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
-  
+
   return (
     <>
       <ViewToggleButton />
@@ -94,7 +94,7 @@ export default function ThreeScene() {
           </div>
         </div>
       )}
-      <div className="relative h-screen w-full">
+      <div className="relative w-full h-screen">
         <Canvas shadows>
           <Suspense fallback={null}>
             <Scene />

@@ -20,19 +20,20 @@ export default function ProductPanelWrapper({ products }: { products: Product[] 
     }
   }, []); // Run once on mount
 
-  return (
-    <div className="relative w-full">
-      <SceneOverlayController section="product" title="Select Product">
-        <div className="mb-3 text-sm leading-relaxed text-white/85">
-          Choose a product. Click any card to apply it.
-        </div>
+  // Hide this panel when addition, motif, or inscription panels are active
+  const isOpen = activePanel !== 'addition' && activePanel !== 'motif' && activePanel !== 'inscription';
 
-        <div className="grid grid-cols-3 gap-3">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} type="product" />
-          ))}
-        </div>
-      </SceneOverlayController>
-    </div>
+  return (
+    <SceneOverlayController section="product" title="Select Product" isOpen={isOpen}>
+      <div className="mb-3 text-sm leading-relaxed text-white/85">
+        Choose a product. Click any card to apply it.
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 w-full">
+        {products.map((p) => (
+          <ProductCard key={p.id} product={p} type="product" />
+        ))}
+      </div>
+    </SceneOverlayController>
   );
 }

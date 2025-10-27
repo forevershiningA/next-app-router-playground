@@ -20,18 +20,19 @@ export default function MaterialPanelWrapper({ materials }: { materials: Materia
     }
   }, []); // Run once on mount
 
+  // Hide this panel when addition, motif, or inscription panels are active
+  const isOpen = activePanel !== 'addition' && activePanel !== 'motif' && activePanel !== 'inscription';
+
   return (
-    <div className="relative w-full">
-      <SceneOverlayController section="material" title="Select Material">
-        <div className="mb-3 text-sm leading-relaxed text-white/85">
-          Choose a stone material to preview on the headstone.
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {materials.map((p) => (
-            <ProductCard key={p.id} product={p} type="material" />
-          ))}
-        </div>
-      </SceneOverlayController>
-    </div>
+    <SceneOverlayController section="material" title="Select Material" isOpen={isOpen}>
+      <div className="mb-3 text-sm leading-relaxed text-white/85">
+        Choose a stone material to preview on the headstone.
+      </div>
+      <div className="grid grid-cols-3 gap-2 w-full">
+        {materials.map((p) => (
+          <ProductCard key={p.id} product={p} type="material" />
+        ))}
+      </div>
+    </SceneOverlayController>
   );
 }
