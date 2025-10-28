@@ -94,8 +94,18 @@ export default function ThreeScene() {
           </div>
         </div>
       )}
-      <div className="relative w-full h-screen">
-        <Canvas shadows>
+      <div className="relative w-full h-screen" style={{ background: '#cfe8fc' }}>
+        <Canvas 
+          shadows 
+          gl={{ 
+            alpha: false,
+            preserveDrawingBuffer: true 
+          }}
+          camera={{ position: [0, 0, 10] }}
+          onCreated={({ gl }) => {
+            gl.setClearColor('#cfe8fc');
+          }}
+        >
           <Suspense fallback={null}>
             <Scene />
             <CameraController key={is2DMode ? 'ortho' : 'persp'} />

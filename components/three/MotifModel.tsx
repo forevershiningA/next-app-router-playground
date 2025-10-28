@@ -217,12 +217,11 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   
   // Use the Y dimension (height) of the mesh for scaling
   const meshHeight = mesh.size.y;
-  
   // Calculate scale to make the motif's height match the heightMm value
   const finalScale = meshHeight > 0 ? targetHeightInUnits / meshHeight : 1;
 
-  // Position on headstone surface (front)
-  const zPosition = headstone.frontZ + 0.01;
+  // Position on headstone surface (front) with enough offset to prevent z-fighting
+  const zPosition = headstone.frontZ + 0.5;
 
   const isSelected = selectedMotifId === id;
 
