@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { defaultErrorHandler } from '#/lib/error-handler';
+import { data } from '#/app/_internal/_data';
 
 /**
  * Wires Next.js router into the store so it can do SPA navigations.
@@ -11,6 +12,7 @@ import { defaultErrorHandler } from '#/lib/error-handler';
  */
 export default function RouterBinder() {
   const router = useRouter();
+  const pathname = usePathname();
   const setNavTo = useHeadstoneStore((s) => s.setNavTo);
   const setProductId = useHeadstoneStore((s) => s.setProductId);
   const setInscriptions = useHeadstoneStore((s) => s.setInscriptions);
@@ -26,9 +28,69 @@ export default function RouterBinder() {
     );
   }, [router, setNavTo]);
 
+  // Set product ID based on URL - run immediately on mount
   useEffect(() => {
-    setProductId('124');
-  }, [setProductId]);
+    console.log('[RouterBinder] Effect running');
+    
+    // Get pathname from window if usePathname hasn't loaded yet
+    const currentPath = pathname || (typeof window !== 'undefined' ? window.location.pathname : null);
+    
+    if (!currentPath) {
+      console.log('[RouterBinder] No pathname available yet');
+      return;
+    }
+    
+    // Check if URL contains a product category or product slug
+    let productId = '124'; // Default headstone
+    
+    console.log(`[RouterBinder] Current pathname: ${currentPath}`);
+    console.log(`[RouterBinder] Available categories:`, data.categories.map(c => ({ id: c.id, slug: c.slug, name: c.name })));
+    
+    // Try to match /select-product/[section]/[category] first
+    let match = currentPath.match(/\/select-product\/[^/]+\/([^/]+)/);
+    
+    // If not found, try /select-product/[slug]
+    if (!match) {
+      match = currentPath.match(/\/select-product\/([^/]+)/);
+    }
+    
+    if (match) {
+      const slug = match[1];
+      
+      console.log(`[RouterBinder] Looking for slug: ${slug}`);
+      
+      // First try to find by category slug
+      const category = data.categories.find(c => c.slug === slug);
+      if (category) {
+        console.log(`[RouterBinder] Found category: ${category.name} (ID: ${category.id})`);
+        const product = data.products.find(p => p.category === category.id);
+        if (product) {
+          productId = product.id;
+          console.log(`[RouterBinder] Setting product ID to ${productId} (${product.name}) from category`);
+        }
+      } else {
+        // Try to find by product name converted to slug
+        console.log('[RouterBinder] Category not found, trying product name match');
+        const product = data.products.find(p => {
+          const productSlug = p.name.toLowerCase().replace(/\s+/g, '-');
+          return productSlug === slug;
+        });
+        
+        if (product) {
+          productId = product.id;
+          console.log(`[RouterBinder] Setting product ID to ${productId} (${product.name}) from product name match`);
+        } else {
+          console.log(`[RouterBinder] No category or product found for slug: ${slug}`);
+        }
+      }
+    } else {
+      console.log(`[RouterBinder] No match in URL, setting default product ID to ${productId}`);
+    }
+    
+    console.log(`[RouterBinder] Final productId being set: ${productId}`);
+    setProductId(productId);
+    // Only run once on mount
+  }, []); // Empty deps to run only on mount
 
   useEffect(() => {
     // Load inscriptions XML for init size
@@ -76,7 +138,7 @@ export default function RouterBinder() {
             inscriptions.map((line) => ({
               ...line,
               sizeMm: initHeight,
-              font: 'Chopin Script',
+              // Don't override font - preserve the font from initial setup
             })),
           );
           
@@ -97,7 +159,7 @@ export default function RouterBinder() {
           inscriptions.map((line) => ({
             ...line,
             sizeMm: 30,
-            font: 'Chopin Script',
+            // Don't override font - preserve the font from initial setup
           })),
         );
       }

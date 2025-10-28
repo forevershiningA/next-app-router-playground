@@ -19,9 +19,9 @@ type Props = {
 
 export default function AutoFit({
   target,
-  margin = 10,
+  margin = 0.5,
   duration = 0.25,
-  pad = 1,
+  pad = 0,
   readyTimeoutMs = 50,
   resizeDebounceMs = 1,
   trigger,
@@ -71,8 +71,16 @@ export default function AutoFit({
       verticalOffset = 0;
     } else {
       // Headstone with base: use proportional offset for header
-      const heightRatio = boxSize.y > 1 ? 0.15 : 0.25;
-      verticalOffset = boxSize.y * heightRatio;
+      // Different offsets for 2D vs 3D view
+      if (view === '2d') {
+        // 2D view needs positive offset to move camera target down
+        const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
+        verticalOffset = boxSize.y * heightRatio;
+      } else {
+        // 3D view offset
+        const heightRatio = boxSize.y > 1 ? 0.05 : 0.10;
+        verticalOffset = boxSize.y * heightRatio;
+      }
     }
     
     // Offset the target downward so camera shows more of the top

@@ -15,7 +15,22 @@ const nextConfig = {
   },
   turbopack: { root: process.cwd() },
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.vercel.app',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
     qualities: [75, 90, 100],
+  },
+  // Enable compression
+  compress: true,
+  // Performance monitoring
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
 } satisfies NextConfig;
 

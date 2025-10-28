@@ -287,17 +287,15 @@ function AdditionModelInner({
   let defaultX = 0, defaultY = 0;
   if (addition.type === 'application') {
     defaultX = THREE.MathUtils.lerp(minX, maxX, 0.5);
-    defaultY = THREE.MathUtils.lerp(minY, maxY, 0.6);
+    defaultY = THREE.MathUtils.lerp(minY, maxY, 0.5);
   } else if (addition.type === 'statue') {
     // Position on the base, left of headstone
-    // NOTE: Y axis is FLIPPED (negative scale in SvgHeadstone group)
-    // So MORE POSITIVE Y = LOWER in world space
-    const headstoneHeight = Math.abs(bbox.max.y - bbox.min.y);
+    // With negative Y scale: lower Y values appear higher (at base)
     defaultX = minX - 80; // Left of the headstone
-    defaultY = bbox.max.y + headstoneHeight * 0.15; // Slightly less down (was 0.2, now 0.15 to move up a bit)
+    defaultY = minY; // Near the top (base level after flip)
   } else if (addition.type === 'vase') {
     defaultX = maxX + 30; // 30mm right
-    defaultY = bbox.max.y; // Also at bottom of headstone
+    defaultY = minY; // Near the top (base level after flip)
   }
 
   const defaultOffset = {

@@ -307,10 +307,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   productId: null,
   setProductId: async (id) => {
+    console.log(`[Store] setProductId called with id: ${id}`);
+    console.trace('[Store] setProductId call stack');
     try {
+      console.log(`[Store] Fetching /xml/catalog-id-${id}.xml`);
       const response = await fetch(`/xml/catalog-id-${id}.xml`);
       const xmlText = await response.text();
       const catalog = await parseCatalogXML(xmlText, id);
+      console.log(`[Store] Setting catalog for product: ${catalog.product.name} (ID: ${id})`);
       set({ catalog, productId: id });
 
       const isPlaque = catalog.product.type === 'plaque';
@@ -503,17 +507,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   additionRefs: {},
   // Sample template: Pre-positioned additions for beautiful composition
   additionOffsets: {
-    'B1134S': { xPos: -35, yPos: 55, scale: 0.7, rotationZ: 0 },      // Angel at left top
-    'B1649': { xPos: -40, yPos: -65, scale: 0.55, rotationZ: 0 },     // Rose at left side bottom (below last inscription)
-    'B2127': { xPos: 0, yPos: 60, scale: 0.6, rotationZ: 0 },         // Cross at center top
+    'B1134S': { xPos: -35, yPos: -50, scale: 0.7, rotationZ: 0 },      // Angel at left top
+    'B1649': { xPos: -40, yPos: 40, scale: 0.55, rotationZ: 0 },       // Rose at left side bottom (below last inscription)
+    'B2127': { xPos: 0, yPos: -75, scale: 0.6, rotationZ: 0 },         // Cross at center above first inscription
   },
 
   selectedMotifId: null,
   motifRefs: {},
   // Sample template: Pre-positioned motifs with increased size for visibility
   motifOffsets: {
-    'motif_dove_1': { xPos: -40, yPos: 55, scale: 1.2, rotationZ: 0, heightMm: 100 },   // Dove - larger and higher
-    'motif_cross_1': { xPos: 40, yPos: 55, scale: 1.2, rotationZ: 0, heightMm: 100 },    // Cross - larger and higher
+    'motif_dove_1': { xPos: -40, yPos: -50, scale: 1.2, rotationZ: 0, heightMm: 100 },   // Dove - top left
+    'motif_cross_1': { xPos: 40, yPos: -50, scale: 1.2, rotationZ: 0, heightMm: 100 },    // Cross - top right
   },
 
   setInscriptions: (inscriptions) => {

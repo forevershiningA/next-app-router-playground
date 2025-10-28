@@ -192,7 +192,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
                     <button
                       type="button"
                       onClick={handleBackToMenu}
-                      className="rounded-md bg-gray-800 px-3 py-1 text-xs font-medium text-gray-200 hover:bg-gray-700 hover:text-white transition-colors normal-case lg:hidden"
+                      className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-700 hover:text-white transition-colors normal-case lg:hidden cursor-pointer"
                     >
                       Back to menu
                     </button>
@@ -254,7 +254,17 @@ function NavItem({
   slug?: string;
   setIsLoading?: (loading: boolean) => void;
 }) {
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    // Special handling for check-price: open panel directly without navigation
+    if (slug === 'check-price') {
+      e.preventDefault();
+      setActivePanel('checkprice');
+      close();
+      return;
+    }
+
     // When navigating to a different page, show loader and dispatch custom event
     if (slug && !isActive) {
       if (setIsLoading) {

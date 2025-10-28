@@ -52,9 +52,16 @@ export default function InscriptionOverlayPanel({ products }: { products: Produc
   const activeId = selectedInscriptionId;
   const active = lines.find((l) => l.id === activeId) ?? null;
 
-  const [selectedFont, setSelectedFont] = useState('Chopin Script');
+  const [selectedFont, setSelectedFont] = useState(active?.font || 'Franklin Gothic');
   const [overlayFontLoading, setOverlayFontLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'font' | 'color'>('font');
+
+  // Update selectedFont when active inscription changes
+  useEffect(() => {
+    if (active?.font) {
+      setSelectedFont(active.font);
+    }
+  }, [active?.font, active?.id]);
 
   const preloadFont = useCallback(async (fontName: string) => {
     const font = FONTS.find((f) => f.name === fontName);

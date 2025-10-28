@@ -6,7 +6,9 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 export default function CheckPriceButton() {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setActivePanel('checkprice');
   };
 

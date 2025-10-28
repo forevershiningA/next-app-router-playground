@@ -48,14 +48,22 @@ export default function SceneOverlayController({
   const [isClient, setIsClient] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const loading = useHeadstoneStore((s) => s.loading);
   
-  // Detect client-side mounting
+  // Detect client-side mounting and wait for loading to complete
   React.useEffect(() => {
     setIsClient(true);
-    // Fade in after a brief delay
-    const timer = setTimeout(() => setIsVisible(true), 50);
-    return () => clearTimeout(timer);
   }, []);
+
+  // Fade in after loading completes
+  React.useEffect(() => {
+    if (!loading && isClient) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    } else if (loading) {
+      setIsVisible(false);
+    }
+  }, [loading, isClient]);
 
   // Keys
   const globalKey = React.useMemo(() => `overlay-pos:_global`, []);
@@ -277,7 +285,7 @@ export default function SceneOverlayController({
               // Navigate to home to hide the section panels
               router.push('/');
             }}
-            className="flex items-center space-x-1 bg-white/10 px-3 py-1.5 text-xs text-white hover:bg-white/20 rounded transition-colors"
+            className="flex items-center space-x-1 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 rounded transition-colors cursor-pointer"
             title="Back to menu"
           >
             <span>←</span>

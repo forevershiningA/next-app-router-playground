@@ -190,8 +190,10 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const spanY = bbox.max.y - bbox.min.y;
   const minX = bbox.min.x + inset;
   const maxX = bbox.max.x - inset;
-  const minY = bbox.min.y + inset + 0.04 * spanY;
-  const maxY = bbox.max.y - inset;
+  // With negative Y scale: bbox.max.y becomes bottom, bbox.min.y becomes top
+  // So for positioning: higher Y value = lower on screen, lower Y value = higher on screen
+  const minY = bbox.min.y + inset + 0.04 * spanY; // Top area (after flip = bottom on screen) - prevent going too high
+  const maxY = bbox.max.y - inset; // Bottom area (after flip = top on screen)
 
   // Default position in center
   const defaultX = THREE.MathUtils.lerp(minX, maxX, 0.5);
