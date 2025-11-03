@@ -18,9 +18,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const shapes = await db.shape.findMany({ limit: 32 });
 
   return (
-    <div className="relative w-full">
+    <>
       {/* Render ONLY the panel; it already wraps itself with SceneOverlayController */}
       <InscriptionOverlayPanel products={shapes} />
-    </div>
+      {children}
+    </>
   );
 }

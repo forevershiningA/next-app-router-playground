@@ -73,12 +73,12 @@ export default function AutoFit({
       // Headstone with base: use proportional offset for header
       // Different offsets for 2D vs 3D view
       if (view === '2d') {
-        // 2D view needs positive offset to move camera target down
+        // 2D view: use same offset as 3D for seamless transition
         const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
         verticalOffset = boxSize.y * heightRatio;
       } else {
-        // 3D view offset
-        const heightRatio = boxSize.y > 1 ? 0.05 : 0.10;
+        // 3D view: same offset for seamless transition
+        const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
         verticalOffset = boxSize.y * heightRatio;
       }
     }
@@ -107,6 +107,12 @@ export default function AutoFit({
     // Explicitly set camera rotation to look directly at the target
     camera.position.copy(toPos);
     camera.lookAt(toTgt);
+    
+    // For 2D view, ensure camera stays perfectly level (no tilt)
+    if (view === '2d') {
+      camera.rotation.z = 0; // No roll
+      camera.up.set(0, 1, 0); // Ensure up vector is correct
+    }
 
     // If controls exist, update their target as well
     if (controls?.target) {

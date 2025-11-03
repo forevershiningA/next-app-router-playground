@@ -5,6 +5,7 @@ import { Suspense, useEffect } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import CanvasClickOverlay from './CanvasClickOverlay';
 import {
   CAMERA_2D_TILT_ANGLE,
   CAMERA_2D_DISTANCE,
@@ -94,7 +95,7 @@ export default function ThreeScene() {
           </div>
         </div>
       )}
-      <div className="relative w-full h-screen" style={{ background: '#cfe8fc' }}>
+      <div className="relative w-full h-screen" style={{ background: '#87CEEB', padding: '40px' }}>
         <Canvas 
           shadows 
           gl={{ 
@@ -105,6 +106,7 @@ export default function ThreeScene() {
           onCreated={({ gl }) => {
             gl.setClearColor('#cfe8fc');
           }}
+          style={{ border: '1px solid white', borderRadius: '0' }}
         >
           <Suspense fallback={null}>
             <Scene />

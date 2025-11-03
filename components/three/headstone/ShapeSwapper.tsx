@@ -11,6 +11,7 @@ import AdditionModel from '../AdditionModel';
 import MotifModel from '../MotifModel';
 import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
+import { BronzeBorder } from '../BronzeBorder';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
@@ -418,6 +419,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const borderName = useHeadstoneStore((s) => s.borderName);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
@@ -479,9 +481,15 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
   const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
   const requestedTex = React.useMemo(() => {
+    // Check if it's already a full path starting with /textures/
+    if (headstoneMaterialUrl?.startsWith('/textures/')) {
+      return headstoneMaterialUrl;
+    }
+    // Check if it's a path without leading slash
     if (headstoneMaterialUrl?.startsWith('textures/')) {
       return `/${headstoneMaterialUrl}`;
     }
+    // Otherwise extract filename and use default base
     const file = headstoneMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
     const jpg = file.replace(/\.(png|webp|jpeg)$/i, '.jpg');
     return TEX_BASE + jpg;
@@ -493,21 +501,18 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
   const swapping = requestedUrl !== visibleUrl || requestedTex !== visibleTex;
 
-  // Trigger fit when switching to 3D mode and assets are ready
+  // Trigger fit when switching view modes and assets are ready
   React.useEffect(() => {
     if (
-      !is2DMode &&
       !isMaterialChange &&
       visibleUrl === requestedUrl &&
       visibleTex === requestedTex
     ) {
-      // Trigger fit immediately and again after a short delay to ensure geometry is ready
+      // Trigger fit on view mode changes
       setFitTick((n) => n + 1);
-      const timeoutId = setTimeout(() => setFitTick((n) => n + 1), 100);
-      return () => clearTimeout(timeoutId);
     }
   }, [
-    is2DMode,
+    is2DMode, // Trigger on mode change
     isMaterialChange,
     visibleUrl,
     requestedUrl,
@@ -567,7 +572,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             
             return (
             <>
-              {inscriptions.map((line: Line, i: number) => (
+              {inscriptions.map((line: Line, i: number) => {
+                const zBump = (inscriptions.length - 1 - i) * 0.00005;
+                return (
                 <ErrorBoundary key={line.id}>
                   <React.Suspense fallback={null}>
                     <HeadstoneInscription
@@ -587,11 +594,11 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       rotationDeg={line.rotationDeg}
                       height={line.sizeMm}
                       text={line.text}
-                      zBump={-i * 0.00005}
+                      zBump={zBump}
                     />
                   </React.Suspense>
                 </ErrorBoundary>
-              ))}
+              )})}
 
               {selectedAdditionIds.map((additionId, i) => (
                 <ErrorBoundary key={`${additionId}-${i}`}>
@@ -618,6 +625,21 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                   </React.Suspense>
                 </ErrorBoundary>
               ))}
+
+              {/* Render bronze border if set */}
+              {borderName && isPlaque && (
+                <ErrorBoundary>
+                  <React.Suspense fallback={null}>
+                    <BronzeBorder
+                      borderName={borderName}
+                      plaqueWidth={widthM * 100}
+                      plaqueHeight={heightM * 100}
+                      color={headstoneMaterialUrl?.includes('phoenix') ? '#c99d44' : '#c99d44'}
+                      depth={5}
+                    />
+                  </React.Suspense>
+                </ErrorBoundary>
+              )}
             </>
             );
           }}

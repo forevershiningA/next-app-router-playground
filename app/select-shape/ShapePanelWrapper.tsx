@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import SceneOverlayController from '#/components/SceneOverlayController';
 import ProductCard from '#/ui/product-card';
@@ -16,20 +17,28 @@ export default function ShapePanelWrapper({
   shapes: Shape[];
   products: Product[];
 }) {
+  const pathname = usePathname();
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
-  // Close addition panel when this panel mounts
+  // Set this as active panel and close addition panel when this panel mounts
   React.useEffect(() => {
+    setActivePanel('shape');
     if (activePanel === 'addition') {
       setSelectedAdditionId(null);
-      setActivePanel(null);
     }
   }, []); // Run once on mount
 
-  // Hide this panel when addition, motif, or inscription panels are active
-  const isOpen = activePanel !== 'addition' && activePanel !== 'motif' && activePanel !== 'inscription';
+  // Close panel when navigating away from /select-shape
+  React.useEffect(() => {
+    if (pathname !== '/select-shape') {
+      setActivePanel(null);
+    }
+  }, [pathname, setActivePanel]);
+
+  // Hide this panel when addition, motif, or inscription panels are active, or when not on /select-shape route
+  const isOpen = pathname === '/select-shape' && activePanel !== 'addition' && activePanel !== 'motif' && activePanel !== 'inscription';
 
   return (
     <SceneOverlayController section="shape" title="Select Shape" isOpen={isOpen}>

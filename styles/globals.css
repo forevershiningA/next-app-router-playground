@@ -205,3 +205,12 @@ h1 {
     filter: blur(3px);
   }
 }
+
+/* Hide 3D canvas on product SEO pages */
+body:has([data-seo-page="true"]) canvas {
+  display: none !important;
+}
+
+body:has([data-seo-page="true"]) .lg\:pl-\[400px\] {
+  padding-left: 0 !important;
+}

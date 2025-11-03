@@ -15,6 +15,7 @@ import MainContent from '#/components/MainContent';
 import AdditionOverlayPanel from '#/components/AdditionOverlayPanel';
 import EditMotifPanel from '#/components/EditMotifPanel';
 import CheckPricePanel from '#/components/CheckPricePanel';
+import SEOPanel from '#/components/SEOPanel';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -80,6 +81,7 @@ export default function RootLayout({
                 <AdditionOverlayPanel />
                 <EditMotifPanel />
                 <CheckPricePanel />
+                <SEOPanel />
                 <ThreeScene />
               </ErrorBoundary>
             </Suspense>

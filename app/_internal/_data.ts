@@ -305,6 +305,47 @@ const colors: Color[] = [
   { id: '34', name: 'White', image: '34.jpg', hex: '#ffffff', category: '3' },
 ];
 
+const bronzes: Color[] = [
+  { id: 'b1', name: 'Black', image: '01.jpg', hex: '#000000', category: 'bronze' },
+  { id: 'b2', name: 'Brown', image: '02.jpg', hex: '#48280f', category: 'bronze' },
+  { id: 'b3', name: 'Casino Blue', image: '03.jpg', hex: '#0c1137', category: 'bronze' },
+  { id: 'b4', name: 'Dark Brown', image: '04.jpg', hex: '#24160b', category: 'bronze' },
+  { id: 'b5', name: 'Dark Green', image: '05.jpg', hex: '#1a391a', category: 'bronze' },
+  { id: 'b6', name: 'Grey', image: '06.jpg', hex: '#6d696a', category: 'bronze' },
+  { id: 'b7', name: 'Holly Green', image: '07.jpg', hex: '#07723a', category: 'bronze' },
+  { id: 'b8', name: 'Ice Blue', image: '08.jpg', hex: '#afcadb', category: 'bronze' },
+  { id: 'b9', name: 'Maroon', image: '09.jpg', hex: '#4c0f1e', category: 'bronze' },
+  { id: 'b10', name: 'Navy Blue', image: '10.jpg', hex: '#2c2c76', category: 'bronze' },
+  { id: 'b11', name: 'Purple', image: '11.jpg', hex: '#513a68', category: 'bronze' },
+  { id: 'b12', name: 'Red', image: '12.jpg', hex: '#c72028', category: 'bronze' },
+  { id: 'b13', name: 'Sundance Pink', image: '13.jpg', hex: '#c99cb0', category: 'bronze' },
+  { id: 'b14', name: 'Turquoise', image: '14.jpg', hex: '#295363', category: 'bronze' },
+  { id: 'b15', name: 'White', image: '15.jpg', hex: '#ffffff', category: 'bronze' },
+];
+
+export type Border = {
+  id: string;
+  name: string;
+  displayName: string;
+  image: string;
+  category: string;
+  message?: string;
+};
+
+const borders: Border[] = [
+  { id: '0', name: 'No Border', displayName: 'Plain cut (no border)', image: 'border0.svg', category: 'bronze' },
+  { id: '1', name: 'Border 1', displayName: 'Bar', image: 'border1.svg', category: 'bronze' },
+  { id: '2', name: 'Border 2', displayName: 'Square', image: 'border2.svg', category: 'bronze' },
+  { id: '3', name: 'Border 3', displayName: 'Solid outline', image: 'border3.svg', category: 'bronze' },
+  { id: '4', name: 'Border 4', displayName: 'Solid', image: 'border4.svg', category: 'bronze' },
+  { id: '5', name: 'Border 5', displayName: 'Notch', image: 'border5.svg', category: 'bronze' },
+  { id: '6', name: 'Border 6', displayName: 'Scallop', image: 'border6.svg', category: 'bronze' },
+  { id: '7', name: 'Border 7', displayName: 'Round outline', image: 'border7.svg', category: 'bronze' },
+  { id: '8', name: 'Border 8', displayName: 'Floral', image: 'border8.svg', category: 'bronze', message: 'The finished plaque will have whole, evenly spaced border elements' },
+  { id: '9', name: 'Border 9', displayName: 'Decorative', image: 'border9.svg', category: 'bronze', message: 'The finished plaque will have whole, evenly spaced border elements' },
+  { id: '10', name: 'Border 10', displayName: 'Square angular', image: 'border10.svg', category: 'bronze' },
+];
+
 const fonts: Font[] = [
   { id: '1', name: 'Adorable', image: 'Adorable.otf', category: '1' },
   { id: '2', name: 'Arial', image: 'arial.ttf', category: '1' },
@@ -538,6 +579,12 @@ const demos = [
         description:
           'View a detailed breakdown of your headstone pricing including all inscriptions, motifs, and additions.',
       },
+      {
+        slug: 'seo',
+        name: 'AI Design Ideas',
+        description:
+          'Browse AI-powered design ideas organized by category. Choose from thousands of professionally designed memorial templates.',
+      },
     ],
   },
 ] as const satisfies DemoCategory[];
@@ -551,8 +598,11 @@ export const data = {
   shapes,
   materials,
   colors,
+  bronzes,
+  borders,
   fonts,
   motifs,
   additions,
   demos,
 };
+

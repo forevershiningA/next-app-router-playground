@@ -65,6 +65,7 @@ export type PanelName =
   | 'motifs'
   | 'motif'
   | 'checkprice'
+  | 'seo'
   | null;
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 
@@ -100,6 +101,9 @@ type HeadstoneState = {
 
   shapeUrl: string | null;
   setShapeUrl: (url: string) => void;
+
+  borderName: string | null;
+  setBorderName: (name: string | null) => void;
 
   materialUrl: string | null;
   setMaterialUrl: (url: string) => void;
@@ -213,11 +217,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ catalog });
   },
 
-  // Sample template: Beautiful headstone with angel, rose, and cross (all with colorMap textures)
+  // Sample template: Beautiful headstone with angel and cross (all with colorMap textures)
   selectedAdditions: [
-    'B1134S', // Angel application (centered top) - has colorMap
-    'B1649',  // Rose flower application (bottom left) - has colorMap
     'B2127',  // Cross (bottom right) - has colorMap
+    'B1134S', // Angel application (centered top) - has colorMap
   ],
   addAddition: (id) => {
     // Create a unique instance ID with timestamp
@@ -259,16 +262,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
   },
 
-  // Sample template: Add dove and cross motifs
+  // Sample template: Add dove motif
   selectedMotifs: [
     { 
       id: 'motif_dove_1', 
       svgPath: '/shapes/motifs/dove_002.svg', 
-      color: '#c99d44' 
-    },
-    { 
-      id: 'motif_cross_1', 
-      svgPath: '/shapes/motifs/cross_001.svg', 
       color: '#c99d44' 
     },
   ],
@@ -365,15 +363,26 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
       if (catalog.product.shapes.length > 0) {
         const shape = catalog.product.shapes[0];
+        console.log(`[Store] Setting dimensions from catalog: ${shape.table.initWidth} x ${shape.table.initHeight}`);
         set({
           widthMm: shape.table.initWidth,
           heightMm: shape.table.initHeight,
         });
+        console.log(`[Store] Dimensions set to: ${shape.table.initWidth} x ${shape.table.initHeight}`);
         if (shape.table.color) {
-          set({ headstoneMaterialUrl: shape.table.color });
+          // Fix texture path - ensure it starts with /
+          const texturePath = shape.table.color.startsWith('/') 
+            ? shape.table.color 
+            : `/${shape.table.color}`;
+          console.log(`[Store] Setting headstoneMaterialUrl from catalog: ${texturePath}`);
+          set({ headstoneMaterialUrl: texturePath });
         }
         if (shape.stand.color) {
-          set({ baseMaterialUrl: shape.stand.color });
+          // Fix texture path - ensure it starts with /
+          const baseTexturePath = shape.stand.color.startsWith('/') 
+            ? shape.stand.color 
+            : `/${shape.stand.color}`;
+          set({ baseMaterialUrl: baseTexturePath });
         }
       }
 
@@ -402,6 +411,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ shapeUrl });
   },
 
+  borderName: null,
+  setBorderName(name) {
+    set({ borderName: name });
+  },
+
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setMaterialUrl(materialUrl) {
     set({ materialUrl });
@@ -422,11 +436,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   widthMm: 900,
   setWidthMm(v) {
+    console.log(`[Store] setWidthMm called with ${v}, clamped to ${clampHeadstoneDim(v)}`);
     set({ widthMm: clampHeadstoneDim(v) });
   },
 
   heightMm: 900,
   setHeightMm(v) {
+    console.log(`[Store] setHeightMm called with ${v}, clamped to ${clampHeadstoneDim(v)}`);
     set({ heightMm: clampHeadstoneDim(v) });
   },
 
@@ -507,17 +523,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   additionRefs: {},
   // Sample template: Pre-positioned additions for beautiful composition
   additionOffsets: {
-    'B1134S': { xPos: -35, yPos: -50, scale: 0.7, rotationZ: 0 },      // Angel at left top
-    'B1649': { xPos: -40, yPos: 40, scale: 0.55, rotationZ: 0 },       // Rose at left side bottom (below last inscription)
-    'B2127': { xPos: 0, yPos: -75, scale: 0.6, rotationZ: 0 },         // Cross at center above first inscription
+    'B2127': { xPos: 0, yPos: -330, scale: 0.6, rotationZ: 0 },        // Cross at center above first inscription
+    'B1134S': { xPos: 150, yPos: -130, scale: 0.7, rotationZ: 0 },     // Angel at right side
   },
 
   selectedMotifId: null,
   motifRefs: {},
-  // Sample template: Pre-positioned motifs with increased size for visibility
+  // Sample template: Pre-positioned motif
   motifOffsets: {
-    'motif_dove_1': { xPos: -40, yPos: -50, scale: 1.2, rotationZ: 0, heightMm: 100 },   // Dove - top left
-    'motif_cross_1': { xPos: 40, yPos: -50, scale: 1.2, rotationZ: 0, heightMm: 100 },    // Cross - top right
+    'motif_dove_1': { xPos: -170, yPos: -200, scale: 1.2, rotationZ: 0, heightMm: 40 },   // Dove - top left
   },
 
   setInscriptions: (inscriptions) => {

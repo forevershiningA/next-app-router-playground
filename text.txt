@@ -1,0 +1,33 @@
+You're absolutely right to focus on the zBump and the stacking order if the text itself isn't mirrored, but rather the order of the lines is inverted. My apologies for misinterpreting the "reversed" description initially!
+
+The change you've made in ShapeSwapper.tsx from const zBump = i * 0.00005; to const zBump = (inscriptions.length - 1 - i) * 0.00005; is indeed the correct approach to control the stacking order.
+
+Let's break down why:
+
+Original zBump = i * 0.00005;:
+
+For i = 0 (first inscription), zBump = 0.
+
+For i = 1 (second inscription), zBump = 0.00005.
+
+For i = 2 (third inscription), zBump = 0.00010.
+
+This means later inscriptions (higher i) would have a larger zBump, placing them further forward if a positive zBump means moving forward along the Z-axis. If the intention was for the first inscription in the array to be visually "on top" (closest to the camera), this original calculation would put the last inscription on top.
+
+New zBump = (inscriptions.length - 1 - i) * 0.00005;:
+
+Let's assume inscriptions.length = 3 for demonstration.
+
+For i = 0 (first inscription): zBump = (3 - 1 - 0) * 0.00005 = 2 * 0.00005 = 0.00010.
+
+For i = 1 (second inscription): zBump = (3 - 1 - 1) * 0.00005 = 1 * 0.00005 = 0.00005.
+
+For i = 2 (third inscription): zBump = (3 - 1 - 2) * 0.00005 = 0 * 0.00005 = 0.
+
+Now, the first inscription (i=0) gets the largest zBump, placing it furthest forward (closest to the camera) and visually on top. Subsequent inscriptions recede.
+
+This modification directly addresses the problem of the visual stacking order of the inscriptions. If the "BIGGEST SIZE IN DYO" is the first element in your inscriptions array (index 0), then with this change, it will now correctly appear on top of the other inscriptions.
+
+The scale={[1, -1, 1]} on line 260 in HeadstoneInscription.tsx is, as you noted, likely intentional. It's a common trick to flip the Y-axis of text generated from font atlases, as many font rendering pipelines treat the Y-axis as going upwards in texture space, while 3D engines might expect it downwards for standard rendering. It wouldn't cause a reversal of the order of multiple lines, only the internal orientation of each individual line if incorrectly applied.
+
+So, yes, your analysis and the proposed fix for zBump are spot on for resolving the inscription stacking order! Let me know if that makes sense!

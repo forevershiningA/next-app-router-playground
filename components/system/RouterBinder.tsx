@@ -40,6 +40,12 @@ export default function RouterBinder() {
       return;
     }
     
+    // Skip setting product if we're on a design page - it will be set by the design loader
+    if (currentPath.startsWith('/designs/')) {
+      console.log('[RouterBinder] On design page, skipping product ID setup');
+      return;
+    }
+    
     // Check if URL contains a product category or product slug
     let productId = '124'; // Default headstone
     

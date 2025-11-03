@@ -48,7 +48,11 @@ export default function SceneOverlayController({
   const [isClient, setIsClient] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const activePanel = useHeadstoneStore((s) => s.activePanel);
   const loading = useHeadstoneStore((s) => s.loading);
+  
+  // Determine if this panel is the currently active one
+  const isActivePanel = activePanel === section;
   
   // Detect client-side mounting and wait for loading to complete
   React.useEffect(() => {
@@ -240,7 +244,9 @@ export default function SceneOverlayController({
       ref={rootRef}
       data-scene-overlay
       className={clsx(
-        'pointer-events-auto fixed z-[9998] transition-opacity duration-200',
+        'pointer-events-auto fixed transition-opacity duration-200',
+        // Dynamic z-index: active panel gets highest z-index to appear above nav
+        isActivePanel ? 'z-[99999]' : 'z-[99998]',
         // Mobile portrait: stick to bottom, full width
         'max-md:!left-0 max-md:!bottom-0 max-md:!top-auto max-md:!w-full max-md:!max-w-full',
         isVisible ? 'opacity-100' : 'opacity-0',

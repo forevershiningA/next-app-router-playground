@@ -112,17 +112,20 @@ export default function InscriptionOverlayPanel({ products }: { products: Produc
     addInscriptionLine({ text, font: selectedFont, yPos: newY });
   }, [lines, addInscriptionLine, incomingText, selectedFont]);
 
-  // Don't render if not the inscription panel OR if addition panel is active
+  // Only hide if a different panel is active (not inscription)
   if (activePanel !== 'inscription' && activePanel !== null) {
     return null;
   }
+
+  // When activePanel is 'inscription' or null, show the panel
+  const shouldBeOpen = activePanel === 'inscription';
 
   return (
     <SceneOverlayController
       section="inscriptions"
       title="Edit Inscription"
       persistKey="inscriptions"
-      isOpen={activePanel === 'inscription'}
+      isOpen={shouldBeOpen}
       onClose={closeInscriptions}
     >
       <div className="bg-gray-900/50 p-4 space-y-4">

@@ -38,9 +38,38 @@ export default function CheckPricePanel() {
     return filename.replace('.svg', '').replace(/-/g, ' ');
   }, [shapeUrl]);
 
+  // Bronze material name mapping
+  const BRONZE_MATERIALS: Record<string, string> = {
+    '01': 'Black',
+    '02': 'Brown', 
+    '03': 'Casino Blue',
+    '04': 'Dark Brown',
+    '05': 'Dark Green',
+    '06': 'Grey',
+    '07': 'Holly Green',
+    '08': 'Ice Blue',
+    '09': 'Maroon',
+    '10': 'Navy Blue',
+    '11': 'Purple',
+    '12': 'Red',
+    '13': 'Sundance Pink',
+    '14': 'Turquoise',
+    '15': 'White',
+  };
+
   // Get material name from URL
   const getMaterialName = (url: string | null) => {
     if (!url) return 'Unknown';
+    
+    // Check if it's a bronze texture
+    if (url.includes('phoenix')) {
+      const match = url.match(/\/(\d+)\.jpg$/);
+      if (match) {
+        const number = match[1];
+        return BRONZE_MATERIALS[number] || `Bronze ${number}`;
+      }
+    }
+    
     const parts = url.split('/');
     const filename = parts[parts.length - 1];
     return filename.replace('.jpg', '').replace('.png', '').replace(/-/g, ' ');
@@ -212,40 +241,40 @@ export default function CheckPricePanel() {
                 </tr>
               )}
 
-              {/* Inscriptions - Combined */}
-              {inscriptions.length > 0 && (
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Product</span>
-                    <p>
-                      <strong>Product ID: {showInscriptionColor ? '125' : '16'} - Inscription ({showInscriptionColor ? 'Traditional Engraved' : 'Laser Etched'})</strong>
-                      {inscriptions.map((line, idx) => {
-                        const colorName = data.colors.find((c) => c.hex === line.color)?.name || line.color;
-                        return (
-                          <React.Fragment key={line.id}>
-                            <br />
-                            {line.text}
-                            <br />
-                            {line.sizeMm}mm {line.font}, colour: {colorName} ({line.color})
-                          </React.Fragment>
-                        );
-                      })}
-                    </p>
-                  </td>
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Qty</span>
-                    <p>{inscriptions.reduce((sum, line) => sum + line.text.length, 0)}</p>
-                  </td>
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Price</span>
-                    ${inscriptions.length > 0 ? (inscriptionCost / inscriptions.reduce((sum, line) => sum + line.text.length, 0)).toFixed(2) : '0.00'}
-                  </td>
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Item Total</span>
-                    ${inscriptionCost.toFixed(2)}
-                  </td>
-                </tr>
-              )}
+              {/* Inscriptions - Individual rows */}
+              {inscriptions.map((line, idx) => {
+                const colorName = data.colors.find((c) => c.hex === line.color)?.name || line.color;
+                const charCount = line.text.length;
+                const pricePerChar = inscriptionCost / inscriptions.reduce((sum, l) => sum + l.text.length, 0);
+                const lineTotal = charCount * pricePerChar;
+                
+                return (
+                  <tr key={line.id} className="border-b border-gray-200 hover:bg-gray-50">
+                    <td className="px-4 py-3 text-gray-900">
+                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Product</span>
+                      <p>
+                        <strong>Product ID: {showInscriptionColor ? '125' : '16'} - Inscription ({showInscriptionColor ? 'Traditional Engraved' : 'Laser Etched'})</strong>
+                        <br />
+                        {line.text}
+                        <br />
+                        {line.sizeMm}mm {line.font}, colour: {colorName} ({line.color})
+                      </p>
+                    </td>
+                    <td className="px-4 py-3 text-gray-900">
+                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Qty</span>
+                      {charCount}
+                    </td>
+                    <td className="px-4 py-3 text-gray-900">
+                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Price</span>
+                      ${pricePerChar.toFixed(2)}
+                    </td>
+                    <td className="px-4 py-3 text-gray-900">
+                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Item Total</span>
+                      ${lineTotal.toFixed(2)}
+                    </td>
+                  </tr>
+                );
+              })}
 
               {/* Additions */}
               {additionItems.map((item) => {
