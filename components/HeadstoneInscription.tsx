@@ -7,6 +7,7 @@ import { Text } from '@react-three/drei';
 import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { ThreeContextValue } from '#/lib/three-types';
+import InscriptionBoxSelection from './InscriptionBoxSelection';
 
 /* ------------------------------------------------------------------ */
 /* Props                                                               */
@@ -85,6 +86,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     );
     const [dragging, setDragging] = React.useState(false);
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
+    const [textBounds, setTextBounds] = React.useState({ width: 0, height: 0 });
+    const textMeshRef = React.useRef<THREE.Mesh | null>(null);
 
     /* ---------------- position on current mesh bbox once available ---------------- */
     React.useEffect(() => {
@@ -219,7 +222,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       };
     }, [dragging, gl, controls, placeFromClientXY]);
 
-    /* ---------------------- PER-ITEM HIGHLIGHT (BoxHelper) ---------------------- */
+    /* ---------------------- PER-ITEM HIGHLIGHT (BoxHelper) - DISABLED ---------------------- */
+    // Removed white outline box helper - using custom selection box instead
+    /*
     React.useEffect(() => {
       const obj = groupRef.current;
       if (!obj || !selected) return;
@@ -250,8 +255,27 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         helperRef.current.scale.setScalar(1.01);
       }
     });
+    */
 
     /* --------------------------------------- UI ---------------------------------------- */
+    
+    // Calculate text bounds for the selection box
+    const handleTextSync = React.useCallback((sprite: any) => {
+      // The sprite/mesh is available after text is rendered
+      if (sprite && sprite.geometry) {
+        sprite.geometry.computeBoundingBox();
+        const bbox = sprite.geometry.boundingBox;
+        if (bbox) {
+          const width = bbox.max.x - bbox.min.x;
+          const height = bbox.max.y - bbox.min.y;
+          setTextBounds({ width, height });
+          textMeshRef.current = sprite;
+        }
+      }
+      // Also refresh helper bounds if present
+      helperRef.current?.update();
+    }, []);
+    
     return (
       <group
         ref={groupRef}
@@ -265,12 +289,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           anchorX="center"
           anchorY="middle"
           fontSize={height}
-          outlineWidth={(selected ? 0.005 : 0.002) * units}
-          outlineColor={selected ? '#ffffff' : 'black'}
-          onSync={() => {
-            // geometry finished updating; refresh helper bounds if present
-            helperRef.current?.update();
-          }}
+          outlineWidth={0.002 * units}
+          outlineColor="black"
+          onSync={handleTextSync}
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {
             e.stopPropagation();
@@ -315,6 +336,32 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         >
           {text}
         </Text>
+        
+        {/* Selection box with resize and rotation handles */}
+        {selected && textBounds.width > 0 && (
+          <InscriptionBoxSelection
+            inscriptionId={id}
+            position={new THREE.Vector3(0, 0, 0.002)}
+            bounds={{
+              width: textBounds.width,
+              height: textBounds.height,
+            }}
+            rotation={0} // Rotation is already applied to parent group
+            unitsPerMeter={units}
+            currentSizeMm={height} // height is already in mm!
+            onUpdate={(data) => {
+              if (data.sizeMm !== undefined) {
+                // Use the absolute size value directly
+                updateLineStore(id, { sizeMm: data.sizeMm });
+              }
+              if (data.rotationDeg !== undefined) {
+                // Add the rotation delta to current rotation
+                const newRotation = rotationDeg + data.rotationDeg;
+                updateLineStore(id, { rotationDeg: newRotation });
+              }
+            }}
+          />
+        )}
       </group>
     );
   },
