@@ -65,7 +65,7 @@ export type PanelName =
   | 'motifs'
   | 'motif'
   | 'checkprice'
-  | 'seo'
+  | 'designs'
   | null;
 type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 

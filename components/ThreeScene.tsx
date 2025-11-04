@@ -103,9 +103,6 @@ export default function ThreeScene() {
             preserveDrawingBuffer: true 
           }}
           camera={{ position: [0, 0, 10] }}
-          onCreated={({ gl }) => {
-            gl.setClearColor('#cfe8fc');
-          }}
           style={{ border: '1px solid white', borderRadius: '0' }}
         >
           <Suspense fallback={null}>

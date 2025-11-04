@@ -34,7 +34,7 @@ const menuIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'select-additions': PlusCircleIcon,
   'select-motifs': SparklesIcon,
   'check-price': CurrencyDollarIcon,
-  'seo': LightBulbIcon,
+  'designs': LightBulbIcon,
 };
 
 export function GlobalNav({ items }: { items: DemoCategory[] }) {

@@ -7,7 +7,7 @@ export default function SEOButton() {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
   const handleClick = () => {
-    setActivePanel('seo');
+    setActivePanel('designs');
   };
 
   return (

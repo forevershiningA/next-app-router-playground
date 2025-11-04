@@ -21,7 +21,7 @@ export default function SEOPanel() {
   const [loading, setLoading] = useState(false);
   const [globalLoading, setGlobalLoading] = useState(false);
 
-  const isOpen = activePanel === 'seo';
+  const isOpen = activePanel === 'designs';
 
   const handleClose = () => {
     setActivePanel(null);

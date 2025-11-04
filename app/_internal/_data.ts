@@ -580,7 +580,7 @@ const demos = [
           'View a detailed breakdown of your headstone pricing including all inscriptions, motifs, and additions.',
       },
       {
-        slug: 'seo',
+        slug: 'designs',
         name: 'AI Design Ideas',
         description:
           'Browse AI-powered design ideas organized by category. Choose from thousands of professionally designed memorial templates.',

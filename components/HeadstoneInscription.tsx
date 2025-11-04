@@ -7,7 +7,7 @@ import { Text } from '@react-three/drei';
 import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { ThreeContextValue } from '#/lib/three-types';
-import InscriptionBoxSelection from './InscriptionBoxSelection';
+import SelectionBox from './SelectionBox';
 
 /* ------------------------------------------------------------------ */
 /* Props                                                               */
@@ -339,8 +339,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         
         {/* Selection box with resize and rotation handles */}
         {selected && textBounds.width > 0 && (
-          <InscriptionBoxSelection
-            inscriptionId={id}
+          <SelectionBox
+            objectId={id}
             position={new THREE.Vector3(0, 0, 0.002)}
             bounds={{
               width: textBounds.width,
@@ -349,6 +349,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             rotation={0} // Rotation is already applied to parent group
             unitsPerMeter={units}
             currentSizeMm={height} // height is already in mm!
+            objectType="inscription"
             onUpdate={(data) => {
               if (data.sizeMm !== undefined) {
                 // Use the absolute size value directly

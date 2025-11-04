@@ -1,7 +1,8 @@
 'use client';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import SkyShader from './SkyShader';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import {
   SKY_TOP_COLOR,
@@ -16,6 +17,11 @@ export default function Scene() {
 
   return (
     <>
+      <SkyShader />
+      
+      {/* Add environment for reflections */}
+      <Environment preset="sunset" environmentIntensity={0.4} />
+      
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow />
       <directionalLight position={[-3, 4, -3]} intensity={0.4} />

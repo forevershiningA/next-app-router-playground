@@ -6,6 +6,7 @@ import { useLoader, useThree } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
+import SelectionBox from '../SelectionBox';
 
 type Props = {
   id: string; // unique motif ID
@@ -239,6 +240,40 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
       onPointerOut={handlePointerOut}
     >
       <primitive object={mesh.group} />
+      
+      {/* Selection box when selected */}
+      {isSelected && (
+        <SelectionBox
+          objectId={id}
+          position={new THREE.Vector3(0, 0, 0.002)}
+          bounds={{
+            width: mesh.size.x,
+            height: mesh.size.y,
+          }}
+          rotation={0}
+          unitsPerMeter={headstone.unitsPerMeter}
+          currentSizeMm={offset.heightMm ?? 100}
+          objectType="motif"
+          onUpdate={(data) => {
+            if (data.scaleFactor !== undefined) {
+              // Update heightMm based on scale factor
+              const newHeightMm = (offset.heightMm ?? 100) * data.scaleFactor;
+              setMotifOffset(id, {
+                ...offset,
+                heightMm: Math.max(10, Math.min(newHeightMm, 500)),
+              });
+            }
+            if (data.rotationDeg !== undefined) {
+              // Add rotation delta to current rotation
+              const newRotation = (offset.rotationZ || 0) + (data.rotationDeg * Math.PI) / 180;
+              setMotifOffset(id, {
+                ...offset,
+                rotationZ: newRotation,
+              });
+            }
+          }}
+        />
+      )}
     </group>
   );
 }

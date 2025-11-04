@@ -392,17 +392,19 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       // Materials (caps index 0, sides index 1)
       const capMat = new THREE.MeshStandardMaterial({
         map: faceMap,
-        roughness: 0.92,
-        metalness: 0.03,
+        roughness: 0.7,
+        metalness: 0.15,
         color: 0xffffff,
         side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        envMapIntensity: 0.3,
       });
       const sideMat = new THREE.MeshStandardMaterial({
         map: sideMap,
-        roughness: 0.95,
-        metalness: 0.02,
+        roughness: 0.8,
+        metalness: 0.1,
         color: 0xffffff,
         side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        envMapIntensity: 0.25,
       });
 
       const meshes = geoms.map((geom, i) => (
