@@ -28,6 +28,8 @@ type Props = {
   }) => void;
   /** Type of object being selected (for specific behaviors) */
   objectType?: 'inscription' | 'motif' | 'addition';
+  /** Addition type (for additions only) - used to determine if it's 2D or 3D */
+  additionType?: 'application' | 'statue' | 'vase';
 };
 
 type HandleType = 
@@ -46,6 +48,7 @@ export default function SelectionBox({
   currentSizeMm,
   onUpdate,
   objectType = 'inscription',
+  additionType,
 }: Props) {
   const threeContext = useThree();
   const { camera, gl, controls } = threeContext;
@@ -68,22 +71,24 @@ export default function SelectionBox({
     pointerId: 0,
   });
 
-  // Visual constants - FIXED SIZES
-  const fixedHandleSize = objectType === 'motif' || objectType === 'addition' 
-    ? 150 / unitsPerMeter  // 150mm for motifs/additions (larger)
-    : 750 / unitsPerMeter;  // 750mm for inscriptions (original size)
-  const handleThickness = 10 / unitsPerMeter; // 10mm fixed thickness
+  // Determine if this is a 2D object (flat on headstone surface)
+  const is2DObject = objectType === 'inscription' || 
+                     objectType === 'motif' || 
+                     (objectType === 'addition' && additionType === 'application');
+
+  // Visual constants - UNIFIED for all 2D objects
+  const fixedHandleSize = is2DObject
+    ? 750 / unitsPerMeter  // 750mm for all 2D objects
+    : 150 / unitsPerMeter;  // 150mm for 3D additions (statues, vases)
+    
+  // Different thickness for different object types due to different coordinate systems
+  const handleThickness = objectType === 'motif'
+    ? 100 / unitsPerMeter  // Motifs need much thicker (100mm) due to their coordinate system
+    : 25 / unitsPerMeter;  // Inscriptions use 25mm
   const handleZOffset = 0.01; // Move handles forward in Z
-  const rotateHandleSize = objectType === 'motif' || objectType === 'addition'
-    ? bounds.height * 0.08  // Smaller for motifs (8% of height)
-    : bounds.height * 0.15 * 0.8; // 15% * 80% for inscriptions
-  const rotateHandleOffset = objectType === 'motif' || objectType === 'addition'
-    ? bounds.height * 0.65  // 65% above motif (smaller offset)
-    : bounds.height * 1.2;  // 120% above inscription
   
   const outlineColor = 0x00ffff; // Cyan
   const handleColor = 0xffffff; // White
-  const rotateColor = 0x404040; // Dark grey
 
   // Create box outline points
   const outlinePoints = React.useMemo(() => {
@@ -136,30 +141,48 @@ export default function SelectionBox({
         (gl.domElement as any).orbitControls.enabled = false;
       }
       
-      const cursorMap: Record<HandleType, string> = {
-        topLeft: 'nwse-resize',
-        topRight: 'nesw-resize',
-        bottomLeft: 'nesw-resize',
-        bottomRight: 'nwse-resize',
-        rotate: 'grabbing',
-      };
+      // For motifs, Y-axis appears to be inverted, so cursors need to be flipped
+      const cursorMap: Record<HandleType, string> = objectType === 'motif' 
+        ? {
+            topLeft: 'nesw-resize',      // Flipped for motifs
+            topRight: 'nwse-resize',     // Flipped for motifs
+            bottomLeft: 'nwse-resize',   // Flipped for motifs
+            bottomRight: 'nesw-resize',  // Flipped for motifs
+            rotate: 'grabbing',
+          }
+        : {
+            topLeft: 'nwse-resize',
+            topRight: 'nesw-resize',
+            bottomLeft: 'nesw-resize',
+            bottomRight: 'nwse-resize',
+            rotate: 'grabbing',
+          };
       
       document.body.style.cursor = cursorMap[handleType] || 'grab';
     },
-    [bounds, gl, currentSizeMm, controls]
+    [bounds, gl, currentSizeMm, controls, objectType]
   );
 
   const handlePointerEnter = React.useCallback((handle: HandleType) => {
     setHoveredHandle(handle);
-    const cursorMap: Record<HandleType, string> = {
-      topLeft: 'nwse-resize',
-      topRight: 'nesw-resize',
-      bottomLeft: 'nesw-resize',
-      bottomRight: 'nwse-resize',
-      rotate: 'grab',
-    };
+    // Same cursor mapping for hover
+    const cursorMap: Record<HandleType, string> = objectType === 'motif'
+      ? {
+          topLeft: 'nesw-resize',
+          topRight: 'nwse-resize',
+          bottomLeft: 'nwse-resize',
+          bottomRight: 'nesw-resize',
+          rotate: 'grab',
+        }
+      : {
+          topLeft: 'nwse-resize',
+          topRight: 'nesw-resize',
+          bottomLeft: 'nesw-resize',
+          bottomRight: 'nwse-resize',
+          rotate: 'grab',
+        };
     document.body.style.cursor = cursorMap[handle] || 'auto';
-  }, []);
+  }, [objectType]);
 
   const handlePointerLeave = React.useCallback(() => {
     if (!isDragging) {
@@ -193,7 +216,8 @@ export default function SelectionBox({
         const deltaX = e.clientX - dragStartRef.current.x;
         const deltaY = e.clientY - dragStartRef.current.y;
 
-        const sensitivity = 150;
+        // Lower sensitivity value = faster/more sensitive resizing
+        const sensitivity = objectType === 'motif' ? 200 : 150;
 
         switch (dragHandle) {
           case 'topLeft':
@@ -201,8 +225,14 @@ export default function SelectionBox({
           case 'bottomLeft':
           case 'bottomRight': {
             // Corner resize - proportional scaling
+            // For motifs, Y-axis is inverted, so we need to flip the Y direction
             const factorX = (dragHandle === 'topLeft' || dragHandle === 'bottomLeft') ? -1 : 1;
-            const factorY = (dragHandle === 'topLeft' || dragHandle === 'topRight') ? -1 : 1;
+            let factorY = (dragHandle === 'topLeft' || dragHandle === 'topRight') ? -1 : 1;
+            
+            // Flip Y direction for motifs due to inverted coordinate system
+            if (objectType === 'motif') {
+              factorY = -factorY;
+            }
             
             const scaleX = 1 + (deltaX * factorX) / sensitivity;
             const scaleY = 1 + (deltaY * factorY) / sensitivity;
@@ -309,7 +339,6 @@ export default function SelectionBox({
 
   // Refs for non-interactive elements
   const outlineRef = React.useRef<any>(null);
-  const lineRef = React.useRef<any>(null);
 
   // Cleanup timeout on unmount
   React.useEffect(() => {
@@ -320,42 +349,48 @@ export default function SelectionBox({
     };
   }, []);
 
-  // Disable raycasting on outline and connecting line
+  // Disable raycasting on outline
   React.useEffect(() => {
     if (outlineRef.current) {
       outlineRef.current.raycast = () => {};
-    }
-    if (lineRef.current) {
-      lineRef.current.raycast = () => {};
     }
   }, []);
 
   return (
     <group position={position} rotation={[0, 0, rotation]}>
-      {/* Box outline */}
+      {/* Box outline - try both Line and backup mesh approach */}
       <Line
         ref={outlineRef}
         points={outlinePoints}
         color={outlineColor}
-        lineWidth={2}
-        renderOrder={1000}
+        lineWidth={3}
+        renderOrder={1001}
         depthWrite={false}
+        depthTest={false}
         visible={true}
       />
-
-      {/* Line connecting to rotation handle */}
-      <Line
-        ref={lineRef}
-        points={[
-          [0, bounds.height / 2, 0],
-          [0, bounds.height / 2 + rotateHandleOffset, 0],
-        ]}
-        color={outlineColor}
-        lineWidth={1}
-        renderOrder={1000}
-        depthWrite={false}
-        visible={true}
-      />
+      
+      {/* Backup outline using thin boxes - always render for debugging */}
+      {outlinePoints.map((point, i) => {
+        if (i === outlinePoints.length - 1) return null;
+        const nextPoint = outlinePoints[i + 1];
+        const midX = (point.x + nextPoint.x) / 2;
+        const midY = (point.y + nextPoint.y) / 2;
+        const length = point.distanceTo(nextPoint);
+        const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x);
+        
+        return (
+          <mesh
+            key={`outline-${i}`}
+            position={[midX, midY, handleZOffset + 0.001]}
+            rotation={[0, 0, angle]}
+            renderOrder={1002}
+          >
+            <boxGeometry args={[length, handleThickness, handleThickness]} />
+            <meshBasicMaterial color={outlineColor} depthWrite={false} depthTest={false} />
+          </mesh>
+        );
+      })}
 
       {/* Corner Handles - Top-Left */}
       <mesh
@@ -428,57 +463,6 @@ export default function SelectionBox({
           depthWrite={false}
         />
       </mesh>
-
-      {/* Rotation handle - circle */}
-      <mesh
-        position={[0, bounds.height / 2 + rotateHandleOffset, handleZOffset]}
-        renderOrder={1003}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => handlePointerDown(e, 'rotate')}
-        onPointerEnter={() => handlePointerEnter('rotate')}
-        onPointerLeave={handlePointerLeave}
-      >
-        <circleGeometry args={[rotateHandleSize, 32]} />
-        <meshBasicMaterial 
-          color={rotateColor} 
-          transparent={false}
-          depthWrite={false}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-
-      {/* HTML overlay for rotation icon */}
-      <Html
-        position={[0, bounds.height / 2 + rotateHandleOffset, handleThickness * 3]}
-        center
-        distanceFactor={10}
-        zIndexRange={[1000, 0]}
-        style={{ 
-          pointerEvents: 'none',
-          userSelect: 'none',
-          display: 'block',
-        }}
-      >
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            backgroundColor: '#404040',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '20px',
-            color: 'white',
-            fontWeight: 'bold',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.8)',
-            border: '2px solid white',
-          }}
-        >
-          ⟲
-        </div>
-      </Html>
     </group>
   );
 }

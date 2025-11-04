@@ -340,35 +340,44 @@ function AdditionModelInner({
 
   const isSelected = selectedAdditionId === id;
 
+  // Calculate scaled bounds for SelectionBox (in world space)
+  const scaledBounds = {
+    width: size.x * finalScale,
+    height: size.y * finalScale,
+  };
+
   return (
     <>      
+      {/* Parent group for positioning only - no scale applied here */}
       <group
-        ref={ref}
         position={[offset.xPos, offset.yPos, zPosition]}
         rotation={[0, 0, offset.rotationZ || 0]}
-        scale={[finalScale, finalScale, finalScale]}
-        visible={true}
-        name={`addition-${id}`}
-        onClick={handleClick}
-        onPointerDown={handlePointerDown}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
       >
-        <primitive object={scene} />
+        {/* Addition mesh with scale */}
+        <group
+          ref={ref}
+          scale={[finalScale, finalScale, finalScale]}
+          visible={true}
+          name={`addition-${id}`}
+          onClick={handleClick}
+          onPointerDown={handlePointerDown}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+        >
+          <primitive object={scene} />
+        </group>
         
-        {/* Selection box when selected */}
-        {isSelected && (
+        {/* Selection box without scale - sibling to addition - only for application type */}
+        {isSelected && addition.type === 'application' && (
           <SelectionBox
             objectId={id}
             position={new THREE.Vector3(0, 0, 0.002)}
-            bounds={{
-              width: size.x,
-              height: size.y,
-            }}
+            bounds={scaledBounds}
             rotation={0}
             unitsPerMeter={headstone.unitsPerMeter}
             currentSizeMm={(offset.scale ?? 1) * 100}
             objectType="addition"
+            additionType={addition.type}
             onUpdate={(data) => {
               if (data.scaleFactor !== undefined) {
                 // Update scale based on scale factor

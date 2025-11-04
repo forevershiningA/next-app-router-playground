@@ -557,9 +557,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
               setSelectedInscriptionId(null);
               setSelectedAdditionId(null); // Close addition panel
               setSelectedMotifId(null); // Close motif panel
-              if (pathname === '/') {
-                openSizePanel?.();
-              }
+              // Always open size panel when clicking headstone
+              openSizePanel?.();
             },
           }}
         >
@@ -585,6 +584,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       selected={selectedInscriptionId === line.id}
                       onSelectInscription={() => {
                         setSelected(null);
+                        setSelectedMotifId(null); // Clear motif selection
+                        setSelectedAdditionId(null); // Clear addition selection
                         openInscriptions?.(line.id);
                       }}
                       color={line.color}

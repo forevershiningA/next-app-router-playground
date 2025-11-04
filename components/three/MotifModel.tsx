@@ -226,54 +226,68 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
 
   const isSelected = selectedMotifId === id;
 
+  // Calculate scaled bounds for SelectionBox (in world space)
+  const scaledBounds = {
+    width: mesh.size.x * finalScale,
+    height: mesh.size.y * finalScale,
+  };
+
   return (
-    <group
-      ref={ref}
-      position={[offset.xPos, offset.yPos, zPosition]}
-      rotation={[0, 0, offset.rotationZ || 0]}
-      scale={[finalScale, finalScale, 1]}
-      visible={true}
-      name={`motif-${id}`}
-      onClick={handleClick}
-      onPointerDown={handlePointerDown}
-      onPointerOver={handlePointerOver}
-      onPointerOut={handlePointerOut}
-    >
-      <primitive object={mesh.group} />
-      
-      {/* Selection box when selected */}
-      {isSelected && (
-        <SelectionBox
-          objectId={id}
-          position={new THREE.Vector3(0, 0, 0.002)}
-          bounds={{
-            width: mesh.size.x,
-            height: mesh.size.y,
-          }}
-          rotation={0}
-          unitsPerMeter={headstone.unitsPerMeter}
-          currentSizeMm={offset.heightMm ?? 100}
-          objectType="motif"
-          onUpdate={(data) => {
-            if (data.scaleFactor !== undefined) {
-              // Update heightMm based on scale factor
-              const newHeightMm = (offset.heightMm ?? 100) * data.scaleFactor;
-              setMotifOffset(id, {
-                ...offset,
-                heightMm: Math.max(10, Math.min(newHeightMm, 500)),
-              });
-            }
-            if (data.rotationDeg !== undefined) {
-              // Add rotation delta to current rotation
-              const newRotation = (offset.rotationZ || 0) + (data.rotationDeg * Math.PI) / 180;
-              setMotifOffset(id, {
-                ...offset,
-                rotationZ: newRotation,
-              });
-            }
-          }}
-        />
-      )}
-    </group>
+    <>
+      {/* Parent group for positioning only - no scale applied here */}
+      <group
+        position={[offset.xPos, offset.yPos, zPosition]}
+        rotation={[0, 0, offset.rotationZ || 0]}
+      >
+        {/* Motif mesh with scale */}
+        <group
+          ref={ref}
+          scale={[finalScale, finalScale, 1]}
+          visible={true}
+          name={`motif-${id}`}
+          onClick={handleClick}
+          onPointerDown={handlePointerDown}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+        >
+          <primitive object={mesh.group} />
+        </group>
+        
+        {/* Selection box without scale - sibling to motif */}
+        {isSelected && (
+          <SelectionBox
+            objectId={id}
+            position={new THREE.Vector3(0, 0, 0.002)}
+            bounds={scaledBounds}
+            rotation={0}
+            unitsPerMeter={headstone.unitsPerMeter}
+            currentSizeMm={offset.heightMm ?? 100}
+            objectType="motif"
+            onUpdate={(data) => {
+              if (data.scaleFactor !== undefined) {
+                // Update heightMm based on scale factor
+                const newHeightMm = (offset.heightMm ?? 100) * data.scaleFactor;
+                // Round to integer and enforce minimum of 40mm for color motifs
+                const roundedHeight = Math.round(newHeightMm);
+                const clampedHeight = Math.max(40, Math.min(roundedHeight, 500));
+                
+                setMotifOffset(id, {
+                  ...offset,
+                  heightMm: clampedHeight,
+                });
+              }
+              if (data.rotationDeg !== undefined) {
+                // Add rotation delta to current rotation
+                const newRotation = (offset.rotationZ || 0) + (data.rotationDeg * Math.PI) / 180;
+                setMotifOffset(id, {
+                  ...offset,
+                  rotationZ: newRotation,
+                });
+              }
+            }}
+          />
+        )}
+      </group>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import ShapeSwapper from './ShapeSwapper';
 import HeadstoneBaseAuto from './HeadstoneBaseAuto';
 import BoxOutline from '../BoxOutline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { data } from '#/app/_internal/_data';
 
 const BASE_H = 2;
 
@@ -36,6 +37,17 @@ export default function HeadstoneAssembly() {
   const selectedInscription = inscriptions.find(
     (inscription) => inscription.id === selectedInscriptionId,
   );
+
+  // Check if selected addition is an application type (2D, flat on headstone)
+  const isApplicationAddition = React.useMemo(() => {
+    if (!selectedAdditionId) return false;
+    
+    // Extract base ID from instance ID (remove timestamp suffix)
+    const baseId = selectedAdditionId.split('_')[0];
+    const addition = data.additions.find((a) => a.id === baseId);
+    
+    return addition?.type === 'application';
+  }, [selectedAdditionId]);
 
   return (
     <>
@@ -68,7 +80,8 @@ export default function HeadstoneAssembly() {
           />
         )}
 
-        {selectedAdditionId && additionRefs[selectedAdditionId] && (
+        {/* Only show BoxOutline for 3D additions (statues, vases), not application type */}
+        {selectedAdditionId && additionRefs[selectedAdditionId] && !isApplicationAddition && (
           <BoxOutline
             targetRef={additionRefs[selectedAdditionId]}
             visible={true}
@@ -78,7 +91,8 @@ export default function HeadstoneAssembly() {
           />
         )}
 
-        {selectedMotifId && motifRefs[selectedMotifId] && (
+        {/* Motifs are 2D, so don't show BoxOutline - they use SelectionBox instead */}
+        {/* selectedMotifId && motifRefs[selectedMotifId] && (
           <BoxOutline
             targetRef={motifRefs[selectedMotifId]}
             visible={true}
@@ -86,7 +100,7 @@ export default function HeadstoneAssembly() {
             pad={0.02}
             through={false}
           />
-        )}
+        ) */}
 
         {showBase && (
           <HeadstoneBaseAuto
