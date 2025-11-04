@@ -71,7 +71,7 @@ export default function SelectionBox({
   // Visual constants - FIXED SIZES
   const fixedHandleSize = objectType === 'motif' || objectType === 'addition' 
     ? 150 / unitsPerMeter  // 150mm for motifs/additions (larger)
-    : 75 / unitsPerMeter;  // 75mm for inscriptions
+    : 750 / unitsPerMeter;  // 750mm for inscriptions (original size)
   const handleThickness = 10 / unitsPerMeter; // 10mm fixed thickness
   const handleZOffset = 0.01; // Move handles forward in Z
   const rotateHandleSize = objectType === 'motif' || objectType === 'addition'
