@@ -100,25 +100,21 @@ const fragmentShader = `
       skyCol = mix(skyCol, cloudCol, smoothstep(0.4, 0.8, den));
     }
     
-    // Green ground color for bottom (when looking down)
-    vec3 groundCol = vec3(0.647, 0.788, 0.251); // #A5C940
+    // Ground color - using original background color #cfe8fc
+    vec3 groundCol = vec3(0.812, 0.910, 0.988); // #cfe8fc
     
-    // horizon color - slightly darker version of the same green
-    vec3 horizonCol = vec3(0.58, 0.71, 0.22); // Darker #A5C940
+    // horizon color - slightly darker version
+    vec3 horizonCol = vec3(0.75, 0.85, 0.95); // Slightly darker than #cfe8fc
     
-    // Adjust horizon to 55% sky / 45% ground
-    // Shift horizon point to -0.1
-    float horizonPoint = -0.1;
-    float adjustedY = rd.y - horizonPoint;
-    float horizonBlend = smoothstep(-0.1, 0.1, adjustedY);
-    vec3 baseColor = mix(groundCol, skyCol, horizonBlend);
+    // Original horizon behavior - sky gradually transitions to ground
+    skyCol = mix(skyCol, horizonCol, pow(1.0 - max(rd.y, 0.0), 16.0));
     
-    // Add horizon color at the transition
-    float horizonMask = 1.0 - abs(adjustedY);
-    horizonMask = pow(horizonMask, 8.0);
-    baseColor = mix(baseColor, horizonCol, horizonMask * 0.5);
+    // Mix to ground when looking down
+    if (rd.y < 0.0) {
+      skyCol = mix(skyCol, groundCol, abs(rd.y));
+    }
     
-    return baseColor;
+    return skyCol;
   }
   
   void main() {

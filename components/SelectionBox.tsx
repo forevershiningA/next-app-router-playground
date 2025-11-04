@@ -69,11 +69,17 @@ export default function SelectionBox({
   });
 
   // Visual constants - FIXED SIZES
-  const fixedHandleSize = 750 / unitsPerMeter; // 750mm fixed size
+  const fixedHandleSize = objectType === 'motif' || objectType === 'addition' 
+    ? 150 / unitsPerMeter  // 150mm for motifs/additions (larger)
+    : 75 / unitsPerMeter;  // 75mm for inscriptions
   const handleThickness = 10 / unitsPerMeter; // 10mm fixed thickness
   const handleZOffset = 0.01; // Move handles forward in Z
-  const rotateHandleSize = bounds.height * 0.15 * 0.8; // 15% of text height * 80%
-  const rotateHandleOffset = bounds.height * 1.2; // 120% above object
+  const rotateHandleSize = objectType === 'motif' || objectType === 'addition'
+    ? bounds.height * 0.08  // Smaller for motifs (8% of height)
+    : bounds.height * 0.15 * 0.8; // 15% * 80% for inscriptions
+  const rotateHandleOffset = objectType === 'motif' || objectType === 'addition'
+    ? bounds.height * 0.65  // 65% above motif (smaller offset)
+    : bounds.height * 1.2;  // 120% above inscription
   
   const outlineColor = 0x00ffff; // Cyan
   const handleColor = 0xffffff; // White
@@ -364,8 +370,7 @@ export default function SelectionBox({
         <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
         <meshBasicMaterial 
           color={handleColor} 
-          transparent={true}
-          opacity={0.9}
+          transparent={false}
           depthWrite={false}
         />
       </mesh>
@@ -383,8 +388,7 @@ export default function SelectionBox({
         <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
         <meshBasicMaterial 
           color={handleColor} 
-          transparent={true}
-          opacity={0.9}
+          transparent={false}
           depthWrite={false}
         />
       </mesh>
@@ -402,8 +406,7 @@ export default function SelectionBox({
         <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
         <meshBasicMaterial 
           color={handleColor} 
-          transparent={true}
-          opacity={0.9}
+          transparent={false}
           depthWrite={false}
         />
       </mesh>
@@ -421,8 +424,7 @@ export default function SelectionBox({
         <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
         <meshBasicMaterial 
           color={handleColor} 
-          transparent={true}
-          opacity={0.9}
+          transparent={false}
           depthWrite={false}
         />
       </mesh>
@@ -440,8 +442,7 @@ export default function SelectionBox({
         <circleGeometry args={[rotateHandleSize, 32]} />
         <meshBasicMaterial 
           color={rotateColor} 
-          transparent={true}
-          opacity={0.9}
+          transparent={false}
           depthWrite={false}
           side={THREE.DoubleSide}
         />
