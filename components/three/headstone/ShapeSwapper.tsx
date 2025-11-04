@@ -124,7 +124,7 @@ function InlineCanvasLoader({ show }: { show: boolean }) {
       zIndexRange={[1000, 0]}
     >
       <div
-        className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-200"
+        className="pointer-events-none fixed inset-0 flex items-center justify-center transition-opacity duration-200"
         style={{ opacity: visible ? 1 : 0 }}
       >
         <div className="flex flex-col items-center gap-4 text-white drop-shadow">
