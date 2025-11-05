@@ -214,3 +214,14 @@ body:has([data-seo-page="true"]) canvas {
 body:has([data-seo-page="true"]) .lg\:pl-\[400px\] {
   padding-left: 0 !important;
 }
+
+/* Canvas padding and border for Desktop only */
+@media (min-width: 1024px) {
+  .canvas-with-border {
+    border: 1px solid white !important;
+  }
+  
+  div:has(> .canvas-with-border) {
+    padding: 40px !important;
+  }
+}

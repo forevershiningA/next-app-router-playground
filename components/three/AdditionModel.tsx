@@ -7,7 +7,6 @@ import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
-import SelectionBox from '../SelectionBox';
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -116,9 +115,15 @@ function AdditionModelInner({
     
     // Calculate size after rotation  
     // Models are in mm at identity scale
+    scene.updateMatrixWorld(true); // Ensure transforms are up to date
     const box = new THREE.Box3().setFromObject(scene);
     const szMM = new THREE.Vector3();
     box.getSize(szMM);
+    
+    // Use absolute values to ensure positive dimensions
+    szMM.x = Math.abs(szMM.x);
+    szMM.y = Math.abs(szMM.y);
+    szMM.z = Math.abs(szMM.z);
     
     // Convert to headstone units (1 unit = 10mm)
     const sz = szMM.divideScalar(10);
@@ -340,12 +345,6 @@ function AdditionModelInner({
 
   const isSelected = selectedAdditionId === id;
 
-  // Calculate scaled bounds for SelectionBox (in world space)
-  const scaledBounds = {
-    width: size.x * finalScale,
-    height: size.y * finalScale,
-  };
-
   return (
     <>      
       {/* Parent group for positioning only - no scale applied here */}
@@ -367,37 +366,7 @@ function AdditionModelInner({
           <primitive object={scene} />
         </group>
         
-        {/* Selection box without scale - sibling to addition - only for application type */}
-        {isSelected && addition.type === 'application' && (
-          <SelectionBox
-            objectId={id}
-            position={new THREE.Vector3(0, 0, 0.002)}
-            bounds={scaledBounds}
-            rotation={0}
-            unitsPerMeter={headstone.unitsPerMeter}
-            currentSizeMm={(offset.scale ?? 1) * 100}
-            objectType="addition"
-            additionType={addition.type}
-            onUpdate={(data) => {
-              if (data.scaleFactor !== undefined) {
-                // Update scale based on scale factor
-                const newScale = (offset.scale ?? 1) * data.scaleFactor;
-                setAdditionOffset(id, {
-                  ...offset,
-                  scale: Math.max(0.05, Math.min(newScale, 5)),
-                });
-              }
-              if (data.rotationDeg !== undefined) {
-                // Add rotation delta to current rotation
-                const newRotation = (offset.rotationZ || 0) + (data.rotationDeg * Math.PI) / 180;
-                setAdditionOffset(id, {
-                  ...offset,
-                  rotationZ: newRotation,
-                });
-              }
-            }}
-          />
-        )}
+        {/* SelectionBox removed for additions - use BoxOutline instead */}
       </group>
     </>
   );

@@ -66,7 +66,7 @@ function BaseMesh({
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial
         map={baseTexture}
-        metalness={0.1}
+        metalness={0}
         roughness={0.55}
       />
     </mesh>

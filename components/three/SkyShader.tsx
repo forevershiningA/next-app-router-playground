@@ -51,7 +51,7 @@ const fragmentShader = `
     vec2 f = fract(uv);
     f = f * f * (3.0 - 2.0 * f);
     
-    float lb = random(i + vec2(0.0, 0.0));
+    float lb = random(i);
     float rb = random(i + vec2(1.0, 0.0));
     float lt = random(i + vec2(0.0, 1.0));
     float rt = random(i + vec2(1.0, 1.0));
@@ -60,7 +60,7 @@ const fragmentShader = `
                mix(lt, rt, f.x), f.y);
   }
   
-  #define OCTAVES 8
+  #define OCTAVES 6
   float fbm(in vec2 uv) {
     float value = 0.0;
     float amplitude = 0.5;
@@ -89,7 +89,7 @@ const fragmentShader = `
     skyCol += sun;
     
     // clouds - only render for upward directions
-    if (rd.y > 0.0) {
+    if (rd.y > 0.05) {
       const float SC = 1e5;
       float dist = (SC) / rd.y; 
       vec2 p = (dist * rd).xz;

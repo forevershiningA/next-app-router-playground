@@ -17,13 +17,23 @@ export default function Scene() {
 
   return (
     <>
-      <SkyShader />
+      {!is2DMode && <SkyShader />}
       
-      {/* Add environment for reflections */}
-      <Environment preset="sunset" environmentIntensity={0.4} />
+      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
       
       <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow />
+      <directionalLight 
+        position={[5, 8, 5]} 
+        intensity={1.2} 
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+      />
       <directionalLight position={[-3, 4, -3]} intensity={0.4} />
       <hemisphereLight
         color={0xffffff}
@@ -44,6 +54,7 @@ export default function Scene() {
         rotateSpeed={0.5}
         zoomSpeed={0.8}
         panSpeed={0.8}
+        maxPolarAngle={Math.PI / 2}
       />
     </>
   );

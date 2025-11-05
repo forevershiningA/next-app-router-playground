@@ -3,6 +3,7 @@
 import { Canvas, useThree } from '@react-three/fiber';
 import { Suspense, useEffect } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
+import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import CanvasClickOverlay from './CanvasClickOverlay';
@@ -69,9 +70,9 @@ function ViewToggleButton() {
     <button
       data-view-toggle
       onClick={toggleViewMode}
-      className="fixed top-20 right-4 z-50 cursor-pointer rounded border border-white/20 bg-black/50 px-3 py-2 text-2xl font-bold text-white backdrop-blur-sm hover:bg-black/70"
+      className="fixed z-50 cursor-pointer rounded border border-white/20 bg-black/50 px-3 py-2 text-2xl font-bold text-white backdrop-blur-sm hover:bg-black/70"
       aria-label={`Switch to ${is2DMode ? '3D' : '2D'} view`}
-      style={{ fontSize: '24px' }}
+      style={{ fontSize: '24px', top: '20px', right: '20px' }}
     >
       {is2DMode ? '3D' : '2D'}
     </button>
@@ -81,6 +82,8 @@ function ViewToggleButton() {
 export default function ThreeScene() {
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
+  const pathname = usePathname();
+  const isDesignsPage = pathname?.startsWith('/designs/');
 
   return (
     <>
@@ -95,15 +98,25 @@ export default function ThreeScene() {
           </div>
         </div>
       )}
-      <div className="relative w-full h-screen" style={{ background: '#87CEEB', padding: '40px' }}>
+      <div 
+        className="relative w-full h-screen" 
+        style={{ 
+          background: '#87CEEB', 
+          padding: '0' 
+        }}
+      >
         <Canvas 
-          shadows 
+          shadows
+          dpr={[1, 2]}
           gl={{ 
             alpha: false,
-            preserveDrawingBuffer: true 
+            preserveDrawingBuffer: true,
+            antialias: true,
+            powerPreference: 'high-performance'
           }}
           camera={{ position: [0, 0, 10] }}
-          style={{ border: '1px solid white', borderRadius: '0' }}
+          style={{ border: 'none', borderRadius: '0' }}
+          className={isDesignsPage ? 'canvas-with-border' : ''}
         >
           <Suspense fallback={null}>
             <Scene />

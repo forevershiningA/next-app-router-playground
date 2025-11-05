@@ -53,6 +53,38 @@ export default function SelectionBox({
   const threeContext = useThree();
   const { camera, gl, controls } = threeContext;
   
+  // Determine if this is a 2D object (flat on headstone surface)
+  const is2DObject = objectType === 'inscription' || 
+                     objectType === 'motif' || 
+                     (objectType === 'addition' && additionType === 'application');
+
+  // Visual constants
+  // For additions, use a fixed size that's visible (1.0 units in headstone space)
+  // For motifs/inscriptions, use the standard formula
+  const fixedHandleSize = objectType === 'addition' && additionType === 'application'
+    ? 1.0  // Fixed 1.0 headstone units (= 10mm = 1cm) - visible size
+    : is2DObject
+    ? 750 / unitsPerMeter  // 750mm for inscriptions and motifs
+    : 150 / unitsPerMeter;  // 150mm for 3D additions (statues, vases)
+    
+  // Different thickness for different object types due to different coordinate systems
+  const handleThickness = objectType === 'motif'
+    ? 100 / unitsPerMeter  // Motifs need much thicker (100mm) due to their coordinate system
+    : objectType === 'addition' && additionType === 'application'
+    ? 25 / unitsPerMeter  // Applications use same as inscriptions (25mm)
+    : 25 / unitsPerMeter;  // Inscriptions use 25mm
+  const handleZOffset = 0.01; // Move handles forward in Z
+  
+  const outlineColor = 0x00ffff; // Cyan
+  const handleColor = 0xffffff; // White
+
+  // Debug log for additions and motifs
+  React.useEffect(() => {
+    if ((objectType === 'addition' && additionType === 'application') || objectType === 'motif') {
+      console.log(`[SelectionBox ${objectType} ${objectId}] Bounds:`, bounds, 'HandleSize:', fixedHandleSize);
+    }
+  }, [objectId, bounds, position, objectType, additionType, fixedHandleSize, unitsPerMeter]);
+
   const [hoveredHandle, setHoveredHandle] = React.useState<HandleType | null>(null);
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragHandle, setDragHandle] = React.useState<HandleType | null>(null);
@@ -70,25 +102,6 @@ export default function SelectionBox({
     target: null as any,
     pointerId: 0,
   });
-
-  // Determine if this is a 2D object (flat on headstone surface)
-  const is2DObject = objectType === 'inscription' || 
-                     objectType === 'motif' || 
-                     (objectType === 'addition' && additionType === 'application');
-
-  // Visual constants - UNIFIED for all 2D objects
-  const fixedHandleSize = is2DObject
-    ? 750 / unitsPerMeter  // 750mm for all 2D objects
-    : 150 / unitsPerMeter;  // 150mm for 3D additions (statues, vases)
-    
-  // Different thickness for different object types due to different coordinate systems
-  const handleThickness = objectType === 'motif'
-    ? 100 / unitsPerMeter  // Motifs need much thicker (100mm) due to their coordinate system
-    : 25 / unitsPerMeter;  // Inscriptions use 25mm
-  const handleZOffset = 0.01; // Move handles forward in Z
-  
-  const outlineColor = 0x00ffff; // Cyan
-  const handleColor = 0xffffff; // White
 
   // Create box outline points
   const outlinePoints = React.useMemo(() => {

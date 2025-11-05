@@ -1,5 +1,5 @@
 C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:33 [RouterBinder] Effect running
-C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:52 [RouterBinder] Current pathname: /select-size
+C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:52 [RouterBinder] Current pathname: /inscriptions
 C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:53 [RouterBinder] Available categories: (5) [{…}, {…}, {…}, {…}, {…}]
 C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:93 [RouterBinder] No match in URL, setting default product ID to 124
 C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:96 [RouterBinder] Final productId being set: 124
@@ -103,7 +103,7 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2527
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4152
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4549
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-index.js @ main-app.js?v=1762277212704:160
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-index.js @ main-app.js?v=1762346999556:160
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
 fn @ webpack.js:1
@@ -112,24 +112,19 @@ eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1762277212704:182
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1762346999556:182
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1762277212704:1998
-(anonimowa) @ main-app.js?v=1762277212704:1999
+__webpack_exec__ @ main-app.js?v=1762346999556:1998
+(anonimowa) @ main-app.js?v=1762346999556:1999
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1762277212704:9
+(anonimowa) @ main-app.js?v=1762346999556:9
 C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:311 [Store] Fetching /xml/catalog-id-124.xml
-C:\Users\polcr\Documents\GitHub\next-dyo\app\select-size\size-selector.tsx:37 Size Selector - Catalog: null
-C:\Users\polcr\Documents\GitHub\next-dyo\app\select-size\size-selector.tsx:38 Size Selector - First Shape: undefined
-C:\Users\polcr\Documents\GitHub\next-dyo\app\select-size\size-selector.tsx:39 Size Selector - Min/Max: {minWidth: 40, maxWidth: 1200, minHeight: 40, maxHeight: 1200}
 C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:315 [Store] Setting catalog for product: Traditional Engraved Headstone (ID: 124)
-C:\Users\polcr\Documents\GitHub\next-dyo\app\select-size\size-selector.tsx:37 Size Selector - Catalog: {product: {…}}
-C:\Users\polcr\Documents\GitHub\next-dyo\app\select-size\size-selector.tsx:38 Size Selector - First Shape: {name: 'Cropped Peak', stand: {…}, table: {…}}
-C:\Users\polcr\Documents\GitHub\next-dyo\app\select-size\size-selector.tsx:39 Size Selector - Min/Max: {minWidth: 300, maxWidth: 1200, minHeight: 300, maxHeight: 1200}
 C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:366 [Store] Setting dimensions from catalog: 600 x 600
 C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:371 [Store] Dimensions set to: 600 x 600
 C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:377 [Store] Setting headstoneMaterialUrl from catalog: /textures/forever/l/Blue-Pearl.jpg
+C:\Users\polcr\Documents\GitHub\next-dyo\app\inscriptions\page.tsx:13 [InscriptionsPage] Setting activePanel to inscription
 index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
     at validateAndParse (index.js:120:15)
     at esm_compareVersions (index.js:10:16)
@@ -163,107 +158,8 @@ emit @ hook.js:268
 (anonimowa) @ backend.js:19
 (anonimowa) @ react_devtools_backend_compact.js:1
 (anonimowa) @ react_devtools_backend_compact.js:1
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350 React has detected a change in the order of Hooks called by AdditionModelInner. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
-
-   Previous render            Next render
-   ------------------------------------------------------
-1. useContext                 useContext
-2. useRef                     useRef
-3. useMemo                    useMemo
-4. useSyncExternalStore       useSyncExternalStore
-5. useEffect                  useEffect
-6. useDebugValue              useDebugValue
-7. useDebugValue              useDebugValue
-8. useCallback                useCallback
-9. useCallback                useCallback
-10. useSyncExternalStore      useSyncExternalStore
-11. useDebugValue             useDebugValue
-12. useCallback               useCallback
-13. useCallback               useCallback
-14. useSyncExternalStore      useSyncExternalStore
-15. useDebugValue             useDebugValue
-16. useCallback               useCallback
-17. useCallback               useCallback
-18. useSyncExternalStore      useSyncExternalStore
-19. useDebugValue             useDebugValue
-20. useCallback               useCallback
-21. useCallback               useCallback
-22. useSyncExternalStore      useSyncExternalStore
-23. useDebugValue             useDebugValue
-24. useCallback               useCallback
-25. useCallback               useCallback
-26. useSyncExternalStore      useSyncExternalStore
-27. useDebugValue             useDebugValue
-28. useRef                    useRef
-29. useState                  useState
-30. useContext                useContext
-31. useRef                    useRef
-32. useMemo                   useMemo
-33. useSyncExternalStore      useSyncExternalStore
-34. useEffect                 useEffect
-35. useDebugValue             useDebugValue
-36. useDebugValue             useDebugValue
-37. useLayoutEffect           useLayoutEffect
-38. useEffect                 useEffect
-39. useMemo                   useMemo
-40. useMemo                   useMemo
-41. useMemo                   useMemo
-42. useMemo                   useMemo
-43. useMemo                   useMemo
-44. useCallback               useCallback
-45. useCallback               useCallback
-46. useCallback               useCallback
-47. useCallback               useCallback
-48. useCallback               useCallback
-49. useEffect                 useEffect
-50. useEffect                 useEffect
-51. useEffect                 useEffect
-52. undefined                 useEffect
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- Error Component Stack
-    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:47:3)
-    at AdditionModel (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:18:41)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
-    at group (<anonymous>)
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:171:7)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:415:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:16:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:608
-error @ intercept-console-error.js:57
-updateHookTypesDev @ react-reconciler.development.js:2202
-useEffect @ react-reconciler.development.js:7587
-exports.useEffect @ react.development.js:1303
-AdditionModelInner @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooks @ react-reconciler.development.js:2235
-updateFunctionComponent @ react-reconciler.development.js:3523
-beginWork @ react-reconciler.development.js:4115
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopSync @ react-reconciler.development.js:6265
-renderRootSync @ react-reconciler.development.js:6248
-performWorkOnRoot @ react-reconciler.development.js:5983
-performSyncWorkOnRoot @ react-reconciler.development.js:1364
-flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
-flushPassiveEffects @ react-reconciler.development.js:6571
-eval @ react-reconciler.development.js:6507
-performWorkUntilDeadline @ scheduler.development.js:44
-react-reconciler.development.js:2355 Uncaught Error: Rendered more hooks than during the previous render.
-    at updateWorkInProgressHook (react-reconciler.development.js:2355:23)
-    at updateEffectImpl (react-reconciler.development.js:2890:20)
-    at Object.useEffect (react-reconciler.development.js:7588:13)
-    at exports.useEffect (react.development.js:1303:34)
-    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350:3)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300 Uncaught ReferenceError: Cannot access 'finalScale' before initialization
+    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300:38)
     at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
     at renderWithHooks (react-reconciler.development.js:2235:24)
     at updateFunctionComponent (react-reconciler.development.js:3523:21)
@@ -273,16 +169,9 @@ react-reconciler.development.js:2355 Uncaught Error: Rendered more hooks than du
     at workLoopSync (react-reconciler.development.js:6265:40)
     at renderRootSync (react-reconciler.development.js:6248:13)
     at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
-    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
-    at flushPassiveEffects (react-reconciler.development.js:6571:21)
-    at eval (react-reconciler.development.js:6507:13)
+    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
     at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
-updateWorkInProgressHook @ react-reconciler.development.js:2355
-updateEffectImpl @ react-reconciler.development.js:2890
-useEffect @ react-reconciler.development.js:7588
-exports.useEffect @ react.development.js:1303
-AdditionModelInner @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350
+AdditionModelInner @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300
 react-stack-bottom-frame @ react-reconciler.development.js:7191
 renderWithHooks @ react-reconciler.development.js:2235
 updateFunctionComponent @ react-reconciler.development.js:3523
@@ -292,17 +181,10 @@ performUnitOfWork @ react-reconciler.development.js:6372
 workLoopSync @ react-reconciler.development.js:6265
 renderRootSync @ react-reconciler.development.js:6248
 performWorkOnRoot @ react-reconciler.development.js:6008
-performSyncWorkOnRoot @ react-reconciler.development.js:1364
-flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
-flushPassiveEffects @ react-reconciler.development.js:6571
-eval @ react-reconciler.development.js:6507
+performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
 performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: Error: Rendered more hooks than during the previous render.
-    at updateWorkInProgressHook (react-reconciler.development.js:2355:23)
-    at updateEffectImpl (react-reconciler.development.js:2890:20)
-    at Object.useEffect (react-reconciler.development.js:7588:13)
-    at exports.useEffect (react.development.js:1303:34)
-    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350:3)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'finalScale' before initialization
+    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300:38)
     at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
     at renderWithHooks (react-reconciler.development.js:2235:24)
     at updateFunctionComponent (react-reconciler.development.js:3523:21)
@@ -312,10 +194,7 @@ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper
     at workLoopSync (react-reconciler.development.js:6265:40)
     at renderRootSync (react-reconciler.development.js:6248:13)
     at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
-    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
-    at flushPassiveEffects (react-reconciler.development.js:6571:21)
-    at eval (react-reconciler.development.js:6507:13)
+    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
     at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at AdditionModelInner (webpack-internal:///(a…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
     at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
     at group (<anonymous>)
@@ -340,26 +219,26 @@ callCallback @ react-reconciler.development.js:1630
 commitCallbacks @ react-reconciler.development.js:1638
 runWithFiberInDEV @ react-reconciler.development.js:399
 commitClassCallbacks @ react-reconciler.development.js:4828
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+reappearLayoutEffects @ react-reconciler.development.js:5561
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5593
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5593
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5567
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5567
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5567
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
 commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
 recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
 commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
@@ -421,18 +300,12 @@ commitLayoutEffects @ react-reconciler.development.js:5501
 commitRootImpl @ react-reconciler.development.js:6512
 commitRoot @ react-reconciler.development.js:6480
 commitRootWhenReady @ react-reconciler.development.js:6082
-performWorkOnRoot @ react-reconciler.development.js:6062
-performSyncWorkOnRoot @ react-reconciler.development.js:1364
-flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
-flushPassiveEffects @ react-reconciler.development.js:6571
-eval @ react-reconciler.development.js:6507
+setTimeout
+performWorkOnRoot @ react-reconciler.development.js:6059
+performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
 performWorkUntilDeadline @ scheduler.development.js:44
-react-reconciler.development.js:2355 Uncaught Error: Rendered more hooks than during the previous render.
-    at updateWorkInProgressHook (react-reconciler.development.js:2355:23)
-    at updateEffectImpl (react-reconciler.development.js:2890:20)
-    at Object.useEffect (react-reconciler.development.js:7588:13)
-    at exports.useEffect (react.development.js:1303:34)
-    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350:3)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300 Uncaught ReferenceError: Cannot access 'finalScale' before initialization
+    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300:38)
     at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
     at renderWithHooks (react-reconciler.development.js:2235:24)
     at updateFunctionComponent (react-reconciler.development.js:3523:21)
@@ -442,16 +315,9 @@ react-reconciler.development.js:2355 Uncaught Error: Rendered more hooks than du
     at workLoopSync (react-reconciler.development.js:6265:40)
     at renderRootSync (react-reconciler.development.js:6248:13)
     at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
-    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
-    at flushPassiveEffects (react-reconciler.development.js:6571:21)
-    at eval (react-reconciler.development.js:6507:13)
+    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
     at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
-updateWorkInProgressHook @ react-reconciler.development.js:2355
-updateEffectImpl @ react-reconciler.development.js:2890
-useEffect @ react-reconciler.development.js:7588
-exports.useEffect @ react.development.js:1303
-AdditionModelInner @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350
+AdditionModelInner @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300
 react-stack-bottom-frame @ react-reconciler.development.js:7191
 renderWithHooks @ react-reconciler.development.js:2235
 updateFunctionComponent @ react-reconciler.development.js:3523
@@ -461,17 +327,10 @@ performUnitOfWork @ react-reconciler.development.js:6372
 workLoopSync @ react-reconciler.development.js:6265
 renderRootSync @ react-reconciler.development.js:6248
 performWorkOnRoot @ react-reconciler.development.js:6008
-performSyncWorkOnRoot @ react-reconciler.development.js:1364
-flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
-flushPassiveEffects @ react-reconciler.development.js:6571
-eval @ react-reconciler.development.js:6507
+performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
 performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: Error: Rendered more hooks than during the previous render.
-    at updateWorkInProgressHook (react-reconciler.development.js:2355:23)
-    at updateEffectImpl (react-reconciler.development.js:2890:20)
-    at Object.useEffect (react-reconciler.development.js:7588:13)
-    at exports.useEffect (react.development.js:1303:34)
-    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:350:3)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'finalScale' before initialization
+    at AdditionModelInner (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AdditionModel.tsx:300:38)
     at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
     at renderWithHooks (react-reconciler.development.js:2235:24)
     at updateFunctionComponent (react-reconciler.development.js:3523:21)
@@ -481,10 +340,7 @@ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper
     at workLoopSync (react-reconciler.development.js:6265:40)
     at renderRootSync (react-reconciler.development.js:6248:13)
     at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
-    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
-    at flushPassiveEffects (react-reconciler.development.js:6571:21)
-    at eval (react-reconciler.development.js:6507:13)
+    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
     at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at AdditionModelInner (webpack-internal:///(a…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
     at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
     at group (<anonymous>)
@@ -509,26 +365,26 @@ callCallback @ react-reconciler.development.js:1630
 commitCallbacks @ react-reconciler.development.js:1638
 runWithFiberInDEV @ react-reconciler.development.js:399
 commitClassCallbacks @ react-reconciler.development.js:4828
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
-recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+reappearLayoutEffects @ react-reconciler.development.js:5561
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5593
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5593
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5567
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5567
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5567
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
+reappearLayoutEffects @ react-reconciler.development.js:5545
+recursivelyTraverseReappearLayoutEffects @ react-reconciler.development.js:5598
 commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
 recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
 commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
@@ -590,9 +446,7 @@ commitLayoutEffects @ react-reconciler.development.js:5501
 commitRootImpl @ react-reconciler.development.js:6512
 commitRoot @ react-reconciler.development.js:6480
 commitRootWhenReady @ react-reconciler.development.js:6082
-performWorkOnRoot @ react-reconciler.development.js:6062
-performSyncWorkOnRoot @ react-reconciler.development.js:1364
-flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
-flushPassiveEffects @ react-reconciler.development.js:6571
-eval @ react-reconciler.development.js:6507
+setTimeout
+performWorkOnRoot @ react-reconciler.development.js:6059
+performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
 performWorkUntilDeadline @ scheduler.development.js:44

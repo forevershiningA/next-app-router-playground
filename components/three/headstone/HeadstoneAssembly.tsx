@@ -46,7 +46,9 @@ export default function HeadstoneAssembly() {
     const baseId = selectedAdditionId.split('_')[0];
     const addition = data.additions.find((a) => a.id === baseId);
     
-    return addition?.type === 'application';
+    // For now, show BoxOutline for ALL additions (not just 3D ones)
+    // SelectionBox doesn't work well with the 3D coordinate system
+    return false; // This will make BoxOutline show for all additions
   }, [selectedAdditionId]);
 
   return (
