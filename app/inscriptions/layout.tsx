@@ -2,9 +2,6 @@
 import React from 'react';
 import { type Metadata } from 'next';
 import db from '#/lib/db';
-// If your panel lives elsewhere, update the import accordingly:
-import InscriptionOverlayPanel from '#/app/inscriptions/InscriptionOverlayPanel';
-// or: import InscriptionOverlayPanel from "#/components/panels/InscriptionOverlayPanel";
 
 export async function generateMetadata(): Promise<Metadata> {
   const demo = db.demo.find({ where: { slug: 'inscriptions' } });
@@ -15,12 +12,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const shapes = await db.shape.findMany({ limit: 32 });
-
   return (
     <>
-      {/* Render ONLY the panel; it already wraps itself with SceneOverlayController */}
-      <InscriptionOverlayPanel products={shapes} />
+      {/* InscriptionOverlayPanel is now rendered globally in ConditionalCanvas */}
       {children}
     </>
   );

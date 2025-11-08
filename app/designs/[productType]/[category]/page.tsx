@@ -1,0 +1,149 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { getDesignsByCategory, type SavedDesignMetadata } from '#/lib/saved-designs-data';
+import Image from 'next/image';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+
+export default function CategoryPage() {
+  const params = useParams();
+  const router = useRouter();
+  const productSlug = params.productType as string;
+  const category = params.category as string;
+  
+  const [designs, setDesigns] = useState<SavedDesignMetadata[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get designs for this category
+    const categoryDesigns = getDesignsByCategory(category as any);
+    // Filter by product slug
+    const filtered = categoryDesigns.filter(d => d.productSlug === productSlug);
+    setDesigns(filtered);
+    setLoading(false);
+  }, [category, productSlug]);
+
+  if (loading) {
+    return (
+      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center min-h-screen ml-[400px]">
+        <div className="text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-slate-800 mx-auto mb-4" />
+          <p className="text-slate-600 font-light">Loading designs...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const categoryTitle = category
+    ? category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : 'Category';
+
+  const productName = productSlug
+    ? productSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : 'Product';
+
+  return (
+    <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto min-h-screen ml-[400px]">
+      <div className="container mx-auto px-8 py-12 max-w-7xl">
+        {/* Elegant Breadcrumb */}
+        <nav className="flex items-center gap-2 text-sm text-slate-500 mb-12">
+          <a href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</a>
+          <ChevronRightIcon className="w-4 h-4" />
+          <a href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</a>
+          <ChevronRightIcon className="w-4 h-4" />
+          <span className="text-slate-900 font-medium tracking-wide">{categoryTitle}</span>
+        </nav>
+
+        {/* Sophisticated Header */}
+        <div className="mb-16 text-center">
+          <h1 className="text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
+            {categoryTitle}
+          </h1>
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent mx-auto mb-6" />
+          <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
+            {designs.length} thoughtfully crafted memorial design{designs.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+
+        {/* Designs Grid */}
+        {designs.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-slate-600 text-lg font-light mb-6">No designs found in this category.</p>
+            <button
+              onClick={() => router.push('/designs')}
+              className="inline-flex items-center text-slate-800 font-light tracking-wide hover:text-slate-900 transition-colors uppercase text-sm"
+            >
+              Browse All Designs
+              <ChevronRightIcon className="w-4 h-4 ml-2" />
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {designs.map((design) => (
+              <div
+                key={design.id}
+                onClick={() => {
+                  const designUrl = `/designs/${design.productSlug}/${design.category}/${design.id}_${design.slug}`;
+                  router.push(designUrl);
+                }}
+                className="group bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-300 hover:shadow-2xl transition-all duration-300 cursor-pointer"
+              >
+                {/* Preview Image */}
+                <div className="relative h-80 bg-slate-100 overflow-hidden">
+                  <Image
+                    src={design.preview}
+                    alt={design.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+
+                {/* Card Content */}
+                <div className="p-6">
+                  <h3 className="font-serif font-light text-xl text-slate-900 mb-3 group-hover:text-slate-700 transition-colors">
+                    {design.title}
+                  </h3>
+                  
+                  {/* Elegant badges */}
+                  <div className="flex items-center gap-2 flex-wrap mb-4">
+                    {design.hasPhoto && (
+                      <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-light uppercase tracking-wider border border-emerald-200">
+                        Photo
+                      </span>
+                    )}
+                    {design.hasMotifs && (
+                      <span className="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-light uppercase tracking-wider border border-amber-200">
+                        {design.motifNames.length} Motif{design.motifNames.length !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {design.hasAdditions && (
+                      <span className="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-light uppercase tracking-wider border border-orange-200">
+                        Additions
+                      </span>
+                    )}
+                  </div>
+
+                  {design.motifNames.length > 0 && (
+                    <p className="text-sm text-slate-500 font-light line-clamp-2 mb-4">
+                      {design.motifNames.slice(0, 2).join(', ')}
+                      {design.motifNames.length > 2 && '...'}
+                    </p>
+                  )}
+
+                  <div className="flex items-center text-slate-700 font-light text-sm uppercase tracking-wider group-hover:translate-x-1 transition-transform duration-300">
+                    <span>View Design</span>
+                    <ChevronRightIcon className="w-4 h-4 ml-1" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

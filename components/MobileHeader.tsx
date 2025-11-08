@@ -4,6 +4,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import { useMemo, useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function MobileHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -11,6 +12,11 @@ export default function MobileHeader() {
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const [isDesktop, setIsDesktop] = useState(false);
+  const pathname = usePathname();
+  
+  // Check if we're on a design list page (product or category level)
+  const segments = pathname?.split('/').filter(s => s) || [];
+  const isDesignListPage = pathname?.startsWith('/designs/') && (segments.length === 2 || segments.length === 3);
 
   // Detect desktop for header positioning
   useEffect(() => {
@@ -39,8 +45,8 @@ export default function MobileHeader() {
       : 0;
   }, [catalog, quantity, inscriptionCost]);
 
-  // Don't render header until catalog is loaded
-  if (!catalog) {
+  // Don't render header on design list pages or until catalog is loaded
+  if (isDesignListPage || !catalog) {
     return null;
   }
 

@@ -81,7 +81,7 @@ export default function SelectionBox({
   // Debug log for additions and motifs
   React.useEffect(() => {
     if ((objectType === 'addition' && additionType === 'application') || objectType === 'motif') {
-      console.log(`[SelectionBox ${objectType} ${objectId}] Bounds:`, bounds, 'HandleSize:', fixedHandleSize);
+
     }
   }, [objectId, bounds, position, objectType, additionType, fixedHandleSize, unitsPerMeter]);
 
@@ -298,7 +298,7 @@ export default function SelectionBox({
         try {
           dragStartRef.current.target.releasePointerCapture(dragStartRef.current.pointerId);
         } catch (err) {
-          console.log('[SelectionBox] Could not release pointer capture:', err);
+
         }
       }
       

@@ -30,27 +30,27 @@ export default function RouterBinder() {
 
   // Set product ID based on URL - run immediately on mount
   useEffect(() => {
-    console.log('[RouterBinder] Effect running');
+
     
     // Get pathname from window if usePathname hasn't loaded yet
     const currentPath = pathname || (typeof window !== 'undefined' ? window.location.pathname : null);
     
     if (!currentPath) {
-      console.log('[RouterBinder] No pathname available yet');
+
       return;
     }
     
     // Skip setting product if we're on a design page - it will be set by the design loader
     if (currentPath.startsWith('/designs/')) {
-      console.log('[RouterBinder] On design page, skipping product ID setup');
+
       return;
     }
     
     // Check if URL contains a product category or product slug
     let productId = '124'; // Default headstone
     
-    console.log(`[RouterBinder] Current pathname: ${currentPath}`);
-    console.log(`[RouterBinder] Available categories:`, data.categories.map(c => ({ id: c.id, slug: c.slug, name: c.name })));
+
+
     
     // Try to match /select-product/[section]/[category] first
     let match = currentPath.match(/\/select-product\/[^/]+\/([^/]+)/);
@@ -63,20 +63,20 @@ export default function RouterBinder() {
     if (match) {
       const slug = match[1];
       
-      console.log(`[RouterBinder] Looking for slug: ${slug}`);
+
       
       // First try to find by category slug
       const category = data.categories.find(c => c.slug === slug);
       if (category) {
-        console.log(`[RouterBinder] Found category: ${category.name} (ID: ${category.id})`);
+
         const product = data.products.find(p => p.category === category.id);
         if (product) {
           productId = product.id;
-          console.log(`[RouterBinder] Setting product ID to ${productId} (${product.name}) from category`);
+
         }
       } else {
         // Try to find by product name converted to slug
-        console.log('[RouterBinder] Category not found, trying product name match');
+
         const product = data.products.find(p => {
           const productSlug = p.name.toLowerCase().replace(/\s+/g, '-');
           return productSlug === slug;
@@ -84,16 +84,16 @@ export default function RouterBinder() {
         
         if (product) {
           productId = product.id;
-          console.log(`[RouterBinder] Setting product ID to ${productId} (${product.name}) from product name match`);
+
         } else {
-          console.log(`[RouterBinder] No category or product found for slug: ${slug}`);
+
         }
       }
     } else {
-      console.log(`[RouterBinder] No match in URL, setting default product ID to ${productId}`);
+
     }
     
-    console.log(`[RouterBinder] Final productId being set: ${productId}`);
+
     setProductId(productId);
     // Only run once on mount
   }, []); // Empty deps to run only on mount
@@ -184,7 +184,23 @@ export default function RouterBinder() {
     return () =>
       window.removeEventListener('fs:navigate', onNavigate as EventListener);
   }, [router]);
-  
+
+  // Check for panel to open from sessionStorage (set by design page edit buttons)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const openPanel = sessionStorage.getItem('openPanel');
+    if (openPanel) {
+      sessionStorage.removeItem('openPanel');
+      
+      // Small delay to ensure design is loaded
+      setTimeout(() => {
+        const setActivePanel = useHeadstoneStore.getState().setActivePanel;
+        setActivePanel(openPanel as any);
+      }, 500);
+    }
+  }, [pathname]);
+
   // Show error toast if needed
   if (loadError) {
     console.error('RouterBinder initialization error:', loadError);

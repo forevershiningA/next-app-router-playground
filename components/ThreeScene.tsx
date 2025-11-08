@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useThree } from '@react-three/fiber';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState, useRef } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
@@ -84,6 +84,32 @@ export default function ThreeScene() {
   const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
   const isDesignsPage = pathname?.startsWith('/designs/');
+  
+  const [isVisible, setIsVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Detect if canvas is in viewport
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when at least 10% is visible
+        rootMargin: '100px', // Start loading 100px before entering viewport
+      }
+    );
+
+    observer.observe(containerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <>
@@ -99,20 +125,36 @@ export default function ThreeScene() {
         </div>
       )}
       <div 
+        ref={containerRef}
         className="relative w-full h-screen" 
         style={{ 
           background: '#87CEEB', 
           padding: '0' 
         }}
       >
-        <Canvas 
+        {isVisible && (
+          <Canvas 
           shadows
           dpr={[1, 2]}
           gl={{ 
             alpha: false,
-            preserveDrawingBuffer: true,
+            preserveDrawingBuffer: false, // Changed to false to reduce memory usage
             antialias: true,
-            powerPreference: 'high-performance'
+            powerPreference: 'high-performance',
+            failIfMajorPerformanceCaveat: false
+          }}
+          onCreated={({ gl }) => {
+            // Handle WebGL context loss
+            gl.domElement.addEventListener('webglcontextlost', (event) => {
+              event.preventDefault();
+              console.warn('WebGL context lost, attempting to restore...');
+            });
+            
+            gl.domElement.addEventListener('webglcontextrestored', () => {
+              console.log('WebGL context restored');
+              // Force a re-render
+              window.dispatchEvent(new Event('resize'));
+            });
           }}
           camera={{ position: [0, 0, 10] }}
           style={{ border: 'none', borderRadius: '0' }}
@@ -123,6 +165,7 @@ export default function ThreeScene() {
             <CameraController key={is2DMode ? 'ortho' : 'persp'} />
           </Suspense>
         </Canvas>
+        )}
       </div>
     </>
   );

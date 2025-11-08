@@ -148,7 +148,7 @@ export default function CheckPricePanel() {
       onClick={handleClose}
     >
       <div 
-        className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden bg-white shadow-2xl rounded-lg"
+        className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -396,7 +396,7 @@ export default function CheckPricePanel() {
         <div className="flex items-center justify-end gap-4 border-t border-gray-200 bg-gray-50 px-6 py-4">
           <button
             onClick={handleClose}
-            className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+            className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors"
           >
             CLOSE
           </button>
@@ -404,7 +404,7 @@ export default function CheckPricePanel() {
             onClick={() => {
               // TODO: Implement PDF download
             }}
-            className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
+            className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
           >
             DOWNLOAD PDF
           </button>

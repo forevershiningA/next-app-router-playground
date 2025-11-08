@@ -170,8 +170,15 @@ export default function SEOPanel() {
             ) : (
               // Design Cards
               <div className="grid grid-cols-2 gap-3">
-                {filteredDesigns.slice(0, 20).map((design) => (
-                  <DesignCard key={design.id} design={design} onClose={handleClose} setGlobalLoading={setGlobalLoading} />
+                {filteredDesigns.slice(0, 20).map((design, index) => (
+                  <DesignCard 
+                    key={design.id} 
+                    design={design} 
+                    index={index + 1}
+                    totalWithSameTitle={filteredDesigns.filter(d => d.title === design.title).length}
+                    onClose={handleClose} 
+                    setGlobalLoading={setGlobalLoading} 
+                  />
                 ))}
               </div>
             )}
@@ -186,27 +193,67 @@ export default function SEOPanel() {
 // Design Card Component
 interface DesignCardProps {
   design: SavedDesignMetadata;
+  index: number;
+  totalWithSameTitle: number;
   onClose: () => void;
   setGlobalLoading: (loading: boolean) => void;
 }
 
-function DesignCard({ design, onClose, setGlobalLoading }: DesignCardProps) {
-  const handleLoadDesign = () => {
+function DesignCard({ design, index, totalWithSameTitle, onClose, setGlobalLoading }: DesignCardProps) {
+  const handleLoadDesign = async () => {
     // Show global loader immediately
     setGlobalLoading(true);
     
     // Close the panel
     onClose();
     
+    // Try to load the design data to get inscription/motif for better SEO URL
+    let urlSuffix = design.slug; // Default to the category slug
+    
+    try {
+      const response = await fetch(`/data/saved-designs/${design.id}.json`);
+      if (response.ok) {
+        const designData = await response.json();
+        
+        // Try to get first inscription text
+        if (designData.inscriptions && designData.inscriptions.length > 0) {
+          const firstInscription = designData.inscriptions[0];
+          if (firstInscription.text && firstInscription.text.trim()) {
+            // Create slug from inscription text (first 3-5 words, max 50 chars)
+            const words = firstInscription.text.trim().split(/\s+/).slice(0, 5);
+            urlSuffix = words.join('-')
+              .toLowerCase()
+              .replace(/[^a-z0-9-]/g, '-')
+              .replace(/-+/g, '-')
+              .replace(/^-|-$/g, '')
+              .substring(0, 50);
+          }
+        }
+        // If no inscription, try to get motif name
+        else if (designData.motifs && designData.motifs.length > 0) {
+          const firstMotif = designData.motifs[0];
+          if (firstMotif.name) {
+            urlSuffix = firstMotif.name
+              .toLowerCase()
+              .replace(/[^a-z0-9-]/g, '-')
+              .replace(/-+/g, '-')
+              .replace(/^-|-$/g, '')
+              .substring(0, 50);
+          }
+        }
+      }
+    } catch (error) {
+      // If loading fails, just use the default slug
+      console.warn('Failed to load design data for URL generation:', error);
+    }
+    
     // Use requestAnimationFrame to ensure the loader is rendered before navigation
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        // Construct the URL with product slug
-        const designUrl = `/designs/${design.productSlug}/${design.category}/${design.id}_${design.slug}`;
-        
-        // Navigate to the design
-        window.location.href = designUrl;
-      });
+      // Construct the URL with enhanced slug
+      const designUrl = `/designs/${design.productSlug}/${design.category}/${design.id}_${urlSuffix}`;
+      
+      // Navigate to the design
+      window.location.href = designUrl;
     });
   };
 
@@ -244,7 +291,7 @@ function DesignCard({ design, onClose, setGlobalLoading }: DesignCardProps) {
       {/* Content */}
       <div className="p-2">
         <h4 className="font-semibold text-gray-900 text-xs line-clamp-1 group-hover:text-blue-600 mb-1">
-          {design.title}
+          {totalWithSameTitle > 1 ? `${design.title} ${index}` : design.title}
         </h4>
         
         {/* Motifs */}

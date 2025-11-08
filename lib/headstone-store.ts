@@ -305,14 +305,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   productId: null,
   setProductId: async (id) => {
-    console.log(`[Store] setProductId called with id: ${id}`);
+
     console.trace('[Store] setProductId call stack');
     try {
-      console.log(`[Store] Fetching /xml/catalog-id-${id}.xml`);
+
       const response = await fetch(`/xml/catalog-id-${id}.xml`);
       const xmlText = await response.text();
       const catalog = await parseCatalogXML(xmlText, id);
-      console.log(`[Store] Setting catalog for product: ${catalog.product.name} (ID: ${id})`);
+
       set({ catalog, productId: id });
 
       const isPlaque = catalog.product.type === 'plaque';
@@ -363,18 +363,18 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
       if (catalog.product.shapes.length > 0) {
         const shape = catalog.product.shapes[0];
-        console.log(`[Store] Setting dimensions from catalog: ${shape.table.initWidth} x ${shape.table.initHeight}`);
+
         set({
           widthMm: shape.table.initWidth,
           heightMm: shape.table.initHeight,
         });
-        console.log(`[Store] Dimensions set to: ${shape.table.initWidth} x ${shape.table.initHeight}`);
+
         if (shape.table.color) {
           // Fix texture path - ensure it starts with /
           const texturePath = shape.table.color.startsWith('/') 
             ? shape.table.color 
             : `/${shape.table.color}`;
-          console.log(`[Store] Setting headstoneMaterialUrl from catalog: ${texturePath}`);
+
           set({ headstoneMaterialUrl: texturePath });
         }
         if (shape.stand.color) {
@@ -436,13 +436,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   widthMm: 900,
   setWidthMm(v) {
-    console.log(`[Store] setWidthMm called with ${v}, clamped to ${clampHeadstoneDim(v)}`);
+
     set({ widthMm: clampHeadstoneDim(v) });
   },
 
   heightMm: 900,
   setHeightMm(v) {
-    console.log(`[Store] setHeightMm called with ${v}, clamped to ${clampHeadstoneDim(v)}`);
+
     set({ heightMm: clampHeadstoneDim(v) });
   },
 
@@ -879,21 +879,33 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       get().setSelectedInscriptionId(id);
     }
     get().setActivePanel('inscription');
-    get().navTo?.('/inscriptions');
+    
+    // Don't navigate if we're on a /designs/ page
+    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/designs/')) {
+      get().navTo?.('/inscriptions');
+    }
   },
 
   openSizePanel: () => {
     // Close addition panel when opening size panel
     set({ selectedAdditionId: null });
     get().setActivePanel('size');
-    get().navTo?.('/select-size');
+    
+    // Don't navigate if we're on a /designs/ page
+    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/designs/')) {
+      get().navTo?.('/select-size');
+    }
   },
 
   openAdditionsPanel: () => {
     // Close addition panel when opening additions panel
     set({ selectedAdditionId: null });
     get().setActivePanel('additions');
-    get().navTo?.('/select-additions');
+    
+    // Don't navigate if we're on a /designs/ page
+    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/designs/')) {
+      get().navTo?.('/select-additions');
+    }
   },
 
   closeInscriptions: () => {

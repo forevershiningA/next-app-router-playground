@@ -46,11 +46,18 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
   
   // Detect if we're on a design page
   const [isDesignPage, setIsDesignPage] = useState(false);
+  const [isDesignListPage, setIsDesignListPage] = useState(false);
   
   useEffect(() => {
     const checkIfDesignPage = () => {
       const path = window.location.pathname;
-      setIsDesignPage(path.startsWith('/designs/'));
+      const onDesignPath = path.startsWith('/designs/');
+      setIsDesignPage(onDesignPath);
+      
+      // Design list pages have 3 segments (/designs/product) or 4 segments (/designs/product/category)
+      const segments = path.split('/').filter(s => s);
+      const isListPage = onDesignPath && (segments.length === 2 || segments.length === 3);
+      setIsDesignListPage(isListPage);
     };
     
     checkIfDesignPage();
@@ -169,12 +176,21 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     ? calculatePrice(catalog.product.priceModel, quantity)
     : 0;
 
+  // Hide entire sidebar on design list pages
+  if (isDesignListPage) {
+    return null;
+  }
+
   return (
     <>
       {/* Sidebar - positioned at top */}
       <div
         className={clsx(
-          'fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 bg-black lg:bottom-[30px] lg:z-auto lg:w-[400px] lg:border-r lg:border-b-0 lg:border-gray-800'
+          'fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 lg:bottom-[30px] lg:z-auto lg:w-[400px] lg:border-r lg:border-b-0 lg:border-gray-800',
+          {
+            'bg-black': !isDesignListPage,
+            'hidden': isDesignListPage,
+          }
         )}
       >
         {/* Loader overlay - show when loading a section, positioned only in sidebar */}

@@ -34,9 +34,9 @@ export default function SizeSelector({
   
   // Debug logging
   React.useEffect(() => {
-    console.log('Size Selector - Catalog:', catalog);
-    console.log('Size Selector - First Shape:', firstShape);
-    console.log('Size Selector - Min/Max:', { minWidth, maxWidth, minHeight, maxHeight });
+
+
+
   }, [catalog, firstShape, minWidth, maxWidth, minHeight, maxHeight]);
 
   // Set this as active panel and close addition panel when this panel mounts
