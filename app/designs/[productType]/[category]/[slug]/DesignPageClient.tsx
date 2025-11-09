@@ -1310,9 +1310,35 @@ export default function DesignPageClient({
                     const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
                     const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
                     
-                    // Position inscriptions - coordinates are in canvas space, scale to display space
-                    const xPos = (item.x || 0) * scalingFactors.scaleX;
-                    const yPos = (item.y || 0) * scalingFactors.scaleY;
+                    // Get screenshot dimensions (already adjusted for DPR in loading)
+                    // But we need the ORIGINAL screenshot size for ratio calculation
+                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
+                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    
+                    // Reconstruct original screenshot size (before DPR division)
+                    const screenshotWidth = screenshotWidthLogical * dpr;
+                    const screenshotHeight = screenshotHeightLogical * dpr;
+                    
+                    // Measure the actual capture transformation (original screenshot to canvas)
+                    const xRatio = screenshotWidth / canvasWidth;
+                    const yRatio = screenshotHeight / canvasHeight;
+                    
+                    // Position inscriptions - use real ratios for accurate positioning
+                    const xPos = (item.x / xRatio) * scalingFactors.scaleX;
+                    const yPos = (item.y / yRatio) * scalingFactors.scaleY;
+                    
+                    // DEBUG
+                    if (index === 0) {
+                      console.log('Inscription positioning:', {
+                        raw: { x: item.x, y: item.y },
+                        canvas: { width: canvasWidth, height: canvasHeight },
+                        screenshotOriginal: { width: screenshotWidth, height: screenshotHeight },
+                        ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
+                        adjusted: { x: (item.x / xRatio).toFixed(2), y: (item.y / yRatio).toFixed(2) },
+                        scale: { scaleX: scalingFactors.scaleX.toFixed(4), scaleY: scalingFactors.scaleY.toFixed(4) },
+                        final: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2) }
+                      });
+                    }
                     
                     return (
                       <DraggableElement
@@ -1348,11 +1374,27 @@ export default function DesignPageClient({
                     const dpr = shapeData?.dpr || 1;
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // Scale motif coordinates - coordinates are in canvas space, scale to display space
-                    const xPos = (motif.x || 0) * scalingFactors.scaleX;
-                    const yPos = (motif.y || 0) * scalingFactors.scaleY;
-                    const motifWidth = motif.width ? motif.width * scalingFactors.scaleX : 80;
-                    const motifHeight = motif.height ? motif.height * scalingFactors.scaleY : 80;
+                    const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
+                    const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
+                    
+                    // Get screenshot dimensions (already adjusted for DPR in loading)
+                    // But we need the ORIGINAL screenshot size for ratio calculation
+                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
+                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    
+                    // Reconstruct original screenshot size (before DPR division)
+                    const screenshotWidth = screenshotWidthLogical * dpr;
+                    const screenshotHeight = screenshotHeightLogical * dpr;
+                    
+                    // Measure the actual capture transformation (original screenshot to canvas)
+                    const xRatio = screenshotWidth / canvasWidth;
+                    const yRatio = screenshotHeight / canvasHeight;
+                    
+                    // Scale motif coordinates - use real ratios for accurate positioning
+                    const xPos = (motif.x / xRatio) * scalingFactors.scaleX;
+                    const yPos = (motif.y / yRatio) * scalingFactors.scaleY;
+                    const motifWidth = motif.width ? (motif.width / xRatio) * scalingFactors.scaleX : 80;
+                    const motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
                     
                     console.log('Rendering headstone motif:', {
                       src: motif.src || motif.name,
