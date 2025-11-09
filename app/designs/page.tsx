@@ -87,12 +87,11 @@ export default function DesignsPage() {
                   
                   <div className="flex flex-col gap-3 text-slate-600 mb-6 font-light">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-serif text-slate-900">{designs.length}</span>
+                      <span className="text-4xl font-serif text-slate-900">{designs.length.toLocaleString()}</span>
                       <span className="text-sm uppercase tracking-wider">design{designs.length !== 1 ? 's' : ''}</span>
                     </div>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-serif text-slate-700">{categories.size}</span>
-                      <span className="text-sm uppercase tracking-wider text-slate-500">categor{categories.size !== 1 ? 'ies' : 'y'}</span>
+                    <div className="flex items-baseline gap-2 text-xs">
+                      <span className="text-slate-500">across {categories.size} categor{categories.size !== 1 ? 'ies' : 'y'}</span>
                     </div>
                   </div>
                   
