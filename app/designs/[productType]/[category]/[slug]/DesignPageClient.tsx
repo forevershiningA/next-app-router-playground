@@ -9,9 +9,10 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { data } from '#/app/_internal/_data';
 import { ChevronRightIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { getProductFromId } from '#/lib/product-utils';
-import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
+import type { SavedDesignMetadata, DesignCategory } from '#/lib/saved-designs-data';
 import React from 'react';
 import { MotifsData } from '#/motifs_data';
+import DesignSidebar from '#/components/DesignSidebar';
 
 // Helper function to detect motif category from motif src
 function detectMotifCategory(motifSrc: string): string | null {
@@ -1086,7 +1087,16 @@ export default function DesignPageClient({
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 ml-[400px] min-h-screen">
+    <>
+      {/* Left Sidebar with Related Designs */}
+      <DesignSidebar 
+        currentDesignId={designId}
+        category={category as DesignCategory}
+        productSlug={productSlug}
+        maxItems={15}
+      />
+      
+      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 ml-[400px] min-h-screen">
       {/* Breadcrumb and Header - positioned at top */}
       <div className="border-b border-slate-200 relative z-10 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-8 py-6 max-w-7xl">
@@ -1622,5 +1632,6 @@ export default function DesignPageClient({
 
       </div>
     </div>
+    </>
   );
 }
