@@ -21,6 +21,25 @@ interface DesignTreeNode {
   };
 }
 
+/**
+ * Format slug for display - convert kebab-case to Title Case
+ * e.g., "your-life-was-a-blessing-your-memory-a-treasure" → "Your Life Was a Blessing Your Memory a Treasure"
+ */
+function formatSlugForDisplay(slug: string): string {
+  if (!slug) return 'Memorial Design';
+  
+  return slug
+    .split('-')
+    .map(word => {
+      // Don't capitalize very short words (articles, prepositions) unless they're the first word
+      if (word.length <= 2 && word !== slug.split('-')[0]) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 export default function DesignsTreeNav() {
   const pathname = usePathname();
   const [treeData, setTreeData] = useState<DesignTreeNode[]>([]);
@@ -57,7 +76,15 @@ export default function DesignsTreeNav() {
       tree[productSlug].categories[category].designs.push({
         id: design.id,
         slug: design.slug,
-        title: design.title || design.slug.split('_').slice(1).join(' '),
+        // Use the meaningful slug text for display instead of generic "Mother Memorial"
+        title: formatSlugForDisplay(design.slug),
+      });
+    });
+    
+    // Sort designs alphabetically by title within each category
+    Object.values(tree).forEach(productNode => {
+      Object.values(productNode.categories).forEach(categoryData => {
+        categoryData.designs.sort((a, b) => a.title.localeCompare(b.title));
       });
     });
     

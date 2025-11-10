@@ -6,6 +6,25 @@ import { getDesignsByCategory, type SavedDesignMetadata } from '#/lib/saved-desi
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
+/**
+ * Format slug for display - convert kebab-case to Title Case
+ * e.g., "your-life-was-a-blessing-your-memory-a-treasure" → "Your Life Was a Blessing Your Memory a Treasure"
+ */
+function formatSlugForDisplay(slug: string): string {
+  if (!slug) return 'Memorial Design';
+  
+  return slug
+    .split('-')
+    .map((word, index) => {
+      // Don't capitalize very short words (articles, prepositions) unless they're the first word
+      if (word.length <= 2 && index > 0) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 export default function CategoryPage() {
   const params = useParams();
   const router = useRouter();
@@ -18,8 +37,10 @@ export default function CategoryPage() {
   useEffect(() => {
     // Get designs for this category
     const categoryDesigns = getDesignsByCategory(category as any);
-    // Filter by product slug
-    const filtered = categoryDesigns.filter(d => d.productSlug === productSlug);
+    // Filter by product slug and sort alphabetically by slug
+    const filtered = categoryDesigns
+      .filter(d => d.productSlug === productSlug)
+      .sort((a, b) => formatSlugForDisplay(a.slug).localeCompare(formatSlugForDisplay(b.slug)));
     setDesigns(filtered);
     setLoading(false);
   }, [category, productSlug]);
@@ -43,6 +64,12 @@ export default function CategoryPage() {
     ? productSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     : 'Product';
 
+  // Get a few example phrases from designs for the subtitle
+  const examplePhrases = designs
+    .slice(0, 3)
+    .map(d => formatSlugForDisplay(d.slug))
+    .join(' • ');
+
   return (
     <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto min-h-screen ml-[400px]">
       <div className="container mx-auto px-8 py-12 max-w-7xl">
@@ -61,6 +88,11 @@ export default function CategoryPage() {
             {categoryTitle}
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent mx-auto mb-6" />
+          {examplePhrases && (
+            <h2 className="text-2xl text-slate-700 font-light mb-4 italic max-w-4xl mx-auto leading-relaxed">
+              {examplePhrases}
+            </h2>
+          )}
           <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
             {designs.length} thoughtfully crafted memorial design{designs.length !== 1 ? 's' : ''}
           </p>
@@ -93,7 +125,7 @@ export default function CategoryPage() {
                 <div className="relative h-80 bg-slate-100 overflow-hidden">
                   <Image
                     src={design.preview}
-                    alt={design.title}
+                    alt={formatSlugForDisplay(design.slug)}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -105,7 +137,7 @@ export default function CategoryPage() {
                 {/* Card Content */}
                 <div className="p-6">
                   <h3 className="font-serif font-light text-xl text-slate-900 mb-3 group-hover:text-slate-700 transition-colors">
-                    {design.title}
+                    {formatSlugForDisplay(design.slug)}
                   </h3>
                   
                   {/* Elegant badges */}

@@ -286,6 +286,8 @@ export default function DesignPageClient({
   const [nameDatabase, setNameDatabase] = useState<{
     firstNames: Set<string>;
     surnames: Set<string>;
+    femaleNames?: string[];
+    maleNames?: string[];
   } | null>(null);
 
   useEffect(() => {
@@ -305,13 +307,38 @@ export default function DesignPageClient({
       setNameDatabase({ 
         firstNames, 
         surnames: surnameSet,
-        // Store raw arrays for random selection
+        // Store separate arrays for gender-specific selection
+        femaleNames: femaleNames,
+        maleNames: maleNames,
         firstNamesArray: [...femaleNames, ...maleNames],
         surnamesArray: surnames,
       } as any);
     }).catch(err => {
       console.error('Failed to load name databases:', err);
     });
+  }, []);
+  
+  // Determine if category is female, male, or neutral
+  const getGenderFromCategory = useCallback((categoryName: string): 'female' | 'male' | 'neutral' => {
+    const lower = categoryName.toLowerCase();
+    
+    // Female categories
+    if (lower.includes('mother') || lower.includes('daughter') || lower.includes('wife') || 
+        lower.includes('sister') || lower.includes('grandmother') || lower.includes('nanna') ||
+        lower.includes('grandma') || lower.includes('aunt') || lower.includes('woman') ||
+        lower.includes('lady') || lower.includes('girl')) {
+      return 'female';
+    }
+    
+    // Male categories
+    if (lower.includes('father') || lower.includes('son') || lower.includes('husband') || 
+        lower.includes('brother') || lower.includes('grandfather') || lower.includes('papa') ||
+        lower.includes('grandpa') || lower.includes('uncle') || lower.includes('man') ||
+        lower.includes('gentleman') || lower.includes('boy') || lower.includes('dad')) {
+      return 'male';
+    }
+    
+    return 'neutral';
   }, []);
   
   // Simple hash function to convert string to number for consistent randomization
@@ -325,14 +352,27 @@ export default function DesignPageClient({
     return Math.abs(hash);
   }, []);
 
-  // Generate a random name based on a seed (for consistent results)
+  // Generate a random name based on a seed and category gender (for consistent results)
   const getRandomName = useCallback((seed?: string): string => {
     if (!nameDatabase || !(nameDatabase as any).firstNamesArray || !(nameDatabase as any).surnamesArray) {
       return 'Name';
     }
 
-    const firstNamesArray = (nameDatabase as any).firstNamesArray;
+    const gender = getGenderFromCategory(category);
+    const femaleNames = (nameDatabase as any).femaleNames || [];
+    const maleNames = (nameDatabase as any).maleNames || [];
     const surnamesArray = (nameDatabase as any).surnamesArray;
+    
+    // Choose appropriate name list based on category gender
+    let firstNamesArray;
+    if (gender === 'female' && femaleNames.length > 0) {
+      firstNamesArray = femaleNames;
+    } else if (gender === 'male' && maleNames.length > 0) {
+      firstNamesArray = maleNames;
+    } else {
+      // Neutral or fallback - use combined list
+      firstNamesArray = (nameDatabase as any).firstNamesArray;
+    }
     
     // Use seed to get consistent "random" values
     const seedValue = seed ? hashString(seed) : Math.floor(Math.random() * 10000);
@@ -340,7 +380,7 @@ export default function DesignPageClient({
     const randomSurname = surnamesArray[(seedValue + 1) % surnamesArray.length];
     
     return `${randomFirstName} ${randomSurname}`;
-  }, [nameDatabase, hashString]);
+  }, [nameDatabase, hashString, category, getGenderFromCategory]);
   
   // Get a random surname based on a seed (for consistent results)
   const getRandomSurname = useCallback((seed?: string): string => {
@@ -605,9 +645,12 @@ export default function DesignPageClient({
     let baseDisplayWidth = screenshotDimensions?.width || shapeData.width || shapeData.init_width || 610;
     let baseDisplayHeight = screenshotDimensions?.height || shapeData.height || shapeData.init_height || 610;
     
-    // Upscale mobile designs (DPR > 1) by 2x for better desktop viewing
+    // MOBILE UPSCALING: Upscale ONLY mobile designs (DPR > 1) by 2x for better desktop viewing
+    // Desktop designs use screenshot dimensions as-is (which are physical pixels)
+    const designDevice = shapeData.device || 'desktop';
     const dpr = shapeData.dpr || 1;
-    const upscaleFactor = dpr > 1 ? 2 : 1;
+    const isDesktopDesign = designDevice === 'desktop';
+    const upscaleFactor = (dpr > 1 && !isDesktopDesign) ? 2 : 1;
     
     const displayWidth = baseDisplayWidth * upscaleFactor;
     const displayHeight = baseDisplayHeight * upscaleFactor;
@@ -716,9 +759,12 @@ export default function DesignPageClient({
           });
           
           // Screenshot dimensions (for display size)
-          // Upscale mobile designs by 2x for better desktop viewing
-          const dpr = shapeData.dpr || 1;
-          const upscaleFactor = dpr > 1 ? 2 : 1;
+          // Desktop designs use physical dimensions as-is
+          // Mobile designs upscale by 2x for better desktop viewing
+          const designDevice = shapeData.device || 'desktop';
+          const designDPR = shapeData.dpr || 1;
+          const isDesktopDesign = designDevice === 'desktop';
+          const upscaleFactor = (designDPR > 1 && !isDesktopDesign) ? 2 : 1;
           
           const displayWidth = screenshotDimensions.width * upscaleFactor;
           const displayHeight = screenshotDimensions.height * upscaleFactor;
@@ -958,6 +1004,12 @@ export default function DesignPageClient({
   const productName = product?.name || designMetadata.productName;
   const categoryTitle = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   
+  // Format slug for display
+  const slugText = slug.split('_').slice(1).join('_').split('-').map((word, index) => {
+    if (word.length <= 2 && index > 0) return word;
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+  
   // Get store state for price calculation
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
@@ -1116,9 +1168,12 @@ export default function DesignPageClient({
           {/* Sophisticated Header with Design Specifications */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 className="text-4xl font-serif font-light text-slate-900 tracking-tight mb-6">
-                {designMetadata.title}
+              <h2 className="text-4xl font-serif font-light text-slate-900 tracking-tight mb-2">
+                {categoryTitle}
               </h2>
+              <p className="text-2xl text-slate-600 font-light italic mb-6">
+                {slugText}
+              </p>
               
               {/* Design Specifications - inline below title */}
               <div className="space-y-3 text-sm">
@@ -1311,42 +1366,64 @@ export default function DesignPageClient({
                   .map((item: any, index: number) => {
                     // Font size needs to be scaled from canvas to display space
                     const dpr = shapeData?.dpr || 1;
+                    const designDevice = shapeData?.device || 'desktop';
+                    const isDesktopDesign = designDevice === 'desktop';
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
-                    // Font size is in canvas coordinates, scale it to display coordinates
-                    const fontSize = ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
+                    
+                    // Font size calculation:
+                    // Desktop: Don't divide by DPR (font size already in physical pixels)
+                    // Mobile: Divide by DPR and multiply by upscaleFactor
+                    const fontSize = isDesktopDesign
+                      ? (item.font_size || 16) * scalingFactors.scaleY
+                      : ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
                     const fontFamily = item.font_family || item.font || 'serif';
                     
                     // Calculate actual transformation ratios from canvas to original screenshot
                     const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
                     const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
                     
-                    // Get screenshot dimensions (already adjusted for DPR in loading)
-                    // But we need the ORIGINAL screenshot size for ratio calculation
-                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
-                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    // Get screenshot dimensions
+                    let screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
+                    let screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
                     
-                    // Reconstruct original screenshot size (before DPR division)
-                    const screenshotWidth = screenshotWidthLogical * dpr;
-                    const screenshotHeight = screenshotHeightLogical * dpr;
+                    // Calculate ratio based on device type:
+                    // Desktop: Use logical dimensions directly (ratio should be ~1.0)
+                    // Mobile: Multiply by DPR first to get physical size
+                    let xRatio, yRatio;
+                    if (isDesktopDesign) {
+                      xRatio = screenshotWidthLogical / canvasWidth;
+                      yRatio = screenshotHeightLogical / canvasHeight;
+                    } else {
+                      const screenshotWidth = screenshotWidthLogical * dpr;
+                      const screenshotHeight = screenshotHeightLogical * dpr;
+                      xRatio = screenshotWidth / canvasWidth;
+                      yRatio = screenshotHeight / canvasHeight;
+                    }
                     
-                    // Measure the actual capture transformation (original screenshot to canvas)
-                    const xRatio = screenshotWidth / canvasWidth;
-                    const yRatio = screenshotHeight / canvasHeight;
-                    
-                    // Position inscriptions - use real ratios for accurate positioning
-                    const xPos = (item.x / xRatio) * scalingFactors.scaleX;
-                    const yPos = (item.y / yRatio) * scalingFactors.scaleY;
+                    // Position inscriptions
+                    // Desktop: Coordinates are in PHYSICAL pixels, need to divide by DPR then scale
+                    // Mobile: Coordinates need ratio adjustment first
+                    let xPos, yPos;
+                    if (isDesktopDesign) {
+                      xPos = (item.x / dpr) * scalingFactors.scaleX;
+                      yPos = (item.y / dpr) * scalingFactors.scaleY;
+                    } else {
+                      xPos = (item.x / xRatio) * scalingFactors.scaleX;
+                      yPos = (item.y / yRatio) * scalingFactors.scaleY;
+                    }
                     
                     // DEBUG
                     if (index === 0) {
                       console.log('Inscription positioning:', {
                         raw: { x: item.x, y: item.y },
                         canvas: { width: canvasWidth, height: canvasHeight },
-                        screenshotOriginal: { width: screenshotWidth, height: screenshotHeight },
+                        screenshot: { width: screenshotWidthLogical, height: screenshotHeightLogical },
                         ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
                         adjusted: { x: (item.x / xRatio).toFixed(2), y: (item.y / yRatio).toFixed(2) },
                         scale: { scaleX: scalingFactors.scaleX.toFixed(4), scaleY: scalingFactors.scaleY.toFixed(4) },
-                        final: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2) }
+                        final: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2) },
+                        isDesktop: isDesktopDesign,
+                        dpr: dpr
                       });
                     }
                     
@@ -1382,29 +1459,44 @@ export default function DesignPageClient({
                     .map((motif: any, index: number) => {
                     // Calculate actual transformation ratios from canvas to original screenshot
                     const dpr = shapeData?.dpr || 1;
+                    const designDevice = shapeData?.device || 'desktop';
+                    const isDesktopDesign = designDevice === 'desktop';
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
                     const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
                     const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
                     
-                    // Get screenshot dimensions (already adjusted for DPR in loading)
-                    // But we need the ORIGINAL screenshot size for ratio calculation
-                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
-                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    // Get screenshot dimensions
+                    let screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
+                    let screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
                     
-                    // Reconstruct original screenshot size (before DPR division)
-                    const screenshotWidth = screenshotWidthLogical * dpr;
-                    const screenshotHeight = screenshotHeightLogical * dpr;
+                    // Calculate ratio based on device type
+                    let xRatio, yRatio;
+                    if (isDesktopDesign) {
+                      xRatio = screenshotWidthLogical / canvasWidth;
+                      yRatio = screenshotHeightLogical / canvasHeight;
+                    } else {
+                      const screenshotWidth = screenshotWidthLogical * dpr;
+                      const screenshotHeight = screenshotHeightLogical * dpr;
+                      xRatio = screenshotWidth / canvasWidth;
+                      yRatio = screenshotHeight / canvasHeight;
+                    }
                     
-                    // Measure the actual capture transformation (original screenshot to canvas)
-                    const xRatio = screenshotWidth / canvasWidth;
-                    const yRatio = screenshotHeight / canvasHeight;
-                    
-                    // Scale motif coordinates - use real ratios for accurate positioning
-                    const xPos = (motif.x / xRatio) * scalingFactors.scaleX;
-                    const yPos = (motif.y / yRatio) * scalingFactors.scaleY;
-                    const motifWidth = motif.width ? (motif.width / xRatio) * scalingFactors.scaleX : 80;
-                    const motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
+                    // Scale motif coordinates
+                    // Desktop: Coordinates and sizes are in canvas space, just scale to display
+                    // Mobile: Coordinates need ratio adjustment first
+                    let xPos, yPos, motifWidth, motifHeight;
+                    if (isDesktopDesign) {
+                      xPos = motif.x * scalingFactors.scaleX;
+                      yPos = motif.y * scalingFactors.scaleY;
+                      motifWidth = motif.width ? motif.width * scalingFactors.scaleX : 80;
+                      motifHeight = motif.height ? motif.height * scalingFactors.scaleY : 80;
+                    } else {
+                      xPos = (motif.x / xRatio) * scalingFactors.scaleX;
+                      yPos = (motif.y / yRatio) * scalingFactors.scaleY;
+                      motifWidth = motif.width ? (motif.width / xRatio) * scalingFactors.scaleX : 80;
+                      motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
+                    }
                     
                     console.log('Rendering headstone motif:', {
                       src: motif.src || motif.name,
@@ -1539,9 +1631,14 @@ export default function DesignPageClient({
                   .map((item: any, index: number) => {
                     // Font size needs to be scaled from canvas to display space
                     const dpr = shapeData?.dpr || 1;
+                    const designDevice = shapeData?.device || 'desktop';
+                    const isDesktopDesign = designDevice === 'desktop';
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
-                    // Font size is in canvas coordinates, scale it to display coordinates
-                    const fontSize = ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
+                    
+                    // Font size calculation - same logic as headstone inscriptions
+                    const fontSize = isDesktopDesign
+                      ? (item.font_size || 16) * scalingFactors.scaleY
+                      : ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
                     const fontFamily = item.font_family || item.font || 'serif';
                     
                     console.log('Base inscription found:', item.label, 'font size:', fontSize);

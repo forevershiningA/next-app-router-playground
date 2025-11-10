@@ -113,6 +113,13 @@ export function getSavedDesign(id: string): SavedDesignMetadata | undefined {
 }
 
 /**
+ * Get all saved designs as an array
+ */
+export function getAllSavedDesigns(): SavedDesignMetadata[] {
+  return Object.values(SAVED_DESIGNS);
+}
+
+/**
  * Get all designs for a category
  */
 export function getDesignsByCategory(category: DesignCategory): SavedDesignMetadata[] {

@@ -4,6 +4,24 @@ import { getSavedDesign, extractDesignIdFromSlug } from '#/lib/saved-designs-dat
 import { getProductFromId } from '#/lib/product-utils';
 import DesignPageClient from './DesignPageClient';
 
+/**
+ * Format slug for display - convert kebab-case to Title Case
+ */
+function formatSlugForDisplay(slug: string): string {
+  if (!slug) return 'Memorial Design';
+  
+  return slug
+    .split('-')
+    .map((word, index) => {
+      // Don't capitalize very short words unless first word
+      if (word.length <= 2 && index > 0) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 interface SavedDesignPageProps {
   params: Promise<{
     productType: string; // Actually productSlug: 'bronze-plaque' | 'laser-etched-headstone' etc.
@@ -32,7 +50,8 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
   }
 
   const product = getProductFromId(design.productId);
-  const title = design.title || 'Memorial Design';
+  // Use formatted slug instead of generic title
+  const title = formatSlugForDisplay(design.slug);
   const categoryTitle = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getAllDesigns, type SavedDesignMetadata } from '#/lib/saved-designs-data';
+import { getAllSavedDesigns, type SavedDesignMetadata } from '#/lib/saved-designs-data';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
@@ -16,7 +16,7 @@ export default function ProductTypePage() {
 
   useEffect(() => {
     // Get all designs and filter by product slug
-    const allDesigns = getAllDesigns();
+    const allDesigns = getAllSavedDesigns();
     const filtered = allDesigns.filter(d => d.productSlug === productSlug);
     setDesigns(filtered);
     setLoading(false);
@@ -61,9 +61,9 @@ export default function ProductTypePage() {
 
         {/* Sophisticated Header */}
         <div className="mb-16 text-center">
-          <h1 className="text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
+          <h2 className="text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
             {productName}
-          </h1>
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent mx-auto mb-6" />
           <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
             Explore our curated collection of {categoryDesigns.length} thoughtfully designed categories

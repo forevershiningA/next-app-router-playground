@@ -132,6 +132,124 @@ function extractNameAndInscription(tags, designName) {
   return { primaryName, inscription };
 }
 
+function shouldSkipLine(line) {
+  const lower = line.toLowerCase();
+  
+  // Skip if it's primarily dates
+  if (/^\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}/.test(line)) return true;
+  if (/^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i.test(line)) return true;
+  if (/\d{4}\s*(-|to)\s*\d{4}/.test(line)) return true;
+  
+  // Skip common memorial headers ONLY if they're alone
+  if (lower === 'in loving memory' || lower === 'in memory of') return true;
+  
+  // Skip single words
+  if (line.split(/\s+/).length === 1) return true;
+  
+  // Skip if it looks like a name (all caps, short)
+  if (/^[A-Z\s&']{2,30}$/.test(line) && line.split(' ').length <= 3) return true;
+  if (/^(mr|mrs|ms|miss|dr|rev|sr|jr)\s/i.test(line)) return true;
+  
+  // Skip family relationship counts
+  if (/^(mother|father|wife|husband|son|daughter|nanna|grandma|papa)\s+of\s+\d+/i.test(line)) return true;
+  
+  return false;
+}
+
+function isMeaningfulText(line) {
+  const words = line.trim().split(/\s+/);
+  if (words.length < 2) return false;
+  if (line.length < 10 || line.length > 150) return false;
+  
+  const meaningfulIndicators = [
+    // Relationship phrases (PRIORITY)
+    /\b(beloved|loving|devoted|treasured|cherished)\s+(mother|father|wife|husband|son|daughter|grandmother|grandfather|friend|sister|brother)/i,
+    // Poetic phrases
+    /\b(made|walked|looked|lived|loved|cherished|treasured)\b/i,
+    /\b(beautiful|invincible|wings|shoulders|universe|hearts|forever|always)\b/i,
+    /\b(blessing|treasure|peace|rest|heaven|angel|light)\b/i,
+    /\b(remember|memory|memories|never|forgotten|missed)\b/i,
+    /\b(life|soul|spirit|journey|legacy|grace)\b/i,
+  ];
+  
+  return meaningfulIndicators.some(pattern => pattern.test(line));
+}
+
+function extractMeaningfulSlugText(tags, motif) {
+  if (!tags) {
+    return motif ? slugify(motif).substring(0, 50) : 'memorial';
+  }
+  
+  // PRIORITY 1: Known complete phrases
+  const knownPhrases = [
+    /your life was a blessing[^.]*your memory a treasure/i,
+    /she made broken look beautiful[^.]*strong look invincible/i,
+    /universe on her shoulders[^.]*pair of wings/i,
+    /walked with the universe[^.]*looked like wings/i,
+    /forever in our hearts/i,
+    /always in our thoughts/i,
+    /gone but never forgotten/i,
+    /deeply loved[^.]*sadly missed/i,
+    /until we meet again/i,
+    /in our hearts forever/i,
+    /memories last forever/i,
+    /a life well lived/i,
+    /the lord is my shepherd/i,
+  ];
+  
+  for (const pattern of knownPhrases) {
+    const match = tags.match(pattern);
+    if (match) {
+      const phrase = match[0].trim();
+      const slugText = slugify(phrase).substring(0, 60);
+      return slugText;
+    }
+  }
+  
+  // PRIORITY 2: Look for meaningful lines
+  const lines = tags
+    .split(/\n{1,}|\s{2,}/)
+    .map(l => l.trim())
+    .filter(l => l.length > 3);
+  
+  const meaningfulLines = [];
+  for (const line of lines) {
+    if (shouldSkipLine(line)) continue;
+    if (isMeaningfulText(line)) {
+      meaningfulLines.push(line);
+    }
+  }
+  
+  // Combine meaningful lines (up to 2-3 lines)
+  if (meaningfulLines.length > 0) {
+    const combined = meaningfulLines.slice(0, 3).join(' ').substring(0, 120);
+    const slugText = slugify(combined).substring(0, 60);
+    if (slugText && slugText.length > 10) {
+      return slugText;
+    }
+  }
+  
+  // PRIORITY 3: Common memorial phrases
+  const commonPhrases = [
+    /always\s+in\s+our\s+hearts/i,
+    /forever\s+in\s+our\s+hearts/i,
+    /rest\s+in\s+peace/i,
+    /in\s+god'?s\s+hands/i,
+    /beloved\s+(wife|husband|mother|father)/i,
+    /loving\s+(mother|father|wife|husband)/i,
+  ];
+  
+  for (const pattern of commonPhrases) {
+    const match = tags.match(pattern);
+    if (match) {
+      return slugify(match[0]).substring(0, 40);
+    }
+  }
+  
+  // Fallback to motif or memorial
+  return motif ? slugify(motif).substring(0, 50) : 'memorial';
+}
+
 function createCategory(design, productType) {
   if (productType === 'bronze-plaque') {
     return slugify(design.ml_motif || 'dedication');
@@ -165,13 +283,24 @@ const templates = allDesigns.map((design, index) => {
   const width = Math.round(parseFloat(design.design_width) || 600);
   const height = Math.round(parseFloat(design.design_height) || 600);
   
-  const slug = `${slugify(primaryName)}-${design.design_stampid}`;
+  // Generate SEO-friendly slug: stampId_meaningful-description
+  const meaningfulText = extractMeaningfulSlugText(design.ml_tags, motif);
+  const slug = `${design.design_stampid}_${meaningfulText}`;
   
   // Track product types
   if (!stats.productTypes[productType]) {
     stats.productTypes[productType] = 0;
   }
   stats.productTypes[productType]++;
+  
+  // Create SEO-optimized metadata with meaningful inscription
+  const metaTitle = meaningfulText && meaningfulText !== slugify(motif).substring(0, 50)
+    ? `${shape} ${motif} ${design.ml_type || 'Memorial'} - ${meaningfulText.replace(/-/g, ' ').substring(0, 50)}`
+    : `${shape} ${motif} ${design.ml_type || 'Memorial'} - ${primaryName.substring(0, 40)}`;
+  
+  const metaDescription = meaningfulText && meaningfulText !== slugify(motif).substring(0, 50)
+    ? `${shape} ${design.ml_type?.toLowerCase() || 'memorial'} with ${motif} motif featuring "${meaningfulText.replace(/-/g, ' ')}". ${width}×${height}mm. ${design.ml_style || 'Custom design'}. Professional craftsmanship.`
+    : `${shape} ${design.ml_type?.toLowerCase() || 'memorial'} with ${motif} motif. ${width}×${height}mm. ${design.ml_style || 'Custom design'}. Professional craftsmanship.`;
   
   return {
     id: `ml-${design.design_stampid}`,
@@ -197,8 +326,8 @@ const templates = allDesigns.map((design, index) => {
     style: design.ml_style || 'Custom',
     type: design.ml_type || 'Memorial',
     metadata: {
-      title: `${shape} ${motif} ${design.ml_type || 'Memorial'} - ${primaryName.substring(0, 40)}`,
-      description: `${shape} ${design.ml_type?.toLowerCase() || 'memorial'} with ${motif} motif. ${width}×${height}mm. ${design.ml_style || 'Custom design'}. Professional craftsmanship.`,
+      title: metaTitle,
+      description: metaDescription,
       keywords: [
         `${shape.toLowerCase()} ${design.ml_type?.toLowerCase() || 'memorial'}`,
         `${motif.toLowerCase()} motif`,

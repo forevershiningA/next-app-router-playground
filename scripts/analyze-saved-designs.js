@@ -185,7 +185,72 @@ function extractMotifNames(designData) {
 }
 
 /**
+ * Slugify helper function
+ */
+function slugify(text) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Check if a line contains names/dates that should be skipped
+ */
+function shouldSkipLine(line) {
+  const lower = line.toLowerCase();
+  
+  // Skip if it's primarily dates
+  if (/^\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}/.test(line)) return true;
+  if (/^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i.test(line)) return true;
+  if (/\d{4}\s*(-|to)\s*\d{4}/.test(line)) return true;
+  
+  // Skip common memorial headers ONLY if they're alone
+  if (lower === 'in loving memory' || lower === 'in memory of') return true;
+  
+  // Skip single words
+  if (line.split(/\s+/).length === 1) return true;
+  
+  // Skip if it looks like a name (all caps, short)
+  if (/^[A-Z\s&']{2,30}$/.test(line) && line.split(' ').length <= 3) return true;
+  if (/^(mr|mrs|ms|miss|dr|rev|sr|jr)\s/i.test(line)) return true;
+  
+  // Skip family relationship counts (e.g., "Mother of 9")
+  if (/^(mother|father|wife|husband|son|daughter|nanna|grandma|papa)\s+of\s+\d+/i.test(line)) return true;
+  
+  return false;
+}
+
+/**
+ * Check if a line is meaningful memorial text
+ */
+function isMeaningfulText(line) {
+  // Must have at least 2 words
+  const words = line.trim().split(/\s+/);
+  if (words.length < 2) return false;
+  
+  // Should be between 10 and 150 characters
+  if (line.length < 10 || line.length > 150) return false;
+  
+  // Look for poetic/meaningful indicators OR relationship phrases
+  const meaningfulIndicators = [
+    // Relationship phrases (PRIORITY)
+    /\b(beloved|loving|devoted|treasured|cherished)\s+(mother|father|wife|husband|son|daughter|grandmother|grandfather|friend|sister|brother)/i,
+    // Poetic phrases
+    /\b(made|walked|looked|lived|loved|cherished|treasured)\b/i,
+    /\b(beautiful|invincible|wings|shoulders|universe|hearts|forever|always)\b/i,
+    /\b(blessing|treasure|peace|rest|heaven|angel|light)\b/i,
+    /\b(remember|memory|memories|never|forgotten|missed)\b/i,
+    /\b(life|soul|spirit|journey|legacy|grace)\b/i,
+  ];
+  
+  return meaningfulIndicators.some(pattern => pattern.test(line));
+}
+
+/**
  * Extract meaningful keywords from inscriptions for SEO slugs
+ * Now looks for ANY meaningful memorial text, not just specific patterns
  */
 function extractKeywordsFromInscriptions(designData) {
   const keywords = [];
@@ -194,110 +259,127 @@ function extractKeywordsFromInscriptions(designData) {
     .filter(item => item.type === 'Inscription' && item.label)
     .map(item => item.label);
   
-  const allText = inscriptions.join(' ').toLowerCase();
+  if (inscriptions.length === 0) return keywords;
   
-  // Extract specific phrases (LONG-TAIL SEO)
+  const allText = inscriptions.join(' ');
+  const allTextLower = allText.toLowerCase();
   
-  // Bible verses
-  if (allText.match(/psalm\s*23/i)) keywords.push('psalm-23');
-  if (allText.match(/john\s*3:?16/i)) keywords.push('john-3-16');
-  if (allText.match(/the\s+lord\s+is\s+my\s+shepherd/i)) keywords.push('lord-is-my-shepherd');
-  if (allText.match(/23rd\s+psalm/i)) keywords.push('23rd-psalm');
+  // PRIORITY 1: Known complete phrases
+  const knownPhrases = [
+    /your life was a blessing[^.]*your memory a treasure/i,
+    /she made broken look beautiful[^.]*strong look invincible/i,
+    /universe on her shoulders[^.]*pair of wings/i,
+    /walked with the universe[^.]*looked like wings/i,
+    /forever in our hearts/i,
+    /always in our thoughts/i,
+    /gone but never forgotten/i,
+    /deeply loved[^.]*sadly missed/i,
+    /until we meet again/i,
+    /in our hearts forever/i,
+    /memories last forever/i,
+    /a life well lived/i,
+    /the lord is my shepherd/i,
+  ];
   
-  // Common memorial phrases
-  if (allText.match(/always\s+in\s+our\s+hearts/i)) keywords.push('always-in-our-hearts');
-  if (allText.match(/forever\s+in\s+our\s+hearts/i)) keywords.push('forever-in-our-hearts');
-  if (allText.match(/gone\s+but\s+not\s+forgotten/i)) keywords.push('gone-but-not-forgotten');
-  if (allText.match(/until\s+we\s+meet\s+again/i)) keywords.push('until-we-meet-again');
-  if (allText.match(/rest\s+in\s+peace/i)) keywords.push('rest-in-peace');
-  if (allText.match(/in\s+god'?s\s+hands/i)) keywords.push('in-gods-hands');
-  if (allText.match(/safe\s+in\s+the\s+arms\s+of\s+jesus/i)) keywords.push('safe-in-arms-of-jesus');
-  
-  // Relationships
-  if (allText.match(/beloved\s+wife/i)) keywords.push('beloved-wife');
-  if (allText.match(/beloved\s+husband/i)) keywords.push('beloved-husband');
-  if (allText.match(/loving\s+mother/i)) keywords.push('loving-mother');
-  if (allText.match(/loving\s+father/i)) keywords.push('loving-father');
-  if (allText.match(/devoted\s+wife/i)) keywords.push('devoted-wife');
-  if (allText.match(/devoted\s+husband/i)) keywords.push('devoted-husband');
-  if (allText.match(/treasured\s+mother/i)) keywords.push('treasured-mother');
-  if (allText.match(/our\s+little\s+angel/i)) keywords.push('our-little-angel');
-  
-  // Service/Military
-  if (allText.match(/served\s+his\s+country/i)) keywords.push('served-his-country');
-  if (allText.match(/served\s+her\s+country/i)) keywords.push('served-her-country');
-  if (allText.match(/proud\s+veteran/i)) keywords.push('proud-veteran');
-  if (allText.match(/lest\s+we\s+forget/i)) keywords.push('lest-we-forget');
-  
-  // Ethnic/Cultural phrases
-  if (allText.match(/aroha\s+nui/i)) keywords.push('aroha-nui');
-  if (allText.match(/haere\s+ra/i)) keywords.push('haere-ra');
-  
-  // Extract surnames (not first names) if they appear with titles
-  const surnameMatch = allText.match(/\b(mr|mrs|ms|miss|dr|rev)\s+([a-z]+)/i);
-  if (surnameMatch) {
-    const surname = surnameMatch[2];
-    if (surname.length > 3 && surname.length < 12) { // Reasonable surname length
-      keywords.push(`${surnameMatch[1].toLowerCase()}-${surname}`);
+  for (const pattern of knownPhrases) {
+    const match = allText.match(pattern);
+    if (match) {
+      const phrase = match[0].trim();
+      const slugText = slugify(phrase).substring(0, 60);
+      if (slugText) {
+        keywords.push(slugText);
+        return keywords; // Return immediately
+      }
     }
   }
   
-  // Extract common surnames that appear with relationship words
-  const relationSurname = allText.match(/\b(smith|jones|williams|brown|taylor|davies|wilson|evans|thomas|roberts|johnson|lewis|walker|robinson|wood|thompson|white|hughes|edwards|green|hall|clarke|king|baker|harris|cooper|turner|carter|phillips|mitchell|campbell|anderson|allen|cook|parker|james|morgan|bell|murphy|kelly|martin|jackson|wright)\b/i);
-  if (relationSurname && allText.match(/\b(family|wife|husband|mother|father|memorial)\b/i)) {
-    keywords.push(relationSurname[0].toLowerCase() + '-family');
+  // PRIORITY 2: Look for meaningful lines in the inscriptions
+  const meaningfulLines = [];
+  for (const line of inscriptions) {
+    const trimmed = line.trim();
+    if (shouldSkipLine(trimmed)) continue;
+    if (isMeaningfulText(trimmed)) {
+      meaningfulLines.push(trimmed);
+    }
   }
+  
+  // Combine meaningful lines (up to 2-3 lines for a good phrase)
+  if (meaningfulLines.length > 0) {
+    // Try to combine consecutive meaningful lines
+    const combined = meaningfulLines.slice(0, 3).join(' ').substring(0, 120);
+    const slugText = slugify(combined).substring(0, 60);
+    if (slugText && slugText.length > 10) {
+      keywords.push(slugText);
+      return keywords;
+    }
+  }
+  
+  // PRIORITY 3: Bible verses
+  if (allTextLower.match(/psalm\s*23/i)) keywords.push('psalm-23');
+  if (allTextLower.match(/john\s*3:?16/i)) keywords.push('john-3-16');
+  if (allTextLower.match(/23rd\s+psalm/i)) keywords.push('23rd-psalm');
+  
+  // PRIORITY 4: Common memorial phrases (shorter)
+  if (allTextLower.match(/always\s+in\s+our\s+hearts/i)) keywords.push('always-in-our-hearts');
+  if (allTextLower.match(/forever\s+in\s+our\s+hearts/i)) keywords.push('forever-in-our-hearts');
+  if (allTextLower.match(/gone\s+but\s+not\s+forgotten/i)) keywords.push('gone-but-not-forgotten');
+  if (allTextLower.match(/until\s+we\s+meet\s+again/i)) keywords.push('until-we-meet-again');
+  if (allTextLower.match(/rest\s+in\s+peace/i)) keywords.push('rest-in-peace');
+  if (allTextLower.match(/in\s+god'?s\s+hands/i)) keywords.push('in-gods-hands');
+  if (allTextLower.match(/safe\s+in\s+the\s+arms\s+of\s+jesus/i)) keywords.push('safe-in-arms-of-jesus');
+  
+  // PRIORITY 5: Relationships
+  if (allTextLower.match(/beloved\s+wife/i)) keywords.push('beloved-wife');
+  if (allTextLower.match(/beloved\s+husband/i)) keywords.push('beloved-husband');
+  if (allTextLower.match(/loving\s+mother/i)) keywords.push('loving-mother');
+  if (allTextLower.match(/loving\s+father/i)) keywords.push('loving-father');
+  if (allTextLower.match(/devoted\s+wife/i)) keywords.push('devoted-wife');
+  if (allTextLower.match(/devoted\s+husband/i)) keywords.push('devoted-husband');
+  if (allTextLower.match(/treasured\s+mother/i)) keywords.push('treasured-mother');
+  if (allTextLower.match(/our\s+little\s+angel/i)) keywords.push('our-little-angel');
+  
+  // PRIORITY 6: Service/Military
+  if (allTextLower.match(/served\s+his\s+country/i)) keywords.push('served-his-country');
+  if (allTextLower.match(/served\s+her\s+country/i)) keywords.push('served-her-country');
+  if (allTextLower.match(/proud\s+veteran/i)) keywords.push('proud-veteran');
+  if (allTextLower.match(/lest\s+we\s+forget/i)) keywords.push('lest-we-forget');
+  
+  // PRIORITY 7: Ethnic/Cultural phrases
+  if (allTextLower.match(/aroha\s+nui/i)) keywords.push('aroha-nui');
+  if (allTextLower.match(/haere\s+ra/i)) keywords.push('haere-ra');
   
   return keywords;
 }
 
 /**
  * Generate privacy-safe slug from design data with SEO focus
+ * Format: meaningful-inscription-phrase or motif-names
  */
 function generatePrivacySafeSlug(designData, category) {
-  const parts = [];
-  
   // Extract SEO keywords from inscriptions
   const keywords = extractKeywordsFromInscriptions(designData);
   if (keywords.length > 0) {
-    // Use up to 3 specific keywords for long-tail SEO
-    parts.push(...keywords.slice(0, 3));
-  }
-  
-  // Add motif names if present and not too many keywords yet
-  if (parts.length < 3) {
-    const motifNames = extractMotifNames(designData);
-    if (motifNames.length > 0) {
-      const remaining = 3 - parts.length;
-      parts.push(...motifNames.slice(0, remaining));
+    // If we got a meaningful phrase (long slug), use it directly
+    if (keywords[0].length > 20) {
+      return keywords[0];
     }
+    // Otherwise combine up to 3 keywords
+    return keywords.slice(0, 3).join('-');
   }
   
-  // Add category if not too generic and we don't have enough keywords
-  if (parts.length < 2 && category && !['memorial', 'in-loving-memory'].includes(category)) {
-    parts.push(category.replace(/_/g, '-'));
+  // Fallback to motif names
+  const motifNames = extractMotifNames(designData);
+  if (motifNames.length > 0) {
+    return motifNames.slice(0, 2).join('-');
   }
   
-  // Check for design elements if still need more
-  if (parts.length < 2) {
-    const hasPhoto = designData.some(item => 
-      item.type === 'UploadedPhoto' || item.type === 'Photo'
-    );
-    const hasLogo = designData.some(item => 
-      item.type === 'Logo' || item.type === 'UploadedLogo'
-    );
-    
-    if (hasPhoto) parts.push('with-photo');
-    if (hasLogo) parts.push('with-logo');
+  // Fallback to category
+  if (category && !['memorial', 'in-loving-memory'].includes(category)) {
+    return category.replace(/_/g, '-');
   }
   
-  // If still no descriptive parts, add category
-  if (parts.length === 0) {
-    parts.push(category.replace(/_/g, '-'));
-  }
-  
-  // Limit to 4-5 parts for reasonable URL length
-  return parts.slice(0, 5).join('-');
+  // Final fallback
+  return 'memorial';
 }
 
 /**
