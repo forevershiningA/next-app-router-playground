@@ -1,6 +1,6 @@
 /**
  * Saved Designs Data - Auto-generated
- * Generated on: 2025-11-10T09:25:21.400Z
+ * Generated on: 2025-11-11T08:25:10.093Z
  * Total designs: 3114
  * 
  * This file contains metadata for all saved designs with:
@@ -1584,7 +1584,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "father-memorial",
-    "slug": "in-loving-memory-of-beloved-son-of-anne-and-brian-beloved-so",
+    "slug": "in-loving-memory-of-beloved-son-of-anne-and-brian",
     "title": "In Loving Memory Of",
     "motifNames": [
       "flower"
@@ -3372,7 +3372,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "butterfly-memorial",
-    "slug": "loving-memory-loving-memory",
+    "slug": "loving-memory",
     "title": "Loving Memory",
     "motifNames": [
       "butterflies"
@@ -3830,7 +3830,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "daughter-memorial",
-    "slug": "daughter-memorial",
+    "slug": "devoted-sister-of",
     "title": "Daughter Memorial",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/11/1669327598578.jpg",
@@ -8783,7 +8783,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "religious-memorial",
-    "slug": "ever-loved-ever-loved-always-together-never-apart-joined-as-",
+    "slug": "ever-loved-always-together-never-apart-joined-as-one-heart",
     "title": "Religious Memorial",
     "motifNames": [
       "butterflies"
@@ -10037,7 +10037,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "husband-memorial",
-    "slug": "to-live-in-the-hearts-is-to-never-die-treasured-memories-of",
+    "slug": "to-live-in-the-hearts-is-to-never-die-and-loving-husband",
     "title": "Husband Memorial",
     "motifNames": [],
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/04/1744499644953.jpg",
@@ -14405,7 +14405,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "wife-memorial",
-    "slug": "in-loving-memory-of-in-loving-memory-of-loving-wife-of-toby-",
+    "slug": "in-loving-memory-of-loving-wife-of-toby-mother-of-anne-lee-i",
     "title": "In Loving Memory Of",
     "motifNames": [
       "flower",
@@ -17265,7 +17265,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "dove-memorial",
-    "slug": "sadly-missed-sadly-missed",
+    "slug": "sadly-missed",
     "title": "In Loving Memory",
     "motifNames": [
       "dove",
@@ -17286,7 +17286,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "dove-memorial",
-    "slug": "sadly-missed-sadly-missed",
+    "slug": "sadly-missed",
     "title": "In Loving Memory",
     "motifNames": [
       "dove",
@@ -17597,7 +17597,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "stainless-steel-plaque",
     "category": "religious-memorial",
-    "slug": "many-gifts-one-spirit-always-showing-respect-for-others-many",
+    "slug": "many-gifts-one-spirit-always-showing-respect-for-others-your",
     "title": "Religious Memorial",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2021/11/1636865594467.jpg",
@@ -18932,7 +18932,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "in-loving-memory",
-    "slug": "in-loving-memory-of-loved-parents-of-in-loving-memory-of",
+    "slug": "in-loving-memory-of-loved-parents-of",
     "title": "In Loving Memory",
     "motifNames": [
       "flower"
@@ -19500,7 +19500,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "biblical-memorial",
-    "slug": "much-loved-much-loved",
+    "slug": "biblical-memorial",
     "title": "Biblical Memorial",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/04/1649791108398.jpg",
@@ -19935,7 +19935,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "laser-colour-plaque",
     "category": "son-memorial",
-    "slug": "eagle",
+    "slug": "beloved-brother-of-beloved-son-of",
     "title": "Son Memorial",
     "motifNames": [
       "eagle"
@@ -20554,7 +20554,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "in-loving-memory",
-    "slug": "in-loving-memory-of-greatly-loved-and-sadly-missed-in-loving",
+    "slug": "in-loving-memory-of-greatly-loved-and-sadly-missed",
     "title": "In loving memory of",
     "motifNames": [
       "fish"
@@ -21304,7 +21304,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "religious-memorial",
-    "slug": "all-is-well-safely-rest-god-is-nigh-all-is-well-safely-rest-",
+    "slug": "all-is-well-safely-rest-god-is-nigh-a-l-is-well-safely-rest-",
     "title": "Religious Memorial",
     "motifNames": [],
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/06/1719261019544.jpg",
@@ -21709,7 +21709,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "biblical-memorial",
-    "slug": "in-loving-memory-of-loved-and-remembered-forever",
+    "slug": "loving-mother-in-loving-memory-of-loved-and-remembered-forev",
     "title": "Biblical Memorial",
     "motifNames": [
       "dove"
@@ -22667,7 +22667,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "in-loving-memory",
-    "slug": "dearly-loved-dearly-loved-dearly-loved",
+    "slug": "dearly-loved",
     "title": "In Loving Memory",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/03/1680181885257.jpg",
@@ -23455,7 +23455,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "religious-memorial",
-    "slug": "born-to-eternal-life-born-to-eternal-life-two-lives-so-beaut",
+    "slug": "born-to-eternal-life-two-lives-so-beautifully-lived-two-hear",
     "title": "IN LOVING MEMORY",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/10/1666840855535.jpg",
@@ -23491,7 +23491,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "in-loving-memory",
-    "slug": "gone-but-not-forgotten-life-is-not-forever-love-is-life-is-n",
+    "slug": "gone-but-not-forgotten-life-is-not-forever-love-is",
     "title": "In Loving Memory",
     "motifNames": [
       "fish"
@@ -23569,7 +23569,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "laser-colour-plaque",
     "category": "religious-memorial",
-    "slug": "gone-but-not-forgotten-life-is-not-forever-love-is-life-is-n",
+    "slug": "gone-but-not-forgotten-life-is-not-forever-love-is",
     "title": "Religious Memorial",
     "motifNames": [
       "fish"
@@ -23667,7 +23667,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "legacy-product",
     "category": "religious-memorial",
-    "slug": "life-is-not-forever-love-is-life-is-not-forever-love-is-gone",
+    "slug": "life-is-not-forever-love-is-gone-but-not-forgotten",
     "title": "Religious Memorial",
     "motifNames": [
       "butterflies"
@@ -23687,7 +23687,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "full-colour-plaque",
     "category": "religious-memorial",
-    "slug": "gone-but-not-forgotten-gone-but-not-forgotten",
+    "slug": "gone-but-not-forgotten",
     "title": "Religious Memorial",
     "motifNames": [
       "dove"
@@ -25292,7 +25292,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "traditional-plaque",
     "category": "rest-in-peace",
-    "slug": "rest-in-peace-always-together-rest-in-peace",
+    "slug": "rest-in-peace-always-together",
     "title": "Rest In Peace",
     "motifNames": [
       "angel"
@@ -25312,7 +25312,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "traditional-plaque",
     "category": "rest-in-peace",
-    "slug": "always-together-rest-in-peace-rest-in-peace",
+    "slug": "always-together-rest-in-peace",
     "title": "Rest In Peace",
     "motifNames": [
       "angel",
@@ -26109,7 +26109,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "in-loving-memory",
-    "slug": "always-loving-always-loved-a-long-life-well-lived-a-long-lif",
+    "slug": "always-loving-always-loved-a-long-life-well-lived-dearly-lov",
     "title": "In Loving Memory",
     "motifNames": [
       "heart"
@@ -26547,7 +26547,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "religious-memorial",
-    "slug": "a-long-life-well-lived-once-met-never-forgotten-once-met-nev",
+    "slug": "a-long-life-well-lived-once-met-never-forgotten",
     "title": "Religious Memorial",
     "motifNames": [
       "dolphin"
@@ -26645,7 +26645,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "legacy-memorial",
     "category": "pet-memorial",
-    "slug": "she-walked-in-beauty-she-walked-in-beauty-a-long-life-well-l",
+    "slug": "she-walked-in-beauty-a-long-life-well-lived-your-love-will-l",
     "title": "Pet Memorial",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/02/1675259335154.jpg",
@@ -26743,7 +26743,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "religious-memorial",
-    "slug": "ever-loved-ever-loved",
+    "slug": "cross",
     "title": "Religious Memorial",
     "motifNames": [
       "cross"
@@ -26763,7 +26763,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "religious-memorial",
-    "slug": "ever-loved-ever-loved",
+    "slug": "cross-dove",
     "title": "Religious Memorial",
     "motifNames": [
       "cross",
@@ -27694,7 +27694,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "laser-colour-plaque",
     "category": "rest-in-peace",
-    "slug": "she-walked-in-beauty-she-walked-in-beauty-rest-in-peace",
+    "slug": "she-walked-in-beauty-rest-in-peace",
     "title": "Rest In Peace",
     "motifNames": [
       "kangaroo"
@@ -27861,7 +27861,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "monument",
     "productSlug": "legacy-full-monument",
     "category": "mother-memorial",
-    "slug": "in-loving-memory-of-love-and-miss-you-mum-forever-and-always",
+    "slug": "in-loving-memory-of-loving-mother-of-loving-grandmother-of",
     "title": "IN LOVING MEMORY OF",
     "motifNames": [
       "butterflies",
@@ -27942,7 +27942,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "monument",
     "productSlug": "laser-monument",
     "category": "rest-in-peace",
-    "slug": "rest-in-peace-rest-in-peace-rest-in-peace",
+    "slug": "rest-in-peace",
     "title": "In Loving memory",
     "motifNames": [
       "cross"
@@ -27962,7 +27962,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "mother-memorial",
-    "slug": "in-loving-memory-of-loved-and-missed-by-loved-and-missed-by",
+    "slug": "in-loving-memory-of-loved-and-missed-by",
     "title": "IN LOVING MEMORY OF",
     "motifNames": [],
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/10/1760611467779.jpg",
@@ -28001,7 +28001,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "stainless-steel-plaque",
     "category": "rest-in-peace",
-    "slug": "rest-in-peace-rest-in-peace-your-love-will-light-my-way",
+    "slug": "rest-in-peace-your-love-will-light-my-way",
     "title": "Rest In Peace",
     "motifNames": [
       "flower",
@@ -28102,7 +28102,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "religious-memorial",
-    "slug": "once-met-never-forgotten-ever-loved-once-met-never-forgotten",
+    "slug": "once-met-never-forgotten-ever-loved",
     "title": "Religious Memorial",
     "motifNames": [
       "anchor"
@@ -28344,7 +28344,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "son-memorial",
-    "slug": "forever-loved-forever-missed-beloved-son-and-grandson-belove",
+    "slug": "forever-loved-forever-missed-beloved-son-and-grandson",
     "title": "Son Memorial",
     "motifNames": [
       "cross"
@@ -31132,7 +31132,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "wife-memorial",
-    "slug": "beloved-husband-of-joy-and-loving-father-dearly-loved-deeply",
+    "slug": "beloved-husband-of-joy-and-loving-father-beloved-wife-of",
     "title": "Wife Memorial",
     "motifNames": [
       "dog"
@@ -34554,7 +34554,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "in-loving-memory",
-    "slug": "loving-memory-loving-memory-loving-memory",
+    "slug": "loving-memory",
     "title": "Loving Memory",
     "motifNames": [
       "fish",
@@ -35509,7 +35509,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "monument",
     "productSlug": "traditional-monument",
     "category": "wife-memorial",
-    "slug": "our-beloved-wife-mother-grandmother-our-beloved-wife-mother-",
+    "slug": "our-beloved-wife-mother-grandmother-eternally-loved-by-your-",
     "title": "Wife Memorial",
     "motifNames": [
       "cross",
@@ -37013,7 +37013,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "father-memorial",
-    "slug": "dearly-loved-husband-of-in-loving-memory-of-always-loving-al",
+    "slug": "loving-father-of-dearly-loved-husband-of-in-loving-memory-of",
     "title": "Father Memorial",
     "motifNames": [
       "cross"
@@ -38789,7 +38789,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "laser-colour-plaque",
     "category": "mother-memorial",
-    "slug": "leater-maree-you-were-too-beautiful-for-this-earth-leater-ma",
+    "slug": "leater-maree-you-were-too-beautiful-for-this-earth-dearly-lo",
     "title": "Mother Memorial",
     "motifNames": [
       "butterflies"
@@ -40846,7 +40846,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "traditional-plaque",
     "category": "wife-memorial",
-    "slug": "heart",
+    "slug": "loving-husband-loving-wife",
     "title": "Wife Memorial",
     "motifNames": [
       "heart"
@@ -44023,7 +44023,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "husband-memorial",
-    "slug": "to-live-in-the-hearts-is-to-never-die-a-loving-father-in-law",
+    "slug": "to-live-in-the-hearts-is-to-never-die-and-devoted-husband",
     "title": "Husband Memorial",
     "motifNames": [],
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/04/1744543254229.jpg",
@@ -44105,7 +44105,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "husband-memorial",
-    "slug": "to-live-in-the-hearts-is-to-never-die-loving-father-in-law",
+    "slug": "to-live-in-the-hearts-is-to-never-die-and-loving-husband",
     "title": "Husband Memorial",
     "motifNames": [],
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/04/1744866286888.jpg",
@@ -48900,7 +48900,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "mother-memorial",
-    "slug": "cross-angel",
+    "slug": "beloved-son",
     "title": "Mother Memorial",
     "motifNames": [
       "angel",
@@ -49976,7 +49976,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "rest-in-peace",
-    "slug": "in-loving-memory-of-late-ezranella-aaron-in-loving-memory-of",
+    "slug": "in-loving-memory-of-late-ezranella-aaron-in-the-hearts-of-th",
     "title": "In Loving Memory Of Late Ezranella Aaron",
     "motifNames": [
       "dove"
@@ -51944,7 +51944,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "mother-memorial",
-    "slug": "a-beautiful-loving-mom-a-beautiful-loving-mom",
+    "slug": "a-beautiful-loving-mom",
     "title": "Mother Memorial",
     "motifNames": [
       "heart"
@@ -51964,7 +51964,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "son-memorial",
-    "slug": "forever-loved-forever-missed-beloved-son-and-grandson-belove",
+    "slug": "forever-loved-forever-missed-beloved-son-and-grandson",
     "title": "Son Memorial",
     "motifNames": [
       "cross"
@@ -52089,7 +52089,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "son-memorial",
-    "slug": "beloved-son-and-grandson-beloved-son-and-grandson-forever-lo",
+    "slug": "beloved-son-and-grandson-forever-loved-forever-missed",
     "title": "Son Memorial",
     "motifNames": [
       "cross"
@@ -52830,7 +52830,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "wife-memorial",
-    "slug": "flower-bird",
+    "slug": "loving-wife",
     "title": "Wife Memorial",
     "motifNames": [
       "bird",
@@ -55989,7 +55989,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "father-memorial",
-    "slug": "always-in-our-hearts",
+    "slug": "loving-father-grandfather-always-in-our-hearts",
     "title": "Father Memorial",
     "motifNames": [
       "flower",
@@ -56398,7 +56398,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "biblical-memorial",
-    "slug": "in-loving-memory-of-the-lord-forever-psalm-23-6-kjv",
+    "slug": "in-loving-memory-of-beloved-husband-the-lord-forever-psalm-2",
     "title": "IN LOVING MEMORY OF",
     "motifNames": [
       "cross",
@@ -61574,7 +61574,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "plaque",
     "productSlug": "bronze-plaque",
     "category": "butterfly-memorial",
-    "slug": "in-loving-memory-of-in-loving-memory-of-in-loving-memory-of",
+    "slug": "in-loving-memory-of",
     "title": "In Loving Memory",
     "motifNames": [
       "butterflies",

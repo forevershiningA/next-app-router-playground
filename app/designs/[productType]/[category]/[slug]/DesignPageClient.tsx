@@ -164,119 +164,26 @@ export default function DesignPageClient({
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
   
-  // Load screenshot dimensions and adjust for DPR, also detect and crop white background
+  // Load screenshot dimensions - divide by DPR to get logical size
   useEffect(() => {
     if (designMetadata.preview && designData) {
       const img = new Image();
-      img.crossOrigin = 'anonymous'; // Enable CORS for canvas
       img.onload = () => {
         // Get the DPR used when design was created
         const designDPR = designData.find((item: any) => item.type === 'Headstone')?.dpr || 1;
         
-        // Always divide by the design's DPR to get the actual logical canvas size
-        // The screenshot is saved at logicalSize * designDPR pixels
-        let adjustedWidth = img.width / designDPR;
-        let adjustedHeight = img.height / designDPR;
+        // Screenshot is saved at logicalSize * designDPR pixels
+        // Divide by DPR to get logical canvas size
+        const logicalWidth = img.width / designDPR;
+        const logicalHeight = img.height / designDPR;
         
-        console.log('Screenshot DPR adjustment:', {
-          imageSize: { width: img.width, height: img.height },
-          designDPR,
-          logicalSize: { width: adjustedWidth, height: adjustedHeight }
+        console.log('Screenshot dimensions:', {
+          physical: { width: img.width, height: img.height },
+          logical: { width: logicalWidth, height: logicalHeight },
+          dpr: designDPR
         });
         
-        // Detect actual content bounds (crop white background)
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          
-          if (ctx) {
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, img.width, img.height);
-            const pixels = imageData.data;
-            
-            // First, count how many white pixels there are
-            const whiteThreshold = 255; // Only pure white (RGB = 255)
-            let whitePixelCount = 0;
-            const totalPixels = img.width * img.height;
-            
-            for (let i = 0; i < pixels.length; i += 4) {
-              const r = pixels[i];
-              const g = pixels[i + 1];
-              const b = pixels[i + 2];
-              const a = pixels[i + 3];
-              
-              if (a === 255 && r === 255 && g === 255 && b === 255) {
-                whitePixelCount++;
-              }
-            }
-            
-            const whitePercentage = (whitePixelCount / totalPixels) * 100;
-            console.log('White background analysis:', {
-              whitePixels: whitePixelCount,
-              totalPixels,
-              whitePercentage: whitePercentage.toFixed(2) + '%'
-            });
-            
-            // Only do auto-cropping if there's more than 30% white background
-            if (whitePercentage > 30) {
-              console.log('Significant white background detected, applying auto-crop');
-              
-              // Find bounds of non-white pixels
-              let minX = img.width;
-              let minY = img.height;
-              let maxX = 0;
-              let maxY = 0;
-              
-              for (let y = 0; y < img.height; y++) {
-                for (let x = 0; x < img.width; x++) {
-                  const i = (y * img.width + x) * 4;
-                  const r = pixels[i];
-                  const g = pixels[i + 1];
-                  const b = pixels[i + 2];
-                  const a = pixels[i + 3];
-                  
-                  // Check if pixel is not white (or transparent)
-                  if (a > 10 && (r < whiteThreshold || g < whiteThreshold || b < whiteThreshold)) {
-                    minX = Math.min(minX, x);
-                    minY = Math.min(minY, y);
-                    maxX = Math.max(maxX, x);
-                    maxY = Math.max(maxY, y);
-                  }
-                }
-              }
-              
-              // If we found content bounds, use them
-              if (maxX > minX && maxY > minY) {
-                const contentWidth = maxX - minX + 1;
-                const contentHeight = maxY - minY + 1;
-                
-                // Always divide by designDPR to get logical size
-                const finalWidth = contentWidth / designDPR;
-                const finalHeight = contentHeight / designDPR;
-                
-                console.log('Auto-cropped screenshot:', {
-                  original: { width: img.width, height: img.height },
-                  cropped: { width: contentWidth, height: contentHeight },
-                  final: { width: finalWidth, height: finalHeight },
-                  designDPR,
-                  bounds: { minX, minY, maxX, maxY }
-                });
-                
-                setScreenshotDimensions({ width: finalWidth, height: finalHeight });
-                return;
-              }
-            } else {
-              console.log('No significant white background, skipping auto-crop');
-            }
-          }
-        } catch (err) {
-          console.warn('Could not auto-crop screenshot, using full dimensions:', err);
-        }
-        
-        // Fallback to full image dimensions
-        setScreenshotDimensions({ width: adjustedWidth, height: adjustedHeight });
+        setScreenshotDimensions({ width: logicalWidth, height: logicalHeight });
       };
       img.src = designMetadata.preview;
     }
@@ -411,7 +318,7 @@ export default function DesignPageClient({
 
   // Function to sanitize inscription text - replace likely names with generic version
   const sanitizeInscription = useCallback((text: string): string => {
-    // Don't sanitize common phrases (exact matches)
+    // Don't sanitize common phrases (exact matches or containing these patterns)
     const commonPhrases = [
       'IN LOVING MEMORY',
       'OF',
@@ -433,7 +340,41 @@ export default function DesignPageClient({
       'REMEMBERED',
     ];
     
+    // Common memorial phrases that should never be replaced
+    const memorialPhrases = [
+      'WILL ALWAYS BE IN OUR HEARTS',
+      'FOREVER IN OUR HEARTS',
+      'ALWAYS IN OUR HEARTS',
+      'IN OUR HEARTS FOREVER',
+      'GONE BUT NOT FORGOTTEN',
+      'FOREVER LOVED',
+      'ALWAYS LOVED',
+      'DEARLY LOVED',
+      'FOREVER MISSED',
+      'DEEPLY MISSED',
+      'GREATLY MISSED',
+      'YOUR LIFE WAS A BLESSING',
+      'YOUR MEMORY A TREASURE',
+      'SHE MADE BROKEN LOOK BEAUTIFUL',
+      'UNIVERSE ON HER SHOULDERS',
+      'BELOVED MOTHER',
+      'BELOVED FATHER',
+      'BELOVED GRANDMOTHER',
+      'BELOVED GRANDFATHER',
+      'BELOVED WIFE',
+      'BELOVED HUSBAND',
+      'LOVING MOTHER',
+      'LOVING FATHER',
+      'DEVOTED MOTHER',
+      'DEVOTED FATHER',
+    ];
+    
     const upperText = text.toUpperCase().trim();
+    
+    // Check if this is an exact match to a memorial phrase
+    if (memorialPhrases.some(phrase => upperText === phrase || upperText.includes(phrase))) {
+      return text;
+    }
     
     // Check if this is an exact match to a common phrase
     if (commonPhrases.includes(upperText)) {
@@ -638,46 +579,38 @@ export default function DesignPageClient({
   const scalingFactors = useMemo(() => {
     if (!shapeData) return { scaleX: 1, scaleY: 1, displayWidth: 800, displayHeight: 800 };
     
-    console.log('screenshotDimensions in scalingFactors:', screenshotDimensions);
-    
-    // Use screenshot dimensions if available (already adjusted for DPR)
-    // Otherwise fall back to canvas dimensions
-    let baseDisplayWidth = screenshotDimensions?.width || shapeData.width || shapeData.init_width || 610;
-    let baseDisplayHeight = screenshotDimensions?.height || shapeData.height || shapeData.init_height || 610;
-    
-    // MOBILE UPSCALING: Upscale ONLY mobile designs (DPR > 1) by 2x for better desktop viewing
-    // Desktop designs use screenshot dimensions as-is (which are physical pixels)
-    const designDevice = shapeData.device || 'desktop';
-    const dpr = shapeData.dpr || 1;
-    const isDesktopDesign = designDevice === 'desktop';
-    const upscaleFactor = (dpr > 1 && !isDesktopDesign) ? 2 : 1;
-    
-    const displayWidth = baseDisplayWidth * upscaleFactor;
-    const displayHeight = baseDisplayHeight * upscaleFactor;
-    
-    // Canvas dimensions for coordinate scaling (logical size, not affected by DPR)
-    // Always use init dimensions - this is the canvas size where the design was created
+    // Canvas dimensions (logical pixels - the workspace where design was created)
     const canvasWidth = shapeData.init_width || shapeData.width || 610;
     const canvasHeight = shapeData.init_height || shapeData.height || 610;
     
-    // Scale coordinates from canvas to display
-    // Screenshot dimensions are already in logical pixels (divided by DPR during loading)
-    const scaleX = displayWidth / canvasWidth;
-    const scaleY = displayHeight / canvasHeight;
+    const dpr = shapeData.dpr || 1;
+    const designDevice = shapeData.device || 'desktop';
+    const isDesktopDesign = designDevice === 'desktop';
+    
+    // Screenshot dimensions are ALREADY in logical pixels (divided by DPR during loading)
+    const screenshotLogicalWidth = screenshotDimensions?.width || canvasWidth;
+    const screenshotLogicalHeight = screenshotDimensions?.height || canvasHeight;
+    
+    // Mobile upscaling: Scale up mobile designs by 2x for better desktop viewing
+    const upscaleFactor = (!isDesktopDesign && dpr > 1) ? 2 : 1;
+    const displayWidth = screenshotLogicalWidth * upscaleFactor;
+    const displayHeight = screenshotLogicalHeight * upscaleFactor;
+    
+    // Scale from logical canvas coordinates to display coordinates
+    const scaleX = (screenshotLogicalWidth / canvasWidth) * upscaleFactor;
+    const scaleY = (screenshotLogicalHeight / canvasHeight) * upscaleFactor;
     
     console.log('Scaling factors:', {
+      canvas: { width: canvasWidth, height: canvasHeight, logical: true },
+      screenshot: { 
+        logical: { width: screenshotLogicalWidth, height: screenshotLogicalHeight }
+      },
       display: { width: displayWidth, height: displayHeight },
-      canvas: { width: canvasWidth, height: canvasHeight },
       scale: { scaleX, scaleY },
-      dpr: shapeData.dpr
+      upscaleFactor,
+      device: designDevice,
+      dpr
     });
-    
-    console.log('DETAILED:', 
-      'Display W/H:', displayWidth, displayHeight,
-      'Canvas W/H:', canvasWidth, canvasHeight, 
-      'ScaleX/Y:', scaleX, scaleY,
-      'DPR:', shapeData.dpr
-    );
     
     return { scaleX, scaleY, displayWidth, displayHeight, upscaleFactor };
   }, [shapeData, screenshotDimensions]);
@@ -745,29 +678,25 @@ export default function DesignPageClient({
             shapeName.toLowerCase().includes('headstone')
           );
           
-          // Canvas dimensions for SVG viewBox
-          // Use screenshot dimensions as these represent the actual rendered size
-          const canvasWidth = screenshotDimensions.width;
-          const canvasHeight = screenshotDimensions.height;
-          
-          console.log('SVG Processing - Canvas dimensions:', {
-            canvasWidth,
-            canvasHeight,
-            source: 'screenshot',
-            screenshotDimensions,
-            dpr: shapeData.dpr
-          });
-          
-          // Screenshot dimensions (for display size)
-          // Desktop designs use physical dimensions as-is
-          // Mobile designs upscale by 2x for better desktop viewing
-          const designDevice = shapeData.device || 'desktop';
           const designDPR = shapeData.dpr || 1;
+          const designDevice = shapeData.device || 'desktop';
           const isDesktopDesign = designDevice === 'desktop';
-          const upscaleFactor = (designDPR > 1 && !isDesktopDesign) ? 2 : 1;
           
-          const displayWidth = screenshotDimensions.width * upscaleFactor;
-          const displayHeight = screenshotDimensions.height * upscaleFactor;
+          // Screenshot dimensions are ALREADY in logical pixels (divided by DPR during loading)
+          const logicalWidth = screenshotDimensions.width;
+          const logicalHeight = screenshotDimensions.height;
+          
+          // Display dimensions: for desktop use logical, for mobile upscale by 2x
+          const upscaleFactor = (!isDesktopDesign && designDPR > 1) ? 2 : 1;
+          const displayWidth = logicalWidth * upscaleFactor;
+          const displayHeight = logicalHeight * upscaleFactor;
+          
+          console.log('SVG Processing:', {
+            screenshot: { width: screenshotDimensions.width, height: screenshotDimensions.height, alreadyLogical: true },
+            display: { width: displayWidth, height: displayHeight },
+            upscaleFactor,
+            dpr: designDPR
+          });
           
           // Get original viewBox to calculate scale
           const viewBoxAttr = svg.getAttribute('viewBox');
@@ -782,23 +711,23 @@ export default function DesignPageClient({
             }
           }
           
-          // Calculate scale factors from original SVG to canvas size
+          // Calculate scale factors from original SVG to logical canvas size
           // For fixed-proportion shapes, use uniform scaling
           let scaleX, scaleY;
           if (isFixedProportionShape) {
             // Use the same scale for both X and Y to maintain proportions
-            const uniformScale = Math.min(canvasWidth / originalWidth, canvasHeight / originalHeight);
+            const uniformScale = Math.min(logicalWidth / originalWidth, logicalHeight / originalHeight);
             scaleX = uniformScale;
             scaleY = uniformScale;
           } else {
             // For flexible shapes like Serpentine, allow independent X/Y scaling
-            scaleX = canvasWidth / originalWidth;
-            scaleY = canvasHeight / originalHeight;
+            scaleX = logicalWidth / originalWidth;
+            scaleY = logicalHeight / originalHeight;
           }
           
-          // Update viewBox to canvas dimensions (for coordinate system)
+          // Update viewBox to logical dimensions (for coordinate system)
           // But set width/height to display dimensions (for actual size)
-          svg.setAttribute('viewBox', `0 0 ${canvasWidth} ${canvasHeight}`);
+          svg.setAttribute('viewBox', `0 0 ${logicalWidth} ${logicalHeight}`);
           svg.setAttribute('width', `${displayWidth}px`);
           svg.setAttribute('height', `${displayHeight}px`);
           
@@ -1183,15 +1112,37 @@ export default function DesignPageClient({
                     <span className="font-light text-slate-500">Product:</span>
                     <span className="text-slate-900">{productName}</span>
                   </div>
-                  <a
-                    href="/"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    Use Template
-                  </a>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={(() => {
+                        const mlDir = designMetadata.mlDir || '';
+                        let domain = 'headstonesdesigner.com';
+                        if (mlDir.includes('forevershining')) {
+                          domain = 'forevershining.com.au';
+                        } else if (mlDir.includes('bronze-plaque')) {
+                          domain = 'bronze-plaque.com';
+                        }
+                        return `https://${domain}/design/html5/#edit${designId}`;
+                      })()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      Edit
+                    </a>
+                    <a
+                      href="/"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      Use Template
+                    </a>
+                  </div>
                 </div>
                 
                 {/* Second row: Shape */}
@@ -1364,66 +1315,47 @@ export default function DesignPageClient({
                 {sanitizedDesignData && sanitizedDesignData
                   .filter((item: any) => item.type === 'Inscription' && item.label && item.part !== 'Base')
                   .map((item: any, index: number) => {
-                    // Font size needs to be scaled from canvas to display space
                     const dpr = shapeData?.dpr || 1;
-                    const designDevice = shapeData?.device || 'desktop';
-                    const isDesktopDesign = designDevice === 'desktop';
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // Font size calculation:
-                    // Desktop: Don't divide by DPR (font size already in physical pixels)
-                    // Mobile: Divide by DPR and multiply by upscaleFactor
-                    const fontSize = isDesktopDesign
-                      ? (item.font_size || 16) * scalingFactors.scaleY
-                      : ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
+                    // Use font_size field (in mm/logical units), NOT parsed from font string
+                    const fontSize = ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
                     const fontFamily = item.font_family || item.font || 'serif';
                     
-                    // Calculate actual transformation ratios from canvas to original screenshot
+                    // Measure actual capture transformation
                     const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
                     const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
                     
-                    // Get screenshot dimensions
-                    let screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
-                    let screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    // Screenshot dimensions are in logical pixels (already divided by DPR)
+                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
+                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
                     
-                    // Calculate ratio based on device type:
-                    // Desktop: Use logical dimensions directly (ratio should be ~1.0)
-                    // Mobile: Multiply by DPR first to get physical size
-                    let xRatio, yRatio;
-                    if (isDesktopDesign) {
-                      xRatio = screenshotWidthLogical / canvasWidth;
-                      yRatio = screenshotHeightLogical / canvasHeight;
-                    } else {
-                      const screenshotWidth = screenshotWidthLogical * dpr;
-                      const screenshotHeight = screenshotHeightLogical * dpr;
-                      xRatio = screenshotWidth / canvasWidth;
-                      yRatio = screenshotHeight / canvasHeight;
-                    }
+                    // Reconstruct original screenshot size in physical pixels
+                    const screenshotWidth = screenshotWidthLogical * dpr;
+                    const screenshotHeight = screenshotHeightLogical * dpr;
                     
-                    // Position inscriptions
-                    // Desktop: Coordinates are in PHYSICAL pixels, need to divide by DPR then scale
-                    // Mobile: Coordinates need ratio adjustment first
-                    let xPos, yPos;
-                    if (isDesktopDesign) {
-                      xPos = (item.x / dpr) * scalingFactors.scaleX;
-                      yPos = (item.y / dpr) * scalingFactors.scaleY;
-                    } else {
-                      xPos = (item.x / xRatio) * scalingFactors.scaleX;
-                      yPos = (item.y / yRatio) * scalingFactors.scaleY;
-                    }
+                    // Real ratios: screenshot (physical) / canvas (logical)
+                    const xRatio = screenshotWidth / canvasWidth;
+                    const yRatio = screenshotHeight / canvasHeight;
+                    
+                    // Position inscriptions using real ratios
+                    const xPos = (item.x / xRatio) * scalingFactors.scaleX;
+                    const yPos = (item.y / yRatio) * scalingFactors.scaleY;
                     
                     // DEBUG
                     if (index === 0) {
-                      console.log('Inscription positioning:', {
-                        raw: { x: item.x, y: item.y },
+                      console.log('Inscription rendering:', {
+                        raw: { x: item.x, y: item.y, font_size: item.font_size },
                         canvas: { width: canvasWidth, height: canvasHeight },
-                        screenshot: { width: screenshotWidthLogical, height: screenshotHeightLogical },
+                        screenshot: { 
+                          logical: { width: screenshotWidthLogical, height: screenshotHeightLogical },
+                          physical: { width: screenshotWidth, height: screenshotHeight }
+                        },
                         ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
                         adjusted: { x: (item.x / xRatio).toFixed(2), y: (item.y / yRatio).toFixed(2) },
+                        display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2), fontSize: fontSize.toFixed(2) },
                         scale: { scaleX: scalingFactors.scaleX.toFixed(4), scaleY: scalingFactors.scaleY.toFixed(4) },
-                        final: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2) },
-                        isDesktop: isDesktopDesign,
-                        dpr: dpr
+                        dpr, upscaleFactor
                       });
                     }
                     
@@ -1457,54 +1389,36 @@ export default function DesignPageClient({
                   {adjustedMotifData
                     .filter((motif: any) => motif.part !== 'Base')
                     .map((motif: any, index: number) => {
-                    // Calculate actual transformation ratios from canvas to original screenshot
                     const dpr = shapeData?.dpr || 1;
-                    const designDevice = shapeData?.device || 'desktop';
-                    const isDesktopDesign = designDevice === 'desktop';
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
+                    // Measure actual capture transformation  
                     const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
                     const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
                     
-                    // Get screenshot dimensions
-                    let screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
-                    let screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    // Screenshot dimensions are in logical pixels (already divided by DPR)
+                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
+                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
                     
-                    // Calculate ratio based on device type
-                    let xRatio, yRatio;
-                    if (isDesktopDesign) {
-                      xRatio = screenshotWidthLogical / canvasWidth;
-                      yRatio = screenshotHeightLogical / canvasHeight;
-                    } else {
-                      const screenshotWidth = screenshotWidthLogical * dpr;
-                      const screenshotHeight = screenshotHeightLogical * dpr;
-                      xRatio = screenshotWidth / canvasWidth;
-                      yRatio = screenshotHeight / canvasHeight;
-                    }
+                    // Reconstruct original screenshot size in physical pixels
+                    const screenshotWidth = screenshotWidthLogical * dpr;
+                    const screenshotHeight = screenshotHeightLogical * dpr;
                     
-                    // Scale motif coordinates
-                    // Desktop: Coordinates and sizes are in canvas space, just scale to display
-                    // Mobile: Coordinates need ratio adjustment first
-                    let xPos, yPos, motifWidth, motifHeight;
-                    if (isDesktopDesign) {
-                      xPos = motif.x * scalingFactors.scaleX;
-                      yPos = motif.y * scalingFactors.scaleY;
-                      motifWidth = motif.width ? motif.width * scalingFactors.scaleX : 80;
-                      motifHeight = motif.height ? motif.height * scalingFactors.scaleY : 80;
-                    } else {
-                      xPos = (motif.x / xRatio) * scalingFactors.scaleX;
-                      yPos = (motif.y / yRatio) * scalingFactors.scaleY;
-                      motifWidth = motif.width ? (motif.width / xRatio) * scalingFactors.scaleX : 80;
-                      motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
-                    }
+                    // Real ratios: screenshot (physical) / canvas (logical)
+                    const xRatio = screenshotWidth / canvasWidth;
+                    const yRatio = screenshotHeight / canvasHeight;
+                    
+                    // Transform motif coordinates using real ratios
+                    const xPos = (motif.x / xRatio) * scalingFactors.scaleX;
+                    const yPos = (motif.y / yRatio) * scalingFactors.scaleY;
+                    const motifWidth = motif.width ? (motif.width / xRatio) * scalingFactors.scaleX : 80;
+                    const motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
                     
                     console.log('Rendering headstone motif:', {
                       src: motif.src || motif.name,
-                      cleanedPath: getMotifPath(motif),
-                      position: { xPos, yPos },
-                      size: { width: motifWidth, height: motifHeight },
-                      flip: { x: motif.flipx, y: motif.flipy },
-                      hasColor: !!motif.color,
+                      raw: { x: motif.x, y: motif.y, width: motif.width, height: motif.height },
+                      ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
+                      display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2), width: motifWidth.toFixed(2), height: motifHeight.toFixed(2) },
                       color: motif.color
                     });
                     
@@ -1635,10 +1549,30 @@ export default function DesignPageClient({
                     const isDesktopDesign = designDevice === 'desktop';
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
+                    // Check if this is a "real" high DPR device vs browser zoom
+                    const isRealHighDPR = dpr >= 2.0 && Math.abs(dpr - Math.round(dpr)) < 0.1;
+                    
+                    // Parse font size from the 'font' string (e.g., "36.63px Lucida Calligraphy")
+                    // The 'font_size' field is in mm, not px, so we use 'font' instead
+                    let fontSizeInPx = 16; // default
+                    if (item.font && typeof item.font === 'string') {
+                      const match = item.font.match(/^([\d.]+)px/);
+                      if (match) {
+                        fontSizeInPx = parseFloat(match[1]);
+                      }
+                    }
+                    
                     // Font size calculation - same logic as headstone inscriptions
-                    const fontSize = isDesktopDesign
-                      ? (item.font_size || 16) * scalingFactors.scaleY
-                      : ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
+                    let fontSize;
+                    if (isDesktopDesign) {
+                      if (isRealHighDPR) {
+                        fontSize = fontSizeInPx * scalingFactors.scaleY;
+                      } else {
+                        fontSize = fontSizeInPx * scalingFactors.scaleY;
+                      }
+                    } else {
+                      fontSize = fontSizeInPx * scalingFactors.scaleY * upscaleFactor;
+                    }
                     const fontFamily = item.font_family || item.font || 'serif';
                     
                     console.log('Base inscription found:', item.label, 'font size:', fontSize);

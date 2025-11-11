@@ -212,6 +212,11 @@ function shouldSkipLine(line) {
   // Skip single words
   if (line.split(/\s+/).length === 1) return true;
   
+  // BEFORE checking if it looks like a name, check if it contains meaningful memorial words
+  // These phrases should NOT be skipped even if they look like names
+  const meaningfulWords = /\b(beloved|loving|devoted|treasured|cherished|beautiful|wonderful|amazing|special|dear|precious|adored)\s+(mother|mom|mum|mama|father|dad|papa|wife|husband|son|daughter|grandmother|grandfather|nana|papa|grandpa|grandma|friend|sister|brother|nan|pop|granny)\b/i;
+  if (meaningfulWords.test(line)) return false;
+  
   // Skip if it looks like a name (all caps, short)
   if (/^[A-Z\s&']{2,30}$/.test(line) && line.split(' ').length <= 3) return true;
   if (/^(mr|mrs|ms|miss|dr|rev|sr|jr)\s/i.test(line)) return true;
@@ -295,11 +300,17 @@ function extractKeywordsFromInscriptions(designData) {
   
   // PRIORITY 2: Look for meaningful lines in the inscriptions
   const meaningfulLines = [];
+  const seenLines = new Set(); // Track duplicates
   for (const line of inscriptions) {
     const trimmed = line.trim();
-    if (shouldSkipLine(trimmed)) continue;
+    const lowerLine = trimmed.toLowerCase();
+    
+    // Skip duplicates, empty lines, or lines that should be skipped
+    if (!trimmed || seenLines.has(lowerLine) || shouldSkipLine(trimmed)) continue;
+    
     if (isMeaningfulText(trimmed)) {
       meaningfulLines.push(trimmed);
+      seenLines.add(lowerLine); // Mark as seen
     }
   }
   

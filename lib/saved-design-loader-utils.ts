@@ -116,64 +116,36 @@ export async function loadSavedDesignIntoEditor(
   designId: string,
   options: LoadDesignOptions = {}
 ) {
-  console.log('🔧 loadSavedDesignIntoEditor called');
-  console.log('📦 Design ID:', designId);
-  console.log('📄 Design data length:', designData?.length);
-  console.log('⚙️ Options:', options);
-  
   const store = useHeadstoneStore.getState();
   const { clearExisting = true } = options;
-
-  console.log('📊 Current store state:', {
-    inscriptions: store.inscriptions.length,
-    additions: store.selectedAdditions?.length || 0,
-    motifs: store.selectedMotifs?.length || 0
-  });
 
   // Get the base product first (to determine product type)
   const baseProduct = designData.find(
     item => item.type === 'Headstone' || item.type === 'Plaque'
   );
-  
-  console.log('🏛️ Base product:', baseProduct);
 
   // Set the correct product based on productid
   if (baseProduct && baseProduct.productid) {
     const productId = String(baseProduct.productid);
-    console.log(`🔄 Setting product ID to: ${productId}`);
-    console.log(`📏 Base product width: ${baseProduct.width}, height: ${baseProduct.height}`);
-    console.log(`📏 Condition check: width exists=${!!baseProduct.width}, height exists=${!!baseProduct.height}`);
     
     try {
       await store.setProductId(productId);
-      console.log('✅ Product set successfully');
-      console.log(`📊 Store dimensions BEFORE override: width=${store.widthMm}, height=${store.heightMm}`);
       
       // IMPORTANT: Set dimensions AFTER product is loaded
       // The setProductId sets default init dimensions, so we need to override them
       if (baseProduct.width && baseProduct.height) {
-        console.log(`🔧 OVERRIDING dimensions to saved values: ${baseProduct.width} x ${baseProduct.height}`);
         store.setWidthMm(baseProduct.width);
         store.setHeightMm(baseProduct.height);
-        console.log(`✅ Dimensions set. Store now shows: width=${store.widthMm}, height=${store.heightMm}`);
-      } else {
-        console.warn('⚠️ Skipping dimension override - width or height is missing');
       }
     } catch (error) {
-      console.warn('⚠️ Failed to set product:', error);
       // Continue anyway - we'll try to load the design
     }
-  } else {
-    console.warn('⚠️ No baseProduct or productid found');
   }
 
   // Clear existing content if requested
   if (clearExisting) {
-    console.log('🧹 Clearing existing content...');
-    
     // Clear inscriptions
     const currentInscriptions = [...store.inscriptions];
-    console.log(`   Deleting ${currentInscriptions.length} inscriptions`);
     currentInscriptions.forEach(insc => {
       store.deleteInscription(insc.id);
     });
@@ -181,7 +153,6 @@ export async function loadSavedDesignIntoEditor(
     // Clear motifs - use selectedMotifs array
     if (store.selectedMotifs && store.selectedMotifs.length > 0) {
       const currentMotifs = [...store.selectedMotifs];
-      console.log(`   Removing ${currentMotifs.length} motifs`);
       currentMotifs.forEach(motif => {
         store.removeMotif(motif.id);
       });
@@ -190,37 +161,27 @@ export async function loadSavedDesignIntoEditor(
     // Clear additions - use selectedAdditions array
     if (store.selectedAdditions && store.selectedAdditions.length > 0) {
       const currentAdditions = [...store.selectedAdditions];
-      console.log(`   Removing ${currentAdditions.length} additions`);
       currentAdditions.forEach(addId => {
         store.removeAddition(addId);
       });
     }
-    
-    console.log('✅ Content cleared');
   }
 
   // Set product properties if available
   if (baseProduct) {
-    console.log('⚙️ Setting product properties...');
-    
     // Set border if available
     if (baseProduct.border) {
-      console.log(`   Setting border: ${baseProduct.border}`);
       store.setBorderName(baseProduct.border);
     }
     
     // Set material/texture if available - with a small delay to ensure setProductId fully completes
     if (baseProduct.texture) {
       const mappedTexture = mapTexture(baseProduct.texture, String(baseProduct.productid));
-      console.log(`   Original texture: ${baseProduct.texture}`);
-      console.log(`   Mapped texture: ${mappedTexture}`);
       
       // Wait a tick to ensure setProductId has fully completed
       await new Promise(resolve => setTimeout(resolve, 100));
       
-      console.log(`   Setting headstoneMaterialUrl to: ${mappedTexture}`);
       store.setHeadstoneMaterialUrl(mappedTexture);
-      console.log(`   Store headstoneMaterialUrl after set: ${store.headstoneMaterialUrl}`);
     }
     // Note: Dimensions are set immediately after setProductId completes (see above)
   }
@@ -229,8 +190,6 @@ export async function loadSavedDesignIntoEditor(
   const inscriptions = designData.filter(
     item => item.type === 'Inscription' && item.label && item.label.trim()
   );
-
-  console.log(`📝 Found ${inscriptions.length} inscriptions to load`);
 
   // Sort inscriptions by OLD Y position
   // In old system: MORE NEGATIVE Y = HIGHER UP on screen (top)
@@ -244,17 +203,37 @@ export async function loadSavedDesignIntoEditor(
     return aY - bY;
   });
 
-  console.log(`📝 Inscriptions sorted by position (top to bottom)`);
-  sortedInscriptions.forEach((insc, idx) => {
-    console.log(`   ${idx + 1}. "${(insc.label || '').substring(0, 30)}" at y=${insc.y}`);
-  });
-
   // Get the stored dimensions for coordinate conversion
   const init_width = baseProduct?.init_width || 1116;
   const init_height = baseProduct?.init_height || 654;
-  const design_dpr = baseProduct?.dpr || 1;
+  const raw_dpr = baseProduct?.dpr || 1;
   const device = baseProduct?.device || 'desktop';
   const orientation = baseProduct?.orientation || 'landscape';
+  
+  // Normalize DPR for desktop designs
+  // Desktop designs should always use DPR = 1.0 regardless of saved DPR
+  // Unusual DPR values (like 1.47) come from browser zoom or display scaling
+  // and should be ignored for desktop designs to prevent scaling issues
+  let design_dpr = raw_dpr;
+  
+  if (device === 'desktop') {
+    // For desktop designs, always use DPR = 1.0
+    // This prevents font size and positioning issues from browser zoom
+    if (Math.abs(raw_dpr - 1.0) > 0.01) {
+      design_dpr = 1.0;
+    }
+  } else {
+    // For mobile designs, normalize to standard mobile DPR values
+    const standardMobileDpr = [1.0, 1.5, 2.0, 2.5, 3.0, 4.0];
+    const isStandardDpr = standardMobileDpr.some(std => Math.abs(raw_dpr - std) < 0.01);
+    
+    if (!isStandardDpr) {
+      const nearest = standardMobileDpr.reduce((prev, curr) => 
+        Math.abs(curr - raw_dpr) < Math.abs(prev - raw_dpr) ? curr : prev
+      );
+      design_dpr = nearest;
+    }
+  }
   
   // Extract viewport size from navigator string if available
   let viewportWidth = init_width;
@@ -298,52 +277,44 @@ export async function loadSavedDesignIntoEditor(
   const designPixelsPerMmY = orientation === 'portrait'
     ? designCanvasHeight / productHeightMm
     : designCanvasHeight / productHeightMm;
-  
-  console.log('📐 Coordinate conversion:', {
-    viewport: `${viewportWidth}x${viewportHeight}`,
-    design_canvas: `${designCanvasWidth.toFixed(0)}x${designCanvasHeight.toFixed(0)}`,
-    design_dpr,
-    current_dpr: currentDpr,
-    device,
-    orientation,
-    product: `${productWidthMm}mm x ${productHeightMm}mm`,
-    currentSize: `${currentWidth}mm x ${currentHeight}mm`,
-    designPixelsPerMmX: designPixelsPerMmX.toFixed(4),
-    designPixelsPerMmY: designPixelsPerMmY.toFixed(4),
-    calculationX: `${designCanvasWidth} / ${productWidthMm}`,
-    calculationY: `${designCanvasHeight} / ${productHeightMm}`
-  });
 
   for (const insc of sortedInscriptions) {
     const text = insc.label || '';
     const font = insc.font_family || 'Arial';
     
-    // The font size in the saved design:
-    // - insc.font = "27.216768292682925px Arial" (actual canvas pixels at design time)
-    // - insc.font_size = 7 (represents 7mm on the product)
-    const sizeMm = insc.font_size || 10;
+    // Extract font size from the 'font' field if available
+    // Format: "18.771183846705306px Garamond" or "27px Arial"
+    let fontPixels = 0;
+    if (insc.font && typeof insc.font === 'string') {
+      const fontMatch = insc.font.match(/([\d.]+)px/);
+      if (fontMatch) {
+        fontPixels = parseFloat(fontMatch[1]);
+      }
+    }
+    
+    // Calculate font size in mm from pixels
+    // The font pixels were rendered at design time with design_dpr
+    // We need to convert them to mm using the design-time pixels-per-mm ratio
+    let sizeMm = insc.font_size || 10;
+    
+    if (fontPixels > 0) {
+      // Font size was in pixels at design time, convert to mm
+      // Use the X-axis pixels-per-mm ratio for font sizing
+      sizeMm = fontPixels / designPixelsPerMmX;
+    }
     
     // Get raw saved position (these are screen pixels relative to canvas center in old system)
     let xPixels = typeof insc.x === 'number' ? insc.x : 0;
     let yPixels = typeof insc.y === 'number' ? insc.y : 0;
     
-    console.log(`   📏 Converting "${text.substring(0, 30)}..."`);
-    console.log(`      Original position (pixels):`, { x: xPixels, y: yPixels });
-    console.log(`      Font info:`, { font: insc.font, font_size_mm: sizeMm });
-    
     // Convert pixel positions to mm using the design-time pixels-per-mm ratios
     // Use separate ratios for X and Y to handle different aspect ratios correctly
     const xMmFromCenter = xPixels / designPixelsPerMmX;
     const yMmFromCenter = yPixels / designPixelsPerMmY;
-    
-    console.log(`      Position in mm from OLD center:`, { x: xMmFromCenter.toFixed(2), y: yMmFromCenter.toFixed(2) });
-    console.log(`      Font size: ${sizeMm}mm (using directly from saved data)`);
 
     // Use position as is from saved design
     const xPos = xMmFromCenter;
     const yPos = yMmFromCenter;
-
-    console.log(`      Final position (mm from CENTER):`, { x: xPos.toFixed(2), y: yPos.toFixed(2) });
     
     // Add inscription
     const id = store.addInscriptionLine({
@@ -355,8 +326,6 @@ export async function loadSavedDesignIntoEditor(
       rotationDeg: typeof insc.rotation === 'number' ? insc.rotation : 0,
       color: insc.color || '#000000',
     });
-    
-    console.log(`   ✨ Created inscription [${store.inscriptions.length - 1}] with ID: ${id}`);
   }
 
   // Load motifs
@@ -364,18 +333,9 @@ export async function loadSavedDesignIntoEditor(
     item => item.type === 'Motif' && item.src
   );
 
-  console.log(`🎨 Found ${motifs.length} motifs to load`);
-
   for (const motif of motifs) {
     const svgPath = `/shapes/motifs/${motif.src}.svg`;
     const color = motif.color || '#c99d44';
-    
-    console.log(`   🎨 Loading motif: ${motif.src}`);
-    console.log(`      SVG path: ${svgPath}`);
-    console.log(`      Color: ${color}`);
-    console.log(`      Position: x=${motif.x}, y=${motif.y}`);
-    console.log(`      Height: ${motif.height}mm`);
-    console.log(`      Rotation: ${motif.rotation}°`);
     
     // Add the motif using the store's addMotif function
     store.addMotif(svgPath);
@@ -407,9 +367,6 @@ export async function loadSavedDesignIntoEditor(
         rotationZ: typeof motif.rotation === 'number' ? motif.rotation : 0,
         heightMm: typeof motif.height === 'number' ? motif.height : 100,
       });
-      
-      console.log(`   ✨ Created motif with ID: ${newMotif.id}`);
-      console.log(`      Position: (${xPos.toFixed(2)}, ${yPos.toFixed(2)})`);
     }
   }
 
@@ -423,8 +380,6 @@ export async function loadSavedDesignIntoEditor(
     inscriptionsLoaded: inscriptions.length,
     motifsLoaded: motifs.length,
   };
-  
-  console.log('✅ Design loaded successfully:', result);
   
   return result;
 }

@@ -149,7 +149,9 @@ export default function DesignsTreeNav() {
       <div className="mb-8 pb-6 border-b border-slate-700/50">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-serif font-light text-white tracking-tight">
-            Memorial Designs
+            <Link href="/designs" className="hover:text-slate-300 transition-colors">
+              Memorial Designs
+            </Link>
           </h1>
           <Link
             href="/"

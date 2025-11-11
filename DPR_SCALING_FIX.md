@@ -1,83 +1,98 @@
-# DPR Scaling - Final Corrected Solution
+# DPR Scaling - Final Solution with Browser Zoom Detection
 
-## Key Insight
-Desktop designs save values in PHYSICAL pixels (already multiplied by DPR), while mobile designs save in logical pixels.
+## Problem
+DPR 1.25 was being treated as a high-DPR device, but it's actually browser zoom (125%), not device pixel ratio. This caused inscriptions to be positioned incorrectly.
 
-## Desktop Design (DPR 2) Example:
-- Canvas: 1296×773 (logical)
-- Font size saved: 153px (physical = 153, not 76.5)
-- Motif size saved: 80px (physical)
-- Screenshot: 2592×1546 (physical = 1296×2, 773×2)
+## Solution
+Distinguish between "real" high DPR (2.0, 3.0 - Retina displays) and browser zoom (1.25, 1.5, 1.75).
 
-When loaded, screenshot is divided by DPR:
-- screenshotDimensions: 1296×773 (logical)
-
-## Correct Approach
-
-### 1. Display Dimensions
-Desktop and mobile both skip upscaling:
+### Detection Logic
 ```typescript
-const upscaleFactor = (dpr > 1 && !isDesktopDesign) ? 2 : 1;
-displayWidth = screenshotDimensions.width * upscaleFactor;
+const isRealHighDPR = dpr >= 2.0 && Math.abs(dpr - Math.round(dpr)) < 0.1;
 ```
-- Desktop: `1296 * 1 = 1296` ✅
-- Mobile: `800 * 2 = 1600` ✅
 
-### 2. Font Sizes
-Desktop: Don't divide by DPR (already physical)
-Mobile: Divide by DPR, multiply by upscale
+**Real High DPR:**
+- 2.0, 3.0, 4.0 (Retina, high-DPI displays)
+- Integer or very close to integer
+- Apply special desktop DPR correction
 
+**Browser Zoom:**
+- 1.25, 1.5, 1.75 (125%, 150%, 175% zoom)
+- Fractional values
+- Treat as normal rendering (no DPR correction)
+
+## Implementation
+
+### Font Sizes
 ```typescript
-const fontSize = isDesktopDesign
-  ? (item.font_size || 16) * scalingFactors.scaleY
-  : ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
+const fontSize = (isDesktopDesign && isRealHighDPR)
+  ? (item.font_size || 16) * scalingFactors.scaleY  // Real high DPR
+  : ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;  // Normal/zoom
 ```
-- Desktop: `153 * 1.0 = 153px` ✅
-- Mobile: `(16 * 1.0) / 2 * 2 = 16px` ✅
 
-### 3. Coordinate Ratios
-Desktop: Use logical dimensions (ratio ~1.0)
-Mobile: Multiply by DPR first (ratio ~2.0)
-
+### Coordinate Ratios
 ```typescript
-if (isDesktopDesign) {
-  xRatio = screenshotWidthLogical / canvasWidth;  // 1296/1296 = 1.0
+if (isDesktopDesign && isRealHighDPR) {
+  xRatio = screenshotWidthLogical / canvasWidth;  // ~1.0
 } else {
-  xRatio = (screenshotWidthLogical * dpr) / canvasWidth;  // (800*2)/800 = 2.0
+  xRatio = (screenshotWidthLogical * dpr) / canvasWidth;  // Normal calculation
 }
 ```
 
-## Why Desktop Values Are Physical
+### Inscription Positions
+```typescript
+if (isDesktopDesign && isRealHighDPR) {
+  xPos = (item.x / dpr) * scalingFactors.scaleX;  // Divide by DPR
+} else {
+  xPos = (item.x / xRatio) * scalingFactors.scaleX;  // Use ratio
+}
+```
 
-When a design is created on desktop with DPR 2:
-- User selects font size 76.5px (visual)
-- Browser stores it as 153px (76.5 * 2 DPR)
-- This 153px is saved in the design file
-- Motif sizes, coordinates, etc. are all in physical pixels
+## Examples
 
-Mobile designs work differently - they save logical values.
+### Desktop DPR 2.0 (Retina MacBook)
+- isRealHighDPR = true
+- Font: No DPR division (physical pixels)
+- Coords: Divide by DPR first
+- **Result:** Displays correctly ✅
+
+### Desktop DPR 1.25 (Browser Zoom 125%)
+- isRealHighDPR = false
+- Font: Normal calculation with DPR
+- Coords: Use ratio adjustment
+- **Result:** Displays correctly ✅
+
+### Desktop DPR 1.0 (Standard Display)
+- isRealHighDPR = false
+- Font: Normal calculation (÷1 = no change)
+- Coords: Ratio = 1.0 (no adjustment)
+- **Result:** Displays correctly ✅
+
+### Mobile DPR 2.0
+- isDesktopDesign = false
+- Uses mobile logic (ratio + upscale)
+- **Result:** Displays correctly ✅
 
 ## Changes Made
 
 **File:** `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`
 
-### Font Sizes (Inscriptions & Base)
-- Desktop: Use font_size directly (no DPR division)
-- Mobile: Divide by DPR, multiply by upscale
+**Updated Sections:**
+1. Headstone inscriptions font size & positioning
+2. Motifs coordinate ratios
+3. Base inscriptions font size
 
-### Coordinate Ratios (Inscriptions & Motifs)
-- Desktop: `ratio = logical / canvas` (~1.0)
-- Mobile: `ratio = (logical * dpr) / canvas` (~2.0)
-
-### Display Dimensions
-- Desktop: Use screenshot dimensions (no upscale)
-- Mobile: Upscale by 2x
+**Added Check:**
+```typescript
+const isRealHighDPR = dpr >= 2.0 && Math.abs(dpr - Math.round(dpr)) < 0.1;
+```
 
 ## Status
-✅ Complete - Font sizes correct
-✅ Complete - Motif sizes correct
-✅ Complete - Positions correct
-✅ Desktop and mobile both work properly
+✅ Real high DPR devices (Retina) work correctly
+✅ Browser zoom (1.25, 1.5, etc.) now handled properly
+✅ Standard displays (DPR 1.0) unaffected
+✅ Mobile designs still work correctly
+
 
 
 
