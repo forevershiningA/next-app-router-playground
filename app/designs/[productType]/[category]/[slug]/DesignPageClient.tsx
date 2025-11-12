@@ -157,6 +157,7 @@ export default function DesignPageClient({
   const [loadingIntoEditor, setLoadingIntoEditor] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(true); // Always show preview, no editor
+  const [motifDimensions, setMotifDimensions] = useState<Record<string, { width: number; height: number }>>({}); // Always show preview, no editor
   const loadAttempted = useRef(false);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const [svgContent, setSvgContent] = useState<string | null>(null);
@@ -886,6 +887,43 @@ export default function DesignPageClient({
     });
   }, [motifData, sanitizedDesignData, scalingFactors]);
 
+
+  // Load SVG dimensions for accurate motif sizing
+  useEffect(() => {
+    if (!motifData || motifData.length === 0) return;
+
+    motifData.forEach((motif: any) => {
+      const motifSrc = motif.src || motif.name;
+      if (!motifSrc || motifDimensions[motifSrc]) return;
+
+      const img = new Image();
+      const motifPath = getMotifPath(motif);
+      
+      img.onload = () => {
+        console.log('SVG dimensions loaded for', motifSrc, ':', img.width, 'x', img.height);
+        setMotifDimensions(prev => ({
+          ...prev,
+          [motifSrc]: { width: img.width, height: img.height }
+        }));
+      };
+      
+      img.onerror = () => {
+        const fallbackPath = getFallbackMotifPath(motif);
+        const img2 = new Image();
+        img2.onload = () => {
+          console.log('SVG dimensions loaded (fallback) for', motifSrc, ':', img2.width, 'x', img2.height);
+          setMotifDimensions(prev => ({
+            ...prev,
+            [motifSrc]: { width: img2.width, height: img2.height }
+          }));
+        };
+        img2.src = fallbackPath;
+      };
+      
+      img.src = motifPath;
+    });
+  }, [motifData]);
+
   // Extract base data if present
   const baseData = useMemo(() => {
     if (!designData) return null;
@@ -1104,69 +1142,17 @@ export default function DesignPageClient({
                 {slugText}
               </p>
               
-              {/* Design Specifications - inline below title */}
-              <div className="space-y-3 text-sm">
-                {/* First row: Product and Use Template button */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-light text-slate-500">Product:</span>
-                    <span className="text-slate-900">{productName}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href={(() => {
-                        const mlDir = designMetadata.mlDir || '';
-                        let domain = 'headstonesdesigner.com';
-                        if (mlDir.includes('forevershining')) {
-                          domain = 'forevershining.com.au';
-                        } else if (mlDir.includes('bronze-plaque')) {
-                          domain = 'bronze-plaque.com';
-                        }
-                        return `https://${domain}/design/html5/#edit${designId}`;
-                      })()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      Edit
-                    </a>
-                    <a
-                      href="/"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      Use Template
-                    </a>
-                  </div>
-                </div>
-                
-                {/* Second row: Shape */}
-                {shapeName && shapeData && shapeData.width && shapeData.height && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-light text-slate-500">Shape:</span>
-                    <span className="text-slate-900">{shapeName} ({Math.round(shapeData.width)} × {Math.round(shapeData.height)} mm)</span>
-                  </div>
-                )}
-                
-                {/* Third row: Material */}
-                {textureData && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-light text-slate-500">Material:</span>
-                    <span className="text-slate-900">
-                      {(() => {
-                        const parts = textureData.split('/');
-                        const filename = parts[parts.length - 1];
-                        return filename.replace('.jpg', '').replace('.png', '');
-                      })()}
-                    </span>
-                  </div>
-                )}
-              </div>
+            </div>
+            <div>
+              <a
+                href="/"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Use Template
+              </a>
             </div>
           </div>
         </div>
@@ -1209,6 +1195,26 @@ export default function DesignPageClient({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
           </svg>
           XML Data
+        </a>
+        <a
+          href={(() => {
+            const mlDir = designMetadata.mlDir || '';
+            let domain = 'headstonesdesigner.com';
+            if (mlDir.includes('forevershining')) {
+              domain = 'forevershining.com.au';
+            } else if (mlDir.includes('bronze-plaque')) {
+              domain = 'bronze-plaque.com';
+            }
+            return `https://${domain}/design/html5/#edit${designId}`;
+          })()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-light text-orange-700 hover:text-orange-900 bg-orange-50 hover:bg-orange-100 rounded-md transition-colors border border-orange-200"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Edit
         </a>
       </div>
 
@@ -1411,8 +1417,24 @@ export default function DesignPageClient({
                     // Transform motif coordinates using real ratios
                     const xPos = (motif.x / xRatio) * scalingFactors.scaleX;
                     const yPos = (motif.y / yRatio) * scalingFactors.scaleY;
-                    const motifWidth = motif.width ? (motif.width / xRatio) * scalingFactors.scaleX : 80;
+                    // Motifs store height and ratio (from Motif.js: ratio = init_height / image_height)
+                    // The actual displayed size needs to match the original canvas size scaled to display
                     const motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
+                    
+                    // Calculate width based on SVG's natural aspect ratio
+                    const motifSrc = motif.src || motif.name;
+                    const svgDims = motifDimensions[motifSrc];
+                    let motifWidth;
+                    
+                    if (svgDims && svgDims.width && svgDims.height) {
+                      // Use actual SVG aspect ratio
+                      const aspectRatio = svgDims.width / svgDims.height;
+                      motifWidth = motifHeight * aspectRatio;
+                      console.log('Using SVG aspect ratio for', motifSrc, ':', aspectRatio.toFixed(2), '-> width:', motifWidth.toFixed(2));
+                    } else {
+                      // Fallback while SVG loads
+                      motifWidth = motifHeight * 1.2;
+                    }
                     
                     console.log('Rendering headstone motif:', {
                       src: motif.src || motif.name,
@@ -1605,6 +1627,42 @@ export default function DesignPageClient({
               </div>
             )}
           </div>
+          </div>
+
+          {/* Design Specifications */}
+          <div className="px-6 pt-6">
+            <div className="bg-slate-50/50 rounded-lg p-6 border border-slate-200/50 mb-6">
+              <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
+                <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Specifications</span>
+              </h3>
+              <div className="space-y-3 ml-9">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-light text-slate-500">Product:</span>
+                  <span className="text-slate-900">{productName}</span>
+                </div>
+                {shapeName && shapeData && shapeData.width && shapeData.height && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-light text-slate-500">Shape:</span>
+                    <span className="text-slate-900">{shapeName} ({Math.round(shapeData.width)} × {Math.round(shapeData.height)} mm)</span>
+                  </div>
+                )}
+                {textureData && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-light text-slate-500">Material:</span>
+                    <span className="text-slate-900">
+                      {(() => {
+                        const parts = textureData.split('/');
+                        const filename = parts[parts.length - 1];
+                        return filename.replace('.jpg', '').replace('.png', '');
+                      })()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Inscriptions List */}
