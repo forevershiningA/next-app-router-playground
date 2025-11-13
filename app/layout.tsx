@@ -18,15 +18,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'Design Your Own', template: '%s | Design Your Own' },
-  metadataBase: new URL('https://app-router.vercel.app'),
+  title: { default: 'Design Your Own Headstone', template: '%s | DYO Headstones' },
+  metadataBase: new URL('https://forevershining.org'),
   description:
-    'A playground to explore Next.js features such as nested layouts, instant loading states, streaming, and component level data fetching.',
+    'Design custom memorial headstones online with real-time 3D visualization. Choose from 30+ premium materials, personalize inscriptions, add laser-etched photos and decorative elements.',
   openGraph: {
-    title: 'Design Your Own',
+    title: 'Design Your Own Headstone - Interactive 3D Memorial Design',
     description:
-      'A playground to explore Design Your Own features such as nested layouts, instant loading states, streaming, and component level data fetching.',
-    images: [`/api/og?title=Design Your Own`],
+      'Create a personalized memorial headstone with our interactive 3D design studio. Select shapes, materials, inscriptions, and decorations with instant visualization.',
+    images: [`/api/og?title=Design Your Own Headstone`],
   },
   twitter: { card: 'summary_large_image' },
 };

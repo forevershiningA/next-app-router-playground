@@ -80,13 +80,30 @@ function ViewToggleButton() {
 }
 
 export default function ThreeScene() {
-  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const is2DMode = useHeadstoneStore ((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
   const isDesignsPage = pathname?.startsWith('/designs/');
   
   const [isVisible, setIsVisible] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const hasInitiallyLoaded = useRef(false);
+
+  // Only show loader after initial load (prevents double loader on page load)
+  useEffect(() => {
+    if (!hasInitiallyLoaded.current && !loading) {
+      // Mark as initially loaded once loading completes
+      hasInitiallyLoaded.current = true;
+    }
+    
+    if (hasInitiallyLoaded.current && loading) {
+      // Only show loader for subsequent loads
+      setShowLoader(true);
+    } else if (!loading) {
+      setShowLoader(false);
+    }
+  }, [loading]);
 
   // Detect if canvas is in viewport
   useEffect(() => {
@@ -114,7 +131,7 @@ export default function ThreeScene() {
   return (
     <>
       <ViewToggleButton />
-      {loading && (
+      {showLoader && (
         <div className="absolute inset-0 z-50 grid place-items-center bg-black">
           <div className="flex flex-col items-center gap-4 text-white drop-shadow">
             <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />

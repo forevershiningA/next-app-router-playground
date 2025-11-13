@@ -13,6 +13,7 @@ import type { SavedDesignMetadata, DesignCategory } from '#/lib/saved-designs-da
 import React from 'react';
 import { MotifsData } from '#/motifs_data';
 import DesignSidebar from '#/components/DesignSidebar';
+import { analyzeImageForCrop, type CropBounds } from '#/lib/screenshot-crop';
 
 // Helper function to detect motif category from motif src
 function detectMotifCategory(motifSrc: string): string | null {
@@ -162,24 +163,63 @@ export default function DesignPageClient({
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const [svgContent, setSvgContent] = useState<string | null>(null);
   const [screenshotDimensions, setScreenshotDimensions] = useState<{ width: number; height: number } | null>(null);
+  const [cropBounds, setCropBounds] = useState<CropBounds | null>(null);
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
   
-  // Load screenshot dimensions - divide by DPR to get logical size
+  // Analyze screenshot for white space and calculate crop bounds
   useEffect(() => {
-    if (designMetadata.preview && designData) {
+    if (designMetadata.preview) {
+      // Increased threshold to 50% to reduce false positives
+      analyzeImageForCrop(designMetadata.preview, 50)
+        .then(bounds => {
+          setCropBounds(bounds);
+          console.log('Auto-crop analysis complete:', {
+            shouldCrop: bounds.shouldCrop,
+            whiteSpace: bounds.whiteSpacePercentage.toFixed(2) + '%',
+            original: { width: bounds.width, height: bounds.height },
+            cropped: { width: bounds.croppedWidth, height: bounds.croppedHeight }
+          });
+        })
+        .catch(err => {
+          console.error('Failed to analyze screenshot for cropping:', err);
+        });
+    }
+  }, [designMetadata.preview]);
+  
+  // Load screenshot dimensions - divide by DPR to get logical size and apply crop
+  useEffect(() => {
+    if (designMetadata.preview && designData && cropBounds) {
       const img = new Image();
       img.onload = () => {
         // Get the DPR used when design was created
         const designDPR = designData.find((item: any) => item.type === 'Headstone')?.dpr || 1;
         
-        // Screenshot is saved at logicalSize * designDPR pixels
-        // Divide by DPR to get logical canvas size
-        const logicalWidth = img.width / designDPR;
-        const logicalHeight = img.height / designDPR;
+        console.log('📸 Screenshot loading (design 1656040658203 check):', {
+          designId: designMetadata.id,
+          cropBounds: {
+            shouldCrop: cropBounds.shouldCrop,
+            whiteSpace: cropBounds.whiteSpacePercentage.toFixed(2) + '%',
+            original: { width: cropBounds.width, height: cropBounds.height },
+            cropped: { width: cropBounds.croppedWidth, height: cropBounds.croppedHeight }
+          },
+          imageActual: { width: img.width, height: img.height },
+          dpr: designDPR
+        });
         
-        console.log('Screenshot dimensions:', {
-          physical: { width: img.width, height: img.height },
+        // Screenshot is saved at logicalSize * designDPR pixels
+        // Use cropped dimensions if white space > 50% (threshold increased)
+        const physicalWidth = cropBounds.shouldCrop ? cropBounds.croppedWidth : img.width;
+        const physicalHeight = cropBounds.shouldCrop ? cropBounds.croppedHeight : img.height;
+        
+        // Divide by DPR to get logical canvas size
+        const logicalWidth = physicalWidth / designDPR;
+        const logicalHeight = physicalHeight / designDPR;
+        
+        console.log('Screenshot dimensions (with crop):', {
+          original: { width: img.width, height: img.height },
+          cropped: cropBounds.shouldCrop ? { width: cropBounds.croppedWidth, height: cropBounds.croppedHeight } : 'not needed',
+          physical: { width: physicalWidth, height: physicalHeight },
           logical: { width: logicalWidth, height: logicalHeight },
           dpr: designDPR
         });
@@ -188,7 +228,7 @@ export default function DesignPageClient({
       };
       img.src = designMetadata.preview;
     }
-  }, [designMetadata.preview, designData]);
+  }, [designMetadata.preview, designData, cropBounds]);
   
   // Load name databases for accurate name detection
   const [nameDatabase, setNameDatabase] = useState<{
@@ -301,6 +341,38 @@ export default function DesignPageClient({
     return surnamesArray[seedValue % surnamesArray.length];
   }, [nameDatabase, hashString]);
   
+  // Get a random first name based on a seed (for consistent results)
+  const getRandomFirstName = useCallback((seed?: string): string => {
+    if (!nameDatabase || !(nameDatabase as any).firstNamesArray) {
+      return 'Name';
+    }
+
+    const firstNamesArray = (nameDatabase as any).firstNamesArray;
+    
+    // Get gender from category for appropriate name selection
+    const gender = getGenderFromCategory(category);
+    
+    // Filter by gender if available
+    let filteredNames = firstNamesArray;
+    if (nameDatabase.firstNames && gender !== 'neutral') {
+      // Get names for specific gender
+      filteredNames = firstNamesArray.filter((name: string) => {
+        const nameUpper = name.toUpperCase();
+        const nameData = (nameDatabase as any).firstNamesData?.[nameUpper];
+        if (!nameData) return true; // Include if no gender data
+        return nameData.gender === gender || nameData.gender === 'neutral';
+      });
+      
+      // Fallback to all names if no gender-specific names found
+      if (filteredNames.length === 0) {
+        filteredNames = firstNamesArray;
+      }
+    }
+    
+    const seedValue = seed ? hashString(seed) : Math.floor(Math.random() * 10000);
+    return filteredNames[seedValue % filteredNames.length];
+  }, [nameDatabase, hashString, category, getGenderFromCategory]);
+  
   // Extract generic name from slug (e.g., "1752154675017_son-memorial" -> "Son Memorial")
   const genericName = useMemo(() => {
     if (!slug) return 'Name';
@@ -335,6 +407,8 @@ export default function DesignPageClient({
       'FOREVER',
       'REST IN PEACE',
       'RIP',
+      'R.I.P',
+      'R.I.P.',
       'BELOVED',
       'CHERISHED',
       'ALWAYS',
@@ -371,14 +445,15 @@ export default function DesignPageClient({
     ];
     
     const upperText = text.toUpperCase().trim();
+    const upperTextNoPunctuation = upperText.replace(/[.,!?;:'"]/g, '');
     
     // Check if this is an exact match to a memorial phrase
     if (memorialPhrases.some(phrase => upperText === phrase || upperText.includes(phrase))) {
       return text;
     }
     
-    // Check if this is an exact match to a common phrase
-    if (commonPhrases.includes(upperText)) {
+    // Check if this is an exact match to a common phrase (with or without punctuation)
+    if (commonPhrases.includes(upperText) || commonPhrases.includes(upperTextNoPunctuation)) {
       return text;
     }
     
@@ -388,6 +463,15 @@ export default function DesignPageClient({
         text.includes('"FOREVER') || 
         text.includes('"#')) {
       return text;
+    }
+    
+    // Skip relationship descriptions (these should not be replaced)
+    const relationshipWords = /\b(beloved|loving|cherished|dear|dearest|devoted|precious|adored|treasured|father|mother|son|daughter|brother|sister|grandfather|grandmother|uncle|aunt|wife|husband|grandson|granddaughter|great-grandfather|great-grandmother|friend)\b/i;
+    if (relationshipWords.test(text.toLowerCase())) {
+      // But also check if it ends with "to" or "of" (relationship descriptions like "Father to" or "Mother of")
+      if (/\b(to|of)\s*$/i.test(text)) {
+        return text; // Keep relationship descriptions as-is
+      }
     }
     
     // Check if this is a date pattern WITHOUT names
@@ -425,15 +509,26 @@ export default function DesignPageClient({
       const hasFirstName = upperWords.some(w => nameDatabase.firstNames.has(w));
       const hasSurname = upperWords.some(w => nameDatabase.surnames.has(w));
       
-      // If it's ONLY a surname (single word that is a surname), replace with just a random surname
+      // If it's ONLY a first name (single word that is a first name), replace with just a random first name
+      // Even if the name exists in both first and surname databases, treat single words as first names
+      if (hasFirstName && words.length === 1 && !hasDatePattern) {
+        const randomFirstName = getRandomFirstName(text); // Use original text as seed
+        const isAllCaps = text === text.toUpperCase();
+        console.log('Single first name detected:', text, '→', randomFirstName, '(all caps:', isAllCaps, ') [hasSurname:', hasSurname, ']');
+        return isAllCaps ? randomFirstName.toUpperCase() : randomFirstName;
+      }
+      
+      // If it's ONLY a surname (single word that is a surname but NOT a first name), replace with just a random surname
       if (hasSurname && !hasFirstName && words.length === 1 && !hasDatePattern) {
         const randomSurname = getRandomSurname(text); // Use original text as seed
         const isAllCaps = text === text.toUpperCase();
+        console.log('Single surname detected:', text, '→', randomSurname, '(all caps:', isAllCaps, ')');
         return isAllCaps ? randomSurname.toUpperCase() : randomSurname;
       }
       
       // If we find both first name and surname (with or without dates)
       if ((hasFirstName && hasSurname) || (hasFirstName && words.length >= 2)) {
+        console.log('Full name or multi-word detected:', text, 'hasFirstName:', hasFirstName, 'hasSurname:', hasSurname, 'words:', words.length);
         // Check it's not a poetic verse with sentence words
         const hasSentenceWords = /\b(the|you|me|my|your|when|feel|know|am|are|is|see|being|part|of|and|or|not|lost)\b/i.test(text);
         if (!hasSentenceWords) {
@@ -490,10 +585,25 @@ export default function DesignPageClient({
     const hasApostrophe = text.includes("'") || text.includes('&apos;');
     const hasSuffix = /\b(JR\.?|SR\.?|III|II|IV)\b/i.test(text);
     
-    // Single word all caps - likely a surname
+    // Single word all caps - check if it's a first name or surname
     if (isAllCapsSingleWord && !hasSentenceWords && nameDatabase) {
-      const randomSurname = getRandomSurname(text);
-      return randomSurname.toUpperCase();
+      const upperWord = text.toUpperCase().replace(/['".,!?]/g, '');
+      const isFirstName = nameDatabase.firstNames?.has(upperWord);
+      const isSurname = nameDatabase.surnames?.has(upperWord);
+      
+      console.log('Fallback ALL CAPS single word:', text, 'isFirstName:', isFirstName, 'isSurname:', isSurname);
+      
+      if (isFirstName && !isSurname) {
+        // It's a first name - return just a random first name
+        const randomFirstName = getRandomFirstName(text);
+        console.log('→ Returning first name only:', randomFirstName.toUpperCase());
+        return randomFirstName.toUpperCase();
+      } else {
+        // It's a surname or unknown - return surname
+        const randomSurname = getRandomSurname(text);
+        console.log('→ Returning surname only:', randomSurname.toUpperCase());
+        return randomSurname.toUpperCase();
+      }
     }
     
     if ((isAllCapsOrMixedCaps || hasSuffix) && !hasSentenceWords) {
@@ -501,7 +611,7 @@ export default function DesignPageClient({
     }
     
     return text;
-  }, [nameDatabase, getRandomName, getRandomSurname]);
+  }, [nameDatabase, getRandomName, getRandomSurname, getRandomFirstName]);
   
   // Extract shape name and map to SVG file
   const shapeName = useMemo(() => {
@@ -552,7 +662,7 @@ export default function DesignPageClient({
       'Right Wave': 'right_wave.svg',
       'Serpentine': isLandscape ? 'serpentine_landscape.svg' : 'serpentine.svg',
       'Square': 'square.svg',
-      'Rectangle': 'portrait.svg',
+      'Rectangle': 'square.svg',  // Use square.svg for Rectangle too (clean coordinates)
       // Guitar shapes
       'Guitar 1': 'headstone_3.svg',
       'Guitar 2': 'headstone_4.svg',
@@ -578,13 +688,18 @@ export default function DesignPageClient({
 
   // Calculate scaling factors for positioning inscriptions
   const scalingFactors = useMemo(() => {
-    if (!shapeData) return { scaleX: 1, scaleY: 1, displayWidth: 800, displayHeight: 800 };
-    
-    // Canvas dimensions (logical pixels - the workspace where design was created)
-    const canvasWidth = shapeData.init_width || shapeData.width || 610;
-    const canvasHeight = shapeData.init_height || shapeData.height || 610;
+    if (!shapeData || !cropBounds) return { scaleX: 1, scaleY: 1, displayWidth: 800, displayHeight: 800, offsetX: 0, offsetY: 0, upscaleFactor: 1, containerScalingMultiplier: 1 };
     
     const dpr = shapeData.dpr || 1;
+    
+    // Canvas dimensions (logical pixels - the workspace where design was created)
+    // init_width and init_height are stored in PHYSICAL pixels (already × DPR)
+    // We need to divide by DPR to get logical canvas size
+    const canvasWidthPhysical = shapeData.init_width || shapeData.width || 610;
+    const canvasHeightPhysical = shapeData.init_height || shapeData.height || 610;
+    const canvasWidth = canvasWidthPhysical / dpr;
+    const canvasHeight = canvasHeightPhysical / dpr;
+    
     const designDevice = shapeData.device || 'desktop';
     const isDesktopDesign = designDevice === 'desktop';
     
@@ -594,27 +709,79 @@ export default function DesignPageClient({
     
     // Mobile upscaling: Scale up mobile designs by 2x for better desktop viewing
     const upscaleFactor = (!isDesktopDesign && dpr > 1) ? 2 : 1;
-    const displayWidth = screenshotLogicalWidth * upscaleFactor;
-    const displayHeight = screenshotLogicalHeight * upscaleFactor;
+    
+    // Calculate display dimensions from logical screenshot dimensions
+    let displayWidth = screenshotLogicalWidth * upscaleFactor;
+    let displayHeight = screenshotLogicalHeight * upscaleFactor;
+    
+    // Calculate base width if present (in mm, need to scale to display)
+    // Find base item from designData
+    let baseDisplayWidth = 0;
+    if (designData) {
+      const baseItem = designData.find((item: any) => item.type === 'Base');
+      if (baseItem && baseItem.width && shapeData.width) {
+        baseDisplayWidth = (baseItem.width / shapeData.width) * displayWidth;
+      }
+    }
+    
+    // Find the maximum width between headstone and base
+    const maxWidth = Math.max(displayWidth, baseDisplayWidth);
+    
+    // Define container width limit (90% of viewport, max 1080px)
+    const containerMaxWidth = Math.min(typeof window !== 'undefined' ? window.innerWidth * 0.9 : 1080, 1080);
+    
+    // If max width exceeds container, scale everything down proportionally
+    let containerScalingMultiplier = 1;
+    if (maxWidth > containerMaxWidth) {
+      containerScalingMultiplier = containerMaxWidth / maxWidth;
+      displayWidth *= containerScalingMultiplier;
+      displayHeight *= containerScalingMultiplier;
+      console.log('🔽 Scaling down to fit container:', {
+        originalMax: maxWidth.toFixed(2) + 'px',
+        containerMax: containerMaxWidth.toFixed(2) + 'px',
+        multiplier: containerScalingMultiplier.toFixed(4),
+        newHeadstoneWidth: displayWidth.toFixed(2) + 'px',
+        newBaseWidth: baseDisplayWidth ? (baseDisplayWidth * containerScalingMultiplier).toFixed(2) + 'px' : 'N/A'
+      });
+    }
     
     // Scale from logical canvas coordinates to display coordinates
-    const scaleX = (screenshotLogicalWidth / canvasWidth) * upscaleFactor;
-    const scaleY = (screenshotLogicalHeight / canvasHeight) * upscaleFactor;
+    const scaleX = (screenshotLogicalWidth / canvasWidth) * upscaleFactor * containerScalingMultiplier;
+    const scaleY = (screenshotLogicalHeight / canvasHeight) * upscaleFactor * containerScalingMultiplier;
     
-    console.log('Scaling factors:', {
-      canvas: { width: canvasWidth, height: canvasHeight, logical: true },
+    console.log('Scaling factors (with crop):', {
+      canvas: { 
+        physical: { width: canvasWidthPhysical, height: canvasHeightPhysical },
+        logical: { width: canvasWidth, height: canvasHeight }
+      },
       screenshot: { 
         logical: { width: screenshotLogicalWidth, height: screenshotLogicalHeight }
       },
+      crop: {
+        applied: cropBounds.shouldCrop,
+        whiteSpace: cropBounds.whiteSpacePercentage.toFixed(2) + '%',
+        bounds: { left: cropBounds.left, top: cropBounds.top }
+      },
       display: { width: displayWidth, height: displayHeight },
+      base: { width: baseDisplayWidth ? (baseDisplayWidth * containerScalingMultiplier).toFixed(2) + 'px' : 'N/A' },
       scale: { scaleX, scaleY },
+      containerScaling: { maxWidth: maxWidth.toFixed(2) + 'px', multiplier: containerScalingMultiplier.toFixed(4) },
       upscaleFactor,
       device: designDevice,
       dpr
     });
     
-    return { scaleX, scaleY, displayWidth, displayHeight, upscaleFactor };
-  }, [shapeData, screenshotDimensions]);
+    return { 
+      scaleX, 
+      scaleY, 
+      displayWidth, 
+      displayHeight, 
+      upscaleFactor,
+      offsetX: cropBounds.left || 0,
+      offsetY: cropBounds.top || 0,
+      containerScalingMultiplier
+    };
+  }, [shapeData, screenshotDimensions, cropBounds, designData]);
 
   const textureData = useMemo(() => {
     if (!designData) return null;
@@ -727,10 +894,11 @@ export default function DesignPageClient({
           }
           
           // Update viewBox to logical dimensions (for coordinate system)
-          // But set width/height to display dimensions (for actual size)
+          // Set width/height to 100% to fill parent container
           svg.setAttribute('viewBox', `0 0 ${logicalWidth} ${logicalHeight}`);
-          svg.setAttribute('width', `${displayWidth}px`);
-          svg.setAttribute('height', `${displayHeight}px`);
+          svg.setAttribute('width', '100%');
+          svg.setAttribute('height', '100%');
+          svg.setAttribute('preserveAspectRatio', 'none'); // Allow SVG to stretch to fill container
           
           // Scale all path data and apply texture
           const paths = svg.querySelectorAll('path');
@@ -928,8 +1096,21 @@ export default function DesignPageClient({
   const baseData = useMemo(() => {
     if (!designData) return null;
     const baseItem = designData.find((item: any) => item.type === 'Base');
+    console.log('🔍 Base detection:', {
+      designId: designMetadata?.id,
+      hasDesignData: !!designData,
+      designDataLength: designData?.length,
+      baseItem: baseItem ? {
+        type: baseItem.type,
+        width: baseItem.width,
+        height: baseItem.height,
+        shape: baseItem.shape,
+        name: baseItem.name
+      } : null,
+      allTypes: designData?.map((item: any) => item.type).join(', ')
+    });
     return baseItem;
-  }, [designData]);
+  }, [designData, designMetadata]);
   
   // Get base texture from baseData
   const baseTextureData = useMemo(() => {
@@ -1324,13 +1505,27 @@ export default function DesignPageClient({
                     const dpr = shapeData?.dpr || 1;
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // Use font_size field (in mm/logical units), NOT parsed from font string
-                    const fontSize = ((item.font_size || 16) * scalingFactors.scaleY) / dpr * upscaleFactor;
+                    // font_size is in mm (real-world units), NOT pixels
+                    // The actual pixel size is in the 'font' field (e.g., "43.77px Dobkin")
+                    // We need to extract the px value from 'font' and scale it
+                    let fontSizeInPx = item.font_size || 16; // fallback
+                    if (item.font && typeof item.font === 'string') {
+                      const match = item.font.match(/^([\d.]+)px/);
+                      if (match) {
+                        fontSizeInPx = parseFloat(match[1]);
+                      }
+                    }
+                    
+                    // Font size in 'font' field is already in physical pixels at creation DPR
+                    // Convert to logical, then scale to display
+                    const fontSize = (fontSizeInPx / dpr) * scalingFactors.scaleY;
                     const fontFamily = item.font_family || item.font || 'serif';
                     
-                    // Measure actual capture transformation
-                    const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
-                    const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
+                    // Canvas dimensions (need to divide physical by DPR to get logical)
+                    const canvasWidthPhysical = shapeData?.init_width || shapeData?.width || 610;
+                    const canvasHeightPhysical = shapeData?.init_height || shapeData?.height || 610;
+                    const canvasWidth = canvasWidthPhysical / dpr;
+                    const canvasHeight = canvasHeightPhysical / dpr;
                     
                     // Screenshot dimensions are in logical pixels (already divided by DPR)
                     const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
@@ -1344,21 +1539,45 @@ export default function DesignPageClient({
                     const xRatio = screenshotWidth / canvasWidth;
                     const yRatio = screenshotHeight / canvasHeight;
                     
-                    // Position inscriptions using real ratios
-                    const xPos = (item.x / xRatio) * scalingFactors.scaleX;
-                    const yPos = (item.y / yRatio) * scalingFactors.scaleY;
+                    // Convert inscription position from screenshot to canvas coordinates
+                    const canvasX = item.x / xRatio;
+                    const canvasY = item.y / yRatio;
+                    
+                    // Only apply auto-center detection if cropping was actually applied
+                    const shouldAutoCenterX = cropBounds?.shouldCrop === true;
+                    
+                    // Check if this element was originally centered (within 10% of canvas center)
+                    const centerThreshold = canvasWidth * 0.1; // 10% of width
+                    const isCentered = shouldAutoCenterX && Math.abs(canvasX) < centerThreshold;
+                    
+                    // Position inscriptions:
+                    // If cropped AND originally centered, keep it centered (xPos = 0)
+                    // Otherwise, apply normal positioning
+                    const xPos = isCentered ? 0 : (canvasX * scalingFactors.scaleX);
+                    const yPos = canvasY * scalingFactors.scaleY;
                     
                     // DEBUG
                     if (index === 0) {
-                      console.log('Inscription rendering:', {
+                      console.log('Inscription rendering (auto-center detection):', {
                         raw: { x: item.x, y: item.y, font_size: item.font_size },
-                        canvas: { width: canvasWidth, height: canvasHeight },
+                        canvasSize: { width: canvasWidth, height: canvasHeight },
                         screenshot: { 
                           logical: { width: screenshotWidthLogical, height: screenshotHeightLogical },
                           physical: { width: screenshotWidth, height: screenshotHeight }
                         },
+                        cropStatus: {
+                          applied: cropBounds?.shouldCrop,
+                          whiteSpace: cropBounds?.whiteSpacePercentage.toFixed(2) + '%'
+                        },
                         ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
-                        adjusted: { x: (item.x / xRatio).toFixed(2), y: (item.y / yRatio).toFixed(2) },
+                        canvasCoords: { x: canvasX.toFixed(2), y: canvasY.toFixed(2) },
+                        centerCheck: {
+                          enabled: shouldAutoCenterX,
+                          threshold: centerThreshold.toFixed(2),
+                          distance: Math.abs(canvasX).toFixed(2),
+                          isCentered,
+                          action: isCentered ? 'FORCE CENTER (xPos=0)' : 'USE ORIGINAL POSITION'
+                        },
                         display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2), fontSize: fontSize.toFixed(2) },
                         scale: { scaleX: scalingFactors.scaleX.toFixed(4), scaleY: scalingFactors.scaleY.toFixed(4) },
                         dpr, upscaleFactor
@@ -1398,9 +1617,11 @@ export default function DesignPageClient({
                     const dpr = shapeData?.dpr || 1;
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // Measure actual capture transformation  
-                    const canvasWidth = shapeData?.init_width || shapeData?.width || 610;
-                    const canvasHeight = shapeData?.init_height || shapeData?.height || 610;
+                    // Canvas dimensions (need to divide physical by DPR to get logical)
+                    const canvasWidthPhysical = shapeData?.init_width || shapeData?.width || 610;
+                    const canvasHeightPhysical = shapeData?.init_height || shapeData?.height || 610;
+                    const canvasWidth = canvasWidthPhysical / dpr;
+                    const canvasHeight = canvasHeightPhysical / dpr;
                     
                     // Screenshot dimensions are in logical pixels (already divided by DPR)
                     const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
@@ -1414,9 +1635,23 @@ export default function DesignPageClient({
                     const xRatio = screenshotWidth / canvasWidth;
                     const yRatio = screenshotHeight / canvasHeight;
                     
-                    // Transform motif coordinates using real ratios
-                    const xPos = (motif.x / xRatio) * scalingFactors.scaleX;
-                    const yPos = (motif.y / yRatio) * scalingFactors.scaleY;
+                    // Convert motif position from screenshot to canvas coordinates
+                    const canvasX = motif.x / xRatio;
+                    const canvasY = motif.y / yRatio;
+                    
+                    // Only apply auto-center detection if cropping was actually applied
+                    const shouldAutoCenterX = cropBounds?.shouldCrop === true;
+                    
+                    // Check if this element was originally centered (within 10% of canvas center)
+                    const centerThreshold = canvasWidth * 0.1; // 10% of width
+                    const isCentered = shouldAutoCenterX && Math.abs(canvasX) < centerThreshold;
+                    
+                    // Position motifs:
+                    // If cropped AND originally centered, keep it centered (xPos = 0)
+                    // Otherwise, apply normal positioning
+                    const xPos = isCentered ? 0 : (canvasX * scalingFactors.scaleX);
+                    const yPos = canvasY * scalingFactors.scaleY;
+                    
                     // Motifs store height and ratio (from Motif.js: ratio = init_height / image_height)
                     // The actual displayed size needs to match the original canvas size scaled to display
                     const motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
@@ -1436,10 +1671,22 @@ export default function DesignPageClient({
                       motifWidth = motifHeight * 1.2;
                     }
                     
-                    console.log('Rendering headstone motif:', {
+                    console.log('Rendering headstone motif (auto-center detection):', {
                       src: motif.src || motif.name,
                       raw: { x: motif.x, y: motif.y, width: motif.width, height: motif.height },
+                      cropStatus: {
+                        applied: cropBounds?.shouldCrop,
+                        whiteSpace: cropBounds?.whiteSpacePercentage.toFixed(2) + '%'
+                      },
                       ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
+                      canvasCoords: { x: canvasX.toFixed(2), y: canvasY.toFixed(2) },
+                      centerCheck: {
+                        enabled: shouldAutoCenterX,
+                        threshold: centerThreshold.toFixed(2),
+                        distance: Math.abs(canvasX).toFixed(2),
+                        isCentered,
+                        action: isCentered ? 'FORCE CENTER (xPos=0)' : 'USE ORIGINAL POSITION'
+                      },
                       display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2), width: motifWidth.toFixed(2), height: motifHeight.toFixed(2) },
                       color: motif.color
                     });
@@ -1550,9 +1797,11 @@ export default function DesignPageClient({
               <div
                 className="relative"
                 style={{
-                  width: `${Math.min(1000, baseData.width || 700)}px`,
-                  height: `${Math.min(200, baseData.height || 100)}px`,
-                  maxWidth: '90%',
+                  // Base width/height are in mm (real-world dimensions)
+                  // Scale based on ratio to headstone mm dimensions, then subtract 50px for margins
+                  width: `${Math.max(100, (baseData.width || 700) / (shapeData?.width || 600) * scalingFactors.displayWidth - 50)}px`,
+                  height: `${Math.max(80, Math.min(200, ((baseData.height || 100) / (shapeData?.height || 600)) * scalingFactors.displayHeight))}px`,
+                  maxWidth: '100%',
                   backgroundImage: baseTextureData 
                     ? `url(${baseTextureData})`
                     : 'linear-gradient(to bottom, #1a1a1a, #000000)',
@@ -1561,22 +1810,31 @@ export default function DesignPageClient({
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
                 }}
               >
+                {(() => {
+                  console.log('Base render:', {
+                    hasBase: !!baseData,
+                    baseData: baseData ? {
+                      width: baseData.width,
+                      height: baseData.height,
+                      type: baseData.type
+                    } : null,
+                    headstoneWidth: shapeData?.width,
+                    headstoneHeight: shapeData?.height,
+                    displayWidth: scalingFactors.displayWidth,
+                    calculatedBaseWidth: Math.max(100, (baseData.width || 700) / (shapeData?.width || 600) * scalingFactors.displayWidth - 50),
+                    calculatedBaseHeight: Math.max(80, Math.min(200, ((baseData.height || 100) / (shapeData?.height || 600)) * scalingFactors.displayHeight))
+                  });
+                  return null;
+                })()}
                 {/* Base Inscriptions Layer */}
                 {sanitizedDesignData && sanitizedDesignData
                   .filter((item: any) => item.type === 'Inscription' && item.label && item.part === 'Base')
                   .map((item: any, index: number) => {
-                    // Font size needs to be scaled from canvas to display space
                     const dpr = shapeData?.dpr || 1;
-                    const designDevice = shapeData?.device || 'desktop';
-                    const isDesktopDesign = designDevice === 'desktop';
-                    const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // Check if this is a "real" high DPR device vs browser zoom
-                    const isRealHighDPR = dpr >= 2.0 && Math.abs(dpr - Math.round(dpr)) < 0.1;
-                    
-                    // Parse font size from the 'font' string (e.g., "36.63px Lucida Calligraphy")
-                    // The 'font_size' field is in mm, not px, so we use 'font' instead
-                    let fontSizeInPx = 16; // default
+                    // font_size is in mm (real-world units), NOT pixels
+                    // The actual pixel size is in the 'font' field (e.g., "43.77px Dobkin")
+                    let fontSizeInPx = item.font_size || 16; // fallback
                     if (item.font && typeof item.font === 'string') {
                       const match = item.font.match(/^([\d.]+)px/);
                       if (match) {
@@ -1584,20 +1842,21 @@ export default function DesignPageClient({
                       }
                     }
                     
-                    // Font size calculation - same logic as headstone inscriptions
-                    let fontSize;
-                    if (isDesktopDesign) {
-                      if (isRealHighDPR) {
-                        fontSize = fontSizeInPx * scalingFactors.scaleY;
-                      } else {
-                        fontSize = fontSizeInPx * scalingFactors.scaleY;
-                      }
-                    } else {
-                      fontSize = fontSizeInPx * scalingFactors.scaleY * upscaleFactor;
-                    }
+                    // Font size in 'font' field is already in physical pixels at creation DPR
+                    // Convert to logical, then scale to display
+                    const fontSize = (fontSizeInPx / dpr) * scalingFactors.scaleY;
                     const fontFamily = item.font_family || item.font || 'serif';
                     
-                    console.log('Base inscription found:', item.label, 'font size:', fontSize);
+                    console.log('Base inscription:', {
+                      label: item.label,
+                      font_size_mm: item.font_size,
+                      font_field: item.font,
+                      font_size_px: fontSizeInPx,
+                      font_size_logical: fontSizeInPx / dpr,
+                      scaleY: scalingFactors.scaleY,
+                      fontSize_display: fontSize,
+                      dpr
+                    });
                     
                     return (
                       <div
@@ -1614,10 +1873,8 @@ export default function DesignPageClient({
                           top: '50%',
                           transform: 'translate(-50%, -50%)',
                           textAlign: 'center',
-                          maxWidth: '90%',
-                          whiteSpace: 'pre-wrap',
+                          whiteSpace: 'nowrap',
                           padding: '8px',
-                          lineHeight: '1.8',
                         }}
                       >
                         {item.label.replace(/&apos;/g, "'")}
@@ -1692,7 +1949,7 @@ export default function DesignPageClient({
 
           {/* Motifs List */}
           {adjustedMotifData.length > 0 && (
-            <div className="bg-amber-50/50 rounded-lg p-6 border border-amber-200/50">
+            <div className="bg-amber-50/50 rounded-lg p-6 border border-amber-200/50 mb-6">
               <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
                 <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -1715,6 +1972,65 @@ export default function DesignPageClient({
               </ul>
             </div>
           )}
+
+          {/* Price Quote */}
+          {(() => {
+            const headstoneItem = designData.find((item: any) => item.type === 'Headstone');
+            const baseItem = designData.find((item: any) => item.type === 'Base');
+            const inscriptionItems = designData.filter((item: any) => item.type === 'Inscription' && item.label);
+            const motifItems = adjustedMotifData;
+            
+            const headstonePrice = Number(headstoneItem?.price || 0);
+            const basePrice = Number(baseItem?.price || 0);
+            const inscriptionPrice = inscriptionItems.reduce((sum: number, item: any) => sum + Number(item.price || 0), 0);
+            const motifPrice = motifItems.reduce((sum: number, item: any) => sum + Number(item.price || 0), 0);
+            const totalPrice = headstonePrice + basePrice + inscriptionPrice + motifPrice;
+            
+            if (totalPrice === 0) return null;
+            
+            return (
+              <div className="bg-green-50/50 rounded-lg p-6 border border-green-200/50">
+                <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Price Quote</span>
+                </h3>
+                <div className="ml-9 space-y-3">
+                  {headstonePrice > 0 && (
+                    <div className="flex justify-between items-baseline text-slate-700">
+                      <span className="font-light">Headstone:</span>
+                      <span className="font-normal">${headstonePrice.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {basePrice > 0 && (
+                    <div className="flex justify-between items-baseline text-slate-700">
+                      <span className="font-light">Base:</span>
+                      <span className="font-normal">${basePrice.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {inscriptionPrice > 0 && (
+                    <div className="flex justify-between items-baseline text-slate-700">
+                      <span className="font-light">Inscriptions ({inscriptionItems.length}):</span>
+                      <span className="font-normal">${inscriptionPrice.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {motifPrice > 0 && (
+                    <div className="flex justify-between items-baseline text-slate-700">
+                      <span className="font-light">Motifs ({motifItems.length}):</span>
+                      <span className="font-normal">${motifPrice.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="border-t border-green-300 pt-3 mt-3">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-serif text-lg text-slate-900">Total:</span>
+                      <span className="font-serif text-2xl font-normal text-green-700">${totalPrice.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
           </div>
         </div>
       )}
