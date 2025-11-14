@@ -148,11 +148,11 @@ export default function DesignsTreeNav() {
       {/* Elegant Header */}
       <div className="mb-8 pb-6 border-b border-slate-700/50">
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-2xl font-serif font-light text-white tracking-tight">
+          <h2 className="text-2xl font-serif font-light text-white tracking-tight">
             <Link href="/designs" className="hover:text-slate-300 transition-colors">
               Memorial Designs
             </Link>
-          </h1>
+          </h2>
           <Link
             href="/"
             className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all text-sm font-light uppercase tracking-wider backdrop-blur-sm border border-white/20"
@@ -163,6 +163,7 @@ export default function DesignsTreeNav() {
         <p className="text-sm text-slate-400 font-light tracking-wide">
           {totalDesigns.toLocaleString()} thoughtfully crafted designs
         </p>
+        <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mt-4" />
       </div>
       
       <div className="space-y-3">

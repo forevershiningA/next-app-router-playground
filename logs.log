@@ -1,0 +1,60 @@
+index.js:640 Uncaught ModuleBuildError: Module build failed (from ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   × Expression expected
+      ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1218:1]
+ 1215 │   }, [shapeName]);
+ 1216 │   
+ 1217 │     }
+ 1218 │   }, [designData]);
+      ·   ─
+ 1219 │   
+ 1220 │   // Format slug for display
+ 1220 │   const slugText = slug.split('_').slice(1).join('_').split('-').map((word, index) => {
+      ╰────
+
+
+Caused by:
+    Syntax Error
+    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:407086)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:408881)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8645)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5019)
+    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
+getServerError @ node-stack-frames.js:41
+eval @ index.js:640
+setTimeout
+hydrate @ index.js:618
+await in hydrate
+pageBootstrap @ page-bootstrap.js:28
+eval @ next-dev.js:24
+Promise.then
+eval @ next-dev.js:22
+(pages-dir-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/next-dev.js @ main.js:314
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main.js:1546
+(anonimowa) @ main.js:1547
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main.js:9
+websocket.js:46 [HMR] connected
+hook.js:608 ./app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx
+Error:   × Expression expected
+      ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1218:1]
+ 1215 │   }, [shapeName]);
+ 1216 │   
+ 1217 │     }
+ 1218 │   }, [designData]);
+      ·   ─
+ 1219 │   
+ 1220 │   // Format slug for display
+ 1220 │   const slugText = slug.split('_').slice(1).join('_').split('-').map((word, index) => {
+      ╰────
+
+Caused by:
+    Syntax Error
+overrideMethod @ hook.js:608
+nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
+handleErrors @ hot-reloader-pages.js:164
+processMessage @ hot-reloader-pages.js:228
+eval @ hot-reloader-pages.js:72
+handleMessage @ websocket.js:69
+index.js:1631 {file: {…}}

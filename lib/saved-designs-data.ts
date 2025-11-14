@@ -236,6 +236,35 @@ export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
 };
 
 /**
+ * Get related designs by various criteria
+ */
+export function getRelatedDesigns(
+  currentDesign: SavedDesignMetadata,
+  limit: number = 6
+): SavedDesignMetadata[] {
+  const designs = Object.values(SAVED_DESIGNS);
+  
+  // Filter out current design and get related ones
+  const related = designs.filter(d => d.id !== currentDesign.id);
+  
+  // Prioritize designs with same shape, same product, or same category
+  const scored = related.map(d => {
+    let score = 0;
+    if (d.productSlug === currentDesign.productSlug) score += 3;
+    if (d.category === currentDesign.category) score += 2;
+    if (d.hasMotifs && currentDesign.hasMotifs) score += 1;
+    if (d.hasPhoto && currentDesign.hasPhoto) score += 1;
+    return { design: d, score };
+  });
+  
+  // Sort by score and return top results
+  return scored
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(s => s.design);
+}
+
+/**
  * All saved designs indexed by ID
  */
 export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {

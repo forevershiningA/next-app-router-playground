@@ -13,6 +13,7 @@ import type { SavedDesignMetadata, DesignCategory } from '#/lib/saved-designs-da
 import React from 'react';
 import { MotifsData } from '#/motifs_data';
 import DesignSidebar from '#/components/DesignSidebar';
+import DesignContentBlock from '#/components/DesignContentBlock';
 import { analyzeImageForCrop, type CropBounds } from '#/lib/screenshot-crop';
 
 // Helper function to detect motif category from motif src
@@ -442,6 +443,9 @@ export default function DesignPageClient({
       'LOVING FATHER',
       'DEVOTED MOTHER',
       'DEVOTED FATHER',
+      'A LIFE LIVED WITH PASSION',
+      'A LOVE THAT NEVER FADED',
+      'A LIFE LIVED WITH PASSION, A LOVE THAT NEVER FADED',
     ];
     
     const upperText = text.toUpperCase().trim();
@@ -1152,6 +1156,69 @@ export default function DesignPageClient({
   const productName = product?.name || designMetadata.productName;
   const categoryTitle = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   
+  // Get simplified product name for H1
+  const getSimplifiedProductName = (name: string): string => {
+    const lower = name.toLowerCase();
+    if (lower.includes('laser-etched') || lower.includes('laser etched')) {
+      if (lower.includes('colour') || lower.includes('color')) {
+        return 'Laser-Etched Colour';
+      }
+      return 'Laser-Etched Black Granite';
+    }
+    if (lower.includes('bronze')) return 'Bronze';
+    if (lower.includes('stainless steel')) return 'Stainless Steel';
+    if (lower.includes('traditional')) return 'Traditional Engraved';
+    if (lower.includes('full colour') || lower.includes('full color')) return 'Full Colour';
+    return name;
+  };
+  
+  const simplifiedProductName = getSimplifiedProductName(productName);
+
+  // Get capitalized product type for H1
+  const productTypeDisplay = designMetadata.productType.charAt(0).toUpperCase() + designMetadata.productType.slice(1);
+
+  // Get friendly shape display name from shapeName
+  const shapeDisplayName = useMemo(() => {
+    if (!shapeName) return null;
+    
+    // Map common numbered shapes to friendly names
+    const shapeMap: Record<string, string> = {
+      'headstone_27': 'Heart',
+      'Headstone 27': 'Heart',
+      'pet_heart': 'Heart',
+      'serpentine': 'Serpentine',
+      'gable': 'Gable',
+      'peak': 'Peak',
+      'curved_peak': 'Curved Peak',
+      'square': 'Square',
+      'landscape': 'Landscape',
+      'portrait': 'Portrait',
+    };
+    
+    // Check if we have a direct mapping
+    if (shapeMap[shapeName]) {
+      return shapeMap[shapeName];
+    }
+    
+    // Extract from numbered patterns like "Headstone 27"
+    let extractedShape = shapeName
+      .replace(/^(headstone|plaque)\s+\d+$/i, '')
+      .replace(/^(headstone|plaque)_\d+$/i, '')
+      .trim();
+    
+    // If we have a named shape, format it
+    if (extractedShape && extractedShape.length > 0 && !/^\d+$/.test(extractedShape)) {
+      return extractedShape
+        .replace(/_/g, ' ')
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+    
+    return null;
+  }, [shapeName]);
+  
+  
   // Format slug for display
   const slugText = slug.split('_').slice(1).join('_').split('-').map((word, index) => {
     if (word.length <= 2 && index > 0) return word;
@@ -1316,9 +1383,9 @@ export default function DesignPageClient({
           {/* Sophisticated Header with Design Specifications */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 className="text-4xl font-serif font-light text-slate-900 tracking-tight mb-2">
-                {categoryTitle}
-              </h2>
+              <h1 className="text-4xl font-serif font-light text-slate-900 tracking-tight mb-7">
+                {categoryTitle} – {simplifiedProductName} {productTypeDisplay}{shapeDisplayName ? ` (${shapeDisplayName})` : ''}
+              </h1>
               <p className="text-2xl text-slate-600 font-light italic mb-6">
                 {slugText}
               </p>
@@ -1326,7 +1393,18 @@ export default function DesignPageClient({
             </div>
             <div>
               <a
-                href="/"
+                href={(() => {
+                  const mlDir = designMetadata.mlDir || '';
+                  let domain = 'headstonesdesigner.com';
+                  if (mlDir.includes('forevershining')) {
+                    domain = 'forevershining.com.au';
+                  } else if (mlDir.includes('bronze-plaque')) {
+                    domain = 'bronze-plaque.com';
+                  }
+                  return `https://${domain}/design/html5/#edit${designId}`;
+                })()}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2035,6 +2113,16 @@ export default function DesignPageClient({
         </div>
       )}
 
+
+      {/* Unique Content Block for SEO */}
+      <DesignContentBlock
+        design={designMetadata}
+        categoryTitle={categoryTitle}
+        simplifiedProductName={simplifiedProductName}
+        shapeName={shapeDisplayName}
+        productType={designMetadata.productType}
+        productSlug={productSlug}
+      />
       </div>
     </div>
     </>
