@@ -1,6 +1,6 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
-import { getSavedDesign, extractDesignIdFromSlug, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
+import { getSavedDesign, getDesignFromSlug, getCanonicalSlugForDesign, extractDesignIdFromSlug, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
 import { getProductFromId } from '#/lib/product-utils';
 import DesignPageClient from './DesignPageClient';
 
@@ -112,9 +112,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: SavedDesignPageProps): Promise<Metadata> {
   const { productType: productSlug, category, slug } = await params;
 
-  // Extract design ID from slug
-  const designId = extractDesignIdFromSlug(slug);
-  const design = designId ? getSavedDesign(designId) : null;
+  // Try new slug lookup first, then fall back to old format
+  let design = getDesignFromSlug(slug);
 
   if (!design) {
     return {
@@ -139,7 +138,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
   const pageTitle = `${categoryTitle} – ${simplifiedProduct} ${productTypeDisplay} | Forever Shining`;
   
   // Get shape name if available
-  const shapeName = designId ? await getDesignShape(designId, design.mlDir) : null;
+  const shapeName = design.id ? await getDesignShape(design.id, design.mlDir) : null;
   
   // Build H1 equivalent (used in OpenGraph)
   // Format: "Mother Memorial – Laser-Etched Black Granite (Heart)"
@@ -168,9 +167,10 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
     description = description.substring(0, 157) + '...';
   }
 
-  // Generate hreflang alternates for AU/US/UK versions
+  // Build canonical URL with clean slug
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
-  const currentPath = `/designs/${productSlug}/${category}/${slug}`;
+  const canonicalSlug = design.slug; // Use the clean, SEO-friendly slug from metadata
+  const currentPath = `/designs/${productSlug}/${category}/${canonicalSlug}`;
   
   // Map mlDir to primary domain
   const getDomainForRegion = (mlDir: string) => {
@@ -221,18 +221,24 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
 export default async function SavedDesignPage({ params }: SavedDesignPageProps) {
   const { productType: productSlug, category, slug } = await params;
 
-  // Extract design ID from slug (format: {id}_{description})
-  const designId = extractDesignIdFromSlug(slug);
-
-  if (!designId) {
-    notFound();
-  }
-
-  const design = getSavedDesign(designId);
-
+  // Try new slug lookup first
+  let design = getDesignFromSlug(slug);
+  
   if (!design) {
     notFound();
   }
+
+  // Check if this is an old timestamp_description format and redirect to clean URL
+  const isOldFormat = /^\d+_/.test(slug);
+  const canonicalSlug = design.slug; // Clean SEO-friendly slug
+  
+  if (isOldFormat && slug !== canonicalSlug) {
+    // 301 redirect from old format to new clean URL
+    const canonicalUrl = `/designs/${productSlug}/${category}/${canonicalSlug}`;
+    redirect(canonicalUrl);
+  }
+
+  const designId = design.id;
 
   // Generate structured data for SEO
   const product = getProductFromId(design.productId);
@@ -261,9 +267,9 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   // Generate SKU
   const sku = `FS-${design.productType.toUpperCase()}-${shapeName ? shapeName.toUpperCase().replace(/\s+/g, '-') : 'STANDARD'}-${simplifiedProduct.toUpperCase().replace(/\s+/g, '-')}-${category.toUpperCase()}`;
   
-  // Build canonical URL
+  // Build canonical URL with clean slug
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.com.au';
-  const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}/${slug}`;
+  const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}/${canonicalSlug}`;
   
   // JSON-LD Structured Data
   const structuredData = {
@@ -422,7 +428,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
       <DesignPageClient
         productSlug={productSlug}
         category={category}
-        slug={slug}
+        slug={canonicalSlug}
         designId={designId}
         design={design}
       />

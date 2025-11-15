@@ -1,24 +1,38 @@
-index.js:640 Uncaught ModuleBuildError: Module build failed (from ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
-Error:   × Expression expected
-      ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1218:1]
- 1215 │   }, [shapeName]);
- 1216 │   
- 1217 │     }
- 1218 │   }, [designData]);
-      ·   ─
- 1219 │   
- 1220 │   // Format slug for display
- 1220 │   const slugText = slug.split('_').slice(1).join('_').split('-').map((word, index) => {
-      ╰────
-
-
-Caused by:
-    Syntax Error
-    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:407086)
+index.js:640 Uncaught ModuleParseError: Module parse failed: Identifier 'extractDesignIdFromSlug' has already been declared (62285:20)
+File was processed with these loaders:
+ * ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/compiled/@next/react-refresh-utils/dist/loader.js
+ * ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-flight-client-module-loader.js
+ * ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+You may need an additional loader to handle the result of these loaders.
+|  * Extract design ID from old slug format (timestamp_description)
+|  * @deprecated Use getDesignFromSlug instead
+>  */ export function extractDesignIdFromSlug(slug) {
+|     const match = slug.match(/^(\d+)_/);
+|     return match ? match[1] : null;
+    at <unknown> (File was processed with these loaders:)
+    at handleParseError (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:410378)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:411994)
+    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:407859)
     at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:408881)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8645)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5019)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8727)
+    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5565)
+    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5650)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5879)
     at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
+    at Object.ReactRefreshLoader (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\@next\react-refresh-utils\dist\loader.js:14:10)
+    at LOADER_EXECUTION (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4134)
+    at runSyncOrAsync (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4145)
+    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5782)
+    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5650)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5879)
+    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
+    at Object.transformSource (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\build\webpack\loaders\next-flight-client-module-loader.js:45:17)
+    at LOADER_EXECUTION (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4134)
+    at runSyncOrAsync (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4145)
+    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5782)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5142)
+    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js:224:23)
 getServerError @ node-stack-frames.js:41
 eval @ index.js:640
 setTimeout
@@ -36,21 +50,26 @@ __webpack_exec__ @ main.js:1546
 webpackJsonpCallback @ webpack.js:1
 (anonimowa) @ main.js:9
 websocket.js:46 [HMR] connected
-hook.js:608 ./app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx
-Error:   × Expression expected
-      ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1218:1]
- 1215 │   }, [shapeName]);
- 1216 │   
- 1217 │     }
- 1218 │   }, [designData]);
-      ·   ─
- 1219 │   
- 1220 │   // Format slug for display
- 1220 │   const slugText = slug.split('_').slice(1).join('_').split('-').map((word, index) => {
-      ╰────
-
-Caused by:
-    Syntax Error
+hook.js:608 ./lib/saved-designs-data.ts
+Module parse failed: Identifier 'extractDesignIdFromSlug' has already been declared (62284:20)
+|  * Extract design ID from old slug format (timestamp_description)
+|  * @deprecated Use getDesignFromSlug instead
+>  */ export function extractDesignIdFromSlug(slug) {
+|     const match = slug.match(/^(\d+)_/);
+|     return match ? match[1] : null;
+overrideMethod @ hook.js:608
+nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
+handleErrors @ hot-reloader-pages.js:164
+processMessage @ hot-reloader-pages.js:228
+eval @ hot-reloader-pages.js:72
+handleMessage @ websocket.js:69
+hook.js:608 ./lib/saved-designs-data.ts
+Module parse failed: Identifier 'extractDesignIdFromSlug' has already been declared (62284:20)
+|  * Extract design ID from old slug format (timestamp_description)
+|  * @deprecated Use getDesignFromSlug instead
+>  */ export function extractDesignIdFromSlug(slug) {
+|     const match = slug.match(/^(\d+)_/);
+|     return match ? match[1] : null;
 overrideMethod @ hook.js:608
 nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
 handleErrors @ hot-reloader-pages.js:164

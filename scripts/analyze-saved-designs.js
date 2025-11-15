@@ -608,6 +608,16 @@ function analyzeDesign(filepath, filename) {
   // Extract motif names for metadata
   const motifNames = extractMotifNames(designData);
   
+  // Extract inscription text for slug generation
+  const inscriptions = designData
+    .filter(item => item.type === 'Inscription' && item.label && item.label.trim())
+    .map(item => item.label.trim())
+    .join(' ');
+  
+  // Extract shape information
+  const shapeItem = designData.find(item => item.design_shape || item.shape);
+  const shapeName = shapeItem ? (shapeItem.design_shape || shapeItem.shape || '').toLowerCase().trim() : '';
+  
   // Preview image path - check if screenshot exists
   // Screenshots are organized in year/month folders based on timestamp
   const timestamp = parseInt(designId);
@@ -643,6 +653,8 @@ function analyzeDesign(filepath, filename) {
     slug: slug,
     title: title,
     motifNames: motifNames,
+    inscriptions: inscriptions, // NEW: Add inscription text for slug generation
+    shapeName: shapeName, // NEW: Add shape name for slug generation
     preview: previewPath,
     mlDir: mlDir,
     hasPhoto: designData.some(item => item.type === 'UploadedPhoto' || item.type === 'Photo'),
