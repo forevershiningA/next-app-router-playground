@@ -59,6 +59,8 @@ export interface SavedDesignMetadata {
   slug: string;            // Privacy-safe URL slug
   title: string;           // Display title
   motifNames: string[];    // Extracted motif names (cross, angel, flower, etc.)
+  inscriptions?: string;   // Extracted inscription text (optional)
+  shapeName?: string;      // Shape name (optional)
   preview: string;         // Preview image path
   mlDir: string;           // ML directory (forevershining, headstonesdesigner, bronze-plaque)
   hasPhoto: boolean;
