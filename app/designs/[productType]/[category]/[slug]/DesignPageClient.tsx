@@ -743,7 +743,8 @@ export default function DesignPageClient({
       scaleX: 1, scaleY: 1, displayWidth: 800, displayHeight: 800, 
       offsetX: 0, offsetY: 0, upscaleFactor: 1, containerScalingMultiplier: 1, 
       ratioWidth: 1, ratioHeight: 1, legacyScale: 1, 
-      canvasCropLeft: 0, canvasCropTop: 0, designDpr: 1 
+      canvasCropLeft: 0, canvasCropTop: 0, designDpr: 1,
+      initW: 800, initH: 800
     };
     
     // FIX #1: Canvas logical size (where x,y were authored)
