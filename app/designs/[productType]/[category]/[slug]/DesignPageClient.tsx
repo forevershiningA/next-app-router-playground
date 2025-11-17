@@ -1760,8 +1760,10 @@ export default function DesignPageClient({
                     const canvasY = item.y / scalingFactors.ratioHeight; // Y stays the same
                     
                     // FIX #3: Apply crop offset and scale axis-correctly
-                    const xPos = (canvasX - scalingFactors.canvasCropLeft) * scalingFactors.ratioWidth;
-                    const yPos = (canvasY - scalingFactors.canvasCropTop) * scalingFactors.ratioHeight;
+                    // NOTE: If screenshot is already cropped (cropBounds.shouldCrop), 
+                    // the saved coordinates are relative to the cropped image, so DON'T subtract crop offset
+                    const xPos = canvasX * scalingFactors.ratioWidth;
+                    const yPos = canvasY * scalingFactors.ratioHeight;
                     
                     // Debug first inscription
                     if (index === 0) {
@@ -1776,7 +1778,15 @@ export default function DesignPageClient({
                         },
                         canvas: { cx: canvasX.toFixed(2), cy: canvasY.toFixed(2) },
                         canvasSize: { w: scalingFactors.initW, h: scalingFactors.initH },
-                        crop: { left: scalingFactors.canvasCropLeft.toFixed(2), top: scalingFactors.canvasCropTop.toFixed(2) },
+                        crop: { 
+                          shouldCrop: cropBounds?.shouldCrop,
+                          left: scalingFactors.canvasCropLeft.toFixed(2), 
+                          top: scalingFactors.canvasCropTop.toFixed(2),
+                          afterSubtraction: {
+                            x: (canvasX - scalingFactors.canvasCropLeft).toFixed(2),
+                            y: (canvasY - scalingFactors.canvasCropTop).toFixed(2)
+                          }
+                        },
                         display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2) }
                       });
                     }
@@ -1822,9 +1832,10 @@ export default function DesignPageClient({
                     );
                     const canvasY = motif.y / scalingFactors.ratioHeight; // Y stays the same
                     
-                    // FIX #3: Apply crop offset and scale axis-correctly
-                    const xPos = (canvasX - scalingFactors.canvasCropLeft) * scalingFactors.ratioWidth;
-                    const yPos = (canvasY - scalingFactors.canvasCropTop) * scalingFactors.ratioHeight;
+                    // FIX #3: Scale to display
+                    // NOTE: If screenshot is already cropped, saved coords are relative to cropped image
+                    const xPos = canvasX * scalingFactors.ratioWidth;
+                    const yPos = canvasY * scalingFactors.ratioHeight;
                     
                     // FIX #5: Motif height in canvas units, scale to display
                     const motifH_canvas = motif.height || 80;
