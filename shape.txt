@@ -1,0 +1,310 @@
+	calcShape(id) {
+
+		this.shapeId = id;
+
+		//console.log(this.width, this.height);
+
+		if (this.stack) {
+
+			if (id == 0) {
+				this.minX = 0;
+				this.maxX = 0;
+				this.minY = 0;
+				this.maxY = 0;
+				this.scale_minX = 0;
+				this.scale_maxX = 0;
+				this.scale_minY = 0;
+				this.scale_maxY = 0;
+			}
+
+			this.stack = this.stackId[id];
+
+			this.encodePath = new EncodePath()
+
+			let x, y, cpx, cpy, proc, width, height, scale, use;
+			let _ratio = 1;
+			let w = (dyo.w * dyo.dpr);
+			let h = (dyo.h * dyo.dpr);
+			
+			_ratio = .975;
+
+			if (w < h) {
+				use = w * _ratio;
+			} else {
+				use = h * _ratio;
+			}
+
+			let totalHeight;
+			let baseHeight;
+
+			if (dyo.monument.base == undefined) {
+				baseHeight = Number(dyo.config._shapes[0].files.stand.init_height);
+			} else {
+				baseHeight = Number(dyo.monument.base.height);
+			}
+
+			if (dyo.monument.has_base) {
+				totalHeight = Number(dyo.monument.headstone.height) + Number(baseHeight);
+			} else {
+				totalHeight = Number(dyo.monument.headstone.height);
+			}
+
+			this.headstoneHeightPx = Number((use) * (Number(dyo.monument.headstone.height) / Number(totalHeight)));
+
+			if (dyo.monument.has_base) {
+
+				if (this._width > this._height) {
+					width = Number(this.headstoneHeightPx);
+					height = Number(this.headstoneHeightPx) * (Number(this._height) / Number(this._width));
+
+					this.baseHeightPx = Number((use) * (Number(baseHeight) / Number(this._width)));
+
+				} else {
+					width = Number(Number(this.headstoneHeightPx) * (Number(this._width) / Number(this._height)));
+					height = Number(this.headstoneHeightPx);
+
+					this.baseHeightPx = Number((Number(use)) * (Number(baseHeight) / Number(totalHeight)));
+				}
+
+			} else {
+
+				if (this._width > this._height) {
+					width = use;
+					height = use * (this._height / this._width);
+				} else {
+					width = use * (this._width / this._height);
+					height = use;
+				}
+
+			}
+
+            this.pixels = {
+                width: Number(width),
+                height: Number(height)
+			}
+
+			dyo.pixels = {
+                width: Number(width),
+                height: Number(height)
+			}
+
+			//console.log(this.pixels);
+
+			if (dyo.monument.has_base) {
+
+				this.y = ((dyo.dpr * dyo.h) / 2) - (this.baseHeightPx / 2);
+				dyo.monument.base.y = ((dyo.dpr * dyo.h) / 2) + (height / 2);
+
+				if (dyo.target) {
+					if (dyo.target.type == "Headstone" && dyo.edit == false) {
+						if (this.width != this.old_width) {
+							if (dyo.monument.id == 8) {
+								dyo.monument.base.width = dyo.monument.headstone.width;
+							} else {
+								if (dyo.monument.has_linked_base) {
+									dyo.monument.base.width = dyo.monument.headstone.width + 100;
+								}
+							}
+						}
+					}
+				}
+
+				if (!dyo.monument.has_linked_base) {
+					if (dyo.monument.base.width > dyo.monument.base.max_width) {
+						dyo.monument.base.width = dyo.monument.base.max_width;
+					}
+				}
+
+				if (dyo.monument.base.width < dyo.monument.headstone.width) {
+					dyo.monument.base.width = dyo.monument.headstone.width;
+				}
+
+			} else {
+
+				this.y = ((dyo.dpr * dyo.h) / 2);
+
+			}
+			
+			for (let key in this.containers) {
+				this.containers[key].x = this.x;
+				this.containers[key].y = this.y;
+			}
+
+			this.bottom = 0;
+			
+			let detail = 20;
+
+			if (this.stack) {
+
+				for (let nr = 0; nr < this.stack.length; nr++) {
+
+					proc = ((this.stack[nr].x + this.p.right) / (this.p.right - this.p.left)) * 100;
+					x = ((width) * proc / 100) - (width / 2);
+
+					proc = ((this.stack[nr].y + this.p.bottom) / (this.p.bottom - this.p.top)) * 100;
+					y = (use * proc / 100) - height / 2;
+
+					if (this.stack[nr].y >= this.p.top) {
+						proc = ((this.stack[nr].y + this.p.bottom) / (this.p.bottom - this.p.top)) * 100;
+						y = (width * proc / 100) - height / 2;
+					}
+
+					if (this.stack[nr].y > this.p.bottom - detail) {
+						proc = ((this.stack[nr].y - this.p.bottom) / (this.p.bottom - this.p.top)) * 100;
+						y = (width * proc / 100) + height / 2;
+					} 
+
+					if (this.minY > y) {
+						this.minY = y;
+					}
+
+					if (this.minX > x) {
+						this.minX = x;
+					}
+
+					if (this.maxY < y) {
+						this.maxY = y;
+					}
+
+					if (this.maxX < x) {
+						this.maxX = x;
+					}
+
+					if (this.stack[nr].cpx) {
+						proc = ((this.stack[nr].cpx + this.p.right) / (this.p.right - this.p.left)) * 100;
+						cpx = ((width) * proc / 100) - (width / 2);
+					}
+
+					if (this.stack[nr].cpy) {
+						proc = ((this.stack[nr].cpy + this.p.bottom) / (this.p.bottom - this.p.top)) * 100;
+						cpy = ((height) * proc / 100) - (height / 2);
+
+						if (this.stack[nr].cpy >= this.p.top) {
+							proc = ((this.stack[nr].cpy + this.p.bottom) / (this.p.bottom - this.p.top)) * 100;
+							cpy = (width * proc / 100) - height / 2;
+						}
+					}
+
+					if (this.stack[nr].cpy > this.p.bottom - detail) {
+						proc = ((this.stack[nr].cpy - this.p.bottom) / (this.p.bottom - this.p.top)) * 100;
+						cpy = (width * proc / 100) + height / 2;
+					}
+
+					// scales dyo's shapes to max width & height view port 
+					// (align width & height sliders)
+					// for example Ceramic Photos, Urns etc.
+
+					if (this.fixed == 2) {
+
+						let scale;
+						let shapeHeight = 400;
+						
+						if (dyo.monument.getProductType() == "headstones") {
+							shapeHeight = 470;
+
+							switch (this.name) {
+								case "Headstone 32":
+									shapeHeight = 400;
+									break;
+							}
+	
+						}
+
+						scale = use / shapeHeight;
+						
+						x = this.stack[nr].x * scale;
+						y = this.stack[nr].y * scale;
+						cpx = this.stack[nr].cpx * scale;
+						cpy = this.stack[nr].cpy * scale;
+
+						switch (this.name) {
+							case "Bone":
+								this.maxY = 190;
+								break;
+						}
+					}
+
+					// scales dyo's shapes to max height view port 
+					// and keeps width same (align width & height sliders)
+
+					if (this.fixed == 3) {
+						let scale;
+						
+						if (dyo.w > dyo.h) {
+							scale = h / 400;
+						} else {
+							scale = w / 400;
+						}
+						
+						x = this.stack[nr].x;
+						//y = this.stack[nr].y;
+						cpx = this.stack[nr].cpx;
+						//cpy = this.stack[nr].cpy;
+					}
+
+					// scales dyo's shapes to max width & height view port 
+					// and keeps width same (align width & height sliders)
+					// new shapes for example New Headstones Shapes
+					
+					if (this.fixed == 4) {
+
+						let shapeHeight; 
+						let scale;
+
+						shapeHeight = 400;
+						
+						if (dyo.w > dyo.h) {
+							scale = height / shapeHeight;
+						} else {
+							scale = height / shapeHeight;
+						}
+						
+						x = this.stack[nr].x * scale;
+						y = this.stack[nr].y * scale;
+						cpx = this.stack[nr].cpx * scale;
+						cpy = this.stack[nr].cpy * scale;
+
+						if (this.scale_minY > y) {
+							this.scale_minY = y;
+						}
+
+						if (this.scale_minX > x) {
+							this.scale_minX = x;
+						}
+
+						if (this.scale_maxY < y) {
+							this.scale_maxY = y;
+						}
+
+						if (this.scale_maxX < x) {
+							this.scale_maxX = x;
+						}
+						
+					}
+
+					switch (this.stack[nr].c) {
+						default:
+							this.encodePath[this.stack[nr].c](x, y);
+							break;
+
+						case "quadraticCurveTo":
+							this.encodePath[this.stack[nr].c](cpx, cpy, x, y);
+							break;
+
+						case "bezierCurveTo":
+							this.encodePath[this.stack[nr].c](this.stack[nr].cp1x, this.stack[nr].cp1y, this.stack[nr].cp2x, this.stack[nr].cp2y, this.stack[nr].x, this.stack[nr].y);
+							break;
+
+					}
+
+				}
+
+			}
+
+			this.old_width = this.width;
+
+			return this.encodePath;
+
+		}
+
+	}

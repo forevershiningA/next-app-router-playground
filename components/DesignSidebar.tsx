@@ -38,12 +38,41 @@ export default function DesignSidebar({
     setLoading(false);
   }, [category, productSlug, currentDesignId, maxItems]);
 
-  // Format slug to readable text (capitalize and replace hyphens with spaces)
+  // Format slug to readable text with dash separator after shape name
   const formatSlugToTitle = (slug: string) => {
-    return slug
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    const words = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1));
+    
+    // List of known shape names
+    const shapeNames = [
+      'Cropped Peak',
+      'Curved Gable', 
+      'Curved Peak',
+      'Curved Top',
+      'Half Round',
+      'Gable',
+      'Left Wave',
+      'Peak',
+      'Right Wave',
+      'Serpentine',
+      'Square',
+      'Rectangle'
+    ];
+    
+    // Check if the slug starts with any known shape name
+    for (const shapeName of shapeNames) {
+      const shapeWords = shapeName.split(' ');
+      const slugStart = words.slice(0, shapeWords.length).join(' ');
+      
+      if (slugStart === shapeName && words.length > shapeWords.length) {
+        // Found a match - add dash separator
+        const shapePartFormatted = shapeWords.join(' ');
+        const restPart = words.slice(shapeWords.length).join(' ');
+        return `${shapePartFormatted} - ${restPart}`;
+      }
+    }
+    
+    // No shape match found, return default formatting
+    return words.join(' ');
   };
 
   const categoryTitle = formatSlugToTitle(category);
@@ -76,7 +105,7 @@ export default function DesignSidebar({
         {/* Design List */}
         <div className="space-y-4">
           {designs.map((design) => {
-            const designUrl = `/designs/${design.productSlug}/${design.category}/${design.id}_${design.slug}`;
+            const designUrl = `/designs/${design.productSlug}/${design.category}/${design.slug}`;
             const displayText = formatSlugToTitle(design.slug);
             
             return (

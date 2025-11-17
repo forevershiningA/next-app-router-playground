@@ -25,6 +25,28 @@ function formatSlugForDisplay(slug: string): string {
     .join(' ');
 }
 
+/**
+ * Format shape name for display - convert snake_case or lowercase to Title Case
+ */
+function formatShapeName(shapeName: string): string {
+  return shapeName
+    .replace(/_/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Format design title with shape name
+ */
+function formatDesignTitle(design: SavedDesignMetadata): string {
+  const baseTitle = formatSlugForDisplay(design.slug);
+  if (design.shapeName) {
+    return `${formatShapeName(design.shapeName)} - ${baseTitle}`;
+  }
+  return baseTitle;
+}
+
 export default function CategoryPage() {
   const params = useParams();
   const router = useRouter();
@@ -37,10 +59,10 @@ export default function CategoryPage() {
   useEffect(() => {
     // Get designs for this category
     const categoryDesigns = getDesignsByCategory(category as any);
-    // Filter by product slug and sort alphabetically by slug
+    // Filter by product slug and sort alphabetically by formatted title
     const filtered = categoryDesigns
       .filter(d => d.productSlug === productSlug)
-      .sort((a, b) => formatSlugForDisplay(a.slug).localeCompare(formatSlugForDisplay(b.slug)));
+      .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
     setDesigns(filtered);
     setLoading(false);
   }, [category, productSlug]);
@@ -116,7 +138,7 @@ export default function CategoryPage() {
               <div
                 key={design.id}
                 onClick={() => {
-                  const designUrl = `/designs/${design.productSlug}/${design.category}/${design.id}_${design.slug}`;
+                  const designUrl = `/designs/${design.productSlug}/${design.category}/${design.slug}`;
                   router.push(designUrl);
                 }}
                 className="group bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-300 hover:shadow-2xl transition-all duration-300 cursor-pointer"
@@ -125,7 +147,7 @@ export default function CategoryPage() {
                 <div className="relative h-80 bg-slate-100 overflow-hidden">
                   <Image
                     src={design.preview}
-                    alt={formatSlugForDisplay(design.slug)}
+                    alt={formatDesignTitle(design)}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -137,7 +159,7 @@ export default function CategoryPage() {
                 {/* Card Content */}
                 <div className="p-6">
                   <h3 className="font-serif font-light text-xl text-slate-900 mb-3 group-hover:text-slate-700 transition-colors">
-                    {formatSlugForDisplay(design.slug)}
+                    {formatDesignTitle(design)}
                   </h3>
                   
                   {/* Elegant badges */}

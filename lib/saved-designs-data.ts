@@ -68485,12 +68485,12 @@ export function getDesignsByProductType(productType: 'headstone' | 'plaque' | 'm
 }
 
 /**
- * Generate SEO URL for a design
- * Format: /designs/{productSlug}/{category}/{id}_{slug}
- * Example: /designs/bronze-plaque/memorial/1724060510093_memorial-with-motifs
+ * Generate SEO URL for a design (clean slug format)
+ * Format: /designs/{productSlug}/{category}/{slug}
+ * Example: /designs/bronze-plaque/memorial/memorial-with-motifs
  */
 export function getDesignUrl(design: SavedDesignMetadata): string {
-  return `/designs/${design.productSlug}/${design.category}/${design.id}_${design.slug}`;
+  return `/designs/${design.productSlug}/${design.category}/${design.slug}`;
 }
 
 /**

@@ -1,0 +1,77 @@
+Yep—I can see what’s happening. Your renderer always “unscales” X with `ratioHeight`:
+
+```ts
+const canvasX = motif.x / scalingFactors.ratioHeight;
+```
+
+That was the right correction for **old** saves (when X & Y were both multiplied by `ratio_height`). But on this PINTO design the crop/aspect makes `ratioWidth < ratioHeight`. Dividing X by the larger number pulls everything **inward** horizontally—so the three top motifs bunch together and leave blank space at the left/right shoulders.
+
+### Fix (safe + backward-compatible)
+
+1. Prefer axis-correct unscale for X.
+2. Auto-detect legacy saves and fall back only when needed.
+
+Drop-in helper:
+
+```ts
+function inferCanvasX(
+  savedX: number,
+  ratioW: number,
+  ratioH: number,
+  canvasW: number,
+  marginPx = 8
+) {
+  // Two candidates: old bug (÷ratioH) vs correct (÷ratioW)
+  const xBug   = savedX / ratioH; // legacy
+  const xFixed = savedX / ratioW; // axis-correct
+
+  const halfW = canvasW / 2;
+  const inside = (x: number) => Math.abs(x) <= halfW + marginPx;
+
+  const insideBug   = inside(xBug);
+  const insideFixed = inside(xFixed);
+
+  // If both are valid, pick the one with more horizontal spread (closer to edges)
+  if (insideBug && insideFixed) {
+    return Math.abs(xFixed) > Math.abs(xBug) ? xFixed : xBug;
+  }
+  // If only one is valid, use it
+  if (insideFixed) return xFixed;
+  if (insideBug)   return xBug;
+
+  // Fallback: clamp axis-correct
+  return Math.max(-halfW, Math.min(halfW, xFixed));
+}
+```
+
+Use it for every X coming from saved data (inscriptions + motifs):
+
+```ts
+// Before
+// const canvasX = item.x / scalingFactors.ratioHeight;
+
+// After
+const canvasX = inferCanvasX(
+  item.x,
+  scalingFactors.ratioWidth,
+  scalingFactors.ratioHeight,
+  canvasWidth
+);
+const canvasY = item.y / scalingFactors.ratioHeight; // Y stays the same
+const xPos = (cropBounds?.shouldCrop && Math.abs(canvasX) < canvasWidth * 0.1) ? 0 : canvasX * scalingFactors.scaleX;
+const yPos = canvasY * scalingFactors.scaleY;
+```
+
+### Why this fixes the “tight top motifs”
+
+* On this design `ratioWidth < ratioHeight`.
+* Using `savedX/ratioHeight` shrinks X → everything slides toward center.
+* Using `savedX/ratioWidth` restores the intended spread; the birds/leaves hit the shoulders like the original.
+* The heuristic keeps your archive safe: true legacy files (saved with the old bug) still render correctly, while newer ones (or any where the math says axis-correct is safer) get the wider, correct layout.
+
+### Quick sanity checks
+
+* After this change, log both candidates for one motif near the shoulder—you should see `|xFixed| > |xBug|` and both within half width.
+* If any item clips, your clamp will report it in logs—bump `marginPx` if needed (but you likely won’t).
+
+If you want me to tailor the thresholds to your dataset, paste one of the saved JSON blobs for the PINTO design (just the header + the three top motifs + title line) and I’ll compute the exact spreads and suggested margins.

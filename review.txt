@@ -1,0 +1,146 @@
+You’re close, but a few things are still fighting you and explain why your recreation doesn’t line up with the original (e.g., “PINTO” height/position and left/right spacing).
+
+Here’s what to fix.
+
+# 1) Ratios: keep DPR out of layout, use it only to normalize legacy data
+
+Right now `ratio_width/ratio_height` mix viewport scaling with DPR. That makes the same design render differently across devices. Use **pure CSS-pixel scaling** for layout, and use DPR only to convert **saved pixel values** back to logical canvas units.
+
+```ts
+// canvas logical size in which (x,y) were authored
+const initW = screenshotDimensions.width;   // e.g., 707
+const initH = screenshotDimensions.height;  // e.g., 476
+
+// actual display box (AFTER any auto-crop)
+const dispW = displayWidth;
+const dispH = displayHeight;
+
+// layout ratios – no DPR here
+let ratio_width  = dispW / initW;
+let ratio_height = dispH / initH;
+
+// fit control if you need it (uniform)
+if (fitMode === 'contain') {
+  const s = Math.min(ratio_width, ratio_height);
+  ratio_width = ratio_height = s;
+} else if (fitMode === 'cover') {
+  const s = Math.max(ratio_width, ratio_height);
+  ratio_width = ratio_height = s;
+}
+```
+
+Why: layout remains stable across devices; DPR won’t randomly “zoom” the scene.
+
+# 2) Legacy save bug: x and y were both multiplied by `ratio_height`
+
+You already compensate by dividing by `ratioHeight`. Good. But do it **once** in a small helper and then always use axis-correct scales:
+
+```ts
+function toCanvasCoordsLegacy(xSaved: number, ySaved: number, legacyScale: number) {
+  // legacy scale == old ratio_height used for x and y
+  return { x: xSaved / legacyScale, y: ySaved / legacyScale };
+}
+
+// later
+const { x: cx, y: cy } = toCanvasCoordsLegacy(item.x, item.y, scaling.ratioHeight);
+const xPos = cx * ratio_width  + offsetX;  // axis-correct
+const yPos = cy * ratio_height + offsetY;
+```
+
+You already do this, but do check that **every** place that reads `item.x/item.y` or `motif.x/motif.y` goes through the same helper (I saw duplicates around lines ~1732 and ~1810—easy to drift).
+
+# 3) Cropping offset: shift coordinates, don’t re-center heuristically
+
+The “auto-center when cropped” branch can cause the title to drift (that’s likely why “PINTO” doesn’t sit where expected). If you crop the screenshot, simply **translate** by the crop top/left in canvas units:
+
+```ts
+// cropBounds are in physical pixels; convert to canvas units first:
+const canvasCropLeft = cropBounds.left / effectiveDpr;   // computed where you load the screenshot
+const canvasCropTop  = cropBounds.top  / effectiveDpr;
+
+// subtract crop in canvas space before scaling to display
+const { x: cx, y: cy } = toCanvasCoordsLegacy(item.x, item.y, legacyScale);
+const xPos = (cx - canvasCropLeft) * ratio_width;
+const yPos = (cy - canvasCropTop)  * ratio_height;
+```
+
+Then delete the “center if near zero” heuristic. If you must keep it, gate it behind a flag per-design; otherwise it will re-center things that were intentionally off-center in the original.
+
+# 4) Font sizing: normalize saved px by DPR, then scale by Y
+
+You extract px from `item.font` (good), but you scale it by composite factors that include DPR indirectly. Prefer a clear, reproducible formula:
+
+```ts
+// When the screenshot loaded, you already compute:
+const designDpr   = designData.find(i => i.type==='Headstone')?.dpr || 1;
+const effectiveDpr = img.width / physicalWidth; // you log this already
+
+// Normalize saved font px (turn device px used at save-time -> canvas logical px)
+const savedPx = extractPx(item.font);                  // "43.77px Dobkin" -> 43.77
+const fontPxCanvas = savedPx * (1 / designDpr);        // logical canvas px
+
+// Then scale canvas -> display using Y ratio (vertical size governs legibility)
+const displayFontPx = fontPxCanvas * ratio_height;
+```
+
+If some fonts in your archive were saved after the legacy bug fix, add a small version flag in the JSON and switch the normalization off for v2.
+
+# 5) Motif size: always use SVG natural aspect ratio, not label heuristics
+
+You implemented an aspect-ratio pass already (👍). Make it the default path. The fallback “label length * font_size” estimation (around line ~1080) skews spacing beside the central Madonna motif. Drop that for motifs and only use it for pure text.
+
+```ts
+// For motifs:
+const {width: svgW, height: svgH} = await readSvgViewBoxOrBBox(svgText);
+const ar = svgW / svgH;                  // robust aspect ratio
+const motifH_canvas = motif.height;      // your saved height in canvas units
+const motifW_canvas = motifH_canvas * ar;
+
+const xPos = (cx - canvasCropLeft) * ratio_width;
+const yPos = (cy - canvasCropTop)  * ratio_height;
+const w    = motifW_canvas * ratio_width;
+const h    = motifH_canvas * ratio_height;
+```
+
+# 6) One coordinate system to rule them all
+
+Make these invariants explicit (and log them once):
+
+* **Canvas space** = (initW × initH) logical units. All saved `x,y,width,height,fontPxCanvas` live here.
+* **Display space** = (dispW × dispH) CSS pixels. `ratio_width = dispW/initW`, `ratio_height = dispH/initH`.
+* **DPR** is only used to:
+
+  * compute `effectiveDpr` from the screenshot (to undo legacy DPR-scaled values),
+  * convert crop offsets from physical px → canvas units,
+  * scale the canvas backing store (sharpness), **not** layout.
+
+# 7) Defensive import for mixed archives
+
+If you have a mix of “old” (x&y scaled by ratio_height) and “new” (axis-correct) saves, detect it:
+
+```ts
+function detectLegacy(save: {x:number,y:number}, initW:number, initH:number) {
+  // if either axis is way outside canvas, it was pre-scaled
+  const maxAxis = Math.max(Math.abs(save.x), Math.abs(save.y));
+  return maxAxis > Math.max(initW, initH) * 1.2; // loose threshold
+}
+
+const isLegacy = detectLegacy(item, initW, initH);
+const legacyScale = isLegacy ? scaling.ratioHeight : 1;
+const { x: cx, y: cy } = toCanvasCoordsLegacy(item.x, item.y, legacyScale);
+```
+
+That lets you render the entire back-catalog correctly without hand-tagging.
+
+---
+
+## Why your recreation drifts vs the original
+
+* The “center-if-cropped” branch nudges centered items horizontally even when the original had deliberate left/right distances.
+* Fonts are scaled with mixed factors; large titles (like PINTO) end up a few percent off in height.
+* Motif widths are sometimes estimated from text heuristics, widening/narrowing the gaps around the central figure.
+* DPR creeps into the layout scale; a different monitor can subtly change the composition.
+
+Apply the seven fixes above and the render should match the source design within a pixel or two—on any screen—while keeping legacy saves correct.
+
+If you want, paste me one representative saved JSON for the PINTO design and I’ll give you the exact `legacyScale` and font normalization numbers it needs.

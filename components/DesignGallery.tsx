@@ -83,7 +83,7 @@ export default function DesignGallery({ designs }: DesignGalleryProps) {
                       {categoryDesigns.slice(0, 4).map((design) => (
                         <a
                           key={design.id}
-                          href={`/designs/${design.productSlug}/${design.category}/${design.id}_${design.slug}`}
+                          href={`/designs/${design.productSlug}/${design.category}/${design.slug}`}
                           className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200"
                         >
                           <div className="aspect-square relative bg-gray-100">

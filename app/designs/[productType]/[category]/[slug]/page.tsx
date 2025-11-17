@@ -1,6 +1,6 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { getSavedDesign, getDesignFromSlug, getCanonicalSlugForDesign, extractDesignIdFromSlug, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
+import { getSavedDesign, getDesignFromSlug, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
 import { getProductFromId } from '#/lib/product-utils';
 import DesignPageClient from './DesignPageClient';
 
@@ -221,21 +221,11 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
 export default async function SavedDesignPage({ params }: SavedDesignPageProps) {
   const { productType: productSlug, category, slug } = await params;
 
-  // Try new slug lookup first
-  let design = getDesignFromSlug(slug);
+  // Lookup design by clean slug
+  const design = getDesignFromSlug(slug);
   
   if (!design) {
     notFound();
-  }
-
-  // Check if this is an old timestamp_description format and redirect to clean URL
-  const isOldFormat = /^\d+_/.test(slug);
-  const canonicalSlug = design.slug; // Clean SEO-friendly slug
-  
-  if (isOldFormat && slug !== canonicalSlug) {
-    // 301 redirect from old format to new clean URL
-    const canonicalUrl = `/designs/${productSlug}/${category}/${canonicalSlug}`;
-    redirect(canonicalUrl);
   }
 
   const designId = design.id;
@@ -269,7 +259,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   
   // Build canonical URL with clean slug
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.com.au';
-  const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}/${canonicalSlug}`;
+  const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}/${design.slug}`;
   
   // JSON-LD Structured Data
   const structuredData = {
@@ -413,6 +403,17 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
 
   return (
     <>
+      {/* Preload hero image for LCP optimization */}
+      {design.preview && (
+        <link
+          rel="preload"
+          as="image"
+          href={design.preview}
+          // @ts-ignore - fetchPriority is valid but not in TS types yet
+          fetchPriority="high"
+        />
+      )}
+      
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -428,7 +429,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
       <DesignPageClient
         productSlug={productSlug}
         category={category}
-        slug={canonicalSlug}
+        slug={design.slug}
         designId={designId}
         design={design}
       />

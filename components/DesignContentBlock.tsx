@@ -15,6 +15,17 @@ import {
   type Region
 } from '#/lib/localization';
 
+/**
+ * Format shape name for display - convert snake_case or lowercase to Title Case
+ */
+function formatShapeName(shapeName: string): string {
+  return shapeName
+    .replace(/_/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 interface DesignContentBlockProps {
   design: SavedDesignMetadata;
   categoryTitle: string;
@@ -398,7 +409,7 @@ export default function DesignContentBlock({
               {relatedDesigns.slice(0, 6).map((relatedDesign) => (
                 <Link
                   key={relatedDesign.id}
-                  href={`/designs/${relatedDesign.productSlug}/${relatedDesign.category}/${relatedDesign.id}_${relatedDesign.slug}`}
+                  href={`/designs/${relatedDesign.productSlug}/${relatedDesign.category}/${relatedDesign.slug}`}
                   className="group block bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-lg transition-all"
                 >
                   {relatedDesign.preview && (
@@ -413,7 +424,9 @@ export default function DesignContentBlock({
                   )}
                   <div className="p-3">
                     <h3 className="font-light text-sm text-slate-900 group-hover:text-slate-600 transition-colors">
-                      {relatedDesign.title}
+                      {relatedDesign.shapeName 
+                        ? `${formatShapeName(relatedDesign.shapeName)} - ${relatedDesign.title}`
+                        : relatedDesign.title}
                     </h3>
                     <p className="text-xs text-slate-500 mt-1">
                       {DESIGN_CATEGORIES[relatedDesign.category]?.name || relatedDesign.category}
@@ -438,7 +451,7 @@ export default function DesignContentBlock({
               {sameCategoryDesigns.map((catDesign) => (
                 <Link
                   key={catDesign.id}
-                  href={`/designs/${catDesign.productSlug}/${catDesign.category}/${catDesign.id}_${catDesign.slug}`}
+                  href={`/designs/${catDesign.productSlug}/${catDesign.category}/${catDesign.slug}`}
                   className="group block bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-lg transition-all"
                 >
                   {catDesign.preview && (
@@ -453,7 +466,9 @@ export default function DesignContentBlock({
                   )}
                   <div className="p-2">
                     <p className="text-xs text-slate-600 font-light group-hover:text-slate-900 transition-colors line-clamp-2">
-                      {catDesign.title}
+                      {catDesign.shapeName 
+                        ? `${formatShapeName(catDesign.shapeName)} - ${catDesign.title}`
+                        : catDesign.title}
                     </p>
                   </div>
                 </Link>

@@ -16,6 +16,7 @@ interface DesignTreeNode {
         id: string;
         slug: string;
         title: string;
+        shapeName?: string;
       }>;
     };
   };
@@ -38,6 +39,48 @@ function formatSlugForDisplay(slug: string): string {
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
     .join(' ');
+}
+
+/**
+ * Format shape name for display - Title Case
+ * e.g., "curved gable" → "Curved Gable"
+ */
+function formatShapeName(shapeName: string): string {
+  if (!shapeName) return '';
+  
+  return shapeName
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Build display title with shape name prefix
+ * e.g., "Curved Gable - Gods Garden Memorial"
+ * Removes the shape name from the slug to avoid duplication
+ */
+function buildDesignTitle(shapeName: string | undefined, slug: string): string {
+  let processedSlug = slug;
+  
+  // Remove shape name from the beginning of slug if it exists
+  if (shapeName) {
+    const shapeKebab = shapeName.toLowerCase().replace(/\s+/g, '-');
+    if (processedSlug.startsWith(shapeKebab + '-')) {
+      processedSlug = processedSlug.substring(shapeKebab.length + 1);
+    } else if (processedSlug === shapeKebab) {
+      // If slug is just the shape name, use a generic title
+      processedSlug = 'memorial';
+    }
+  }
+  
+  const slugTitle = formatSlugForDisplay(processedSlug);
+  
+  if (shapeName) {
+    const formattedShape = formatShapeName(shapeName);
+    return `${formattedShape} - ${slugTitle}`;
+  }
+  
+  return slugTitle;
 }
 
 export default function DesignsTreeNav() {
@@ -76,8 +119,9 @@ export default function DesignsTreeNav() {
       tree[productSlug].categories[category].designs.push({
         id: design.id,
         slug: design.slug,
-        // Use the meaningful slug text for display instead of generic "Mother Memorial"
-        title: formatSlugForDisplay(design.slug),
+        shapeName: design.shapeName,
+        // Build title with shape name prefix
+        title: buildDesignTitle(design.shapeName, design.slug),
       });
     });
     
@@ -233,9 +277,9 @@ export default function DesignsTreeNav() {
                         {isCategoryExpanded && (
                           <div className="ml-4 mt-2 space-y-1.5">
                             {categoryData.designs.map((design, index) => {
-                              const designPath = `/designs/${productNode.productSlug}/${categoryKey}/${design.id}_${design.slug}`;
+                              const designPath = `/designs/${productNode.productSlug}/${categoryKey}/${design.slug}`;
                               const isDesignActive = pathname === designPath;
-                              
+
                               return (
                                 <Link
                                   key={`${productNode.productSlug}-${categoryKey}-${design.id}-${index}`}
