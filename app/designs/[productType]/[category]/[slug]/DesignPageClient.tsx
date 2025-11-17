@@ -208,24 +208,35 @@ export default function DesignPageClient({
           dpr: designDPR
         });
         
-        // Screenshot is saved at logicalSize * designDPR pixels
+        // Screenshot is captured at physical pixels (init_width × DPR, init_height × DPR)
+        // But we need to work in LOGICAL canvas coordinates (init_width, init_height)
         // Use cropped dimensions if white space > 50% (threshold increased)
         const physicalWidth = cropBounds.shouldCrop ? cropBounds.croppedWidth : img.width;
         const physicalHeight = cropBounds.shouldCrop ? cropBounds.croppedHeight : img.height;
         
-        // Divide by DPR to get logical canvas size
-        const logicalWidth = physicalWidth / designDPR;
-        const logicalHeight = physicalHeight / designDPR;
+        // Calculate the ACTUAL DPR from the screenshot
+        // (the screenshot might not match init_width × dpr due to browser constraints)
+        const headstoneData = designData.find((item: any) => item.type === 'Headstone');
+        const initWidth = headstoneData?.init_width || 707;
+        const initHeight = headstoneData?.init_height || 476;
         
-        console.log('Screenshot dimensions (with crop):', {
+        // Calculate effective DPR from actual screenshot size
+        const effectiveDPR = physicalWidth / initWidth;
+        
+        console.log('Screenshot dimensions (with DPR analysis):', {
           original: { width: img.width, height: img.height },
           cropped: cropBounds.shouldCrop ? { width: cropBounds.croppedWidth, height: cropBounds.croppedHeight } : 'not needed',
           physical: { width: physicalWidth, height: physicalHeight },
-          logical: { width: logicalWidth, height: logicalHeight },
-          dpr: designDPR
+          canvas: { width: initWidth, height: initHeight },
+          dpr: { 
+            fromJSON: designDPR,
+            calculated: effectiveDPR.toFixed(4),
+            note: 'Using calculated DPR from actual screenshot size'
+          }
         });
         
-        setScreenshotDimensions({ width: logicalWidth, height: logicalHeight });
+        // Store the canvas dimensions (logical space for coordinate system)
+        setScreenshotDimensions({ width: initWidth, height: initHeight });
       };
       img.src = designMetadata.preview;
     }
@@ -690,33 +701,96 @@ export default function DesignPageClient({
     return null;
   }, [shapeName, shapeData]);
 
+  // FIX #2: Helper function to convert legacy saved coordinates back to canvas space
+  const toCanvasCoordsLegacy = useCallback((xSaved: number, ySaved: number, legacyScale: number) => {
+    // Legacy scale == old ratio_height used for both x and y
+    return { x: xSaved / legacyScale, y: ySaved / legacyScale };
+  }, []);
+
+  // FIX #7: Auto-detect legacy vs axis-correct coordinates for X
+  const inferCanvasX = useCallback((
+    savedX: number,
+    ratioW: number,
+    ratioH: number,
+    canvasW: number,
+    marginPx = 8
+  ) => {
+    // Two candidates: old bug (÷ratioH) vs correct (÷ratioW)
+    const xBug = savedX / ratioH;   // legacy
+    const xFixed = savedX / ratioW; // axis-correct
+
+    const halfW = canvasW / 2;
+    const inside = (x: number) => Math.abs(x) <= halfW + marginPx;
+
+    const insideBug = inside(xBug);
+    const insideFixed = inside(xFixed);
+
+    // If both are valid, pick the one with more horizontal spread (closer to edges)
+    if (insideBug && insideFixed) {
+      return Math.abs(xFixed) > Math.abs(xBug) ? xFixed : xBug;
+    }
+    // If only one is valid, use it
+    if (insideFixed) return xFixed;
+    if (insideBug) return xBug;
+
+    // Fallback: clamp axis-correct
+    return Math.max(-halfW, Math.min(halfW, xFixed));
+  }, []);
+
   // Calculate scaling factors for positioning inscriptions
   const scalingFactors = useMemo(() => {
-    if (!shapeData || !cropBounds) return { scaleX: 1, scaleY: 1, displayWidth: 800, displayHeight: 800, offsetX: 0, offsetY: 0, upscaleFactor: 1, containerScalingMultiplier: 1 };
+    if (!shapeData || !cropBounds || !screenshotDimensions) return { 
+      scaleX: 1, scaleY: 1, displayWidth: 800, displayHeight: 800, 
+      offsetX: 0, offsetY: 0, upscaleFactor: 1, containerScalingMultiplier: 1, 
+      ratioWidth: 1, ratioHeight: 1, legacyScale: 1, 
+      canvasCropLeft: 0, canvasCropTop: 0, designDpr: 1 
+    };
     
-    const dpr = shapeData.dpr || 1;
-    
-    // Canvas dimensions (logical pixels - the workspace where design was created)
-    // init_width and init_height are stored in PHYSICAL pixels (already × DPR)
-    // We need to divide by DPR to get logical canvas size
-    const canvasWidthPhysical = shapeData.init_width || shapeData.width || 610;
-    const canvasHeightPhysical = shapeData.init_height || shapeData.height || 610;
-    const canvasWidth = canvasWidthPhysical / dpr;
-    const canvasHeight = canvasHeightPhysical / dpr;
+    // FIX #1: Canvas logical size (where x,y were authored)
+    const initW = screenshotDimensions.width;   // e.g., 707
+    const initH = screenshotDimensions.height;  // e.g., 476
     
     const designDevice = shapeData.device || 'desktop';
     const isDesktopDesign = designDevice === 'desktop';
     
-    // Screenshot dimensions are ALREADY in logical pixels (divided by DPR during loading)
-    const screenshotLogicalWidth = screenshotDimensions?.width || canvasWidth;
-    const screenshotLogicalHeight = screenshotDimensions?.height || canvasHeight;
+    // Actual screenshot physical dimensions
+    const physicalWidth = cropBounds.shouldCrop ? cropBounds.croppedWidth : cropBounds.width;
+    const physicalHeight = cropBounds.shouldCrop ? cropBounds.croppedHeight : cropBounds.height;
+    
+    // DPR from design (for normalizing legacy data only)
+    const designDpr = shapeData.dpr || 1;
+    
+    // Calculate effective DPR from screenshot
+    const effectiveDpr = cropBounds.width / initW;
     
     // Mobile upscaling: Scale up mobile designs by 2x for better desktop viewing
-    const upscaleFactor = (!isDesktopDesign && dpr > 1) ? 2 : 1;
+    const upscaleFactor = (!isDesktopDesign && physicalWidth / initW > 1) ? 2 : 1;
     
-    // Calculate display dimensions from logical screenshot dimensions
-    let displayWidth = screenshotLogicalWidth * upscaleFactor;
-    let displayHeight = screenshotLogicalHeight * upscaleFactor;
+    // Display size = physical screenshot size × upscale factor
+    let displayWidth = physicalWidth * upscaleFactor;
+    let displayHeight = physicalHeight * upscaleFactor;
+    
+    // FIX #1: Layout ratios - pure CSS-pixel scaling, NO DPR HERE
+    let ratio_width = displayWidth / initW;
+    let ratio_height = displayHeight / initH;
+    
+    // Fit control if needed (uniform scaling)
+    const fitMode = shapeData.fit || "stretch";
+    if (fitMode === 'contain') {
+      const s = Math.min(ratio_width, ratio_height);
+      ratio_width = ratio_height = s;
+    } else if (fitMode === 'cover') {
+      const s = Math.max(ratio_width, ratio_height);
+      ratio_width = ratio_height = s;
+    }
+    
+    // FIX #2: Legacy scale for old saved coordinates
+    // Old logic multiplied both x and y by ratio_height
+    const legacyScale = ratio_height;
+    
+    // FIX #3: Crop offset in canvas units
+    const canvasCropLeft = cropBounds.shouldCrop ? (cropBounds.left / effectiveDpr) : 0;
+    const canvasCropTop = cropBounds.shouldCrop ? (cropBounds.top / effectiveDpr) : 0;
     
     // Calculate base width if present (in mm, need to scale to display)
     // Find base item from designData
@@ -749,30 +823,21 @@ export default function DesignPageClient({
       });
     }
     
-    // Scale from logical canvas coordinates to display coordinates
-    const scaleX = (screenshotLogicalWidth / canvasWidth) * upscaleFactor * containerScalingMultiplier;
-    const scaleY = (screenshotLogicalHeight / canvasHeight) * upscaleFactor * containerScalingMultiplier;
+    // Scale factors for display (pure layout ratios with upscaling/container adjustments)
+    const scaleX = ratio_width * upscaleFactor * containerScalingMultiplier;
+    const scaleY = ratio_height * upscaleFactor * containerScalingMultiplier;
     
-    console.log('Scaling factors (with crop):', {
-      canvas: { 
-        physical: { width: canvasWidthPhysical, height: canvasHeightPhysical },
-        logical: { width: canvasWidth, height: canvasHeight }
-      },
-      screenshot: { 
-        logical: { width: screenshotLogicalWidth, height: screenshotLogicalHeight }
-      },
-      crop: {
-        applied: cropBounds.shouldCrop,
-        whiteSpace: cropBounds.whiteSpacePercentage.toFixed(2) + '%',
-        bounds: { left: cropBounds.left, top: cropBounds.top }
-      },
+    console.log('Clean ratio calculation (DPR-free layout):', {
+      canvas: { width: initW, height: initH },
+      physical: { width: physicalWidth, height: physicalHeight },
       display: { width: displayWidth, height: displayHeight },
-      base: { width: baseDisplayWidth ? (baseDisplayWidth * containerScalingMultiplier).toFixed(2) + 'px' : 'N/A' },
+      ratios: { ratio_width, ratio_height },
       scale: { scaleX, scaleY },
-      containerScaling: { maxWidth: maxWidth.toFixed(2) + 'px', multiplier: containerScalingMultiplier.toFixed(4) },
+      legacy: { legacyScale, designDpr, effectiveDpr },
+      crop: { canvasCropLeft, canvasCropTop },
       upscaleFactor,
-      device: designDevice,
-      dpr
+      containerScalingMultiplier,
+      fitMode
     });
     
     return { 
@@ -781,9 +846,17 @@ export default function DesignPageClient({
       displayWidth, 
       displayHeight, 
       upscaleFactor,
-      offsetX: cropBounds.left || 0,
-      offsetY: cropBounds.top || 0,
-      containerScalingMultiplier
+      offsetX: 0,  // No longer used - using canvasCropLeft/Top instead
+      offsetY: 0,
+      containerScalingMultiplier,
+      ratioWidth: ratio_width,
+      ratioHeight: ratio_height,
+      legacyScale,
+      canvasCropLeft,
+      canvasCropTop,
+      designDpr,
+      initW,
+      initH
     };
   }, [shapeData, screenshotDimensions, cropBounds, designData]);
 
@@ -830,18 +903,41 @@ export default function DesignPageClient({
 
   // Load and process SVG with texture
   useEffect(() => {
-    if (!shapeImagePath || !textureData || !shapeData || !screenshotDimensions) {
+    console.log('🔍 SVG useEffect check:', {
+      shapeImagePath: !!shapeImagePath,
+      textureData: !!textureData,
+      shapeData: !!shapeData,
+      screenshotDimensions: !!screenshotDimensions,
+      cropBounds: !!cropBounds,
+      values: {
+        shapeImagePath,
+        textureData,
+        screenshotDimensions,
+        cropBounds: cropBounds ? { width: cropBounds.width, height: cropBounds.height, shouldCrop: cropBounds.shouldCrop } : null
+      }
+    });
+    
+    if (!shapeImagePath || !textureData || !shapeData || !screenshotDimensions || !cropBounds) {
+      console.log('❌ SVG generation skipped - missing dependencies');
       setSvgContent(null);
       return;
     }
     
+    console.log('✅ All dependencies available, fetching SVG from:', shapeImagePath);
+    
     fetch(shapeImagePath)
-      .then(res => res.text())
+      .then(res => {
+        console.log('📥 SVG fetch response:', res.status, res.ok);
+        return res.text();
+      })
       .then(svgText => {
+        console.log('📄 SVG text received, length:', svgText.length);
         // Parse SVG and inject texture pattern
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svg = doc.querySelector('svg');
+        
+        console.log('🔍 SVG element found:', !!svg);
         
         if (svg) {
           // Check if this is a fixed-proportion shape (Guitar or Headstone)
@@ -854,17 +950,24 @@ export default function DesignPageClient({
           const designDevice = shapeData.device || 'desktop';
           const isDesktopDesign = designDevice === 'desktop';
           
-          // Screenshot dimensions are ALREADY in logical pixels (divided by DPR during loading)
-          const logicalWidth = screenshotDimensions.width;
-          const logicalHeight = screenshotDimensions.height;
+          // screenshotDimensions now holds canvas size (logical init_width/height)
+          // Get physical screenshot size for display
+          const canvasWidth = screenshotDimensions.width;
+          const canvasHeight = screenshotDimensions.height;
           
-          // Display dimensions: for desktop use logical, for mobile upscale by 2x
+          // Calculate physical size from canvas and actual DPR
+          const headstoneData = designData?.find((item: any) => item.type === 'Headstone');
+          const physicalWidth = cropBounds.shouldCrop ? cropBounds.croppedWidth : cropBounds.width;
+          const physicalHeight = cropBounds.shouldCrop ? cropBounds.croppedHeight : cropBounds.height;
+          
+          // Display dimensions: scale physical by upscale factor
           const upscaleFactor = (!isDesktopDesign && designDPR > 1) ? 2 : 1;
-          const displayWidth = logicalWidth * upscaleFactor;
-          const displayHeight = logicalHeight * upscaleFactor;
+          const displayWidth = physicalWidth * upscaleFactor;
+          const displayHeight = physicalHeight * upscaleFactor;
           
           console.log('SVG Processing:', {
-            screenshot: { width: screenshotDimensions.width, height: screenshotDimensions.height, alreadyLogical: true },
+            canvas: { width: canvasWidth, height: canvasHeight },
+            physical: { width: physicalWidth, height: physicalHeight },
             display: { width: displayWidth, height: displayHeight },
             upscaleFactor,
             dpr: designDPR
@@ -883,23 +986,23 @@ export default function DesignPageClient({
             }
           }
           
-          // Calculate scale factors from original SVG to logical canvas size
+          // Calculate scale factors from original SVG to canvas size
           // For fixed-proportion shapes, use uniform scaling
           let scaleX, scaleY;
           if (isFixedProportionShape) {
             // Use the same scale for both X and Y to maintain proportions
-            const uniformScale = Math.min(logicalWidth / originalWidth, logicalHeight / originalHeight);
+            const uniformScale = Math.min(canvasWidth / originalWidth, canvasHeight / originalHeight);
             scaleX = uniformScale;
             scaleY = uniformScale;
           } else {
             // For flexible shapes like Serpentine, allow independent X/Y scaling
-            scaleX = logicalWidth / originalWidth;
-            scaleY = logicalHeight / originalHeight;
+            scaleX = canvasWidth / originalWidth;
+            scaleY = canvasHeight / originalHeight;
           }
           
-          // Update viewBox to logical dimensions (for coordinate system)
+          // Update viewBox to canvas dimensions (for coordinate system)
           // Set width/height to 100% to fill parent container
-          svg.setAttribute('viewBox', `0 0 ${logicalWidth} ${logicalHeight}`);
+          svg.setAttribute('viewBox', `0 0 ${canvasWidth} ${canvasHeight}`);
           svg.setAttribute('width', '100%');
           svg.setAttribute('height', '100%');
           svg.setAttribute('preserveAspectRatio', 'none'); // Allow SVG to stretch to fill container
@@ -959,14 +1062,17 @@ export default function DesignPageClient({
           // Serialize back to string
           const serializer = new XMLSerializer();
           const processedSvg = serializer.serializeToString(svg);
+          console.log('✅ SVG processed successfully, length:', processedSvg.length);
           setSvgContent(processedSvg);
+        } else {
+          console.log('❌ No SVG element found in parsed document');
         }
       })
       .catch(err => {
-        console.error('Failed to load SVG:', err);
+        console.error('❌ Failed to load SVG:', err);
         setSvgContent(null);
       });
-  }, [shapeImagePath, textureData, shapeData, screenshotDimensions]);
+  }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds]);
 
   const motifData = useMemo(() => {
     if (!designData) return [];
@@ -1154,7 +1260,43 @@ export default function DesignPageClient({
   
   const product = getProductFromId(designMetadata.productId);
   const productName = product?.name || designMetadata.productName;
-  const categoryTitle = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  
+  // Format category title with dash separator between shape name and rest
+  const categoryTitle = useMemo(() => {
+    const words = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1));
+    
+    // List of known shape names (from the shape map)
+    const shapeNames = [
+      'Cropped Peak',
+      'Curved Gable', 
+      'Curved Peak',
+      'Curved Top',
+      'Half Round',
+      'Gable',
+      'Left Wave',
+      'Peak',
+      'Right Wave',
+      'Serpentine',
+      'Square',
+      'Rectangle'
+    ];
+    
+    // Check if the category starts with any known shape name
+    for (const shapeName of shapeNames) {
+      const shapeWords = shapeName.split(' ');
+      const categoryStart = words.slice(0, shapeWords.length).join(' ');
+      
+      if (categoryStart === shapeName && words.length > shapeWords.length) {
+        // Found a match - add dash separator
+        const shapePartFormatted = shapeWords.join(' ');
+        const restPart = words.slice(shapeWords.length).join(' ');
+        return `${shapePartFormatted} - ${restPart}`;
+      }
+    }
+    
+    // No shape match found, return default formatting
+    return words.join(' ');
+  }, [category]);
   
   // Get simplified product name for H1
   const getSimplifiedProductName = (name: string): string => {
@@ -1478,7 +1620,7 @@ export default function DesignPageClient({
       </div>
 
       {/* Design Preview - Enhanced with shape, texture, and motifs */}
-      {designData && (
+      {designData && screenshotDimensions && (
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 my-8">
           {/* Visual Preview Area */}
           <div className="relative bg-gradient-to-br from-slate-50 to-white min-h-[600px] flex items-center justify-center p-8">
@@ -1540,27 +1682,36 @@ export default function DesignPageClient({
                   </div>
                 ) : (
                   // Other headstone shapes - use pre-processed SVG with texture
-                  svgContent ? (
-                    <div 
-                      className="absolute inset-0"
-                      dangerouslySetInnerHTML={{ __html: svgContent }}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    />
-                  ) : (
-                    <div 
-                      className="absolute inset-0 rounded-lg"
-                      style={{
-                        backgroundImage: textureData 
-                          ? `url(${textureData})`
-                          : 'linear-gradient(to bottom, #9ca3af, #6b7280)',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                    />
-                  )
+                  (() => {
+                    console.log('🎨 Rendering headstone shape:', {
+                      shapeName,
+                      svgContent: !!svgContent,
+                      svgLength: svgContent?.length || 0,
+                      fallbackToTexture: !svgContent
+                    });
+                    
+                    return svgContent ? (
+                      <div 
+                        className="absolute inset-0"
+                        dangerouslySetInnerHTML={{ __html: svgContent }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    ) : (
+                      <div 
+                        className="absolute inset-0 rounded-lg"
+                        style={{
+                          backgroundImage: textureData 
+                            ? `url(${textureData})`
+                            : 'linear-gradient(to bottom, #9ca3af, #6b7280)',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }}
+                      />
+                    );
+                  })()
                 )
               ) : (
                 <div 
@@ -1580,13 +1731,11 @@ export default function DesignPageClient({
                 {sanitizedDesignData && sanitizedDesignData
                   .filter((item: any) => item.type === 'Inscription' && item.label && item.part !== 'Base')
                   .map((item: any, index: number) => {
-                    const dpr = shapeData?.dpr || 1;
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // font_size is in mm (real-world units), NOT pixels
-                    // The actual pixel size is in the 'font' field (e.g., "43.77px Dobkin")
-                    // We need to extract the px value from 'font' and scale it
-                    let fontSizeInPx = item.font_size || 16; // fallback
+                    // Font size - FIX #4: Normalize saved px by DPR, then scale by Y
+                    // Extract px from font field
+                    let fontSizeInPx = item.font_size || 16;
                     if (item.font && typeof item.font === 'string') {
                       const match = item.font.match(/^([\d.]+)px/);
                       if (match) {
@@ -1594,71 +1743,40 @@ export default function DesignPageClient({
                       }
                     }
                     
-                    // Font size in 'font' field is already in physical pixels at creation DPR
-                    // Convert to logical, then scale to display
-                    const fontSize = (fontSizeInPx / dpr) * scalingFactors.scaleY;
+                    // Normalize to canvas logical pixels (undo DPR scaling from save time)
+                    const fontPxCanvas = fontSizeInPx * (1 / scalingFactors.designDpr);
+                    // Then scale canvas -> display using Y ratio
+                    const fontSize = fontPxCanvas * scalingFactors.ratioHeight;
                     const fontFamily = item.font_family || item.font || 'serif';
                     
-                    // Canvas dimensions (need to divide physical by DPR to get logical)
-                    const canvasWidthPhysical = shapeData?.init_width || shapeData?.width || 610;
-                    const canvasHeightPhysical = shapeData?.init_height || shapeData?.height || 610;
-                    const canvasWidth = canvasWidthPhysical / dpr;
-                    const canvasHeight = canvasHeightPhysical / dpr;
+                    // FIX #7: Auto-detect legacy vs axis-correct for X coordinate
+                    const canvasX = inferCanvasX(
+                      item.x,
+                      scalingFactors.ratioWidth,
+                      scalingFactors.ratioHeight,
+                      scalingFactors.initW
+                    );
+                    const canvasY = item.y / scalingFactors.ratioHeight; // Y stays the same
                     
-                    // Screenshot dimensions are in logical pixels (already divided by DPR)
-                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
-                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    // FIX #3: Apply crop offset and scale axis-correctly
+                    const xPos = (canvasX - scalingFactors.canvasCropLeft) * scalingFactors.ratioWidth;
+                    const yPos = (canvasY - scalingFactors.canvasCropTop) * scalingFactors.ratioHeight;
                     
-                    // Reconstruct original screenshot size in physical pixels
-                    const screenshotWidth = screenshotWidthLogical * dpr;
-                    const screenshotHeight = screenshotHeightLogical * dpr;
-                    
-                    // Real ratios: screenshot (physical) / canvas (logical)
-                    const xRatio = screenshotWidth / canvasWidth;
-                    const yRatio = screenshotHeight / canvasHeight;
-                    
-                    // Convert inscription position from screenshot to canvas coordinates
-                    const canvasX = item.x / xRatio;
-                    const canvasY = item.y / yRatio;
-                    
-                    // Only apply auto-center detection if cropping was actually applied
-                    const shouldAutoCenterX = cropBounds?.shouldCrop === true;
-                    
-                    // Check if this element was originally centered (within 10% of canvas center)
-                    const centerThreshold = canvasWidth * 0.1; // 10% of width
-                    const isCentered = shouldAutoCenterX && Math.abs(canvasX) < centerThreshold;
-                    
-                    // Position inscriptions:
-                    // If cropped AND originally centered, keep it centered (xPos = 0)
-                    // Otherwise, apply normal positioning
-                    const xPos = isCentered ? 0 : (canvasX * scalingFactors.scaleX);
-                    const yPos = canvasY * scalingFactors.scaleY;
-                    
-                    // DEBUG
+                    // Debug first inscription
                     if (index === 0) {
-                      console.log('Inscription rendering (auto-center detection):', {
-                        raw: { x: item.x, y: item.y, font_size: item.font_size },
-                        canvasSize: { width: canvasWidth, height: canvasHeight },
-                        screenshot: { 
-                          logical: { width: screenshotWidthLogical, height: screenshotHeightLogical },
-                          physical: { width: screenshotWidth, height: screenshotHeight }
+                      console.log('Inscription positioning (auto-detect):', {
+                        label: item.label,
+                        raw: { x: item.x, y: item.y },
+                        ratios: { width: scalingFactors.ratioWidth.toFixed(4), height: scalingFactors.ratioHeight.toFixed(4) },
+                        candidates: { 
+                          xBug: (item.x / scalingFactors.ratioHeight).toFixed(2),
+                          xFixed: (item.x / scalingFactors.ratioWidth).toFixed(2),
+                          chosen: canvasX.toFixed(2)
                         },
-                        cropStatus: {
-                          applied: cropBounds?.shouldCrop,
-                          whiteSpace: cropBounds?.whiteSpacePercentage.toFixed(2) + '%'
-                        },
-                        ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
-                        canvasCoords: { x: canvasX.toFixed(2), y: canvasY.toFixed(2) },
-                        centerCheck: {
-                          enabled: shouldAutoCenterX,
-                          threshold: centerThreshold.toFixed(2),
-                          distance: Math.abs(canvasX).toFixed(2),
-                          isCentered,
-                          action: isCentered ? 'FORCE CENTER (xPos=0)' : 'USE ORIGINAL POSITION'
-                        },
-                        display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2), fontSize: fontSize.toFixed(2) },
-                        scale: { scaleX: scalingFactors.scaleX.toFixed(4), scaleY: scalingFactors.scaleY.toFixed(4) },
-                        dpr, upscaleFactor
+                        canvas: { cx: canvasX.toFixed(2), cy: canvasY.toFixed(2) },
+                        canvasSize: { w: scalingFactors.initW, h: scalingFactors.initH },
+                        crop: { left: scalingFactors.canvasCropLeft.toFixed(2), top: scalingFactors.canvasCropTop.toFixed(2) },
+                        display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2) }
                       });
                     }
                     
@@ -1692,85 +1810,47 @@ export default function DesignPageClient({
                   {adjustedMotifData
                     .filter((motif: any) => motif.part !== 'Base')
                     .map((motif: any, index: number) => {
-                    const dpr = shapeData?.dpr || 1;
                     const upscaleFactor = scalingFactors.upscaleFactor || 1;
                     
-                    // Canvas dimensions (need to divide physical by DPR to get logical)
-                    const canvasWidthPhysical = shapeData?.init_width || shapeData?.width || 610;
-                    const canvasHeightPhysical = shapeData?.init_height || shapeData?.height || 610;
-                    const canvasWidth = canvasWidthPhysical / dpr;
-                    const canvasHeight = canvasHeightPhysical / dpr;
+                    // FIX #7: Auto-detect legacy vs axis-correct for X coordinate
+                    const canvasX = inferCanvasX(
+                      motif.x,
+                      scalingFactors.ratioWidth,
+                      scalingFactors.ratioHeight,
+                      scalingFactors.initW
+                    );
+                    const canvasY = motif.y / scalingFactors.ratioHeight; // Y stays the same
                     
-                    // Screenshot dimensions are in logical pixels (already divided by DPR)
-                    const screenshotWidthLogical = screenshotDimensions?.width || canvasWidth;
-                    const screenshotHeightLogical = screenshotDimensions?.height || canvasHeight;
+                    // FIX #3: Apply crop offset and scale axis-correctly
+                    const xPos = (canvasX - scalingFactors.canvasCropLeft) * scalingFactors.ratioWidth;
+                    const yPos = (canvasY - scalingFactors.canvasCropTop) * scalingFactors.ratioHeight;
                     
-                    // Reconstruct original screenshot size in physical pixels
-                    const screenshotWidth = screenshotWidthLogical * dpr;
-                    const screenshotHeight = screenshotHeightLogical * dpr;
+                    // FIX #5: Motif height in canvas units, scale to display
+                    const motifH_canvas = motif.height || 80;
+                    const motifHeight = motifH_canvas * scalingFactors.ratioHeight;
                     
-                    // Real ratios: screenshot (physical) / canvas (logical)
-                    const xRatio = screenshotWidth / canvasWidth;
-                    const yRatio = screenshotHeight / canvasHeight;
-                    
-                    // Convert motif position from screenshot to canvas coordinates
-                    const canvasX = motif.x / xRatio;
-                    const canvasY = motif.y / yRatio;
-                    
-                    // Only apply auto-center detection if cropping was actually applied
-                    const shouldAutoCenterX = cropBounds?.shouldCrop === true;
-                    
-                    // Check if this element was originally centered (within 10% of canvas center)
-                    const centerThreshold = canvasWidth * 0.1; // 10% of width
-                    const isCentered = shouldAutoCenterX && Math.abs(canvasX) < centerThreshold;
-                    
-                    // Position motifs:
-                    // If cropped AND originally centered, keep it centered (xPos = 0)
-                    // Otherwise, apply normal positioning
-                    const xPos = isCentered ? 0 : (canvasX * scalingFactors.scaleX);
-                    const yPos = canvasY * scalingFactors.scaleY;
-                    
-                    // Motifs store height and ratio (from Motif.js: ratio = init_height / image_height)
-                    // The actual displayed size needs to match the original canvas size scaled to display
-                    const motifHeight = motif.height ? (motif.height / yRatio) * scalingFactors.scaleY : 80;
-                    
-                    // Calculate width based on SVG's natural aspect ratio
+                    // FIX #5: Always use SVG natural aspect ratio
                     const motifSrc = motif.src || motif.name;
                     const svgDims = motifDimensions[motifSrc];
-                    let motifWidth;
+                    let motifWidth = motifHeight * 1.2; // Fallback while loading
                     
                     if (svgDims && svgDims.width && svgDims.height) {
-                      // Use actual SVG aspect ratio
-                      const aspectRatio = svgDims.width / svgDims.height;
-                      motifWidth = motifHeight * aspectRatio;
-                      console.log('Using SVG aspect ratio for', motifSrc, ':', aspectRatio.toFixed(2), '-> width:', motifWidth.toFixed(2));
-                    } else {
-                      // Fallback while SVG loads
-                      motifWidth = motifHeight * 1.2;
+                      const ar = svgDims.width / svgDims.height;
+                      const motifW_canvas = motifH_canvas * ar;
+                      motifWidth = motifW_canvas * scalingFactors.ratioWidth;
                     }
                     
-                    console.log('Rendering headstone motif (auto-center detection):', {
-                      src: motif.src || motif.name,
-                      raw: { x: motif.x, y: motif.y, width: motif.width, height: motif.height },
-                      cropStatus: {
-                        applied: cropBounds?.shouldCrop,
-                        whiteSpace: cropBounds?.whiteSpacePercentage.toFixed(2) + '%'
-                      },
-                      ratios: { xRatio: xRatio.toFixed(4), yRatio: yRatio.toFixed(4) },
-                      canvasCoords: { x: canvasX.toFixed(2), y: canvasY.toFixed(2) },
-                      centerCheck: {
-                        enabled: shouldAutoCenterX,
-                        threshold: centerThreshold.toFixed(2),
-                        distance: Math.abs(canvasX).toFixed(2),
-                        isCentered,
-                        action: isCentered ? 'FORCE CENTER (xPos=0)' : 'USE ORIGINAL POSITION'
-                      },
-                      display: { xPos: xPos.toFixed(2), yPos: yPos.toFixed(2), width: motifWidth.toFixed(2), height: motifHeight.toFixed(2) },
-                      color: motif.color
-                    });
+                    // Calculate flip transform (apply to inner images, not container to avoid drag issues)
+                    const flipX = motif.flipx === '-1' || motif.flipx === -1 ? -1 : 1;
+                    const flipY = motif.flipy === '-1' || motif.flipy === -1 ? -1 : 1;
+                    const flipTransform = `scaleX(${flipX}) scaleY(${flipY})`;
                     
-                    // Calculate flip transform
-                    const flipTransform = `scaleX(${motif.flipx === '-1' || motif.flipx === -1 ? -1 : 1}) scaleY(${motif.flipy === '-1' || motif.flipy === -1 ? -1 : 1})`;
+                    // Rotation (in degrees)
+                    const rotation = motif.rotation || 0;
+                    const rotateTransform = rotation !== 0 ? `rotate(${rotation}deg)` : '';
+                    
+                    // Combined transform for inner images (flip + rotate)
+                    const innerTransform = [flipTransform, rotateTransform].filter(Boolean).join(' ');
                     
                     return (
                       <DraggableElement
@@ -1827,7 +1907,7 @@ export default function DesignPageClient({
                                     maskRepeat: 'no-repeat',
                                     WebkitMaskPosition: 'center',
                                     maskPosition: 'center',
-                                    transform: flipTransform,
+                                    transform: innerTransform,
                                   }}
                                 />
                               </>
@@ -1840,7 +1920,7 @@ export default function DesignPageClient({
                                 alt={`Motif ${index + 1}`}
                                 className="w-full h-full object-contain"
                                 style={{
-                                  transform: flipTransform,
+                                  transform: innerTransform,
                                 }}
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
@@ -1908,11 +1988,8 @@ export default function DesignPageClient({
                 {sanitizedDesignData && sanitizedDesignData
                   .filter((item: any) => item.type === 'Inscription' && item.label && item.part === 'Base')
                   .map((item: any, index: number) => {
-                    const dpr = shapeData?.dpr || 1;
-                    
-                    // font_size is in mm (real-world units), NOT pixels
-                    // The actual pixel size is in the 'font' field (e.g., "43.77px Dobkin")
-                    let fontSizeInPx = item.font_size || 16; // fallback
+                    // FIX #4: Normalize saved px by DPR, then scale by Y
+                    let fontSizeInPx = item.font_size || 16;
                     if (item.font && typeof item.font === 'string') {
                       const match = item.font.match(/^([\d.]+)px/);
                       if (match) {
@@ -1920,21 +1997,9 @@ export default function DesignPageClient({
                       }
                     }
                     
-                    // Font size in 'font' field is already in physical pixels at creation DPR
-                    // Convert to logical, then scale to display
-                    const fontSize = (fontSizeInPx / dpr) * scalingFactors.scaleY;
+                    const fontPxCanvas = fontSizeInPx * (1 / scalingFactors.designDpr);
+                    const fontSize = fontPxCanvas * scalingFactors.ratioHeight;
                     const fontFamily = item.font_family || item.font || 'serif';
-                    
-                    console.log('Base inscription:', {
-                      label: item.label,
-                      font_size_mm: item.font_size,
-                      font_field: item.font,
-                      font_size_px: fontSizeInPx,
-                      font_size_logical: fontSizeInPx / dpr,
-                      scaleY: scalingFactors.scaleY,
-                      fontSize_display: fontSize,
-                      dpr
-                    });
                     
                     return (
                       <div
