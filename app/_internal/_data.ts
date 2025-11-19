@@ -442,7 +442,7 @@ const fonts: Font[] = [
 ];
 
 const c = "motif"; // class name for all motifs
-const p = "/motifs/"; // base path for motif images
+const p = "/shapes/motifs/s/"; // base path for motif images
 
 // Translation keys match the Lang constants from Const.js
 const motifs: Motif[] = [

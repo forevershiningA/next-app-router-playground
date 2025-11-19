@@ -1,0 +1,198 @@
+Right now the text and motifs are still being “messed with” by all the DPR heuristics we added earlier, so even though the headstone is scaled correctly, the inscriptions/motifs are effectively being shrunk and nudged.
+
+Let’s **simplify and stabilise** this:
+treat all inscription & motif data as **authoring-canvas coordinates and sizes**, ignore DPR for them, and only apply the same `uniformScale + offsets` that the headstone uses.
+
+Below is a **clean replacement** for the inscriptions + motifs layers.
+Please **replace your current blocks starting at**
+`{/* Inscriptions Layer - ... */}` and the following motifs block with this code.
+
+```tsx
+              {/* Inscriptions Layer - Only headstone inscriptions */}
+              <div className="absolute inset-0 pointer-events-none">
+                {sanitizedDesignData &&
+                  sanitizedDesignData
+                    .filter(
+                      (item: any) =>
+                        item.type === 'Inscription' &&
+                        item.label &&
+                        item.part !== 'Base'
+                    )
+                    .map((item: any, index: number) => {
+                      // Authoring frame size and scale (same as headstone)
+                      const uniformScale = scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // --- FONT SIZE (DPR-agnostic) ---
+                      let fontSizeInPx = item.font_size || 16;
+                      if (item.font && typeof item.font === 'string') {
+                        const match = item.font.match(/^([\d.]+)px/);
+                        if (match) fontSizeInPx = parseFloat(match[1]);
+                      }
+
+                      // Treat saved value as authoring-canvas px; just scale to display
+                      const fontSize = fontSizeInPx * uniformScale;
+                      const fontFamily =
+                        item.font_family || item.font || 'serif';
+
+                      // --- COORDINATES (authoring canvas, centre-origin) ---
+                      const canvasX = item.x ?? 0;
+                      const canvasY = item.y ?? 0;
+
+                      // Canvas (0,0) is centre of headstone → convert to top-left display coords
+                      const displayX =
+                        (canvasX + initW / 2) * uniformScale +
+                        (scalingFactors.offsetX || 0);
+                      const displayY =
+                        (canvasY + initH / 2) * uniformScale +
+                        (scalingFactors.offsetY || 0);
+
+                      if (index === 0) {
+                        console.log('🔍 Inscription FINAL mapping', {
+                          label: item.label,
+                          canvas: { x: canvasX, y: canvasY, fontSizeInPx },
+                          display: { x: displayX, y: displayY, fontSize },
+                          initW,
+                          initH,
+                          uniformScale,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${displayX}px`,
+                            top: `${displayY}px`,
+                            transform: `translate(-50%, -50%)${
+                              item.rotation
+                                ? ` rotate(${item.rotation}deg)`
+                                : ''
+                            }`,
+                            fontSize: `${fontSize}px`,
+                            fontFamily,
+                            color: item.color || '#000000',
+                            fontWeight: /bold/i.test(fontFamily)
+                              ? 'bold'
+                              : 'normal',
+                            fontStyle: /italic/i.test(fontFamily)
+                              ? 'italic'
+                              : 'normal',
+                            whiteSpace: 'nowrap',
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          {item.label.replace(/&apos;/g, "'")}
+                        </DraggableElement>
+                      );
+                    })}
+              </div>
+
+              {/* Motifs Layer - Only headstone motifs */}
+              {adjustedMotifData.length > 0 && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {adjustedMotifData
+                    .filter((motif: any) => motif.part !== 'Base')
+                    .map((motif: any, index: number) => {
+                      const uniformScale = scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // --- COORDINATES in authoring canvas space ---
+                      const canvasX = motif.x ?? 0;
+                      const canvasY = motif.y ?? 0;
+
+                      const displayX =
+                        (canvasX + initW / 2) * uniformScale +
+                        (scalingFactors.offsetX || 0);
+                      const displayY =
+                        (canvasY + initH / 2) * uniformScale +
+                        (scalingFactors.offsetY || 0);
+
+                      // --- SIZE ---
+                      const motifSrc = motif.src || motif.name;
+                      const svgDims = motifDimensions[motifSrc];
+                      const motifRatio = parseFloat(motif.ratio || '1');
+
+                      // Base authoring-space width/height
+                      let authorHeight: number;
+                      let authorWidth: number;
+
+                      if (typeof motif.height === 'number') {
+                        authorHeight = motif.height;
+                      } else if (svgDims) {
+                        authorHeight = svgDims.height * motifRatio;
+                      } else {
+                        authorHeight = 100; // fallback
+                      }
+
+                      if (typeof motif.width === 'number') {
+                        authorWidth = motif.width;
+                      } else if (svgDims && svgDims.height > 0) {
+                        const aspect = svgDims.width / svgDims.height;
+                        authorWidth = authorHeight * aspect;
+                      } else {
+                        authorWidth = authorHeight; // square fallback
+                      }
+
+                      // Scale to display
+                      const motifHeight = authorHeight * uniformScale;
+                      const motifWidth = authorWidth * uniformScale;
+
+                      if (index === 0) {
+                        console.log('🎨 Motif FINAL mapping', {
+                          src: motifSrc,
+                          canvas: { x: canvasX, y: canvasY },
+                          display: { x: displayX, y: displayY },
+                          authorSize: { w: authorWidth, h: authorHeight },
+                          displaySize: { w: motifWidth, h: motifHeight },
+                          initW,
+                          initH,
+                          uniformScale,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${displayX}px`,
+                            top: `${displayY}px`,
+                            transform: `translate(-50%, -50%)${
+                              motif.rotation
+                                ? ` rotate(${motif.rotation}deg)`
+                                : ''
+                            }`,
+                            width: `${motifWidth}px`,
+                            height: `${motifHeight}px`,
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          <img
+                            src={motifSrc}
+                            alt={motif.name || 'motif'}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              display: 'block',
+                            }}
+                          />
+                        </DraggableElement>
+                      );
+                    })}
+                </div>
+              )}
+```
+
+Key points of this version:
+
+* **No DPR math at all** for inscriptions or motifs – all DPR-related branching is gone.
+* X/Y are taken exactly as saved (authoring canvas), then mapped with the same `uniformScale`, `initW`, `initH`, `offsetX`, `offsetY` that the headstone uses.
+* Font sizes and motif sizes are also treated as authoring pixels and scaled only by `uniformScale`, so their proportions to the headstone should now match what you saw when designing (including your iPhone DPR-3 session).
+
+Drop this in, rebuild, and the SEHOVIC design should finally line up with the original PINTO reference on both desktop and iPhone.

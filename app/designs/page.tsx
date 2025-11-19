@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { SAVED_DESIGNS, type SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import MobileNavToggle from '#/components/MobileNavToggle';
+import DesignsTreeNav from '#/components/DesignsTreeNav';
 
 export default function DesignsPage() {
   const [groupedDesigns, setGroupedDesigns] = useState<Record<string, SavedDesignMetadata[]>>({});
@@ -40,7 +42,12 @@ export default function DesignsPage() {
   const totalDesigns = Object.values(groupedDesigns).reduce((sum, designs) => sum + designs.length, 0);
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto ml-[400px] min-h-screen">
+    <>
+      <MobileNavToggle>
+        <DesignsTreeNav />
+      </MobileNavToggle>
+      
+      <div className="flex-1 bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto md:ml-[400px] min-h-screen">
       <div className="container mx-auto px-8 py-12 max-w-7xl">
         {/* Elegant Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-12">
@@ -106,5 +113,6 @@ export default function DesignsPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -168,38 +168,30 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
   }
 
   // Build canonical URL with clean slug
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
+  const baseUrl = 'https://forevershining.org';
   const canonicalSlug = design.slug; // Use the clean, SEO-friendly slug from metadata
   const currentPath = `/designs/${productSlug}/${category}/${canonicalSlug}`;
-  
-  // Map mlDir to primary domain
-  const getDomainForRegion = (mlDir: string) => {
-    if (mlDir === 'forevershining') return 'https://forevershining.com.au';
-    if (mlDir === 'bronze-plaque') return 'https://bronze-plaque.com';
-    return 'https://headstonesdesigner.com';
-  };
-
-  const alternateLanguages = {
-    'en-AU': `${getDomainForRegion('forevershining')}${currentPath}`,
-    'en-US': `${getDomainForRegion('bronze-plaque')}${currentPath}`,
-    'en-GB': `${baseUrl}${currentPath}`, // UK version on main domain
-  };
+  const canonicalUrl = `${baseUrl}${currentPath}`;
 
   return {
     title: pageTitle,
     description,
     alternates: {
-      canonical: `${baseUrl}${currentPath}`,
-      languages: alternateLanguages,
+      canonical: canonicalUrl,
+      languages: {
+        'x-default': canonicalUrl,
+        'en-GB': canonicalUrl,
+        'en-US': canonicalUrl,
+        'en-AU': canonicalUrl,
+      },
     },
     openGraph: {
       title: h1Title,
       description,
-      url: `${baseUrl}${currentPath}`,
-      locale: design.mlDir === 'forevershining' ? 'en_AU' : 'en_US',
-      alternateLocale: ['en_AU', 'en_US', 'en_GB'].filter(
-        locale => locale !== (design.mlDir === 'forevershining' ? 'en_AU' : 'en_US')
-      ),
+      url: canonicalUrl,
+      siteName: 'Forever Shining',
+      locale: 'en_GB',
+      type: 'website',
       images: design.preview ? [
         {
           url: design.preview,
@@ -258,7 +250,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const sku = `FS-${design.productType.toUpperCase()}-${shapeName ? shapeName.toUpperCase().replace(/\s+/g, '-') : 'STANDARD'}-${simplifiedProduct.toUpperCase().replace(/\s+/g, '-')}-${category.toUpperCase()}`;
   
   // Build canonical URL with clean slug
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.com.au';
+  const baseUrl = 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}/${design.slug}`;
   
   // JSON-LD Structured Data
@@ -270,7 +262,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "@type": "Product",
         "@id": `${canonicalUrl}#product`,
         "name": productTitle,
-        "description": `Design online: add inscriptions, verses and motifs with live preview. ${categoryTitle.toLowerCase()} in ${simplifiedProduct.toLowerCase()}.`,
+        "description": `Design a ${categoryTitle.toLowerCase()} in ${simplifiedProduct.toLowerCase()}. Add inscriptions, verses and motifs with live preview. Fast proofing & delivery.`,
         "brand": {
           "@type": "Brand",
           "name": "Forever Shining"
@@ -285,18 +277,33 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           ...(design.hasMotifs ? [{ "@type": "PropertyValue", "name": "Motifs", "value": "Available" }] : []),
           ...(design.hasPhoto ? [{ "@type": "PropertyValue", "name": "Photo", "value": "Photo placement available" }] : []),
         ],
-        "image": design.preview ? [`${baseUrl}${design.preview}`] : [],
+        "image": design.preview ? [design.preview.startsWith('http') ? design.preview : `${baseUrl}${design.preview}`] : [],
         "sku": sku,
+        "mpn": sku,
         "offers": {
           "@type": "Offer",
-          "priceCurrency": "AUD",
-          "price": "495.00",
-          "priceValidUntil": new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          "priceCurrency": "GBP",
           "availability": "https://schema.org/InStock",
           "url": canonicalUrl,
           "seller": {
             "@type": "Organization",
             "name": "Forever Shining"
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": ["GB", "US", "AU", "CA"]
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 2,
+                "maxValue": 3,
+                "unitCode": "WEE"
+              }
+            }
           }
         }
       },
@@ -347,13 +354,29 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
       ...(design.preview ? [{
         "@type": "ImageObject",
         "@id": `${canonicalUrl}#image`,
-        "url": `${baseUrl}${design.preview}`,
-        "contentUrl": `${baseUrl}${design.preview}`,
+        "url": design.preview.startsWith('http') ? design.preview : `${baseUrl}${design.preview}`,
+        "contentUrl": design.preview.startsWith('http') ? design.preview : `${baseUrl}${design.preview}`,
         "name": `${productTitle} Preview`,
         "description": `Preview of ${categoryTitle.toLowerCase()} design`,
         "width": "1200",
         "height": "630"
-      }] : [])
+      }] : []),
+      // Organization Schema
+      {
+        "@type": "Organization",
+        "@id": `${baseUrl}#organization`,
+        "name": "Forever Shining",
+        "url": baseUrl,
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${baseUrl}/logo.png`
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Customer Service",
+          "availableLanguage": ["English"]
+        }
+      }
     ]
   };
 

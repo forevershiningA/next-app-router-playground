@@ -79,7 +79,7 @@ export default function DesignSidebar({
 
   if (loading) {
     return (
-      <div className="fixed left-0 top-0 h-screen w-96 bg-white border-r border-slate-200 overflow-y-auto p-6">
+      <div className="hidden md:block fixed left-0 top-0 h-screen w-96 bg-white border-r border-slate-200 overflow-y-auto p-6">
         <div className="flex items-center justify-center h-32">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-slate-800" />
         </div>
@@ -92,7 +92,7 @@ export default function DesignSidebar({
   }
 
   return (
-    <div className="fixed left-0 top-0 h-screen w-96 bg-gradient-to-b from-slate-50 to-white border-r border-slate-200 overflow-y-auto shadow-xl">
+    <div className="hidden md:block fixed left-0 top-0 h-screen w-96 bg-gradient-to-b from-slate-50 to-white border-r border-slate-200 overflow-y-auto shadow-xl">
       <div className="p-6">
         {/* Header */}
         <div className="mb-8">

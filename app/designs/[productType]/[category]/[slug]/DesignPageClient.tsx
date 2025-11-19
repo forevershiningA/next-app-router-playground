@@ -15,6 +15,36 @@ import { MotifsData } from '#/motifs_data';
 import DesignSidebar from '#/components/DesignSidebar';
 import DesignContentBlock from '#/components/DesignContentBlock';
 import { analyzeImageForCrop, type CropBounds } from '#/lib/screenshot-crop';
+import { getMotifCategoryName } from '#/lib/motif-translations';
+import MobileNavToggle from '#/components/MobileNavToggle';
+import DesignsTreeNav from '#/components/DesignsTreeNav';
+
+// Type for layout items (inscriptions and motifs)
+type LayoutItem = {
+  x?: number;
+  y?: number;
+  cx?: number;
+  cy?: number;
+};
+
+// Helper function to detect if design uses physical coordinates
+function designUsesPhysicalCoords(
+  items: LayoutItem[],
+  initW: number,
+  initH: number
+): boolean {
+  if (!initW || !initH) return false;
+
+  const maxCanvasX = initW / 2 + 10; // small margin
+  const maxCanvasY = initH / 2 + 10;
+
+  return items.some((item) => {
+    const rawX = (item.x ?? item.cx ?? 0) as number;
+    const rawY = (item.y ?? item.cy ?? 0) as number;
+
+    return Math.abs(rawX) > maxCanvasX || Math.abs(rawY) > maxCanvasY;
+  });
+}
 
 // Helper function to detect motif category from motif src
 function detectMotifCategory(motifSrc: string): string | null {
@@ -81,6 +111,882 @@ interface DesignPageClientProps {
   slug: string;         // e.g., '1724060510093_memorial-with-motifs'
   designId: string;
   design: SavedDesignMetadata;
+}
+
+// Component for design-specific content (SEO & programmatic content)
+function DesignSpecificContent({ 
+  shapeName, 
+  productSlug, 
+  categoryTitle,
+  designTitle 
+}: { 
+  shapeName: string; 
+  productSlug: string; 
+  categoryTitle: string;
+  designTitle: string;
+}) {
+  const [content, setContent] = useState({
+    intro: '',
+    layoutGuidance: '',
+    sizes: '',
+    approval: '',
+    timeline: ''
+  });
+
+  useEffect(() => {
+    // Generate shape-specific content
+    const shapeGuidance: Record<string, { chars: string; lines: string; motifTip: string }> = {
+      'Curved Gable': {
+        chars: '30–40 characters per line',
+        lines: '3–6 lines total',
+        motifTip: 'crosses, doves, or floral sprays fit well in the lower arc'
+      },
+      'Curved Top': {
+        chars: '35–45 characters per line',
+        lines: '4–8 lines',
+        motifTip: 'larger verses suit the extended curved area'
+      },
+      'Serpentine': {
+        chars: '30–40 characters per line',
+        lines: '3–6 lines',
+        motifTip: 'softer shoulders perfect for side motif pairing'
+      },
+      'Ogee': {
+        chars: '25–35 characters per line',
+        lines: '3–5 lines',
+        motifTip: 'elegant curves frame centered motifs beautifully'
+      }
+    };
+
+    const guidance = shapeGuidance[shapeName] || {
+      chars: '30–40 characters per line',
+      lines: '3–6 lines',
+      motifTip: 'motifs can be positioned throughout the design'
+    };
+
+    const productType = productSlug.includes('laser') ? 'laser-etched' : 
+                       productSlug.includes('bronze') ? 'bronze' : 'traditional engraved';
+
+    setContent({
+      intro: `This ${shapeName} design is a classic ${productType} headstone that suits ${categoryTitle.toLowerCase()} inscriptions. The ${shapeName.toLowerCase()} shape frames a central family name beautifully, with space for meaningful text and decorative motifs. Most families choose Black Granite with a serif family name and a clean, highly legible verse font.`,
+      layoutGuidance: `Top line (family name): up to 12 words; best at 2–3 words|Body lines: ${guidance.chars}, ${guidance.lines}|Motifs: ${guidance.motifTip}|Tip: keep the longest line in the center for visual balance`,
+      sizes: 'Standard tablet sizes: 600×600, 700×500, 800×600 mm|Finishes: Traditional Engraved, Laser Etched (photo-realistic), or Sandblasted|Granite: Black, Blue Pearl, Imperial Red, and 27 more options',
+      approval: 'We prepare proofs for your cemetery and can help with permits. Installation is available through our certified installer network.',
+      timeline: 'Lead time typically 2–3 weeks after proof approval (express available)'
+    });
+  }, [shapeName, productSlug, categoryTitle]);
+
+  return (
+    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 shadow-none md:shadow-sm mb-4 md:mb-6">
+      <div className="px-4 md:px-6 py-4 md:py-6">
+        <h2 className="font-serif text-2xl text-slate-900 mb-4">About This Design</h2>
+        
+        {/* Introduction */}
+        <p className="text-slate-700 mb-6" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+          {content.intro}
+        </p>
+
+        {/* Layout Guidance */}
+        <div className="mb-6">
+          <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+            Layout Guidance for {shapeName}
+          </h3>
+          <ul className="space-y-2">
+            {content.layoutGuidance.split('|').map((item, index) => (
+              <li key={index} className="flex items-start gap-2 text-slate-700" style={{ fontSize: '15px' }}>
+                <span className="text-amber-600 mt-1">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Sizes & Options */}
+        <div className="mb-6">
+          <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+            Sizes & Options
+          </h3>
+          <ul className="space-y-2">
+            {content.sizes.split('|').map((item, index) => (
+              <li key={index} className="flex items-start gap-2 text-slate-700" style={{ fontSize: '15px' }}>
+                <span className="text-amber-600 mt-1">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Cemetery Approval & Installation */}
+        <div className="mb-6">
+          <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+            Cemetery Approval & Installation
+          </h3>
+          <p className="text-slate-700 mb-2" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+            {content.approval}
+          </p>
+          <p className="text-slate-700" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+            <strong>Timeline:</strong> {content.timeline}
+          </p>
+        </div>
+
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-200">
+          <button
+            onClick={() => {
+              // Scroll to the "Use Template" button or trigger edit
+              const editButton = document.querySelector('a[href*="#edit"]');
+              if (editButton instanceof HTMLAnchorElement) {
+                editButton.click();
+              }
+            }}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium cursor-pointer"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Design This Memorial (Live Preview)
+          </button>
+          <a
+            href="/contact"
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-900 border-2 border-slate-900 rounded-lg hover:bg-slate-50 transition-all font-medium"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            Get Help From a Designer
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Component to load and display product description from XML
+function ProductDescription({ productSlug, productId }: { productSlug: string; productId: string }) {
+  const [description, setDescription] = useState<string>('');
+  const [sizes, setSizes] = useState<string>('');
+  const [productName, setProductName] = useState<string>('');
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    async function loadProductDescription() {
+      try {
+        // Map product slugs to XML tags
+        const productMap: Record<string, { nameTag: string; descTag: string; sizeTag: string; xmlPath: string }> = {
+          'traditional-headstone': {
+            nameTag: 'traditional_engraved_headstone',
+            descTag: 'traditional_engraved_headstone_description',
+            sizeTag: 'headstone_sizes_traditional',
+            xmlPath: '/xml/us_EN/languages24.xml'
+          },
+          'bronze-plaque': {
+            nameTag: 'bronze_plaque',
+            descTag: 'bronze_plaque_description',
+            sizeTag: 'bronze_plaque_sizes',
+            xmlPath: '/xml/us_EN/languages24.xml'
+          },
+          'laser-etched-headstone': {
+            nameTag: 'laser_etched_black_granite_headstone',
+            descTag: 'laser_etched_black_granite_headstone_description',
+            sizeTag: 'headstone_sizes',
+            xmlPath: '/xml/us_EN/languages24.xml'
+          },
+          'laser-etched-plaque': {
+            nameTag: 'laser_etched_black_granite_plaque',
+            descTag: 'laser_etched_black_granite_plaque_description',
+            sizeTag: 'plaques_sizes',
+            xmlPath: '/xml/us_EN/languages24.xml'
+          },
+          'traditional-plaque': {
+            nameTag: 'traditional_engraved_plaque',
+            descTag: 'traditional_engraved_plaque_description',
+            sizeTag: 'traditional_plaques_sizes',
+            xmlPath: '/xml/us_EN/languages24.xml'
+          }
+        };
+
+        const productInfo = productMap[productSlug];
+        if (!productInfo) return;
+
+        const response = await fetch(productInfo.xmlPath);
+        if (response.ok) {
+          const xmlText = await response.text();
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+          // Extract product name
+          const nameElement = xmlDoc.querySelector(productInfo.nameTag);
+          if (nameElement) {
+            setProductName(nameElement.textContent || '');
+          }
+
+          // Extract description
+          const descElement = xmlDoc.querySelector(productInfo.descTag);
+          if (descElement) {
+            let desc = descElement.textContent || '';
+            // Remove <br/> and <br> tags from the description
+            desc = desc.replace(/<br\s*\/?>/gi, '');
+            setDescription(desc);
+          }
+
+          // Extract sizes
+          const sizeElement = xmlDoc.querySelector(productInfo.sizeTag);
+          if (sizeElement) {
+            let sizeText = sizeElement.textContent || '';
+            // Remove <br/> and <br> tags from sizes
+            sizeText = sizeText.replace(/<br\s*\/?>/gi, '');
+            setSizes(sizeText);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load product description:', error);
+      }
+    }
+    loadProductDescription();
+  }, [productSlug]);
+
+  if (!description && !sizes) return null;
+
+  return (
+    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 overflow-hidden mb-4 md:mb-6 shadow-none md:shadow-sm">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+      >
+        <h3 className="font-serif font-light text-xl text-slate-900 flex items-center gap-3">
+          <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Product Information</span>
+        </h3>
+        <svg 
+          className={`w-5 h-5 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {isExpanded && (
+        <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-slate-200">
+          {/* Text Description */}
+          <div className="ml-0 md:ml-9 mt-6 mb-6">
+            <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+              {productName}
+            </h4>
+            {description && (
+              <div 
+                className="prose max-w-none text-slate-700 mb-3"
+                style={{ fontSize: '15px', lineHeight: '1.6' }}
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            )}
+            {sizes && (
+              <div 
+                className="prose max-w-none text-slate-700"
+                style={{ fontSize: '15px', lineHeight: '1.6' }}
+                dangerouslySetInnerHTML={{ __html: sizes }}
+              />
+            )}
+          </div>
+
+          {/* Alternative Products Carousel */}
+          <div className="ml-0 md:ml-9">
+            <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '15px' }}>
+              Use This Design On:
+            </h4>
+            <div className="flex gap-4 overflow-x-auto pb-4">
+              {/* Show related products, excluding the current product */}
+              <RelatedProductCard productId="124" currentProductId={productId} />
+              <RelatedProductCard productId="4" currentProductId={productId} />
+              <RelatedProductCard productId="22" currentProductId={productId} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Component to display related product card
+function RelatedProductCard({ productId, currentProductId }: { productId: string; currentProductId?: string }) {
+  const [productName, setProductName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    async function loadProductInfo() {
+      try {
+        const langResponse = await fetch('/xml/us_EN/languages24.xml');
+        if (!langResponse.ok) return;
+
+        const langXml = await langResponse.text();
+        const parser = new DOMParser();
+        const langDoc = parser.parseFromString(langXml, 'text/xml');
+
+        // Map product IDs to XML tags
+        const productMap: Record<string, { nameTag: string; descTag: string }> = {
+          '124': {
+            nameTag: 'traditional_engraved_headstone',
+            descTag: 'traditional_engraved_headstone_description'
+          },
+          '4': {
+            nameTag: 'laser_etched_black_granite_headstone',
+            descTag: 'laser_etched_black_granite_headstone_description'
+          },
+          '22': {
+            nameTag: 'laser_etched_black_granite_mini_headstone',
+            descTag: 'laser_etched_black_granite_mini_headstone_description'
+          }
+        };
+
+        const productInfo = productMap[productId];
+        if (!productInfo) return;
+
+        // Get product name
+        const nameElement = langDoc.querySelector(productInfo.nameTag);
+        if (nameElement) {
+          setProductName(nameElement.textContent || '');
+        }
+
+        // Get description
+        const descElement = langDoc.querySelector(productInfo.descTag);
+        if (descElement) {
+          let desc = descElement.textContent || '';
+          desc = desc.replace(/<br\s*\/?>/gi, '');
+          setDescription(desc);
+        }
+      } catch (error) {
+        console.error('Failed to load related product info:', error);
+      }
+    }
+    loadProductInfo();
+  }, [productId]);
+
+  // Don't render if this is the current product
+  if (currentProductId && productId === currentProductId) return null;
+  
+  if (!productName) return null;
+
+  const productImagePath = `/jpg/products/APP_ID_${productId}-medium.jpg`;
+
+  return (
+    <>
+      <div 
+        className="flex-shrink-0 w-64 bg-white rounded-lg border border-slate-300 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+        onClick={() => setShowModal(true)}
+      >
+        <img 
+          src={productImagePath}
+          alt={productName}
+          className="w-full h-48 object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = 'none';
+          }}
+        />
+        <div className="p-4">
+          <div className="font-medium text-slate-900 mb-2" style={{ fontSize: '15px' }}>
+            {productName}
+          </div>
+          {description && (
+            <div 
+              className="prose max-w-none text-slate-700 text-sm line-clamp-3"
+              style={{ fontSize: '14px', lineHeight: '1.5' }}
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Related Product Modal */}
+      {showModal && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowModal(false)}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-10">
+              <h3 className="font-serif text-2xl text-slate-900">{productName}</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="mb-6">
+                <img 
+                  src={productImagePath}
+                  alt={productName}
+                  className="w-full rounded-lg"
+                  style={{ maxHeight: '40vh', objectFit: 'contain' }}
+                />
+              </div>
+              {description && (
+                <div 
+                  className="prose max-w-none text-slate-700"
+                  style={{ fontSize: '15px', lineHeight: '1.6' }}
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// Component to load and display personalization options
+function PersonalizationOptions({ productId, productSlug }: { productId: string; productSlug: string }) {
+  const [options, setOptions] = useState<Array<{ name: string; description: string; image?: string }>>([]);
+  const [photoInfo, setPhotoInfo] = useState<string>('');
+  const [motifInfo, setMotifInfo] = useState<string>('');
+  const [inscriptionInfo, setInscriptionInfo] = useState<string>('');
+  const [selectedOption, setSelectedOption] = useState<{ name: string; description: string; image?: string } | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    async function loadPersonalizationOptions() {
+      try {
+        // Load catalog XML
+        const catalogResponse = await fetch(`/xml/catalog-id-${productId}.xml`);
+        if (!catalogResponse.ok) return;
+
+        const catalogXml = await catalogResponse.text();
+        const catalogParser = new DOMParser();
+        const catalogDoc = catalogParser.parseFromString(catalogXml, 'text/xml');
+
+        // Get additions
+        const additions = catalogDoc.querySelectorAll('additions > addition');
+        if (additions.length === 0) return;
+
+        // Load language XML for descriptions
+        const langResponse = await fetch('/xml/us_EN/languages24.xml');
+        if (!langResponse.ok) return;
+
+        const langXml = await langResponse.text();
+        const langParser = new DOMParser();
+        const langDoc = langParser.parseFromString(langXml, 'text/xml');
+
+        // Get photo info text
+        const photoInfoElement = langDoc.querySelector('photo_info_traditional');
+        if (photoInfoElement) {
+          let photoInfoText = photoInfoElement.textContent || '';
+          // Remove <br/> tags
+          photoInfoText = photoInfoText.replace(/<br\s*\/?>/gi, ' ');
+          setPhotoInfo(photoInfoText);
+        }
+
+        // Get inscription info text
+        const inscriptionInfoElement = langDoc.querySelector('inscriptions_info_traditional');
+        if (inscriptionInfoElement) {
+          let inscriptionInfoText = inscriptionInfoElement.textContent || '';
+          // Remove <br/> tags
+          inscriptionInfoText = inscriptionInfoText.replace(/<br\s*\/?>/gi, ' ');
+          setInscriptionInfo(inscriptionInfoText);
+        }
+
+        // Get motif info text based on product type
+        let motifInfoTag = 'motifs_info_trad'; // default
+        if (productSlug.includes('laser-etched')) {
+          motifInfoTag = 'motifs_info_laser';
+        } else if (productSlug.includes('bronze')) {
+          motifInfoTag = 'motifs_info_bronze';
+        }
+        
+        const motifInfoElement = langDoc.querySelector(motifInfoTag);
+        if (motifInfoElement) {
+          let motifInfoText = motifInfoElement.textContent || '';
+          // Remove <br/> tags
+          motifInfoText = motifInfoText.replace(/<br\s*\/?>/gi, ' ');
+          setMotifInfo(motifInfoText);
+        }
+
+        const optionsList: Array<{ name: string; description: string; image?: string }> = [];
+
+        additions.forEach((addition) => {
+          const name = addition.getAttribute('name');
+          if (!name) return;
+
+          // Skip inscription and motif as they're basic
+          if (name === 'Inscription' || name === 'Motif') return;
+
+          // Skip flower pot, hole, and base additions
+          if (name === 'Flower Pot Hole' || name === 'Flower Pot' || name === 'Coloured Granite Headstone Base') return;
+
+          // Map addition names to XML tags and images
+          const tagMap: Record<string, { descTag: string; image?: string }> = {
+            'Ceramic Photo': {
+              descTag: 'ceramic_photo_description',
+              image: 'product-ceramic-image.jpg'
+            },
+            'Vitreous Enamel Image': {
+              descTag: 'vitreous_enamel_description',
+              image: 'product-vitreous-enamel-image.jpg'
+            },
+            'Premium Plana': {
+              descTag: 'premium_plana_description',
+              image: 'plana.jpg'
+            },
+            'Flower Pot Hole': {
+              descTag: 'flower_pot_holes'
+            },
+            'Flower Pot': {
+              descTag: 'flower_pot_holes'
+            },
+            'Coloured Granite Headstone Base': {
+              descTag: 'headstone_base'
+            },
+          };
+
+          const tagInfo = tagMap[name];
+          if (tagInfo) {
+            const descElement = langDoc.querySelector(tagInfo.descTag);
+            if (descElement) {
+              let desc = descElement.textContent || '';
+              // Remove <br/> and <br> tags from the description
+              desc = desc.replace(/<br\s*\/?>/gi, '');
+              // Remove upload instructions
+              desc = desc.replace(/<p>Click to upload.*?<\/p>/gi, '');
+              desc = desc.replace(/<div class='instructions'>.*?<\/div>/gi, '');
+              optionsList.push({
+                name: name,
+                description: desc,
+                image: tagInfo.image
+              });
+            }
+          } else {
+            // Add name without description
+            optionsList.push({
+              name: name,
+              description: '',
+              image: undefined
+            });
+          }
+        });
+
+        setOptions(optionsList);
+      } catch (error) {
+        console.error('Failed to load personalization options:', error);
+      }
+    }
+    loadPersonalizationOptions();
+  }, [productId, productSlug]);
+
+  if (options.length === 0 && !photoInfo && !motifInfo && !inscriptionInfo) return null;
+
+  const fonts = data.fonts;
+
+  return (
+    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 overflow-hidden mb-4 md:mb-6 shadow-none md:shadow-sm">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+      >
+        <h3 className="font-serif font-light text-lg md:text-xl text-slate-900 flex items-center gap-3">
+          <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+          </svg>
+          <span>Personalization Options</span>
+        </h3>
+        <svg 
+          className={`w-5 h-5 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {isExpanded && (
+        <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-slate-200">
+          {/* Inscriptions Section */}
+          {inscriptionInfo && (
+            <div className="ml-0 md:ml-9 space-y-4 mb-6 mt-6">
+          <div>
+            <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+              Inscriptions
+            </h4>
+            <div 
+              className="text-slate-700 mb-4"
+              style={{ fontSize: '15px', lineHeight: '1.6' }}
+              dangerouslySetInnerHTML={{ __html: inscriptionInfo }}
+            />
+            
+            {/* Font List */}
+            <div className="mt-4">
+              <h5 className="font-medium text-slate-900 mb-3" style={{ fontSize: '15px' }}>
+                Available Fonts
+              </h5>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {fonts.map((font) => (
+                  <div
+                    key={font.id}
+                    className="px-3 py-2 bg-white rounded border border-slate-300 text-sm text-slate-700 hover:border-slate-400 hover:shadow-sm transition-all"
+                    style={{ 
+                      fontFamily: font.name === 'Arial' ? 'Arial, sans-serif' :
+                                  font.name === 'Garamond' ? 'Garamond, serif' :
+                                  font.name === 'Franklin Gothic' ? 'Franklin Gothic Medium, sans-serif' :
+                                  font.name === 'Lucida Calligraphy' ? 'Lucida Calligraphy, cursive' :
+                                  font.name === 'Chopin Script' ? 'cursive' :
+                                  font.name === 'French Script' ? 'cursive' :
+                                  font.name === 'Great Vibes' ? 'cursive' :
+                                  font.name === 'Adorable' ? 'cursive' :
+                                  font.name === 'Dobkin' ? 'serif' :
+                                  font.name === 'Xirwena' ? 'fantasy' :
+                                  'inherit'
+                    }}
+                  >
+                    {font.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        )}
+        
+        {/* Granites Section */}
+        <div className="ml-0 md:ml-9 space-y-4 mb-6 mt-6">
+          <div>
+          <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+            Granites
+          </h4>
+          
+          {/* Materials Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {data.materials.map((material) => (
+               <div
+                key={material.id}
+                className="bg-white rounded-lg border border-slate-300 overflow-hidden hover:shadow-md transition-all cursor-pointer"
+              >
+                <div className="aspect-square bg-slate-100 flex items-center justify-center">
+                  <img 
+                    src={`/textures/forever/l/${material.image}`}
+                    alt={material.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-2 text-center">
+                  <div className="text-xs font-medium text-slate-900">
+                    {material.name}
+                  </div>
+                </div>
+              </div>
+            ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Photos Section */}
+        <div className="ml-0 md:ml-9 space-y-4">
+        {photoInfo && (
+          <div>
+            <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+              Photos
+            </h4>
+            <div 
+              className="text-slate-700"
+              style={{ fontSize: '15px', lineHeight: '1.6' }}
+              dangerouslySetInnerHTML={{ __html: photoInfo }}
+            />
+            </div>
+          )}
+        </div>
+        <div className="ml-0 md:ml-9 space-y-4 mt-4">
+        {options.length > 0 && (
+          <div className="relative">
+            {/* Carousel for options with images */}
+            {options.some(opt => opt.image) && (
+              <div className="mb-6">
+                <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+                  {options.filter(opt => opt.image).map((option, index) => (
+                    <div 
+                      key={index} 
+                      className="flex-shrink-0 snap-start cursor-pointer"
+                      onClick={() => setSelectedOption(option)}
+                    >
+                      <div className="w-64 bg-white rounded-lg border border-slate-300 overflow-hidden hover:shadow-lg transition-shadow">
+                        <img 
+                          src={`/jpg/photos/m/${option.image}`}
+                          alt={option.name}
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="p-4">
+                          <div className="font-medium text-slate-900 mb-2" style={{ fontSize: '15px' }}>
+                            {option.name}
+                          </div>
+                          {option.description && (
+                            <div 
+                              className="prose max-w-none text-slate-700 text-sm line-clamp-3"
+                              style={{ fontSize: '14px', lineHeight: '1.5' }}
+                              dangerouslySetInnerHTML={{ __html: option.description }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <style jsx>{`
+                  .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                  }
+                  .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                  }
+                  .line-clamp-3 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                  }
+                `}</style>
+              </div>
+            )}
+            
+            {/* Options without images */}
+            {options.filter(opt => !opt.image).map((option, index) => (
+              <div key={index} className="mb-4">
+                <div className="font-medium text-slate-900 mb-1" style={{ fontSize: '15px' }}>
+                  {option.name}
+                </div>
+                {option.description && (
+                  <div 
+                    className="prose max-w-none text-slate-700"
+                    style={{ fontSize: '15px', lineHeight: '1.6' }}
+                    dangerouslySetInnerHTML={{ __html: option.description }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Motif Info and Categories */}
+      {motifInfo && (
+        <div className="ml-0 md:ml-9 mt-6">
+          <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+            Motifs
+          </h4>
+          <div 
+            className="text-slate-700 mb-4"
+            style={{ fontSize: '15px', lineHeight: '1.6' }}
+            dangerouslySetInnerHTML={{ __html: motifInfo }}
+          />
+            <MotifCategories />
+          </div>
+        )}
+      </div>
+      )}
+
+      {/* Photo Option Modal */}
+      {selectedOption && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedOption(null)}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-10">
+              <h3 className="font-serif text-2xl text-slate-900">{selectedOption.name}</h3>
+              <button
+                onClick={() => setSelectedOption(null)}
+                className="text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6">
+              {selectedOption.image && (
+                <div className="mb-6">
+                  <img 
+                    src={`/jpg/photos/m/${selectedOption.image}`}
+                    alt={selectedOption.name}
+                    className="w-full rounded-lg"
+                    style={{ maxHeight: '40vh', objectFit: 'contain' }}
+                  />
+                </div>
+              )}
+              {selectedOption.description && (
+                <div 
+                  className="prose max-w-none text-slate-700"
+                  style={{ fontSize: '15px', lineHeight: '1.6' }}
+                  dangerouslySetInnerHTML={{ __html: selectedOption.description }}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Component to display motif categories
+function MotifCategories() {
+  const motifs = data.motifs;
+
+  return (
+    <div>
+      <h4 className="font-medium text-slate-900 mb-3" style={{ fontSize: '15px' }}>
+        Browse Motif Categories
+      </h4>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {motifs.slice(0, 12).map((motif) => (
+          <div
+            key={motif.id}
+            className="group relative overflow-hidden rounded-lg border border-slate-300 bg-white hover:border-slate-400 hover:shadow-md transition-all cursor-pointer"
+          >
+            <div className="p-3">
+              <div className="mb-2 flex h-16 items-center justify-center">
+                <img
+                  src={motif.img}
+                  alt={getMotifCategoryName(motif.name)}
+                  className="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <div className="text-center">
+                <div className="text-xs font-medium text-slate-900 truncate">
+                  {getMotifCategoryName(motif.name)}
+                </div>
+                {motif.traditional && (
+                  <span className="inline-block mt-1 rounded bg-slate-100 px-2 py-0.5 text-[10px] text-slate-700">
+                    Traditional
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {motifs.length > 12 && (
+        <div className="mt-3 text-center">
+          <p className="text-sm text-slate-600">
+            Showing 12 of {motifs.length} categories
+          </p>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // Draggable component for inscriptions and motifs
@@ -748,14 +1654,16 @@ export default function DesignPageClient({
       initW: 800, initH: 800, uniformScale: 1
     };
     
-    // FIX #1: Canvas logical size (where x,y were authored)
-    const initW = screenshotDimensions.width;   // e.g., 707 desktop, 414 iPhone
-    const initH = screenshotDimensions.height;  // e.g., 476 desktop, 660 iPhone
+    // CRITICAL: Use TRUE design coordinates (init_width × init_height) from headstone data
+    // NOT cropped screenshot dimensions - this is the coordinate system where x,y were authored
+    const headstoneData = designData?.find((item: any) => item.type === 'Headstone');
+    const initW = headstoneData?.init_width || shapeData.init_width || screenshotDimensions.width;
+    const initH = headstoneData?.init_height || shapeData.init_height || screenshotDimensions.height;
     
-    console.log('📏 Authoring frame from screenshotDimensions:', { 
+    console.log('📏 TRUE authoring frame (init_width × init_height):', { 
       initW, 
-      initH, 
-      screenshotDimensions 
+      initH,
+      source: headstoneData ? 'headstoneData' : (shapeData.init_width ? 'shapeData' : 'screenshotDimensions')
     });
     
     const designDevice = shapeData.device || 'desktop';
@@ -1213,6 +2121,24 @@ export default function DesignPageClient({
     });
   }, [motifData, sanitizedDesignData, scalingFactors]);
 
+  // Detect if this design uses physical coordinates (per-design detection)
+  const allLayoutItems = useMemo<LayoutItem[]>(() => {
+    if (!sanitizedDesignData) return [];
+    const inscriptions = sanitizedDesignData.filter((item: any) => item.type === 'Inscription');
+    const motifs = adjustedMotifData || [];
+    return [...inscriptions, ...motifs];
+  }, [sanitizedDesignData, adjustedMotifData]);
+
+  const usesPhysicalCoords = useMemo(
+    () =>
+      designUsesPhysicalCoords(
+        allLayoutItems,
+        scalingFactors.initW,
+        scalingFactors.initH
+      ),
+    [allLayoutItems, scalingFactors.initW, scalingFactors.initH]
+  );
+
 
   // Load SVG dimensions for accurate motif sizing
   useEffect(() => {
@@ -1530,21 +2456,30 @@ export default function DesignPageClient({
   // Wait for both design data and name database to be loaded before rendering
   if (loading || !nameDatabase) {
     return (
-      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen ml-[400px]">
-        <div className="container mx-auto px-8 py-16 max-w-7xl">
-          <div className="flex items-center gap-4 justify-center">
-            <ArrowPathIcon className="w-8 h-8 animate-spin text-slate-800" />
-            <p className="text-slate-600 text-lg font-light">
-              {!nameDatabase ? 'Preparing memorial design...' : 'Loading memorial design...'}
-            </p>
+      <>
+        <MobileNavToggle>
+          <DesignsTreeNav />
+        </MobileNavToggle>
+        <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen md:ml-[400px]">
+          <div className="container mx-auto px-8 py-16 max-w-7xl">
+            <div className="flex items-center gap-4 justify-center">
+              <ArrowPathIcon className="w-8 h-8 animate-spin text-slate-800" />
+              <p className="text-slate-600 text-lg font-light">
+                {!nameDatabase ? 'Preparing memorial design...' : 'Loading memorial design...'}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
     <>
+      <MobileNavToggle>
+        <DesignsTreeNav />
+      </MobileNavToggle>
+      
       {/* Left Sidebar with Related Designs */}
       <DesignSidebar 
         currentDesignId={designId}
@@ -1553,12 +2488,12 @@ export default function DesignPageClient({
         maxItems={15}
       />
       
-      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 ml-[400px] min-h-screen">
+      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 md:ml-[400px] min-h-screen">
       {/* Breadcrumb and Header - positioned at top */}
-      <div className="border-b border-slate-200 relative z-10 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-8 py-6 max-w-7xl">
-          {/* Elegant Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-6">
+      <div className="border-b border-slate-200 md:border-b relative z-10 bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 md:px-8 py-3 md:py-6 max-w-7xl">
+          {/* Elegant Breadcrumb - Hidden on mobile, visible on desktop */}
+          <nav className="hidden md:flex items-center gap-2 text-sm text-slate-500 mb-6">
             <a href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</a>
             <ChevronRightIcon className="w-4 h-4" />
             <a href={`/designs/${designMetadata.productType}`} className="hover:text-slate-900 transition-colors font-light tracking-wide capitalize">{designMetadata.productType}s</a>
@@ -1570,48 +2505,35 @@ export default function DesignPageClient({
             <span className="text-slate-900 font-medium tracking-wide">{designMetadata.title}</span>
           </nav>
 
+          {/* Mobile Breadcrumb - Compact version showing only current page */}
+          <nav className="md:hidden flex items-center gap-2 text-sm text-slate-500 mb-3">
+            <a href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light">
+              <ChevronRightIcon className="w-4 h-4 rotate-180 inline" />
+              <span className="ml-1">Back to {categoryTitle}</span>
+            </a>
+          </nav>
+
           {/* Sophisticated Header with Design Specifications */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h1 className="text-4xl font-serif font-light text-slate-900 tracking-tight mb-7">
+              <h1 className="text-2xl md:text-4xl font-serif font-light text-slate-900 tracking-tight mb-2 md:mb-4">
                 {categoryTitle} – {simplifiedProductName} {productTypeDisplay}{shapeDisplayName ? ` (${shapeDisplayName})` : ''}
               </h1>
-              <p className="text-2xl text-slate-600 font-light italic mb-6">
+              
+              <p className="text-lg md:text-2xl text-slate-600 font-light italic mb-3 md:mb-6">
                 {slugText}
               </p>
               
-            </div>
-            <div>
-              <a
-                href={(() => {
-                  const mlDir = designMetadata.mlDir || '';
-                  let domain = 'headstonesdesigner.com';
-                  if (mlDir.includes('forevershining')) {
-                    domain = 'forevershining.com.au';
-                  } else if (mlDir.includes('bronze-plaque')) {
-                    domain = 'bronze-plaque.com';
-                  }
-                  return `https://${domain}/design/html5/#edit${designId}`;
-                })()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-light uppercase tracking-wider shadow-md hover:shadow-lg"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Use Template
-              </a>
             </div>
           </div>
         </div>
       </div>
 
       {/* Rest of content - appears after canvas */}
-      <div className="container mx-auto max-w-7xl px-8">
+      <div className="container mx-auto max-w-7xl px-4 md:px-8">
 
       {/* Download Links */}
-      <div className="flex gap-3 py-6">
+      <div className="flex gap-2 md:gap-3 py-3 md:py-6 overflow-x-auto">
         <a
           href={designMetadata.preview}
           target="_blank"
@@ -1669,18 +2591,19 @@ export default function DesignPageClient({
 
       {/* Design Preview - Enhanced with shape, texture, and motifs */}
       {designData && screenshotDimensions && (
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 my-8">
+        <div className="bg-white rounded-none md:rounded-lg shadow-none md:shadow-sm border-0 md:border border-slate-200 my-0 md:my-8">
           {/* Visual Preview Area */}
-          <div className="relative bg-gradient-to-br from-slate-50 to-white min-h-[600px] flex items-center justify-center p-8">
+          <div className="relative bg-gradient-to-br from-slate-50 to-white min-h-[400px] md:min-h-[600px] flex items-center justify-center p-4 md:p-8">
             {/* Container for headstone and base stacked vertically */}
             <div className="flex flex-col items-center gap-0">
               {/* Headstone SVG as the main shape with texture overlay */}
-              {/* Container sized to match SVG - make it square based on width to prevent distortion */}
-              <div 
+              {/* Container follows display dimensions (no forced square) */}
+              <div
                 className="relative"
                 style={{
-                  width: `${scalingFactors.initW * scalingFactors.uniformScale}px`,
-                  height: `${scalingFactors.initW * scalingFactors.uniformScale}px` // Square container
+                  width: `${scalingFactors.displayWidth}px`,
+                  height: `${scalingFactors.displayHeight}px`,
+                  maxWidth: '100%',
                 }}
               >
               {/* SVG Shape as base */}
@@ -1772,102 +2695,99 @@ export default function DesignPageClient({
               )}
 
               {/* Inscriptions Layer - Only headstone inscriptions */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                {sanitizedDesignData && sanitizedDesignData
-                  .filter((item: any) => item.type === 'Inscription' && item.label && item.part !== 'Base')
-                  .map((item: any, index: number) => {
-                    const upscaleFactor = scalingFactors.upscaleFactor || 1;
-                    
-                    // Font size - FIX #4: Normalize saved px by DPR, then scale by Y
-                    // Extract px from font field
-                    let fontSizeInPx = item.font_size || 16;
-                    if (item.font && typeof item.font === 'string') {
-                      const match = item.font.match(/^([\d.]+)px/);
-                      if (match) {
-                        fontSizeInPx = parseFloat(match[1]);
+              <div className="absolute inset-0 pointer-events-none">
+                {sanitizedDesignData &&
+                  sanitizedDesignData
+                    .filter(
+                      (item: any) =>
+                        item.type === 'Inscription' &&
+                        item.label &&
+                        item.part !== 'Base'
+                    )
+                    .map((item: any, index: number) => {
+                      const savedDpr = scalingFactors.designDpr || 1;
+                      const normalizeByDpr = savedDpr > 1;
+
+                      // Authoring frame size and scale (same as headstone)
+                      const uniformScale = scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // --- FONT SIZE (normalize by DPR if needed) ---
+                      let fontSizeInPx = item.font_size || 16;
+                      if (item.font && typeof item.font === 'string') {
+                        const match = item.font.match(/^([\d.]+)px/);
+                        if (match) fontSizeInPx = parseFloat(match[1]);
                       }
-                    }
-                    
-                    // CRITICAL: Auto-detect if font size is in canvas space or physical space
-                    // Canvas space: reasonable font sizes (10-300px typically)
-                    // Physical space: very large (e.g., 300-900px for DPR 3)
-                    // Heuristic: if font size > 200px, it's likely in physical space and needs normalization
-                    const seemsLikePhysicalFont = fontSizeInPx > 200;
-                    const fontPxCanvas = seemsLikePhysicalFont 
-                      ? fontSizeInPx * (1 / scalingFactors.designDpr)
-                      : fontSizeInPx; // Already in canvas space
-                    
-                    const fontSize = fontPxCanvas; // In authoring units
-                    const fontFamily = item.font_family || item.font || 'serif';
-                    
-                    // CRITICAL: Auto-detect coordinate system
-                    // Some designs save coords in canvas space, others in physical pixels
-                    // Test: If raw coords are already reasonable for canvas (0-initW range), use directly
-                    // Otherwise, transform them from physical to canvas space
-                    
-                    let canvasX, canvasY;
-                    const rawX = item.x;
-                    const rawY = item.y;
-                    
-                    // Check if coordinates seem to be in canvas space already
-                    // Canvas space: -initW/2 to +initW/2 (centered)
-                    // Physical space: Much larger values (e.g., -2000 to +2000 for DPR 3)
-                    const maxCanvasCoord = scalingFactors.initW; // Reasonable max for canvas space
-                    const seemsLikeCanvasSpace = Math.abs(rawX) <= maxCanvasCoord && Math.abs(rawY) <= maxCanvasCoord;
-                    
-                    if (seemsLikeCanvasSpace) {
-                      // Use directly - already in canvas space
-                      canvasX = rawX;
-                      canvasY = rawY;
-                    } else {
-                      // Transform from physical to canvas space
-                      canvasX = rawX / scalingFactors.ratioHeight;
-                      canvasY = rawY / scalingFactors.ratioHeight;
-                    }
-                    
-                    if (index === 0) {
-                      console.log('🔍 Coordinate system detection:', {
-                        label: item.label,
-                        raw: { x: rawX.toFixed(2), y: rawY.toFixed(2) },
-                        font: { 
-                          fontSizeInPx, 
-                          seemsLikePhysicalFont, 
-                          fontPxCanvas: fontPxCanvas.toFixed(2),
-                          designDpr: scalingFactors.designDpr
-                        },
-                        initW: scalingFactors.initW,
-                        maxCanvasCoord,
-                        seemsLikeCanvasSpace,
-                        result: { canvasX: canvasX.toFixed(2), canvasY: canvasY.toFixed(2) }
-                      });
-                    }
-                    
-                    // FIX #3: Coordinates in authoring space - container already applies transform
-                    const xPos = canvasX;
-                    const yPos = canvasY;
-                    
-                    return (
-                      <DraggableElement
-                        key={index}
-                        initialStyle={{
-                          fontSize: `${fontSize}px`,
-                          fontFamily: fontFamily,
-                          color: item.color || '#000000',
-                          fontWeight: fontFamily.toLowerCase().includes('bold') ? 'bold' : 'normal',
-                          fontStyle: fontFamily.toLowerCase().includes('italic') ? 'italic' : 'normal',
-                          transform: `translate(-50%, -50%) ${item.rotation ? `rotate(${item.rotation}deg)` : ''}`,
-                          textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                          left: `calc(50% + ${xPos}px)`,
-                          top: `calc(50% + ${yPos}px)`,
-                          position: 'absolute',
-                          whiteSpace: 'nowrap',
-                          pointerEvents: 'auto',
-                        }}
-                      >
-                        {item.label.replace(/&apos;/g, "'")}
-                      </DraggableElement>
-                    );
-                  })}
+
+                      // Normalize font size by DPR if needed (for high-DPR authoring, e.g. iPhone)
+                      const canvasFontSize = normalizeByDpr
+                        ? fontSizeInPx / savedDpr
+                        : fontSizeInPx;
+
+                      const fontSize = canvasFontSize * uniformScale;
+                      const fontFamily =
+                        item.font_family || item.font || 'serif';
+
+                      // --- COORDINATES (normalize by DPR if needed) ---
+                      const rawX = item.x ?? 0;
+                      const rawY = item.y ?? 0;
+
+                      const canvasX = normalizeByDpr ? rawX / savedDpr : rawX;
+                      const canvasY = normalizeByDpr ? rawY / savedDpr : rawY;
+
+                      // Canvas (0,0) is centre of headstone → convert to top-left display coords
+                      const dispX =
+                        (scalingFactors.offsetX || 0) +
+                        (canvasX + initW / 2) * uniformScale;
+                      const dispY =
+                        (scalingFactors.offsetY || 0) +
+                        (canvasY + initH / 2) * uniformScale;
+
+                      if (index === 0) {
+                        console.log('🔍 Inscription DPR-normalized mapping', {
+                          label: item.label,
+                          savedDpr,
+                          normalizeByDpr,
+                          raw: { x: rawX, y: rawY, fontSizeInPx },
+                          canvas: { x: canvasX, y: canvasY, fontSizeInPx: canvasFontSize },
+                          display: { x: dispX, y: dispY, fontSize },
+                          initW,
+                          initH,
+                          uniformScale,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${dispX}px`,
+                            top: `${dispY}px`,
+                            transform: `translate(-50%, -50%)${
+                              item.rotation
+                                ? ` rotate(${item.rotation}deg)`
+                                : ''
+                            }`,
+                            fontSize: `${fontSize}px`,
+                            fontFamily,
+                            color: item.color || '#000000',
+                            fontWeight: /bold/i.test(fontFamily)
+                              ? 'bold'
+                              : 'normal',
+                            fontStyle: /italic/i.test(fontFamily)
+                              ? 'italic'
+                              : 'normal',
+                            whiteSpace: 'nowrap',
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          {item.label.replace(/&apos;/g, "'")}
+                        </DraggableElement>
+                      );
+                    })}
               </div>
 
               {/* Motifs Layer - Only headstone motifs */}
@@ -1876,181 +2796,103 @@ export default function DesignPageClient({
                   {adjustedMotifData
                     .filter((motif: any) => motif.part !== 'Base')
                     .map((motif: any, index: number) => {
-                    const upscaleFactor = scalingFactors.upscaleFactor || 1;
-                    
-                    // CRITICAL: Auto-detect coordinate system (same logic as inscriptions)
-                    let canvasX, canvasY;
-                    const rawX = motif.x;
-                    const rawY = motif.y;
-                    
-                    const maxCanvasCoord = scalingFactors.initW;
-                    const seemsLikeCanvasSpace = Math.abs(rawX) <= maxCanvasCoord && Math.abs(rawY) <= maxCanvasCoord;
-                    
-                    if (seemsLikeCanvasSpace) {
-                      canvasX = rawX;
-                      canvasY = rawY;
-                    } else {
-                      canvasX = rawX / scalingFactors.ratioHeight;
-                      canvasY = rawY / scalingFactors.ratioHeight;
-                    }
-                    
-                    // FIX #3: Coordinates in authoring space - container already applies transform
-                    // Don't double-transform: parent div has uniformScale and offsets applied
-                    const xPos = canvasX;
-                    const yPos = canvasY;
-                    
-                    // Use motif ratio (scale) to calculate size
-                    const motifRatio = parseFloat(motif.ratio || '1');
-                    const motifSrc = motif.src || motif.name;
-                    const svgDims = motifDimensions[motifSrc];
-                    
-                    // --- NEW: robust sizing ---
-                    // 1) Prefer saved height (authoring space). If it's suspiciously large,
-                    //    treat it as legacy physical pixels and normalize by DPR (like inscriptions).
-                    const canvasH = scalingFactors.initH || 600;
-                    const uniformScale = scalingFactors.uniformScale || 1;
-                    
-                    // Motif height is saved in authoring frame pixels, scale to display
-                    let heightFromSave: number | undefined = typeof motif.height === 'number' 
-                      ? motif.height * uniformScale 
-                      : undefined;
-                    
-                    // 2) Determine aspect from SVG dims when we have them
-                    const aspect = svgDims && svgDims.height > 0 ? svgDims.width / svgDims.height : 1;
-                    
-                    // 3) Final height/width
-                    let motifHeight = heightFromSave
-                      ?? (svgDims ? svgDims.height * motifRatio : 100);     // fallback
-                    
-                    let motifWidth = heightFromSave
-                      ? (heightFromSave * aspect)
-                      : (svgDims ? svgDims.width * motifRatio : 100);
-                    
-                    // 4) Guard rails (very small/very large)
-                    const minH = 24;                       // don't let motifs vanish
-                    const maxH = canvasH * 0.5;            // avoid absurd sizes
-                    motifHeight = Math.min(Math.max(motifHeight, minH), maxH);
-                    motifWidth  = Math.max(motifWidth, minH * aspect);
-                    
-                    console.log('🎨 Motif sizing:', {
-                      src: motifSrc,
-                      savedHeight: motif.height,
-                      heightFromSave,
-                      canvasH,
-                      designDpr: scalingFactors.designDpr,
-                      motifRatio,
-                      svgDims,
-                      aspect,
-                      finalWidth: motifWidth,
-                      finalHeight: motifHeight
-                    });
-                    
-                    // Calculate flip transform (apply to inner images, not container to avoid drag issues)
-                    const flipX = motif.flipx === '-1' || motif.flipx === -1 ? -1 : 1;
-                    const flipY = motif.flipy === '-1' || motif.flipy === -1 ? -1 : 1;
-                    const flipTransform = `scaleX(${flipX}) scaleY(${flipY})`;
-                    
-                    // Rotation (in degrees)
-                    const rotation = motif.rotation || 0;
-                    const rotateTransform = rotation !== 0 ? `rotate(${rotation}deg)` : '';
-                    
-                    // Combined transform for inner images (flip + rotate)
-                    const innerTransform = [flipTransform, rotateTransform].filter(Boolean).join(' ');
-                    
-                    return (
-                      <DraggableElement
-                        key={index}
-                        initialStyle={{
-                          left: `calc(50% + ${xPos}px)`,
-                          top: `calc(50% + ${yPos}px)`,
-                          transform: 'translate(-50%, -50%)',
-                          width: `${motifWidth}px`,
-                          height: `${motifHeight}px`,
-                          position: 'absolute',
-                          zIndex: 10,
-                          pointerEvents: 'auto',
-                        }}
-                      >
-                        {(() => {
-                          const motifPath = getMotifPath(motif);
-                          const fallbackPath = getFallbackMotifPath(motif);
-                          
-                          if (motif.color) {
-                            console.log('🎨 Rendering colored motif with mask:', motifPath, 'color:', motif.color);
-                            return (
-                              <>
-                                {/* Hidden img to detect loading errors */}
-                                <img
-                                  src={motifPath}
-                                  alt=""
-                                  style={{ display: 'none' }}
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    console.error('❌ Colored motif failed to load:', target.src);
-                                    if (!target.dataset.fallbackAttempted) {
-                                      console.log('🔄 Trying fallback path for colored motif:', fallbackPath);
-                                      target.dataset.fallbackAttempted = 'true';
-                                      target.src = fallbackPath;
-                                    }
-                                  }}
-                                  onLoad={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    console.log('✅ Colored motif loaded:', target.src);
-                                  }}
-                                />
-                                {/* Actual visible colored motif using mask */}
-                                <div
-                                  style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    backgroundColor: motif.color,
-                                    WebkitMaskImage: `url(${motifPath}), url(${fallbackPath})`,
-                                    maskImage: `url(${motifPath}), url(${fallbackPath})`,
-                                    WebkitMaskSize: 'contain',
-                                    maskSize: 'contain',
-                                    WebkitMaskRepeat: 'no-repeat',
-                                    maskRepeat: 'no-repeat',
-                                    WebkitMaskPosition: 'center',
-                                    maskPosition: 'center',
-                                    transform: innerTransform,
-                                  }}
-                                />
-                              </>
-                            );
-                          } else {
-                            console.log('🖼️ Rendering regular motif:', motifPath);
-                            return (
-                              <img
-                                src={motifPath}
-                                alt={`Motif ${index + 1}`}
-                                className="w-full h-full object-contain"
-                                style={{
-                                  transform: innerTransform,
-                                }}
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  console.error('❌ Motif failed to load:', target.src);
-                                  
-                                  // Check if we've already tried the fallback
-                                  if (!target.dataset.fallbackAttempted) {
-                                    console.log('🔄 Trying fallback path:', fallbackPath);
-                                    target.dataset.fallbackAttempted = 'true';
-                                    target.src = fallbackPath;
-                                  } else {
-                                    console.error('❌ Both attempts failed for motif:', motif.src || motif.name);
-                                  }
-                                }}
-                                onLoad={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  console.log('✅ Motif loaded successfully:', target.src);
-                                }}
-                              />
-                            );
-                          }
-                        })()}
-                      </DraggableElement>
-                    );
-                  })}
+                      const savedDpr = scalingFactors.designDpr || 1;
+                      const normalizeByDpr = savedDpr > 1;
+
+                      const uniformScale = scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // --- COORDINATES (normalize by DPR if needed) ---
+                      const rawX = motif.x ?? 0;
+                      const rawY = motif.y ?? 0;
+
+                      const canvasX = normalizeByDpr ? rawX / savedDpr : rawX;
+                      const canvasY = normalizeByDpr ? rawY / savedDpr : rawY;
+
+                      const dispX =
+                        (scalingFactors.offsetX || 0) +
+                        (canvasX + initW / 2) * uniformScale;
+                      const dispY =
+                        (scalingFactors.offsetY || 0) +
+                        (canvasY + initH / 2) * uniformScale;
+
+                      // --- SIZE ---
+                      const motifSrc = motif.src || motif.name;
+                      const svgDims = motifDimensions[motifSrc];
+                      const motifRatio = parseFloat(motif.ratio || '1');
+
+                      let motifHeightCanvas: number | undefined;
+                      if (typeof motif.height === 'number') {
+                        // Normalize motif height by DPR if needed (for high-DPR authoring)
+                        motifHeightCanvas = normalizeByDpr
+                          ? motif.height / savedDpr
+                          : motif.height;
+                      }
+
+                      // Determine aspect from SVG dims when available
+                      const aspect =
+                        svgDims && svgDims.height > 0
+                          ? svgDims.width / svgDims.height
+                          : 1;
+
+                      let motifHeight = motifHeightCanvas
+                        ? motifHeightCanvas * uniformScale
+                        : (svgDims ? svgDims.height * motifRatio * uniformScale : 100 * uniformScale);
+
+                      let motifWidth = motifHeightCanvas
+                        ? motifHeightCanvas * aspect * uniformScale
+                        : (svgDims ? svgDims.width * motifRatio * uniformScale : 100 * uniformScale);
+
+                      if (index === 0) {
+                        console.log('🎨 Motif DPR-normalized mapping', {
+                          src: motifSrc,
+                          savedDpr,
+                          normalizeByDpr,
+                          raw: { x: rawX, y: rawY, h: motif.height },
+                          canvas: { x: canvasX, y: canvasY, h: motifHeightCanvas },
+                          display: {
+                            x: dispX,
+                            y: dispY,
+                            w: motifWidth,
+                            h: motifHeight,
+                          },
+                          initW,
+                          initH,
+                          uniformScale,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${dispX}px`,
+                            top: `${dispY}px`,
+                            transform: `translate(-50%, -50%)${
+                              motif.rotation
+                                ? ` rotate(${motif.rotation}deg)`
+                                : ''
+                            }`,
+                            width: `${motifWidth}px`,
+                            height: `${motifHeight}px`,
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          <img
+                            src={getMotifPath(motif)}
+                            alt={motif.name || 'motif'}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              display: 'block',
+                            }}
+                          />
+                        </DraggableElement>
+                      );
+                    })}
                 </div>
               )}
             </div>
@@ -2133,155 +2975,35 @@ export default function DesignPageClient({
             )}
           </div>
           </div>
-
-          {/* Design Specifications */}
-          <div className="px-6 pt-6">
-            <div className="bg-slate-50/50 rounded-lg p-6 border border-slate-200/50 mb-6">
-              <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
-                <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span>Specifications</span>
-              </h3>
-              <div className="space-y-3 ml-9">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-light text-slate-500">Product:</span>
-                  <span className="text-slate-900">{productName}</span>
-                </div>
-                {shapeName && shapeData && shapeData.width && shapeData.height && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-light text-slate-500">Shape:</span>
-                    <span className="text-slate-900">{shapeName} ({Math.round(shapeData.width)} × {Math.round(shapeData.height)} mm)</span>
-                  </div>
-                )}
-                {textureData && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-light text-slate-500">Material:</span>
-                    <span className="text-slate-900">
-                      {(() => {
-                        const parts = textureData.split('/');
-                        const filename = parts[parts.length - 1];
-                        return filename.replace('.jpg', '').replace('.png', '');
-                      })()}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Inscriptions List */}
-          <div className="px-6 pb-6">
-          {designData.filter((item: any) => item.type === 'Inscription' && item.label).length > 0 && (
-            <div className="bg-blue-50/50 rounded-lg p-6 border border-blue-200/50 mb-6">
-              <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                </svg>
-                <span>Inscriptions</span>
-              </h3>
-              <ul className="space-y-2 ml-9">
-                {designData
-                  .filter((item: any) => item.type === 'Inscription' && item.label)
-                  .map((item: any, index: number) => (
-                    <li key={index} className="text-slate-700 font-light">
-                      <span className="font-normal">{sanitizeInscription(item.label.replace(/&apos;/g, "'"))}</span>
-                      {item.font_family && (
-                        <span className="text-sm text-slate-500 ml-2">({item.font_family})</span>
-                      )}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Motifs List */}
-          {adjustedMotifData.length > 0 && (
-            <div className="bg-amber-50/50 rounded-lg p-6 border border-amber-200/50 mb-6">
-              <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
-                <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-                <span>Decorative Motifs</span>
-              </h3>
-              <ul className="space-y-2 ml-9">
-                {adjustedMotifData.map((motif: any, index: number) => (
-                  <li key={index} className="text-slate-700 font-light">
-                    <span className="font-normal">{motif.name || `Motif ${index + 1}`}</span>
-                    {motif.color && (
-                      <span 
-                        className="inline-block w-5 h-5 rounded-full ml-2 border-2 border-white shadow-sm"
-                        style={{ backgroundColor: motif.color }}
-                        title={motif.color}
-                      />
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Price Quote */}
-          {(() => {
-            const headstoneItem = designData.find((item: any) => item.type === 'Headstone');
-            const baseItem = designData.find((item: any) => item.type === 'Base');
-            const inscriptionItems = designData.filter((item: any) => item.type === 'Inscription' && item.label);
-            const motifItems = adjustedMotifData;
-            
-            const headstonePrice = Number(headstoneItem?.price || 0);
-            const basePrice = Number(baseItem?.price || 0);
-            const inscriptionPrice = inscriptionItems.reduce((sum: number, item: any) => sum + Number(item.price || 0), 0);
-            const motifPrice = motifItems.reduce((sum: number, item: any) => sum + Number(item.price || 0), 0);
-            const totalPrice = headstonePrice + basePrice + inscriptionPrice + motifPrice;
-            
-            if (totalPrice === 0) return null;
-            
-            return (
-              <div className="bg-green-50/50 rounded-lg p-6 border border-green-200/50">
-                <h3 className="font-serif font-light text-xl text-slate-900 mb-4 flex items-center gap-3">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>Price Quote</span>
-                </h3>
-                <div className="ml-9 space-y-3">
-                  {headstonePrice > 0 && (
-                    <div className="flex justify-between items-baseline text-slate-700">
-                      <span className="font-light">Headstone:</span>
-                      <span className="font-normal">${headstonePrice.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {basePrice > 0 && (
-                    <div className="flex justify-between items-baseline text-slate-700">
-                      <span className="font-light">Base:</span>
-                      <span className="font-normal">${basePrice.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {inscriptionPrice > 0 && (
-                    <div className="flex justify-between items-baseline text-slate-700">
-                      <span className="font-light">Inscriptions ({inscriptionItems.length}):</span>
-                      <span className="font-normal">${inscriptionPrice.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {motifPrice > 0 && (
-                    <div className="flex justify-between items-baseline text-slate-700">
-                      <span className="font-light">Motifs ({motifItems.length}):</span>
-                      <span className="font-normal">${motifPrice.toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div className="border-t border-green-300 pt-3 mt-3">
-                    <div className="flex justify-between items-baseline">
-                      <span className="font-serif text-lg text-slate-900">Total:</span>
-                      <span className="font-serif text-2xl font-normal text-green-700">${totalPrice.toFixed(2)}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
-          </div>
         </div>
       )}
+
+      {/* Design-Specific Content for SEO */}
+      <div className="px-0 md:px-6 pt-4 md:pt-6">
+        <DesignSpecificContent 
+          shapeName={shapeDisplayName || 'Standard'}
+          productSlug={productSlug}
+          categoryTitle={categoryTitle}
+          designTitle={designMetadata.title}
+        />
+      </div>
+
+      {/* Product Description */}
+      <div className="px-0 md:px-6 pt-4 md:pt-6">
+        <ProductDescription productSlug={productSlug} productId={designMetadata.productId} />
+      </div>
+
+      {/* Detailed Price Quote from saved HTML */}
+      <div className="px-0 md:px-6">
+      {designId && sanitizedDesignData && (
+        <DetailedPriceQuote designId={designId} designData={sanitizedDesignData} />
+      )}
+      </div>
+
+      {/* Personalization Options */}
+      <div className="px-0 md:px-6 pb-4 md:pb-6">
+        <PersonalizationOptions productId={designMetadata.productId} productSlug={productSlug} />
+      </div>
 
 
       {/* Unique Content Block for SEO */}
@@ -2294,7 +3016,407 @@ export default function DesignPageClient({
         productSlug={productSlug}
       />
       </div>
+      
+      {/* Sticky Mobile CTA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-40 p-4">
+        <a
+          href={(() => {
+            const mlDir = designMetadata.mlDir || '';
+            let domain = 'headstonesdesigner.com';
+            if (mlDir.includes('forevershining')) {
+              domain = 'forevershining.com.au';
+            } else if (mlDir.includes('bronze-plaque')) {
+              domain = 'bronze-plaque.com';
+            }
+            return `https://${domain}/design/html5/#edit${designId}`;
+          })()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-center"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Use This Template
+        </a>
+      </div>
     </div>
+    </>
+  );
+}
+
+// Component to load and display detailed price quote HTML
+function DetailedPriceQuote({ designId, designData }: { designId: string; designData: any[] }) {
+  const [priceHtml, setPriceHtml] = useState<string | null>(null);
+  const [selectedMaterial, setSelectedMaterial] = useState<{ name: string; image: string } | null>(null);
+  const [selectedMotif, setSelectedMotif] = useState<{ name: string; file: string } | null>(null);
+  const [selectedShape, setSelectedShape] = useState<{ name: string; file: string } | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    async function loadPriceHtml() {
+      try {
+        // Load different HTML based on mobile/desktop
+        const htmlFile = isMobile 
+          ? `/ml/headstonesdesigner/saved-designs/html/${designId}.html`
+          : `/ml/headstonesdesigner/saved-designs/html/${designId}-desktop.html`;
+        
+        const response = await fetch(htmlFile);
+        if (response.ok) {
+          let html = await response.text();
+          
+          // Replace original names with sanitized versions
+          const inscriptions = designData.filter((item: any) => item.type === 'Inscription' && item.label);
+          
+          // Create a mapping of original to sanitized text
+          const originalDesignResponse = await fetch(`/ml/headstonesdesigner/saved-designs/json/${designId}.json`);
+          if (originalDesignResponse.ok) {
+            const originalData = await originalDesignResponse.json();
+            const originalInscriptions = originalData.filter((item: any) => item.type === 'Inscription' && item.label);
+            
+            // Replace each original inscription with sanitized version in the HTML
+            originalInscriptions.forEach((origItem: any, index: number) => {
+              if (inscriptions[index] && origItem.label !== inscriptions[index].label) {
+                const originalText = origItem.label.replace(/&apos;/g, "'");
+                const sanitizedText = inscriptions[index].label.replace(/&apos;/g, "'");
+                
+                // Escape special regex characters
+                const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                
+                // Replace in HTML (case-sensitive, whole word)
+                const regex = new RegExp(escapeRegex(originalText), 'g');
+                html = html.replace(regex, sanitizedText);
+              }
+            });
+          }
+          
+          // Make materials clickable
+          html = html.replace(/Material:\s*([^<\n]+)/g, (match, materialName) => {
+            const trimmedName = materialName.trim();
+            return `Material: <span class="material-link" data-material="${trimmedName}">${trimmedName}</span>`;
+          });
+          
+          // Make motif files clickable
+          html = html.replace(/File:\s*([^<\n]+)/g, (match, fileName) => {
+            const trimmedFile = fileName.trim();
+            return `File: <span class="motif-link" data-motif="${trimmedFile}">${trimmedFile}</span>`;
+          });
+          
+          // Make shapes clickable
+          html = html.replace(/Shape:\s*([^<\n]+)/g, (match, shapeName) => {
+            const trimmedName = shapeName.trim();
+            return `Shape: <span class="shape-link" data-shape="${trimmedName}">${trimmedName}</span>`;
+          });
+          
+          setPriceHtml(html);
+        }
+      } catch (error) {
+        console.error('Failed to load price quote HTML:', error);
+      }
+    }
+    if (isMobile !== undefined) {
+      loadPriceHtml();
+    }
+  }, [designId, designData, isMobile]);
+
+  // Handle material, motif, and shape clicks
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Handle material click
+      if (target.classList.contains('material-link')) {
+        const materialName = target.getAttribute('data-material');
+        if (materialName) {
+          const material = data.materials.find(m => m.name === materialName);
+          if (material) {
+            setSelectedMaterial({
+              name: material.name,
+              image: material.image
+            });
+          }
+        }
+      }
+      
+      // Handle motif click
+      if (target.classList.contains('motif-link')) {
+        const motifFile = target.getAttribute('data-motif');
+        if (motifFile) {
+          setSelectedMotif({
+            name: motifFile,
+            file: motifFile
+          });
+        }
+      }
+      
+      // Handle shape click
+      if (target.classList.contains('shape-link')) {
+        const shapeName = target.getAttribute('data-shape');
+        if (shapeName) {
+          // Map shape names to their SVG files
+          const shapeMap: Record<string, string> = {
+            'Cropped Peak': 'cropped_peak.svg',
+            'Curved Gable': 'curved_gable.svg',
+            'Curved Peak': 'curved_peak.svg',
+            'Curved Top': 'curved_top.svg',
+            'Half Round': 'half_round.svg',
+            'Gable': 'gable.svg',
+            'Left Wave': 'left_wave.svg',
+            'Peak': 'peak.svg',
+            'Right Wave': 'right_wave.svg',
+            'Serpentine': 'serpentine.svg',
+            'Square': 'square.svg',
+            'Rectangle': 'square.svg',
+          };
+          
+          let shapeFile = shapeMap[shapeName];
+          
+          // If not in map, check if it's a numbered headstone
+          if (!shapeFile) {
+            const match = shapeName.match(/^Headstone (\d+)$/);
+            if (match) {
+              shapeFile = `headstone_${match[1]}.svg`;
+            }
+          }
+          
+          if (shapeFile) {
+            setSelectedShape({
+              name: shapeName,
+              file: shapeFile
+            });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
+
+  if (!priceHtml) return null;
+
+  return (
+    <>
+    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 overflow-hidden mb-4 md:mb-6 shadow-none md:shadow-sm">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+      >
+        <h3 className="font-serif font-light text-lg md:text-xl text-slate-900 flex items-center gap-3">
+          <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Price Quote</span>
+        </h3>
+        <svg 
+          className={`w-5 h-5 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {isExpanded && (
+        <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-slate-200">
+          <div className="ml-0 md:ml-9 mt-4">
+            <div 
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{ __html: priceHtml }}
+            />
+            <style jsx global>{`
+              .mdc-data-table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 1rem;
+              }
+              .mdc-data-table__content {
+                width: 100%;
+                border: 1px solid #e2e8f0;
+              }
+              .mdc-data-table__content thead {
+                background-color: #f1f5f9;
+              }
+              .mdc-data-table__content th {
+                padding: 14px;
+                text-align: left;
+                font-weight: 600;
+                font-size: 15px;
+                color: #334155;
+                border-bottom: 2px solid #cbd5e1;
+              }
+              .mdc-data-table__content td {
+                padding: 12px 14px;
+                border-bottom: 1px solid #e2e8f0;
+                color: #475569;
+                font-size: 15px;
+                line-height: 1.6;
+              }
+              .mdc-data-table__content tr:hover {
+                background-color: #f8fafc;
+              }
+              .mdc-data-table__content .total-flex td {
+                font-weight: 600;
+                font-size: 16px;
+                background-color: #f1f5f9;
+                border-top: 2px solid #cbd5e1;
+              }
+              .mdc-data-table__content .total-title {
+                text-align: right;
+              }
+              .mdc-data-table__content .empty-cell {
+                border: none;
+              }
+              .material-link {
+                color: #2563eb;
+                text-decoration: underline;
+                cursor: pointer;
+                transition: color 0.2s;
+              }
+              .material-link:hover {
+                color: #1d4ed8;
+              }
+              .motif-link {
+                color: #2563eb;
+                text-decoration: underline;
+                cursor: pointer;
+                transition: color 0.2s;
+              }
+              .motif-link:hover {
+                color: #1d4ed8;
+              }
+              .shape-link {
+                color: #2563eb;
+                text-decoration: underline;
+                cursor: pointer;
+                transition: color 0.2s;
+              }
+              .shape-link:hover {
+                color: #1d4ed8;
+              }
+            `}</style>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Material Modal */}
+    {selectedMaterial && (
+      <div 
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        onClick={() => setSelectedMaterial(null)}
+      >
+        <div 
+          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-serif text-2xl text-slate-900">{selectedMaterial.name}</h3>
+            <button
+              onClick={() => setSelectedMaterial(null)}
+              className="text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="relative aspect-video bg-slate-100 rounded-lg overflow-hidden">
+            <img 
+              src={`/textures/forever/l/${selectedMaterial.image}`}
+              alt={selectedMaterial.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <p className="mt-4 text-sm text-slate-600">
+            Click outside to close
+          </p>
+        </div>
+      </div>
+    )}
+
+    {/* Motif Modal */}
+    {selectedMotif && (
+      <div 
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        onClick={() => setSelectedMotif(null)}
+      >
+        <div 
+          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-serif text-2xl text-slate-900">Motif: {selectedMotif.name}</h3>
+            <button
+              onClick={() => setSelectedMotif(null)}
+              className="text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="relative aspect-square bg-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-8">
+            <img 
+              src={`/shapes/motifs/${selectedMotif.file}.svg`}
+              alt={selectedMotif.name}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+          <p className="mt-4 text-sm text-slate-600">
+            Click outside to close
+          </p>
+        </div>
+      </div>
+    )}
+
+    {/* Shape Modal */}
+    {selectedShape && (
+      <div 
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        onClick={() => setSelectedShape(null)}
+      >
+        <div 
+          className="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-serif text-2xl text-slate-900">{selectedShape.name}</h3>
+            <button
+              onClick={() => setSelectedShape(null)}
+              className="text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="relative aspect-square bg-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-8">
+            <img 
+              src={`/shapes/headstones/${selectedShape.file}`}
+              alt={selectedShape.name}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+          <p className="mt-4 text-sm text-slate-600">
+            Click outside to close
+          </p>
+        </div>
+      </div>
+    )}
     </>
   );
 }

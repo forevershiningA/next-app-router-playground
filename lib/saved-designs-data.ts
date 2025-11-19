@@ -59175,7 +59175,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "laser-etched-headstone",
     "category": "biblical-memorial",
-    "slug": "curved-gable-john-14",
+    "slug": "curved-gable-i-am-the-way-and-the-truth-and-the-life-john-14-6",
     "title": "Biblical Memorial",
     "motifNames": [
       "cross",

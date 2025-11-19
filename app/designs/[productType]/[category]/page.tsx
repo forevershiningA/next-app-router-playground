@@ -5,6 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { getDesignsByCategory, type SavedDesignMetadata } from '#/lib/saved-designs-data';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import MobileNavToggle from '#/components/MobileNavToggle';
+import DesignsTreeNav from '#/components/DesignsTreeNav';
 
 /**
  * Format slug for display - convert kebab-case to Title Case
@@ -69,12 +71,17 @@ export default function CategoryPage() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center min-h-screen ml-[400px]">
+      <>
+        <MobileNavToggle>
+          <DesignsTreeNav />
+        </MobileNavToggle>
+        <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center min-h-screen md:ml-[400px]">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-slate-800 mx-auto mb-4" />
           <p className="text-slate-600 font-light">Loading designs...</p>
         </div>
       </div>
+      </>
     );
   }
 
@@ -93,7 +100,12 @@ export default function CategoryPage() {
     .join(' • ');
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto min-h-screen ml-[400px]">
+    <>
+      <MobileNavToggle>
+        <DesignsTreeNav />
+      </MobileNavToggle>
+      
+      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto min-h-screen md:ml-[400px]">
       <div className="container mx-auto px-8 py-12 max-w-7xl">
         {/* Elegant Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-12">
@@ -199,5 +211,6 @@ export default function CategoryPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

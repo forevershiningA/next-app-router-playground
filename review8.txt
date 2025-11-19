@@ -1,0 +1,289 @@
+Yep, I see what’s happening now – we fixed the *container* scaling, but the PINTO/SEHOVIC design is still using **raw iPhone (DPR 3) font sizes and coordinates** without always being divided by that DPR, so everything blows up and collapses toward the centre.
+
+To stabilise this, let’s **force mobile-DPR normalisation** (for iPhone-saved designs) and also add the crop offsets into the positioning.
+Below is a **drop-in replacement** for the whole *Inscriptions* + *Motifs* layers.
+Just replace your existing two blocks starting at
+`{/* Inscriptions Layer - Only headstone inscriptions */}`
+down to the end of the motifs `</div>` with this:
+
+```tsx
+              {/* Inscriptions Layer - Only headstone inscriptions */}
+              <div className="absolute inset-0 pointer-events-none">
+                {sanitizedDesignData &&
+                  sanitizedDesignData
+                    .filter(
+                      (item: any) =>
+                        item.type === 'Inscription' &&
+                        item.label &&
+                        item.part !== 'Base'
+                    )
+                    .map((item: any, index: number) => {
+                      const savedDpr = scalingFactors.designDpr || 1;
+                      // For mobile / iPhone designs always normalise by DPR.
+                      // Also fall back to usesPhysicalCoords if detection says so.
+                      const normalizeByDpr =
+                        (shapeData?.device === 'mobile' && savedDpr > 1) ||
+                        usesPhysicalCoords;
+
+                      // --- Font size ---
+                      let fontSizeInPx = item.font_size || 16;
+                      if (item.font && typeof item.font === 'string') {
+                        const match = item.font.match(/^([\d.]+)px/);
+                        if (match) fontSizeInPx = parseFloat(match[1]);
+                      }
+
+                      // canvasFontSize = logical canvas units
+                      const canvasFontSize = normalizeByDpr
+                        ? fontSizeInPx / savedDpr
+                        : fontSizeInPx;
+
+                      const fontSize =
+                        canvasFontSize * (scalingFactors.uniformScale || 1);
+                      const fontFamily =
+                        item.font_family || item.font || 'serif';
+
+                      // --- Coordinates ---
+                      const rawX = item.x ?? 0;
+                      const rawY = item.y ?? 0;
+
+                      const canvasX = normalizeByDpr
+                        ? rawX / savedDpr
+                        : rawX;
+                      const canvasY = normalizeByDpr
+                        ? rawY / savedDpr
+                        : rawY;
+
+                      const uniformScale =
+                        scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // include crop offsets so text lines up with cropped SVG
+                      const dispX =
+                        (scalingFactors.offsetX || 0) +
+                        (canvasX + initW / 2) * uniformScale;
+                      const dispY =
+                        (scalingFactors.offsetY || 0) +
+                        (canvasY + initH / 2) * uniformScale;
+
+                      if (index === 0) {
+                        console.log('🔍 Inscription debug', {
+                          label: item.label,
+                          normalizeByDpr,
+                          usesPhysicalCoords,
+                          savedDpr,
+                          raw: { x: rawX, y: rawY, fontSizeInPx },
+                          canvas: {
+                            x: canvasX,
+                            y: canvasY,
+                            font: canvasFontSize,
+                          },
+                          display: { x: dispX, y: dispY, fontSize },
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${dispX}px`,
+                            top: `${dispY}px`,
+                            transform: `translate(-50%, -50%)${
+                              item.rotation
+                                ? ` rotate(${item.rotation}deg)`
+                                : ''
+                            }`,
+                            fontSize: `${fontSize}px`,
+                            fontFamily,
+                            color: item.color || '#000000',
+                            fontWeight: fontFamily
+                              .toLowerCase()
+                              .includes('bold')
+                              ? 'bold'
+                              : 'normal',
+                            fontStyle: fontFamily
+                              .toLowerCase()
+                              .includes('italic')
+                              ? 'italic'
+                              : 'normal',
+                            whiteSpace: 'nowrap',
+                            pointerEvents: 'auto',
+                            textShadow:
+                              '1px 1px 2px rgba(0,0,0,0.5)',
+                          }}
+                        >
+                          {item.label.replace(/&apos;/g, "'")}
+                        </DraggableElement>
+                      );
+                    })}
+              </div>
+
+              {/* Motifs Layer - Only headstone motifs */}
+              {adjustedMotifData.length > 0 && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {adjustedMotifData
+                    .filter((motif: any) => motif.part !== 'Base')
+                    .map((motif: any, index: number) => {
+                      const savedDpr = scalingFactors.designDpr || 1;
+                      const normalizeByDpr =
+                        (shapeData?.device === 'mobile' && savedDpr > 1) ||
+                        usesPhysicalCoords;
+
+                      // --- Coordinates ---
+                      const rawX = motif.x ?? 0;
+                      const rawY = motif.y ?? 0;
+
+                      const canvasX = normalizeByDpr
+                        ? rawX / savedDpr
+                        : rawX;
+                      const canvasY = normalizeByDpr
+                        ? rawY / savedDpr
+                        : rawY;
+
+                      const uniformScale =
+                        scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      const dispX =
+                        (scalingFactors.offsetX || 0) +
+                        (canvasX + initW / 2) * uniformScale;
+                      const dispY =
+                        (scalingFactors.offsetY || 0) +
+                        (canvasY + initH / 2) * uniformScale;
+
+                      // --- Size (height-driven, keep SVG aspect) ---
+                      const canvasH = initH;
+                      const motifSrc = motif.src || motif.name;
+                      const svgDims = motifDimensions[motifSrc];
+                      const aspect =
+                        svgDims && svgDims.height > 0
+                          ? svgDims.width / svgDims.height
+                          : 1;
+
+                      let motifHeightCanvas: number | undefined;
+                      if (typeof motif.height === 'number') {
+                        motifHeightCanvas = normalizeByDpr
+                          ? motif.height / savedDpr
+                          : motif.height;
+                      }
+
+                      const ratio = parseFloat(motif.ratio || '1');
+
+                      let motifHeight = motifHeightCanvas
+                        ? motifHeightCanvas * uniformScale
+                        : (svgDims
+                            ? svgDims.height * ratio * uniformScale
+                            : 100 * uniformScale);
+
+                      let motifWidth = motifHeightCanvas
+                        ? motifHeightCanvas * aspect * uniformScale
+                        : (svgDims
+                            ? svgDims.width * ratio * uniformScale
+                            : 100 * uniformScale);
+
+                      const minH = 24;
+                      const maxH = canvasH * uniformScale * 0.5;
+                      motifHeight = Math.min(
+                        Math.max(motifHeight, minH),
+                        maxH
+                      );
+                      motifWidth = Math.max(motifWidth, minH * aspect);
+
+                      const flipX =
+                        motif.flipx === '-1' || motif.flipx === -1 ? -1 : 1;
+                      const flipY =
+                        motif.flipy === '-1' || motif.flipy === -1 ? -1 : 1;
+                      const rotation = motif.rotation || 0;
+                      const innerTransform = [
+                        `scaleX(${flipX}) scaleY(${flipY})`,
+                        rotation ? `rotate(${rotation}deg)` : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ');
+
+                      if (index === 0) {
+                        console.log('🎨 Motif debug', {
+                          motif: motif.name,
+                          normalizeByDpr,
+                          savedDpr,
+                          raw: { x: rawX, y: rawY, h: motif.height },
+                          canvas: {
+                            x: canvasX,
+                            y: canvasY,
+                            h: motifHeightCanvas,
+                          },
+                          display: {
+                            x: dispX,
+                            y: dispY,
+                            w: motifWidth,
+                            h: motifHeight,
+                          },
+                          svgDims,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${dispX}px`,
+                            top: `${dispY}px`,
+                            width: `${motifWidth}px`,
+                            height: `${motifHeight}px`,
+                            transform: 'translate(-50%, -50%)',
+                            pointerEvents: 'auto',
+                            zIndex: 10,
+                          }}
+                        >
+                          {(() => {
+                            const motifPath = getMotifPath(motif);
+                            const isSvg = motifPath.endsWith('.svg');
+                            if (isSvg) {
+                              return (
+                                <img
+                                  src={motifPath}
+                                  alt={motif.name}
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    transform: innerTransform,
+                                    transformOrigin: 'center center',
+                                  }}
+                                />
+                              );
+                            }
+                            return (
+                              <img
+                                src={motifPath}
+                                alt={motif.name}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'contain',
+                                  transform: innerTransform,
+                                  transformOrigin: 'center center',
+                                }}
+                              />
+                            );
+                          })()}
+                        </DraggableElement>
+                      );
+                    })}
+                </div>
+              )}
+```
+
+What this does, in plain terms:
+
+* **Always divides by DPR for mobile/iPhone designs** (so PINTO/SEHOVIC coordinates and font sizes are corrected back into the logical canvas space).
+* Uses the **same uniformScale** for shape + text + motifs.
+* Includes **offsetX/offsetY** from the crop, so the layout lines up with the curved top SVG.
+* Removes any extra container transforms, so there’s no double-scaling.
+
+After you paste this in and rebuild, the SEHOVIC design should:
+
+* Have the surname and epitaph in the same place/size as the original PINTO image.
+* Show the two name blocks left/right and the motifs in the correct spots on both desktop and iPhone.

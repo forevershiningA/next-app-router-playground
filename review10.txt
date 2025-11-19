@@ -1,0 +1,240 @@
+Yep, DPR is still sneaking into the coordinates – the “smart” auto-detection is misclassifying this design as canvas-space and skipping the `/ savedDPR` step. Let’s stop being clever and just **always normalise by designDpr when it’s > 1** for *both* inscriptions and motifs.
+
+Below is a **drop-in replacement** for the inscriptions + motifs layer.
+In `DesignPageClient.tsx` find the block that starts with:
+
+```tsx
+{/* Inscriptions Layer - Only headstone inscriptions */}
+{sanitizedDesignData
+  .filter((item: any) => item.type === 'Inscription')
+  ...
+```
+
+and ends just after the motifs map. Replace that whole block with this:
+
+```tsx
+              {/* Inscriptions Layer - headstone only, DPR-normalised */}
+              {sanitizedDesignData
+                .filter((item: any) => item.type === 'Inscription')
+                .length > 0 && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {sanitizedDesignData
+                    .filter((item: any) => item.type === 'Inscription')
+                    .map((item: any, index: number) => {
+                      const savedDpr = scalingFactors.designDpr || 1;
+                      const normalizeByDpr = savedDpr > 1;
+
+                      // --- Font size ---
+                      const fontSizeInPx = item.font_size || 20;
+                      const canvasFontSize = normalizeByDpr
+                        ? fontSizeInPx / savedDpr
+                        : fontSizeInPx; // already canvas space
+
+                      const uniformScale = scalingFactors.uniformScale || 1;
+                      const fontSize = canvasFontSize * uniformScale;
+
+                      const fontFamily =
+                        item.font_family || item.font || 'serif';
+
+                      // --- Coordinates ---
+                      const rawX = item.x ?? 0;
+                      const rawY = item.y ?? 0;
+
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // Convert physical-pixel coords → canvas space if needed
+                      const canvasX = normalizeByDpr ? rawX / savedDpr : rawX;
+                      const canvasY = normalizeByDpr ? rawY / savedDpr : rawY;
+
+                      // Canvas is centre-origin → display is top-left origin
+                      const displayX =
+                        (canvasX + initW / 2) * uniformScale +
+                        (scalingFactors.offsetX || 0);
+                      const displayY =
+                        (canvasY + initH / 2) * uniformScale +
+                        (scalingFactors.offsetY || 0);
+
+                      if (index === 0) {
+                        console.log('🔍 DPR fixed (Inscription)', {
+                          label: item.label,
+                          savedDpr,
+                          normalizeByDpr,
+                          raw: { x: rawX, y: rawY, fontSizeInPx },
+                          canvas: {
+                            x: canvasX,
+                            y: canvasY,
+                            fontSize: canvasFontSize,
+                          },
+                          display: { x: displayX, y: displayY, fontSize },
+                          initW,
+                          initH,
+                          uniformScale,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            fontSize: `${fontSize}px`,
+                            fontFamily,
+                            color: item.color || '#000000',
+                            fontWeight: fontFamily
+                              .toLowerCase()
+                              .includes('bold')
+                              ? 'bold'
+                              : 'normal',
+                            fontStyle: fontFamily
+                              .toLowerCase()
+                              .includes('italic')
+                              ? 'italic'
+                              : 'normal',
+                            transform: `translate(-50%, -50%) ${
+                              item.rotation
+                                ? `rotate(${item.rotation}deg)`
+                                : ''
+                            }`,
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                            left: `${displayX}px`,
+                            top: `${displayY}px`,
+                            position: 'absolute',
+                            whiteSpace: 'nowrap',
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          {item.label.replace(/&apos;/g, "'")}
+                        </DraggableElement>
+                      );
+                    })}
+                </div>
+              )}
+
+              {/* Motifs Layer - headstone only, DPR-normalised */}
+              {adjustedMotifData.length > 0 && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {adjustedMotifData
+                    .filter((motif: any) => motif.part !== 'Base')
+                    .map((motif: any, index: number) => {
+                      const savedDpr = scalingFactors.designDpr || 1;
+                      const normalizeByDpr = savedDpr > 1;
+
+                      const uniformScale = scalingFactors.uniformScale || 1;
+                      const initW = scalingFactors.initW || 800;
+                      const initH = scalingFactors.initH || 800;
+
+                      // --- Coordinates ---
+                      const rawX = motif.x ?? 0;
+                      const rawY = motif.y ?? 0;
+
+                      const canvasX = normalizeByDpr ? rawX / savedDpr : rawX;
+                      const canvasY = normalizeByDpr ? rawY / savedDpr : rawY;
+
+                      const displayX =
+                        (canvasX + initW / 2) * uniformScale +
+                        (scalingFactors.offsetX || 0);
+                      const displayY =
+                        (canvasY + initH / 2) * uniformScale +
+                        (scalingFactors.offsetY || 0);
+
+                      // --- Size (height-driven, keep SVG aspect) ---
+                      const canvasH = initH;
+                      const motifSrc = motif.src || motif.name;
+                      const svgDims = motifDimensions[motifSrc];
+                      const aspect =
+                        svgDims && svgDims.height > 0
+                          ? svgDims.width / svgDims.height
+                          : 1;
+
+                      // Height saved in authoring frame; if DPR>1, normalise once
+                      let motifHeightCanvas: number | undefined;
+                      if (typeof motif.height === 'number') {
+                        motifHeightCanvas = normalizeByDpr
+                          ? motif.height / savedDpr
+                          : motif.height;
+                      }
+
+                      const ratio = parseFloat(motif.ratio || '1');
+
+                      let motifHeight = motifHeightCanvas
+                        ? motifHeightCanvas * uniformScale
+                        : svgDims
+                        ? svgDims.height * ratio * uniformScale
+                        : 100 * uniformScale;
+
+                      let motifWidth = motifHeightCanvas
+                        ? motifHeightCanvas * aspect * uniformScale
+                        : svgDims
+                        ? svgDims.width * ratio * uniformScale
+                        : 100 * uniformScale;
+
+                      const minH = 24;
+                      const maxH = canvasH * uniformScale * 0.5;
+                      motifHeight = Math.min(
+                        Math.max(motifHeight, minH),
+                        maxH
+                      );
+                      motifWidth = Math.max(motifWidth, minH * aspect);
+
+                      const flipX =
+                        motif.flipx === '-1' || motif.flipx === -1 ? -1 : 1;
+                      const flipY =
+                        motif.flipy === '-1' || motif.flipy === -1 ? -1 : 1;
+
+                      if (index === 0) {
+                        console.log('🎨 DPR fixed (Motif)', {
+                          src: motifSrc,
+                          savedDpr,
+                          normalizeByDpr,
+                          raw: { x: rawX, y: rawY, h: motif.height },
+                          canvas: { x: canvasX, y: canvasY, h: motifHeightCanvas },
+                          display: {
+                            x: displayX,
+                            y: displayY,
+                            w: motifWidth,
+                            h: motifHeight,
+                          },
+                          initW,
+                          initH,
+                          uniformScale,
+                        });
+                      }
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: displayX,
+                            top: displayY,
+                            width: motifWidth,
+                            height: motifHeight,
+                            transform: `translate(-50%, -50%) scale(${flipX}, ${flipY})`,
+                            transformOrigin: 'center center',
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          <img
+                            src={getMotifPath(motif)}
+                            alt={motif.name || 'motif'}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                            }}
+                          />
+                        </DraggableElement>
+                      );
+                    })}
+                </div>
+              )}
+```
+
+What this does, in plain terms:
+
+* **If `designDpr > 1` we *always* divide x, y, font size and motif height by `designDpr`.**
+  No more heuristic mis-detection.
+* Then we scale all of that by the same `uniformScale` that the headstone uses, so inscriptions/motifs keep the right size and position relative to the stone.
+* No CSS `transform: scale()` on the whole layer, so we don’t double-scale.
+
+Once this is in, reload the SEHOVIC/PINTO design on desktop and iPhone – the inscriptions and motifs should line up in the same place and with sensible sizes on both.
