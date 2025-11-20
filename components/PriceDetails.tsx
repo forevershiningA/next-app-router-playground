@@ -154,6 +154,10 @@ export default function PriceDetails({ designId, mlDir }: PriceDetailsProps) {
           display: none;
         }
 
+        .price-details-wrapper .mobile-only {
+          display: none;
+        }
+
         .price-details-wrapper tbody td strong {
           color: #0f172a;
           font-weight: 600;
@@ -219,10 +223,15 @@ export default function PriceDetails({ designId, mlDir }: PriceDetailsProps) {
 
           .price-details-wrapper .table-header-for-mobile {
             display: inline-block;
-            font-weight: 600;
-            color: #64748b;
-            margin-right: 8px;
+            font-weight: bold;
             min-width: 80px;
+            max-width: 80px;
+            margin-right: 10px;
+            color: #64748b;
+          }
+
+          .price-details-wrapper .mobile-only {
+            display: block;
           }
 
           .price-details-wrapper .total-flex {

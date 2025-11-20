@@ -251,6 +251,29 @@ h1 {
   animation-duration: var(--duration-move);
 }
 
+/* MDC Data Table - Mobile Price Quote Styles */
+.mdc-data-table__content .table-header-for-mobile {
+  display: none;
+  font-weight: bold;
+  min-width: 80px;
+  max-width: 80px;
+  margin-right: 10px;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mdc-data-table__content .table-header-for-mobile {
+    display: inline-block;
+  }
+  
+  .mobile-only {
+    display: block;
+  }
+}
+
 /* 
  * Using view-transition-image-pair and not view-transition-group to preserve
  * the default animation which includes automatic position and scale morphing
