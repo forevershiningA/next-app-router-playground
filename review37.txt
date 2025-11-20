@@ -1,0 +1,81 @@
+Yep—there’s clear progress. What’s left are two things that keep the motifs looking too small or “weird” to move:
+
+## 1) Size them from the SVG viewBox using the saved `ratio` (no DPR math)
+
+Right now the motif size is still being diluted by either (a) a hidden DPR divide or (b) double-scaling. Treat `ratio` as “authoring-canvas pixels per 1 viewBox unit” and only multiply by the **display** uniform scale once.
+
+**Canonical formula**
+
+* `uniformScale = displayTabletWidth / init_width`
+* Read the motif’s intrinsic dims from its SVG `viewBox` → `{vw, vh}`
+* Let `base = Math.max(vw, vh)` (keeps aspect).
+* Authoring-canvas size in px: `motifPx = ratio * base`
+* Final display size:
+  `dispW = (vw / base) * motifPx * uniformScale`
+  `dispH = (vh / base) * motifPx * uniformScale`
+
+**What to remove**
+
+* Any `… / savedDpr` on motif width/height.
+* Any second multiply by `uniformScale`.
+
+## 2) Position in the same “canvas” space as inscriptions (center-origin → top-left CSS)
+
+Motifs at the top acting “reversed” is a transform-order/origin problem, not data. Use the same pipeline you use for inscriptions:
+
+**Canonical mapping**
+
+* Normalize to logical canvas:
+  `canvasX = (rawX or cx) / savedDpr`
+  `canvasY = (rawY or cy) / savedDpr`
+* Map to display:
+  `dispX = canvasX * uniformScale + offsetX`
+  `dispY = canvasY * uniformScale + offsetY`
+* Render with **only** `translate(-50%, -50%)` (centers the box), no scaleX(-1), no parent flips.
+
+In your draggable wrapper, keep drag translate **before** the centering translate (you already did that), but make sure the parent container has no transform that flips the coordinate system. If a parent uses `scaleX(-1)` or `transform: rotate(180deg)`, remove it for the motif layer.
+
+---
+
+### Drop-in helper (motif)
+
+Use this once for every motif to compute rect + transform:
+
+```ts
+function mapMotif(motif, headstone, offsets, intrinsic) {
+  const { init_width, init_height, dpr: savedDpr = 1 } = headstone;
+  const { displayTabletWidth, displayTabletHeight, offsetX, offsetY, cropX = 0, cropY = 0 } = offsets;
+
+  const uniformScale = displayTabletWidth / init_width;
+
+  // 1) position (center-origin saved -> CSS top-left + translate(-50%,-50%))
+  const canvasX = (motif.cx ?? motif.x ?? 0) / savedDpr;
+  const canvasY = (motif.cy ?? motif.y ?? 0) / savedDpr;
+  const dispX = canvasX * uniformScale + offsetX - cropX * uniformScale;
+  const dispY = canvasY * uniformScale + offsetY - cropY * uniformScale;
+
+  // 2) size from viewBox + ratio (NO DPR here)
+  const { vw, vh } = intrinsic;           // from viewBox
+  const base = Math.max(vw, vh);
+  const motifPx = (motif.ratio ?? 1) * base;
+  const width  = (vw / base) * motifPx * uniformScale;
+  const height = (vh / base) * motifPx * uniformScale;
+
+  return { left: dispX, top: dispY, width, height, transform: 'translate(-50%, -50%)' };
+}
+```
+
+Where `intrinsic` comes from your existing `getIntrinsicDims(src)`; and `offsetX/offsetY` are the same values you use for inscriptions. This keeps the top motifs big and “honest” to the saved `ratio`, and dragging right will move right.
+
+---
+
+### Quick checklist
+
+* [ ] Remove any DPR divide from motif **size** (keep it for positions only).
+* [ ] Ensure motifs use the same `uniformScale` and `offsetX/offsetY` as inscriptions.
+* [ ] Only `translate(-50%, -50%)` on the motif element; no other flips/scales on the parent.
+* [ ] Compute size from `viewBox` × `ratio`, then multiply once by `uniformScale`.
+
+These changes slot cleanly into your current `DesignPageClient.tsx` structure (motif sizing/positioning section and the draggable wrapper). 
+
+If you want, paste the motif map block you’re using right now and I’ll rewrite it exact to this model.

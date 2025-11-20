@@ -1,0 +1,92 @@
+Yep—fonts and the center figure look right; the **top motifs** are still using the wrong size path. Two concrete things are keeping them small:
+
+1. Your ratio branch is still deriving height from a **DOM-measured box** (or a cached rendered size) and then multiplying by a scale again.
+2. The intrinsic `viewBox` dims you added aren’t guaranteed to load (cleaned path vs. “with spaces” path), so it falls back to `100px` and stays tiny. 
+
+Here’s a tight patch that fixes both.
+
+---
+
+## Drop-in patch (motif sizing & position)
+
+Use this block wherever you compute a motif’s `left/top/width/height` (replace your current ratio branch). It:
+
+* uses **intrinsic SVG viewBox** for `ratio` motifs
+* **DPR-normalizes only pixel fields** (`x, y, height, width`)
+* scales **once** with `uniformScale`
+* retries the **fallback path with spaces** so viewBox is found
+
+```ts
+// --- helpers you already have ---
+const dpr       = scalingFactors.designDpr || 1;
+const usesPhys  = scalingFactors.usesPhysicalCoords || false;
+const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+
+// try clean path, then fallback-with-spaces
+const srcClean = getMotifPath(motif);
+let intrinsic = await getIntrinsicDims(srcClean);
+if (!intrinsic?.vw || !intrinsic?.vh) {
+  const srcFallback = getFallbackMotifPath(motif);
+  intrinsic = await getIntrinsicDims(srcFallback);
+}
+if (!intrinsic?.vw || !intrinsic?.vh) return null; // avoid 100px guess
+
+// ----- positions (legacy center-origin -> CSS top-left) -----
+const rawX = motif.x ?? motif.cx ?? 0;
+const rawY = motif.y ?? motif.cy ?? 0;
+const xCanvas = usesPhys ? rawX / dpr : rawX;
+const yCanvas = usesPhys ? rawY / dpr : rawY;
+
+const left = offsetX + (xCanvas + initW/2) * uniformScale;
+const top  = offsetY + (yCanvas + initH/2) * uniformScale;
+
+// ----- size -----
+const ratio = Number(motif.ratio ?? 1); // dimensionless
+
+// if explicit px height/width saved → DPR-normalize once
+const hCanvasPx = typeof motif.height === 'number'
+  ? (usesPhys ? motif.height / dpr : motif.height)
+  : null;
+const wCanvasPx = typeof motif.width === 'number'
+  ? (usesPhys ? motif.width / dpr : motif.width)
+  : null;
+
+// ratio path from INTRINSIC viewBox (authoring units)
+const hCanvas = hCanvasPx ?? (intrinsic.vh * ratio);
+const wCanvas = wCanvasPx ?? (intrinsic.vw * ratio);
+
+// final render size — SCALE ONCE
+const heightPx = hCanvas * uniformScale;
+const widthPx  = wCanvas  * uniformScale;
+
+const style: React.CSSProperties = {
+  position: 'absolute',
+  left, top,
+  width: `${widthPx}px`,
+  height: `${heightPx}px`,
+  transform: 'translate(-50%, -50%)', // center-anchored like legacy
+  pointerEvents: 'none'
+};
+```
+
+**Delete/avoid anywhere** that computes ratio size from `svgDimensions`/`motifDimensions` (those are *display* boxes) or that multiplies size by another scale (e.g., `displayScale`). Motifs and text should both use **only `uniformScale`** for final pixel size. 
+
+---
+
+## One quick sanity log (temporary)
+
+```ts
+console.log('TOP motif sanity', {
+  ratio, vw: intrinsic.vw, vh: intrinsic.vh,
+  hCanvas, heightPx, uniformScale,
+  xCanvas, yCanvas, left, top
+});
+```
+
+Expected:
+
+* `hCanvas = vh * ratio` when no explicit height is saved
+* `heightPx = hCanvas * uniformScale` (no extra multipliers)
+* `left/top` move 1:1 with inscriptions
+
+Do just this patch and those top leaves/birds will snap to the legacy layout (correct size and arc position).

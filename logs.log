@@ -1,38 +1,22 @@
-index.js:640 Uncaught ModuleParseError: Module parse failed: Identifier 'currentDPR' has already been declared (3838:66)
-File was processed with these loaders:
- * ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/compiled/@next/react-refresh-utils/dist/loader.js
- * ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-flight-client-module-loader.js
- * ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
-You may need an additional loader to handle the result of these loaders.
-|                                                             const rawY = item.y;
-|                                                             // Get current device DPR
->                                                             const currentDPR = "object" !== 'undefined' ? window.devicePixelRatio : 1;
-|                                                             const savedDPR = scalingFactors.designDpr || 1;
-|                                                             // Check if coordinates seem to be in canvas space already
-    at <unknown> (File was processed with these loaders:)
-    at handleParseError (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:410378)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:411994)
-    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:407859)
+index.js:640 Uncaught ModuleBuildError: Module build failed (from ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   × Expected ';', '}' or <eof>
+   ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1:1]
+ 1 │ This is a confirmed scaling logic error where the **DPR normalization** (intended to shrink the coordinates of high-res text) was accidentally applied to the **Headstone Object dimensions** (which were already in logical units), causing the headstone to shrink to 1/3rd of its intended size.
+   · ──┬─ ──
+   ·   ╰── This is the expression part of an expression statement
+ 2 │ 
+ 3 │ Here is the corrected `DesignPageClient.tsx`. I have separated the `layoutScale` (for the container/objects) from the `uniformScale` (for the coordinate contents), ensuring the headstone remains full-size while the text coordinates are properly normalized.
+ 3 │ 
+   ╰────
+
+
+Caused by:
+    Syntax Error
+    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:407086)
     at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:408881)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8727)
-    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5565)
-    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5650)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5879)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8645)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5019)
     at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
-    at Object.ReactRefreshLoader (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\@next\react-refresh-utils\dist\loader.js:14:10)
-    at LOADER_EXECUTION (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4134)
-    at runSyncOrAsync (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4145)
-    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5782)
-    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5650)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5879)
-    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
-    at Object.transformSource (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\build\webpack\loaders\next-flight-client-module-loader.js:45:17)
-    at LOADER_EXECUTION (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4134)
-    at runSyncOrAsync (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4145)
-    at iterateNormalLoaders (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5782)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5142)
-    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js:224:23)
 getServerError @ node-stack-frames.js:41
 eval @ index.js:640
 setTimeout
@@ -51,12 +35,18 @@ webpackJsonpCallback @ webpack.js:1
 (anonimowa) @ main.js:9
 websocket.js:46 [HMR] connected
 hook.js:608 ./app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx
-Module parse failed: Identifier 'currentDPR' has already been declared (3808:66)
-|                                                             const rawY = item.y;
-|                                                             // Get current device DPR
->                                                             const currentDPR = "undefined" !== 'undefined' ? window.devicePixelRatio : 1;
-|                                                             const savedDPR = scalingFactors.designDpr || 1;
-|                                                             // Check if coordinates seem to be in canvas space already
+Error:   × Expected ';', '}' or <eof>
+   ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1:1]
+ 1 │ This is a confirmed scaling logic error where the **DPR normalization** (intended to shrink the coordinates of high-res text) was accidentally applied to the **Headstone Object dimensions** (which were already in logical units), causing the headstone to shrink to 1/3rd of its intended size.
+   · ──┬─ ──
+   ·   ╰── This is the expression part of an expression statement
+ 2 │ 
+ 3 │ Here is the corrected `DesignPageClient.tsx`. I have separated the `layoutScale` (for the container/objects) from the `uniformScale` (for the coordinate contents), ensuring the headstone remains full-size while the text coordinates are properly normalized.
+ 3 │ 
+   ╰────
+
+Caused by:
+    Syntax Error
 overrideMethod @ hook.js:608
 nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
 handleErrors @ hot-reloader-pages.js:164

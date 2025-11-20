@@ -1,0 +1,127 @@
+Yep—I can see why the motifs “jump” off the tablet now. Two things are biting us:
+
+1. **Their CSS transform stack**
+   Your `DraggableElement` composes a drag translate **before** whatever transform the child already has. That’s fine, but the child defaults to `translate(-50%, -50%)` (center-origin). If the motif style you pass already contains a translate/scale, you end up with a confusing matrix that flips the local space—so dragging left can look like it moves right. 
+
+2. **Positioning/sizing aren’t in the same “logical canvas” as the headstone**
+   Some motifs are being positioned with numbers that were normalized to the saved canvas, while their parent (preview container) is scaled differently. That mismatch pushes them off the tablet and also makes them look small/large at odd times.
+
+---
+
+## Fix (surgical and safe)
+
+### A) Make drag math aware of canvas scale (and never invert)
+
+Add a `scale=1` prop to `DraggableElement` and divide the deltas by it. Also lock the built-in centering so we don’t end up with two “translate”s fighting each other.
+
+```tsx
+// DraggableElement(...)
+function DraggableElement({
+  children,
+  initialStyle,
+  onPositionChange,
+  scale = 1,                     // NEW
+}: {
+  children: React.ReactNode;
+  initialStyle: React.CSSProperties;
+  onPositionChange?: (x: number, y: number) => void;
+  scale?: number;                // NEW
+}) {
+  // ...
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    const newX = (e.clientX - dragStart.x) / scale;   // scaled
+    const newY = (e.clientY - dragStart.y) / scale;   // scaled
+    setPosition({ x: newX, y: newY });
+    onPositionChange?.(newX, newY);
+  }, [isDragging, dragStart, onPositionChange, scale]);
+
+  return (
+    <div
+      ref={elementRef}
+      onMouseDown={handleMouseDown}
+      style={{
+        ...initialStyle,
+        // Keep ONLY one centering translate; put drag after it:
+        transform: `${initialStyle.transform ?? 'translate(-50%, -50%)'} translate(${position.x}px, ${position.y}px)`,
+        transformOrigin: 'center center',
+        cursor: isDragging ? 'grabbing' : 'grab',
+        userSelect: 'none',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+> Pass your current preview zoom/uniformScale into `scale` so dragging tracks perfectly when the canvas is zoomed. (If you don’t have a single uniform scale, pass the X scale.)
+
+---
+
+### B) Position motifs in the **same logical canvas** as inscriptions
+
+For each motif:
+
+1. Compute **logical** canvas coords (what you saved at authoring time), e.g.
+   `logicalX = (raw.cx ?? raw.x) / savedDpr` and same for Y.
+2. Map to preview by applying exactly the same transform as inscriptions:
+   `displayX = cropOffsetX + logicalX * uniformScale`
+   `displayY = cropOffsetY + logicalY * uniformScale`
+3. Size with the legacy **ratio** (from XML) and the motif’s intrinsic viewBox—not with CSS scale stacking:
+
+```tsx
+// (where you build motif style)
+const { vw, vh } = await getIntrinsicDims(motifSrc); // from your helper
+const base = Math.max(vw, vh);
+const logicalSize = base * ratio;             // ratio from JSON/XML
+const displayW = (vw / base) * logicalSize * uniformScale;
+const displayH = (vh / base) * logicalSize * uniformScale;
+
+const style: React.CSSProperties = {
+  position: 'absolute',
+  left: displayX,
+  top: displayY,
+  width: displayW,
+  height: displayH,
+  transform: 'translate(-50%, -50%)', // center at cx/cy (same as inscriptions)
+};
+```
+
+**Important:** don’t also apply a CSS `scale()` to the same motif—width/height already encode the scale. Double-scaling is what keeps shrinking the top icons.
+
+---
+
+### C) Guarantee the same stacking context and container
+
+Wrap all inscriptions + motifs in a single absolutely-positioned container that’s anchored to the headstone canvas (same size & origin), then render everything relative to it:
+
+```tsx
+<div
+  ref={overlayRef}
+  style={{
+    position: 'absolute',
+    left: svgLeft,                // same used for inscriptions
+    top: svgTop,
+    width: svgWidth,
+    height: svgHeight,
+    pointerEvents: 'none',        // so tablet gets clicks
+  }}
+>
+  {/* each motif/inscription div below sets pointerEvents: 'auto' if draggable */}
+</div>
+```
+
+This prevents the “motif drifts off the tablet” effect when something else (e.g., page zoom, base image, or auto-crop) changes.
+
+---
+
+### D) One-liner sanity checks
+
+* **Exactly one centering translate** per item (`translate(-50%,-50%)`). No nested translates in `initialStyle`.
+* **No negative scales** anywhere in the ancestor chain of the overlay (never `scaleX(-1)`).
+* **Ratio** is applied once (to intrinsic size), then multiplied by `uniformScale`, never by both width/height and a transform.
+
+---
+
+If you want, paste the motif style block you use right now and I’ll rewrite it to this pattern verbatim so we lock it in.

@@ -1,0 +1,315 @@
+The issue you are seeing ("a little bit different") is almost certainly because the Headstone Shape is being stretched to fill the entire Canvas, whereas in the original design tool, the Headstone is an object inside the Canvas with its own specific width and height.
+
+In the previous code, we sized the SVG container to init_width × init_height. If the stone defined in the JSON is smaller than the canvas (which is typical—e.g., a 600mm stone on an 800mm canvas), your preview was rendering the stone at 800mm, making the text look positioned incorrectly (or too small) by comparison.
+
+Here is the corrected code. The key changes are:
+
+Decoupled Scene vs. Object: We now calculate the layout container (scene) separately from the stone object (headstone).
+
+Headstone Positioning: The SVG/Texture layer is now positioned absolutely based on the JSON's Headstone width/height/x/y, rather than filling 100% of the view.
+
+Text Refinement: Adjusted line-height to 1.1 (standard for these tools) to fix vertical drift in multi-line text.
+
+1. Update scalingFactors to include Headstone Object Data
+
+Replace the scalingFactors useMemo (around line 1086) with this enhanced version:
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// Calculate scaling factors for positioning inscriptions
+  const scalingFactors = useMemo(() => {
+    // 1. Find the Authoring Frame (The "Truth")
+    const headstoneData = designData?.find((item: any) => item.type === 'Headstone');
+    const shapeDataFallback = shapeData || {};
+    
+    // Canvas Dimensions (The Workspace)
+    const initW = headstoneData?.init_width || shapeDataFallback.init_width || 800;
+    const initH = headstoneData?.init_height || shapeDataFallback.init_height || 800;
+    const designDpr = headstoneData?.dpr || shapeDataFallback.dpr || 1;
+
+    // Headstone Dimensions (The Object inside the workspace)
+    // If width/height are missing, fallback to initW (assuming full-bleed)
+    const stoneW = headstoneData?.width || initW;
+    const stoneH = headstoneData?.height || initH;
+    const stoneX = headstoneData?.x || 0;
+    const stoneY = headstoneData?.y || 0;
+
+    // 2. Detect Coordinate System
+    const layoutItems = designData?.filter((i: any) => i.type === 'Inscription' || i.type === 'Motif') || [];
+    
+    // Check if items are positioned way outside logical bounds (indicating physical pixels)
+    const usesPhysicalCoords = layoutItems.some((item: any) => {
+      const x = item.x ?? 0;
+      const y = item.y ?? 0;
+      return Math.abs(x) > (initW / 2 + 50) || Math.abs(y) > (initH / 2 + 50);
+    });
+
+    // 3. Determine Display Dimensions (Responsive)
+    const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const isMobile = viewportWidth < 768;
+    
+    // Mobile: 90% of screen width. Desktop: Max 600px.
+    const maxContainerWidth = isMobile ? viewportWidth * 0.92 : 600;
+    
+    // Calculate the display width maintaining aspect ratio of the CANVAS
+    let displayWidth = Math.min(initW, maxContainerWidth);
+    
+    // If high-res legacy design, ensure we don't render tiny on desktop
+    if (usesPhysicalCoords && displayWidth < 400) displayWidth = 400;
+
+    const aspectRatio = initW / initH;
+    const displayHeight = displayWidth / aspectRatio;
+
+    // 4. Calculate Uniform Scale
+    // This scales JSON logical units to Screen pixels
+    const normalizationFactor = usesPhysicalCoords ? (1 / designDpr) : 1;
+    const containerScale = (displayWidth / initW);
+    
+    const uniformScale = containerScale * normalizationFactor;
+
+    return { 
+      // Global Scene Values
+      scaleX: uniformScale, 
+      scaleY: uniformScale, 
+      displayWidth, 
+      displayHeight, 
+      offsetX: displayWidth / 2, // Center of Scene
+      offsetY: displayHeight / 2, // Center of Scene
+      
+      // Canvas Data
+      initW,
+      initH,
+      designDpr,
+      usesPhysicalCoords,
+      uniformScale,
+
+      // Specific Object Data (Scaled to Display)
+      headstone: {
+        width: stoneW * uniformScale,
+        height: stoneH * uniformScale,
+        x: stoneX * uniformScale,
+        y: stoneY * uniformScale
+      }
+    };
+  }, [designData, shapeData]);
+2. Update the Visual Preview Area
+
+Replace the render block inside {designData && screenshotDimensions && ( (around line 1390) with this logic.
+Note the new wrapper div for the stone that uses position: absolute.
+
+code
+Tsx
+download
+content_copy
+expand_less
+{/* Design Preview - Enhanced with shape, texture, and motifs */}
+      {designData && screenshotDimensions && (
+        <div className="bg-white rounded-none md:rounded-lg shadow-none md:shadow-sm border-0 md:border border-slate-200 my-0 md:my-8">
+          {/* Visual Preview Area */}
+          <div className="relative bg-gradient-to-br from-slate-50 to-white min-h-[400px] md:min-h-[600px] flex items-center justify-center p-4 md:p-8">
+            
+            {/* SCENE CONTAINER (Represents the full Workspace) */}
+            <div className="flex flex-col items-center gap-0">
+              <div
+                ref={svgHostRef}
+                className="relative" // Removed shadow here, moving to stone object
+                style={{
+                  width: `${scalingFactors.displayWidth}px`,
+                  height: `${scalingFactors.displayHeight}px`,
+                  maxWidth: '100%',
+                  // Optional: border to show canvas bounds for debugging
+                  // border: '1px dashed #ccc' 
+                }}
+              >
+              
+              {/* HEADSTONE OBJECT LAYER */}
+              {/* This places the stone exactly where it belongs in the workspace */}
+              <div 
+                className="absolute shadow-2xl"
+                style={{
+                    width: `${scalingFactors.headstone.width}px`,
+                    height: `${scalingFactors.headstone.height}px`,
+                    left: `${scalingFactors.offsetX + scalingFactors.headstone.x}px`,
+                    top: `${scalingFactors.offsetY + scalingFactors.headstone.y}px`,
+                    transform: 'translate(-50%, -50%)', // Center anchor point
+                    zIndex: 1
+                }}
+              >
+                  {/* SVG Shape as base */}
+                  {shapeImagePath ? (
+                    shapeName === 'Serpentine' && shapeData ? (
+                      // Serpentine Logic (unchanged)
+                      <div className="absolute inset-0">
+                        <svg 
+                          width="100%" height="100%" 
+                          viewBox={`0 0 ${scalingFactors.initW} ${scalingFactors.initH}`}
+                          xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                        >
+                          <defs>
+                            {textureData && (
+                              <pattern id="graniteTexture" patternUnits="userSpaceOnUse" width="520" height="520">
+                                <image href={textureData} x="0" y="0" width="520" height="520" />
+                              </pattern>
+                            )}
+                          </defs>
+                          <path 
+                            fill={textureData ? "url(#graniteTexture)" : "#808080"}
+                            d={/* Path d logic remains same as your file */ "..."}
+                          />
+                        </svg>
+                      </div>
+                    ) : (
+                      // Standard Shape Logic
+                      (() => {
+                        return svgContent ? (
+                          <div 
+                            className="absolute inset-0"
+                            dangerouslySetInnerHTML={{ __html: svgContent }}
+                          />
+                        ) : (
+                          <div 
+                            className="absolute inset-0 rounded-lg"
+                            style={{
+                              backgroundImage: textureData ? `url(${textureData})` : 'linear-gradient(to bottom, #9ca3af, #6b7280)',
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                            }}
+                          />
+                        );
+                      })()
+                    )
+                  ) : (
+                    <div 
+                      className="absolute inset-0 rounded-lg"
+                      style={{
+                        backgroundImage: textureData ? `url(${textureData})` : 'linear-gradient(to bottom, #9ca3af, #6b7280)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    />
+                  )}
+              </div>
+
+              {/* Inscriptions Layer (Z-Index > Stone) */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg" style={{ zIndex: 10 }}>
+                {sanitizedDesignData &&
+                  sanitizedDesignData
+                    .filter((item: any) => item.type === 'Inscription' && item.label && item.part !== 'Base')
+                    .map((item: any, index: number) => {
+                      const rawX = item.x ?? 0;
+                      const rawY = item.y ?? 0;
+                      let fontSizeInPx = item.font_size || 16;
+                      
+                      if (item.font && typeof item.font === 'string') {
+                        const match = item.font.match(/^([\d.]+)px/);
+                        if (match) fontSizeInPx = parseFloat(match[1]);
+                      }
+
+                      const dispX = scalingFactors.offsetX + (rawX * scalingFactors.uniformScale);
+                      const dispY = scalingFactors.offsetY + (rawY * scalingFactors.uniformScale);
+                      const fontSize = fontSizeInPx * scalingFactors.uniformScale;
+
+                      const fontFamily = item.font_family || item.font || 'serif';
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${dispX}px`,
+                            top: `${dispY}px`,
+                            transform: `translate(-50%, -50%)${item.rotation ? ` rotate(${item.rotation}deg)` : ''}`,
+                            fontSize: `${fontSize}px`,
+                            fontFamily,
+                            color: item.color || '#000000',
+                            fontWeight: /bold/i.test(fontFamily) ? 'bold' : 'normal',
+                            fontStyle: /italic/i.test(fontFamily) ? 'italic' : 'normal',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'center',
+                            // Tighter line-height fixes vertical drift vs design tools
+                            lineHeight: '1.1', 
+                            // Subtler shadow for realism
+                            textShadow: '0px 1px 1px rgba(0,0,0,0.3)', 
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          {item.label.replace(/&apos;/g, "'")}
+                        </DraggableElement>
+                      );
+                    })}
+              </div>
+
+              {/* Motifs Layer */}
+              {adjustedMotifData.length > 0 && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg" style={{ zIndex: 5 }}>
+                  {adjustedMotifData
+                    .filter((motif: any) => motif.part !== 'Base')
+                    .map((motif: any, index: number) => {
+                      const rawX = motif.x ?? 0;
+                      const rawY = motif.y ?? 0;
+                      
+                      const dispX = scalingFactors.offsetX + (rawX * scalingFactors.uniformScale);
+                      const dispY = scalingFactors.offsetY + (rawY * scalingFactors.uniformScale);
+
+                      const motifSrc = motif.src || motif.name;
+                      const svgDims = motifDimensions[motifSrc];
+                      const motifRatio = parseFloat(motif.ratio || '1');
+                      
+                      // Calculate dimensions logic (same as before)
+                      let rawWidth = 100, rawHeight = 100;
+                      if (svgDims) {
+                         rawWidth = svgDims.width * motifRatio;
+                         rawHeight = svgDims.height * motifRatio;
+                      }
+                      if (typeof motif.height === 'number' && motif.height > 0) {
+                         rawHeight = motif.height;
+                         if (svgDims) rawWidth = rawHeight * (svgDims.width / svgDims.height);
+                         else rawWidth = rawHeight;
+                      }
+
+                      const finalWidth = rawWidth * scalingFactors.uniformScale;
+                      const finalHeight = rawHeight * scalingFactors.uniformScale;
+
+                      return (
+                        <DraggableElement
+                          key={index}
+                          initialStyle={{
+                            position: 'absolute',
+                            left: `${dispX}px`,
+                            top: `${dispY}px`,
+                            transform: `translate(-50%, -50%)${motif.rotation ? ` rotate(${motif.rotation}deg)` : ''}`,
+                            width: `${finalWidth}px`,
+                            height: `${finalHeight}px`,
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          <img
+                            src={getMotifPath(motif)}
+                            alt={motif.name || 'motif'}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                              display: 'block',
+                              filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
+                            }}
+                          />
+                        </DraggableElement>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+
+            {/* Base logic (keep as is, but ensure it uses scalingFactors.displayWidth logic properly) */}
+            {baseData && (
+               /* ... keep your existing base logic, it's separate from the main stone canvas ... */
+               <div /> 
+            )}
+          </div>
+          </div>
+        </div>
+      )}

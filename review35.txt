@@ -1,0 +1,104 @@
+Short answer: it’s **not** the headstone SVG being “too big.”
+Your motifs are still small because the current motif-sizing path keeps mixing two different references for `ratio` (sometimes `viewBox.height * ratio`, sometimes `initH * ratio`). That unpredictably shrinks the height — especially for the top motifs — and also explains the “reversed” drag feel when a flip sneaks onto the wrapper.
+
+Here’s the clean, legacy-faithful rule set that fixes it:
+
+## What to lock in
+
+1. **Ratio means “fraction of the tablet (canvas) height,” not the SVG’s own viewBox.**
+   So for motifs that were saved with only `ratio`, compute height in canvas units as:
+
+   ```
+   hCanvas = initH * ratio
+   ```
+
+   Then multiply by `uniformScale` once to get pixels.
+
+2. **Only DPR-normalize explicit pixel sizes.**
+   If a motif has a saved `height`/`width` in px and the design used physical coords, normalize once:
+
+   ```
+   px → canvas = px / savedDpr
+   ```
+
+3. **Flip on the <img>, never on the wrapper.**
+   Keep the draggable wrapper un-flipped so “move left = go left”.
+
+4. **One scaling pipeline.**
+   Position: (normalize DPR if needed) → convert center-origin to top-left → *uniformScale once*.
+   Size: (ratio→canvas units OR px→canvas units) → *uniformScale once*.
+
+## Minimal patch (drop-in)
+
+In your motifs layer, replace the size block with this single path (note the comment that ratio uses `initH`):
+
+```ts
+// ---- Position (center-origin -> top-left) ----
+const rawX = motif.x ?? motif.cx ?? 0;
+const rawY = motif.y ?? motif.cy ?? 0;
+const xCanvas = usesPhys ? rawX / savedDpr : rawX;
+const yCanvas = usesPhys ? rawY / savedDpr : rawY;
+
+const left = offsetX + (xCanvas + initW / 2) * uniformScale;
+const top  = offsetY + (yCanvas + initH / 2) * uniformScale;
+
+// ---- Size (single-source-of-truth) ----
+const ratio = Number(motif.ratio ?? 1);
+
+// Intrinsic aspect from SVG viewBox (only for width calc)
+const dims = motifDimensions[motif.src || motif.name];
+const aspect = dims?.height ? (dims.width / dims.height) : 1;
+
+// Height in *canvas* units
+const hCanvas = typeof motif.height === 'number'
+  ? (usesPhys ? motif.height / savedDpr : motif.height)       // explicit px path
+  : (initH * ratio);                                          // ✅ ratio is fraction of tablet height
+
+const wCanvas = typeof motif.width === 'number'
+  ? (usesPhys ? motif.width / savedDpr : motif.width)
+  : (hCanvas * aspect);
+
+// Final pixels — scale ONCE
+const heightPx = hCanvas * uniformScale;
+const widthPx  = wCanvas * uniformScale;
+
+// Wrapper stays un-flipped; flip only the image
+<DraggableElement
+  initialStyle={{
+    position: 'absolute',
+    left: `${left}px`,
+    top: `${top}px`,
+    transform: `translate(-50%, -50%)${motif.rotation ? ` rotate(${motif.rotation}deg)` : ''}`,
+    transformOrigin: 'center center',
+    width: `${widthPx}px`,
+    height: `${heightPx}px`,
+    pointerEvents: 'auto',
+  }}
+>
+  <img
+    src={getMotifPath(motif)}
+    alt={motif.name || 'motif'}
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'contain',
+      display: 'block',
+      transform: `scale(${motif.scaleX ?? 1}, ${motif.scaleY ?? 1})`,
+    }}
+  />
+</DraggableElement>
+```
+
+Why this works:
+
+* Your legacy saves (and the sample ratio like `0.13456`) were authored relative to the **tablet height**, not the motif’s internal viewBox. Using `initH * ratio` restores that exact proportion across any device (iPhone DPR=3 included).
+* We scale **once** with `uniformScale` (no double-scaling).
+* With the flip moved to the `<img>`, dragging is intuitive again.
+
+If you log these three fields for a top motif you’ll see the numbers line up and the size jumps to what you expect:
+
+```ts
+console.log('motif check', { ratio, initH, hCanvas: initH * ratio, heightPx: (initH * ratio) * uniformScale });
+```
+
+If, after this, a particular motif is still tiny, it means that motif has an **explicit `height` saved in physical px**; in that case verify `scalingFactors.usesPhysicalCoords` and `designDpr` are coming through so we hit the `px / savedDpr` branch once.

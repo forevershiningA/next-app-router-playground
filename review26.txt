@@ -1,0 +1,75 @@
+Good progress—text & the center motif are now matching. The last mismatch is the **top motifs** (size/position). Two concrete fixes will lock them in:
+
+## 1) Size `ratio` motifs from the SVG’s **intrinsic viewBox**, not the displayed box
+
+Right now the ratio branch still builds size from `svgDimensions` (a DOM/display measure) and then multiplies by `uniformScale` again. That double-scales → small and slightly off along the arch. Parse the SVG once, read its `viewBox`, and use that for the authoring-space size; then scale **once** with `uniformScale`. 
+
+**Add (top-level util + cache):**
+
+```ts
+// cache: src -> {vw, vh}
+const intrinsicCache: Record<string,{vw:number;vh:number}> = {};
+
+async function getIntrinsicDims(src: string): Promise<{vw:number;vh:number}> {
+  if (intrinsicCache[src]) return intrinsicCache[src];
+  const txt = await fetch(src).then(r => r.text());
+  const m = txt.match(/viewBox\s*=\s*"([\d.\s-]+)"/i);
+  if (!m) return (intrinsicCache[src] = { vw: 100, vh: 100 });
+  const [, vb] = m;
+  const [, , vw, vh] = vb.trim().split(/\s+/).map(Number);
+  return (intrinsicCache[src] = { vw, vh });
+}
+```
+
+**Use it in the motif sizing (ratio path):**
+
+```ts
+const savedDpr = scalingFactors.designDpr || 1;
+const usesPhysical = scalingFactors.usesPhysicalCoords || false;
+const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+
+const rawX = motif.x ?? motif.cx ?? 0;
+const rawY = motif.y ?? motif.cy ?? 0;
+const xCanvas = usesPhysical ? rawX / savedDpr : rawX;
+const yCanvas = usesPhysical ? rawY / savedDpr : rawY;
+
+const left = offsetX + (xCanvas + initW/2) * uniformScale;
+const top  = offsetY + (yCanvas + initH/2) * uniformScale;
+
+// ---- size ----
+const motifSrc = getMotifPath(motif); // your helper, preserves spaces fallback
+const { vw, vh } = await getIntrinsicDims(motifSrc);
+const ratio = Number(motif.ratio ?? 1);        // dimensionless
+const pxH = typeof motif.height === 'number'
+  ? (usesPhysical ? motif.height / savedDpr : motif.height)
+  : vh * ratio;                                 // authoring-space height from viewBox
+const pxW = typeof motif.width === 'number'
+  ? (usesPhysical ? motif.width / savedDpr : motif.width)
+  : vw * ratio;
+
+const height = pxH * uniformScale;              // scale ONCE
+const width  = pxW * uniformScale;
+```
+
+**Render guard (avoid tiny 100px fallback flash):**
+
+```ts
+if (!vw || !vh) return null; // or a skeleton
+```
+
+## 2) Remove any remaining `displayScale` from motif sizing
+
+Sizes must use **uniformScale** only (same scale as positions and fonts). If any motif block still multiplies width/height by `displayScale`, replace with `uniformScale`. That lingering second scale is why “still the same” persisted. 
+
+---
+
+### Quick checklist
+
+* [ ] Ratio branch uses `{vw, vh}` from SVG **viewBox** → `px = viewBox * ratio`.
+* [ ] DPR divide only for **pixel** values (`x,y,height,width,font_size`). **Never** divide `ratio`.
+* [ ] Single scale everywhere: `uniformScale` for positions **and** sizes.
+* [ ] Don’t render a ratio motif until `{vw, vh}` are known.
+
+Apply those two surgical changes in your current `DesignPageClient.tsx` and the top leaves/birds will match the legacy canvas precisely. 
+
+If you paste the exact motif render block you’re using now, I’ll return it already patched to the pattern above.

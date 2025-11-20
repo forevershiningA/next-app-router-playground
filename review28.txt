@@ -1,0 +1,75 @@
+Nice—text + center motif are lining up. The last mismatch is just the **top motifs** still being sized from a DOM box (and scaled twice). Here’s the tight, surgical fix to land it exactly:
+
+## Do these 4 edits in `DesignPageClient.tsx`
+
+1. **Use intrinsic SVG `viewBox` for ratio-sized motifs** (never the measured DOM size).
+2. **Scale once**: compute authoring-space size → multiply by `uniformScale`. Remove any remaining `displayScale` from motif sizing.
+3. **DPR-normalize only pixel values** (`x, y, height, width, font_size`). Never touch `ratio` (it’s dimensionless).
+4. **Render-guard** ratio motifs until intrinsic dims are known (prevents the tiny 100 px fallback).
+
+### Drop-in code (replace your motif sizing/position block)
+
+```ts
+// scaling helpers from your existing calc
+const savedDpr = scalingFactors.designDpr || 1;
+const usesPhys = scalingFactors.usesPhysicalCoords || false;
+const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+
+// --- position (center-origin from legacy -> top-left for CSS) ---
+const rawX = motif.x ?? motif.cx ?? 0;
+const rawY = motif.y ?? motif.cy ?? 0;
+const xCanvas = usesPhys ? rawX / savedDpr : rawX;
+const yCanvas = usesPhys ? rawY / savedDpr : rawY;
+
+const left = offsetX + (xCanvas + initW / 2) * uniformScale;
+const top  = offsetY + (yCanvas + initH / 2) * uniformScale;
+
+// --- size ---
+const src = getMotifPath(motif);              // your existing helper
+const { vw, vh } = await getIntrinsicDims(src); // read SVG viewBox once & cache
+if (!vw || !vh) return null;                  // avoid 100px fallback flash
+
+const ratio = Number(motif.ratio ?? 1);       // dimensionless
+
+// pixel path: normalize DPR once
+const hCanvasPx = (typeof motif.height === 'number')
+  ? (usesPhys ? motif.height / savedDpr : motif.height)
+  : null;
+const wCanvasPx = (typeof motif.width === 'number')
+  ? (usesPhys ? motif.width / savedDpr : motif.width)
+  : null;
+
+// ratio path: size from intrinsic viewBox * ratio (authoring units)
+const hCanvas = hCanvasPx ?? (vh * ratio);
+const wCanvas = wCanvasPx ?? (vw * ratio);
+
+// final render size — scale ONCE
+const heightPx = hCanvas * uniformScale;
+const widthPx  = wCanvas  * uniformScale;
+
+const style: React.CSSProperties = {
+  position: 'absolute',
+  left,
+  top,
+  width: `${widthPx}px`,
+  height: `${heightPx}px`,
+  transform: 'translate(-50%, -50%)',
+  // …other styles (pointer-events, filters, etc.)
+};
+```
+
+### One sanity log (temporarily)
+
+```ts
+console.log('top motif', { ratio, vw, vh, hCanvas, heightPx, uniformScale, xCanvas, yCanvas, left, top });
+```
+
+You should see:
+
+* `hCanvas = vh * ratio` (when no explicit height is saved)
+* `heightPx = hCanvas * uniformScale`
+* positions move 1:1 with inscriptions
+
+These changes match the legacy canvas behavior and remove the last double-scale that kept the top leaves/birds slightly small and off the arch. The rest of your scaling pipeline (uniform top-left offsets + center anchoring) is already correct. 
+
+If you want, paste the current motif render function and I’ll return it fully patched with this block in place.

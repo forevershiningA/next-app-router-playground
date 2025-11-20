@@ -1,0 +1,61 @@
+You’re right — sizes are still being scaled with a different factor than positions.
+
+### What’s happening
+
+* **Positions** use `uniformScale` (derived from the authoring frame `initW × initH`).
+* **Font sizes & motif sizes** in your active file are multiplied by **`displayScale`**, which is either `1` or not equal to `uniformScale`. That makes the text and motifs **too small** versus the headstone. See the inscription sizing line using `displayScale` and the motif sizing block using `displayScale`.  
+
+You already have an alternate block that sizes text with `uniformScale` (correct), but it isn’t the path being executed. 
+
+### Minimal fix (make sizes use the exact same scale as positions)
+
+**1) Inscriptions – change one line**
+
+```ts
+// BEFORE
+const fontSize = canvasFontSize * displayScale;  // <-- too small
+// AFTER
+const fontSize = canvasFontSize * uniformScale;  // match position scale
+```
+
+This is in the headstone inscriptions map where `fontSizeInPx` is parsed and `canvasFontSize` is computed. 
+
+**2) Motifs – replace all uses of `displayScale` with `uniformScale`**
+
+```ts
+// BEFORE
+let motifHeight = motifHeightCanvas
+  ? motifHeightCanvas * displayScale
+  : (svgDims ? svgDims.height * motifRatio * displayScale : 100 * displayScale);
+
+let motifWidth = motifHeightCanvas
+  ? motifHeightCanvas * aspect * displayScale
+  : (svgDims ? svgDims.width * motifRatio * displayScale : 100 * displayScale);
+
+// AFTER
+let motifHeight = motifHeightCanvas
+  ? motifHeightCanvas * uniformScale
+  : (svgDims ? svgDims.height * motifRatio * uniformScale : 100 * uniformScale);
+
+let motifWidth = motifHeightCanvas
+  ? motifHeightCanvas * aspect * uniformScale
+  : (svgDims ? svgDims.width * motifRatio * uniformScale : 100 * uniformScale);
+```
+
+This is inside the headstone motifs render block, just after `motifHeightCanvas` and `aspect` are set. 
+
+> Rationale: positions are computed with
+> `disp = offset + (canvas + init/2) * uniformScale`,
+> so sizes must also be multiplied by **the same `uniformScale`** to stay proportional.
+
+### Optional sanity log (helps verify)
+
+Right after computing sizes, add a one-time log for an element:
+
+```ts
+if (index === 0) {
+  console.log('Scale parity check', { uniformScale, fontSize, motifWidth, motifHeight, initW, initH });
+}
+```
+
+Apply those swaps and the inscriptions/motifs will match the authoring proportions relative to the headstone outline.

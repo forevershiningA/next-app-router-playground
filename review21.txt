@@ -1,0 +1,76 @@
+Short answer: because the component is still doing the same job in two different ways at once. You’ve got duplicate layout paths, mixed origins, and double-scaling. That makes some designs (like your SEHOVIC JSON) come out small even when DPR math looks “right”.
+
+Here are the concrete culprits I can see in your current `DesignPageClient.tsx`, with exact fixes:
+
+1. Two competing motif renderers (pick one, delete the other)
+
+* One path sizes/positions motifs with **`displayScale` + DPR checks** and even adds `(+ initW/2, + initH/2)` before scaling. 
+* Another path sizes/positions motifs with **`uniformScale` only** and **no DPR normalization** when `motif.height` is present. 
+  → Keep a single path that:
+
+  * Normalizes saved values exactly once: `h_px = motif.height ? motif.height / savedDpr : (svgDims.height * motifRatio)`
+  * Uses one scale: `final = h_px * uniformScale` (and `dispX/dispY = offset + raw * uniformScale`)
+  * No `(+ initW/2, + initH/2)` when you already use `translate(-50%,-50%)`.
+
+2. Double-scaling after container down-scale
+   You correctly recalc `uniformScale` after applying `containerScalingMultiplier` (good), but you also keep separate `scaleX/scaleY = ratio * upscaleFactor * containerScalingMultiplier`. If any element then multiplies by `uniformScale` again, it gets scaled **twice** (shrunk).  
+   → Simplify to a **single scalar**:
+
+* Define `uniformScaleFinal = uniformScale` **after** container fit.
+* Remove/ignore `scaleX/scaleY/legacyScale` for layout.
+* Everywhere use **only** `uniformScaleFinal` for `x, y, fontSize, motif sizes`.
+
+3. Mixed coordinate origins (center vs top-left)
+   One branch converts with `(canvasX + initW/2)`/`(canvasY + initH/2)` (center-origin assumption) while the other just uses `rawX`/`rawY` (top-left).  
+   → Choose one convention (your JSONs are saved as **center anchors** + `translate(-50%,-50%)`), then:
+
+* **Don’t** add `+ initW/2` or `+ initH/2`.
+* Use: `dispX = offsetX + rawX * uniformScaleFinal; dispY = offsetY + rawY * uniformScaleFinal;`
+
+4. DPR normalization not applied consistently
+   In one motif path you divide by DPR; in the other, you don’t. That alone explains DPR=3 designs rendering ~⅓ size vs expected (or vice-versa) depending on which path runs.  
+   → Rule: **always** normalize saved numbers that were captured on device:
+   `x = savedX / savedDpr; y = savedY / savedDpr; font = savedFontPx / savedDpr; motifHeight = savedHeight / savedDpr;`
+   (If a field wasn’t saved in physical pixels, skip the divide—be consistent for all fields.)
+
+Minimal patch (what to keep):
+
+* In your scaling block keep only the “uniform contain” math and container refit; return **`uniformScale`**, **`offsetX`**, **`offsetY`**, and the **authoring `initW/initH`**. (Your existing block already computes these correctly; just stop exporting/using `scaleX/scaleY/legacyScale` later.) 
+
+* In inscriptions:
+
+  ```ts
+  const x = item.x / savedDpr;
+  const y = item.y / savedDpr;
+  const fs = (item.font_size || 24) / savedDpr;
+  const left = offsetX + x * uniformScale;
+  const top  = offsetY + y * uniformScale;
+  const fontSize = fs * uniformScale;
+  // transform: 'translate(-50%, -50%) rotate(...)'
+  ```
+
+  (This matches your later inscription block; keep that one.) 
+
+* In motifs (single path only):
+
+  ```ts
+  const x = motif.x / savedDpr, y = motif.y / savedDpr;
+  const left = offsetX + x * uniformScale;
+  const top  = offsetY + y * uniformScale;
+
+  let hCanvas = motif.height
+      ? motif.height / savedDpr
+      : (svgDims ? svgDims.height * motifRatio : 100);
+
+  const aspect = svgDims ? svgDims.width / svgDims.height : 1;
+  const height = hCanvas * uniformScale;
+  const width  = hCanvas * aspect * uniformScale;
+  ```
+
+  (Delete the other motif block and anything that references `displayScale`.)  
+
+Why this will fix SEHOVIC specifically
+
+* Your JSON was authored on a high-DPR device; positions and sizes need one DPR divide, then a single uniform contain scale. The current code sometimes divides and **also** scales twice after container fit, which makes inscriptions/motifs end up too small. Unifying to **one normalization + one scale** makes the authoring preview and your Next page match.
+
+If you want, I can trim the file for you to a single, clean renderer (inscriptions + motifs) using only `uniformScale/offset` and push the exact diff.

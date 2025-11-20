@@ -1,0 +1,127 @@
+You’re very close. The remaining “too-small/top-motif” issues come from two inconsistencies in the current file:
+
+1. two different scaling pipelines exist in the same file
+2. motifs use `displayScale` (which is never updated) instead of the uniform, DPR-aware scale you already compute
+
+Here’s exactly what to change.
+
+---
+
+## 1) Keep **one** scaling pipeline (uniform, top-left anchored)
+
+Keep the version that computes a single **uniformScale** and **top-left offsets**:
+
+* it derives `initW/initH` from the saved Headstone (true authoring frame)
+* it sets `offsetX/offsetY` to **the top-left** of the fitted canvas
+* it exposes `usesPhysicalCoords` to decide whether to divide by the saved DPR
+
+That’s the block that logs “📏 TRUE authoring frame …” and center-insets the frame via:
+
+```ts
+let uniformScale = Math.min(displayWidth / initW, displayHeight / initH);
+let offsetX = Math.round((displayWidth - initW * uniformScale) / 2);
+let offsetY = Math.round((displayHeight - initH * uniformScale) / 2);
+```
+
+Keep this one (it returns `uniformScale`, `offsetX`, `offsetY`, `usesPhysicalCoords`, `designDpr`, etc.). 
+
+**Delete** the alternate version that sets `offsetX = displayWidth / 2` and maps from a center origin directly (that one fights your “top-left” mapping). 
+
+With the top-left pipeline retained, the mapping you already use is correct:
+
+```ts
+dispX = offsetX + (canvasX + initW/2) * uniformScale;
+dispY = offsetY + (canvasY + initH/2) * uniformScale;
+```
+
+…and it matches the legacy center-origin authoring coordinates. 
+
+---
+
+## 2) Remove `displayScale`; size text **and motifs** with `uniformScale`
+
+Right now some blocks still multiply sizes by `displayScale` (default = 1), which is why things render small or drift. Use `uniformScale` everywhere for sizes.
+
+### Inscriptions
+
+Ensure the font size path is:
+
+```ts
+const savedDpr = scalingFactors.designDpr || 1;
+const usesPhysical = scalingFactors.usesPhysicalCoords || false;
+
+let fontSizeInPx = item.font_size || 16;
+// normalize physical → logical only if needed
+const canvasFontSize = usesPhysical ? fontSizeInPx / savedDpr : fontSizeInPx;
+
+// final rendered size
+const fontSize = canvasFontSize * uniformScale;
+```
+
+(You already have this in one block—keep this version and remove the one that multiplies by `displayScale`.)  
+
+### Motifs
+
+Fix the motif sizing so **ratio** is respected and DPR is handled once:
+
+```ts
+const savedDpr = scalingFactors.designDpr || 1;
+const usesPhysical = scalingFactors.usesPhysicalCoords || false;
+const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+
+const rawX = motif.x ?? 0;
+const rawY = motif.y ?? 0;
+const canvasX = usesPhysical ? rawX / savedDpr : rawX;
+const canvasY = usesPhysical ? rawY / savedDpr : rawY;
+
+const dispX = offsetX + (canvasX + initW / 2) * uniformScale;
+const dispY = offsetY + (canvasY + initH / 2) * uniformScale;
+
+// ---- size ----
+const motifSrc = motif.src || motif.name;
+const svgDims = motifDimensions[motifSrc];              // naturalWidth/Height measured earlier
+const ratio = typeof motif.ratio === 'number' ? motif.ratio : parseFloat(motif.ratio || '1');
+
+// If legacy height was saved in *physical* pixels, normalise to logical first
+let canvasHeight: number | null = null;
+if (typeof motif.height === 'number') {
+  canvasHeight = usesPhysical ? motif.height / savedDpr : motif.height;
+}
+
+// final size in screen pixels
+const heightPx = (canvasHeight ?? (svgDims?.height ?? 100) * ratio) * uniformScale;
+const aspect = svgDims && svgDims.height > 0 ? svgDims.width / svgDims.height : 1;
+const widthPx = heightPx * aspect;
+```
+
+Then render with `width: ${widthPx}px; height: ${heightPx}px;`.
+Right now this block multiplies by `displayScale` — change those to `uniformScale` as above. 
+
+---
+
+## 3) Don’t render motifs until their intrinsic size is known
+
+When `svgDims` is missing you fall back to `100px`, which produces tiny top motifs (and makes the ratio look wrong). Add a guard so motifs wait until their natural size has been measured:
+
+```ts
+if (!svgDims && typeof motif.height !== 'number') return null; // or a lightweight skeleton
+```
+
+(Place right before you compute `aspect/heightPx`.) The code that records `motifDimensions[motifSrc]` is already present; this just prevents the 100px fallback from flashing. 
+
+---
+
+## 4) Sanity-check your coordinate space detection
+
+You already compute `usesPhysicalCoords` from the layout items. Keep that and ensure you always use the saved DPR from the Headstone data for normalization (`designDpr`). That logic is in the same scaling block you’re keeping. 
+
+---
+
+### TL;DR – surgical edits
+
+* Remove all uses of `displayScale`. Use `uniformScale` for **every** size calculation (inscriptions and motifs).  
+* Keep the scalingFactors implementation that returns **top-left offsets**; delete the “offsetX = displayWidth/2” variant.  
+* Motif size = `(motif.height? (h/DPR) : svgHeight*ratio) * uniformScale` and width by aspect. 
+* Delay motif render until `svgDims` is known to avoid the 100px fallback. 
+
+Apply those, and the top motifs will match the legacy canvas: correct size from `ratio`, correct placement from center-origin coords, and consistent scaling with inscriptions.

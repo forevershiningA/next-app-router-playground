@@ -1,0 +1,96 @@
+Yes—fonts + center figure are correct now. The two bugs left are only in the motif layer:
+
+## A) Top motifs are still too small
+
+Cause: the **ratio-only** path is still sizing from a DOM/rendered box at some point in the chain and/or getting double-scaled. Size them from the SVG **viewBox** (intrinsic), then multiply by **uniformScale once**—never by any other scale. Also DPR-divide only pixel fields (`x, y, height, width, font_size`), never `ratio`.
+
+**Drop-in replacement in your motif sizing:**
+
+```ts
+// inputs already available from your code:
+const dpr = scalingFactors.designDpr || 1;
+const usesPhys = scalingFactors.usesPhysicalCoords || false;
+const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+
+// 1) positions (center-origin -> top-left)
+const rawX = motif.x ?? motif.cx ?? 0;
+const rawY = motif.y ?? motif.cy ?? 0;
+const xCanvas = usesPhys ? rawX / dpr : rawX;
+const yCanvas = usesPhys ? rawY / dpr : rawY;
+const left = offsetX + (xCanvas + initW/2) * uniformScale;
+const top  = offsetY + (yCanvas + initH/2) * uniformScale;
+
+// 2) intrinsic dims (with fallback for filenames with spaces)
+const srcClean = getMotifPath(motif);
+let { vw, vh } = await getIntrinsicDims(srcClean);
+if (!vw || !vh) {
+  const srcSpaces = getFallbackMotifPath(motif);
+  ({ vw, vh } = await getIntrinsicDims(srcSpaces));
+}
+if (!vw || !vh) return null; // avoid 100px guess
+
+// 3) size: DPR-normalize only explicit px sizes; otherwise use viewBox * ratio
+const ratio = Number(motif.ratio ?? 1); // dimensionless
+const hCanvas = typeof motif.height === 'number'
+  ? (usesPhys ? motif.height / dpr : motif.height)
+  : (vh * ratio);
+const wCanvas = typeof motif.width === 'number'
+  ? (usesPhys ? motif.width / dpr : motif.width)
+  : (vw * ratio);
+
+// 4) final render size — scale ONCE
+const heightPx = hCanvas * uniformScale;
+const widthPx  = wCanvas  * uniformScale;
+
+const style: React.CSSProperties = {
+  position: 'absolute',
+  left, top,
+  width: `${widthPx}px`,
+  height: `${heightPx}px`,
+  transform: 'translate(-50%, -50%)',
+  transformOrigin: 'center center',
+  pointerEvents: 'none',
+};
+```
+
+This removes the lingering double-scale and forces the ratio path to match legacy. (Your file already has the intrinsic parser & fallbacks; this just wires it correctly and keeps the math one-scale-only.) 
+
+---
+
+## B) “Moving left goes right” when dragging the top motifs
+
+Cause: transform composition order. Your draggable wrapper appends a `translate(x,y)` **after** the existing `translate(-50%,-50%)`. Because CSS applies transforms right-to-left, the centering offset is applied *after* the drag delta, which flips intuition and can look like inversion depending on the parent transform chain.
+
+**Fix the order and set an explicit origin:**
+
+```tsx
+// In DraggableElement
+style={{
+  ...initialStyle,
+  // put the drag translate FIRST, then the centering translate
+  transform: `translate(${position.x}px, ${position.y}px) ${initialStyle.transform || 'translate(-50%, -50%)'}`,
+  transformOrigin: 'center center',
+  cursor: isDragging ? 'grabbing' : 'grab',
+  userSelect: 'none',
+}}
+```
+
+This makes pointer movement map 1:1 to the element regardless of the centering transform. (If you don’t need live dragging on this public preview, you can also disable the draggable wrapper here to eliminate any transform stacking issues.) 
+
+---
+
+### Quick sanity checks
+
+* Log once per top motif:
+
+```ts
+console.log('motif', { ratio, vw, vh, hCanvas, heightPx, uniformScale, xCanvas, yCanvas });
+```
+
+Expected:
+
+* `hCanvas = vh * ratio` (when no explicit height saved),
+* `heightPx = hCanvas * uniformScale`,
+* dragging left moves left.
+
+Do those two edits and the top leaves/birds will match the legacy canvas in both **size** and **drag behavior**.

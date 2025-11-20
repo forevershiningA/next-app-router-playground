@@ -145,7 +145,7 @@ export default function ThreeScene() {
         ref={containerRef}
         className="relative w-full h-screen" 
         style={{ 
-          background: '#87CEEB', 
+          background: '#000000', 
           padding: '0' 
         }}
       >
