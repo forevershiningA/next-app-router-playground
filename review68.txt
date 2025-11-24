@@ -1,0 +1,69 @@
+You’re right—the base is being laid out in page pixels, not in the same **logical canvas** space as the headstone. That’s why it keeps drifting, sitting too low, and staying too wide. The fix is to place the base using the same numbers you already compute for the headstone (`offX`, `offY`, `drawW`, `drawH`) and to size it from the JSON width/length instead of the full mask width.
+
+Drop-in patch (core idea, no dependencies):
+
+```tsx
+// after you have topProfile { offX, offY, drawW, drawH, scale } and headstoneData
+const hs = designData.find((i:any)=>i.type==='Headstone') || {};
+const initW   = hs.init_width  || 707;
+const initH   = hs.init_height || 476;
+const stoneWm = hs.width       || 600;        // mm in JSON
+const baseHm  = hs._length     || 80;         // base height (mm) from JSON
+const baseWm  = hs.base_width  || stoneWm;    // optional, else same as stone
+
+// convert mm → pixels in the current render
+// pixels-per-mm in screen = drawW / stoneWm
+const ppmm    = (topProfile?.drawW || initW) / stoneWm;
+
+// target base dimensions (pixels)
+const baseWpx = Math.round((baseWm) * ppmm);
+const baseHpx = Math.round((baseHm) * ppmm);
+
+// sit the base just under the tablet with a small overlap so it “touches”
+// tweak `overlapPx` (3–10px) to match the reference look
+const overlapPx = 6;
+
+// anchor relative to the same canvas as the headstone
+const leftPx = Math.round((topProfile!.offX) + (topProfile!.drawW - baseWpx) / 2);
+const topPx  = Math.round((topProfile!.offY) + (topProfile!.drawH) - overlapPx);
+```
+
+Render wrapper (ensures both elements share one positioning context and stay centered):
+
+```tsx
+<div
+  className="relative mx-auto"
+  style={{ width: initW, height: initH + baseHpx, position: 'relative' }}
+>
+  {/* Headstone (your existing render) */}
+  <div style={{ position: 'absolute', left: 0, top: 0, width: initW, height: initH }}>
+    {/* ...existing headstone/SVG render... */}
+  </div>
+
+  {/* Base — sized and positioned in the same logical coordinates */}
+  <img
+    src={baseTextureUrl}
+    alt="Base"
+    style={{
+      position: 'absolute',
+      left: leftPx,
+      top : topPx,
+      width: baseWpx,
+      height: baseHpx,
+      objectFit: 'cover',
+      zIndex: 0,              // stays behind inscriptions/motifs
+      pointerEvents: 'none',
+    }}
+  />
+</div>
+```
+
+Why this fixes all three symptoms:
+
+* **Too wide** → width now comes from JSON (`base_width` if present; else stone width).
+* **Wrong vertical position** → top aligned to `offY + drawH` (the bottom of the rendered stone) with a tiny overlap.
+* **Floating gap** → wrapper’s height is `initH + baseHpx`, so the base isn’t pushed far down by outer layout.
+
+If you don’t have `base_width` in the JSON, you’ll still get a visually correct result because `baseWpx` defaults to the stone’s rendered width. If your JSON’s base height lives under a different key, swap `hs._length` accordingly.
+
+This change keeps everything in one coordinate system (the same one your curve/top-profile uses), so the base will finally sit **directly under** the headstone and scale perfectly with it. 

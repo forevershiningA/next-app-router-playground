@@ -1,0 +1,77 @@
+Great—now that the base shows, its **X/Y are computed right but applied in the wrong coordinate space**. It’s being positioned relative to a parent that isn’t the same coordinate system as the tablet (hence the thin strip halfway up, starting near the page’s left).
+
+### What to change (two parts)
+
+#### 1) Ensure the preview wrapper is the positioning context
+
+Make the wrapper that also contains the tablet **`position: relative`** and put the base **inside this same wrapper** (after the tablet background, before text/motifs).
+
+```tsx
+// The same element that currently holds the tablet background
+<div ref={svgHostRef} style={{
+  position: 'relative',          // <-- make this the positioning context
+  width: overlayW,
+  height: overlayH,
+  overflow: 'hidden'
+}}>
+  {/* tablet background here ... */}
+  {/* <-- base div goes HERE */}
+  {/* inscriptions/motifs go after */}
+</div>
+```
+
+#### 2) Compute base X/Y in the tablet’s overlay space (not page space)
+
+Use the fitted tablet bounds from `buildTopProfile` and convert from authoring → overlay px with the **same scale** as the tablet:
+
+```tsx
+// --- authoring → overlay scale (same mapping the tablet uses)
+const sx = overlayW / initW;
+const sy = overlayH / initH;
+
+// --- fitted tablet bounds (overlay px)
+const stoneLeft = offsetX + (topProfile?.offX ?? 0) * sx;
+const stoneTop  = offsetY + (topProfile?.offY ?? 0) * sy;
+const stoneW    = (topProfile?.drawW ?? initW) * sx;
+const stoneH    = (topProfile?.drawH ?? initH) * sy;
+const stoneBottom = stoneTop + stoneH;
+
+// --- base size & placement (overlay px; centered under tablet)
+const baseOverhang = 0.04;                         // 4% wider than tablet
+const baseWidth    = Math.round(stoneW * (1 + baseOverhang));
+const baseHeight   = Math.round(overlayH * 0.085);
+const overlapPx    = Math.round(baseHeight * 0.25); // tucks under tablet
+
+let baseLeft = Math.round(stoneLeft + (stoneW - baseWidth) / 2);
+let baseTop  = Math.round(stoneBottom - overlapPx);
+
+// Clamp to keep whole base inside the wrapper
+baseLeft = Math.max(0, Math.min(overlayW - baseWidth, baseLeft));
+baseTop  = Math.max(0, Math.min(overlayH - baseHeight, baseTop));
+
+// --- render AFTER tablet background, inside the same wrapper
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: baseLeft,
+  top: baseTop,
+  width: baseWidth,
+  height: baseHeight,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  zIndex: 25,                   // above tablet bg, below inscriptions/motifs
+  pointerEvents: 'none',
+};
+<div style={baseStyle} />
+```
+
+### Quick sanity check (log once)
+
+```ts
+console.log('BASE XY',
+  { baseLeft, baseTop, baseWidth, baseHeight,
+    stoneLeft, stoneTop, stoneW, stoneH, overlayW, overlayH });
+```
+
+**Why this fixes your screenshot:**
+Previously the base was absolutely positioned but **not** inside the same positioned wrapper as the tablet, so its left/top were interpreted in the page/root coordinate system. By making `svgHostRef` the positioned parent and placing the base **inside** it, the same offset/scale math lines the base up perfectly under the tablet. 

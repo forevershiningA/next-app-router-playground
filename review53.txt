@@ -1,0 +1,55 @@
+You’ve got the base positioned correctly now, but it’s being **painted behind** the tablet layer (or just outside the clipped canvas). Two tiny fixes:
+
+### 1) Put the base **above** the tablet (z-index + DOM order)
+
+Render the base **after** the tablet background element and give it a higher z-index than the tablet (and lower than inscriptions/motifs). If your tablet bg uses `zIndex: 10–20`, set the base to `zIndex: 25` (or higher).
+
+```ts
+// --- stone bounds in OVERLAY px (from buildTopProfile)
+const stoneW = (topProfile?.drawW ?? initW) * (overlayW / initW);
+const stoneL = offsetX + (topProfile?.offX ?? 0) * (overlayW / initW);
+const stoneT = offsetY + (topProfile?.offY ?? 0) * (overlayH / initH);
+const stoneH = (topProfile?.drawH ?? initH) * (overlayH / initH);
+const stoneB = stoneT + stoneH;
+
+// base sizing + position (centered under tablet)
+const baseOverhang = 0.04;                         // 4% wider than tablet
+const baseWidth    = Math.round(stoneW * (1 + baseOverhang));
+const baseHeight   = Math.round(overlayH * 0.085); // 8.5% of canvas height
+const baseLeft     = Math.round(stoneL + (stoneW - baseWidth) / 2);
+
+// overlap but keep fully visible inside canvas
+const overlapPx    = Math.round(baseHeight * 0.25);
+const canvasTop    = offsetY;
+const canvasBottom = offsetY + overlayH;
+let baseTop        = Math.round(stoneB - overlapPx);
+baseTop            = Math.max(canvasTop, Math.min(canvasBottom - baseHeight, baseTop));
+
+// IMPORTANT: paint above tablet bg
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: baseLeft,
+  top: baseTop,
+  width: baseWidth,
+  height: baseHeight,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  zIndex: 25,                 // <-- higher than tablet bg
+  pointerEvents: 'none',
+};
+```
+
+Place the `<div style={baseStyle} />` **after** you render the tablet background so stacking is predictable. If the parent preview uses `overflow:hidden`, the clamp above guarantees the base stays inside.
+
+### 2) Sanity checks (one-time)
+
+* Ensure the preview wrapper has `position: relative` (so absolute coordinates are local).
+* Confirm the tablet background’s z-index is **lower** (e.g., 10–20).
+* Log values once to verify it’s inside the canvas:
+
+```ts
+console.log('BASE DEBUG', { baseLeft, baseTop, baseWidth, baseHeight, stoneT, stoneB, overlayH });
+```
+
+These two changes fix the “invisible base” by keeping it **inside** the canvas and **above** the tablet background. You already have the needed `offX/offY/drawW/drawH` in `DesignPageClient.tsx`, so it’s a drop-in swap. 

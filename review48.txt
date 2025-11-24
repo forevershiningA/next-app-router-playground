@@ -1,0 +1,73 @@
+Short answer: it’s not the global “scale” of inscriptions/motifs. The last few pixels are coming from two tiny mismatches in your snap math:
+
+1. **Edge bias in the curve sampler.**
+   `buildTopProfile` picks the *first opaque* pixel **inside** the stone. Anti-aliasing makes that 1–2 px below the true outline, so every snap lands slightly low.
+
+2. **Motif height under-count.**
+   `motifHAuthor` is derived from a pre-scaled value in some cases, so the bbox you subtract from the curve is 1–2 px too small → also lands low.
+
+Do these two micro-fixes and it will “stick” perfectly:
+
+---
+
+### A) Nudge the sampled curve up by 1 px (edge bias)
+
+Inside `buildTopProfile` (after reading `a`), subtract one pixel when the first opaque is found:
+
+```ts
+// For each column x, find first opaque pixel (top edge inside stone)
+for (let x = 0; x < initW; x++) {
+  for (let y = 0; y < initH; y++) {
+    const a = imgData[(y * initW + x) * 4 + 3];
+    if (a > 8) {
+      topY[x] = Math.max(0, y - 1); // <-- bias up 1 px to counter AA
+      break;
+    }
+  }
+}
+```
+
+(Keep your 5-tap smoothing after this.) 
+
+---
+
+### B) Use the **final rendered motif height** to compute `motifHAuthor`
+
+Where you calculate the snap:
+
+```ts
+// Make sure this is the same pixel height you set in the style (final render height in the overlay)
+const motifRenderHOverlayPx = finalMotifHeightPx; // <- whatever you actually use to render
+
+// Convert to authoring space
+const motifHAuthor = motifRenderHOverlayPx * (initH / overlayH);
+```
+
+Then keep your existing:
+
+```ts
+const overlayCenterY = offsetY + overlayH/2 + cy * sy;
+const authorCenterY  = (overlayCenterY - offsetY) * (initH / overlayH);
+const currentTopAuthor = authorCenterY - motifHAuthor / 2;
+```
+
+This removes the 1–2 px “under-reach” from using a pre-scaled height. If you don’t already have `finalMotifHeightPx`, log the element’s actual style height (`getBoundingClientRect().height`) once and wire that value into the calc. 
+
+---
+
+### C) (Optional) Keep your optical lift, but cap totals
+
+After (A) and (B), keep your `opticalLift`/`crownBoost`, but clamp the total upward delta so it never exceeds ~10 px:
+
+```ts
+const deltaAuthor = Math.max(-10, Math.min(10, desiredTopAuthor - currentTopAuthor));
+```
+
+---
+
+### Why this fixes “it’s still a bit low”
+
+* The curve you snap to was ~1 px *inside* the outline; biasing it up matches the visual edge.
+* Using the **rendered** motif height (not a pre-scale) makes the bbox math exact, so the top of the motif lands at `curve + margin`—not 1–2 px below it.
+
+If you want, paste your current `finalMotifHeightPx` expression and I’ll point to the exact line to swap so `motifHAuthor` is 1:1 with the drawn element. 

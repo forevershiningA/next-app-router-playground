@@ -1,0 +1,98 @@
+Yes — fix the motifs by mapping them with the **same, single coordinate system** you use for the headstone SVG and inscriptions: authoring-canvas → fitted overlay (uniformScale, offsetX/Y). Then size each motif from its SVG viewBox and the saved `<ratio>`.
+
+Here’s a drop-in approach that makes your SEHOVIC layout match the original PINTO screenshot.
+
+### 1) Normalize saved XY to a center-origin pair
+
+Designs may store either `cx/cy` (center-origin) or `x/y` (top-left). Normalize once, then map.
+
+```ts
+function normCanvasCenter(item: any, initW: number, initH: number) {
+  if (item.cx != null || item.cy != null) {
+    return { cx: item.cx ?? 0, cy: item.cy ?? 0 };
+  }
+  const x = item.x ?? 0, y = item.y ?? 0;
+  const w = item.w ?? 0, h = item.h ?? 0; // if present in JSON
+  // convert top-left authoring to center-origin about canvas center
+  return { cx: (x + w/2) - initW/2, cy: (y + h/2) - initH/2 };
+}
+```
+
+### 2) Map center-origin canvas coords into the fitted overlay
+
+Use the **same** `uniformScale`, `offsetX`, `offsetY`, `initW`, `initH` you already compute for the preview. This guarantees DPR-agnostic placement. (Your file already keeps these values and builds a top profile; reuse them. )
+
+```ts
+function toDisplayXY(cx: number, cy: number, s: {
+  uniformScale: number, initW: number, initH: number, offsetX: number, offsetY: number
+}) {
+  const displayX = s.offsetX + (s.initW/2 + cx) * s.uniformScale;
+  const displayY = s.offsetY + (s.initH/2 + cy) * s.uniformScale;
+  return { displayX, displayY };
+}
+```
+
+### 3) Size motifs from their SVG viewBox + saved `<ratio>`
+
+You already parse intrinsic SVG viewBox in `getIntrinsicDims`. Use that to create a **pixel scale** that matches the authoring intent (ratio of tablet width). This fixes the “too small”/“too big” drift across devices. 
+
+```ts
+// target width = ratio * canvas width (authoring units), then scaled to screen
+async function motifScreenScale(svgUrl: string, ratio: number, s: {
+  uniformScale: number, initW: number
+}) {
+  const { vw } = await getIntrinsicDims(svgUrl);   // intrinsic width in viewBox units
+  const targetCanvasW = (ratio || 0.12) * s.initW; // e.g. ratio 0.12 = 12% of tablet width
+  const targetScreenW = targetCanvasW * s.uniformScale;
+  // render the SVG at its intrinsic size and scale it up
+  return targetScreenW / vw;
+}
+```
+
+### 4) Render motif with a single transform
+
+Keep a single `translate(-50%, -50%)` and apply the computed scale. Avoid mixing extra transforms or DPR math.
+
+```tsx
+// inside your motif renderer
+const { cx, cy } = normCanvasCenter(motif, initW, initH);
+const { displayX, displayY } = toDisplayXY(cx, cy, { uniformScale, initW, initH, offsetX, offsetY });
+const scale = await motifScreenScale(motifUrl, motif.ratio, { uniformScale, initW });
+
+<div
+  style={{
+    position: 'absolute',
+    left: displayX,
+    top:  displayY,
+    transform: `translate(-50%, -50%) scale(${scale})`,
+    transformOrigin: 'center center',
+    zIndex: 10, // above base, below UI
+    pointerEvents: 'none'
+  }}
+  dangerouslySetInnerHTML={{ __html: svgMarkup /* fetched once */ }}
+/>
+```
+
+### 5) (Optional) Keep motifs inside the stone silhouette
+
+You already compute a `topProfile` (column-wise top Y) in the file. If a motif creeps into air, nudge its `displayY` down to `topY[x] + margin`. This is how the PINTO top floral spray sits neatly in the arch. 
+
+```ts
+function clampToStone(displayX: number, displayY: number, topProfile: any, margin = 6) {
+  if (!topProfile) return { displayX, displayY };
+  const x = Math.round(displayX);
+  if (x < 0 || x >= topProfile.topY.length) return { displayX, displayY };
+  const minY = topProfile.offY + topProfile.topY[x] + margin;
+  return { displayX, displayY: Math.max(displayY, minY) };
+}
+```
+
+---
+
+## Why this matches the PINTO screenshot
+
+* **One coordinate system**: authoring canvas → fitted overlay with (uniformScale, offsetX, offsetY). No DPR branches, no re-normalization surprises.
+* **ViewBox-driven size**: each motif’s size is a **percentage of tablet width** via `<ratio>`, so birds/floral spray/statue scale correctly relative to the stone on any screen.
+* **Arch clamping** (optional): keeps the floral spray tucked into the curve like PINTO.
+
+Hook these into your current `DesignPageClient.tsx` motif pass (next to your inscription mapping) and the layout will snap to the same proportions and positions as the original reference. 

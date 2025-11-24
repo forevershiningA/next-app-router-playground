@@ -1,22 +1,22 @@
-index.js:640 Uncaught ModuleBuildError: Module build failed (from ./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
-Error:   × Expected ';', '}' or <eof>
-   ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1:1]
- 1 │ This is a confirmed scaling logic error where the **DPR normalization** (intended to shrink the coordinates of high-res text) was accidentally applied to the **Headstone Object dimensions** (which were already in logical units), causing the headstone to shrink to 1/3rd of its intended size.
-   · ──┬─ ──
-   ·   ╰── This is the expression part of an expression statement
- 2 │ 
- 3 │ Here is the corrected `DesignPageClient.tsx`. I have separated the `layoutScale` (for the container/objects) from the `uniformScale` (for the coordinate contents), ensuring the headstone remains full-size while the text coordinates are properly normalized.
- 3 │ 
-   ╰────
-
-
-Caused by:
-    Syntax Error
-    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:407086)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\webpack\bundle5.js:29:408881)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8645)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5019)
-    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
+index.js:640 Uncaught Error: Cannot find module './vendor-chunks/three@0.180.0.js'
+Require stack:
+- C:\Users\polcr\Documents\GitHub\next-dyo\.next\server\webpack-runtime.js
+- C:\Users\polcr\Documents\GitHub\next-dyo\.next\server\app\designs\[productType]\[category]\[slug]\page.js
+- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\require.js
+- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\load-components.js
+- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\build\utils.js
+- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\dev\static-paths-worker.js
+- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\jest-worker\processChild.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\require-hook.js:57:36)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\require-hook.js:68:28)
+    at require (node:internal/modules/helpers:135:16)
 getServerError @ node-stack-frames.js:41
 eval @ index.js:640
 setTimeout
@@ -34,23 +34,4 @@ __webpack_exec__ @ main.js:1546
 webpackJsonpCallback @ webpack.js:1
 (anonimowa) @ main.js:9
 websocket.js:46 [HMR] connected
-hook.js:608 ./app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx
-Error:   × Expected ';', '}' or <eof>
-   ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:1:1]
- 1 │ This is a confirmed scaling logic error where the **DPR normalization** (intended to shrink the coordinates of high-res text) was accidentally applied to the **Headstone Object dimensions** (which were already in logical units), causing the headstone to shrink to 1/3rd of its intended size.
-   · ──┬─ ──
-   ·   ╰── This is the expression part of an expression statement
- 2 │ 
- 3 │ Here is the corrected `DesignPageClient.tsx`. I have separated the `layoutScale` (for the container/objects) from the `uniformScale` (for the coordinate contents), ensuring the headstone remains full-size while the text coordinates are properly normalized.
- 3 │ 
-   ╰────
-
-Caused by:
-    Syntax Error
-overrideMethod @ hook.js:608
-nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
-handleErrors @ hot-reloader-pages.js:164
-processMessage @ hot-reloader-pages.js:228
-eval @ hot-reloader-pages.js:72
-handleMessage @ websocket.js:69
-index.js:1631 {file: {…}}
+hot-reloader-pages.js:207 [Fast Refresh] rebuilding

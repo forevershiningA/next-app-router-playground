@@ -1,0 +1,120 @@
+Short version: the “floating/too-wide base” isn’t a math problem — it’s a DOM/positioning problem caused by **several competing base renderers** in `DesignPageClient.tsx`, each with different coordinate systems, tops/lefts, and z-indexes. Depending on which one wins React’s render order, the base is either centered, pushed far right, or detached from the tablet. That’s why your screenshots keep “looping” between different wrong states.
+
+## What’s wrong (proof points)
+
+* The file currently contains **multiple “Base (pedestal)” blocks** sprinkled in different places (some *inside* the headstone overlay, others *after* the scene). Examples: one block that builds a flex “row” under the stone (v59) outside the main object layer, another inside the overlay (v60), a mm-based one (v61), plus earlier experiments that compute width/height differently and use different z-indexes.
+* Some of those blocks are **anchored to the page/section** (`left: 0` of a different ancestor), not to the same positioned container as the tablet, so their “center” is the page center, not the tablet center — hence the base appears too wide and shifted. 
+* Z-index and container choice also vary (`zIndex: 25` vs `zIndex: 0`) so in some renders the base overlays text; in others it hides behind — matching your “covers the headstone / floats below” screenshots.
+
+## Solid fix (single source of truth)
+
+1. **Keep exactly one base renderer** and delete the others.
+   Place it **inside the same absolutely-positioned overlay** that you use for tablet/motifs/inscriptions (the element referenced by `svgHostRef` / the “HEADSTONE OBJECT LAYER”). This guarantees the same coordinate system.
+
+2. **Compute size/position from mm → px** using the fitted tablet bounds, then center it with flex.
+   Use the mm from the saved JSON when available (length/height), otherwise fall back to a small overhang (e.g., 15–25 mm each side). The `v61` block already does this correctly; keep that one and remove the rest. 
+
+### Drop-in block to keep
+
+Put this block **inside** the overlay container (same place you render motifs), and remove the other “Base (pedestal)” blocks:
+
+```tsx
+{/* Base (pedestal) — single canonical renderer */}
+{baseData && (() => {
+  // Pull mm from design
+  const headstoneItem = (sanitizedDesignData || []).find((it:any)=>it.type==='Headstone') || {};
+  const tabletWidthMm  = Number(headstoneItem.width)  || 600;
+  const tabletHeightMm = Number(headstoneItem.height) || 600;
+
+  // Find a base-like item
+  const baseItem = (sanitizedDesignData || []).find((it:any) =>
+    /base/i.test(`${it.type} ${it.name ?? ''} ${it.label ?? ''}`)
+  ) || {};
+
+  // Prefer explicit mm; else add a small overhang (each side)
+  const lengthMm = [
+    baseItem.length_mm, baseItem.length, baseItem.width_mm, baseItem.width,
+    baseItem.size?.length_mm, baseItem.size?.width_mm,
+  ].map(Number).filter(v => Number.isFinite(v) && v >= 300).sort((a,b)=>b-a)[0]
+    ?? (tabletWidthMm + 2*25); // 25mm each side
+
+  const heightMm = [
+    baseItem.height_mm, baseItem.height, baseItem.size?.height_mm, baseItem.thickness_mm,
+  ].map(Number).filter(v => Number.isFinite(v) && v >= 50 && v <= 200)[0]
+    ?? 90;
+
+  // Overlay (display) scale
+  const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+  const overlayW = initW * uniformScale;
+  const overlayH = initH * uniformScale;
+
+  // Fitted tablet bounds in overlay px
+  const sx = overlayW / initW, sy = overlayH / initH;
+  const stoneTop  = offsetY + (topProfile?.offY ?? 0) * sy;
+  const stoneW    = (topProfile?.drawW ?? initW) * sx;
+  const stoneH    = (topProfile?.drawH ?? initH) * sy;
+  const stoneBot  = stoneTop + stoneH;
+
+  // mm → px
+  const pxPerMmX = stoneW / tabletWidthMm;
+  const pxPerMmY = stoneH / tabletHeightMm;
+
+  const baseWidthPx  = Math.round(lengthMm * pxPerMmX);
+  const baseHeightPx = Math.round(heightMm * pxPerMmY);
+
+  // Tuck under tablet a bit
+  const overlapPx = Math.round(baseHeightPx * 0.25);
+
+  // Row spans overlay; flex centers the base
+  const baseRowStyle: React.CSSProperties = {
+    position: 'absolute',
+    left: 0,
+    top: Math.max(0, Math.min(overlayH - baseHeightPx, stoneBot - overlapPx)),
+    width: overlayW,
+    height: baseHeightPx,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    pointerEvents: 'none',
+    zIndex: 5, // below text/motifs, above background
+  };
+
+  const baseStyle: React.CSSProperties = {
+    width: baseWidthPx,
+    height: baseHeightPx,
+    backgroundImage: baseTextureData
+      ? `url(${baseTextureData})`
+      : 'linear-gradient(to bottom,#1a1a1a,#000)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
+  return (
+    <div style={baseRowStyle}>
+      <div style={baseStyle} />
+    </div>
+  );
+})()}
+```
+
+3. **Ensure the overlay container is the positioning context.**
+   The element that wraps the tablet/motifs must have `position: relative;` (it already does in the HEADSTONE OBJECT LAYER). Keeping the base block inside that same element is the key difference versus the broken versions that sit outside. 
+
+4. **Delete the other variants.**
+   Search for and remove the duplicate “Base (pedestal)” blocks (v59/v60 and earlier experiments). Leaving even one of them in will reintroduce the drift you’ve been seeing.
+
+---
+
+### About the “SEHOVIC y-pos” and top motifs
+
+Your inscription/motif components use `translate(-50%,-50%)`, which is correct **if `left/top` are the element’s center**. If an inscription’s saved Y represents a baseline or a top, you must convert it to a center before mapping; otherwise the center math will place the *top* of the text at your “curve start” line. Check the mapping where `left`/`top` are computed (just above the `DraggableElement` creation) and ensure you add **half of the scaled height** when your saved Y is a top/baseline. The renderer already centers the DOM node. 
+
+---
+
+### Why this fixes all the screenshots
+
+* The base stops “floating” because it’s absolutely positioned **in the same coordinate space** as the tablet.
+* It stops being “too wide on the right” because we **center it with flex** in a row as wide as the overlay, instead of anchoring to `left: 0` of a different ancestor.
+* It no longer covers inscriptions because we **pin z-index** below the text/motifs but above the background.
+
+If you want, I can also point to the minimal `git diff` to remove the extra blocks and leave just the canonical one.

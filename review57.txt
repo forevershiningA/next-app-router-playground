@@ -1,0 +1,74 @@
+Nice—now we can see the base. Its strip being offset left and halfway up means the base `<div>` is still **not absolutely positioned inside the same overlay wrapper** as the tablet, so its `left/top` are being interpreted in a different coordinate space.
+
+Do these three changes (they’re small):
+
+1. Make the **same wrapper** that holds the tablet the positioning context.
+
+```tsx
+<div
+  ref={svgHostRef}
+  style={{
+    position: 'relative',   // <-- must be relative
+    width: overlayW,
+    height: overlayH,
+    overflow: 'hidden'
+  }}
+>
+  {/* tablet background here ... */}
+
+  {/* Place the BASE here (inside this wrapper) */}
+  <div style={baseStyle} />
+
+  {/* inscriptions / motifs ... */}
+</div>
+```
+
+2. Compute base XY **in overlay pixels** using the fitted stone bounds, and clamp so it can’t leave the wrapper:
+
+```ts
+const sx = overlayW / initW;
+const sy = overlayH / initH;
+
+const stoneLeft = offsetX + (topProfile?.offX ?? 0) * sx;
+const stoneTop  = offsetY + (topProfile?.offY ?? 0) * sy;
+const stoneW    = (topProfile?.drawW ?? initW) * sx;
+const stoneH    = (topProfile?.drawH ?? initH) * sy;
+const stoneBottom = stoneTop + stoneH;
+
+const baseOverhang = 0.04;
+const baseWidth  = Math.round(stoneW * (1 + baseOverhang));
+const baseHeight = Math.round(overlayH * 0.085);
+const overlapPx  = Math.round(baseHeight * 0.25);
+
+let baseLeft = Math.round(stoneLeft + (stoneW - baseWidth) / 2);
+let baseTop  = Math.round(stoneBottom - overlapPx);
+
+// keep the whole base inside the wrapper
+baseLeft = Math.max(0, Math.min(overlayW - baseWidth, baseLeft));
+baseTop  = Math.max(0, Math.min(overlayH - baseHeight, baseTop));
+
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: baseLeft,
+  top: baseTop,
+  width: baseWidth,
+  height: baseHeight,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  zIndex: 25,              // above tablet bg, below text/motifs
+  pointerEvents: 'none',
+};
+```
+
+3. Double-check stacking and transforms:
+
+* The tablet/background element’s `zIndex` must be **< 25**.
+* The wrapper (`svgHostRef`) must **not** have extra `transform: translate(...)` or padding; if it does, the base must live **inside** that transformed element (the snippet above ensures this).
+* Log once to confirm we’re in the right space:
+
+```ts
+console.log('BASE XY', { baseLeft, baseTop, baseWidth, baseHeight, overlayW, overlayH, stoneLeft, stoneTop, stoneW, stoneH });
+```
+
+With the base node rendered **inside** the same `svgHostRef` container and positioned in **overlay coordinates**, it will snap under the tablet and center correctly. All variables referenced are already present in your `DesignPageClient.tsx`. 

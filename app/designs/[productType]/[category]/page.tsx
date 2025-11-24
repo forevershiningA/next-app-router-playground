@@ -39,14 +39,52 @@ function formatShapeName(shapeName: string): string {
 }
 
 /**
- * Format design title with shape name
+ * Format design title with shape name separated by dash
+ * e.g., "curved-gable-gods-garden" → "Curved Gable - Gods Garden"
  */
 function formatDesignTitle(design: SavedDesignMetadata): string {
-  const baseTitle = formatSlugForDisplay(design.slug);
-  if (design.shapeName) {
-    return `${formatShapeName(design.shapeName)} - ${baseTitle}`;
+  const slug = design.slug;
+  const shapeName = design.shapeName;
+  
+  if (!shapeName) {
+    return formatSlugForDisplay(slug);
   }
-  return baseTitle;
+  
+  // Find known shape names in the slug
+  // Convert shape name to match slug format (lowercase with dashes instead of spaces/underscores)
+  const shapeWords = shapeName.toLowerCase().replace(/[\s_]+/g, '-').split('-');
+  const slugWords = slug.split('-');
+  
+  // Check if slug starts with the shape name
+  let shapeEndIndex = 0;
+  let matchFound = true;
+  
+  for (let i = 0; i < shapeWords.length; i++) {
+    if (slugWords[i] !== shapeWords[i]) {
+      matchFound = false;
+      break;
+    }
+    shapeEndIndex = i + 1;
+  }
+  
+  if (matchFound && shapeEndIndex > 0) {
+    // Extract the part after shape name
+    const remainingWords = slugWords.slice(shapeEndIndex);
+    const shapePart = formatShapeName(shapeName);
+    const restPart = remainingWords
+      .map((word, index) => {
+        if (word.length <= 2 && index > 0) {
+          return word;
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
+    
+    return restPart ? `${shapePart} - ${restPart}` : shapePart;
+  }
+  
+  // If shape name not found in slug, just format the slug
+  return formatSlugForDisplay(slug);
 }
 
 export default function CategoryPage() {

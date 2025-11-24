@@ -1,0 +1,66 @@
+You’re right—the base is being laid too high and too wide.
+
+Here’s a tight fix that (a) pins the base to the exact bottom of the rendered headstone (no overlap), and (b) keeps the base visually narrower so it doesn’t sprawl beyond the tablet.
+
+### What to change in `DesignPageClient.tsx`
+
+1. **Compute the stone bottom from the fitted canvas**, not the heuristic margins.
+   Right before `baseRowStyle`, replace the `stoneBot` usage with a deterministic bottom derived from the overlay frame:
+
+```ts
+// Overlay (display) size of the authoring canvas
+const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+const overlayW = initW * uniformScale;
+const overlayH = initH * uniformScale;
+
+// Always use the fitted canvas bottom as the headstone bottom.
+// The headstone SVG is rendered full-bleed (absolute inset-0), so its bottom == overlay bottom.
+const stoneBot = Math.round(offsetY + overlayH);
+```
+
+This removes the guesswork that can float the base upward when `topProfile` is absent or incomplete. (Your headstone SVG is forced to fill the container: “absolute inset-0 … width: '100%', height: '100%'”, so its visual bottom equals the overlay’s bottom. )
+
+2. **Place the base starting exactly at that bottom, with no overlap**, and keep it behind motifs/inscriptions:
+
+```ts
+const baseRowStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top: stoneBot,              // starts right where the headstone ends
+  width: overlayW,
+  height: baseHeightPx,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  pointerEvents: 'none',
+  zIndex: 2                   // below text/motifs (which are 5/10), above background
+};
+```
+
+(Your current code already sets `top: stoneBot` but `stoneBot` was coming from estimates; compute it exactly as above. Also drop zIndex to 2 so motifs don’t appear “behind” the base if there’s any rounding. )
+
+3. **Cap the base width to the tablet’s visual width** so it’s narrower like the saved design:
+
+```ts
+// px-per-mm taken from the actual stone (already correct)
+const pxPerMmX = stoneW / tabletWidthMm;
+const pxPerMmY = stoneH / tabletHeightMm;
+
+let baseWidthPx  = Math.round(lengthMm * pxPerMmX);
+const baseHeightPx = Math.round(heightMm * pxPerMmY);
+
+// Never let the base exceed the visible tablet width; add a slight inset
+const maxBasePx = Math.round(stoneW * 0.96);
+baseWidthPx = Math.min(baseWidthPx, maxBasePx);
+```
+
+This uses your saved base length (700 mm) but prevents canvas-wide “planks” when conversions make it overshoot; it also matches what customers expect visually (a base that’s a touch narrower than the tablet silhouette). The rest of your base renderer (row centering, texture, etc.) stays unchanged. 
+
+---
+
+### Why this works
+
+* The headstone SVG is rendered full-bleed inside the overlay; using `offsetY + overlayH` gives the true bottom every time, regardless of `topProfile` availability. 
+* Width is derived from mm → px using the stone’s *actual* on-screen width, then clamped to the tablet silhouette so the base appears properly narrower. 
+
+Apply those edits where the **“Base (pedestal) — single canonical renderer”** block lives. You’ll get a base that starts exactly at the bottom of the headstone and is visually narrower, matching the saved design intent—without covering the tablet. 

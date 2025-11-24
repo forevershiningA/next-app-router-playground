@@ -1,0 +1,85 @@
+Yep — it’s still using the *mask / canvas* width, not the rendered headstone width. That’s why the base keeps coming out too wide.
+
+Here’s the fix in three tiny moves:
+
+1. **Measure the actually rendered headstone** (the `drawW/drawH/offX/offY/scale` you already compute for curve-snap) and use *that* as the layout width.
+2. **Size the base by authoring ratio** (base width ÷ headstone width) and multiply by `drawW`. Do the same for height.
+3. **Center and stack** in a small wrapper that’s exactly `drawW` wide; put the base at the bottom, headstone above it. (No more full-mask width.)
+
+Drop-in patch (TSX):
+
+```tsx
+// after you have topProfile { topY, offX, offY, drawW, drawH, scale }
+const headstoneItem = designData?.find((d:any) => d.type === 'Headstone') || {};
+const baseItem      = designData?.find((d:any) => d.type?.toLowerCase().includes('base')) || {};
+
+// authoring (canvas) sizes
+const hsWAuthor = headstoneItem.width  ?? headstoneItem.init_width  ?? 700;
+const hsHAuthor = headstoneItem.height ?? headstoneItem.init_height ?? 500;
+
+// base authoring dimensions (same units as inscriptions/motifs)
+const baseWAuthor = baseItem.width  ?? 600;
+const baseHAuthor = baseItem.height ?? 100;
+
+// scale to rendered pixels (use the same mapping you used for the stone)
+const baseW = (baseWAuthor / hsWAuthor) * (topProfile?.drawW ?? 0);
+const baseH = (baseHAuthor / hsHAuthor) * (topProfile?.drawH ?? 0);
+
+// wrapper width is EXACTLY the rendered stone width
+const wrapperStyle: React.CSSProperties = {
+  position: 'relative',
+  width:  topProfile?.drawW ?? 0,
+  height: (topProfile?.drawH ?? 0) + baseH, // space for the base
+  margin: '0 auto', // center on page
+};
+
+// headstone sits at top of wrapper, aligned exactly like your raster draw
+const stoneStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top:  0,
+  width:  topProfile?.drawW ?? 0,
+  height: topProfile?.drawH ?? 0,
+  zIndex: 2,
+};
+
+// base centered under stone, same optical width as stone
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: '50%',
+  bottom: 0,
+  width: baseW,
+  height: baseH,
+  transform: 'translateX(-50%)',
+  zIndex: 1,
+  pointerEvents: 'none',
+  backgroundImage: `url(${baseItem.texture ?? '/textures/forever/l/Black-Granite.jpg'})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  boxShadow: '0 6px 16px rgba(0,0,0,0.25)', // optional
+};
+```
+
+And render:
+
+```tsx
+<div style={wrapperStyle}>
+  <div style={stoneStyle}>
+    {/* your existing stone SVG/canvas/inscriptions/motifs */}
+  </div>
+
+  <div style={baseStyle} />
+</div>
+```
+
+Why this works
+
+* The wrapper’s width = **`drawW`** (the real, on-screen headstone width), so the base can’t “see” the larger mask/canvas.
+* The base width/height = **authoring ratios × drawW/drawH**, so it matches the original JSON proportionally.
+* Centering is trivial (`left:50%` + `translateX(-50%)`), and stacking order (`zIndex`) prevents the base from covering the stone.
+
+If your JSON stores base thickness differently (e.g., `base.height_mm`), just plug those into `baseWAuthor/baseHAuthor` (same unit family as the headstone’s authoring width/height).
+
+This change fits directly in your current `DesignPageClient.tsx` around where you compute `topProfile` and render the preview. 
+
+If you want, I can also wire the base texture to the exact file from the design JSON and add an optional bevel/drop-shadow to match the screenshot even closer.

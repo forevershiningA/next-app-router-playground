@@ -1,0 +1,123 @@
+You’re right—the base is being sized to the full mask/container width. Let’s pin its width to the **drawn headstone width** (`drawW`), center it with `offX`, and give it a controlled height. Also ensure it sits **under** the tablet (z-index) instead of covering it.
+
+### What to change
+
+1. **Expose the headstone render metrics** you already compute in `buildTopProfile` and use them for the base:
+
+```ts
+// after setTopProfile(...)
+const metrics = topProfile && {
+  offX: topProfile.offX,
+  offY: topProfile.offY,
+  drawW: topProfile.drawW,
+  drawH: topProfile.drawH,
+};
+```
+
+2. **Derive base size/position from the headstone**, not the container:
+
+```ts
+// sensible defaults if the JSON has no base object yet
+const BASE_OVERHANG = 0.06;           // base wider than tablet by ~6% total (3% each side)
+const BASE_HEIGHT_FACTOR = 0.16;      // base height ≈ 16% of tablet height
+const BASE_GAP = 10;                  // px gap between tablet and base
+
+// If your saved design contains a base “addition”, you can read its intended ratio:
+const headstone = designData?.find((i: any) => i.type === 'Headstone');
+const baseAdd   = designData?.find((i: any) => i.type === 'Addition' && /base/i.test(i.name || ''));
+
+// optional ratio if widths exist in mm
+const mmRatio = (baseAdd?.width && headstone?.width) 
+  ? (baseAdd.width / headstone.width) 
+  : (1 + BASE_OVERHANG);
+
+const baseW = Math.round(metrics.drawW * mmRatio);
+const baseH = Math.round(metrics.drawH * BASE_HEIGHT_FACTOR);
+const baseLeft = Math.round(metrics.offX + (metrics.drawW - baseW) / 2);
+const baseTop  = Math.round(metrics.offY + metrics.drawH + BASE_GAP);
+```
+
+3. **Render the base as its own absolutely-positioned layer** that does not stretch:
+
+```tsx
+{/* HEADSTONE LAYER (stays as you have it) */}
+<div
+  style={{
+    position: 'absolute',
+    left: metrics.offX,
+    top:  metrics.offY,
+    width: metrics.drawW,
+    height: metrics.drawH,
+    zIndex: 2, // tablet above
+  }}
+  dangerouslySetInnerHTML={{ __html: svgContent! }}
+/>
+
+{/* BASE LAYER */}
+<div
+  style={{
+    position: 'absolute',
+    left: baseLeft,
+    top:  baseTop,
+    width: baseW,
+    height: baseH,
+    zIndex: 1,               // under the tablet
+    overflow: 'hidden',
+    boxShadow: '0 8px 16px rgba(0,0,0,.25)',
+    borderRadius: 2,
+  }}
+>
+  <img
+    src="/textures/forever/l/Blue-Pearl.jpg" // or from the addition’s selected granite
+    alt="Granite base"
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      display: 'block',
+    }}
+  />
+</div>
+```
+
+4. **Make the canvas tall enough** so the base isn’t clipped:
+
+```tsx
+// container around both layers
+<div
+  ref={svgHostRef}
+  style={{
+    position: 'relative',
+    width:  screenshotDimensions?.width || 800,
+    height: (screenshotDimensions?.height || 600) 
+          + (metrics ? (Math.round(metrics.drawH * BASE_HEIGHT_FACTOR) + BASE_GAP + 20) : 0),
+  }}
+>
+  {/* layers go here */}
+</div>
+```
+
+### Using real base proportions (optional)
+
+If your saved design JSON has explicit base dims, replace the defaults:
+
+```ts
+// Example: baseAdd.width_mm, baseAdd.height_mm and headstone.width_mm
+const mmRatio  = (baseAdd?.width_mm && headstone?.width_mm)
+  ? (baseAdd.width_mm / headstone.width_mm)
+  : (1 + BASE_OVERHANG);
+
+const baseH = (baseAdd?.height_mm && headstone?.height_mm)
+  ? Math.round(metrics.drawH * (baseAdd.height_mm / headstone.height_mm))
+  : Math.round(metrics.drawH * BASE_HEIGHT_FACTOR);
+```
+
+### Why this fixes the “still too wide” issue
+
+* Previously the base used the **mask/container width** (e.g., `width: 100%`), so it always spanned the whole preview.
+* Now it uses **`drawW` & `offX`** from the same layout math as the tablet, keeping them perfectly aligned and centered regardless of masks, DPR, or cropping.
+* Height is decoupled from the mask and scaled from the tablet, so it won’t look “too short”.
+
+If you paste the snippets in your `DesignPageClient.tsx` where you render the headstone, the base will sit **under**, be **centered**, and match the **intended width** instead of the mask. 
+
+Want me to wire this to the actual base “Addition” in your saved design JSON next, so it picks the exact granite swatch and real mm ratios automatically?

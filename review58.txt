@@ -1,0 +1,63 @@
+Got it—your base strip is still being laid out in the wrong coordinate space. You’re computing the right numbers, but the base `<div>` isn’t anchored to the same positioned wrapper as the tablet, so `left/top` are interpreted elsewhere. Let’s hard-anchor the base to the **stone’s center & bottom** inside the **same overlay wrapper** that paints the tablet.
+
+### Patch (drop in after the tablet background, before text/motifs)
+
+Use the fitted stone bounds from `topProfile` and anchor with `left: stoneCx`, `top: stoneBottom`, then translate. This avoids any parent padding/scroll transforms.
+
+```tsx
+// === Authoring→overlay scale (same as tablet)
+const sx = overlayW / initW;
+const sy = overlayH / initH;
+
+// === Fitted stone bounds (overlay px)
+const stoneLeft = offsetX + (topProfile?.offX ?? 0) * sx;
+const stoneTop  = offsetY + (topProfile?.offY ?? 0) * sy;
+const stoneW    = (topProfile?.drawW ?? initW) * sx;
+const stoneH    = (topProfile?.drawH ?? initH) * sy;
+
+const stoneCx   = stoneLeft + stoneW / 2;
+const stoneBottom = stoneTop + stoneH;
+
+// === Base size (relative to tablet width)
+const baseOverhang = 0.04;                         // 4% wider than tablet
+const baseWidth    = Math.round(stoneW * (1 + baseOverhang));
+const baseHeight   = Math.round(overlayH * 0.085);
+const overlapPx    = Math.round(baseHeight * 0.25); // how much base tucks under tablet
+
+// === Style (anchor at stone center/bottom, then translate)
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: stoneCx,
+  top: stoneBottom,
+  width: baseWidth,
+  height: baseHeight,
+  transform: `translate(-50%, ${-overlapPx}px)`, // center horizontally, pull upward for overlap
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundColor: '#2b2b2b', // visible even if texture fails
+  zIndex: 25,                  // above tablet bg, below inscriptions/motifs
+  pointerEvents: 'none',
+};
+
+// ---- IMPORTANT: render INSIDE the same overlay wrapper that has position:relative
+<div style={baseStyle} />
+```
+
+### Make sure these are true
+
+* The **same wrapper** that holds the tablet (`svgHostRef`) has `position:'relative'`, `width:overlayW`, `height:overlayH`, and the **base is a child of that wrapper** (not elsewhere).
+* The tablet/background z-index is **< 25**; inscriptions/motifs **> 25**.
+* No extra `transform` on a *parent other than* the overlay wrapper. If you have a page-level transform, it won’t affect this because we’re anchoring inside the overlay.
+
+### One-time debug (helps if anything still drifts)
+
+```ts
+console.log('BASE@overlay', {
+  overlayW, overlayH,
+  stoneLeft, stoneTop, stoneW, stoneH, stoneCx, stoneBottom,
+  baseWidth, baseHeight, overlapPx
+});
+```
+
+This “center+bottom anchor” avoids left/top being interpreted in the wrong space and snaps the base exactly under the tablet, matching the reference. The variables used here already exist in your current `DesignPageClient.tsx`. 

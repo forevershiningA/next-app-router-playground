@@ -91,6 +91,58 @@ async function getIntrinsicDims(src: string): Promise<{vw: number; vh: number}> 
   }
 }
 
+// Build a per-column "top Y" look-up of the rendered headstone
+async function buildTopProfile(svgText: string, initW: number, initH: number) {
+  const vbMatch = svgText.match(/viewBox\s*=\s*"([\d.\s-]+)"/i);
+  const [, vbStr] = vbMatch || [, `0 0 ${initW} ${initH}`];
+  const [ , , vbWStr, vbHStr ] = vbStr.split(/\s+/);
+  const vbW = parseFloat(vbWStr) || initW;
+  const vbH = parseFloat(vbHStr) || initH;
+
+  // Fit like your shape renderer (contain)
+  const scale = Math.min(initW / vbW, initH / vbH);
+  const drawW = vbW * scale;
+  const drawH = vbH * scale;
+  const offX = (initW - drawW) / 2;
+  const offY = (initH - drawH) / 2;
+
+  // Paint the SVG into a canvas
+  const blob = new Blob([svgText], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const img = await new Promise<HTMLImageElement>((res, rej) => {
+    const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url;
+  });
+
+  const c = document.createElement('canvas'); c.width = initW; c.height = initH;
+  const g = c.getContext('2d')!;
+  g.clearRect(0,0,initW,initH);
+  g.drawImage(img, offX, offY, drawW, drawH);
+  URL.revokeObjectURL(url);
+
+  // For each column x, find first opaque pixel (top edge inside stone)
+  const topY: number[] = new Array(initW).fill(initH);
+  const imgData = g.getImageData(0, 0, initW, initH).data;
+  for (let x = 0; x < initW; x++) {
+    for (let y = 0; y < initH; y++) {
+      const a = imgData[(y * initW + x) * 4 + 3];
+      if (a > 8) {
+        topY[x] = Math.max(0, y - 1); // Bias up 1 px to counter AA
+        break;
+      }
+    }
+  }
+  
+  // Smooth topY (simple 5-tap box blur to remove jaggies)
+  for (let i = 0; i < 2; i++) {
+    const b = topY.slice();
+    for (let x = 2; x < topY.length - 2; x++) {
+      topY[x] = Math.round((b[x-2] + b[x-1] + b[x] + b[x+1] + b[x+2]) / 5);
+    }
+  }
+  
+  return { topY, offX, offY, drawW, drawH, scale };
+}
+
 // Helper function to get predominant motif category from design
 function getPredominantMotifCategory(designData: any[]): string | null {
   if (!designData) return null;
@@ -197,9 +249,9 @@ function DesignSpecificContent({
   }, [shapeName, productSlug, categoryTitle]);
 
   return (
-    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 shadow-none md:shadow-sm mb-4 md:mb-6">
-      <div className="px-4 md:px-6 py-4 md:py-6">
-        <h2 className="font-serif text-2xl text-slate-900 mb-4">About This Design</h2>
+    <div className="bg-white border-0 mb-4 md:mb-6">
+      <div className="pt-6">
+        <h2 className="font-serif text-2xl text-slate-900 mb-4">About Design - {designTitle}</h2>
         
         {/* Introduction */}
         <p className="text-slate-700 mb-6" style={{ fontSize: '15px', lineHeight: '1.6' }}>
@@ -249,33 +301,6 @@ function DesignSpecificContent({
           </p>
         </div>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-200">
-          <button
-            onClick={() => {
-              // Scroll to the "Use Template" button or trigger edit
-              const editButton = document.querySelector('a[href*="#edit"]');
-              if (editButton instanceof HTMLAnchorElement) {
-                editButton.click();
-              }
-            }}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium cursor-pointer"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            Design This Memorial (Live Preview)
-          </button>
-          <a
-            href="/contact"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-900 border-2 border-slate-900 rounded-lg hover:bg-slate-50 transition-all font-medium"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            Get Help From a Designer
-          </a>
-        </div>
       </div>
     </div>
   );
@@ -1015,11 +1040,13 @@ function DraggableElement({
   initialStyle,
   onPositionChange,
   scale = 1,
+  onClick,
 }: { 
   children: React.ReactNode; 
   initialStyle: React.CSSProperties;
   onPositionChange?: (x: number, y: number) => void;
   scale?: number;
+  onClick?: () => void;
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -1038,12 +1065,12 @@ function DraggableElement({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    const newX = (e.clientX - dragStart.x) / scale;
-    const newY = (e.clientY - dragStart.y) / scale;
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
     
     setPosition({ x: newX, y: newY });
     onPositionChange?.(newX, newY);
-  }, [isDragging, dragStart, onPositionChange, scale]);
+  }, [isDragging, dragStart, onPositionChange]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -1064,6 +1091,7 @@ function DraggableElement({
     <div
       ref={elementRef}
       onMouseDown={handleMouseDown}
+      onClick={() => onClick?.()}
       style={{
         ...initialStyle,
         // Keep ONLY one centering translate; put drag after it:
@@ -1096,9 +1124,19 @@ export default function DesignPageClient({
   const [svgDimensions, setSvgDimensions] = useState<{ width: number; height: number } | null>(null);
   const [screenshotDimensions, setScreenshotDimensions] = useState<{ width: number; height: number } | null>(null);
   const [cropBounds, setCropBounds] = useState<CropBounds | null>(null);
+  const [topProfile, setTopProfile] = useState<{ topY: number[]; offX: number; offY: number; drawW: number; drawH: number; scale: number } | null>(null);
   const svgHostRef = useRef<HTMLDivElement>(null);
+  const [isLocalhost, setIsLocalhost] = useState(false);
+  const [selectedInscriptionIndex, setSelectedInscriptionIndex] = useState<number | null>(null);
+  const [editedInscriptionText, setEditedInscriptionText] = useState<string>('');
+  const [inscriptionTexts, setInscriptionTexts] = useState<Record<number, string>>({});
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
+  
+  // Check if we're on localhost
+  useEffect(() => {
+    setIsLocalhost(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  }, []);
   
   // Analyze screenshot for white space and calculate crop bounds
   useEffect(() => {
@@ -1107,12 +1145,6 @@ export default function DesignPageClient({
       analyzeImageForCrop(designMetadata.preview, 50)
         .then(bounds => {
           setCropBounds(bounds);
-          console.log('Auto-crop analysis complete:', {
-            shouldCrop: bounds.shouldCrop,
-            whiteSpace: bounds.whiteSpacePercentage.toFixed(2) + '%',
-            original: { width: bounds.width, height: bounds.height },
-            cropped: { width: bounds.croppedWidth, height: bounds.croppedHeight }
-          });
         })
         .catch(err => {
           console.error('Failed to analyze screenshot for cropping:', err);
@@ -1610,6 +1642,8 @@ export default function DesignPageClient({
       'Serpentine': isLandscape ? 'serpentine_landscape.svg' : 'serpentine.svg',
       'Square': 'square.svg',
       'Rectangle': 'square.svg',  // Use square.svg for Rectangle too (clean coordinates)
+      'heart': 'headstone_27.svg',  // Heart shape (formerly Headstone 27)
+      'Heart': 'headstone_27.svg',  // Heart shape with capital H
       // Guitar shapes
       'Guitar 1': 'headstone_3.svg',
       'Guitar 2': 'headstone_4.svg',
@@ -1990,6 +2024,27 @@ export default function DesignPageClient({
       });
   }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds]);
 
+  // Build top profile for motif snapping
+  useEffect(() => {
+    (async () => {
+      console.log('🔍 TopProfile effect:', { hasSvgContent: !!svgContent, hasScreenshotDimensions: !!screenshotDimensions });
+      if (!svgContent || !screenshotDimensions) {
+        console.log('⚠️ TopProfile: Missing prerequisites');
+        return;
+      }
+      const { width: initW, height: initH } = screenshotDimensions;
+      console.log('🔄 Building top profile...', { initW, initH });
+      try {
+        const prof = await buildTopProfile(svgContent, initW, initH);
+        setTopProfile(prof);
+        console.log('✅ Top profile built:', { initW, initH, samplePoints: prof.topY.slice(0, 10) });
+      } catch (err) {
+        console.warn('❌ Failed to build top profile:', err);
+        setTopProfile(null);
+      }
+    })();
+  }, [svgContent, screenshotDimensions]);
+
   const motifData = useMemo(() => {
     if (!designData) return [];
     const motifs = designData.filter((item: any) => item.type === 'Motif');
@@ -2163,7 +2218,10 @@ export default function DesignPageClient({
   
   // Get base texture from baseData
   const baseTextureData = useMemo(() => {
-    if (!baseData?.texture) return null;
+    if (!baseData?.texture) {
+      console.log('🔍 Base texture: No texture in baseData');
+      return null;
+    }
     
     const savedTexturePath = baseData.texture;
     
@@ -2176,7 +2234,9 @@ export default function DesignPageClient({
     // Try to match the texture path with our mapping
     for (const [oldPath, newImage] of Object.entries(textureMapping)) {
       if (savedTexturePath.includes(oldPath)) {
-        return `/textures/forever/l/${newImage}`;
+        const result = `/textures/forever/l/${newImage}`;
+        console.log('🔍 Base texture mapped:', { savedTexturePath, result });
+        return result;
       }
     }
     
@@ -2184,16 +2244,21 @@ export default function DesignPageClient({
     const match = savedTexturePath.match(/\/([A-Z0-9]+)(?:-TILE)?-\d+-X-\d+\.jpg/i);
     if (match && match[1]) {
       const graniteName = match[1];
-      return `/textures/forever/l/${graniteName}.jpg`;
+      const result = `/textures/forever/l/${graniteName}.jpg`;
+      console.log('🔍 Base texture (regex match):', { savedTexturePath, graniteName, result });
+      return result;
     }
     
     // Fallback: try to extract any filename and use it
     const filename = savedTexturePath.split('/').pop();
     if (filename) {
       const cleanFilename = filename.replace(/-TILE-\d+-X-\d+/i, '');
-      return `/textures/forever/l/${cleanFilename}`;
+      const result = `/textures/forever/l/${cleanFilename}`;
+      console.log('🔍 Base texture (fallback):', { savedTexturePath, filename, cleanFilename, result });
+      return result;
     }
     
+    console.log('🔍 Base texture (unchanged):', { savedTexturePath });
     return savedTexturePath;
   }, [baseData]);
   
@@ -2305,6 +2370,41 @@ export default function DesignPageClient({
     if (word.length <= 2 && index > 0) return word;
     return word.charAt(0).toUpperCase() + word.slice(1);
   }).join(' ');
+  
+  // Create formatted design title with shape name
+  const formattedDesignTitle = useMemo(() => {
+    const words = slug.split('-').map((word, index) => {
+      if (word.length <= 2 && index > 0) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    
+    if (!shapeDisplayName) {
+      return words.join(' ');
+    }
+    
+    // Find shape name in slug and add dash separator
+    const shapeWords = shapeDisplayName.toLowerCase().replace(/[\s_]+/g, '-').split('-');
+    const slugWords = slug.split('-');
+    
+    let shapeEndIndex = 0;
+    let matchFound = true;
+    
+    for (let i = 0; i < shapeWords.length; i++) {
+      if (slugWords[i] !== shapeWords[i]) {
+        matchFound = false;
+        break;
+      }
+      shapeEndIndex = i + 1;
+    }
+    
+    if (matchFound && shapeEndIndex > 0) {
+      const remainingWords = words.slice(shapeEndIndex);
+      const restPart = remainingWords.join(' ');
+      return restPart ? `${shapeDisplayName} - ${restPart}` : shapeDisplayName;
+    }
+    
+    return words.join(' ');
+  }, [slug, shapeDisplayName]);
   
   // Get store state for price calculation
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -2498,6 +2598,7 @@ export default function DesignPageClient({
       <div className="container mx-auto max-w-7xl px-4 md:px-8">
 
       {/* Download Links */}
+      {isLocalhost && (
       <div className="flex gap-2 md:gap-3 py-3 md:py-6 overflow-x-auto">
         <a
           href={designMetadata.preview}
@@ -2553,12 +2654,13 @@ export default function DesignPageClient({
           Edit
         </a>
       </div>
+      )}
 
       {/* Design Preview - Enhanced with shape, texture, and motifs */}
       {designData && screenshotDimensions && (
-        <div className="bg-white rounded-none md:rounded-lg shadow-none md:shadow-sm border-0 md:border border-slate-200 my-0 md:my-8">
+        <div className="bg-white rounded-none my-0 md:my-8">
           {/* Visual Preview Area */}
-          <div className="relative bg-gradient-to-br from-slate-50 to-white min-h-[400px] md:min-h-[600px] flex items-center justify-center p-4 md:p-8">
+          <div className="relative flex items-center justify-center">
             
             {/* SCENE CONTAINER (Represents the full Workspace) */}
             <div className="flex flex-col items-center gap-0">
@@ -2575,7 +2677,7 @@ export default function DesignPageClient({
               {/* HEADSTONE OBJECT LAYER */}
               {/* Force full-bleed: headstone fills 100% of the container */}
               <div 
-                className="absolute shadow-2xl"
+                className="absolute"
                 style={{
                     width: '100%',
                     height: '100%',
@@ -2691,11 +2793,7 @@ export default function DesignPageClient({
                       const rawX = item.x ?? 0;
                       const rawY = item.y ?? 0;
                       const canvasX = usesPhysical ? rawX / savedDpr : rawX;
-                      const canvasY = usesPhysical ? rawY / savedDpr : rawY;
-                      
-                      // Convert from center-anchored to display position
-                      const dispX = offsetX + (canvasX + initW / 2) * uniformScale;
-                      const dispY = offsetY + (canvasY + initH / 2) * uniformScale;
+                      let canvasY = usesPhysical ? rawY / savedDpr : rawY;
                       
                       let fontSizeInPx = item.font_size || 16;
                       // Handle font strings like "30px"
@@ -2705,6 +2803,46 @@ export default function DesignPageClient({
                       }
                       const canvasFontSize = usesPhysical ? fontSizeInPx / savedDpr : fontSizeInPx;
                       const fontSize = canvasFontSize * uniformScale;
+                      
+                      // Detect if this is the surname (largest font or explicit flag)
+                      const isSurname = item.isSurname || fontSize >= 24; // Adjust threshold as needed
+                      
+                      // Surname center-based snap to curve
+                      if (topProfile && isSurname) {
+                        // Sample the curve at the inscription's center X in authoring space
+                        const authorX = Math.round(initW / 2 + canvasX);
+                        const sideInsetPx = Math.round(initW * 0.018);
+                        const col = Math.max(sideInsetPx, Math.min(initW - 1 - sideInsetPx, authorX));
+                        
+                        const yC = topProfile.topY[col];
+                        
+                        // Small margin below the stone outline + crown bias
+                        const baseMargin = Math.round(initH * 0.012);
+                        const yL = topProfile.topY[Math.max(0, col - 1)];
+                        const yR = topProfile.topY[Math.min(initW - 1, col + 1)];
+                        const slope = Math.abs(yR - yL) / 2;
+                        const crownBoost = slope < 0.2 ? 2 : 0;
+                        const marginPx = baseMargin + (slope > 0.6 ? 2 : 0) - crownBoost;
+                        
+                        // Desired CENTER (authoring px) where the top curve starts (+margin)
+                        const desiredCenterAuthor = yC + marginPx;
+                        
+                        // Current CENTER (authoring px) of the rendered surname
+                        const overlayH = initH * uniformScale;
+                        const overlayCenterY = offsetY + overlayH / 2 + canvasY * uniformScale;
+                        const currentCenterAuthor = (overlayCenterY - offsetY) * (initH / overlayH);
+                        
+                        // Move by center (no top/bottom math)
+                        const deltaAuthor  = desiredCenterAuthor - currentCenterAuthor;
+                        const deltaOverlay = deltaAuthor * (overlayH / initH);
+                        const deltaCy      = deltaOverlay / uniformScale;
+                        
+                        canvasY = Math.round((canvasY + deltaCy) * 2) / 2; // quantize to 0.5px for stability
+                      }
+                      
+                      // Convert from center-anchored to display position
+                      const dispX = offsetX + (canvasX + initW / 2) * uniformScale;
+                      const dispY = offsetY + (canvasY + initH / 2) * uniformScale;
 
                       const fontFamily = item.font_family || item.font || 'serif';
 
@@ -2720,9 +2858,16 @@ export default function DesignPageClient({
                         transformX = '-100%';
                       }
 
+                      // Use edited text if this inscription is being edited
+                      const displayText = (inscriptionTexts[index] ?? item.label).replace(/&apos;/g, "'");
+
                       return (
                         <DraggableElement
                           key={index}
+                          onClick={() => {
+                            setSelectedInscriptionIndex(index);
+                            setEditedInscriptionText(displayText);
+                          }}
                           initialStyle={{
                             position: 'absolute',
                             left: `${dispX}px`,
@@ -2742,7 +2887,7 @@ export default function DesignPageClient({
                             pointerEvents: 'auto',
                           }}
                         >
-                          {item.label.replace(/&apos;/g, "'")}
+                          {displayText}
                         </DraggableElement>
                       );
                     })}
@@ -2775,10 +2920,6 @@ export default function DesignPageClient({
                       const sx = overlayW / initW;  // This IS uniformScale
                       const sy = overlayH / initH;  // Same if aspect preserved
                       
-                      // Map from center-origin canvas to overlay pixels
-                      const left = offsetX + overlayW / 2 + cx * sx;
-                      const top = offsetY + overlayH / 2 + cy * sy;
-                      
                       // -------------- Size: viewBox × ratio × uniformScale --------------
                       const { width: vw, height: vh } = dims;
                       const ratio = Number(motif.ratio ?? 1);
@@ -2787,12 +2928,59 @@ export default function DesignPageClient({
                       const widthPx = vw * ratio * sx;
                       const heightPx = widthPx * aspect;
                       
+                      // -------------- Snap top motifs to curved edge (uniform solution) --------------
+                      let cyUsed = cy;
+                      
+                      // Calculate motif height in authoring pixels
+                      const motifHAuthor = (heightPx * initH) / overlayH;
+                      
+                      // Only affect "top band" motifs - positioned above center
+                      const isTopBand = cy < -(initH * 0.18) - (motifHAuthor * 0.15);
+                      
+                      if (isTopBand && topProfile) {
+                        // Sample curve using authoring X
+                        const authorX = Math.round(initW / 2 + cx);
+                        const col = Math.max(0, Math.min(initW - 1, authorX));
+                        
+                        // Uniform margin below stone edge
+                        const marginPx = Math.round(initH * 0.012); // ~1.2% of canvas height
+                        
+                        // Target: motif top sits just below stone silhouette
+                        const desiredTopAuthor = topProfile.topY[col] + marginPx;
+                        
+                        // Current motif top in authoring px
+                        const overlayCenterY = offsetY + overlayH / 2 + cy * sy;
+                        const authorCenterY = (overlayCenterY - offsetY) * (initH / overlayH);
+                        const currentTopAuthor = authorCenterY - motifHAuthor / 2;
+                        
+                        // Calculate adjustment needed
+                        const deltaAuthor = desiredTopAuthor - currentTopAuthor;
+                        
+                        // Apply adjustment if significant (>1px)
+                        if (Math.abs(deltaAuthor) >= 1) {
+                          const deltaOverlay = deltaAuthor * (overlayH / initH);
+                          const deltaCy = deltaOverlay / sy;
+                          cyUsed = cy + deltaCy;
+                        }
+                      }
+                      
+                      // Map from center-origin canvas to overlay pixels
+                      const left = offsetX + overlayW / 2 + cx * sx;
+                      const top = offsetY + overlayH / 2 + cyUsed * sy;
+                      
                       // Debug log
                       if (index < 3) {
-                        console.log('MOTIF v39',
+                        const motifHAuthorDebug = (heightPx * initH) / overlayH;
+                        const isTopBandDebug = cy < -(initH * 0.18) - (motifHAuthorDebug * 0.15);
+                        console.log('MOTIF v48',
                           motif.name || motif.src,
                           {
-                            cx, cy,
+                            cx, cy, cyUsed,
+                            isTopBand: isTopBandDebug,
+                            motifHAuthor: motifHAuthorDebug.toFixed(2),
+                            hasTopProfile: !!topProfile,
+                            snapOpt: motif.snapTop ?? true,
+                            extraLift: motif.snapExtraLiftPx ?? 0,
                             ratio,
                             vw, vh,
                             sx,
@@ -2819,108 +3007,215 @@ export default function DesignPageClient({
                             pointerEvents: 'auto',
                           }}
                         >
-                          <img
-                            src={getMotifPath(motif)}
-                            alt={motif.name || 'motif'}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'contain',
-                              display: 'block',
-                              // Flips and per-motif scaling live here, never on the wrapper
-                              transform: `scale(${motif.scaleX ?? 1}, ${motif.scaleY ?? 1}) rotate(${motif.rotation ?? 0}deg)`,
-                              transformOrigin: 'center',
-                              filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
-                            }}
-                            onError={(e) => ((e.target as HTMLImageElement).src = getFallbackMotifPath(motif))}
-                          />
+                          {motif.color && motif.color !== '#000000' ? (
+                            // Use mask technique for colored motifs
+                            <div
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: motif.color,
+                                WebkitMaskImage: `url(${getMotifPath(motif)})`,
+                                maskImage: `url(${getMotifPath(motif)})`,
+                                WebkitMaskSize: 'contain',
+                                maskSize: 'contain',
+                                WebkitMaskPosition: 'center',
+                                maskPosition: 'center',
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskRepeat: 'no-repeat',
+                                transform: `scale(${motif.scaleX ?? 1}, ${motif.scaleY ?? 1}) rotate(${motif.rotation ?? 0}deg)`,
+                                transformOrigin: 'center',
+                                filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={getMotifPath(motif)}
+                              alt={motif.name || 'motif'}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain',
+                                display: 'block',
+                                transform: `scale(${motif.scaleX ?? 1}, ${motif.scaleY ?? 1}) rotate(${motif.rotation ?? 0}deg)`,
+                                transformOrigin: 'center',
+                                filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
+                              }}
+                              onError={(e) => ((e.target as HTMLImageElement).src = getFallbackMotifPath(motif))}
+                            />
+                          )}
                         </DraggableElement>
                       );
                     })}
                 </div>
               )}
+              
+              {/* Base (pedestal) — single canonical renderer */}
+              {(() => {
+                if (!baseData) {
+                  console.log('🔍 Base render check: No base data');
+                  return null;
+                }
+                
+                console.log('🔍 Base render check:', { 
+                  hasBaseData: !!baseData, 
+                  hasTopProfile: !!topProfile, 
+                  hasTexture: !!baseTextureData,
+                  hasScalingFactors: !!scalingFactors 
+                });
+                
+                return (() => {
+                  // Pull mm from design
+                  const headstoneItem = (sanitizedDesignData || []).find((it: any) => it.type === 'Headstone') || {};
+                  const tabletWidthMm  = Number(headstoneItem.width)  || 600;
+                  const tabletHeightMm = Number(headstoneItem.height) || 600;
+
+                  // Find a base-like item
+                  const baseItem = (sanitizedDesignData || []).find((it: any) =>
+                    /base/i.test(`${it.type} ${it.name ?? ''} ${it.label ?? ''}`)
+                  ) || {};
+
+                  // Prefer explicit mm; else add a small overhang (each side)
+                  const lengthMm = [
+                    baseItem.length_mm, baseItem.length, baseItem.width_mm, baseItem.width,
+                    baseItem.size?.length_mm, baseItem.size?.width_mm,
+                  ].map(Number).filter(v => Number.isFinite(v) && v >= 300).sort((a, b) => b - a)[0]
+                    ?? (tabletWidthMm + 2 * 25); // 25mm each side
+
+                  const heightMm = [
+                    baseItem.height_mm, baseItem.height, baseItem.size?.height_mm, baseItem.thickness_mm,
+                  ].map(Number).filter(v => Number.isFinite(v) && v >= 50 && v <= 200)[0]
+                    ?? 90;
+
+                  // Overlay (display) scale
+                  const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+                  const overlayW = initW * uniformScale;
+                  const overlayH = initH * uniformScale;
+
+                  // Always use the fitted canvas bottom as the headstone bottom.
+                  // The headstone SVG is rendered full-bleed (absolute inset-0), so its bottom == overlay bottom.
+                  const stoneBot = Math.round(offsetY + overlayH);
+
+                  // Calculate stone dimensions for mm → px conversion
+                  const sx = overlayW / initW;
+                  const sy = overlayH / initH;
+                  
+                  let stoneW, stoneH;
+                  
+                  if (topProfile) {
+                    // Use topProfile for accurate measurements
+                    stoneW = (topProfile.drawW ?? initW) * sx;
+                    stoneH = (topProfile.drawH ?? initH) * sy;
+                  } else {
+                    // Estimate: assume stone fills most of the canvas
+                    const marginX = initW * 0.05;
+                    const marginY = initH * 0.1;
+                    stoneW = (initW - 2 * marginX) * sx;
+                    stoneH = (initH - 2 * marginY) * sy;
+                    console.log('⚠️ Base using estimated stone dimensions (topProfile not available)');
+                  }
+
+                  // mm → px
+                  const pxPerMmX = stoneW / tabletWidthMm;
+                  const pxPerMmY = stoneH / tabletHeightMm;
+
+                  let baseWidthPx  = Math.round(lengthMm * pxPerMmX);
+                  const baseHeightPx = Math.round(heightMm * pxPerMmY);
+
+                  // Never let the base exceed the visible tablet width; add a slight inset
+                  const maxBasePx = Math.round(stoneW * 0.96);
+                  baseWidthPx = Math.min(baseWidthPx, maxBasePx);
+
+                  // Tuck under tablet a bit
+                  const overlapPx = Math.round(baseHeightPx * 0.25);
+
+                  console.log('📦 Base dimensions:', {
+                    lengthMm,
+                    heightMm,
+                    baseWidthPx,
+                    baseHeightPx,
+                    maxBasePx,
+                    overlapPx,
+                    stoneBot,
+                    stoneW,
+                    stoneH,
+                    tabletWidthMm,
+                    tabletHeightMm,
+                    pxPerMmX,
+                    pxPerMmY
+                  });
+
+                  // Row spans overlay; flex centers the base
+                  // Position the base to start exactly where the headstone ends
+                  const baseRowStyle: React.CSSProperties = {
+                    position: 'absolute',
+                    left: 0,
+                    top: stoneBot, // starts right where the headstone ends
+                    width: overlayW,
+                    height: baseHeightPx,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    pointerEvents: 'none',
+                    zIndex: 2, // below text/motifs (which are 5/10), above background
+                  };
+
+                  const baseStyle: React.CSSProperties = {
+                    width: baseWidthPx,
+                    height: baseHeightPx,
+                    backgroundImage: baseTextureData
+                      ? `url(${baseTextureData})`
+                      : 'linear-gradient(to bottom,#1a1a1a,#000)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundColor: '#2b2b2b',
+                  };
+
+                  return (
+                    <div style={baseRowStyle}>
+                      <div style={baseStyle} />
+                    </div>
+                  );
+                })();
+              })()}
               </div>
               {/* End of HEADSTONE OBJECT LAYER */}
             </div>
             {/* End of Scene Container */}
-
-            {/* Base (pedestal) if present - positioned directly below headstone */}
-            {baseData && (
-              <div
-                className="relative"
-                style={{
-                  // Base width/height are in mm (real-world dimensions)
-                  // Scale based on ratio to headstone mm dimensions, then subtract 50px for margins
-                  width: `${Math.max(100, (baseData.width || 700) / (shapeData?.width || 600) * scalingFactors.displayWidth - 50)}px`,
-                  height: `${Math.max(80, Math.min(200, ((baseData.height || 100) / (shapeData?.height || 600)) * scalingFactors.displayHeight))}px`,
-                  maxWidth: '100%',
-                  backgroundImage: baseTextureData 
-                    ? `url(${baseTextureData})`
-                    : 'linear-gradient(to bottom, #1a1a1a, #000000)',
-                  backgroundSize: '520px 520px', // Seamless texture size
-                  backgroundRepeat: 'repeat',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-                }}
-              >
-                {(() => {
-                  console.log('Base render:', {
-                    hasBase: !!baseData,
-                    baseData: baseData ? {
-                      width: baseData.width,
-                      height: baseData.height,
-                      type: baseData.type
-                    } : null,
-                    headstoneWidth: shapeData?.width,
-                    headstoneHeight: shapeData?.height,
-                    displayWidth: scalingFactors.displayWidth,
-                    calculatedBaseWidth: Math.max(100, (baseData.width || 700) / (shapeData?.width || 600) * scalingFactors.displayWidth - 50),
-                    calculatedBaseHeight: Math.max(80, Math.min(200, ((baseData.height || 100) / (shapeData?.height || 600)) * scalingFactors.displayHeight))
-                  });
-                  return null;
-                })()}
-                {/* Base Inscriptions Layer */}
-                {sanitizedDesignData && sanitizedDesignData
-                  .filter((item: any) => item.type === 'Inscription' && item.label && item.part === 'Base')
-                  .map((item: any, index: number) => {
-                    // FIX #4: Normalize saved px by DPR, then scale by Y
-                    let fontSizeInPx = item.font_size || 16;
-                    if (item.font && typeof item.font === 'string') {
-                      const match = item.font.match(/^([\d.]+)px/);
-                      if (match) {
-                        fontSizeInPx = parseFloat(match[1]);
-                      }
-                    }
-                    
-                    const fontPxCanvas = fontSizeInPx * (1 / scalingFactors.designDpr);
-                    const fontSize = fontPxCanvas; // In authoring units, container scales
-                    const fontFamily = item.font_family || item.font || 'serif';
-                    
-                    return (
-                      <div
-                        key={`base-${index}`}
-                        className="absolute"
-                        style={{
-                          fontSize: `${fontSize}px`,
-                          fontFamily: fontFamily,
-                          color: item.color || '#FFFFFF',
-                          fontWeight: fontFamily.toLowerCase().includes('bold') ? 'bold' : 'normal',
-                          fontStyle: fontFamily.toLowerCase().includes('italic') ? 'italic' : 'normal',
-                          textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
-                          left: '50%',
-                          top: '50%',
-                          transform: 'translate(-50%, -50%)',
-                          textAlign: 'center',
-                          whiteSpace: 'nowrap',
-                          padding: '8px',
-                        }}
-                      >
-                        {item.label.replace(/&apos;/g, "'")}
-                      </div>
-                    );
-                  })}
-              </div>
-            )}
           </div>
+          
+          {/* Inscription Edit Input */}
+          {selectedInscriptionIndex !== null && (
+            <div className="mt-6 max-w-2xl mx-auto">
+              <div className="bg-white rounded-lg border border-slate-300 p-4 shadow-sm">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Edit Inscription Text
+                </label>
+                <textarea
+                  rows={2}
+                  value={editedInscriptionText}
+                  onChange={(e) => {
+                    const newText = e.target.value;
+                    setEditedInscriptionText(newText);
+                    setInscriptionTexts(prev => ({
+                      ...prev,
+                      [selectedInscriptionIndex]: newText
+                    }));
+                  }}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent text-slate-900 resize-none"
+                  placeholder="Enter inscription text..."
+                />
+                <button
+                  onClick={() => {
+                    setSelectedInscriptionIndex(null);
+                    setEditedInscriptionText('');
+                  }}
+                  className="mt-3 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-md text-sm transition-colors"
+                >
+                  Done Editing
+                </button>
+              </div>
+            </div>
+          )}
           </div>
         </div>
       )}
@@ -2931,7 +3226,7 @@ export default function DesignPageClient({
           shapeName={shapeDisplayName || 'Standard'}
           productSlug={productSlug}
           categoryTitle={categoryTitle}
-          designTitle={designMetadata.title}
+          designTitle={formattedDesignTitle}
         />
       </div>
 

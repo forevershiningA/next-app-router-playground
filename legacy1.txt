@@ -1,0 +1,66 @@
+showBase() {
+
+		if (dyo.monument.has_base) {
+
+			if (dyo.monument.base) {
+				dyo.monument.base.min_width = dyo.monument.headstone.width;
+
+				if (dyo.monument.base.width < dyo.monument.headstone.width) {
+					dyo.monument.base.width = dyo.monument.headstone.width;
+				}
+				
+				if (!dyo.edit) {
+					if (dyo.monument.id == 8) {
+						dyo.monument.base.width = dyo.monument.headstone.width;
+					} else {
+						dyo.monument.base.width = dyo.monument.headstone.width + 100;
+					}
+					if (dyo.monument.base.width > Number(File('stand').max_width)) {
+						dyo.monument.base.width = Number(File('stand').max_width);
+					}
+					dyo.monument.base.length = dyo.monument.headstone.length;
+					if (dyo.monument.base.length > Number(File('stand').max_depth)) {
+						dyo.monument.base.length = Number(File('stand').max_depth);
+					}
+				}
+
+				dyo.monument.base.min_width = dyo.monument.headstone.width;
+				dyo.monument.has_base = true;
+				dyo.monument.base.show();
+				$('#base-switch').checked = 'checked';
+				$('#base-link-switch').checked = '';
+				
+				switch (dyo.monument.id) {
+					default:
+						$('#dyo_add_headstone_base_flower_pot_holes').style.display = "flex";
+						$('#dyo_link_headstone_base').style.display = "flex";
+						
+						if (dyo.monument.has_base_flower_pot_holes) {
+							$('#base_flower_pots').style.display = "block";
+						}
+						
+						let base_thickness = 130;
+						let widthChange = 600;
+						let headstoneWidth = dyo.monument.headstone.width;
+						let headstoneHeight = dyo.monument.headstone.height;
+
+						if (dyo.usa) {
+							widthChange = dyo.engine.metrics.convertToInches(widthChange);
+							headstoneWidth = dyo.engine.metrics.convertToInches(headstoneWidth);
+							headstoneHeight = dyo.engine.metrics.convertToInches(headstoneHeight);
+						}
+
+						if (Number(headstoneWidth) > widthChange || Number(headstoneHeight) > widthChange) {
+							base_thickness = 250;
+						} 
+		
+						dyo.monument.base.setLength(base_thickness);
+
+						break;
+					case 8: case 22:
+						$('#dyo_add_headstone_base_flower_pot_holes').style.display = "none";
+						$('#dyo_add_headstone_base').style.display = "none";
+						$('#base_flower_pots').style.display = "none";
+						$('#dyo_link_headstone_base').style.display = "none";
+						break;
+				}

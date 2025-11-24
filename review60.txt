@@ -1,0 +1,75 @@
+You’re right — it should be simple. The issue is your **base node isn’t inside the same positioned wrapper** as the tablet, so its `top/left` are being computed against the page, not the overlay. Put the base **inside** the `svgHostRef` wrapper (the one that paints the tablet) and center it with a full-width flex row.
+
+### Do exactly this
+
+1. Find where the tablet is rendered — the div with `ref={svgHostRef}`. Make sure it has `position:'relative'`.
+
+```tsx
+<div
+  ref={svgHostRef}
+  style={{
+    position: 'relative',
+    width: overlayW,
+    height: overlayH,
+    overflow: 'hidden'
+  }}
+>
+  {/* tablet/background is already here */}
+  {/* INSERT the base row below */}
+```
+
+2. Insert this block **as a child of that same wrapper**, right after the tablet background and before inscriptions/motifs:
+
+```tsx
+// scales and fitted stone bounds (same math you use elsewhere)
+const sx = overlayW / initW;
+const sy = overlayH / initH;
+
+const stoneLeft = offsetX + (topProfile?.offX ?? 0) * sx;
+const stoneTop  = offsetY + (topProfile?.offY ?? 0) * sy;
+const stoneW    = (topProfile?.drawW ?? initW) * sx;
+const stoneH    = (topProfile?.drawH ?? initH) * sy;
+const stoneBottom = stoneTop + stoneH;
+
+// base sizing and overlap
+const baseOverhang = 0.04;
+const baseWidth    = Math.round(stoneW * (1 + baseOverhang));
+const baseHeight   = Math.round(overlayH * 0.085);
+const overlapPx    = Math.round(baseHeight * 0.25);
+
+// full-width row anchored at the stone bottom; flex centers the base
+const baseRowStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top: Math.max(0, Math.min(overlayH - baseHeight, stoneBottom - overlapPx)),
+  width: overlayW,
+  height: baseHeight,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  zIndex: 25,              // above tablet bg, below text/motifs
+  pointerEvents: 'none'
+};
+
+const baseStyle: React.CSSProperties = {
+  width: baseWidth,
+  height: baseHeight,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center'
+};
+
+<div style={baseRowStyle}>
+  <div style={baseStyle} />
+</div>
+```
+
+3. Confirm stacking: tablet/background zIndex < 25; inscriptions/motifs > 25.
+
+4. If it still floats, it means the base row isn’t actually inside `svgHostRef`. Move it until it is. Quick log to verify coordinates:
+
+```ts
+console.log('BASE overlay check', { overlayW, overlayH, stoneBottom, baseHeight, top: baseRowStyle.top });
+```
+
+Once that `<div style={baseRowStyle}>…</div>` is a **direct child of the `svgHostRef` container**, the base will sit directly under the tablet and be perfectly centered. 

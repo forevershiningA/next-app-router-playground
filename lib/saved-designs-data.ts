@@ -546,7 +546,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "IN LOVING MEMORY",
     "motifNames": [],
     "inscriptions": "IN LOVING MEMORY OF ANDREE&apos; LAZAR MOSLEY JR. JUNE 14, 2025 JANUARY 6, 2006   - LOVING SON BROTHER \"FOREVER #21\"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/07/1752154675017.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -712,7 +712,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Biblical Memorial",
     "motifNames": [],
     "inscriptions": "Reese The Lord is close to the brokenhearted hose who are crushed in spirit Psalm 34 :18 Sister Loving Friend Daughter Fly high sweet angel Rest easy Oct. 11. 2025 Nov. 7. 2013",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1760317402338.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -1584,7 +1584,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Wife Memorial",
     "motifNames": [],
     "inscriptions": "Maureen Ann Tuisue In Loving Memory March 23, 1966 -  September 19, 2021 Beloved Wife of Apakuki \"Kuki\" Tuisue Devoted Mother of Sisilia \"Sis\" Tuisue Cherished Daughter Of Ian and Lorna Adored Aunt to many Remembering you is Dignified Always Everyday That time cannot Alliviate Sleep Well Beautiful Sister to Joanne, Erin and many Fijian ones Missing you is an Inflict Forever In Our Hearts \"For those that Sleep in Christ will God bring with Him when He comes\"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/06/1749392203479.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -1900,7 +1900,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Biblical Memorial",
     "motifNames": [],
     "inscriptions": "John 3:16 Will you join me in Heaven?",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/07/1752870923677.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -3876,7 +3876,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "Thea Kopp Our beloved daughter Forever in our hearts 14th February 2020",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/1587310089876.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -5430,7 +5430,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "In loving memory of Skye Rebecca McHugh Forever 25 forever in our hearts 31/8/1999.May 2025🕊️ SKIPPY too precious for this world",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/09/1757509615562.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -6225,7 +6225,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "2006-2024 Kalleea McKenzie She was a fighter that lost her battle",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1724894260777.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -6311,7 +6311,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "IN LOVING MEMORY OF JANE STOAKES MR. STOAKES A LOVING HUSBAND, FATHER, AND SON A LOVING WIFE, MOTHER, AND DAUGHTER SEP 30 1948 MAY 12 1904 APR 4 1902 SEP 30 1948 A FOREVER INTERTWINED COUPLE",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/05/1747006071497.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -6333,7 +6333,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Mary Margaret Bell 6th May 1944 - 27th May 2020 In Loving Memory of Beloved Wife of Ken Cherished Mother of Greg and Tricia Much loved Nanna to: Jared, Aidan, Brieanna and Karissa Your life was a blessing, Your Memory a treasure You are loved beyond words, Missed beyond measure. Rest in Peace",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/1591593458796.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -6635,7 +6635,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Daughter Memorial",
     "motifNames": [],
     "inscriptions": "Rylee Oct. 10, 2025 July 16, 2009 beloved daughter friend in loving memory of \" Find the Light\" sister",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1760321710307.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -6890,7 +6890,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "In Loving Memory Of Vernnesa Rose Busch 04/08/1966 - 19/07/2023 Your life was a blessing your memory a treasure... You are loved beyond words and missed beyond measure... Forever in our hearts Until we meet again Beloved mother of Terentia, Bryoni, Cheyanne, Jefferey Grandmother of Cheyanne, Eli, Amber, Kodah, Allyn, Emily",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/03/1742989042388.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -7133,7 +7133,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Jennifer Anne Auditore 5/3/1960/17/01/2020 Cherished Mum to Anthony and Michelle Devoted grandmother to Charli Dearly loved & missed by her loving Husband Carmelo There are some who bring a light so great the light remains. for the world that even after they have gone,",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2020/06/1593071196228.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -7968,7 +7968,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "dove"
     ],
     "inscriptions": "In Loving Memory of Adrienne Sandra Hinch 30/08/1957 to 28/09/2015 Loving Mother of Melissa Hannah Laurence (bigboy) dec Amanda Shannon Beautiful Loving Grandmother to All of the Grandchildren Love & Miss you So Much Forever in Our Hearts Loving Sister Aunty Cousin & Friend",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2020/07/1595215467828.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -9406,7 +9406,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Biblical Memorial",
     "motifNames": [],
     "inscriptions": "Megan Layne Guerra Oct. 6, 1984 - Aug. 25, 2025 Perfect love casts out all fear - 1 John 4:18",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/09/1757793412400.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -10235,7 +10235,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "turtle"
     ],
     "inscriptions": "31/ 5 /1988 Loving Father And Brother Close To Our Heart 23 /10 / 2012 And Always Be Loved And Remembered Fishy Troy Ronald Hooper In Loving Memory of Cherished Son",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2020/10/1601897133046.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -10687,7 +10687,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Biblical Memorial",
     "motifNames": [],
     "inscriptions": "OUR DEAR DAD WHO DIED 20TH JAN 2000 AGED 82 TOGETHER FOREVER A LOVED DAD, GRANDAD & BROTHER ANTHONY GERALD GARRETT AGED 66 WHO DIED 20TH JUN 2024 JOHN KEVIN GARRETT",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/07/1752523343120.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -11880,7 +11880,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Day/Month/Yr ^^^Marriage Date Goes Here Maybe?^^ In Loving Memory Bud & Ann Runner",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1722483726395.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -11902,7 +11902,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Jenill Ann Peñaranda May 28, 2000 October 18, 2124 Cherish your memory and the memory will be forever Your love will light the way",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/04/1712844055325.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -12008,7 +12008,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "turtle"
     ],
     "inscriptions": "Erected by her loving family ?/10/2019 In Loving Memory Daisy Kris ~ of ?/?/1964",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2020/12/1606991662649.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -12075,7 +12075,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "In the loving memory of اناللّٰه وانا اليه راجعون 17 January 2017 1st June 2023 Zainab Tashkent",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2024/08/1724400460149.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -12548,7 +12548,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "IN LOVING MEMORY OF Claude Hart Nichol Hart HART BROTHERS",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2021/01/1611108704929.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -12588,7 +12588,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "In Loving memory",
     "motifNames": [],
     "inscriptions": "In Loving memory Julieanne margret THOMPSON 15.05.1965 D.O.B",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/10/1759556752739.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -14016,7 +14016,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "birds"
     ],
     "inscriptions": "Corazon Mendonez Keeley July 25 1947- July 27 2020 Wife of William Keeley Mother of Wilora Keeley We always love you forever in our hearts Rest in Peace I can no longer see you in my eyes Or touch you with my hands But I will feel you in my heart forever",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2021/02/1614263815137.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -14629,7 +14629,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "RIP In loving Memory of Wendy June Wiliams everyday we miss you r smile that noone can replace we will all see you in the dream time 1st March --1987   sadly passed age  34 years our family chain is broken and nothing seems the same sadly and dearly missed Beloved wife mother and grandmother  great grandmother but still it brings us comfort  in the sadness that we face one day we will meet again  untill we do we will find the strenght to carry on your name and live another day we know one day some how some where we all will meet you again because a Mother holds her childrens hand for a while but their hearts forever when you left us you have taken a piece of us with you to link our family chain again FLYHIGH OUR SWEET ANGEL GOD HAS CLIPPED YOUR WINGS but has god has promised he will call all us all one day",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2021/03/1616110933129.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -17057,7 +17057,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Baby Memorial",
     "motifNames": [],
     "inscriptions": "REM Tighe Stevenson 01.01.2016 Our Angel Baby",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/02/1644238842045.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -17181,7 +17181,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "28 / 08 / 1989 - 21 / 03 / 2022 Forever In Our Hearts Carly Ann Gorey 28/08/1979 - 21/03/2022 Dearly loved and sadly missed We will always cherish you forever in our hearts Fly High Forever Young In loving memory of",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/04/1649245474295.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -17873,7 +17873,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "In loving memory of Mr Tauna Veratau Aug 28th 1965 - Nov 11th 2021 \"Surely goodness and mercy shall follow me all the days of my life and I will dwell in the house of the Lord forever\" We love you Psalm 23:6",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1761009727390.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -18006,7 +18006,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "A life lived with passion, A love that never faded Maria Toppo A Special Lady, Precious Wife, Doting Mother, Choti Nani,  And A Dear Friend to All Who Knew Her Your legacy of love, strength, grace, and unflagging zeal for life will forever live and guide us through life. In loving memory of 15th August 1948\t to\t 15th November 2024",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1761796985723.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -18159,7 +18159,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Sister Memorial",
     "motifNames": [],
     "inscriptions": "Kerri Anne Dargan Jaleah, Karleigha, Kyesha Darel, Dayne & Azyah Beautiful Nanny to Janarly, Azaria, Gabrielle Dearly missed Sister, Cousin and Friend 2 Of 5 Dearly missed Sister, Cousin and Friend 2 of 5",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2021/08/1630105396174.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -18995,7 +18995,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "and you never ever will. Until we meet again. Mumma Bear In Loving Memory Of Lorraine Carolyn Ryles 22.09.1952 to 11.09.2021 Adored Mum & Nanna Forever loved, never forgotten. To walk and guide us We hold your smile and memory in our hearts and there you will remain.",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2021/10/1635204651664.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -19318,7 +19318,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "cross"
     ],
     "inscriptions": "Jxxxxxxxx Dxxxxxx Aug 99,9999 - Jun 99, 9999 Nothing Ventured Nothing Gained",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/06/1751229669472.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -20089,7 +20089,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "angel"
     ],
     "inscriptions": "Matthew 19:14 Jesus said, \"Let the little children come to me and do not hinder them, for the kingdom of heaven belongs to such as these Born to eternal life : In Loving Memory Of Our Beloved Angel Lihoma Faavaega Siaosi 12/01/2021 Families are Forever Always and Forever \"We&apos;ll hold you in our hearts untill we can hold you in Heaven\"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/01/1641816268171.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -20414,7 +20414,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "FOREVER IN OUR HEARTS SHEILA DODD 30/11/1953 - 14/05/2014 MOTHER OF GRANDMOTHER OF GREAT GRANDMOTHER OF LORETTA DODD CLEM WALTERS ALANA WALTERS JOSEPH GRAHAM ELVISON GRAHAM&apos;JNR&apos; AVA JONES MOTHER OF LORETTA DODD ANTHONY WALTERS FOREVER IN OUR HEARTS",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/02/1643934203715.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -21394,7 +21394,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Son Memorial",
     "motifNames": [],
     "inscriptions": "Denim-James Wynn Conner Born too soon, gone too soon Jan 3 Jan 27 2025 2025 “There is no footprint too small to leave an imprint on this world” So long and goodnight until we Beloved son and NICU warrior meet again",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/03/1741821268708.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -21560,7 +21560,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Child Memorial",
     "motifNames": [],
     "inscriptions": "Our earthy nature loving wahine MARAMA NUI SHEED Left us way too soon We will remember you in our hearts & souls When we look at the trees, the plants the stones and the moon 05 OCT 1974 - 28 SEPT 2021 We love you our beautiful child of nature",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/04/1650163937643.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -21693,7 +21693,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Anya van Dongen-Rud Died 12-3-2022 Born 13-3-2022 Our precious daughter. You&apos;ve given us so much joy, little one. Mum and Dad will always love you. In Loving Memory Till we meet in Heaven",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/04/1650863843255.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -21761,7 +21761,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Anya van Dongen-Rud In Loving Memory 13-3-2022 In Loving Memory 12-3-2022 Our precious daughter. You&apos;ve given us so much joy, little one. Mum and Dad will always love you. Till we meet in Heaven",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/04/1650959429085.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -22114,7 +22114,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "Amanda Michelle Dec, 26, 2016 Your smile, love & heart will be missed forever",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/05/1652673924623.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -22530,7 +22530,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "Andrée Marie-Rose (Frodello) Garcia 13 April 1933 -- 16 January 2022 Joachim Garcia 2 March 1932 -- 16 May 2016 In loving memory of and",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/placeholder-memorial.png",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -22640,7 +22640,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "In loving memory of \"moi pour lui dans la vie\" (Married 2/6/1954) Greatly loved and sadly missed GARCIA 3/3/1932 - 16/5/2016 OUR BELOVED PARENTS, GRANDPARENTS & GREAT-GRANDPARENTS \"C&apos;est lui pour moi\" 13/4/1933 - 16/1/2022 Andrée Marie-Rose (Frodello) Joachim In loving memory of",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/06/1654566043825.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -24798,7 +24798,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Fishing Memorial",
     "motifNames": [],
     "inscriptions": "Umberto Borinelli 22/2/22 - 12/2/66 GONE FISHING",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/09/1662274171205.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -24905,7 +24905,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "rose"
     ],
     "inscriptions": "Valma Colleen Lawrence Lesley Margaret Lawrence In Loving Memory Daughters of Colin And Margaret Lawrence Sisters of Beverley (Dec) Lynette Greg (Dec), Karen, Clinton Graham And Anthony Born 21st May 1957 Passed Away 7 January 2005 Born 25 June 1966 Passed Away 29 March 1985 Beloved Mother Of Renza Both Deceased Beloved Aunties Grandmothers And Great Grandmothers too Many Loved & Missed By All",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2022/09/1663199881259.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -26927,7 +26927,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "In Loving Memory Bethany Morrey 25-01-2008 - 02/01/2025 Forever 16 A Beautiful Soul Gone Too Soon But Never Forgotten A Soul Too Precious For This World",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/01/1735823194880.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -28233,7 +28233,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "BERYL GAIBA KRIS In Loving Memory Of Our Dearest Sister Aunty and Friend. Our  Beloved Wife Mother Grandmother Born October 26 1967 on Thursday Island In God&apos;s Care  March 15 2019 Cairns Aged 52",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/01/1672730207856.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -28280,7 +28280,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "BERYL GAIBA KRIS In Loving Memory Of Our  Beloved Wife Mother Grandmother Aged 52 Born October 26 1967 Thursday Island Taken In God&apos;s Care March 15 2019 Cairns",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/01/1672795730659.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -29195,7 +29195,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Our Angel on Earth, Our Angel in Heaven Louana Natalia Castelazzi June 24, 2025 August 1, 2004 Sunrise Sunset “Don’t always give up on yourself you will always believing in yourself”",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/06/1750829337716.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -29900,7 +29900,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "In Loving Memory Of Irene Jane Davis I shall not be in want. “The Lord is my shepherd, You’ll always be home to us our little lady Love Monica, Ryemina, Maroon & John 28.02.1952 25.09.2018 He guides me in paths of righteousness for his name sake. for you are with me; your rod and your staff, they comfort me.” Even though I walk through the valley of the shadow of death, I shall fear no evil “Heaven gained a angel & has taken a piece of our hearts forever.” May you rest easy on grace & love Psalms 23: Beloved daughter, sister, mother, aunt, grandmother & great-grandmother",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/02/1677241048028.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -30792,7 +30792,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "IN LOVING MEMORY OF",
     "motifNames": [],
     "inscriptions": "IN LOVING MEMORY OF DONALD MONA BELINDA WYATT WYATT ANNE BROWN PASSED AWAY PASSED AWAY PASSED AWAY 25-09-1988 11-11-1987 AGED 60 AGED 11 SADLY MISSED RIP FATHER & MOTHER OF 10 LOVED AND MISSED BY KATIE NATIKA, YVONNE & UNCLE DAVID LOVED AND MISSED BY RODNEY,KEN, REGINA JACKIE, KATIE,LINDSAY & JEFFREY 00-00-1900 AGED 00 ROSE, STELLENA, DAVID",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/10/1760611467779.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -31345,7 +31345,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Traditional Engraved Headstone - 18/04/2023 Chrome - desktop In Loving Memory A long life well lived Devoted in love So loved Ever loved Goodnight and God bless you",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/04/1681806059613.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -31559,7 +31559,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/04/1682747010316.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -32181,7 +32181,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "cat"
     ],
     "inscriptions": "Belinda Newey mother to Grace",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/06/1687320009081.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -32352,7 +32352,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Taelia Jayne Woods 05/06/2011-10/07/2017 In Loving Memory Of Daughter Of Verdun & Lareessa Sister Of Verdun & Kadence Forever In Our Hearts Rest In Peace",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/07/1689184210576.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -33184,7 +33184,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "28/11/1948 ~ 04/07/2024 ‘til we meet again In loving memory of Beloved wife, mother & grandmother. She departed this world leaving behind a legacy of compassion, grace & unwavering strength. Susan (Sue) Lee (nee Gibson)",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/05/1746226798199.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -34033,7 +34033,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "horse"
     ],
     "inscriptions": "You touched the lives of all who lnew you. Surrounded by her loving family She knew her life was through She closed her pain filled eyes Her final breath a sigh Her husband took her hand And whispered \"Welcome Dear\" It&apos;s been so very long - We won&apos;t be parted here But wasn&apos;t scared to die",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/11/1701245808712.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -34056,7 +34056,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "horse"
     ],
     "inscriptions": "Surrounded by her loving family She knew her life was through Her final breath a sigh Her husband took her hand And whispered \"Welcome Dear\" It&apos;s been so very long - We won&apos;t be parted here But wasn&apos;t scared to die Together with our son, Peter Forever in our Hearts She closed her beautiful eyes",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2023/11/1701306212138.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -35510,7 +35510,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "Bailey Shaye Nov.28, 2009 - Oct. 13, 2010 Fly with the Angels Rest in Gods arms Loved and Missed Untill we Meet again Mettler",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1761582064328.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -37136,7 +37136,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Baby Memorial",
     "motifNames": [],
     "inscriptions": "Imman charity Ademe Keep resting baby girl, We will forever miss you. You are always in our hearts",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2024/05/1716820722678.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -38402,7 +38402,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "17 January 2017 1st June 2023 Zainab Tashkent اناللّٰه وانا اليه راجعون Forever in our hearts In loving memory of our beloved daughter “Yaya”",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2024/08/1724404075377.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -38625,7 +38625,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "Until We Meet Again 14/12/2022 Born sleeping Two little hands are resting A little heart is still A little son is waiting for us over the hill. Tawera Edward Loreto Calvin Kairic Solomon",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2024/09/1725367093608.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -38981,7 +38981,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "dove"
     ],
     "inscriptions": "Tracey Kennedy-Anderson 21 june 1972 - 05 September 2023 Come on down from heaven And walk with me a while You know i miss your company You know i miss your smile. You went home without me Left me standing in the rain So come on down from heaven And walk with me again \" MAUDE \"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2024/09/1726552811874.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -39839,7 +39839,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "In loving memory of JODY LEE RYAN 04/05/72 ~ 04/10/19 You may be gone but your never forgotten our beautiful mother you left us with a hole in our hearts We will forever cherish our memories together Until we meet again our queen Loving Mother to John Ryan , Nikisha Ryan, Amy Dhu,ArthurDhu,Jack Dhu, Taylor Dhu &Frank Dhu",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2024/11/1730875228895.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -41075,7 +41075,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "Until We Meet Again 14/12/2022 Born sleeping Two little hands are resting A little heart is still A little son is waiting for us over the hill. Tawera Edward Loreto Calvin Kairic Solomon Revelation 21:4 Neith shall there be mourning, nor crying, nor pain no more, for the former things \"He will wipe away every tear from their eyes and death will be no more have passed away\".",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/02/1740725536736.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -41661,7 +41661,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "dove"
     ],
     "inscriptions": "In loving memory of 28/11/1948 ~ 04/07/2024 She departed this world leaving behind a legacy of compassion, grace & unwavering strength. ‘til we meet again Susan (Sue) Lee (nee Gibson) Beloved wife, mother & grandmother",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/05/1746226010663.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -42595,7 +42595,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "In Loving Memory Of Jermaine Jeremiah Macale Born Sleeping 21st September 2000 Beloved Son of Sarah and Darryl Macale Forever In Our Hearts",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/08/1754540965382.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -42683,7 +42683,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "15/10/1968 - 16/10/1968 &apos;A child is like a butterfly in the wind Some can fly higher than others, but each one flies the best it can. Why compare one against the other? Each one is different, each one is special, each one is beautiful&apos; Dearly loved & Always Remembered by your Mum xxxx LOTHIAN & siblings Danny Wayne, Aileen, Christine & Maitland Leater Maree you were too beautiful for this earth Leater Maree",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/08/1755611930430.jpg",
     "mlDir": "forevershining",
     "hasPhoto": false,
@@ -43103,7 +43103,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Fly high SKIPPY,forever 25 Too precious for this UGLY world SKIP May been gone,but never forgotten always in our hearts Shine bright beautiful precious,Sweetheart In Loving Memory of SKYE REBECCA MCHUGH SKYE 30/8/1999—MAY20/25",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/09/1757651008576.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -43148,7 +43148,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Too precious for this UGLY world Fly high SKIPPY,forever 25 In Loving Memory of SKYE REBECCA MCHUGH SKIP May been gone,but never forgotten always in our hearts Shine bright beautiful precious,Sweetheart SKYE 30/8/1999—MAY20/25 R.I.P Precious sweetheart",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/09/1757651658865.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -43327,7 +43327,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "May the winds of heaven Blow softly an whisper In Your Ear How Much We all Love and Miss you Rest In Peace Our Angel❤️ Our Favourite Hello And Our Hardest Goodbye❤️ In Loving Memory Of Sheldon Charles Councillor ~ 19/08/2018 13/12/1985 Loving Son Of Nicolette Pearce Stewart Councillor Loving Father of 2 Daughters Jazarleaha Councillor Taleeha Councillor",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/forevershining/saved-designs/screenshots/2025/09/1758526346232.jpg",
     "mlDir": "forevershining",
     "hasPhoto": true,
@@ -43698,7 +43698,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "Forever in our hearts MADISON MARY BEARDY Jesus said “Let the little children come to me, and do not hinder them, for the kingdom of God belongs to such as these. OCT 31 2007 - JAN 22 2023",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/03/1679035306214.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -44337,7 +44337,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "27/06/62 TO 16/12/22 no one will ever know what it means to lose you In loving memory of Paul Bowater Our hearts still ache in sadness and secret tears will flow",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/05/1682965320716.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -44426,7 +44426,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "cross"
     ],
     "inscriptions": "Jayden Skye Newman February 1st, 2006 - February 29th 2100 1 John 4:8",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/05/1683660854754.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -44695,7 +44695,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Wilson In loving memory of Jesse Marie Wilson March 2018-July 2019 In loving memory of Annshirley Wilson October 1984-March 2022 A beautiful sister, aunt and friend Forever missed, never forgotten Beloved daughter",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/05/1685449476646.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -45957,7 +45957,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "Elsie Grace Rose Richard is littleElsie saying goodnight. Weighing 6lbs 5oz, 21 cms long \"Sacred Girl\" \"Little Rattle\" \"Many Stars Girl\" Arrived November 14th 2021 at 6:13am Left for the Spirit World , January 4th 2023 at 2:22pm The brightest star in the sky tonight",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/02/1707333740411.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -46002,7 +46002,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "bird"
     ],
     "inscriptions": "Forever In Our Hearts Jennings Barbara Ann December 25 1946 January 9 2025",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/01/1738012703879.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -46780,7 +46780,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "CASON  HINES DEC 4, 2009 AUG 7, 2023",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/08/1693254614837.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -46845,7 +46845,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "CHERISHED MEMORIES OF KAREN MCFADZEAN AGED 59 21.04.1964~27.06.2023 AND HER BELOVED HUSBAND ROBERT MCFADZEAN 21.08.1958~23.07.2023 AGED 64 LOVING PARENTS AND DEVOTED GRANDPARENTS MCFADZEAN MUM DAD TOGETHER FOREVER",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/08/1693407051576.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -46867,7 +46867,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "CHERISHED MEMORIES OF KAREN MCFADZEAN AGED 59 AND HER BELOVED HUSBAND ROBERT MCFADZEAN AGED 64 MCFADZEAN MUM DAD 21st APRIL 1964~27th JUNE 2023 21st AUGUST 1958~23rd JULY 2023 ADORED FATHER AND GRANDA",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/08/1693498229376.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -47728,7 +47728,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "IN GODS HANDS NOW Carmen Marie Redcay 10/18/1992 08/25/2023 Gone but never forgotten You&apos;re memories will always be with us",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/09/1695921512957.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -47752,7 +47752,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Carmen Marie Redcay 10/18/1992 08/25/2023 Gone but never forgotten You&apos;re memories will always be with us You were loved by so many especially your family Rest in peace Our beautiful daughter Fly high IN GODS HANDS NOW",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/09/1695922866294.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -47863,7 +47863,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "elephant"
     ],
     "inscriptions": "In Loving Memory of Omia Maye She was a loving daughter, sister, and friend to many",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/10/1696447555000.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -47907,7 +47907,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "elephant"
     ],
     "inscriptions": "In Loving Memory of She was a loving daughter, sister, and friend to many Omia Maye Aug 2003 - October 20**",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/10/1696449482420.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -48022,7 +48022,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "In Loving Memory: Carolina Gonzalez-Martinez 2000-2060 Daughter, Sister, Friend",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/10/1696812399023.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -48728,7 +48728,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "Siokapesi Vailea Fangupo Dec 4, 1980 - Nov ?, 2022 Beloved Wife,Mother,Daughter,Big Sister Filipai 4:6 Neongo pe koe ha ae mea Oua te mou lotomo&apos;ua ai ka ihe mea kotoa pe tuku ke ha kihe Otua ho&apos;o mou ngaahi kole ihe Lotu moe hufia pea fai moe fakafeta&apos;i. Forever in our Hearts our \"Beautiful Eyes\"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2023/11/1699585536504.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -49511,7 +49511,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "biblical-memorial",
-    "slug": "curved-gable-john-headstone",
+    "slug": "curved-gable-may-heavens-eternal-happiness-be-thine",
     "title": "Biblical Memorial",
     "motifNames": [
       "bird",
@@ -49970,7 +49970,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "DOB Carol GIllis DOB Raymond Frank Colleen Gillis Our friends will sing for us",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/08/1754412247781.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -50287,7 +50287,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "In Memory of Andre & Carmen Lopez Andre 1962- Carmen 1960- May They Rest In Peace",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/01/1704667776192.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -50333,7 +50333,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "WILSON GWENDOLYN BYRD BELOVED MOTHER, GRANDMOTHER, SISTER JAN.  30,  1949 AUG.  1,  2020",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/01/1704937621079.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -50590,7 +50590,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "dog"
     ],
     "inscriptions": "January 24, 1962 April 5, 1959 Joe Darby Best Friend and Wife of Vowed 10-31-1982 Married 6-14-1997 Melinda Letha Long Flash 1991-2006 Melo 2010-2022 Daughter Of 👈 Libby 2005? - Tybalt 2007 -",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/01/1705809898087.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -50818,7 +50818,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Here lays Alma Jean Jackson The most loving, caring, mother, grandmother, May she always be remembered and never forgotten",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/01/1706625451539.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -50911,7 +50911,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Claire Rowe In Loving Memory Darling Wife, Mum Daughter & Sister Oct 69 - June 24",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1723813220184.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -51109,7 +51109,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "Peace I leave with you, my peace I give unto you. (John 14:27) In Loving Memory Jessica Richardson Come to me, all you that labor and are heavy laden, and I will give you rest. (Matthew 11:28)",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/02/1707493026710.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -51175,7 +51175,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "Becky Marrufo 7-31-67 4-9-22 Beloved Mom Sister Grandma Tia Niece",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/02/1707514285472.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -51654,7 +51654,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Kuwana Paschal Loving Mother, daughter, sister, aunt, friend, lawyer February 1974-May 2018 If love could have saved you, you would have lived forever Come to me , all who are weary and burdend, and i will give you rest. Matthewe11:28",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/02/1709070050763.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -52301,7 +52301,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Baby Memorial",
     "motifNames": [],
     "inscriptions": "Mommy and Daddy Love You Forever Endeavors Our Baby Boy, Calvin Kane Williams March 11th 2021- March 11th 2021",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/05/1714527023504.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -52392,7 +52392,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "1953/2023 PENNY TODD LUNDY",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/03/1711916926576.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -52459,7 +52459,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Jxxxxxxx Dxxxxxx August 99,9999 - June 99,9999 Nothing Ventured Nothing Gained",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/06/1751227027342.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -53417,7 +53417,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "“The Lord is my shepherd; I shall not want.” ~ Psalm 23 MARGARET MAE “Molly” (SHEPHERD) GRIMES April 22, 1931 - December 14, 2023",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/04/1714311178594.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -53506,7 +53506,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "dove"
     ],
     "inscriptions": "Jamie-Lee Ralphs Sunrise 04-03-1990 Sunset 03-11-2023 Loving Daddy,Husband,Son Brother And Best Mate Never Forgotten God Bless Loved Always,Forever Missed, In Loving Memory of Jambo",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/05/1714751110432.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -54147,7 +54147,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "Princess",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/05/1716309435258.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -54170,7 +54170,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "Princess 1945-1970",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/05/1716309722753.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -54656,7 +54656,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "horse"
     ],
     "inscriptions": "20~04~1957 01~05~2024 Kevin Malcolm Kerslake~McKay",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/06/1717774020693.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -55558,7 +55558,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "horse"
     ],
     "inscriptions": "In loving Of Corey John Ashby 19/01/1992- 20/04/2024 Memory Forever in our hearts",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/07/1721281600369.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -55922,7 +55922,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "sun"
     ],
     "inscriptions": "Francis Nicholas Keohane Vivien Anne Keohane A much loved Husband, Dad and Grandad A much loved Wife, Mum and Nan The best parents of And Frank and Viv Keohane together forever Their eternal love for each other lives on xxx A life, like any other, completely unlike any other. In loving memory Always in our hearts and minds Gone from this world but forever loved and forever missed 18.09.1936 - 26.12.2002 Love you to the moon and stars and back again 05.07.1940  - 23.01.2024",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1723055650801.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -56241,7 +56241,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "bird"
     ],
     "inscriptions": "Judith C. Fox Douglas A. Fox 2nd LT US ARMY Dec 12 1930 - Apr 12 1989 Dec 20 1946 - July 22 2024",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1723602674473.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -56286,7 +56286,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "teddy-bear"
     ],
     "inscriptions": "December 12, 1974 - August 15, 2024 The Man Who Removed Jennfifer Hayduk From A Text Message Group... TWICE Matthew \"Asshat\" Vish",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1723817846893.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -56309,7 +56309,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "butterflies"
     ],
     "inscriptions": "Judith C. Fox Douglas A. Fox 2nd LT US ARMY Dec 12 1930 - Apr 12 1989 Dec 20 1946 - July 22 2024 (Robinson)",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1723848953285.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -56333,7 +56333,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "turtle"
     ],
     "inscriptions": "Judith C. Fox Douglas A. Fox 2nd LT US ARMY Dec 12 1930 - Apr 12 1989 Dec 20 1946 - July 22 2024 (Robinson)",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1723849544365.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -56379,7 +56379,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Judith C. Fox Douglas A. Fox 2nd LT US ARMY Dec 12 1930 - Apr 12 1989 Dec 20 1946 - July 22 2024 (Robinson) \"All My Love - Doug and Judy\"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1724018394349.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -56426,7 +56426,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Geraldine Montgomery Born 1933 Died 1956 \"Gone. And the light of all our life gone with her. Beautiful heart, we miss you.\"",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/01/1737748471013.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -56825,7 +56825,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Our beloved daughter and sister Tavia Au&apos;breanna Dunlap June 10, 2095 November 20, 2007 Don&apos;t cry because it&apos;s over, smile because it happened. You will be missed.",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1726083797722.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -56891,7 +56891,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flowers"
     ],
     "inscriptions": "In Loving Memory of July 4th, 1963 January 10th, 2024 archangel and with the trumpet call of God, and the dead in Christ will rise first.\" 1 Thessalonians 4:16 \"For the Lord Himself will come down from Forever In Our Hearts TAUALOFA MARGARET JOHNSTON FONG Heaven, with a loud command, with the voice of the",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/08/1724963213442.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -57088,7 +57088,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "birds"
     ],
     "inscriptions": "Alexis Austin Schaffer August 21,2001- Beloved Daughter and Sister Whosoever believeth in Him should not perish but have eternal life John 3:15",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1725399954321.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -57291,7 +57291,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Kim Brett The love between a mother and daughter is forever ♾️",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1725747085830.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -57426,7 +57426,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Brother Memorial",
     "motifNames": [],
     "inscriptions": "Sinead Hannah O&apos;Sullivan 22-03-1994 to 07-11-2022 Aged 28 In Loving Memory of All our love xxx Just a prayer from the family who loved you Just a memory fond and true In our hearts you will live forever Because we thought the world of you Also remembering Stephen Michael her baby brother O&apos;SULLIVAN",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1725971424316.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -57519,7 +57519,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "SUNRISE SUNSET September 11, 1958 February 16, 1984 \"Eternal love of a mother and her children\" MONA DENISE SAYLES",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1726059870953.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -57766,7 +57766,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "VALLEJOS Beloved Mother Daughter, Sister and Friend Anne Louise Evans Feb. 25, 1965 Xxx. 22, 1111",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1726934429710.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -58104,7 +58104,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "dove"
     ],
     "inscriptions": "Lu&apos;isa Kaufusi Kefu DOB: 10th October 1943 Sleep on now, and take your rest. Matthew 26:45 Beloved Wife, Mother, and Grandmother. Even though our words will never do enough in thanking you We want you to know we are deeply greatful for you. for the great contribution you made in our lives. MOMMA LUK. REST IN LOVE &apos;OFA ATU",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/10/1728004267595.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -58558,7 +58558,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "title": "Daughter Memorial",
     "motifNames": [],
     "inscriptions": "Our Beloved Daughter and Sister Mele Halatu&apos;u Lokotui 25 November 1993 27 September 2024 Sunrise Sunset Teu hanga hake hoku mata kihe ngaahi mo&apos;unga &apos;aia  oku hau mei ai hoku ngaahi tokoni &apos;Oku hau hoku tokoni meia Sihova &apos;aia na&apos;ane ngaahi &apos;ae langi mo mamani. Forever in our Hearts",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/05/1747347360569.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -59115,7 +59115,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "duck"
     ],
     "inscriptions": "",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/11/1731457297049.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -59137,7 +59137,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "duck"
     ],
     "inscriptions": "Stella Preston Christine Esther 1957 - 2024 Wayne Kendal Preston Always In Our Hearts 1957 - Treasured Memories Of Love & Travel",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/11/1731460260894.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -59159,7 +59159,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "duck"
     ],
     "inscriptions": "Stella Preston Christine Esther 1957 - 2024 Age 66 Wayne Kendal Preston 1957 - Always In Our Hearts A lifetime of love & travel",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/11/1731459017701.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -59600,7 +59600,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "bird"
     ],
     "inscriptions": "Megan Amelia Hatcher May 10, 1992",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/11/1732578088902.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -60037,7 +60037,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "“I believe inside of me to be the answer to my - Madelyn Adell Wood JUNE 14, 2006 • DECEMBER 27, 2025 my mystery.”",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2024/12/1735612535909.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -60233,7 +60233,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "In Loving Memory Millie Mae Wright 05/01/2024 - - 15/01/2025 to do was in our lives to accept that the angels picked you xxx Forever 1, too precious for the world The hardest thing that we ever had",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/01/1736994603619.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -60675,13 +60675,13 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
     "productType": "headstone",
     "productSlug": "traditional-headstone",
     "category": "biblical-memorial",
-    "slug": "headstone-27-psalm",
+    "slug": "heart-shape-truly-my-soul-finds-rest-in-god",
     "title": "Biblical Memorial",
     "motifNames": [
       "heart"
     ],
     "inscriptions": "1997 July 30 2067 Truly my soul finds rest in God; my salvation comes from Him. Psalms 62:1-2 Beloved mother & grandmother Megan Jenna September 27",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/02/1739765356856.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -60856,7 +60856,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "Beloved Father, Son Brother and Husband",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/03/1740884309558.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -62932,7 +62932,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "Madison G. Laine Oct 30, 2008 - Jan 8 2025 Loved but nevr forgotten the angel of all",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/06/1749174681755.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": false,
@@ -63426,7 +63426,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "cross"
     ],
     "inscriptions": "E.P.D First breath on October 16, 1973 Eternal rest on February 12, 2025 \"No Hay Nada Mas Dificil Que Vivir Sin Ti\" Beatriz Olivia Belmontez",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/07/1752719071429.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -63448,7 +63448,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "heart"
     ],
     "inscriptions": "",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/07/1752900602151.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -64482,7 +64482,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "flower"
     ],
     "inscriptions": "January 11, 2011 Gone but never forgotten we will forever Cherish our Memories with you. Love and miss you mom. In loving memory of Florinda  Ida Trujillo June 25, 1949",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/09/1757487544134.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -64814,7 +64814,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "fish"
     ],
     "inscriptions": "Kaylee Stead May 30, 2009-October 17,2091 Beloved wife mother & friend. In loving memory",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1759460952952.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,
@@ -64992,7 +64992,7 @@ export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = {
       "turtle"
     ],
     "inscriptions": "Emily Jay Larson First Sunrise Last Sunset November 26, 2000 September 11, 2024 Too Beautiful For This Earth",
-    "shapeName": "headstone 27",
+    "shapeName": "heart",
     "preview": "/ml/headstonesdesigner/saved-designs/screenshots/2025/10/1760027741472.jpg",
     "mlDir": "headstonesdesigner",
     "hasPhoto": true,

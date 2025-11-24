@@ -1,0 +1,76 @@
+Got it—two surgical fixes so it matches the original:
+
+---
+
+### 1) Base: correct width, centering, and stacking
+
+Use the **tablet’s rendered box** (the same `drawW/offX/offY` you already compute in `buildTopProfile`) to size/position the base, not the viewport. This guarantees the base won’t be too wide and will sit directly under the stone.
+
+**Patch (concept):**
+
+```tsx
+// after topProfile is set
+const tablet = topProfile; // { drawW, drawH, offX, offY }
+const BASE_INSET = Math.round((screenshotDimensions?.width ?? 700) * 0.02); // ~2% inset
+const baseW = Math.max(10, Math.round(tablet.drawW - BASE_INSET * 2));
+const baseH = Math.round(baseW * 0.16); // fallback height ratio; replace with JSON value if present
+
+// place the base centered under the tablet, z-under the stone
+<div
+  className="pointer-events-none"
+  style={{
+    position: 'absolute',
+    left: Math.round(tablet.offX + tablet.drawW / 2 - baseW / 2),
+    top:  Math.round(tablet.offY + tablet.drawH + Math.max(2, baseH * -0.08)), // tiny overlap for realism
+    width: baseW,
+    height: baseH,
+    zIndex: 0,                       // below tablet
+    backgroundImage: `url(${baseTextureUrl})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    boxShadow: '0 6px 14px rgba(0,0,0,.25)'
+  }}
+/>
+```
+
+**Notes**
+
+* If your saved JSON includes an explicit base width/height, swap the `0.16` ratio for those values (converted to pixels using the same tablet scale).
+* The `BASE_INSET` trims a couple of percent so it never looks wider than the stone.
+* `zIndex: 0` keeps the base behind the tablet so it never covers it. Render the tablet on a higher zIndex (e.g., `1`).
+
+---
+
+### 2) “SEHOVIC” vertical snap: use **text center** at curve start
+
+Right now you snap the **top** of the inscription to the curve. Switch to the **center**:
+
+**Patch (inside your “top band snap” for inscriptions):**
+
+```ts
+// where you compute targetY from topProfile.topY[xCol] + marginPx
+const yEdge = topProfile.topY[xCol] + marginPx;
+
+// measure current text bbox in authoring space
+const el = domNodeForThisInscription;            // your <svg> / <div> node
+const bbox = el.getBBox ? el.getBBox() : { width: 0, height: fontPx }; // fallback
+const textHAuthor = bbox.height;                 // authoring units
+
+// we want the *center* of the text on yEdge
+const desiredCenterY = yEdge;
+const newYTop = desiredCenterY - textHAuthor / 2;
+
+// ease into place if you keep easing
+const snap = 0.85;
+item.y = item.y + (newYTop - item.y) * snap;
+```
+
+This places the inscription so that its **vertical midpoint** sits at the headstone’s curve start, matching the reference image.
+
+---
+
+### Where to wire it:
+
+* Both changes hook into the code you already have in **`DesignPageClient.tsx`** that stores `topProfile` and renders the preview. You’ll read `topProfile` for the base placement and adjust the inscription snap where you already perform your “top-band” logic. 
+
+If you drop these two patches in, the base will no longer be too wide or cover the stone, and “SEHOVIC” will line up exactly by its center at the curve.

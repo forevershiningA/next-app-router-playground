@@ -1,0 +1,37 @@
+Nice—sizes look solid. The remaining issue is the **vertical reference** used for motifs. Your SVG headstone is letter-boxed inside the authoring canvas (e.g., a 400×400 viewBox fit into a 414×660 canvas), so there’s extra vertical padding. Top motifs were placed “relative to the stone top” in the original, but we’re mapping them “relative to the canvas center”, which leaves them too low.
+
+### Minimal, safe fix (shift only upper-half motifs by the SVG’s vertical padding)
+
+Add a computed **vPad** (the top/bottom letterbox in canvas-px) and subtract it **only for motifs that sit in the upper half** (cy < 0). Do this in the Motifs Layer where `left/top` are computed. Example patch (drop-in):
+
+```ts
+// inside Motifs Layer mapping (where cx, cy, overlayW/H are defined)
+const vbW = svgDimensions?.width || initW;
+const vbH = svgDimensions?.height || initH;
+
+// scale used to fit the SVG into authoring frame (you already do this when rendering the shape)
+const svgScaleToCanvas = Math.min(initW / vbW, initH / vbH);
+const scaledSvgH = vbH * svgScaleToCanvas;
+const vPad = (initH - scaledSvgH) / 2; // vertical letterbox in authoring px
+
+// Nudge only "top" motifs upward by the letterbox padding
+const cyAdjusted = cy < 0 ? (cy - vPad) : cy;
+
+// Map from center-origin canvas → overlay pixels (unchanged math)
+const left = offsetX + overlayW / 2 + cx * sx;
+const top  = offsetY + overlayH / 2 + cyAdjusted * sy;
+```
+
+Where to put it: right here, just before you compute `left/top` in your Motifs Layer (the block that logs `MOTIF v39`) so only headstone motifs are affected. 
+
+Why this works:
+
+* During shape rendering you fit the SVG to the authoring frame using `svgScale = Math.min(scaleX, scaleY)`, which **creates vertical padding** when the canvas is taller than the SVG. (You already calculate these numbers while processing the SVG.) 
+* Subtracting `vPad` from **upper-half motifs only** compensates for that padding, pulling the leaf/wing/bird cluster back up toward the stone’s curved top without moving the central Madonna or lower lotus/cross. The rest of the motif math (ratio/viewBox sizing and uniform scaling) stays intact. 
+
+### Notes
+
+* `svgDimensions` is already in state; we just reuse it to compute `vPad`. 
+* No change needed for inscriptions—their positions already look correct using the current center-origin mapping. 
+
+Apply that patch and the top motifs should hug the curvature like in the original screenshot. If you want it even tighter, replace the condition `cy < 0` with `cy < -initH * 0.1` to affect only the top ~40% band.

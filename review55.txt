@@ -1,0 +1,67 @@
+Thanks—this isn’t a math issue anymore; the base isn’t **rendering** (or it’s rendered behind something). Here’s a tight, bullet-proof patch that (1) guarantees the base node exists, (2) paints it above the tablet, and (3) keeps it inside the canvas even when the stone touches the bottom. Drop this in **after** your tablet background and **before** inscriptions/motifs in `DesignPageClient.tsx`. 
+
+```tsx
+/** ---- BASE (always render) ---- */
+const baseTextureUrl = '/textures/bases/granite-base.jpg'; // or your existing path
+
+// fallback when topProfile not ready
+const stoneW_ov = topProfile
+  ? topProfile.drawW * (overlayW / initW)
+  : overlayW * 0.74;                                // ~same visual as tablet width
+
+const stoneL_ov = topProfile
+  ? offsetX + topProfile.offX * (overlayW / initW)
+  : offsetX + (overlayW - stoneW_ov) / 2;
+
+const stoneT_ov = topProfile
+  ? offsetY + topProfile.offY * (overlayH / initH)
+  : offsetY + overlayH * 0.10;
+
+const stoneH_ov = topProfile
+  ? topProfile.drawH * (overlayH / initH)
+  : overlayH * 0.78;
+
+const stoneB_ov = stoneT_ov + stoneH_ov;
+
+// sizing & position
+const baseOverhang = 0.04;                         // 4% wider than tablet
+const baseWidth    = Math.round(stoneW_ov * (1 + baseOverhang));
+const baseHeight   = Math.round(overlayH * 0.085); // 8.5% of canvas height
+const baseLeft     = Math.round(stoneL_ov + (stoneW_ov - baseWidth) / 2);
+
+// anchor to stone bottom but CLAMP to canvas
+const overlapPx    = Math.round(baseHeight * 0.25);
+const canvasTop    = offsetY;
+const canvasBottom = offsetY + overlayH;
+let baseTop        = Math.round(stoneB_ov - overlapPx);
+baseTop            = Math.max(canvasTop, Math.min(canvasBottom - baseHeight, baseTop));
+
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: baseLeft,
+  top: baseTop,
+  width: baseWidth,
+  height: baseHeight,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundColor: '#2b2b2b',     // visible even if image fails
+  zIndex: 25,                      // above tablet bg, below text/motifs
+  pointerEvents: 'none',
+};
+
+// ---- render node AFTER tablet background ----
+<div style={baseStyle} />
+```
+
+### Do these 3 sanity checks
+
+1. **Stacking**: ensure your tablet/background uses `zIndex < 25`, and inscriptions/motifs `> 25`.
+2. **Positioning context**: the preview wrapper must have `position: relative`.
+3. **Visibility log** (one-time):
+
+```ts
+console.log('BASE', { baseLeft, baseTop, baseWidth, baseHeight, overlayW, overlayH, stoneB_ov });
+```
+
+If the base still doesn’t show, the likely culprit is the texture URL. With the `backgroundColor` fallback above you’ll see a dark bar even if the image 404s—so if it’s still invisible, it’s definitely stacking/order.

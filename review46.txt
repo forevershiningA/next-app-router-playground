@@ -1,0 +1,32 @@
+That’s basically there. For a pixel-perfect hug, give the crown a tiny extra lift and keep shoulders a hair lower.
+
+### Micro-tune (drop into your MOTIF v42 block)
+
+```ts
+// 1) Crown boost: +3 px (was 2)
+const crownBoost = slope < 0.2 ? 3 : 0;
+
+// 2) Shoulder bias: add +2 px to margin when slope is steep
+const baseMargin = Math.round(initH * 0.011);
+const marginPx   = baseMargin + (slope > 0.6 ? 2 : 0);
+
+// 3) Slightly stronger optical lift (from 8% → 9%, max 9 px)
+const opticalLift = Math.min(9, Math.round(motifHAuthor * 0.09));
+
+// Final target
+const desiredTopAuthor = yC + marginPx - opticalLift - crownBoost;
+
+// Apply full delta & quantize (keeps layout stable on reopen)
+const deltaAuthor  = desiredTopAuthor - currentTopAuthor;
+const deltaOverlay = deltaAuthor * (overlayH / initH);
+const deltaCy      = deltaOverlay / sy;
+cyUsed = Math.round((cy + deltaCy) * 2) / 2;
+```
+
+### Why this helps
+
+* **Crown boost** only when the curve is nearly flat → nudges the center cluster up to the exact visual line.
+* **Shoulder bias** keeps the side birds off the bevel on gables/ogees.
+* **Optical lift** counters internal whitespace in the motif SVGs.
+
+If you want a hard “never overlap the surname” guard next, I’ll add the optional surname-gap cap using your existing layout data in **DesignPageClient.tsx**. 

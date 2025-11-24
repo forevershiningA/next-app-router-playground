@@ -1,0 +1,49 @@
+You anchored the base to the **overlay bottom**. Because the tablet is letter-boxed (contain fit), your base ends up outside the visible area when the overlay is cropped/tight → it disappears.
+
+Anchor it to the **stone bottom** instead, using the fitted bounds you already compute in `buildTopProfile` (`offX`, `drawW`, `offY`, `drawH`). Also give the base a small overlap into the tablet so it’s always visible.
+
+### Drop-in patch (where you style/render the base)
+
+```ts
+// ---- stone bounds in OVERLAY pixels (from buildTopProfile)
+const stoneW = (topProfile?.drawW ?? initW) * (overlayW / initW);
+const stoneL = offsetX + (topProfile?.offX ?? 0) * (overlayW / initW);
+const stoneB = offsetY + (topProfile?.offY ?? 0) * (overlayH / initH)   // top of stone
+              + (topProfile?.drawH ?? initH) * (overlayH / initH);       // + stone height
+
+// width: a little wider than the tablet (or set to 1.00 for exact)
+const baseOverhang = 0.04;                         // 4% wider than tablet
+const baseWidth    = Math.round(stoneW * (1 + baseOverhang));
+
+// height: proportion of canvas (or keep your fixed value)
+const baseHeight   = Math.round(overlayH * 0.08);
+
+// left: center under the tablet
+const baseLeft     = Math.round(stoneL + (stoneW - baseWidth) / 2);
+
+// top: stick to stone bottom, with a small overlap upward so it’s visible
+const overlapPx    = Math.round(baseHeight * 0.20); // 20% tucks under the tablet
+const baseTop      = Math.round(stoneB - overlapPx);
+
+// final style
+const baseStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: baseLeft,
+  top: baseTop,
+  width: baseWidth,
+  height: baseHeight,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  zIndex: 3,                // above tablet background
+  pointerEvents: 'none',
+};
+```
+
+### Why this fixes it
+
+* Uses the **actual rendered tablet width/left/bottom** (not the overlay extents), so the base always lines up and remains inside the viewport.
+* The small **overlap** prevents the base from being pushed below a tight crop.
+* `zIndex` ensures it doesn’t hide behind other layers.
+
+If `topProfile` is ever null, keep your old fallback (overlay-bottom) so it still renders. Everything needed is already in `DesignPageClient.tsx`. 

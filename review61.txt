@@ -1,0 +1,85 @@
+You’re right—the base should come from the **JSON’s physical dimensions**, not a % guess. Here’s a drop-in that sizes/centers the base **in overlay px from the saved design’s mm**, so it matches the original screenshot and data precisely. (Put this inside the same positioned wrapper as the tablet.)
+
+### What it does
+
+* Reads headstone tablet **width_mm/height_mm** from the saved design.
+* Reads base **length_mm/height_mm** (falls back to sensible defaults if missing).
+* Converts mm → overlay pixels using the fitted tablet’s actual draw size.
+* Centers the base under the tablet with a small overlap tuck.
+
+### Patch
+
+```tsx
+// --- pull physical mm from saved design JSON
+const headstoneItem = (designData || []).find((it: any) => it.type === 'Headstone') || {};
+const tabletWidthMm  = Number(headstoneItem.width)  || 600;   // mm
+const tabletHeightMm = Number(headstoneItem.height) || 600;   // mm
+
+// try to find an explicit base addition in the JSON
+const baseItem = (designData || []).find((it: any) =>
+  (it.type === 'Addition' || it.type === 'Base' || it.type === 'Headstone Base') &&
+  /base/i.test(String(it.name || it.label || ''))
+) || {};
+
+// read base length/height in mm (common fields + fallbacks)
+const baseLengthMm = Number(baseItem.length_mm ?? baseItem.width_mm ?? baseItem.length ?? baseItem.width)
+  || (tabletWidthMm + 2 * 75);     // default: 75 mm overhang each side
+const baseHeightMm = Number(baseItem.height_mm ?? baseItem.height)
+  || 100;                           // default: 100 mm base height
+
+// --- fitted tablet bounds (overlay px), already computed in your component
+const sx = overlayW / initW;
+const sy = overlayH / initH;
+
+const stoneLeft = offsetX + (topProfile?.offX ?? 0) * sx;
+const stoneTop  = offsetY + (topProfile?.offY ?? 0) * sy;
+const stoneW    = (topProfile?.drawW ?? initW) * sx;
+const stoneH    = (topProfile?.drawH ?? initH) * sy;
+const stoneBottom = stoneTop + stoneH;
+
+// --- px-per-mm from the actual fitted tablet
+const pxPerMmX = stoneW / tabletWidthMm;
+const pxPerMmY = stoneH / tabletHeightMm; // usually ~= pxPerMmX
+
+// --- final base size in overlay px straight from mm
+const baseWidthPx  = Math.round(baseLengthMm * pxPerMmX);
+const baseHeightPx = Math.round(baseHeightMm * pxPerMmY);
+
+// --- how much to tuck the base under the tablet
+const overlapPx = Math.round(baseHeightPx * 0.25);
+
+// --- full-width row at stone bottom; flex centers base
+const baseRowStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top: Math.max(0, Math.min(overlayH - baseHeightPx, stoneBottom - overlapPx)),
+  width: overlayW,
+  height: baseHeightPx,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  zIndex: 25,            // above tablet bg, below text/motifs
+  pointerEvents: 'none',
+};
+
+const baseStyle: React.CSSProperties = {
+  width: baseWidthPx,
+  height: baseHeightPx,
+  backgroundImage: `url(${baseTextureUrl})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+};
+
+// render inside the same overlay wrapper as the tablet
+<div style={baseRowStyle}>
+  <div style={baseStyle} />
+</div>
+```
+
+### Notes
+
+* If your JSON uses different field names for base mm, add them to the `baseItem` reads; the math stays the same.
+* This removes the “too wide/too short” look because it’s **driven by mm** (JSON) → **px** (overlay) using the **actual fitted tablet scale**.
+* Keep the base block as a child of the tablet overlay container with `position:'relative'`, so `top/left` are in the right coord space.
+
+This is consistent with the file you just shared—drop it into your current `DesignPageClient.tsx` where you’re rendering the base. 

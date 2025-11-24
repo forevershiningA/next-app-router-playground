@@ -1,0 +1,141 @@
+You’re right on both counts:
+
+1. the family-name (SEHOVIC) is being plotted with its **top** touching the arc instead of its **center**
+2. the **base** is using the screenshot/mask width, not the rendered headstone width/offset
+
+Below is a minimal set of fixes that plugs into what you already have (you’re already computing `topProfile` with `{ topY, offX, offY, drawW, drawH, scale }`, so let’s reuse that).
+
+---
+
+## A) Make the family name “stick” to the arc by its **center**
+
+```ts
+// helpers (reuse your initW/initH and topProfile)
+const sx = topProfile.drawW / initW;   // uniform
+const sy = topProfile.drawH / initH;
+
+function canvasToDisplay(xCanvas: number, yCanvas: number) {
+  // canvas coords are center-origin (+x right, +y down)
+  const xDisp = topProfile.offX + (xCanvas + initW / 2) * sx;
+  const yDisp = topProfile.offY + (yCanvas + initH / 2) * sy;
+  return { xDisp, yDisp };
+}
+
+// --- Set family-name Y so that its **center** sits P px under the curve
+function familyNameCenterY(canvasX: number, measuredTextHeightPx: number, paddingPx: number) {
+  // find top edge of stone at the display column of the family-name center
+  const xDisp = topProfile.offX + canvasX * sx; // if you pass canvasX as absolute (0..initW)
+  const col = Math.round(xDisp);
+  const stoneTopY = topProfile.topY[Math.max(0, Math.min(col, topProfile.topY.length - 1))];
+
+  // position the **center** of the text a little below the arc:
+  const centerYDisp = stoneTopY + paddingPx + measuredTextHeightPx / 2;
+
+  // convert display back to canvas center-origin Y
+  const yCanvas = (centerYDisp - topProfile.offY) / sy - initH / 2;
+  return yCanvas;
+}
+```
+
+Usage pattern (after measuring the element once fonts are loaded):
+
+```ts
+// measure the family name (once)
+const famEl = famRef.current!;
+const famRect = famEl.getBoundingClientRect();
+const famH = famRect.height;
+
+// we want the name centered at the headstone’s geometric center in X
+const nameCanvasCenterX = initW / 2;
+
+// e.g., 10–14 px looks good on DPR=3 screenshots
+const paddingUnderArc = 12;
+
+const yCanvasCenter = familyNameCenterY(nameCanvasCenterX, famH, paddingUnderArc);
+
+// store back into your item model so DraggableElement (with translate(-50%,-50%)) uses CENTER coords:
+item.cy = yCanvasCenter;  // keep cx as you already have (centered)
+```
+
+Because your draggable wrapper already applies `translate(-50%, -50%)`, feeding it **center** coordinates (cx, cy) fixes the issue where the **top** edge touched the arc instead of the **center**. 
+
+---
+
+## B) Make the base the same width as the rendered stone and place it directly underneath
+
+Right now the base is using a container/mask width. Always tie it to the rendered headstone frame:
+
+```tsx
+// where you render the base
+const baseGapPx = 8;                       // small gap
+const baseWidth = topProfile.drawW;        // EXACTLY match stone draw width
+const baseLeft  = topProfile.offX;         // align left edges
+const baseTop   = topProfile.offY + topProfile.drawH + baseGapPx;
+
+const baseAspect = baseTextureNaturalH / baseTextureNaturalW; // or fixed mm -> px
+const baseHeight = Math.round(baseWidth * baseAspect);        // or a fixed pixel height
+
+<img
+  src={baseTextureUrl}
+  alt="Base"
+  style={{
+    position: 'absolute',
+    left: baseLeft,
+    top: baseTop,
+    width: baseWidth,
+    height: baseHeight,     // don’t let it auto-scale from some other parent
+    objectFit: 'cover',
+    zIndex: 0               // behind inscriptions/motifs
+  }}
+/>
+```
+
+If you keep the base height in millimetres (e.g., 100 mm), convert with the same scale you used for the stone:
+
+```ts
+// mm → canvas px → display px (uniform)
+const pxPerCanvasX = sx;                 // display px per canvas px
+const baseHeightCanvasPx = (baseHeightMm / headstoneHeightMm) * initH;
+const baseHeight = Math.round(baseHeightCanvasPx * sy);
+```
+
+**Key points**
+
+* **Width/left**: `drawW` and `offX` — not screenshot width.
+* **Top**: `offY + drawH + gap` — i.e., directly under the stone render box.
+* If the base still “covers” the stone, you’re rendering it **after** with a higher stacking order or negative gap — keep `zIndex` lower than text/motifs and use a positive `baseGapPx`.
+
+---
+
+## C) Why the top motifs drift
+
+They’ll drift if any of these are true:
+
+* you mix top-left and center-origin math (fix by always using center coords + `translate(-50%, -50%)`)
+* you use `init_width/init_height` scale for the stone but `screenshotDimensions` for motifs (fix by using the same `sx/sy` and `offX/offY` as above)
+* non-uniform scale sneaks in (always use `sx === sy` from `drawW/initW`)
+
+Use the same `canvasToDisplay()` for EVERY item (inscription + motif). For a motif saved with `(cx, cy, wCanvas)`, do:
+
+```ts
+const { xDisp, yDisp } = canvasToDisplay(cx - initW/2, cy - initH/2);
+const wDisp = wCanvas * sx; // uniform
+
+<div style={{
+  position: 'absolute',
+  left: xDisp,
+  top:  yDisp,
+  width: wDisp,
+  transform: 'translate(-50%, -50%)'
+}} />
+```
+
+That makes the top-row motifs “stick” to the arc the same way as the family name. 
+
+---
+
+If you drop these in:
+
+* SEHOVIC will align by its **center** to a consistent offset beneath the curve.
+* The base will be exactly as wide as the rendered stone, centered, and just under it.
+* All motifs/inscriptions will share one mapping function, removing the tiny XY drift you’re seeing.

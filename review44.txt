@@ -1,0 +1,42 @@
+You’re right—the cluster is still a touch low. Two tiny fixes will lock X/Y perfectly:
+
+### 1) Sample the curve using **authoring X** (not screen X)
+
+You already have `cx` in authoring, center-origin units. Use that directly to pick the column from `topY`. This removes the tiny error from overlay→authoring round-trip.
+
+```ts
+// BEFORE (approx)
+const screenX = offsetX + overlayW/2 + cx * sx;
+const authorX = (screenX - offsetX) * (initW / overlayW);
+
+// AFTER (exact)
+const authorX = Math.round(initW / 2 + cx);
+const sideInsetPx = Math.round(initW * 0.018); // ~1.8% inset
+const col = Math.max(sideInsetPx, Math.min(initW - 1 - sideInsetPx, authorX));
+```
+
+### 2) Use a small **optical lift** and slope-aware margin
+
+Decrease the default margin near the crown and nudge motifs up a few px to compensate for vertical whitespace inside their SVG viewBox.
+
+```ts
+// Local slope (px/col) to detect shoulders vs crown
+const yL = topProfile.topY[Math.max(0, col - 1)];
+const yC = topProfile.topY[col];
+const yR = topProfile.topY[Math.min(initW - 1, col + 1)];
+const slope = Math.abs(yR - yL) / 2;
+
+// Base margin scales with canvas, increases slightly on steeper slopes
+const baseMargin = Math.round(initH * 0.012);          // ~1.2% canvas height
+const marginPx   = Math.max(6, baseMargin + Math.min(6, Math.round(slope * 0.5)));
+
+// “Optical” lift to counter motif’s internal top padding
+const opticalLift = Math.min(6, Math.round(motifHAuthor * 0.06));
+
+// Final target for the motif’s bbox top (authoring px)
+const desiredTopAuthor = yC + marginPx - opticalLift;
+```
+
+Keep the rest of your math the same (i.e., compute `currentTopAuthor`, `deltaAuthor → deltaOverlay → deltaCy`, then `cyUsed = cy + deltaCy * 0.85`). With these two tweaks the spray will hug the curve like in the reference across shapes and DPRs. 
+
+If you want, I can point to your `MOTIF v42` block lines where to paste these swaps.

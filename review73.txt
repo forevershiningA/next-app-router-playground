@@ -1,0 +1,156 @@
+Short answer: the base is being laid out in page space, not in the same **fit‐box** as the tablet, and it’s using the **mask/container width** instead of the **rendered headstone width**. That’s why it “floats,” overlaps, and stays too wide on the right—your offsets/scale (offX/offY/scale) from the tablet fit aren’t applied to the base, and the base isn’t stacked in the same positioned container. The same misalignment also explains why the top motifs/SEHOVIC don’t “stick” to the curve—those items are correctly mapped to the tablet fit, but the base is not. 
+
+Here’s a solid, surgical fix that keeps everything in one coordinate system:
+
+---
+
+## 1) Put tablet + inscriptions + base into one stage
+
+Create a single **relatively positioned stage** that uses the tablet’s logical canvas (init_width × init_height) and the same **contain** fit. Then, place the base using **that same fit**.
+
+```tsx
+// helpers (one source of truth for fit)
+function containFit(srcW:number, srcH:number, dstW:number, dstH:number) {
+  const scale = Math.min(dstW/srcW, dstH/srcH);
+  const drawW = srcW * scale;
+  const drawH = srcH * scale;
+  const offX = (dstW - drawW) / 2;
+  const offY = (dstH - drawH) / 2;
+  return { scale, drawW, drawH, offX, offY };
+}
+```
+
+Where you render the preview, wrap everything:
+
+```tsx
+// target stage size in CSS pixels (eg. 900 wide, or whatever your layout needs)
+const STAGE_W = 900;
+const STAGE_H = 900; // height for tablet area (doesn't include base yet)
+
+// from your JSON
+const initW = headstoneData.init_width;
+const initH = headstoneData.init_height;
+
+// compute the tablet fit once
+const fit = containFit(initW, initH, STAGE_W, STAGE_H);
+// use 'fit' for ALL children (tablet, inscriptions, motifs AND base)
+
+return (
+  <div
+    className="stone-stage"
+    style={{ position:'relative', width: STAGE_W, height: STAGE_H + basePxHeight, margin:'0 auto' }}
+  >
+    {/* Tablet (masked granite SVG) */}
+    <img
+      src={tabletMaskUrl}
+      style={{
+        position:'absolute',
+        left: fit.offX,
+        top:  fit.offY,
+        width: fit.drawW,
+        height: fit.drawH,
+        objectFit:'contain',
+        pointerEvents:'none'
+      }}
+      alt=""
+    />
+
+    {/* Inscriptions + motifs (already mapped in canvas coords) */}
+    {/* When you convert (canvasX,canvasY) -> CSS, do: */}
+    {/* cssLeft = fit.offX + ((canvasX + initW/2) * fit.scale)
+        cssTop  = fit.offY + ((canvasY + initH/2) * fit.scale) */}
+    {/* Keep translate(-50%,-50%) so (cssLeft, cssTop) is the element center */}
+
+    {/* Base (see section 2 below) */}
+    <img
+      src={baseTextureUrl}
+      style={baseStyle /* computed as below */}
+      alt=""
+    />
+  </div>
+);
+```
+
+> Important: do **not** use page/body width or any crop screenshot numbers to place the base. Use the same `fit` that you used for the tablet. Ignore screenshot auto-crop for placement.
+
+---
+
+## 2) Size and place the base from the same fit
+
+Most JSONs define base width as “same as tablet” and base height as a fixed mm (or a ratio). Convert it with the **same scale** you used for the tablet:
+
+```tsx
+// Example: base is same width as tablet; height comes from JSON millimetres
+const baseWidthPx  = fit.drawW * (baseScaleX ?? 1); // often 1
+const baseHeightPx = (baseHeightMm / initH_mm) * fit.drawH; // or use a fixed ratio, e.g. 0.12*fit.drawH
+const baseOverlapPx = Math.max(0, (baseLipMm ?? 0) / initH_mm * fit.drawH); // small overlap up behind the tablet
+
+const baseLeft = fit.offX + (fit.drawW - baseWidthPx) / 2;
+const baseTop  = fit.offY + fit.drawH - baseOverlapPx;
+
+const baseStyle: React.CSSProperties = {
+  position:'absolute',
+  left: baseLeft,
+  top:  baseTop,
+  width: baseWidthPx,
+  height: baseHeightPx,
+  objectFit:'cover',
+  zIndex: 0,          // behind inscriptions
+  pointerEvents:'none'
+};
+```
+
+If you don’t have mm in JSON, a sane visual default is:
+
+```ts
+const baseHeightPx = Math.round(fit.drawH * 0.14); // ~14% of tablet height
+const baseOverlapPx = Math.round(baseHeightPx * 0.10); // ~10% lip overlap
+```
+
+This immediately fixes:
+
+* base too wide (was using mask/container width; now uses `fit.drawW`)
+* base drifting left/right (centered from the same `offX` and `drawW`)
+* base “floating” far below (top = `fit.offY + fit.drawH - overlap`)
+* base covering the tablet (you control overlap pixels precisely)
+
+---
+
+## 3) Keep inscriptions/motifs locked to the tablet
+
+You already compute a `transform: translate(-50%,-50%)` in `DraggableElement`. Keep it, but ensure your **top/left** are computed from the same `fit`:
+
+```tsx
+const cssLeft = fit.offX + ( (canvasX + initW/2) * fit.scale );
+const cssTop  = fit.offY + ( (canvasY + initH/2) * fit.scale );
+
+<div style={{
+  position:'absolute',
+  left: cssLeft,
+  top: cssTop,
+  transform: 'translate(-50%, -50%)', // keep center-origin placement
+  // ...font size also scaled from fit.scale
+}} />
+```
+
+This also fixes your “SEHOVIC y center should sit exactly where the arc starts” complaint—because you’re now mapping **center points** into the **same scaled fit** as the stone outline, that Y will line up with the curve/top-profile you built.
+
+> If you use your `topProfile` for auto-snapping to the curve, **index into it with the same pixel X** (`cssLeft`) and place the center Y at `topProfile.topY[x] + desiredOffsetPx`.
+
+---
+
+## 4) Make sure auto-crop doesn’t move geometry
+
+You’re analyzing the screenshot for white borders, which is fine for **thumbnail export**, but must not influence layout math. Keep the crop numbers only for **displaying the exported image**, never for computing `offX/offY/scale`. All geometry (tablet, text, motifs, base) must be driven exclusively by `containFit(initW, initH, STAGE_W, STAGE_H)`.
+
+---
+
+## 5) One last gotcha you already hit
+
+Your `DraggableElement` currently concatenates transforms. Ensure you **only** have the center translate plus the drag translate—don’t accidentally stack an extra translate from a parent. The safe pattern is what you have now:
+
+```tsx
+transform: `${initialStyle.transform ?? 'translate(-50%, -50%)'} translate(${position.x}px, ${position.y}px)`
+```
+
+Just make sure `initialStyle.transform` isn’t also adding another translate/scale from outside.

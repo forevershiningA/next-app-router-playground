@@ -1,0 +1,78 @@
+You’re right—the base is being laid out independently of the tablet, so it “floats” and its width isn’t tied to the SVG’s drawn width. Fix is to make the headstone + base share one **relative** canvas, compute the tablet’s drawn box once, and then absolutely place the base centered under it using the same scale.
+
+Drop-in patch (minimal, no DPR logic needed):
+
+```tsx
+// 1) Ensure the preview wrapper is the positioning root
+<div
+  ref={svgHostRef}
+  className="relative mx-auto"
+  style={{
+    width: screenshotDimensions?.width ?? 707,   // logical canvas width
+    height: (screenshotDimensions?.height ?? 476) + baseHeightPx + 10, // room for base
+  }}
+>
+  {/* HEADSTONE SVG */}
+  <div
+    style={{
+      position: 'absolute',
+      left: topProfile ? topProfile.offX : 0,
+      top:  topProfile ? topProfile.offY : 0,
+      width: topProfile ? topProfile.drawW : (screenshotDimensions?.width ?? 707),
+      height: topProfile ? topProfile.drawH : (screenshotDimensions?.height ?? 476),
+    }}
+  >
+    {/* your existing <img src={shapeSvg}/> or <svg dangerouslySetInnerHTML={{__html: svgContent}} /> */}
+  </div>
+
+  {/* 2) BASE — lock to tablet’s draw box and center it */}
+  <img
+    src={baseTextureUrl} /* your base texture */
+    alt="Base"
+    style={{
+      position: 'absolute',
+      width: topProfile ? topProfile.drawW : (screenshotDimensions?.width ?? 707), // EXACTLY match tablet draw width
+      height: baseHeightPx,                     // pick a constant or from JSON
+      left: topProfile
+        ? topProfile.offX + (topProfile.drawW / 2)
+        : (screenshotDimensions?.width ?? 707) / 2,
+      transform: 'translateX(-50%)',
+      top: topProfile
+        ? topProfile.offY + topProfile.drawH + 6 /* small gap */
+        : (screenshotDimensions?.height ?? 476) + 6,
+      objectFit: 'cover',
+      pointerEvents: 'none',
+      zIndex: 0,
+    }}
+  />
+</div>
+```
+
+Key points that fix both issues:
+
+1. **Single positioning root**
+   `svgHostRef` wrapper is `position: relative`. Both the tablet (SVG) and the base are absolutely positioned inside it, so the base can’t “float” away.
+
+2. **Width parity**
+   Set the base `width` to `topProfile.drawW` (the tablet’s actual drawn width). That removes the right-side overhang—no more using the mask/container width.
+
+3. **Accurate vertical placement**
+   Place the base at `offY + drawH + gap`, i.e., *just below the tablet’s bottom edge*. Increase wrapper `height` to include the base so it doesn’t get pushed outside the viewport.
+
+4. **Z-order**
+   If you need the base behind the tablet, render the base first or give it lower `zIndex`.
+
+If you don’t have `topProfile` available at render time, compute a simple preview scale and reuse it for both:
+
+```ts
+const initW = headstoneData.init_width;  // from JSON
+const initH = headstoneData.init_height;
+const previewW = Math.min(680, initW);   // whatever your max display width is
+const scale = previewW / initW;
+const drawW = initW * scale;
+const drawH = initH * scale;
+```
+
+Then substitute `drawW/drawH` for `topProfile.drawW/drawH` and set `offX/offY` to zero (or your centering offsets).
+
+This change keeps the base **locked** to the tablet’s real drawn geometry, so it won’t be too wide, won’t overhang on the right, and won’t drift down the page. You can paste this into the section where the preview is rendered in your `DesignPageClient.tsx`. 
