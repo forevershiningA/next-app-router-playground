@@ -92,8 +92,8 @@ DYO (Design Your Own) is a comprehensive online headstone design platform that g
 
 1. Clone the repository:
 ```sh
-git clone https://github.com/yourusername/next-dyo.git
-cd next-dyo
+git clone https://github.com/forevershiningA/next-app-router-playground.git
+cd next-app-router-playground
 ```
 
 2. Install dependencies:
@@ -126,7 +126,7 @@ pnpm start
 ## Project Structure
 
 ```
-next-dyo/
+next-app-router-playground/
 ├── app/                          # Next.js App Router pages
 │   ├── additions/               # 3D additions & embellishments
 │   ├── inscriptions/            # Text customization
