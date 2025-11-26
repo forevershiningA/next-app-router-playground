@@ -1786,13 +1786,16 @@ export default function DesignPageClient({
     
     // Check if headstone physical dimensions differ significantly from canvas
     // (indicates canvas is larger than actual headstone content)
+    // NOTE: Skip if width/height are in millimeters (much smaller values)
     const physicalToCanvasRatio = (headstoneData?.width || initW) / initW;
-    const hasSignificantScaleDiff = physicalToCanvasRatio < 0.5 || physicalToCanvasRatio > 1.5;
+    const likelyMillimeters = headstoneData?.width && headstoneData.width < 1000; // mm values typically < 1000
+    const hasSignificantScaleDiff = !likelyMillimeters && (physicalToCanvasRatio < 0.5 || physicalToCanvasRatio > 1.5);
     
     // Single uniform scale: how does the logical authoring frame map to display?
     let uniformScale = Math.min(displayWidth / initW, displayHeight / initH);
     
     // If canvas is much larger than headstone, scale up content to fill better
+    // (but only if dimensions are in pixels, not millimeters)
     if (hasSignificantScaleDiff && physicalToCanvasRatio < 0.8) {
       // Canvas is larger than headstone - content needs to scale up
       // Multiply by inverse of ratio to compensate
