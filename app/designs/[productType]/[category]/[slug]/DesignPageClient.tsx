@@ -1770,14 +1770,14 @@ export default function DesignPageClient({
     // If high-res legacy design, ensure we don't render tiny on desktop
     if (usesPhysicalCoords && displayWidth < 400) displayWidth = 400;
 
-    // For height: use full authoring height if no DPR scaling needed
-    // Otherwise scale proportionally to maintain aspect ratio
+    // For height: use full authoring height if no DPR scaling
+    // This preserves the authoring canvas proportions better
     let displayHeight;
     if (!designDpr || designDpr === 1) {
       // No DPR scaling - use authoring canvas height directly
-      displayHeight = Math.min(initH, displayWidth / (initW / initH));
+      displayHeight = initH;
     } else {
-      // Has DPR - scale proportionally
+      // Has DPR - scale proportionally to width
       const aspectRatio = initW / initH;
       displayHeight = displayWidth / aspectRatio;
     }
