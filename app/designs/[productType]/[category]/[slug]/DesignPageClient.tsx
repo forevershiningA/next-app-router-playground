@@ -2760,13 +2760,20 @@ export default function DesignPageClient({
                 shapeName === 'Serpentine' && shapeData ? (
                   // Dynamically generate Serpentine SVG with correct proportions
                   <div className="absolute inset-0">
-                    <svg 
-                      width="100%" 
-                      height="100%" 
-                      viewBox={`0 0 ${scalingFactors.initW} ${scalingFactors.initH}`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      preserveAspectRatio="none"
-                    >
+                    {(() => {
+                      // Use headstone physical dimensions for viewBox to fill the display
+                      const headstoneItem = designData?.find((item: any) => item.type === 'Headstone');
+                      const viewBoxW = headstoneItem?.width || scalingFactors.initW;
+                      const viewBoxH = headstoneItem?.height || scalingFactors.initH;
+                      
+                      return (
+                        <svg 
+                          width="100%" 
+                          height="100%" 
+                          viewBox={`0 0 ${viewBoxW} ${viewBoxH}`}
+                          xmlns="http://www.w3.org/2000/svg"
+                          preserveAspectRatio="none"
+                        >
                       <defs>
                         {textureData && (
                           <pattern id="graniteTexture" patternUnits="userSpaceOnUse" width="520" height="520">
@@ -2783,11 +2790,10 @@ export default function DesignPageClient({
                       <path 
                         fill={textureData ? "url(#graniteTexture)" : "#808080"}
                         d={(() => {
-                          // Calculate the serpentine curve in authoring space (initW x initH)
-                          const w = scalingFactors.initW; // Use authoring frame dimensions
-                          const h = scalingFactors.initH;
-                          const offsetX = 0; // No offset - full-bleed rendering
-                          // Curve height as percentage of total height (10%)
+                          // Calculate the serpentine curve using viewBox dimensions
+                          const w = viewBoxW;
+                          const h = viewBoxH;
+                          const offsetX = 0;
                           const curveHeight = h * 0.1;
                           
                           return `M${offsetX + w} ${curveHeight} L${offsetX + w} ${h} ${offsetX} ${h} ${offsetX} ${curveHeight} ` +
@@ -2800,6 +2806,8 @@ export default function DesignPageClient({
                         })()}
                       />
                     </svg>
+                      );
+                    })()}
                   </div>
                 ) : (
                   // Other headstone shapes - use pre-processed SVG with texture
