@@ -2016,6 +2016,14 @@ export default function DesignPageClient({
           svg.setAttribute('height', '100%');
           svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); // Maintain aspect ratio, center in container
           
+          // Set viewBox to match authoring canvas dimensions (not SVG's native dimensions)
+          // This ensures coordinates align with inscription/motif positioning
+          if (screenshotDimensions) {
+            const { width: initW, height: initH } = screenshotDimensions;
+            svg.setAttribute('viewBox', `0 0 ${initW} ${initH}`);
+            logger.log(`📐 Set SVG viewBox to authoring canvas: 0 0 ${initW} ${initH}`);
+          }
+          
           // Just update path fills and remove filters
           const paths = svg.querySelectorAll('path');
           
