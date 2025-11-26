@@ -2918,9 +2918,11 @@ export default function DesignPageClient({
                       }
                       
                       // Convert from center-anchored to display position
-                      // Coordinates are in headstone physical space, expand to canvas space
+                      // Only apply headstone ratio for Serpentine (which has dynamic viewBox)
+                      // Other shapes use SVG viewBox from file
                       const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
-                      const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+                      const isSerpentine = shapeName === 'Serpentine';
+                      const headstoneToCanvasRatio = isSerpentine ? ((headstoneItem?.width || initW) / initW) : 1;
                       const canvasX_scaled = canvasX * headstoneToCanvasRatio;
                       const canvasY_scaled = canvasY * headstoneToCanvasRatio;
                       const dispX = offsetX + (canvasX_scaled + initW / 2) * uniformScale;
@@ -3052,9 +3054,11 @@ export default function DesignPageClient({
                       }
                       
                       // Map from center-origin canvas to overlay pixels
-                      // Coordinates are in headstone physical space, expand to canvas space
+                      // Only apply headstone ratio for Serpentine (which has dynamic viewBox)
+                      // Other shapes use SVG viewBox from file
                       const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
-                      const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+                      const isSerpentine = shapeName === 'Serpentine';
+                      const headstoneToCanvasRatio = isSerpentine ? ((headstoneItem?.width || initW) / initW) : 1;
                       const cx_scaled = cx * headstoneToCanvasRatio;
                       const cy_scaled = cyUsed * headstoneToCanvasRatio;
                       const left = offsetX + (cx_scaled + initW / 2) * sx;
