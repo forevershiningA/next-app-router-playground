@@ -2910,8 +2910,13 @@ export default function DesignPageClient({
                       }
                       
                       // Convert from center-anchored to display position
-                      const dispX = offsetX + (canvasX + initW / 2) * uniformScale;
-                      const dispY = offsetY + (canvasY + initH / 2) * uniformScale;
+                      // Coordinates are in headstone physical space, convert to canvas space
+                      const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
+                      const canvasToHeadstoneRatio = initW / (headstoneItem?.width || initW);
+                      const canvasX_scaled = canvasX * canvasToHeadstoneRatio;
+                      const canvasY_scaled = canvasY * canvasToHeadstoneRatio;
+                      const dispX = offsetX + (canvasX_scaled + initW / 2) * uniformScale;
+                      const dispY = offsetY + (canvasY_scaled + initH / 2) * uniformScale;
 
                       const fontFamily = item.font_family || item.font || 'serif';
 
@@ -3038,9 +3043,14 @@ export default function DesignPageClient({
                         }
                       }
                       
-                      // Map from center-origin canvas to overlay pixels (same as inscriptions)
-                      const left = offsetX + (cx + initW / 2) * sx;
-                      const top = offsetY + (cyUsed + initH / 2) * sy;
+                      // Map from center-origin canvas to overlay pixels
+                      // Coordinates are in headstone physical space, convert to canvas space
+                      const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
+                      const canvasToHeadstoneRatio = initW / (headstoneItem?.width || initW);
+                      const cx_scaled = cx * canvasToHeadstoneRatio;
+                      const cy_scaled = cyUsed * canvasToHeadstoneRatio;
+                      const left = offsetX + (cx_scaled + initW / 2) * sx;
+                      const top = offsetY + (cy_scaled + initH / 2) * sy;
                       
                       // Debug log - now show ALL motifs, not just first 3
                       const motifHAuthorDebug = (heightPx * initH) / overlayH;
