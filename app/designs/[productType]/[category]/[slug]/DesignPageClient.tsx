@@ -1770,12 +1770,9 @@ export default function DesignPageClient({
     // If high-res legacy design, ensure we don't render tiny on desktop
     if (usesPhysicalCoords && displayWidth < 400) displayWidth = 400;
 
-    // Use headstone physical aspect ratio if available (for un-cropped screenshots)
-    // Otherwise fall back to canvas aspect ratio
-    const hasPhysicalDims = headstoneData?.width && headstoneData?.height;
-    const aspectRatio = hasPhysicalDims 
-      ? ((headstoneData?.width ?? initW) / (headstoneData?.height ?? initH))
-      : (initW / initH);
+    // Use canvas aspect ratio (the authoring space)
+    // The SVG shape will scale to fill this container
+    const aspectRatio = initW / initH;
     const displayHeight = displayWidth / aspectRatio;
 
     // 4. Calculate Scale
