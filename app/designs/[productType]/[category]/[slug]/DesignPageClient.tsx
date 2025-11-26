@@ -2752,9 +2752,9 @@ export default function DesignPageClient({
                         fill={textureData ? "url(#graniteTexture)" : "#808080"}
                         d={(() => {
                           // Calculate the serpentine curve based on actual dimensions
-                          const w = scalingFactors.displayWidth * 0.8; // Reduce width to 80%
+                          const w = scalingFactors.displayWidth; // Full width like other shapes
                           const h = scalingFactors.displayHeight;
-                          const offsetX = scalingFactors.displayWidth * 0.1; // Center the narrower shape
+                          const offsetX = 0; // No offset - full-bleed rendering
                           // Curve height as percentage of total height (10%)
                           const curveHeight = h * 0.1;
                           
