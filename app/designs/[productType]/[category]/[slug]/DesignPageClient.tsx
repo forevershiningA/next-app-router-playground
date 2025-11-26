@@ -1784,9 +1784,22 @@ export default function DesignPageClient({
 
     // 4. Calculate Scale
     
+    // Check if headstone physical dimensions differ significantly from canvas
+    // (indicates canvas is larger than actual headstone content)
+    const physicalToCanvasRatio = (headstoneData?.width || initW) / initW;
+    const hasSignificantScaleDiff = physicalToCanvasRatio < 0.5 || physicalToCanvasRatio > 1.5;
+    
     // Single uniform scale: how does the logical authoring frame map to display?
-    // This is a pure "contain" scale (fit initW×initH into displayW×displayH)
-    const uniformScale = Math.min(displayWidth / initW, displayHeight / initH);
+    let uniformScale = Math.min(displayWidth / initW, displayHeight / initH);
+    
+    // If canvas is much larger than headstone, scale up content to fill better
+    if (hasSignificantScaleDiff && physicalToCanvasRatio < 0.8) {
+      // Canvas is larger than headstone - content needs to scale up
+      // Multiply by inverse of ratio to compensate
+      const compensationFactor = Math.min(1 / physicalToCanvasRatio, 3.0); // Cap at 3x
+      uniformScale = uniformScale * compensationFactor;
+      logger.log(`📐 Applying scale compensation: ${compensationFactor.toFixed(2)}x (physical/canvas ratio: ${physicalToCanvasRatio.toFixed(2)})`);
+    }
     
     // Calculate top-left offsets (for centered canvas within display area)
     const offsetX = Math.round((displayWidth - initW * uniformScale) / 2);
