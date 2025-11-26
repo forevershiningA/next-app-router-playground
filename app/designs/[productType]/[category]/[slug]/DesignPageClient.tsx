@@ -3038,9 +3038,9 @@ export default function DesignPageClient({
                         }
                       }
                       
-                      // Map from center-origin canvas to overlay pixels
-                      const left = offsetX + overlayW / 2 + cx * sx;
-                      const top = offsetY + overlayH / 2 + cyUsed * sy;
+                      // Map from center-origin canvas to overlay pixels (same as inscriptions)
+                      const left = offsetX + (cx + initW / 2) * sx;
+                      const top = offsetY + (cyUsed + initH / 2) * sy;
                       
                       // Debug log - now show ALL motifs, not just first 3
                       const motifHAuthorDebug = (heightPx * initH) / overlayH;
