@@ -109,6 +109,9 @@ export async function generateStaticParams() {
   return [];
 }
 
+// Enable ISR - revalidate every 24 hours
+export const revalidate = 86400;
+
 export async function generateMetadata({ params }: SavedDesignPageProps): Promise<Metadata> {
   const { productType: productSlug, category, slug } = await params;
 
@@ -436,6 +439,10 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           fetchPriority="high"
         />
       )}
+      
+      {/* Preconnect to asset domains for faster resource loading */}
+      <link rel="preconnect" href={process.env.NEXT_PUBLIC_BASE_URL || ''} />
+      <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_BASE_URL || ''} />
       
       {/* JSON-LD Structured Data */}
       <script

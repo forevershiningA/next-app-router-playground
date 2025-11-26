@@ -18,6 +18,7 @@ import { analyzeImageForCrop, type CropBounds } from '#/lib/screenshot-crop';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
+import { logger } from '#/lib/logger';
 
 // Type for layout items (inscriptions and motifs)
 type LayoutItem = {
@@ -86,7 +87,7 @@ async function getIntrinsicDims(src: string): Promise<{vw: number; vh: number}> 
     const vh = parts[3] || 100;
     return (__intrinsicCache[src] = { vw, vh });
   } catch (err) {
-    console.warn('Failed to fetch intrinsic dims for', src, err);
+    logger.warn('Failed to fetch intrinsic dims for', src, err);
     return (__intrinsicCache[src] = { vw: 100, vh: 100 });
   }
 }
@@ -204,6 +205,7 @@ function DesignSpecificContent({
     approval: '',
     timeline: ''
   });
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     // Generate shape-specific content
@@ -249,59 +251,83 @@ function DesignSpecificContent({
   }, [shapeName, productSlug, categoryTitle]);
 
   return (
-    <div className="bg-white border-0 mb-4 md:mb-6">
-      <div className="pt-6">
-        <h2 className="font-serif text-2xl text-slate-900 mb-4">About Design - {designTitle}</h2>
-        
-        {/* Introduction */}
-        <p className="text-slate-700 mb-6" style={{ fontSize: '15px', lineHeight: '1.6' }}>
-          {content.intro}
-        </p>
+    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 overflow-hidden mb-4 md:mb-6 shadow-none md:shadow-sm mt-4 md:mt-6">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+      >
+        <h3 className="font-serif font-light text-xl text-slate-900 flex items-center gap-3">
+          <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>About This Design</span>
+        </h3>
+        <svg 
+          className={`w-5 h-5 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {isExpanded && (
+        <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-slate-200">
+          <div className="ml-0 md:ml-9 mt-6">
+            {/* Design Title */}
+            <h2 className="font-serif text-2xl text-slate-900 mb-4">{designTitle}</h2>
+            
+            {/* Introduction */}
+            <p className="text-slate-700 mb-6" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+              {content.intro}
+            </p>
 
-        {/* Layout Guidance */}
-        <div className="mb-6">
-          <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
-            Layout Guidance for {shapeName}
-          </h3>
-          <ul className="space-y-2">
-            {content.layoutGuidance.split('|').map((item, index) => (
-              <li key={index} className="flex items-start gap-2 text-slate-700" style={{ fontSize: '15px' }}>
-                <span className="text-amber-600 mt-1">•</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+            {/* Layout Guidance */}
+            <div className="mb-6">
+              <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+                Layout Guidance for {shapeName}
+              </h3>
+              <ul className="space-y-2">
+                {content.layoutGuidance.split('|').map((item, index) => (
+                  <li key={index} className="flex items-start gap-2 text-slate-700" style={{ fontSize: '15px' }}>
+                    <span className="text-amber-600 mt-1">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Sizes & Options */}
+            <div className="mb-6">
+              <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+                Sizes & Options
+              </h3>
+              <ul className="space-y-2">
+                {content.sizes.split('|').map((item, index) => (
+                  <li key={index} className="flex items-start gap-2 text-slate-700" style={{ fontSize: '15px' }}>
+                    <span className="text-amber-600 mt-1">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Cemetery Approval & Installation */}
+            <div className="mb-6">
+              <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
+                Cemetery Approval & Installation
+              </h3>
+              <p className="text-slate-700 mb-2" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+                {content.approval}
+              </p>
+              <p className="text-slate-700" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+                <strong>Timeline:</strong> {content.timeline}
+              </p>
+            </div>
+          </div>
         </div>
-
-        {/* Sizes & Options */}
-        <div className="mb-6">
-          <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
-            Sizes & Options
-          </h3>
-          <ul className="space-y-2">
-            {content.sizes.split('|').map((item, index) => (
-              <li key={index} className="flex items-start gap-2 text-slate-700" style={{ fontSize: '15px' }}>
-                <span className="text-amber-600 mt-1">•</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Cemetery Approval & Installation */}
-        <div className="mb-6">
-          <h3 className="font-medium text-slate-900 mb-3" style={{ fontSize: '16px' }}>
-            Cemetery Approval & Installation
-          </h3>
-          <p className="text-slate-700 mb-2" style={{ fontSize: '15px', lineHeight: '1.6' }}>
-            {content.approval}
-          </p>
-          <p className="text-slate-700" style={{ fontSize: '15px', lineHeight: '1.6' }}>
-            <strong>Timeline:</strong> {content.timeline}
-          </p>
-        </div>
-
-      </div>
+      )}
     </div>
   );
 }
@@ -384,7 +410,7 @@ function ProductDescription({ productSlug, productId }: { productSlug: string; p
           }
         }
       } catch (error) {
-        console.error('Failed to load product description:', error);
+        logger.error('Failed to load product description:', error);
       }
     }
     loadProductDescription();
@@ -504,7 +530,7 @@ function RelatedProductCard({ productId, currentProductId }: { productId: string
           setDescription(desc);
         }
       } catch (error) {
-        console.error('Failed to load related product info:', error);
+        logger.error('Failed to load related product info:', error);
       }
     }
     loadProductInfo();
@@ -721,7 +747,7 @@ function PersonalizationOptions({ productId, productSlug }: { productId: string;
 
         setOptions(optionsList);
       } catch (error) {
-        console.error('Failed to load personalization options:', error);
+        logger.error('Failed to load personalization options:', error);
       }
     }
     loadPersonalizationOptions();
@@ -1147,7 +1173,7 @@ export default function DesignPageClient({
           setCropBounds(bounds);
         })
         .catch(err => {
-          console.error('Failed to analyze screenshot for cropping:', err);
+          logger.error('Failed to analyze screenshot for cropping:', err);
         });
     }
   }, [designMetadata.preview]);
@@ -1160,7 +1186,7 @@ export default function DesignPageClient({
         // Get the DPR used when design was created
         const designDPR = designData.find((item: any) => item.type === 'Headstone')?.dpr || 1;
         
-        console.log('📸 Screenshot loading (design 1656040658203 check):', {
+        logger.log('📸 Screenshot loading (design 1656040658203 check):', {
           designId: designMetadata.id,
           cropBounds: {
             shouldCrop: cropBounds.shouldCrop,
@@ -1187,7 +1213,7 @@ export default function DesignPageClient({
         // Calculate effective DPR from actual screenshot size
         const effectiveDPR = physicalWidth / initWidth;
         
-        console.log('Screenshot dimensions (with DPR analysis):', {
+        logger.log('Screenshot dimensions (with DPR analysis):', {
           original: { width: img.width, height: img.height },
           cropped: cropBounds.shouldCrop ? { width: cropBounds.croppedWidth, height: cropBounds.croppedHeight } : 'not needed',
           physical: { width: physicalWidth, height: physicalHeight },
@@ -1238,7 +1264,7 @@ export default function DesignPageClient({
         surnamesArray: surnames,
       } as any);
     }).catch(err => {
-      console.error('Failed to load name databases:', err);
+      logger.error('Failed to load name databases:', err);
     });
   }, []);
   
@@ -1493,7 +1519,7 @@ export default function DesignPageClient({
       if (hasFirstName && words.length === 1 && !hasDatePattern) {
         const randomFirstName = getRandomFirstName(text); // Use original text as seed
         const isAllCaps = text === text.toUpperCase();
-        console.log('Single first name detected:', text, '→', randomFirstName, '(all caps:', isAllCaps, ') [hasSurname:', hasSurname, ']');
+        logger.log('Single first name detected:', text, '→', randomFirstName, '(all caps:', isAllCaps, ') [hasSurname:', hasSurname, ']');
         return isAllCaps ? randomFirstName.toUpperCase() : randomFirstName;
       }
       
@@ -1501,13 +1527,13 @@ export default function DesignPageClient({
       if (hasSurname && !hasFirstName && words.length === 1 && !hasDatePattern) {
         const randomSurname = getRandomSurname(text); // Use original text as seed
         const isAllCaps = text === text.toUpperCase();
-        console.log('Single surname detected:', text, '→', randomSurname, '(all caps:', isAllCaps, ')');
+        logger.log('Single surname detected:', text, '→', randomSurname, '(all caps:', isAllCaps, ')');
         return isAllCaps ? randomSurname.toUpperCase() : randomSurname;
       }
       
       // If we find both first name and surname (with or without dates)
       if ((hasFirstName && hasSurname) || (hasFirstName && words.length >= 2)) {
-        console.log('Full name or multi-word detected:', text, 'hasFirstName:', hasFirstName, 'hasSurname:', hasSurname, 'words:', words.length);
+        logger.log('Full name or multi-word detected:', text, 'hasFirstName:', hasFirstName, 'hasSurname:', hasSurname, 'words:', words.length);
         // Check it's not a poetic verse with sentence words
         const hasSentenceWords = /\b(the|you|me|my|your|when|feel|know|am|are|is|see|being|part|of|and|or|not|lost|may|be|thine|thy|thee|heaven|eternal|happiness|shall|will|has|had|was|were|would|could|should|our|their|us|we)\b/i.test(text);
         if (!hasSentenceWords) {
@@ -1570,17 +1596,17 @@ export default function DesignPageClient({
       const isFirstName = nameDatabase.firstNames?.has(upperWord);
       const isSurname = nameDatabase.surnames?.has(upperWord);
       
-      console.log('Fallback ALL CAPS single word:', text, 'isFirstName:', isFirstName, 'isSurname:', isSurname);
+      logger.log('Fallback ALL CAPS single word:', text, 'isFirstName:', isFirstName, 'isSurname:', isSurname);
       
       if (isFirstName && !isSurname) {
         // It's a first name - return just a random first name
         const randomFirstName = getRandomFirstName(text);
-        console.log('→ Returning first name only:', randomFirstName.toUpperCase());
+        logger.log('→ Returning first name only:', randomFirstName.toUpperCase());
         return randomFirstName.toUpperCase();
       } else {
         // It's a surname or unknown - return surname
         const randomSurname = getRandomSurname(text);
-        console.log('→ Returning surname only:', randomSurname.toUpperCase());
+        logger.log('→ Returning surname only:', randomSurname.toUpperCase());
         return randomSurname.toUpperCase();
       }
     }
@@ -1757,7 +1783,7 @@ export default function DesignPageClient({
     const offsetX = Math.round((displayWidth - initW * uniformScale) / 2);
     const offsetY = Math.round((displayHeight - initH * uniformScale) / 2);
 
-    console.log('📏 TRUE authoring frame:', {
+    logger.log('📏 TRUE authoring frame:', {
       initW, initH, designDpr, usesPhysicalCoords,
       viewportWidth, displayWidth, displayHeight,
       uniformScale, offsetX, offsetY
@@ -1833,7 +1859,7 @@ export default function DesignPageClient({
 
   // Load and process SVG with texture
   useEffect(() => {
-    console.log('🔍 SVG useEffect check:', {
+    logger.log('🔍 SVG useEffect check:', {
       shapeImagePath: !!shapeImagePath,
       textureData: !!textureData,
       shapeData: !!shapeData,
@@ -1848,26 +1874,26 @@ export default function DesignPageClient({
     });
     
     if (!shapeImagePath || !textureData || !shapeData || !screenshotDimensions || !cropBounds) {
-      console.log('❌ SVG generation skipped - missing dependencies');
+      logger.log('❌ SVG generation skipped - missing dependencies');
       setSvgContent(null);
       return;
     }
     
-    console.log('✅ All dependencies available, fetching SVG from:', shapeImagePath);
+    logger.log('✅ All dependencies available, fetching SVG from:', shapeImagePath);
     
     fetch(shapeImagePath)
       .then(res => {
-        console.log('📥 SVG fetch response:', res.status, res.ok);
+        logger.log('📥 SVG fetch response:', res.status, res.ok);
         return res.text();
       })
       .then(svgText => {
-        console.log('📄 SVG text received, length:', svgText.length);
+        logger.log('📄 SVG text received, length:', svgText.length);
         // Parse SVG and inject texture pattern
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svg = doc.querySelector('svg');
         
-        console.log('🔍 SVG element found:', !!svg);
+        logger.log('🔍 SVG element found:', !!svg);
         
         if (svg) {
           // Check if this is a fixed-proportion shape (Guitar or Headstone)
@@ -1888,7 +1914,7 @@ export default function DesignPageClient({
           // Calculate physical size from canvas and actual DPR
           const headstoneData = designData?.find((item: any) => item.type === 'Headstone');
           
-          console.log('📊 Headstone item data:', {
+          logger.log('📊 Headstone item data:', {
             x: headstoneData?.x,
             y: headstoneData?.y,
             width: headstoneData?.width,
@@ -1904,7 +1930,7 @@ export default function DesignPageClient({
           const displayWidth = physicalWidth * upscaleFactor;
           const displayHeight = physicalHeight * upscaleFactor;
           
-          console.log('SVG Processing:', {
+          logger.log('SVG Processing:', {
             canvas: { width: canvasWidth, height: canvasHeight },
             physical: { width: physicalWidth, height: physicalHeight },
             display: { width: displayWidth, height: displayHeight },
@@ -1925,7 +1951,7 @@ export default function DesignPageClient({
             }
           }
           
-          console.log('SVG original dimensions from viewBox:', { originalWidth, originalHeight });
+          logger.log('SVG original dimensions from viewBox:', { originalWidth, originalHeight });
           
           // Store SVG dimensions for container sizing
           setSvgDimensions({ width: originalWidth, height: originalHeight });
@@ -1940,7 +1966,7 @@ export default function DesignPageClient({
           const scaledSvgWidth = originalWidth * svgScale;
           const scaledSvgHeight = originalHeight * svgScale;
           
-          console.log('SVG scaling to authoring frame:', {
+          logger.log('SVG scaling to authoring frame:', {
             original: { width: originalWidth, height: originalHeight },
             authoring: { width: canvasWidth, height: canvasHeight },
             scale: svgScale,
@@ -1955,7 +1981,7 @@ export default function DesignPageClient({
           const svgToAuthoringScaleX = canvasWidth / originalWidth;
           const svgToAuthoringScaleY = canvasHeight / originalHeight;
           
-          console.log('SVG to authoring scale:', {
+          logger.log('SVG to authoring scale:', {
             canvasWidth,
             canvasHeight,
             originalWidth,
@@ -2009,17 +2035,17 @@ export default function DesignPageClient({
           // Serialize back to string
           const serializer = new XMLSerializer();
           const processedSvg = serializer.serializeToString(svg);
-          console.log('✅ SVG processed successfully, length:', processedSvg.length);
+          logger.log('✅ SVG processed successfully, length:', processedSvg.length);
           
           // Wrap SVG in a centered flex container so it stays centered in authoring frame
           const wrappedSvg = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">${processedSvg}</div>`;
           setSvgContent(wrappedSvg);
         } else {
-          console.log('❌ No SVG element found in parsed document');
+          logger.log('❌ No SVG element found in parsed document');
         }
       })
       .catch(err => {
-        console.error('❌ Failed to load SVG:', err);
+        logger.error('❌ Failed to load SVG:', err);
         setSvgContent(null);
       });
   }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds]);
@@ -2027,19 +2053,19 @@ export default function DesignPageClient({
   // Build top profile for motif snapping
   useEffect(() => {
     (async () => {
-      console.log('🔍 TopProfile effect:', { hasSvgContent: !!svgContent, hasScreenshotDimensions: !!screenshotDimensions });
+      logger.log('🔍 TopProfile effect:', { hasSvgContent: !!svgContent, hasScreenshotDimensions: !!screenshotDimensions });
       if (!svgContent || !screenshotDimensions) {
-        console.log('⚠️ TopProfile: Missing prerequisites');
+        logger.log('⚠️ TopProfile: Missing prerequisites');
         return;
       }
       const { width: initW, height: initH } = screenshotDimensions;
-      console.log('🔄 Building top profile...', { initW, initH });
+      logger.log('🔄 Building top profile...', { initW, initH });
       try {
         const prof = await buildTopProfile(svgContent, initW, initH);
         setTopProfile(prof);
-        console.log('✅ Top profile built:', { initW, initH, samplePoints: prof.topY.slice(0, 10) });
+        logger.log('✅ Top profile built:', { initW, initH, samplePoints: prof.topY.slice(0, 10) });
       } catch (err) {
-        console.warn('❌ Failed to build top profile:', err);
+        logger.warn('❌ Failed to build top profile:', err);
         setTopProfile(null);
       }
     })();
@@ -2048,7 +2074,7 @@ export default function DesignPageClient({
   const motifData = useMemo(() => {
     if (!designData) return [];
     const motifs = designData.filter((item: any) => item.type === 'Motif');
-    console.log('Total motifs in design data:', motifs.length, motifs.map(m => ({ src: m.src, name: m.name })));
+    logger.log('Total motifs in design data:', motifs.length, motifs.map(m => ({ src: m.src, name: m.name })));
     // Map flipx/flipy to scaleX/scaleY for compatibility
     return motifs.map((motif: any) => ({
       ...motif,
@@ -2126,8 +2152,8 @@ export default function DesignPageClient({
             ? (motif.x || 0) - (moveDistance / scalingFactors.scaleX)
             : (motif.x || 0) + (moveDistance / scalingFactors.scaleX);
           
-          console.log(`Adjusting motif "${motif.name}" to avoid overlap with inscription "${inscription.label}"`);
-          console.log(`Moving ${moveLeft ? 'left' : 'right'} by ${moveDistance}px`);
+          logger.log(`Adjusting motif "${motif.name}" to avoid overlap with inscription "${inscription.label}"`);
+          logger.log(`Moving ${moveLeft ? 'left' : 'right'} by ${moveDistance}px`);
           
           return {
             ...motif,
@@ -2172,25 +2198,25 @@ export default function DesignPageClient({
       
       try {
         const dims = await getIntrinsicDims(motifPath);
-        console.log('SVG viewBox loaded for', motifSrc, ':', dims.vw, 'x', dims.vh);
+        logger.log('SVG viewBox loaded for', motifSrc, ':', dims.vw, 'x', dims.vh);
         setMotifDimensions(prev => ({
           ...prev,
           [motifSrc]: { width: dims.vw, height: dims.vh }
         }));
       } catch (err) {
-        console.error('Failed to load SVG dimensions for', motifSrc, ':', err);
+        logger.error('Failed to load SVG dimensions for', motifSrc, ':', err);
         // Try fallback path
         const fallbackPath = getFallbackMotifPath(motif);
         try {
           const dims = await getIntrinsicDims(fallbackPath);
-          console.log('SVG viewBox loaded from fallback for', motifSrc, ':', dims.vw, 'x', dims.vh);
+          logger.log('SVG viewBox loaded from fallback for', motifSrc, ':', dims.vw, 'x', dims.vh);
           setMotifDimensions(prev => ({
             ...prev,
             [motifSrc]: { width: dims.vw, height: dims.vh }
           }));
         } catch {
           // Don't set 100x100 fallback - let the guard clause handle it
-          console.warn('Failed to load intrinsic dimensions for motif:', motifSrc, '- will skip rendering');
+          logger.warn('Failed to load intrinsic dimensions for motif:', motifSrc, '- will skip rendering');
         }
       }
     });
@@ -2200,7 +2226,7 @@ export default function DesignPageClient({
   const baseData = useMemo(() => {
     if (!designData) return null;
     const baseItem = designData.find((item: any) => item.type === 'Base');
-    console.log('🔍 Base detection:', {
+    logger.log('🔍 Base detection:', {
       designId: designMetadata?.id,
       hasDesignData: !!designData,
       designDataLength: designData?.length,
@@ -2219,7 +2245,7 @@ export default function DesignPageClient({
   // Get base texture from baseData
   const baseTextureData = useMemo(() => {
     if (!baseData?.texture) {
-      console.log('🔍 Base texture: No texture in baseData');
+      logger.log('🔍 Base texture: No texture in baseData');
       return null;
     }
     
@@ -2235,7 +2261,7 @@ export default function DesignPageClient({
     for (const [oldPath, newImage] of Object.entries(textureMapping)) {
       if (savedTexturePath.includes(oldPath)) {
         const result = `/textures/forever/l/${newImage}`;
-        console.log('🔍 Base texture mapped:', { savedTexturePath, result });
+        logger.log('🔍 Base texture mapped:', { savedTexturePath, result });
         return result;
       }
     }
@@ -2245,7 +2271,7 @@ export default function DesignPageClient({
     if (match && match[1]) {
       const graniteName = match[1];
       const result = `/textures/forever/l/${graniteName}.jpg`;
-      console.log('🔍 Base texture (regex match):', { savedTexturePath, graniteName, result });
+      logger.log('🔍 Base texture (regex match):', { savedTexturePath, graniteName, result });
       return result;
     }
     
@@ -2254,11 +2280,11 @@ export default function DesignPageClient({
     if (filename) {
       const cleanFilename = filename.replace(/-TILE-\d+-X-\d+/i, '');
       const result = `/textures/forever/l/${cleanFilename}`;
-      console.log('🔍 Base texture (fallback):', { savedTexturePath, filename, cleanFilename, result });
+      logger.log('🔍 Base texture (fallback):', { savedTexturePath, filename, cleanFilename, result });
       return result;
     }
     
-    console.log('🔍 Base texture (unchanged):', { savedTexturePath });
+    logger.log('🔍 Base texture (unchanged):', { savedTexturePath });
     return savedTexturePath;
   }, [baseData]);
   
@@ -2653,6 +2679,17 @@ export default function DesignPageClient({
           </svg>
           Edit
         </a>
+        <a
+          href={typeof window !== 'undefined' ? window.location.href.replace('localhost:3000', 'forevershining.org').replace('localhost:3001', 'forevershining.org') : '#'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-light text-pink-700 hover:text-pink-900 bg-pink-50 hover:bg-pink-100 rounded-md transition-colors border border-pink-200"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Live
+        </a>
       </div>
       )}
 
@@ -2735,7 +2772,7 @@ export default function DesignPageClient({
                 ) : (
                   // Other headstone shapes - use pre-processed SVG with texture
                   (() => {
-                    console.log('🎨 Rendering headstone shape:', {
+                    logger.log('🎨 Rendering headstone shape:', {
                       shapeName,
                       svgContent: !!svgContent,
                       svgLength: svgContent?.length || 0,
@@ -2972,7 +3009,7 @@ export default function DesignPageClient({
                       if (index < 3) {
                         const motifHAuthorDebug = (heightPx * initH) / overlayH;
                         const isTopBandDebug = cy < -(initH * 0.18) - (motifHAuthorDebug * 0.15);
-                        console.log('MOTIF v48',
+                        logger.log('MOTIF v48',
                           motif.name || motif.src,
                           {
                             cx, cy, cyUsed,
@@ -3052,11 +3089,11 @@ export default function DesignPageClient({
               {/* Base (pedestal) — single canonical renderer */}
               {(() => {
                 if (!baseData) {
-                  console.log('🔍 Base render check: No base data');
+                  logger.log('🔍 Base render check: No base data');
                   return null;
                 }
                 
-                console.log('🔍 Base render check:', { 
+                logger.log('🔍 Base render check:', { 
                   hasBaseData: !!baseData, 
                   hasTopProfile: !!topProfile, 
                   hasTexture: !!baseTextureData,
@@ -3111,7 +3148,7 @@ export default function DesignPageClient({
                     const marginY = initH * 0.1;
                     stoneW = (initW - 2 * marginX) * sx;
                     stoneH = (initH - 2 * marginY) * sy;
-                    console.log('⚠️ Base using estimated stone dimensions (topProfile not available)');
+                    logger.log('⚠️ Base using estimated stone dimensions (topProfile not available)');
                   }
 
                   // mm → px
@@ -3128,7 +3165,7 @@ export default function DesignPageClient({
                   // Tuck under tablet a bit
                   const overlapPx = Math.round(baseHeightPx * 0.25);
 
-                  console.log('📦 Base dimensions:', {
+                  logger.log('📦 Base dimensions:', {
                     lengthMm,
                     heightMm,
                     baseWidthPx,
@@ -3231,7 +3268,7 @@ export default function DesignPageClient({
       </div>
 
       {/* Product Description */}
-      <div className="px-0 md:px-6 pt-4 md:pt-6">
+      <div className="px-0 md:px-6">
         <ProductDescription productSlug={productSlug} productId={designMetadata.productId} />
       </div>
 
@@ -3365,7 +3402,7 @@ function DetailedPriceQuote({ designId, designData }: { designId: string; design
           setPriceHtml(html);
         }
       } catch (error) {
-        console.error('Failed to load price quote HTML:', error);
+        logger.error('Failed to load price quote HTML:', error);
       }
     }
     if (isMobile !== undefined) {
@@ -3662,3 +3699,4 @@ function DetailedPriceQuote({ designId, designData }: { designId: string; design
     </>
   );
 }
+

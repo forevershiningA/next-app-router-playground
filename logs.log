@@ -1,22 +1,19 @@
-index.js:640 Uncaught Error: Cannot find module './vendor-chunks/three@0.180.0.js'
-Require stack:
-- C:\Users\polcr\Documents\GitHub\next-dyo\.next\server\webpack-runtime.js
-- C:\Users\polcr\Documents\GitHub\next-dyo\.next\server\app\designs\[productType]\[category]\[slug]\page.js
-- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\require.js
-- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\load-components.js
-- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\build\utils.js
-- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\dev\static-paths-worker.js
-- C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\jest-worker\processChild.js
-    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
-    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\require-hook.js:57:36)
-    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
-    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
-    at Function._load (node:internal/modules/cjs/loader:1211:37)
-    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
-    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
-    at mod.require (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\server\require-hook.js:68:28)
-    at require (node:internal/modules/helpers:135:16)
+index.js:640 Uncaught TypeError: __webpack_modules__[moduleId] is not a function
+    at Object.__webpack_require__ [as require] (file://C:\Users\polcr\Documents\GitHub\next-dyo\.next\server\webpack-runtime.js:25:42)
+    at Object.require (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:38:28606)
+    at globalThis.__next_require__ (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:38:29429)
+    at requireModule (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:399872)
+    at initializeModuleChunk (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:437231)
+    at getOutlinedModel (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:446572)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:454749)
+    at ResponseInstance._fromJSON (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:454840)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:436644)
+    at resolveModelChunk (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:434898)
+    at processFullStringRow (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:483754)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:486157)
+    at processBinaryChunk (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:486229)
+    at progress (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1\node_modules\next\dist\compiled\next-server\app-page-experimental.runtime.dev.js:2:487757)
 getServerError @ node-stack-frames.js:41
 eval @ index.js:640
 setTimeout
@@ -34,4 +31,3 @@ __webpack_exec__ @ main.js:1546
 webpackJsonpCallback @ webpack.js:1
 (anonimowa) @ main.js:9
 websocket.js:46 [HMR] connected
-hot-reloader-pages.js:207 [Fast Refresh] rebuilding

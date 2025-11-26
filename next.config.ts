@@ -32,6 +32,38 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  // Headers for caching static assets
+  async headers() {
+    return [
+      {
+        source: '/xml/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      {
+        source: '/json/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      {
+        source: '/shapes/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 } satisfies NextConfig;
 
 const codeHikeConfig = {
