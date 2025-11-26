@@ -1761,24 +1761,19 @@ export default function DesignPageClient({
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const isMobile = viewportWidth < 768;
     
-    // Mobile: 90% of screen width. Desktop: Max 600px.
-    const maxContainerWidth = isMobile ? viewportWidth * 0.92 : 600;
+    // FIXED HEIGHT APPROACH: Always use 500px height for readability
+    const fixedHeight = 500;
     
-    // Calculate the display width
-    let displayWidth = Math.min(initW, maxContainerWidth);
+    // Calculate width based on aspect ratio to maintain proportions
+    const aspectRatio = initW / initH;
+    let displayWidth = fixedHeight * aspectRatio;
+    let displayHeight = fixedHeight;
     
-    // If high-res legacy design, ensure we don't render tiny on desktop
-    if (usesPhysicalCoords && displayWidth < 400) displayWidth = 400;
-
-    // For height: use full authoring height if no DPR scaling
-    // This preserves the authoring canvas proportions better
-    let displayHeight;
-    if (!designDpr || designDpr === 1) {
-      // No DPR scaling - use authoring canvas height directly
-      displayHeight = initH;
-    } else {
-      // Has DPR - scale proportionally to width
-      const aspectRatio = initW / initH;
+    // Cap width on desktop to prevent extremely wide designs
+    const maxContainerWidth = isMobile ? viewportWidth * 0.92 : 800;
+    if (displayWidth > maxContainerWidth) {
+      // Width exceeds max, scale down both dimensions proportionally
+      displayWidth = maxContainerWidth;
       displayHeight = displayWidth / aspectRatio;
     }
 
