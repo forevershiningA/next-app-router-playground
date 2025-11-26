@@ -2910,11 +2910,11 @@ export default function DesignPageClient({
                       }
                       
                       // Convert from center-anchored to display position
-                      // Coordinates are in headstone physical space, convert to canvas space
+                      // Coordinates are in headstone physical space, expand to canvas space
                       const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
-                      const canvasToHeadstoneRatio = initW / (headstoneItem?.width || initW);
-                      const canvasX_scaled = canvasX * canvasToHeadstoneRatio;
-                      const canvasY_scaled = canvasY * canvasToHeadstoneRatio;
+                      const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+                      const canvasX_scaled = canvasX * headstoneToCanvasRatio;
+                      const canvasY_scaled = canvasY * headstoneToCanvasRatio;
                       const dispX = offsetX + (canvasX_scaled + initW / 2) * uniformScale;
                       const dispY = offsetY + (canvasY_scaled + initH / 2) * uniformScale;
 
@@ -3044,11 +3044,11 @@ export default function DesignPageClient({
                       }
                       
                       // Map from center-origin canvas to overlay pixels
-                      // Coordinates are in headstone physical space, convert to canvas space
+                      // Coordinates are in headstone physical space, expand to canvas space
                       const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
-                      const canvasToHeadstoneRatio = initW / (headstoneItem?.width || initW);
-                      const cx_scaled = cx * canvasToHeadstoneRatio;
-                      const cy_scaled = cyUsed * canvasToHeadstoneRatio;
+                      const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+                      const cx_scaled = cx * headstoneToCanvasRatio;
+                      const cy_scaled = cyUsed * headstoneToCanvasRatio;
                       const left = offsetX + (cx_scaled + initW / 2) * sx;
                       const top = offsetY + (cy_scaled + initH / 2) * sy;
                       
