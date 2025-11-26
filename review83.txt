@@ -1,0 +1,41 @@
+You’re right—the Serpentine headstone is being drawn smaller only for that shape, because one Serpentine branch still hard-codes an 80% width with a 10% side offset. That’s a leftover tweak that only affects Serpentine, so other shapes look normal.
+
+### The culprit
+
+In `DesignPageClient.tsx` there’s a Serpentine path generator that does this:
+
+```ts
+const w = scalingFactors.displayWidth * 0.8;   // 80%
+const h = scalingFactors.displayHeight;
+const offsetX = scalingFactors.displayWidth * 0.1; // 10% inset
+```
+
+That block is still present alongside the newer “full-bleed” version. It keeps the stone 20% narrower, which is exactly what you’re seeing.  
+
+Other Serpentine blocks already use the correct full width:
+
+```ts
+const w = scalingFactors.displayWidth; // 100%
+const h = scalingFactors.displayHeight;
+const offsetX = 0; // no inset
+```
+
+These are fine, but the narrow one is still being hit at runtime.  
+
+### Fix (one-liner edits)
+
+Search for the Serpentine block that multiplies by `0.8` / `0.1` and change it to:
+
+```ts
+const w = scalingFactors.displayWidth;
+const h = scalingFactors.displayHeight;
+const offsetX = 0;
+```
+
+(Leave the rest of the path math as-is.)
+
+### Also clean up duplicates
+
+There are multiple Serpentine branches in the file (merge leftovers). Keep **one** Serpentine renderer (the full-bleed one) and remove the others to avoid ambiguity about which block executes. The scene container sizing (`scalingFactors.displayWidth/Height`) is already consistent and capped only by the 600px desktop max—not per design—so once the 0.8/0.1 tweak is gone, Serpentine will fill the frame like your reference screenshot.    
+
+If you want, I can paste a minimal patch block you can drop in.

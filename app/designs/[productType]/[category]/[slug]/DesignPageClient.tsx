@@ -2731,7 +2731,7 @@ export default function DesignPageClient({
                     <svg 
                       width="100%" 
                       height="100%" 
-                      viewBox={`0 0 ${scalingFactors.initW} ${scalingFactors.initH}`}
+                      viewBox={`0 0 ${scalingFactors.displayWidth} ${scalingFactors.displayHeight}`}
                       xmlns="http://www.w3.org/2000/svg"
                       preserveAspectRatio="none"
                     >
