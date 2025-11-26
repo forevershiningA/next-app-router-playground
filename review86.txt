@@ -1,0 +1,61 @@
+You’re right—the motifs and inscriptions are being pulled toward the center. The culprit is the new “headstone→canvas” scaling that was added to both inscription and motif position formulas. Dividing by `(stoneW/initW)` shrinks every saved X/Y toward 0, so sheep that should sit hard-left end up nearer the middle (exactly what we see on the right image).
+
+# What to change (minimal, safe fix)
+
+## 1) Inscriptions: drop the headstone/canvas ratio from X & Y
+
+**Current (pulls inward):**
+
+```ts
+const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
+const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+const dispX = offsetX + ((canvasX / headstoneToCanvasRatio) + initW / 2) * uniformScale;
+const dispY = offsetY + ((canvasY / headstoneToCanvasRatio) + initH / 2) * uniformScale;
+```
+
+**Fix (use authoring coordinates directly):**
+
+```ts
+const dispX = offsetX + (canvasX + initW / 2) * uniformScale;
+const dispY = offsetY + (canvasY + initH / 2) * uniformScale;
+```
+
+Make this change where inscriptions are rendered in `DesignPageClient.tsx`. This removes the compression and restores the original authoring-space mapping (center-origin → top-left, then scale), which is how your legacy screenshots were authored. 
+
+## 2) Motifs: do the same removal for left/top
+
+**Current (pulls inward):**
+
+```ts
+const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
+const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+const left = offsetX + ((cx / headstoneToCanvasRatio) + initW / 2) * sx;
+const top  = offsetY + ((cyUsed / headstoneToCanvasRatio) + initH / 2) * sy;
+```
+
+**Fix:**
+
+```ts
+const left = offsetX + (cx + initW / 2) * sx;
+const top  = offsetY + (cyUsed + initH / 2) * sy;
+```
+
+Apply this where motifs are rendered in `DesignPageClient.tsx`. This keeps sizes the same (you already compute `widthPx/heightPx` from the SVG viewBox × `ratio` × uniform scale) but restores correct positions. 
+
+# Why this is correct
+
+* Your **authoring frame is 930×580 with center-origin**; saved `x,y` for this design (e.g., sheep at `x≈-188`) are already in that frame. When you added the “headstone width / canvas width” ratio pass, you effectively applied an extra **inward scaling** (÷1.147), which drifts everything toward the center by ~15%. That’s exactly the misalignment you noted in the findings doc (“NEEDS VERIFICATION”) and what the right image shows. Removing the extra pass restores the left-heavy layout from the original screenshot. 
+
+* The rest of the pipeline—DPR normalization (only if `usesPhysicalCoords`), center→top-left conversion, uniform scale, offsets, and the **Serpentine viewBox in authoring space**—is already correct and should be kept as-is. 
+
+# Keep these recent good changes
+
+* **Use `x/y` (not `cx/cy`)** for motifs and match inscription mapping. ✔️ 
+* **Disable overlap autoshift** until bounding boxes are fixed, otherwise non-overlapping sheep keep getting moved. ✔️ 
+* **Serpentine viewBox in authoring coordinates** (not display size). ✔️ 
+
+---
+
+## One-line summary
+
+Remove the `headstoneToCanvasRatio` adjustment from both inscriptions and motifs; map saved authoring coordinates directly with the standard `(x + initW/2) * uniformScale` (and same for Y). This restores the left-clustered sheep and overall layout to match the original screenshot.   
