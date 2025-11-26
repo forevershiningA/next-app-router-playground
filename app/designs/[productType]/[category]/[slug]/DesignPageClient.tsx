@@ -19,6 +19,7 @@ import { getMotifCategoryName } from '#/lib/motif-translations';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import { logger } from '#/lib/logger';
+import { generateDesignSVG } from '#/lib/svg-generator';
 
 // Type for layout items (inscriptions and motifs)
 type LayoutItem = {
@@ -1877,7 +1878,43 @@ export default function DesignPageClient({
     return savedTexturePath;
   }, [designData]);
 
-  // Load and process SVG with texture
+  // Generate complete SVG (NEW PRIMARY APPROACH)
+  const [generatedSVG, setGeneratedSVG] = useState<string | null>(null);
+  const [svgGenerationError, setSVGGenerationError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!designData || !screenshotDimensions) {
+      setGeneratedSVG(null);
+      return;
+    }
+
+    const generateSVG = async () => {
+      try {
+        logger.log('🎨 Generating complete SVG design...');
+        
+        const svg = await generateDesignSVG({
+          designData,
+          initWidth: screenshotDimensions.width,
+          initHeight: screenshotDimensions.height,
+          shapeImagePath,
+          textureData: textureData || undefined,
+          isLaserEtched: productSlug.includes('laser-etched')
+        });
+
+        setGeneratedSVG(svg);
+        setSVGGenerationError(null);
+        logger.log('✅ SVG generation complete, length:', svg.length);
+      } catch (error) {
+        logger.error('❌ SVG generation failed:', error);
+        setSVGGenerationError(error as Error);
+        setGeneratedSVG(null);
+      }
+    };
+
+    generateSVG();
+  }, [designData, screenshotDimensions, shapeImagePath, textureData, productSlug]);
+
+  // Load and process SVG with texture (FALLBACK for HTML overlay approach)
   useEffect(() => {
     logger.log('🔍 SVG useEffect check:', {
       shapeImagePath: !!shapeImagePath,
@@ -2786,8 +2823,23 @@ export default function DesignPageClient({
               >
               
               {/* HEADSTONE OBJECT LAYER */}
-              {/* Force full-bleed: headstone fills 100% of the container */}
-              <div 
+              {/* PRIMARY: Generated SVG (if available) */}
+              {/* FALLBACK: HTML overlay with separate SVG shape */}
+              {generatedSVG ? (
+                <div 
+                  className="absolute"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    left: '0',
+                    top: '0',
+                    zIndex: 1
+                  }}
+                  dangerouslySetInnerHTML={{ __html: generatedSVG }}
+                />
+              ) : (
+                <div className="absolute inset-0">
+              <div
                 className="absolute"
                 style={{
                     width: '100%',
@@ -3195,8 +3247,12 @@ export default function DesignPageClient({
                     })}
                 </div>
               )}
-              
-              {/* Base (pedestal) — single canonical renderer */}
+            </div>
+            )}
+            
+            {/* END: SVG vs HTML Fallback */}
+            
+            {/* Base (pedestal) — single canonical renderer */}
               {(() => {
                 if (!baseData) {
                   logger.log('🔍 Base render check: No base data');
