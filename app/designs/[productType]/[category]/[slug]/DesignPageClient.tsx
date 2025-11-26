@@ -2910,8 +2910,12 @@ export default function DesignPageClient({
                       }
                       
                       // Convert from center-anchored to display position
-                      const dispX = offsetX + (canvasX + initW / 2) * uniformScale;
-                      const dispY = offsetY + (canvasY + initH / 2) * uniformScale;
+                      // NOTE: Coordinates appear to be relative to headstone physical dimensions, not canvas
+                      // Headstone: 1066.8mm, Canvas: 930px
+                      const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
+                      const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+                      const dispX = offsetX + ((canvasX / headstoneToCanvasRatio) + initW / 2) * uniformScale;
+                      const dispY = offsetY + ((canvasY / headstoneToCanvasRatio) + initH / 2) * uniformScale;
 
                       const fontFamily = item.font_family || item.font || 'serif';
 
@@ -3039,8 +3043,11 @@ export default function DesignPageClient({
                       }
                       
                       // Map from center-origin canvas to overlay pixels (same as inscriptions)
-                      const left = offsetX + (cx + initW / 2) * sx;
-                      const top = offsetY + (cyUsed + initH / 2) * sy;
+                      // NOTE: Coordinates appear to be relative to headstone physical dimensions, not canvas
+                      const headstoneItem = sanitizedDesignData?.find((it: any) => it.type === 'Headstone');
+                      const headstoneToCanvasRatio = (headstoneItem?.width || initW) / initW;
+                      const left = offsetX + ((cx / headstoneToCanvasRatio) + initW / 2) * sx;
+                      const top = offsetY + ((cyUsed / headstoneToCanvasRatio) + initH / 2) * sy;
                       
                       // Debug log - now show ALL motifs, not just first 3
                       const motifHAuthorDebug = (heightPx * initH) / overlayH;
