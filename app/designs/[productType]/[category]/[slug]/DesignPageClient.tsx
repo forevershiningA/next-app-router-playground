@@ -3124,7 +3124,7 @@ export default function DesignPageClient({
                     ?? 90;
 
                   // Overlay (display) scale
-                  const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
+                  const { uniformScale, initW, initH, offsetX, offsetY, displayWidth, displayHeight } = scalingFactors;
                   const overlayW = initW * uniformScale;
                   const overlayH = initH * uniformScale;
 
@@ -3132,24 +3132,10 @@ export default function DesignPageClient({
                   // The headstone SVG is rendered full-bleed (absolute inset-0), so its bottom == overlay bottom.
                   const stoneBot = Math.round(offsetY + overlayH);
 
-                  // Calculate stone dimensions for mm → px conversion
-                  const sx = overlayW / initW;
-                  const sy = overlayH / initH;
-                  
-                  let stoneW, stoneH;
-                  
-                  if (topProfile) {
-                    // Use topProfile for accurate measurements
-                    stoneW = (topProfile.drawW ?? initW) * sx;
-                    stoneH = (topProfile.drawH ?? initH) * sy;
-                  } else {
-                    // Estimate: assume stone fills most of the canvas
-                    const marginX = initW * 0.05;
-                    const marginY = initH * 0.1;
-                    stoneW = (initW - 2 * marginX) * sx;
-                    stoneH = (initH - 2 * marginY) * sy;
-                    logger.log('⚠️ Base using estimated stone dimensions (topProfile not available)');
-                  }
+                  // Use displayWidth directly for base width (per review84.txt)
+                  // This ensures the base matches the stone width exactly
+                  const stoneW = displayWidth;
+                  const stoneH = displayHeight;
 
                   // mm → px
                   const pxPerMmX = stoneW / tabletWidthMm;
