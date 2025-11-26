@@ -2979,9 +2979,14 @@ export default function DesignPageClient({
                       // This ensures motifs render even if SVG loading is slow
                       
                       // -------------- Canonical mapping: authoring → overlay --------------
-                      // Normalize to logical canvas (center-origin coords)
-                      const cx = (motif.cx ?? motif.x ?? 0) / savedDpr;
-                      const cy = (motif.cy ?? motif.y ?? 0) / savedDpr;
+                      // Use same coordinate system as inscriptions
+                      const rawX = motif.x ?? 0;
+                      const rawY = motif.y ?? 0;
+                      
+                      // Normalize to logical canvas (same as inscriptions)
+                      const usesPhysical = scalingFactors.usesPhysicalCoords;
+                      const cx = usesPhysical ? rawX / savedDpr : rawX;
+                      const cy = usesPhysical ? rawY / savedDpr : rawY;
                       
                       // Get display size (overlayW = displayWidth in scalingFactors)
                       const overlayW = initW * uniformScale;
