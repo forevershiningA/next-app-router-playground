@@ -2095,6 +2095,11 @@ export default function DesignPageClient({
 
   // Adjust motif positions to avoid overlapping with inscriptions
   const adjustedMotifData = useMemo(() => {
+    // DISABLED: Overlap adjustment is causing issues - moving sheep that don't overlap
+    // TODO: Fix bounding box calculation to be more accurate
+    return motifData;
+    
+    /* ORIGINAL CODE - COMMENTED OUT
     if (!motifData.length || !sanitizedDesignData || !scalingFactors) return motifData;
 
     const inscriptions = sanitizedDesignData.filter((item: any) => item.type === 'Inscription' && item.label && item.part !== 'Base');
@@ -2175,7 +2180,8 @@ export default function DesignPageClient({
       
       return motif;
     });
-  }, [motifData, sanitizedDesignData, scalingFactors]);
+    */
+  }, [motifData]);
 
   // Detect if this design uses physical coordinates (per-design detection)
   const allLayoutItems = useMemo<LayoutItem[]>(() => {
