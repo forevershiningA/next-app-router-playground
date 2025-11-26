@@ -2074,7 +2074,17 @@ export default function DesignPageClient({
   const motifData = useMemo(() => {
     if (!designData) return [];
     const motifs = designData.filter((item: any) => item.type === 'Motif');
-    logger.log('Total motifs in design data:', motifs.length, motifs.map(m => ({ src: m.src, name: m.name })));
+    logger.log('Total motifs in design data:', motifs.length);
+    logger.log('Motif details:', motifs.map((m, i) => ({ 
+      index: i,
+      src: m.src, 
+      name: m.name,
+      itemID: m.itemID,
+      x: m.x,
+      y: m.y,
+      height: m.height,
+      rotation: m.rotation
+    })));
     // Map flipx/flipy to scaleX/scaleY for compatibility
     return motifs.map((motif: any) => ({
       ...motif,
@@ -3021,29 +3031,29 @@ export default function DesignPageClient({
                       const left = offsetX + overlayW / 2 + cx * sx;
                       const top = offsetY + overlayH / 2 + cyUsed * sy;
                       
-                      // Debug log
-                      if (index < 3) {
-                        const motifHAuthorDebug = (heightPx * initH) / overlayH;
-                        const isTopBandDebug = cy < -(initH * 0.18) - (motifHAuthorDebug * 0.15);
-                        logger.log('MOTIF v48',
-                          motif.name || motif.src,
-                          {
-                            cx, cy, cyUsed,
-                            isTopBand: isTopBandDebug,
-                            motifHAuthor: motifHAuthorDebug.toFixed(2),
-                            hasTopProfile: !!topProfile,
-                            snapOpt: motif.snapTop ?? true,
-                            extraLift: motif.snapExtraLiftPx ?? 0,
-                            ratio,
-                            vw, vh,
-                            sx,
-                            widthPx: widthPx.toFixed(2),
-                            heightPx: heightPx.toFixed(2),
-                            left: left.toFixed(2),
-                            top: top.toFixed(2)
-                          }
-                        );
-                      }
+                      // Debug log - now show ALL motifs, not just first 3
+                      const motifHAuthorDebug = (heightPx * initH) / overlayH;
+                      const isTopBandDebug = cy < -(initH * 0.18) - (motifHAuthorDebug * 0.15);
+                      logger.log(`MOTIF ${index}/${adjustedMotifData.length}:`,
+                        motif.name || motif.src,
+                        {
+                          itemID: motif.itemID,
+                          src: motifSrc,
+                          rawCoords: { x: motif.x, y: motif.y },
+                          cx, cy, cyUsed,
+                          isTopBand: isTopBandDebug,
+                          motifHAuthor: motifHAuthorDebug.toFixed(2),
+                          hasTopProfile: !!topProfile,
+                          ratio,
+                          vw, vh,
+                          sx,
+                          widthPx: widthPx.toFixed(2),
+                          heightPx: heightPx.toFixed(2),
+                          left: left.toFixed(2),
+                          top: top.toFixed(2),
+                          adjustedForOverlap: motif.adjustedForOverlap || false
+                        }
+                      );
 
                       return (
                         <DraggableElement
