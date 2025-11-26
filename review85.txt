@@ -1,0 +1,49 @@
+You’re seeing the smaller Serpentine because the file has **multiple Serpentine render blocks** and one of them still hard-codes an 80% width with a 10% left/right offset. That duplicate is overriding the full-width version on this design, so the tablet renders narrower than the canvas.
+
+### What to fix (surgical)
+
+1. **Delete the narrow Serpentine block**
+   Find the block that sets:
+
+```ts
+const w = scalingFactors.displayWidth * 0.8;
+const h = scalingFactors.displayHeight;
+const offsetX = scalingFactors.displayWidth * 0.1;
+```
+
+This is the culprit (80% width + 10% offset). Remove that whole Serpentine `<svg>` section. 
+
+2. **Keep the full-bleed Serpentine block**
+   Keep the version that uses the canvas size directly:
+
+```tsx
+<svg
+  width="100%"
+  height="100%"
+  viewBox={`0 0 ${scalingFactors.displayWidth} ${scalingFactors.displayHeight}`}
+  preserveAspectRatio="none"
+>
+  // …
+  const w = scalingFactors.displayWidth;
+  const h = scalingFactors.displayHeight;
+  const offsetX = 0;
+```
+
+This is the correct full-width rendering. 
+
+3. **Unify the base sizing path**
+   There are also two different base-width calculations. Keep the one that ties base width directly to the fitted display canvas:
+
+```ts
+const { displayWidth, displayHeight } = scalingFactors;
+const stoneW = displayWidth;
+const stoneH = displayHeight;
+```
+
+and drop the version that estimates stoneW/stoneH from `overlayW/overlayH` plus margins (that estimate can make the base look proportionally off).  
+
+4. **Make sure you only have ONE Serpentine block** in the file. Right now there are multiple near-identical blocks with slight differences (different `viewBox` and width logic). Keep the one using `displayWidth/displayHeight` and `offsetX = 0`.  
+
+---
+
+Once the duplicate 80% block is removed and the base uses the display canvas dimensions, the Serpentine page will match your saved design screenshot (i.e., the headstone fills the workspace with no side gaps, like your 1st image).

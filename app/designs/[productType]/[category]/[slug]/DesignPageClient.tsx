@@ -2190,36 +2190,52 @@ export default function DesignPageClient({
   useEffect(() => {
     if (!motifData || motifData.length === 0) return;
 
-    motifData.forEach(async (motif: any) => {
-      const motifSrc = motif.src || motif.name;
-      if (!motifSrc || motifDimensions[motifSrc]) return;
+    // Load all motif dimensions in parallel
+    const loadDimensions = async () => {
+      const promises = motifData.map(async (motif: any) => {
+        const motifSrc = motif.src || motif.name;
+        if (!motifSrc || motifDimensions[motifSrc]) return;
 
-      const motifPath = getMotifPath(motif);
+        const motifPath = getMotifPath(motif);
+        
+        try {
+          const dims = await getIntrinsicDims(motifPath);
+          logger.log('SVG viewBox loaded for', motifSrc, ':', dims.vw, 'x', dims.vh);
+          return { motifSrc, dims: { width: dims.vw, height: dims.vh } };
+        } catch (err) {
+          logger.error('Failed to load SVG dimensions for', motifSrc, ':', err);
+          // Try fallback path
+          const fallbackPath = getFallbackMotifPath(motif);
+          try {
+            const dims = await getIntrinsicDims(fallbackPath);
+            logger.log('SVG viewBox loaded from fallback for', motifSrc, ':', dims.vw, 'x', dims.vh);
+            return { motifSrc, dims: { width: dims.vw, height: dims.vh } };
+          } catch {
+            logger.warn('Failed to load intrinsic dimensions for motif:', motifSrc, '- will skip rendering');
+            return null;
+          }
+        }
+      });
+
+      const results = await Promise.all(promises);
       
-      try {
-        const dims = await getIntrinsicDims(motifPath);
-        logger.log('SVG viewBox loaded for', motifSrc, ':', dims.vw, 'x', dims.vh);
+      // Batch update all dimensions at once
+      const newDimensions: Record<string, { width: number; height: number }> = {};
+      results.forEach(result => {
+        if (result) {
+          newDimensions[result.motifSrc] = result.dims;
+        }
+      });
+      
+      if (Object.keys(newDimensions).length > 0) {
         setMotifDimensions(prev => ({
           ...prev,
-          [motifSrc]: { width: dims.vw, height: dims.vh }
+          ...newDimensions
         }));
-      } catch (err) {
-        logger.error('Failed to load SVG dimensions for', motifSrc, ':', err);
-        // Try fallback path
-        const fallbackPath = getFallbackMotifPath(motif);
-        try {
-          const dims = await getIntrinsicDims(fallbackPath);
-          logger.log('SVG viewBox loaded from fallback for', motifSrc, ':', dims.vw, 'x', dims.vh);
-          setMotifDimensions(prev => ({
-            ...prev,
-            [motifSrc]: { width: dims.vw, height: dims.vh }
-          }));
-        } catch {
-          // Don't set 100x100 fallback - let the guard clause handle it
-          logger.warn('Failed to load intrinsic dimensions for motif:', motifSrc, '- will skip rendering');
-        }
       }
-    });
+    };
+
+    loadDimensions();
   }, [motifData]);
 
   // Extract base data if present
@@ -2941,10 +2957,10 @@ export default function DesignPageClient({
                       
                       // Get motif intrinsic dimensions (from SVG viewBox)
                       const motifSrc = motif.src || motif.name;
-                      const dims = motifDimensions[motifSrc];
+                      const dims = motifDimensions[motifSrc] || { width: 100, height: 100 };
                       
-                      // Skip if dims not loaded yet (avoid 100x100 fallback)
-                      if (!dims || !dims.width || !dims.height) return null;
+                      // Use fallback dimensions if not loaded yet
+                      // This ensures motifs render even if SVG loading is slow
                       
                       // -------------- Canonical mapping: authoring → overlay --------------
                       // Normalize to logical canvas (center-origin coords)
