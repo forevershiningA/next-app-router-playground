@@ -61,9 +61,9 @@ export const getNameDatabases = cache(async () => {
   
   try {
     const [firstNamesFData, firstNamesMData, surnamesData] = await Promise.all([
-      readFile(join(process.cwd(), 'public', 'json', 'firstnames_f.json'), 'utf-8'),
-      readFile(join(process.cwd(), 'public', 'json', 'firstnames_m.json'), 'utf-8'),
-      readFile(join(process.cwd(), 'public', 'json', 'surnames.json'), 'utf-8'),
+      readFile(join(process.cwd(), 'public', 'json', 'firstnames_f_small.json'), 'utf-8'),
+      readFile(join(process.cwd(), 'public', 'json', 'firstnames_m_small.json'), 'utf-8'),
+      readFile(join(process.cwd(), 'public', 'json', 'surnames_small.json'), 'utf-8'),
     ]);
     
     nameDbCache = {

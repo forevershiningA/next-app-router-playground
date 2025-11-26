@@ -1243,9 +1243,9 @@ export default function DesignPageClient({
   useEffect(() => {
     // Load name databases
     Promise.all([
-      fetch('/json/firstnames_f.json').then(r => r.json()),
-      fetch('/json/firstnames_m.json').then(r => r.json()),
-      fetch('/json/surnames.json').then(r => r.json()),
+      fetch('/json/firstnames_f_small.json').then(r => r.json()),
+      fetch('/json/firstnames_m_small.json').then(r => r.json()),
+      fetch('/json/surnames_small.json').then(r => r.json()),
     ]).then(([femaleNames, maleNames, surnames]) => {
       // Combine and convert to Sets for fast lookup (case-insensitive)
       const firstNames = new Set([
