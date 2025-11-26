@@ -2023,9 +2023,13 @@ export default function DesignPageClient({
           const isLaserEtched = productSlug.includes('laser-etched');
           
           paths.forEach(path => {
+            // Remove any existing fill styles (inline or from attributes)
+            path.removeAttribute('style');
+            
             if (isLaserEtched) {
               // Laser-etched: solid black background
               path.setAttribute('fill', '#000000');
+              path.setAttribute('style', 'fill: #000000 !important;');
             } else {
               // Traditional: granite texture
               path.setAttribute('fill', 'url(#graniteTexture)');
