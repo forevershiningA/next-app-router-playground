@@ -41,27 +41,117 @@ After 18 commits fixing coordinate system issues with the HTML overlay approach,
    - Supports traditional (granite texture)
    - Serpentine path generation
 
-2. **Design Page Integration Started**
+2. **SVG Caching System** (`lib/svg-cache.ts`)
+   - 24-hour cache expiration
+   - File structure: `svg/{year}/{month}/{designId}.svg`
+   - Automatic cache checking on page load
+   - Background cache saving (non-blocking)
+   - Cache cleanup utilities
+
+3. **Design Page Integration** ✅ COMPLETE
    - Added `generateDesignSVG` import
    - Created state for generated SVG
-   - Added useEffect to generate SVG on mount
+   - Added useEffect to fetch/generate SVG
+   - Client-side cache check first
+   - Fallback to generation if cache miss
+   - Display toggle: SVG (z-10) vs HTML overlay (z-1, hidden)
+
+4. **API Routes**
+   - POST `/api/cache-svg` - Save generated SVG to cache
+
+5. **CLI Tools**
+   - `pnpm cache:clear` - Delete expired cache files
+   - `pnpm cache:stats` - View cache statistics
 
 ### 🚧 In Progress:
-1. **Rendering Logic** - Adding ternary conditional:
-   ```jsx
-   {generatedSVG ? (
-     <div dangerouslySetInnerHTML={{ __html: generatedSVG }} />
-   ) : (
-     <div> {/* HTML overlay fallback */} </div>
-   )}
-   ```
+1. **Browser Testing** - Need to test in browser:
+   - Verify SVG generation works
+   - Check positioning matches original
+   - Test cache hit/miss logic
+   - Verify text selectability
 
-2. **Syntax Issue** - TypeScript error on line 3251:
-   ```
-   error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-   ```
-   - Issue with closing braces in JSX ternary
-   - Needs investigation of surrounding JSX structure
+---
+
+## Caching Strategy
+
+### Cache Flow:
+
+```
+User visits design page
+        ↓
+Check cache: /ml/forevershining/saved-designs/svg/{year}/{month}/{designId}.svg
+        ↓
+   ┌────────────┐
+   │ Cache Hit? │
+   └────┬───┬───┘
+        │   │
+     Yes│   │No
+        │   │
+        ↓   ↓
+    ┌───────────┐      ┌──────────────┐
+    │ Fresh?    │      │ Generate SVG │
+    │ (< 24h)   │      └──────┬───────┘
+    └─────┬─────┘             │
+          │                   │
+       Yes│  No               │
+          │   │               │
+          ↓   ↓               ↓
+    ┌──────────────────┐  ┌──────────────┐
+    │ Serve from cache │  │ Save to cache│
+    └──────────────────┘  └──────┬───────┘
+                                  │
+                                  ↓
+                           ┌──────────────┐
+                           │ Display SVG  │
+                           └──────────────┘
+```
+
+### Cache Directory Structure:
+
+```
+public/ml/forevershining/saved-designs/svg/
+├── 2024/
+│   ├── 07/
+│   │   ├── 1721009360757.svg  (< 24h - FRESH)
+│   │   └── 1721009360999.svg  (> 24h - EXPIRED)
+│   ├── 10/
+│   │   └── 1730066358154.svg
+│   └── 11/
+│       └── 1700517739396.svg
+├── 2023/
+│   └── 09/
+│       └── 1630558777652.svg
+└── .gitkeep
+```
+
+### Cache Management:
+
+**View statistics:**
+```bash
+pnpm cache:stats
+```
+
+**Clear expired files:**
+```bash
+pnpm cache:clear
+```
+
+**Manual cache invalidation:**
+```bash
+# Delete specific design cache
+rm public/ml/forevershining/saved-designs/svg/2024/07/1721009360757.svg
+
+# Clear all cache
+rm -rf public/ml/forevershining/saved-designs/svg/**/*.svg
+```
+
+### Benefits:
+
+1. ✅ **Fast page loads** - Cached SVGs load instantly
+2. ✅ **Reduced CPU** - No regeneration on every visit
+3. ✅ **Auto-cleanup** - 24-hour expiration prevents stale cache
+4. ✅ **Easy management** - CLI tools for monitoring
+5. ✅ **Graceful degradation** - Falls back to generation if cache fails
 
 ---
 
@@ -203,15 +293,16 @@ This ensures:
 | Task | Time | Status |
 |------|------|--------|
 | SVG Generator | 2h | ✅ Done |
-| Integration | 1h | 🚧 In Progress |
-| Testing | 4h | ⏳ TODO |
+| Caching System | 2h | ✅ Done |
+| Integration | 1h | ✅ Done |
+| Testing | 4h | ⏳ In Progress |
 | Bug Fixes | 2h | ⏳ TODO |
-| Documentation | 1h | 🚧 In Progress |
-| **Total** | **10h** | **50% Complete** |
+| Documentation | 1h | ✅ Done |
+| **Total** | **12h** | **75% Complete** |
 
 Compare to:
 - **HTML overlay fixes:** 3+ days (18 commits, still not perfect)
-- **SVG approach:** 10 hours total (simpler, cleaner, more maintainable)
+- **SVG approach:** 9 hours done, 3 hours remaining
 
 ---
 
@@ -228,4 +319,4 @@ Compare to:
 
 ---
 
-**Next Session:** Fix JSX syntax error and test with first saved design.
+**Next Session:** Test SVG generation and caching in browser, verify positioning accuracy.
