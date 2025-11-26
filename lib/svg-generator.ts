@@ -268,9 +268,18 @@ function generateMotifs(
     const x = centerX + cx - width / 2;
     const y = centerY + cy - height / 2;
     
-    // Get motif path
+    // Get motif path - ensure all motifs use /shapes/motifs/ prefix
     const src = motif.src || '';
-    const motifPath = src.startsWith('/') ? src : `/motifs/${src}`;
+    let motifPath = src;
+    
+    if (!src.startsWith('/')) {
+      // Relative path - add /shapes/motifs/ prefix
+      motifPath = `/shapes/motifs/${src}`;
+    } else if (src.startsWith('/motifs/')) {
+      // Old /motifs/ path - update to /shapes/motifs/
+      motifPath = src.replace('/motifs/', '/shapes/motifs/');
+    }
+    // else: already has full path (e.g., /shapes/motifs/...) - use as-is
     
     // Apply color filter for laser-etched (white motifs)
     const color = motif.color || '#000000';
