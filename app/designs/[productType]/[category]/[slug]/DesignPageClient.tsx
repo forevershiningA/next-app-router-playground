@@ -2763,7 +2763,7 @@ export default function DesignPageClient({
                     <svg 
                       width="100%" 
                       height="100%" 
-                      viewBox={`0 0 ${scalingFactors.displayWidth} ${scalingFactors.displayHeight}`}
+                      viewBox={`0 0 ${scalingFactors.initW} ${scalingFactors.initH}`}
                       xmlns="http://www.w3.org/2000/svg"
                       preserveAspectRatio="none"
                     >
@@ -2783,9 +2783,9 @@ export default function DesignPageClient({
                       <path 
                         fill={textureData ? "url(#graniteTexture)" : "#808080"}
                         d={(() => {
-                          // Calculate the serpentine curve based on actual dimensions
-                          const w = scalingFactors.displayWidth; // Full width like other shapes
-                          const h = scalingFactors.displayHeight;
+                          // Calculate the serpentine curve in authoring space (initW x initH)
+                          const w = scalingFactors.initW; // Use authoring frame dimensions
+                          const h = scalingFactors.initH;
                           const offsetX = 0; // No offset - full-bleed rendering
                           // Curve height as percentage of total height (10%)
                           const curveHeight = h * 0.1;
