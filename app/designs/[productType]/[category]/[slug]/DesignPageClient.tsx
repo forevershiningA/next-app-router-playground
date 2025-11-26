@@ -19,7 +19,6 @@ import { getMotifCategoryName } from '#/lib/motif-translations';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import { logger } from '#/lib/logger';
-import { generateDesignSVG } from '#/lib/svg-generator';
 
 // Type for layout items (inscriptions and motifs)
 type LayoutItem = {
@@ -1878,19 +1877,39 @@ export default function DesignPageClient({
     return savedTexturePath;
   }, [designData]);
 
-  // Generate complete SVG (NEW PRIMARY APPROACH)
+  // Generate complete SVG (NEW PRIMARY APPROACH with caching)
   const [generatedSVG, setGeneratedSVG] = useState<string | null>(null);
   const [svgGenerationError, setSVGGenerationError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!designData || !screenshotDimensions) {
+    if (!designData || !screenshotDimensions || !designId) {
       setGeneratedSVG(null);
       return;
     }
 
-    const generateSVG = async () => {
+    const fetchOrGenerateSVG = async () => {
       try {
-        logger.log('🎨 Generating complete SVG design...');
+        logger.log('🎨 Fetching/generating SVG for design:', designId);
+        
+        // Try to fetch cached SVG first
+        const cachedSVGPath = `/ml/forevershining/saved-designs/svg/${getCachePath(designId)}`;
+        
+        try {
+          const response = await fetch(cachedSVGPath);
+          if (response.ok) {
+            const svg = await response.text();
+            logger.log('✅ Using cached SVG from:', cachedSVGPath);
+            setGeneratedSVG(svg);
+            setSVGGenerationError(null);
+            return;
+          }
+        } catch (err) {
+          logger.log('⚠️ No cached SVG found, will generate new one');
+        }
+        
+        // Generate new SVG
+        logger.log('🎨 Generating new SVG...');
+        const { generateDesignSVG } = await import('#/lib/svg-generator');
         
         const svg = await generateDesignSVG({
           designData,
@@ -1904,6 +1923,10 @@ export default function DesignPageClient({
         setGeneratedSVG(svg);
         setSVGGenerationError(null);
         logger.log('✅ SVG generation complete, length:', svg.length);
+        
+        // Save to cache (fire and forget)
+        saveSVGToCache(designId, svg);
+        
       } catch (error) {
         logger.error('❌ SVG generation failed:', error);
         setSVGGenerationError(error as Error);
@@ -1911,8 +1934,31 @@ export default function DesignPageClient({
       }
     };
 
-    generateSVG();
-  }, [designData, screenshotDimensions, shapeImagePath, textureData, productSlug]);
+    fetchOrGenerateSVG();
+  }, [designData, screenshotDimensions, shapeImagePath, textureData, productSlug, designId]);
+  
+  // Helper: Get cache path for design ID
+  function getCachePath(designId: string): string {
+    const timestamp = parseInt(designId);
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${year}/${month}/${designId}.svg`;
+  }
+  
+  // Helper: Save SVG to cache (client-side request to API)
+  async function saveSVGToCache(designId: string, svg: string): Promise<void> {
+    try {
+      await fetch('/api/cache-svg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ designId, svg })
+      });
+      logger.log('✅ SVG cached successfully');
+    } catch (error) {
+      logger.error('⚠️ Failed to cache SVG (non-fatal):', error);
+    }
+  }
 
   // Load and process SVG with texture (FALLBACK for HTML overlay approach)
   useEffect(() => {

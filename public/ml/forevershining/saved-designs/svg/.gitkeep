@@ -1,0 +1,8 @@
+# SVG Cache Directory
+
+This directory stores generated SVG files for saved designs.
+
+- Files are organized by year/month/designId.svg
+- Cache expires after 24 hours
+- Use `pnpm cache:clear` to remove expired files
+- Use `pnpm cache:stats` to view cache statistics

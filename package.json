@@ -9,7 +9,9 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check --ignore-unknown .",
-    "validate": "pnpm type-check && pnpm lint && pnpm format:check"
+    "validate": "pnpm type-check && pnpm lint && pnpm format:check",
+    "cache:clear": "node scripts/clear-svg-cache.js",
+    "cache:stats": "node scripts/svg-cache-stats.js"
   },
   "dependencies": {
     "@heroicons/react": "2.2.0",
