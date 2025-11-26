@@ -126,21 +126,51 @@ async function generateShape(
       if (response.ok) {
         const svgText = await response.text();
         
-        // Parse SVG and extract path(s)
+        // Parse SVG and extract path(s) and original viewBox
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svg = doc.querySelector('svg');
         
         if (svg) {
           const paths = svg.querySelectorAll('path');
+          
+          // Get original SVG dimensions from viewBox or width/height
+          const viewBox = svg.getAttribute('viewBox');
+          let originalWidth = initWidth;
+          let originalHeight = initHeight;
+          
+          if (viewBox) {
+            const parts = viewBox.split(/\s+/);
+            originalWidth = parseFloat(parts[2]) || initWidth;
+            originalHeight = parseFloat(parts[3]) || initHeight;
+          } else {
+            const width = svg.getAttribute('width');
+            const height = svg.getAttribute('height');
+            if (width) originalWidth = parseFloat(width);
+            if (height) originalHeight = parseFloat(height);
+          }
+          
+          // Calculate scale to fit authoring canvas
+          const scaleX = initWidth / originalWidth;
+          const scaleY = initHeight / originalHeight;
+          
           let pathsContent = '';
+          
+          // If we need to scale, wrap in a <g> with transform
+          if (Math.abs(scaleX - 1) > 0.01 || Math.abs(scaleY - 1) > 0.01) {
+            pathsContent += `  <g transform="scale(${scaleX}, ${scaleY})">\n`;
+          }
           
           paths.forEach(path => {
             const d = path.getAttribute('d');
             if (d) {
-              pathsContent += `  <path fill="${fill}" d="${d}"/>\n`;
+              pathsContent += `    <path fill="${fill}" d="${d}"/>\n`;
             }
           });
+          
+          if (Math.abs(scaleX - 1) > 0.01 || Math.abs(scaleY - 1) > 0.01) {
+            pathsContent += `  </g>\n`;
+          }
           
           return pathsContent;
         }
