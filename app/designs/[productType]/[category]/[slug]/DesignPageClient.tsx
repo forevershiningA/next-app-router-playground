@@ -1896,7 +1896,7 @@ export default function DesignPageClient({
           designData,
           initWidth: screenshotDimensions.width,
           initHeight: screenshotDimensions.height,
-          shapeImagePath,
+          shapeImagePath: shapeImagePath || undefined,
           textureData: textureData || undefined,
           isLaserEtched: productSlug.includes('laser-etched')
         });
@@ -2823,9 +2823,9 @@ export default function DesignPageClient({
               >
               
               {/* HEADSTONE OBJECT LAYER */}
-              {/* PRIMARY: Generated SVG (if available) */}
-              {/* FALLBACK: HTML overlay with separate SVG shape */}
-              {generatedSVG ? (
+              
+              {/* PRIMARY: Generated complete SVG (if available) */}
+              {generatedSVG && (
                 <div 
                   className="absolute"
                   style={{
@@ -2833,12 +2833,13 @@ export default function DesignPageClient({
                     height: '100%',
                     left: '0',
                     top: '0',
-                    zIndex: 1
+                    zIndex: 10
                   }}
                   dangerouslySetInnerHTML={{ __html: generatedSVG }}
                 />
-              ) : (
-                <div className="absolute inset-0">
+              )}
+              
+              {/* FALLBACK: HTML overlay (hidden if SVG available) */}
               <div
                 className="absolute"
                 style={{
@@ -2846,7 +2847,8 @@ export default function DesignPageClient({
                     height: '100%',
                     left: '0',
                     top: '0',
-                    zIndex: 1
+                    zIndex: 1,
+                    display: generatedSVG ? 'none' : 'block'
                 }}
               >
               {/* SVG Shape as base */}
@@ -3247,12 +3249,10 @@ export default function DesignPageClient({
                     })}
                 </div>
               )}
-            </div>
-            )}
-            
-            {/* END: SVG vs HTML Fallback */}
-            
-            {/* Base (pedestal) — single canonical renderer */}
+              
+              {/* END: HTML Overlay Fallback */}
+              
+              {/* Base (pedestal) — single canonical renderer */}
               {(() => {
                 if (!baseData) {
                   logger.log('🔍 Base render check: No base data');

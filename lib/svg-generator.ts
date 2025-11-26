@@ -220,7 +220,7 @@ function generateInscriptions(
     fill="${color}" 
     text-anchor="${textAnchor}"
   >
-${lines.map((line, i) => 
+${lines.map((line: string, i: number) => 
     `    <tspan x="${svgX}" dy="${i === 0 ? 0 : lineHeight}">${escapeXML(line)}</tspan>`
   ).join('\n')}
   </text>`;
