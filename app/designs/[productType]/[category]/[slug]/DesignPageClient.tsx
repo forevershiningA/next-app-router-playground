@@ -1764,16 +1764,23 @@ export default function DesignPageClient({
     // Mobile: 90% of screen width. Desktop: Max 600px.
     const maxContainerWidth = isMobile ? viewportWidth * 0.92 : 600;
     
-    // Calculate the display width maintaining aspect ratio of the CANVAS
+    // Calculate the display width
     let displayWidth = Math.min(initW, maxContainerWidth);
     
     // If high-res legacy design, ensure we don't render tiny on desktop
     if (usesPhysicalCoords && displayWidth < 400) displayWidth = 400;
 
-    // Use canvas aspect ratio (the authoring space)
-    // The SVG shape will scale to fill this container
-    const aspectRatio = initW / initH;
-    const displayHeight = displayWidth / aspectRatio;
+    // For height: use full authoring height if no DPR scaling needed
+    // Otherwise scale proportionally to maintain aspect ratio
+    let displayHeight;
+    if (!designDpr || designDpr === 1) {
+      // No DPR scaling - use authoring canvas height directly
+      displayHeight = Math.min(initH, displayWidth / (initW / initH));
+    } else {
+      // Has DPR - scale proportionally
+      const aspectRatio = initW / initH;
+      displayHeight = displayWidth / aspectRatio;
+    }
 
     // 4. Calculate Scale
     
