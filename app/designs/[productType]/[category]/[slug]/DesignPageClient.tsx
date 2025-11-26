@@ -2018,8 +2018,18 @@ export default function DesignPageClient({
           
           // Just update path fills and remove filters
           const paths = svg.querySelectorAll('path');
+          
+          // Check if this is a laser-etched design
+          const isLaserEtched = productSlug.includes('laser-etched');
+          
           paths.forEach(path => {
-            path.setAttribute('fill', 'url(#graniteTexture)');
+            if (isLaserEtched) {
+              // Laser-etched: solid black background
+              path.setAttribute('fill', '#000000');
+            } else {
+              // Traditional: granite texture
+              path.setAttribute('fill', 'url(#graniteTexture)');
+            }
             path.removeAttribute('filter');
           });
           
@@ -2808,7 +2818,11 @@ export default function DesignPageClient({
                         )}
                       </defs>
                       <path 
-                        fill={textureData ? "url(#graniteTexture)" : "#808080"}
+                        fill={(() => {
+                          const isLaserEtched = productSlug.includes('laser-etched');
+                          if (isLaserEtched) return '#000000';
+                          return textureData ? "url(#graniteTexture)" : "#808080";
+                        })()}
                         d={(() => {
                           // Calculate the serpentine curve using viewBox dimensions
                           const w = viewBoxW;
@@ -2848,9 +2862,14 @@ export default function DesignPageClient({
                       <div 
                         className="absolute inset-0 rounded-lg"
                         style={{
-                          backgroundImage: textureData 
-                            ? `url(${textureData})`
-                            : 'linear-gradient(to bottom, #9ca3af, #6b7280)',
+                          backgroundImage: (() => {
+                            const isLaserEtched = productSlug.includes('laser-etched');
+                            if (isLaserEtched) return undefined;
+                            return textureData 
+                              ? `url(${textureData})`
+                              : 'linear-gradient(to bottom, #9ca3af, #6b7280)';
+                          })(),
+                          backgroundColor: productSlug.includes('laser-etched') ? '#000000' : undefined,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                         }}
