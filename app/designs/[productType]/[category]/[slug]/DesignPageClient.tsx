@@ -1884,8 +1884,8 @@ export default function DesignPageClient({
     const match = savedTexturePath.match(/\/([A-Z][A-Za-z0-9-]+?)(?:-TILE)?-\d+-[xX]-\d+\.jpg$/i);
     if (match && match[1]) {
       const graniteName = match[1];
-      // Map to our texture system: /textures/forever/l/White-Carrara.jpg
-      return `/textures/forever/l/${graniteName}.jpg`;
+      // Map to our texture system: /textures/forever/l/White-Carrara.webp
+      return `/textures/forever/l/${graniteName}.webp`;
     }
     
     // Fallback: try to extract any filename and use it
@@ -2434,7 +2434,7 @@ export default function DesignPageClient({
     const match = savedTexturePath.match(/\/([A-Z0-9]+)(?:-TILE)?-\d+-X-\d+\.jpg/i);
     if (match && match[1]) {
       const graniteName = match[1];
-      const result = `/textures/forever/l/${graniteName}.jpg`;
+      const result = `/textures/forever/l/${graniteName}.webp`;
       logger.log('🔍 Base texture (regex match):', { savedTexturePath, graniteName, result });
       return result;
     }

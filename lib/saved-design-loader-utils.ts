@@ -14,21 +14,21 @@ export interface LoadDesignOptions {
  * Bronze texture mapping
  */
 const BRONZE_TEXTURES = [
-  { name: "Black", color: "#000000", img: "/textures/phoenix/s/01.jpg" },
-  { name: "Brown", color: "#48280f", img: "/textures/phoenix/s/02.jpg" },
-  { name: "Casino Blue", color: "#0c1137", img: "/textures/phoenix/s/03.jpg" },
-  { name: "Dark Brown", color: "#24160b", img: "/textures/phoenix/s/04.jpg" },
-  { name: "Dark Green", color: "#1a391a", img: "/textures/phoenix/s/05.jpg" },
-  { name: "Grey", color: "#6d696a", img: "/textures/phoenix/s/06.jpg" },
-  { name: "Holly Green", color: "#07723a", img: "/textures/phoenix/s/07.jpg" },
-  { name: "Ice Blue", color: "#afcadb", img: "/textures/phoenix/s/08.jpg" },
-  { name: "Maroon", color: "#4c0f1e", img: "/textures/phoenix/s/09.jpg" },
-  { name: "Navy Blue", color: "#2c2c76", img: "/textures/phoenix/s/10.jpg" },
-  { name: "Purple", color: "#513a68", img: "/textures/phoenix/s/11.jpg" },
-  { name: "Red", color: "#c72028", img: "/textures/phoenix/s/12.jpg" },
-  { name: "Sundance Pink", color: "#c99cb0", img: "/textures/phoenix/s/13.jpg" },
-  { name: "Turquoise", color: "#295363", img: "/textures/phoenix/s/14.jpg" },
-  { name: "White", color: "#ffffff", img: "/textures/phoenix/s/15.jpg" }
+  { name: "Black", color: "#000000", img: "/textures/phoenix/s/01.webp" },
+  { name: "Brown", color: "#48280f", img: "/textures/phoenix/s/02.webp" },
+  { name: "Casino Blue", color: "#0c1137", img: "/textures/phoenix/s/03.webp" },
+  { name: "Dark Brown", color: "#24160b", img: "/textures/phoenix/s/04.webp" },
+  { name: "Dark Green", color: "#1a391a", img: "/textures/phoenix/s/05.webp" },
+  { name: "Grey", color: "#6d696a", img: "/textures/phoenix/s/06.webp" },
+  { name: "Holly Green", color: "#07723a", img: "/textures/phoenix/s/07.webp" },
+  { name: "Ice Blue", color: "#afcadb", img: "/textures/phoenix/s/08.webp" },
+  { name: "Maroon", color: "#4c0f1e", img: "/textures/phoenix/s/09.webp" },
+  { name: "Navy Blue", color: "#2c2c76", img: "/textures/phoenix/s/10.webp" },
+  { name: "Purple", color: "#513a68", img: "/textures/phoenix/s/11.webp" },
+  { name: "Red", color: "#c72028", img: "/textures/phoenix/s/12.webp" },
+  { name: "Sundance Pink", color: "#c99cb0", img: "/textures/phoenix/s/13.webp" },
+  { name: "Turquoise", color: "#295363", img: "/textures/phoenix/s/14.webp" },
+  { name: "White", color: "#ffffff", img: "/textures/phoenix/s/15.webp" }
 ];
 
 /**
@@ -36,18 +36,18 @@ const BRONZE_TEXTURES = [
  */
 const MATERIAL_TEXTURES: Record<string, string> = {
   // Blue Pearl variants
-  'blue-pearl': '/textures/forever/l/Blue-Pearl.jpg',
-  'blue pearl': '/textures/forever/l/Blue-Pearl.jpg',
+  'blue-pearl': '/textures/forever/l/Blue-Pearl.webp',
+  'blue pearl': '/textures/forever/l/Blue-Pearl.webp',
   
   // Glory Black (for laser etched - IDs 18 and 19)
-  'glory-black': '/textures/forever/l/Glory-Black-2.jpg',
-  'glory black': '/textures/forever/l/Glory-Black-2.jpg',
-  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.jpg',
+  'glory-black': '/textures/forever/l/Glory-Black-2.webp',
+  'glory black': '/textures/forever/l/Glory-Black-2.webp',
+  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
   
   // Other common materials
-  'african-black': '/textures/forever/l/African-Black.jpg',
-  'noble-black': '/textures/forever/l/Noble-Black.jpg',
-  'g654': '/textures/forever/l/01.jpg', // Fallback to numbered texture
+  'african-black': '/textures/forever/l/African-Black.webp',
+  'noble-black': '/textures/forever/l/Noble-Black.webp',
+  'g654': '/textures/forever/l/01.webp', // Fallback to numbered texture
 };
 
 /**
@@ -58,21 +58,21 @@ function mapTexture(texturePath: string, productId: string): string {
   
   // Check if it's a bronze plaque (productId 5)
   if (productId === '5') {
-    // Handle paths like "src/bronzes/phoenix/l/04.jpg" -> "/textures/phoenix/l/04.jpg"
+    // Handle paths like "src/bronzes/phoenix/l/04.webp" -> "/textures/phoenix/l/04.webp"
     if (texturePath.includes('phoenix')) {
-      const match = texturePath.match(/phoenix[\/\\](l|s)[\/\\](\d+)\.jpg$/);
+      const match = texturePath.match(/phoenix[\/\\](l|s)[\/\\](\d+)\.(jpg|webp)$/);
       if (match) {
         const size = match[1]; // 'l' or 's'
         const number = match[2];
-        return `/textures/phoenix/${size}/${number}.jpg`;
+        return `/textures/phoenix/${size}/${number}.webp`;
       }
     }
     
     // Extract bronze color from path if possible (fallback)
-    const bronzeMatch = texturePath.match(/[\/\\](\d+)\.jpg$/);
+    const bronzeMatch = texturePath.match(/[\/\\](\d+)\.(jpg|webp)$/);
     if (bronzeMatch) {
       const number = bronzeMatch[1];
-      return `/textures/phoenix/l/${number}.jpg`;
+      return `/textures/phoenix/l/${number}.webp`;
     }
     
     // Default bronze
@@ -472,3 +472,4 @@ export function checkForDuplicates(
 
   return false;
 }
+

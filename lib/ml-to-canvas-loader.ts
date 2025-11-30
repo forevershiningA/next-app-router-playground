@@ -77,9 +77,9 @@ export function mapShapeToSVG(mlShape: string): string {
  */
 export function mapTextureToFile(mlTexture: string): string {
   // ML textures are like: "src/granites/forever2/l/18.jpg"
-  // Your textures are in: "/textures/forever/l/Imperial-Red.jpg"
+  // Your textures are in: "/textures/forever/l/Imperial-Red.webp"
   
-  if (!mlTexture) return '/textures/forever/l/Imperial-Red.jpg';
+  if (!mlTexture) return '/textures/forever/l/Imperial-Red.webp';
   
   // Extract filename from path
   const parts = mlTexture.split('/');
@@ -232,3 +232,4 @@ export function getCanvasURLForDesign(design: MLDesign, targetProduct: string = 
  *   return <div>Design loaded into canvas!</div>;
  * }
  */
+
