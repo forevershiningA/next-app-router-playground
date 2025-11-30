@@ -7,7 +7,7 @@ export const DEFAULT_SHAPE_URL = SHAPES_BASE + DEFAULT_SHAPE_IMAGE;
 
 // Texture paths
 export const TEX_BASE = '/textures/forever/l/';
-export const DEFAULT_TEX = 'Imperial-Red.jpg';
+export const DEFAULT_TEX = 'Imperial-Red.webp';
 
 // Headstone dimension constraints (mm)
 export const MIN_HEADSTONE_DIM = 300;
@@ -50,3 +50,4 @@ export const CAMERA_3D_POSITION_Z = 8; // Reduced for zoom
 export const CAMERA_FOV = 35; // Reduced FOV for more zoom
 export const CAMERA_NEAR = 0.1;
 export const CAMERA_FAR = 100;
+
