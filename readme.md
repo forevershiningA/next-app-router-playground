@@ -12,6 +12,32 @@ An interactive 3D web application that allows families to design custom memorial
 
 DYO (Design Your Own) is a comprehensive online headstone design platform that guides families through the complete customization process. From selecting shapes and materials to adding laser-etched photos and inscriptions, the application provides an intuitive, visual experience with instant 3D rendering.
 
+## Recent Updates (November 2025)
+
+### Motif Sizing & Design Format Compatibility
+
+**Fixed critical rendering issues for saved designs:**
+
+- **Dual Format Support**: Implemented detection and handling for both old MM-based and new ratio-based design formats
+  - Old format: Motifs sized in physical millimeters with `height` field
+  - New format: Motifs sized using viewport ratios with `ratio` and `dpr` fields
+  
+- **Canvas Dimension Logic**: 
+  - MM-based designs use original canvas dimensions (707×476px)
+  - Ratio-based designs use cropped screenshot dimensions (1066×1077px)
+  
+- **Accurate Motif Scaling**: Fixed motif sizing calculations to correctly handle both formats
+  - MM-based: `mm × px/mm ratio`
+  - Ratio-based: `viewBox × ratio × DPR`
+
+- **Screenshot Processing**: Added automated scripts for cropping and metadata generation
+  - `scripts/crop-screenshots.js` - Auto-crop white space from screenshots
+  - `scripts/generate-screenshot-metadata.js` - Generate crop dimension metadata
+
+- **Bug Fixes**: Resolved rendering issues in legacy designs (e.g., "Gods Garden" design)
+
+See [MOTIF_SIZING_FIX_2025_01_29.md](MOTIF_SIZING_FIX_2025_01_29.md) for detailed technical documentation.
+
 ## Key Features
 
 ### 🎨 **Interactive 3D Design Studio**
@@ -23,9 +49,10 @@ DYO (Design Your Own) is a comprehensive online headstone design platform that g
 ### 📐 **Comprehensive Customization**
 
 **Shapes & Styles**
-- Wide range of headstone shapes (Serpentine, Ogee, Gothic, and more)
+- Wide range of headstone shapes (Serpentine, Ogee, Gothic, Curved Gable, and more)
 - Support for custom shapes upon request
-- SVG-based shape system for precision
+- SVG-based shape system for precision rendering
+- Universal coordinate system for accurate motif placement
 
 **Materials**
 - 30+ premium granite and stone materials
@@ -48,12 +75,19 @@ DYO (Design Your Own) is a comprehensive online headstone design platform that g
 - 34+ color choices including gold and silver gilding
 - Custom text placement and rotation
 - Font size control (5mm - 1200mm)
-- Real-time preview
+- Real-time preview with accurate positioning
+
+**Motifs & Decorations**
+- 100+ decorative motifs (religious symbols, flowers, nature, etc.)
+- Precise positioning with coordinate system
+- Scale and rotation controls
+- Color customization (black, white, gold, silver)
+- Support for both overlay and carved rendering styles
 
 **Additions & Embellishments**
 - 3D decorative applications (angels, crosses, religious figures)
 - Vases and statues
-- Laser-etched images and motifs
+- Laser-etched images and photos
 - Position, scale, and rotation controls
 
 ## Technology Stack
@@ -75,6 +109,7 @@ DYO (Design Your Own) is a comprehensive online headstone design platform that g
 - **Build Tool**: Next.js with Turbopack
 - **Package Manager**: pnpm
 - **Code Formatting**: Prettier with Tailwind plugin
+- **Image Processing**: Sharp 0.33.5 (for screenshot cropping)
 
 ### Content & Validation
 - **MDX Support**: @next/mdx for documentation pages
@@ -129,11 +164,12 @@ pnpm start
 next-dyo/
 ├── app/                          # Next.js App Router pages
 │   ├── additions/               # 3D additions & embellishments
+│   ├── designs/                 # Saved design gallery & viewer
 │   ├── inscriptions/            # Text customization
+│   ├── products/                # Product pages & templates
 │   ├── select-material/         # Material/texture selection
 │   ├── select-shape/            # Shape selection
 │   ├── select-size/             # Size configuration
-│   ├── traditional-engraved-headstone/ # Alternative style
 │   └── layout.tsx               # Root layout with 3D scene
 ├── components/                   # React components
 │   ├── three/                   # Three.js components
@@ -141,15 +177,27 @@ next-dyo/
 │   ├── ThreeScene.tsx           # Main 3D scene
 │   ├── SceneOverlayHost.tsx     # Overlay management
 │   └── HeadstoneInscription.tsx # Text rendering
-├── lib/                         # Core logic & stores
+├── contexts/                     # React contexts
+│   └── DesignContext.tsx        # Design state management
+├── lib/                         # Core logic & utilities
 │   ├── headstone-store.ts       # Zustand state management
 │   ├── headstone-constants.ts   # Configuration constants
 │   ├── scene-overlay-store.ts   # Overlay state
-│   └── db.ts                    # Mock data layer
+│   ├── svg-generator.ts         # SVG rendering for saved designs
+│   └── db.ts                    # Data layer
 ├── public/                      # Static assets
 │   ├── textures/                # Material textures
-│   ├── shapes/                  # SVG shapes
+│   ├── shapes/                  # SVG headstone shapes
+│   │   └── motifs/              # Decorative motif SVGs
+│   ├── ml/                      # Saved designs database
+│   │   ├── bronze-plaque/       # Bronze plaque designs
+│   │   ├── forevershining/      # Forever Shining designs
+│   │   └── headstonesdesigner/  # Headstone designer designs
 │   └── additions/               # 3D models (.glb)
+├── scripts/                     # Utility scripts
+│   ├── crop-screenshots.js      # Auto-crop design screenshots
+│   └── generate-screenshot-metadata.js # Generate crop metadata
+├── legacy_extracted/            # Legacy DYO codebase reference
 └── styles/                      # Global styles
 ```
 
@@ -262,10 +310,12 @@ This is a proprietary application. For bugs or feature requests, please contact 
 ## Scripts
 
 ```sh
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm prettier     # Format code
+pnpm dev                    # Start development server
+pnpm build                  # Build for production
+pnpm start                  # Start production server
+pnpm prettier               # Format code
+node scripts/crop-screenshots.js              # Crop design screenshots
+node scripts/generate-screenshot-metadata.js  # Generate crop metadata
 ```
 
 ## Support & Contact
