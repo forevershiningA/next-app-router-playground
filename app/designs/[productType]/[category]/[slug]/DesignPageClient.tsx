@@ -1868,8 +1868,8 @@ export default function DesignPageClient({
     
     // Mapping from old texture paths to new material image filenames
     const textureMapping: Record<string, string> = {
-      'forever2/l/17.jpg': 'Glory-Black-1.jpg', // Glory Gold Spots
-      'forever2/l/18.jpg': 'Glory-Black-2.jpg', // Glory Black
+      'forever2/l/17.jpg': 'Glory-Black-1.webp', // Glory Gold Spots
+      'forever2/l/18.jpg': 'Glory-Black-2.webp', // Glory Black
     };
     
     // Try to match the texture path with our mapping
@@ -1892,7 +1892,7 @@ export default function DesignPageClient({
     const filename = savedTexturePath.split('/').pop();
     if (filename) {
       // Remove -TILE-900-X-900 or -600-x-600 suffix if present
-      const cleanFilename = filename.replace(/(-TILE)?-\d+-[xX]-\d+/i, '');
+      const cleanFilename = filename.replace(/(-TILE)?-\d+-[xX]-\d+/i, '').replace(/\.jpg$/i, '.webp');
       return `/textures/forever/l/${cleanFilename}`;
     }
     
@@ -2417,8 +2417,8 @@ export default function DesignPageClient({
     
     // Mapping from old texture paths to new material image filenames
     const textureMapping: Record<string, string> = {
-      'forever2/l/17.jpg': 'Glory-Black-1.jpg', // Glory Gold Spots
-      'forever2/l/18.jpg': 'Glory-Black-2.jpg', // Glory Black
+      'forever2/l/17.jpg': 'Glory-Black-1.webp', // Glory Gold Spots
+      'forever2/l/18.jpg': 'Glory-Black-2.webp', // Glory Black
     };
     
     // Try to match the texture path with our mapping
@@ -2442,7 +2442,7 @@ export default function DesignPageClient({
     // Fallback: try to extract any filename and use it
     const filename = savedTexturePath.split('/').pop();
     if (filename) {
-      const cleanFilename = filename.replace(/-TILE-\d+-X-\d+/i, '');
+      const cleanFilename = filename.replace(/-TILE-\d+-X-\d+/i, '').replace(/\.jpg$/i, '.webp');
       const result = `/textures/forever/l/${cleanFilename}`;
       logger.log('🔍 Base texture (fallback):', { savedTexturePath, filename, cleanFilename, result });
       return result;
