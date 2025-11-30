@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coordinate System Test - Design 1725769905504</title>
+    <style>
+        body { 
+            margin: 20px; 
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .svg-container {
+            background: white;
+            padding: 20px;
+            border: 2px solid #333;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .info {
+            background: #e8f4f8;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #0066cc;
+        }
+        svg {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Coordinate System Test: Curved Gable Design</h1>
+    
+    <div class="info">
+        <strong>Design Data:</strong><br>
+        - Viewport (init_width/height): 707 x 476px (what user saw in browser)<br>
+        - <strong>Screenshot (actual canvas): 1066 x 1078px</strong><br>
+        - DPR: 2.3249998092651367<br>
+        - Headstone: 609.6 x 609.6 (appears to be in pixels)<br>
+        - <strong>IMPORTANT: Saved coordinates are relative to canvas center (533, 539)</strong><br>
+        - <strong>Text Y coordinate = vertical CENTER of text (use dominant-baseline="middle")</strong><br>
+    </div>
+
+    <div class="container">
+        <!-- Approach 1: Raw coordinates with SCREENSHOT dimensions - ALL ELEMENTS -->
+        <div class="svg-container">
+            <h2>✅ CORRECT: Raw Coords + Screenshot Canvas (1066x1078) - COMPLETE DESIGN</h2>
+            <div class="info">
+                Uses screenshot dimensions as canvas, coordinates as-is, centered viewBox<br>
+                <strong>Design 1725769905504 - ALL 8 Inscriptions + 8 Motifs</strong>
+            </div>
+            <svg width="533" height="539" viewBox="-533 -539 1066 1078" style="background: #ddd;">
+                <!-- Definitions (patterns, textures) -->
+                <defs>
+                  <pattern id="graniteTexture" patternUnits="userSpaceOnUse" width="520" height="520">
+                    <image href="public/textures/forever/l/G633.jpg" x="0" y="0" width="520" height="520"/>
+                  </pattern>
+                </defs>
+                
+                <!-- Canvas center point at 0,0 -->
+                <circle cx="0" cy="0" r="8" fill="red"/>
+                <text x="0" y="-20" font-size="12" fill="red" text-anchor="middle">CENTER (0,0)</text>
+                
+                <!-- Canvas boundary -->
+                <rect x="-533" y="-539" width="1066" height="1078" fill="none" stroke="orange" stroke-width="2" stroke-dasharray="5,5"/>
+                
+                <!-- Headstone shape (Curved Gable) - correct pixel sizing based on mm-to-px ratio -->
+                <!-- Base width: 700mm = canvas width 1066px (100% width)
+                     Scale factor: 1066 / 700 = 1.523 px/mm
+                     Headstone width: 609.6mm × 1.523 = 928.3px
+                     Headstone height: 609.6mm × 1.523 = 928.3px
+                     Shape SVG viewBox="0 0 400.05 400" 
+                     Scale to fit: 928.3 / 400 = 2.321
+                     Position: center horizontally at (-928.3/2 = -464.15), top at -539 -->
+                <g transform="translate(-464.15, -539) scale(2.321)">
+                  <path fill="url(#graniteTexture)" stroke="blue" stroke-width="0.9" 
+                        d="M400 99.7 L400 400 400.05 400 400.05 400 0 400 0 99.7 72.75 83.05 82.85 64.1 95.65 46.9 111 31.95 128.45 19.45 147.65 9.85 168.05 3.35 189.35 0 210.75 0 231.95 3.35 252.35 9.85 271.55 19.45 289 31.95 304.4 46.9 317.2 64.1 327.35 83.05 400 99.7"/>
+                </g>
+                <text x="0" y="-320" font-size="10" fill="blue" text-anchor="middle">Curved Gable (609.6mm = 928.3px)</text>
+                <text x="0" y="465" font-size="10" fill="gray" text-anchor="middle">Base area (700mm = 1066px, height 100px)</text>
+                
+                <!-- ALL INSCRIPTIONS (8 total) -->
+                
+                <!-- 1. PINTO (surname) -->
+                <circle cx="2.89" cy="-262.28" r="5" fill="green"/>
+                <text x="2.89" y="-262.28" font-size="115.57" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">PINTO</text>
+                
+                <!-- 2. May Heaven's eternal happiness be thine. (verse) -->
+                <circle cx="9.62" cy="-162.76" r="3" fill="green"/>
+                <text x="9.62" y="-162.76" font-size="39.54" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">May Heaven's eternal happiness be thine.</text>
+                
+                <!-- 3. JOHN TIMOTHY (left person) -->
+                <circle cx="-283.60" cy="55.68" r="3" fill="green"/>
+                <text x="-283.60" y="55.68" font-size="33.45" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">JOHN TIMOTHY</text>
+                
+                <!-- 4. MAY 13, 1927 (left birth date) -->
+                <circle cx="-297.79" cy="90.47" r="2" fill="green"/>
+                <text x="-297.79" y="90.47" font-size="27.37" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">MAY 13, 1927</text>
+                
+                <!-- 5. FEB 2, 2024 (left death date) -->
+                <circle cx="-293.06" cy="119.94" r="2" fill="green"/>
+                <text x="-293.06" y="119.94" font-size="27.37" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">FEB 2, 2024</text>
+                
+                <!-- 6. TERESA ISABELLA (right person) -->
+                <circle cx="231.02" cy="48.79" r="3" fill="green"/>
+                <text x="231.02" y="48.79" font-size="38.02" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">TERESA ISABELLA</text>
+                
+                <!-- 7. NEE SALDANHA (maiden name) -->
+                <circle cx="224.13" cy="95.41" r="2" fill="green"/>
+                <text x="224.13" y="95.41" font-size="33.45" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">NEE SALDANHA</text>
+                
+                <!-- 8. OCT 2, 1933 (right birth date) -->
+                <circle cx="214.91" cy="131.24" r="2" fill="green"/>
+                <text x="214.91" y="131.24" font-size="27.37" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">OCT 2, 1933</text>
+                
+                <!-- 9. SEPT 18, 2022 (right death date) -->
+                <circle cx="217.24" cy="157.02" r="2" fill="green"/>
+                <text x="217.24" y="157.02" font-size="27.37" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">SEPT 18, 2022</text>
+                
+                <!-- ALL MOTIFS (8 total) - actual SVG images with correct sizing and rotation -->
+                
+                <!-- Motif 1: itemID 9 (1_155_13) at x:-328.10, y:301.98, height:51, ratio:0.1346 (h/w) -->
+                <g>
+                  <circle cx="-328.10" cy="301.98" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = height / ratio = 51 / 0.1346 ≈ 379 -->
+                  <image href="public/shapes/motifs/1_155_13.svg" 
+                         x="-517.6" y="276.48" 
+                         width="379" height="51" 
+                         preserveAspectRatio="xMidYMid meet"/>
+                  <text x="-328.10" y="333" font-size="8" fill="purple" text-anchor="middle">M1(9)</text>
+                </g>
+                
+                <!-- Motif 2: itemID 10 (1_154_15) at x:-86.17, y:-382.74, height:91, ratio:0.0981 (h/w), rotation:73 -->
+                <g transform="rotate(73, -86.17, -382.74)">
+                  <circle cx="-86.17" cy="-382.74" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 91 / 0.0981 ≈ 928 -->
+                  <image href="public/shapes/motifs/1_154_15.svg" 
+                         x="-550.17" y="-428.24" 
+                         width="928" height="91" 
+                         preserveAspectRatio="xMidYMid meet"/>
+                  <text x="-86.17" y="-433" font-size="8" fill="purple" text-anchor="middle">M2(10)r73</text>
+                </g>
+                
+                <!-- Motif 3: itemID 11 (1_184_13) LARGE CENTER at x:-6.73, y:47.24, height:181, ratio:0.1976 (h/w) -->
+                <g>
+                  <circle cx="-6.73" cy="47.24" r="4" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 181 / 0.1976 ≈ 916 -->
+                  <image href="public/shapes/motifs/1_184_13.svg" 
+                         x="-464.73" y="-43.26" 
+                         width="916" height="181" 
+                         preserveAspectRatio="xMidYMid meet"/>
+                  <text x="-6.73" y="143" font-size="8" fill="purple" text-anchor="middle">M3(11)large</text>
+                </g>
+                
+                <!-- Motif 4: itemID 13 (1_129_03) at x:-202.16, y:-344.35, height:45, ratio:0.0505 (h/w), flipx:-1 -->
+                <g>
+                  <circle cx="-202.16" cy="-344.35" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 45 / 0.0505 ≈ 891, then flip X -->
+                  <image href="public/shapes/motifs/1_129_03.svg" 
+                         x="-647.66" y="-366.85" 
+                         width="891" height="45" 
+                         preserveAspectRatio="xMidYMid meet"
+                         transform="scale(-1, 1) translate(-891, 0)"/>
+                  <text x="-202.16" y="-371" font-size="8" fill="purple" text-anchor="middle">M4(13)fx</text>
+                </g>
+                
+                <!-- Motif 5: itemID 14 (1_129_03) at x:170.98, y:-351.56, height:44, ratio:0.0494 (h/w) -->
+                <g>
+                  <circle cx="170.98" cy="-351.56" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 44 / 0.0494 ≈ 891 -->
+                  <image href="public/shapes/motifs/1_129_03.svg" 
+                         x="-274.52" y="-373.56" 
+                         width="891" height="44" 
+                         preserveAspectRatio="xMidYMid meet"/>
+                  <text x="170.98" y="-378" font-size="8" fill="purple" text-anchor="middle">M5(14)</text>
+                </g>
+                
+                <!-- Motif 6: itemID 16 (1_016_05) at x:265.66, y:278.50, height:53, ratio:0.0757 (h/w) -->
+                <g>
+                  <circle cx="265.66" cy="278.50" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 53 / 0.0757 ≈ 700 -->
+                  <image href="public/shapes/motifs/1_016_05.svg" 
+                         x="-84.34" y="252" 
+                         width="700" height="53" 
+                         preserveAspectRatio="xMidYMid meet"/>
+                  <text x="265.66" y="311" font-size="8" fill="purple" text-anchor="middle">M6(16)</text>
+                </g>
+                
+                <!-- Motif 7: itemID 17 (1_154_15) at x:43.95, y:-378.01, height:92, ratio:0.0991 (h/w), rotation:100, flipy:-1 -->
+                <g transform="rotate(100, 43.95, -378.01)">
+                  <circle cx="43.95" cy="-378.01" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 92 / 0.0991 ≈ 928, then flip Y -->
+                  <image href="public/shapes/motifs/1_154_15.svg" 
+                         x="-420.05" y="-424.01" 
+                         width="928" height="92" 
+                         preserveAspectRatio="xMidYMid meet"
+                         transform="scale(1, -1) translate(0, -92)"/>
+                  <text x="43.95" y="-429" font-size="8" fill="purple" text-anchor="middle">M7(17)r100fy</text>
+                </g>
+                
+                <!-- Motif 8: itemID 18 (cross_001) at x:204.02, y:271.61, height:51, ratio:0.0854 (h/w) -->
+                <g>
+                  <circle cx="204.02" cy="271.61" r="3" fill="rgba(255,0,255,0.3)"/>
+                  <!-- width = 51 / 0.0854 ≈ 597 -->
+                  <image href="public/shapes/motifs/cross_001.svg" 
+                         x="-94.48" y="246.11" 
+                         width="597" height="51" 
+                         preserveAspectRatio="xMidYMid meet"/>
+                  <text x="204.02" y="303" font-size="8" fill="purple" text-anchor="middle">M8(18)cross</text>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Approach 2: OLD WRONG APPROACH - Using init_width/height -->
+        <div class="svg-container">
+            <h2>❌ WRONG: Using Viewport Dimensions (707x476)</h2>
+            <div class="info">
+                This was the wrong approach - using viewport dims instead of canvas dims
+            </div>
+            <svg width="353.5" height="238" viewBox="-353.5 -238 707 476" style="background: #ddd;">
+                <!-- Canvas center point at 0,0 -->
+                <circle cx="0" cy="0" r="5" fill="red"/>
+                <text x="0" y="-10" font-size="12" fill="red" text-anchor="middle">CENTER (0,0)</text>
+                
+                <!-- Canvas boundary -->
+                <rect x="-353.5" y="-238" width="707" height="476" fill="none" stroke="orange" stroke-width="2" stroke-dasharray="5,5"/>
+                
+                <!-- PINTO at RAW coords - goes outside canvas! -->
+                <circle cx="2.89" cy="-262.28" r="5" fill="green"/>
+                <text x="2.89" y="-262.28" font-size="115.57" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">PINTO</text>
+                <line x1="-100" y1="-262.28" x2="100" y2="-262.28" stroke="green" stroke-width="1" stroke-dasharray="2,2"/>
+                
+                <!-- TERESA -->
+                <circle cx="231.02" cy="48.79" r="3" fill="green"/>
+                <text x="231.02" y="48.79" font-size="38.02" font-family="Garamond" text-anchor="middle" dominant-baseline="middle" fill="black">TERESA</text>
+                
+                <!-- Cross: way off bottom -->
+                <circle cx="204.02" cy="271.61" r="8" fill="purple"/>
+                <text x="204.02" y="290" font-size="10" fill="purple" text-anchor="middle">Cross (off canvas!)</text>
+                
+                <!-- Headstone -->
+                <rect x="-304.8" y="-304.8" width="609.6" height="609.6" fill="none" stroke="blue" stroke-width="2"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="info">
+        <strong>Analysis - Design 1725769905504 (Curved Gable):</strong><br>
+        <strong>✅ CORRECT APPROACH:</strong> The screenshot dimensions (1066×1078) represent the ACTUAL canvas size.<br>
+        Coordinates were saved relative to this canvas center (533, 539), so we use them as-is (NO DPR division needed).<br><br>
+        
+        <strong>Design Elements:</strong><br>
+        - Base: 700×100 mm → 1066×? px (100% canvas width)<br>
+        - MM to PX scale: 1066 / 700 = 1.523 px/mm<br>
+        - Headstone: 609.6×609.6 mm → 928.3×928.3 px (using scale factor)<br>
+        - Canvas (screenshot): 1066×1078 px (what coordinates reference)<br>
+        - Viewport (authoring): 707×476 px (what user saw during design)<br>
+        - Available height for headstone: 978 px (1078 - 100 base)<br>
+        - DPR: 2.3249998092651367<br>
+        - Shape: Curved Gable SVG (viewBox: 0 0 400.05 400, scaled 2.321x to 928.3×928.3px)<br>
+        - Texture: G633 granite from public/textures/forever/l/ (520×520 tiles)<br>
+        - <strong>9 Inscriptions</strong> (PINTO, verse, 2 names, 4 dates, maiden name)<br>
+        - <strong>8 Motifs</strong> (actual SVG images with rotation/flip transforms)<br><br>
+        
+        <strong>Motif Sizing Formula:</strong><br>
+        - JSON has "height" (display height) and "ratio" (height/width aspect ratio)<br>
+        - Width = height / ratio (e.g., M1: width = 51 / 0.1346 ≈ 379px)<br>
+        - Position (x,y) = CENTER of motif (same as inscriptions)<br>
+        - Image positioned at (x - width/2, y - height/2) to center it<br>
+        - Rotation: applied as group transform around center point (x, y)<br>
+        - Flip: flipx:-1 = horizontal flip via scale(-1,1), flipy:-1 = vertical flip via scale(1,-1)<br>
+        - Example M1: x=-328.10, y=301.98, h=51, ratio=0.1346 → w=379 → img at x=-517.6, y=276.48<br><br>
+        
+        <strong>❌ WRONG APPROACH:</strong> Using viewport dimensions (707×476) makes elements go outside canvas bounds.<br>
+        Notice how many motifs would be cut off (y &lt; -238 or y &gt; 238) if we used viewport height.<br><br>
+        
+        <strong>Correct SVG Generation Formula:</strong><br>
+        - Get screenshot dimensions (e.g., 1066 × 1078)<br>
+        - ViewBox: centered at (0, 0) with screenshot dimensions: "-533 -539 1066 1078"<br>
+        - Element positions: use RAW coordinates (saved_x, saved_y) - NO division needed!<br>
+        - Font sizes: use RAW font size from saved data<br>
+        - Text alignment: text-anchor="middle" dominant-baseline="middle"<br>
+        - Display size: HALF of canvas (533×539) for 2:1 scaling ratio<br>
+        - Scale the entire SVG if you want to display at different size<br><br>
+        
+        <strong>Key Observations:</strong><br>
+        - Top motifs (M2, M4, M5, M7) have y &lt; -344 (well outside viewport -238 limit)<br>
+        - Bottom motifs (M1, M6, M8) have y &gt; 271 (well outside viewport 238 limit)<br>
+        - This proves coordinates reference the SCREENSHOT canvas, not the viewport!<br>
+        - Text Y = vertical CENTER of text (use dominant-baseline="middle")<br>
+    </div>
+
+</body>
+</html>

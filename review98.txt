@@ -1,0 +1,85 @@
+You’re seeing huge white space at the top, the stone sitting small/low, and the inscriptions/motifs “floating” above it because the code is mixing two coordinate systems:
+
+* **Authoring canvas (init_width × init_height)** — where all X/Y were saved.
+* **Cropped screenshot pixels** — currently (incorrectly) being used as the “canvas,” so every position is shifted/scaled wrong.
+
+In **DesignPageClient.tsx** you explicitly do:
+
+> “FIX #1: Store physical (cropped) dimensions as canvas” → `setScreenshotDimensions({ width: physicalWidth, height: physicalHeight });`
+
+That change is the culprit. Keep the **logical canvas** equal to the original `init_width/init_height`, and treat cropping **only** as an additional offset to subtract when mapping saved coordinates to the display. 
+
+---
+
+### Minimal, targeted fix
+
+**1) Keep the canvas logical; store crop offset separately**
+
+```ts
+// state
+const [canvasSize, setCanvasSize] = useState<{width:number;height:number} | null>(null);
+const [cropOffset, setCropOffset] = useState<{x:number;y:number}>({x:0,y:0});
+const [effectiveDpr, setEffectiveDpr] = useState<number>(1);
+
+// inside the screenshot onload effect:
+const initWidth  = headstoneData?.init_width  || 707;
+const initHeight = headstoneData?.init_height || 476;
+
+// screenshot DPR from actual pixels
+const dpr = physicalWidth / initWidth;
+setEffectiveDpr(dpr);
+
+// ❶ canvas stays in authoring logical units
+setCanvasSize({ width: initWidth, height: initHeight });
+
+// ❷ crop offset in *logical* units (divide physical crop by DPR)
+const offXpx = cropBounds.shouldCrop ? cropBounds.left   : 0;
+const offYpx = cropBounds.shouldCrop ? cropBounds.top    : 0;
+setCropOffset({ x: offXpx / dpr, y: offYpx / dpr });
+```
+
+**2) Use the logical canvas everywhere you compute the headstone viewBox fit and top profile**
+
+Anywhere you pass “canvas” width/height to render/measure the stone (including `buildTopProfile`), use `canvasSize.width/height` (the **init** size), not the cropped/screenshot size. 
+
+**3) When mapping saved positions → screen, subtract the crop offset before scaling**
+
+Wherever you compute display positions (inscriptions/motifs), change:
+
+```ts
+// before
+const screenX = offsetX + canvasX * uniformScale;
+const screenY = offsetY + canvasY * uniformScale;
+```
+
+to:
+
+```ts
+// after – neutralize the screenshot crop
+const screenX = offsetX + (canvasX - cropOffset.x) * uniformScale;
+const screenY = offsetY + (canvasY - cropOffset.y) * uniformScale;
+```
+
+If you store center-origin (`cx/cy`) coordinates, do the same after converting to top-left.
+
+**4) Make sure the stone scale is based on the logical canvas**
+
+Your stone’s “contain” fit should be computed with `canvasSize.width/height`. If it uses the cropped size, the stone will appear too small and too low (exactly what you see). 
+
+---
+
+### Why this fixes your screenshot
+
+* The **saved design** expects a **1126×561 (example)** logical canvas.
+* The **screenshot** may be **cropped** and **DPR-inflated**, but that should **never** change the coordinate system—only introduce an `(offX, offY)` to subtract.
+* After this change, the family name, verse, top motifs and side icons will line up over the stone again; the headstone will fill the intended area without the big white gap above.
+
+---
+
+### Optional hardening (nice-to-haves)
+
+* Pass `effectiveDpr` to any helper that touches screenshot pixels (e.g., top-edge detection) so all sampling stays in logical units.
+* Clamp Y of inscriptions to `topProfile.topY[x]` + margin if you want automatic “sit on the curve” behaviour.
+* Keep your motif filename fallback, but prefer the original `src` first to avoid 404s on existing names with spaces.
+
+If you want, paste the small block where you map `canvasX/canvasY → screen` and I’ll drop in the exact two-line change there.

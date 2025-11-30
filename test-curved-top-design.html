@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design 1654222051474 - Curved Top Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .svg-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Design 1654222051474 - Curved Top (Mobile iPhone DPR=3)</h1>
+        
+        <div class="info">
+            <strong>Design Info:</strong><br>
+            - Design ID: 1654222051474<br>
+            - Shape: Curved Top (Traditional Engraved White Carrara Marble)<br>
+            - Device: Mobile (iPhone), Portrait orientation<br>
+            - Viewport: 414×660 px<br>
+            - DPR: 3<br>
+            - Screenshot (Canvas): 1212×1212 px (ACTUAL from screenshot)<br>
+            - Base: 700mm = 1212px (100% width)<br>
+            - MM to PX Scale: 1.731 px/mm<br>
+            - Headstone: 600×600 mm = 1038.6×1038.6 px<br>
+            - Elements: 12 inscriptions (gold gilding), 1 motif<br>
+        </div>
+
+        <div class="svg-container">
+            <h2>✅ CORRECT: Raw Coords + Screenshot Canvas (1212×1212)</h2>
+            <div class="info">
+                Uses screenshot dimensions as canvas, coordinates as-is, centered viewBox<br>
+                <strong>Design: "GEORGE & SADIE BOLTON" - For God So Loved the World (John 3:16)</strong>
+            </div>
+            <svg width="606" height="606" viewBox="-606 -606 1212 1212" style="background: #ddd;">
+                <!-- Definitions (patterns, textures) -->
+                <defs>
+                  <pattern id="marbleTexture" patternUnits="userSpaceOnUse" width="520" height="520">
+                    <image href="public/textures/forever/l/White-Carrara.jpg" x="0" y="0" width="520" height="520"/>
+                  </pattern>
+                </defs>
+                
+                <!-- Canvas center point at 0,0 -->
+                <circle cx="0" cy="0" r="8" fill="red"/>
+                <text x="0" y="-20" font-size="14" fill="red" text-anchor="middle">CENTER (0,0)</text>
+                
+                <!-- Canvas boundary -->
+                <rect x="-606" y="-606" width="1212" height="1212" fill="none" stroke="orange" stroke-width="2" stroke-dasharray="5,5"/>
+                
+                <!-- Headstone shape (Curved Top) - correct pixel sizing based on mm-to-px ratio -->
+                <!-- Base width: 700mm = canvas width 1212px (100% width)
+                     Scale factor: 1212 / 700 = 1.731 px/mm
+                     Headstone width: 600mm × 1.731 = 1038.6px
+                     Headstone height: 600mm × 1.731 = 1038.6px
+                     Shape SVG viewBox="0 0 400 400" 
+                     Scale to fit: 1038.6 / 400 = 2.597
+                     Position: center horizontally at (-1038.6/2 = -519.3), top at -606 -->
+                <g transform="translate(-519.3, -606) scale(2.597)">
+                  <path fill="url(#marbleTexture)" stroke="blue" stroke-width="0.6" 
+                        d="M370.3 46.75 L400 66.65 400 400 400.05 400 400.05 400 0 400 0 66.65 29.7 46.75 61.3 30.15 94.6 17.05 129.05 7.6 164.35 1.85 199.4 0 235.7 1.85 271 7.6 305.4 17.05 338.65 30.15 370.3 46.75"/>
+                </g>
+                <text x="0" y="-540" font-size="12" fill="blue" text-anchor="middle">Curved Top (600mm = 1038.6px)</text>
+                <text x="0" y="560" font-size="12" fill="gray" text-anchor="middle">Base area (700mm = 1212px, height 100mm)</text>
+                
+                <!-- ALL INSCRIPTIONS (12 total) - Gold Gilding #c99d44 -->
+                
+                <!-- 1. In Loving Memory -->
+                <text x="-4" y="-330" font-size="129.74" font-family="Dobkin" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">In Loving Memory</text>
+                
+                <!-- 2. Safe in the Loving Arms of Jesus -->
+                <text x="3" y="-250" font-size="60.55" font-family="Adorable" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">Safe in the Loving Arms of Jesus</text>
+                
+                <!-- 3. GEORGE FREDERICK BOLTON -->
+                <text x="12" y="-124" font-size="53.63" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">GEORGE FREDERICK BOLTON</text>
+                
+                <!-- 4. 1909 - 1970 (Aged 61 Years) -->
+                <text x="18" y="-65" font-size="44.98" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">1909 - 1970 (Aged 61 Years)</text>
+                
+                <!-- 5. SADIE VIDA BOLTON (nee BROWNIE) -->
+                <text x="6" y="46" font-size="53.63" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">SADIE VIDA BOLTON (nee BROWNIE)</text>
+                
+                <!-- 6. 1911 - 2007 (Aged 96 Years) -->
+                <text x="18" y="107" font-size="44.98" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">1911 - 2007 (Aged 96 Years)</text>
+                
+                <!-- 7. 19 (heart symbol between numbers) -->
+                <text x="0" y="120" font-size="39.79" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">19</text>
+                
+                <!-- 8. Beloved Parents of Robert and Kerrie -->
+                <text x="0" y="214" font-size="60.55" font-family="Adorable" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">Beloved Parents of Robert and Kerrie</text>
+                
+                <!-- 9-12. Bible Verse (John 3:16) - 4 lines -->
+                <text x="138" y="333.67" font-size="39.79" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">"For God so loved the world, that</text>
+                <text x="172" y="372.67" font-size="39.79" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">he gave his only Son, that whoever</text>
+                <text x="150" y="417.67" font-size="39.79" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">believes in him should not perish</text>
+                <text x="138" y="465.67" font-size="39.79" font-family="Arial" fill="#c99d44" text-anchor="middle" dominant-baseline="middle">but have eternal life." John 3:16</text>
+                
+                <!-- MOTIF (1 total) - Gold Gilding, flipped -->
+                <!-- Motif: 2_152_23 at x:-327, y:399, height:100, ratio:0.1357, flipx:-1 -->
+                <g>
+                  <circle cx="-327" cy="399" r="5" fill="rgba(201,157,68,0.3)"/>
+                  <!-- width = 100 / 0.1357 ≈ 737 -->
+                  <image href="public/shapes/motifs/2_152_23.svg" 
+                         x="-695.5" y="349" 
+                         width="737" height="100" 
+                         preserveAspectRatio="xMidYMid meet"
+                         transform="scale(-1, 1) translate(-737, 0)"/>
+                  <text x="-327" y="510" font-size="10" fill="#c99d44" text-anchor="middle">Motif(flipX)</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <div class="info">
+        <strong>Analysis - Design 1654222051474 (Curved Top):</strong><br>
+        <strong>✅ CORRECT APPROACH:</strong> The screenshot dimensions (1242×1980) represent the ACTUAL canvas size.<br>
+        Coordinates were saved relative to this canvas center (621, 990), so we use them as-is (NO DPR division needed).<br><br>
+        
+        <strong>Design Elements:</strong><br>
+        - Base: 700×100 mm → 1212×? px (100% canvas width)<br>
+        - MM to PX scale: 1212 / 700 = 1.731 px/mm<br>
+        - Headstone: 600×600 mm → 1038.6×1038.6 px (using scale factor)<br>
+        - Canvas (screenshot): 1212×1212 px (SQUARE, what coordinates reference)<br>
+        - Viewport (authoring): 414×660 px (what user saw during design)<br>
+        - DPR: ~2.93 (1212 / 414 ≈ 2.93, not exactly 3)<br>
+        - Shape: Curved Top SVG (viewBox: 0 0 400 400, scaled 2.597x to 1038.6px)<br>
+        - Texture: White Carrara marble (520×520 tiles)<br>
+        - Color: Gold Gilding (#c99d44) on white marble<br>
+        - <strong>12 Inscriptions</strong> (gold on white marble)<br>
+        - <strong>1 Motif</strong> (gold, horizontally flipped)<br><br>
+        
+        <strong>Key Features:</strong><br>
+        - Traditional engraved (not laser etched)<br>
+        - Gold gilding color (#c99d44) for all text and motifs<br>
+        - White Carrara marble background texture<br>
+        - Bible verse John 3:16 (4 lines)<br>
+        - Names: George Frederick Bolton & Sadie Vida Bolton<br>
+        - Memorial for parents (Robert and Kerrie)<br>
+        - One decorative motif (flipped horizontally)<br><br>
+        
+        <strong>Coordinate System Proof:</strong><br>
+        - DPR: 3 (highest resolution of all test designs)<br>
+        - Canvas: 1242×1980 px (largest canvas so far)<br>
+        - Same approach works: Base width establishes MM→PX scale<br>
+        - All coordinates are RAW canvas coordinates (no DPR division)<br>
+        - Headstone is 85.7% of canvas width (1064.6 / 1242 = 0.857)<br>
+    </div>
+
+</body>
+</html>

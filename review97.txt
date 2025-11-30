@@ -1,0 +1,84 @@
+Short answer: not yet. A few key spots in **DesignPageClient.tsx** still fight the “screenshot-canvas + mm/px” model. Here’s the minimal, surgical fix set.
+
+### 1) Treat the screenshot (cropped if needed) as the canvas
+
+Right now you set `screenshotDimensions` to `init_width/init_height` from JSON. That’s the authoring viewport, not the actual canvas. Save the **cropped physical** size instead:
+
+```ts
+// AFTER you compute physicalWidth/physicalHeight …
+setScreenshotDimensions({ width: physicalWidth, height: physicalHeight });
+```
+
+(You currently store `{ width: initWidth, height: initHeight }` — flip this to physical W/H so all downstream math uses the real canvas. )
+
+### 2) Scale and lay out from the screenshot canvas
+
+In your `scalingFactors` memo, seed the “truth” from `screenshotDimensions` (when available), not `init_width/init_height`:
+
+```ts
+const initW = screenshotDimensions?.width  ?? headstoneData?.init_width  ?? 800;
+const initH = screenshotDimensions?.height ?? headstoneData?.init_height ?? 800;
+```
+
+This makes the uniform mapping consistent with the proven model in your test page (canvas == screenshot).  
+
+### 3) Stop dividing saved coords by DPR
+
+Coordinates are saved at canvas scale. Remove the DPR branch:
+
+```ts
+// Before:
+const cx = usesPhysical ? rawX / savedDpr : rawX;
+const cy = usesPhysical ? rawY / savedDpr : rawY;
+
+// After:
+const cx = rawX;
+const cy = rawY;
+```
+
+(“NO DPR division” per your test doc; this also aligns with the universal generator.  )
+
+### 4) Use motif height + ratio correctly (ignore intrinsic SVG size)
+
+Current motif size uses the loaded SVG viewBox dims; that’s wrong. JSON gives `height` and `ratio = height/width`. So:
+
+```ts
+// Replace the whole "dims, aspect, widthPx" block with:
+const ratio = Number(motif.ratio ?? 1);        // height/width
+const heightAuth = Number(motif.height ?? 80); // authoring px
+const widthAuth  = heightAuth / (ratio || 1);  // from ratio
+
+// map authoring → display:
+const widthPx  = widthAuth  * sx;  // sx = uniformScale
+const heightPx = heightAuth * sy;
+```
+
+This matches the formula you documented (width = height / ratio) and fixes top-band sizing. 
+
+### 5) Centered SVG viewBox to match center-origin coordinates
+
+When you overwrite the shape `<svg>` viewBox, set it to a **centered** viewBox so the stone aligns with center-origin overlay coordinates:
+
+```ts
+if (screenshotDimensions) {
+  const { width: initW, height: initH } = screenshotDimensions;
+  svg.setAttribute('viewBox', `${-initW/2} ${-initH/2} ${initW} ${initH}`);
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+}
+```
+
+(Your test file and generator both assume center-origin. You currently set `0 0 …`, which mismatches overlay math.  )
+
+### 6) Base mm→px uses displayed tablet size (keep) but depend on (2)
+
+Your base mapping is already mm→px from the displayed tablet width/height; it will become correct once (2) makes `displayWidth/displayHeight` derive from the screenshot canvas. No further change required there. 
+
+---
+
+#### Why this works
+
+* It unifies everything on one coordinate truth: **the screenshot canvas** (cropped size).
+* It removes DPR heuristics that were re-scaling already-scaled data.
+* It respects your own spec: **height in mm / height in px** ⇒ a single mm/px factor to scale physicals, while **positions** are raw canvas coords. 
+
+If you’d like, I can paste fully patched snippets for each block, but applying the six edits above will snap inscriptions, motifs, the curved-top snapping logic, and the base into agreement with the generator and your `test-coordinate-approach.html`.

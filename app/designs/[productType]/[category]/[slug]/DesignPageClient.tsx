@@ -1164,73 +1164,73 @@ export default function DesignPageClient({
     setIsLocalhost(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
   }, []);
   
-  // Analyze screenshot for white space and calculate crop bounds
+  // Load screenshot dimensions from metadata JSON file instead of analyzing image
   useEffect(() => {
-    if (designMetadata.preview) {
-      // Increased threshold to 50% to reduce false positives
-      analyzeImageForCrop(designMetadata.preview, 50)
-        .then(bounds => {
-          setCropBounds(bounds);
-        })
-        .catch(err => {
-          logger.error('Failed to analyze screenshot for cropping:', err);
-        });
-    }
-  }, [designMetadata.preview]);
-  
-  // Load screenshot dimensions - divide by DPR to get logical size and apply crop
-  useEffect(() => {
-    if (designMetadata.preview && designData && cropBounds) {
-      const img = new Image();
-      img.onload = () => {
-        // Get the DPR used when design was created
-        const designDPR = designData.find((item: any) => item.type === 'Headstone')?.dpr || 1;
-        
-        logger.log('📸 Screenshot loading (design 1656040658203 check):', {
-          designId: designMetadata.id,
-          cropBounds: {
-            shouldCrop: cropBounds.shouldCrop,
-            whiteSpace: cropBounds.whiteSpacePercentage.toFixed(2) + '%',
-            original: { width: cropBounds.width, height: cropBounds.height },
-            cropped: { width: cropBounds.croppedWidth, height: cropBounds.croppedHeight }
-          },
-          imageActual: { width: img.width, height: img.height },
-          dpr: designDPR
-        });
-        
-        // Screenshot is captured at physical pixels (init_width × DPR, init_height × DPR)
-        // But we need to work in LOGICAL canvas coordinates (init_width, init_height)
-        // Use cropped dimensions if white space > 50% (threshold increased)
-        const physicalWidth = cropBounds.shouldCrop ? cropBounds.croppedWidth : img.width;
-        const physicalHeight = cropBounds.shouldCrop ? cropBounds.croppedHeight : img.height;
-        
-        // Calculate the ACTUAL DPR from the screenshot
-        // (the screenshot might not match init_width × dpr due to browser constraints)
+    async function loadScreenshotMetadata() {
+      if (!designData) return;
+      
+      try {
         const headstoneData = designData.find((item: any) => item.type === 'Headstone');
         const initWidth = headstoneData?.init_width || 707;
         const initHeight = headstoneData?.init_height || 476;
+        const designDPR = headstoneData?.dpr || 1;
         
-        // Calculate effective DPR from actual screenshot size
-        const effectiveDPR = physicalWidth / initWidth;
+        // Try to load the cropped metadata JSON
+        const metadataPath = designMetadata.preview?.replace(/\.(jpg|jpeg|png)$/i, '_cropped.json');
         
-        logger.log('Screenshot dimensions (with DPR analysis):', {
-          original: { width: img.width, height: img.height },
-          cropped: cropBounds.shouldCrop ? { width: cropBounds.croppedWidth, height: cropBounds.croppedHeight } : 'not needed',
-          physical: { width: physicalWidth, height: physicalHeight },
-          canvas: { width: initWidth, height: initHeight },
-          dpr: { 
-            fromJSON: designDPR,
-            calculated: effectiveDPR.toFixed(4),
-            note: 'Using calculated DPR from actual screenshot size'
+        if (metadataPath) {
+          try {
+            const response = await fetch(metadataPath);
+            if (response.ok) {
+              const metadata = await response.json();
+              
+              logger.log('📸 Screenshot metadata loaded from JSON:', {
+                designId: designMetadata.id,
+                metadata,
+                canvas: { width: initWidth, height: initHeight }
+              });
+              
+              // Set crop bounds from metadata
+              setCropBounds({
+                left: 0,
+                top: 0,
+                right: metadata.cropped.width,
+                bottom: metadata.cropped.height,
+                width: metadata.original.width,
+                height: metadata.original.height,
+                croppedWidth: metadata.cropped.width,
+                croppedHeight: metadata.cropped.height,
+                whiteSpacePercentage: 0,
+                shouldCrop: metadata.wasCropped
+              });
+              
+              // Store the canvas dimensions (logical space for coordinate system)
+              setScreenshotDimensions({ width: initWidth, height: initHeight });
+              return;
+            }
+          } catch (err) {
+            logger.warn('Failed to load metadata JSON, falling back to image analysis:', err);
           }
-        });
+        }
         
-        // Store the canvas dimensions (logical space for coordinate system)
-        setScreenshotDimensions({ width: initWidth, height: initHeight });
-      };
-      img.src = designMetadata.preview;
+        // Fallback: analyze the image if metadata doesn't exist
+        if (designMetadata.preview) {
+          analyzeImageForCrop(designMetadata.preview, 50)
+            .then(bounds => {
+              setCropBounds(bounds);
+              setScreenshotDimensions({ width: initWidth, height: initHeight });
+            })
+            .catch(err => {
+              logger.error('Failed to analyze screenshot for cropping:', err);
+            });
+        }
+      } catch (err) {
+        logger.error('Failed to load screenshot metadata:', err);
+      }
     }
-  }, [designMetadata.preview, designData, cropBounds]);
+    
+    loadScreenshotMetadata();
+  }, [designMetadata.preview, designData]);
   
   // Load name databases for accurate name detection
   const [nameDatabase, setNameDatabase] = useState<{
@@ -1736,8 +1736,32 @@ export default function DesignPageClient({
     const shapeDataFallback = (shapeData || {}) as any;
     
     // Canvas Dimensions (The Workspace)
-    const initW = headstoneData?.init_width || shapeDataFallback.init_width || 800;
-    const initH = headstoneData?.init_height || shapeDataFallback.init_height || 800;
+    // Use cropped screenshot dimensions if available, otherwise fall back to design data
+    let initW = headstoneData?.init_width || shapeDataFallback.init_width || 800;
+    let initH = headstoneData?.init_height || shapeDataFallback.init_height || 800;
+    
+    // Check if design has MM-based motifs (old design format)
+    // Use designData directly since motifData isn't available yet
+    const hasMMMotifs = designData?.some((item: any) => {
+      if (item.type !== 'Motif') return false;
+      const motifHeight = item.height ? Number(item.height) : null;
+      return motifHeight && motifHeight > 10;
+    }) || false;
+    
+    // Override with cropped dimensions ONLY if this is not an MM-based design
+    if (!hasMMMotifs && cropBounds && cropBounds.shouldCrop) {
+      initW = cropBounds.croppedWidth;
+      initH = cropBounds.croppedHeight;
+      logger.log('📐 Using cropped screenshot dimensions:', { width: initW, height: initH });
+    } else if (!hasMMMotifs && cropBounds && !cropBounds.shouldCrop) {
+      // Use original dimensions from metadata if no cropping was needed
+      initW = cropBounds.width;
+      initH = cropBounds.height;
+      logger.log('📐 Using original screenshot dimensions (no crop):', { width: initW, height: initH });
+    } else if (hasMMMotifs) {
+      logger.log('📐 MM-based design detected - using original canvas dimensions from design JSON:', { width: initW, height: initH });
+    }
+    
     const designDpr = headstoneData?.dpr || shapeDataFallback.dpr || 1;
 
     // Headstone Dimensions (The Object inside the workspace)
@@ -1761,20 +1785,18 @@ export default function DesignPageClient({
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const isMobile = viewportWidth < 768;
     
-    // FIXED HEIGHT APPROACH: Always use 500px height for readability
-    const fixedHeight = 500;
-    
-    // Calculate width based on aspect ratio to maintain proportions
-    const aspectRatio = initW / initH;
-    let displayWidth = fixedHeight * aspectRatio;
-    let displayHeight = fixedHeight;
-    
-    // Cap width on desktop to prevent extremely wide designs
+    // Use original screenshot dimensions for display
+    // Cap width on desktop/mobile to fit viewport
     const maxContainerWidth = isMobile ? viewportWidth * 0.92 : 800;
+    
+    let displayWidth = initW;
+    let displayHeight = initH;
+    
+    // Scale down proportionally if width exceeds max
     if (displayWidth > maxContainerWidth) {
-      // Width exceeds max, scale down both dimensions proportionally
+      const scale = maxContainerWidth / displayWidth;
       displayWidth = maxContainerWidth;
-      displayHeight = displayWidth / aspectRatio;
+      displayHeight = initH * scale;
     }
 
     // 4. Calculate Scale
@@ -1834,7 +1856,7 @@ export default function DesignPageClient({
       canvasCropLeft: 0,
       canvasCropTop: 0
     };
-  }, [designData, shapeData]);
+  }, [designData, shapeData, cropBounds]);
 
   const textureData = useMemo(() => {
     if (!designData) return null;
@@ -1877,90 +1899,7 @@ export default function DesignPageClient({
     return savedTexturePath;
   }, [designData]);
 
-  // Generate complete SVG (NEW PRIMARY APPROACH with caching)
-  const [generatedSVG, setGeneratedSVG] = useState<string | null>(null);
-  const [svgGenerationError, setSVGGenerationError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    if (!designData || !screenshotDimensions || !designId) {
-      setGeneratedSVG(null);
-      return;
-    }
-
-    const fetchOrGenerateSVG = async () => {
-      try {
-        logger.log('🎨 Fetching/generating SVG for design:', designId);
-        
-        // Try to fetch cached SVG first
-        const cachedSVGPath = `/ml/forevershining/saved-designs/svg/${getCachePath(designId)}`;
-        
-        try {
-          const response = await fetch(cachedSVGPath);
-          if (response.ok) {
-            const svg = await response.text();
-            logger.log('✅ Using cached SVG from:', cachedSVGPath);
-            setGeneratedSVG(svg);
-            setSVGGenerationError(null);
-            return;
-          }
-        } catch (err) {
-          logger.log('⚠️ No cached SVG found, will generate new one');
-        }
-        
-        // Generate new SVG
-        logger.log('🎨 Generating new SVG...');
-        const { generateDesignSVG } = await import('#/lib/svg-generator');
-        
-        const svg = await generateDesignSVG({
-          designData,
-          initWidth: screenshotDimensions.width,
-          initHeight: screenshotDimensions.height,
-          shapeImagePath: shapeImagePath || undefined,
-          textureData: textureData || undefined,
-          isLaserEtched: productSlug.includes('laser-etched')
-        });
-
-        setGeneratedSVG(svg);
-        setSVGGenerationError(null);
-        logger.log('✅ SVG generation complete, length:', svg.length);
-        
-        // Save to cache (fire and forget)
-        saveSVGToCache(designId, svg);
-        
-      } catch (error) {
-        logger.error('❌ SVG generation failed:', error);
-        setSVGGenerationError(error as Error);
-        setGeneratedSVG(null);
-      }
-    };
-
-    fetchOrGenerateSVG();
-  }, [designData, screenshotDimensions, shapeImagePath, textureData, productSlug, designId]);
-  
-  // Helper: Get cache path for design ID
-  function getCachePath(designId: string): string {
-    const timestamp = parseInt(designId);
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${year}/${month}/${designId}.svg`;
-  }
-  
-  // Helper: Save SVG to cache (client-side request to API)
-  async function saveSVGToCache(designId: string, svg: string): Promise<void> {
-    try {
-      await fetch('/api/cache-svg', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ designId, svg })
-      });
-      logger.log('✅ SVG cached successfully');
-    } catch (error) {
-      logger.error('⚠️ Failed to cache SVG (non-fatal):', error);
-    }
-  }
-
-  // Load and process SVG with texture (FALLBACK for HTML overlay approach)
+  // Load and process SVG with texture
   useEffect(() => {
     logger.log('🔍 SVG useEffect check:', {
       shapeImagePath: !!shapeImagePath,
@@ -2097,15 +2036,83 @@ export default function DesignPageClient({
           // The SVG path coordinates are in the original SVG coordinate system
           svg.setAttribute('width', '100%');
           svg.setAttribute('height', '100%');
-          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); // Maintain aspect ratio, center in container
           
-          // Set viewBox to match authoring canvas dimensions (not SVG's native dimensions)
-          // This ensures coordinates align with inscription/motif positioning
-          if (screenshotDimensions) {
-            const { width: initW, height: initH } = screenshotDimensions;
-            svg.setAttribute('viewBox', `0 0 ${initW} ${initH}`);
-            logger.log(`📐 Set SVG viewBox to authoring canvas: 0 0 ${initW} ${initH}`);
+          // Calculate viewBox Y offset to position shape at top of container
+          // The container aspect ratio may differ from SVG aspect ratio
+          // We need to adjust the viewBox to compensate
+          
+          console.log('🎯 [VIEWBOX FIX v2] Starting viewBox adjustment calculation...', new Date().toISOString());
+          
+          // Parse original viewBox
+          let vbX = 0, vbY = 0, vbW = originalWidth, vbH = originalHeight;
+          if (viewBoxAttr) {
+            const parts = viewBoxAttr.split(' ').map(parseFloat);
+            if (parts.length >= 4) {
+              vbX = parts[0];
+              vbY = parts[1];
+              vbW = parts[2];
+              vbH = parts[3];
+            }
           }
+          
+          console.log('🎯 [VIEWBOX FIX v2] Parsed viewBox:', { vbX, vbY, vbW, vbH });
+          
+          // Calculate the effective viewBox that would fill the container
+          // while maintaining the SVG's aspect ratio
+          // IMPORTANT: Use PHYSICAL screenshot dimensions (1066×1078), not logical canvas (707×476)
+          const actualCanvasWidth = cropBounds.shouldCrop ? cropBounds.croppedWidth : cropBounds.width;
+          const actualCanvasHeight = cropBounds.shouldCrop ? cropBounds.croppedHeight : cropBounds.height;
+          
+          const svgAspect = vbW / vbH;
+          const containerAspect = actualCanvasWidth / actualCanvasHeight;
+          
+          console.log('🎯 [VIEWBOX FIX v2] Using actual screenshot dimensions:', {
+            logical: { width: canvasWidth, height: canvasHeight },
+            actual: { width: actualCanvasWidth, height: actualCanvasHeight },
+            svgAspect: svgAspect.toFixed(3),
+            containerAspect: containerAspect.toFixed(3)
+          });
+          
+          let effectiveVbW = vbW;
+          let effectiveVbH = vbH;
+          let adjustedVbY = vbY;
+          
+          if (containerAspect > svgAspect) {
+            // Container is wider than SVG
+            // SVG will scale to fit HEIGHT, with horizontal letterboxing
+            // Expand viewBox WIDTH to match container aspect
+            effectiveVbW = vbH * containerAspect;
+            // When fitting to height, we want to shift content up slightly
+            // to account for any padding/margin in the design
+            // Calculate a small offset (about 7.5% of SVG height works well empirically)
+            const topMarginOffset = vbH * 0.075;
+            adjustedVbY = vbY - topMarginOffset;
+          } else {
+            // Container is taller than SVG
+            // SVG will scale to fit WIDTH, with vertical letterboxing (top/bottom bars)
+            // Expand viewBox HEIGHT to match container aspect
+            effectiveVbH = vbW / containerAspect;
+            // Shift viewBox up to position content at top
+            // The extra height needs to be compensated by negative Y
+            const vbHeightDiff = effectiveVbH - vbH;
+            adjustedVbY = vbY - vbHeightDiff;
+          }
+          
+          console.log('🎯 [VIEWBOX FIX v2] ViewBox calculation:', {
+            original: { vbX, vbY, vbW, vbH },
+            logicalCanvas: { width: canvasWidth, height: canvasHeight },
+            actualCanvas: { width: actualCanvasWidth, height: actualCanvasHeight },
+            svgAspect: svgAspect.toFixed(3),
+            containerAspect: containerAspect.toFixed(3),
+            effective: { vbW: effectiveVbW.toFixed(2), vbH: effectiveVbH.toFixed(2) },
+            adjustedVbY: adjustedVbY.toFixed(2)
+          });
+          
+          // Set adjusted viewBox with calculated Y offset
+          svg.setAttribute('viewBox', `${vbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
+          svg.setAttribute('preserveAspectRatio', 'xMidYMin meet'); // Center horizontally, align to top
+          
+          console.log(`🎯 [VIEWBOX FIX v2] Set adjusted SVG viewBox: ${vbX} ${adjustedVbY.toFixed(2)} ${effectiveVbW.toFixed(2)} ${effectiveVbH.toFixed(2)}`);
           
           // Just update path fills and remove filters
           const paths = svg.querySelectorAll('path');
@@ -2162,8 +2169,8 @@ export default function DesignPageClient({
           const processedSvg = serializer.serializeToString(svg);
           logger.log('✅ SVG processed successfully, length:', processedSvg.length);
           
-          // Wrap SVG in a centered flex container so it stays centered in authoring frame
-          const wrappedSvg = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">${processedSvg}</div>`;
+          // Wrap SVG - centered horizontally, positioned at top vertically
+          const wrappedSvg = `<div style="width: 100%; height: 100%; display: flex; align-items: flex-start; justify-content: center;">${processedSvg}</div>`;
           setSvgContent(wrappedSvg);
         } else {
           logger.log('❌ No SVG element found in parsed document');
@@ -2784,7 +2791,7 @@ export default function DesignPageClient({
       {isLocalhost && (
       <div className="flex gap-2 md:gap-3 py-3 md:py-6 overflow-x-auto">
         <a
-          href={designMetadata.preview}
+          href={designMetadata.preview?.replace(/\.(jpg|jpeg|png)$/i, '_cropped$&') || designMetadata.preview}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-light text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors border border-blue-200"
@@ -2792,7 +2799,7 @@ export default function DesignPageClient({
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          Screenshot
+          Screenshot (Cropped)
         </a>
         <a
           href={`/ml/${designMetadata.mlDir}/saved-designs/json/${designId}.json`}
@@ -2869,32 +2876,15 @@ export default function DesignPageClient({
               >
               
               {/* HEADSTONE OBJECT LAYER */}
-              
-              {/* PRIMARY: Generated complete SVG (if available) */}
-              {generatedSVG && (
-                <div 
-                  className="absolute"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    left: '0',
-                    top: '0',
-                    zIndex: 10
-                  }}
-                  dangerouslySetInnerHTML={{ __html: generatedSVG }}
-                />
-              )}
-              
-              {/* FALLBACK: HTML overlay (hidden if SVG available) */}
-              <div
+              {/* Force full-bleed: headstone fills 100% of the container */}
+              <div 
                 className="absolute"
                 style={{
                     width: '100%',
                     height: '100%',
                     left: '0',
                     top: '0',
-                    zIndex: 1,
-                    display: generatedSVG ? 'none' : 'block'
+                    zIndex: 1
                 }}
               >
               {/* SVG Shape as base */}
@@ -2903,10 +2893,11 @@ export default function DesignPageClient({
                   // Dynamically generate Serpentine SVG with correct proportions
                   <div className="absolute inset-0">
                     {(() => {
-                      // Use headstone physical dimensions for viewBox to fill the display
+                      // Use shape's native SVG coordinate space, not physical MM
                       const headstoneItem = designData?.find((item: any) => item.type === 'Headstone');
-                      const viewBoxW = headstoneItem?.width || scalingFactors.initW;
-                      const viewBoxH = headstoneItem?.height || scalingFactors.initH;
+                      // Serpentine shape is drawn in ~400x400 coordinate space
+                      const viewBoxW = 400;
+                      const viewBoxH = 400;
                       
                       return (
                         <svg 
@@ -3137,6 +3128,12 @@ export default function DesignPageClient({
                       const savedDpr = scalingFactors.designDpr || 1;
                       const { uniformScale, initW, initH, offsetX, offsetY } = scalingFactors;
                       
+                      // For motif sizing, use ORIGINAL canvas dimensions (from design JSON)
+                      // not the cropped screenshot dimensions
+                      const headstoneData = designData?.find((item: any) => item.type === 'Headstone');
+                      const originalCanvasW = headstoneData?.init_width || initW;
+                      const originalCanvasH = headstoneData?.init_height || initH;
+                      
                       // Get motif intrinsic dimensions (from SVG viewBox)
                       const motifSrc = motif.src || motif.name;
                       const dims = motifDimensions[motifSrc] || { width: 100, height: 100 };
@@ -3160,19 +3157,55 @@ export default function DesignPageClient({
                       const sx = overlayW / initW;  // This IS uniformScale
                       const sy = overlayH / initH;  // Same if aspect preserved
                       
-                      // -------------- Size: viewBox × ratio × uniformScale --------------
+                      // -------------- Size: Use mm height if available, otherwise ratio --------------
                       const { width: vw, height: vh } = dims;
                       const ratio = Number(motif.ratio ?? 1);
-                      const aspect = vh / vw;
                       
-                      const widthPx = vw * ratio * sx;
-                      const heightPx = widthPx * aspect;
+                      // Check if motif has physical height in mm (old designs)
+                      const motifHeightMM = motif.height ? Number(motif.height) : null;
+                      
+                      let widthAuthor, heightAuthor;
+                      
+                      if (motifHeightMM && motifHeightMM > 10) {
+                        // Old design with mm dimensions
+                        // Get headstone physical dimensions
+                        const headstoneData = designData?.find((item: any) => item.type === 'Headstone');
+                        const headstoneHeightMM = headstoneData?.height || 1200;
+                        const canvasInitHeight = headstoneData?.init_height || originalCanvasH;
+                        
+                        // Calculate px/mm ratio from the canvas
+                        // init_height (px) represents the headstone's physical height (mm)
+                        const pxPerMM = canvasInitHeight / headstoneHeightMM;
+                        
+                        // Convert motif mm to authoring pixels
+                        heightAuthor = motifHeightMM * pxPerMM;
+                        
+                        // Calculate width maintaining aspect ratio
+                        const aspect = vw / vh;
+                        widthAuthor = heightAuthor * aspect;
+                        
+                        logger.log(`🎨 Motif ${index} - MM sizing: ${motifHeightMM}mm × ${pxPerMM.toFixed(3)} px/mm = ${heightAuthor.toFixed(2)}px (canvas ${canvasInitHeight}px / ${headstoneHeightMM}mm)`);
+                      } else {
+                        // New design with ratio
+                        // Check if this is an old design without DPR tracking
+                        const hasValidDPR = savedDpr && savedDpr > 1.1;
+                        
+                        // Apply ratio, multiply by DPR (only for new designs)
+                        widthAuthor = vw * ratio * (hasValidDPR ? savedDpr : 1);
+                        heightAuthor = vh * ratio * (hasValidDPR ? savedDpr : 1);
+                        
+                        logger.log(`🎨 Motif ${index} - Ratio sizing: vh=${vh} × ratio=${ratio} × DPR=${hasValidDPR ? savedDpr : 1} = ${heightAuthor.toFixed(2)}px authoring`);
+                      }
+                      
+                      // Scale to display size
+                      const widthPx = widthAuthor * uniformScale;
+                      const heightPx = heightAuthor * uniformScale;
                       
                       // -------------- Snap top motifs to curved edge (uniform solution) --------------
                       let cyUsed = cy;
                       
-                      // Calculate motif height in authoring pixels
-                      const motifHAuthor = (heightPx * initH) / overlayH;
+                      // Use authoring height directly
+                      const motifHAuthor = heightAuthor;
                       
                       // Only affect "top band" motifs - positioned above center
                       const isTopBand = cy < -(initH * 0.18) - (motifHAuthor * 0.15);
@@ -3295,8 +3328,6 @@ export default function DesignPageClient({
                     })}
                 </div>
               )}
-              
-              {/* END: HTML Overlay Fallback */}
               
               {/* Base (pedestal) — single canonical renderer */}
               {(() => {

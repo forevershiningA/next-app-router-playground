@@ -1,0 +1,89 @@
+Great summary — you’ve nailed the real conflict: **authoring viewport (1126×561)** vs **physical stone (1200×1200)**. Here’s the crisp clarification and the exact mapping to make everything line up.
+
+## Answers to your questions
+
+* **Was the whole square headstone visible during authoring?**
+  **No.** The screenshot equals the **1126×561 authoring canvas**, i.e., a **cropped landscape window** onto a square stone. 
+
+* **What should the final SVG show?**
+  For page rendering that must match the screenshot/design preview, the final SVG should show the **cropped landscape view** (exactly like the 1126×561 screenshot). You can also offer a **“Full-Stone Export”** mode, but the default for product pages should match the authored screenshot. 
+
+* **Are text coordinates relative to the canvas center or the physical stone center?**
+  **Canvas center.** Positions like `x:-10, y:221` are relative to `(initW/2, initH/2)` = `(563, 280.5)` for this design, and were intended to land ~89% down the 1126×561 canvas. 
+
+---
+
+## Implementation: make shape + overlays share the **same** frame
+
+### Mode A (default): **Authoring-crop mode** (match the screenshot)
+
+1. **SVG viewBox = authoring canvas**
+
+   ```xml
+   <svg viewBox="0 0 initW initH">
+   ```
+
+   where `initW=1126`, `initH=561`. 
+
+2. **Fit the square headstone into this canvas with “contain”** (uniform scale, centered), by wrapping the shape in a `<g>`:
+
+   ```ts
+   // intrinsic headstone viewBox, e.g., 0 0 400 400
+   scale = Math.min(initW / vbW, initH / vbH)
+   offX  = (initW - vbW*scale) / 2
+   offY  = (initH - vbH*scale) / 2
+   ```
+
+   ```xml
+   <g transform={`translate(${offX},${offY}) scale(${scale})`}>
+     <!-- square stone path(s) -->
+   </g>
+   ```
+
+   **Important:** use **uniform** `scale(s)` (not separate `scaleX/scaleY`) so the stone isn’t squashed. Your current non-uniform path scaling is what made the outline look wrong. 
+
+3. **Overlay inscriptions/motifs in authoring coordinates**
+   Keep your existing mapping:
+
+   ```ts
+   const centerX = initW/2, centerY = initH/2;
+   svgX = centerX + rawX;   // rawX from JSON
+   svgY = centerY + rawY;   // rawY from JSON
+   ```
+
+   Because the **viewBox is the canvas**, the overlays and the stone now share the **same coordinate system**. This mirrors your page runtime where the stone is drawn “contained” inside the canvas while text sits in canvas pixels.  
+
+> Result: stone stays square (letterboxed inside 1126×561), and every label lands **pixel-identically** to the old screenshot.
+
+---
+
+### Mode B (optional): **Full-stone export** (show entire 1200×1200 mm)
+
+If you ever need a square SVG of the full headstone:
+
+1. **SVG viewBox = stone viewBox** (e.g., `0 0 vbW vbH`, 400×400 or 1126×1126—your choice of units).
+2. **Convert overlay points from canvas → stone space** by **inverting** the contain-fit used in Mode A:
+
+   ```ts
+   // Given an authoring point (ax, ay) where:
+   // ax = centerX + rawX, ay = centerY + rawY  (canvas pixels)
+
+   // First, remove the letterbox offset and scale:
+   const sx = (ax - offX) / scale;
+   const sy = (ay - offY) / scale;
+
+   // (sx, sy) are now in the stone’s intrinsic viewBox (0..vbW, 0..vbH).
+   // Position your text there (re-center if you use center-anchored text).
+   ```
+
+   Fonts/sizes authored in canvas pixels also need the same **1/scale** conversion when moving to full-stone space. This gives you a perfect square export while preserving layout. 
+
+---
+
+## What to change in your code (summary)
+
+* In your SVG generator, keep **`viewBox="0 0 initW initH"`** for default renders and **wrap the stone in a uniform `scale()` + `translate()`** group (Mode A). Do **not** scale X/Y independently. 
+* Your page renderer already computes offsets/scales for a contained stone; make the static generator mirror that exact math so the static SVG matches the runtime look. 
+* If/when you add **Full-stone export**, apply the inverse mapping above (Mode B).
+
+This resolves the “either text or shape is right—but not both” dilemma by making both live in the **authoring canvas frame** for the default case, which is exactly what your screenshot represents.

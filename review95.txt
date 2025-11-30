@@ -1,0 +1,248 @@
+Yes—let’s lock this down to one universal, device-agnostic display pipeline that reproduces the original authoring view exactly, regardless of DPR, phone vs desktop, or shape (square stone in a landscape canvas, etc.).
+
+# Universal Display Algorithm
+
+## Core idea
+
+Treat the **saved design’s authoring canvas** as the single source of truth (“Design Space”).
+Everything (headstone SVG, base, motifs, inscriptions) is first laid out *exactly as it was authored* in that space; then we uniformly scale that whole poster to the user’s display container. No DPR logic. No heuristic re-interpretation. Just two clean transforms:
+
+1. **Authoring → Design Space (canonical poster)**
+2. **Design Space → Display container**
+
+This guarantees a pixel-faithful match to the original screenshots across all devices.
+
+---
+
+## Inputs (typical fields you already have)
+
+* `initW`, `initH`: authoring canvas size saved with the design.
+* `containerW`, `containerH`: current display container (CSS px).
+* `shapeViewBox = [vx, vy, vw, vh]`: headstone SVG viewBox.
+* `stoneWidthMm`, `stoneHeightMm`: physical stone size (mm) — used when exporting to print/hi-res, not for screen matching.
+* `offsetX`, `offsetY`: any crop/scroll offset captured during authoring (0 if none).
+* For each **inscription/motif**:
+
+  * `x`, `y` in authoring pixels (as saved),
+  * coordinates’ origin (`center` or `topLeft`) — if missing, assume center.
+  * `fontSizePx` or original motif pixel size,
+  * optional `ratio` (motif scaling factor from the XML).
+
+---
+
+## Two-stage transform
+
+### 1) Build the **Design Space** (reproduce authoring scene)
+
+* The **Design Space** has size exactly `initW × initH`.
+
+* Place the **headstone SVG** inside it using a single uniform scale so that it matches how it appeared in the authoring canvas:
+
+  ```
+  // Fit the shape's viewBox into the authoring canvas without distortion
+  stoneScale0 = min(initW / vw, initH / vh)
+
+  // Center the stone within the authoring canvas, then apply any saved offset
+  stoneDx0 = (initW  - vw * stoneScale0) / 2 + offsetX
+  stoneDy0 = (initH  - vh * stoneScale0) / 2 + offsetY
+  ```
+
+* Map **inscriptions & motifs** directly from saved authoring pixels:
+
+  ```
+  // If saved with center-origin:
+  designX = initW/2 + x
+  designY = initH/2 - y   // if y was “up is positive” in authoring; otherwise use '+ y' for top-left origin
+
+  // Font & motif sizes are in authoring CSS pixels (as saved)
+  designFontSize = savedFontSizePx
+  designMotifSize = savedMotifPx * (ratio ?? 1)
+  ```
+
+> Result: you now have a perfect poster of the original scene in a 2D surface of size `initW × initH`.
+
+---
+
+### 2) Scale the **Design Space** into the display container
+
+Uniformly scale the whole poster to the live container:
+
+```
+uniformScale = min(containerW / initW, containerH / initH)
+
+displayX  = designX  * uniformScale
+displayY  = designY  * uniformScale
+displayFontSize  = designFontSize  * uniformScale
+displayMotifSize = designMotifSize * uniformScale
+
+// Headstone transform for rendering the SVG
+stoneScale = stoneScale0 * uniformScale
+stoneDx    = stoneDx0    * uniformScale
+stoneDy    = stoneDy0    * uniformScale
+```
+
+No DPR. No remapping. No “physical mm” conversions for on-screen display.
+The display always matches the original authoring look one-to-one.
+
+---
+
+## Edge cases covered
+
+* **iPhone DPR=3** or any HiDPI: unchanged; CSS pixels are canonical.
+* **Square stone in a wide authoring canvas**: preserved exactly via Stage 1 centering + Stage 2 uniform scaling.
+* **Top motifs mirroring or drifting**: eliminated by consistently using the same origin convention you saved with (center-origin → convert once; top-left stays top-left).
+* **Base floating / overshooting**: base is just another SVG element inside the Design Space; it follows the same two transforms and will match the screenshot.
+* **Letterboxing**: any leftover space after Stage 2 is expected pillar/letterboxing and precisely matches the authoring proportions.
+
+---
+
+## Reference implementation (TypeScript)
+
+Drop-in helpers you can use inside `svg-generator.ts` (or wherever you do mapping):
+
+```ts
+type ViewBox = { vx: number; vy: number; vw: number; vh: number };
+
+type AuthoringInfo = {
+  initW: number;
+  initH: number;
+  offsetX?: number;  // default 0
+  offsetY?: number;  // default 0
+  origin?: 'center' | 'topLeft'; // default 'center'
+};
+
+type ContainerInfo = { width: number; height: number };
+
+type StoneInfo = {
+  viewBox: ViewBox;            // from the headstone SVG
+  // physical sizes only needed for print/export, not for display
+  widthMm?: number;
+  heightMm?: number;
+};
+
+export function buildUniversalMapping(
+  authoring: AuthoringInfo,
+  container: ContainerInfo,
+  stone: StoneInfo
+) {
+  const { initW, initH } = authoring;
+  const { width: containerW, height: containerH } = container;
+  const { vw, vh } = stone.viewBox;
+
+  // --- Stage 1: authoring → design space (same size as authoring) ---
+  const stoneScale0 = Math.min(initW / vw, initH / vh);
+
+  const stoneDx0 =
+    (initW - vw * stoneScale0) / 2 + (authoring.offsetX ?? 0);
+  const stoneDy0 =
+    (initH - vh * stoneScale0) / 2 + (authoring.offsetY ?? 0);
+
+  // --- Stage 2: design space → display container ---
+  const uniformScale = Math.min(containerW / initW, containerH / initH);
+
+  // Derived stone transform in display space
+  const stoneScale = stoneScale0 * uniformScale;
+  const stoneDx = stoneDx0 * uniformScale;
+  const stoneDy = stoneDy0 * uniformScale;
+
+  function mapPointAuthoringToDisplay(xSaved: number, ySaved: number) {
+    let designX: number;
+    let designY: number;
+
+    if ((authoring.origin ?? 'center') === 'center') {
+      // center-origin authoring (x right+, y up+)
+      designX = initW / 2 + xSaved;
+      designY = initH / 2 - ySaved;
+    } else {
+      // top-left origin authoring (x right+, y down+)
+      designX = xSaved;
+      designY = ySaved;
+    }
+
+    return {
+      x: designX * uniformScale,
+      y: designY * uniformScale,
+    };
+  }
+
+  function scaleSizeAuthoringToDisplay(sizePx: number) {
+    return sizePx * uniformScale;
+  }
+
+  return {
+    // Display-space stone transform for <svg> rendering:
+    stoneTransform: {
+      scale: stoneScale,
+      dx: stoneDx,
+      dy: stoneDy,
+    },
+
+    // Mapping utilities for inscriptions & motifs:
+    mapPointAuthoringToDisplay,
+    scaleSizeAuthoringToDisplay,
+
+    // For layout/debug:
+    uniformScale,
+    stoneScale0,
+    stoneDx0,
+    stoneDy0,
+  };
+}
+```
+
+### Using it for elements
+
+```ts
+// Example for a text inscription
+const { x, y, fontSizePx } = savedInscription;
+const { mapPointAuthoringToDisplay, scaleSizeAuthoringToDisplay } = mapping;
+
+const p = mapPointAuthoringToDisplay(x, y);
+const fontSize = scaleSizeAuthoringToDisplay(fontSizePx);
+
+// Render <text x={p.x} y={p.y} fontSize={fontSize} ... />
+```
+
+```ts
+// Example for a motif (saved size + optional ratio)
+const savedSizePx = motif.savedSizePx;      // e.g., bounding box width in authoring px
+const ratio = motif.ratio ?? 1;
+const motifSizeDisplay = scaleSizeAuthoringToDisplay(savedSizePx * ratio);
+// Position with mapPointAuthoringToDisplay(...) same as inscriptions
+```
+
+```ts
+// Example for the headstone shape SVG
+// <g transform={`translate(${dx}, ${dy}) scale(${scale})`}>
+//   ...headstone paths drawn in their viewBox coords...
+// </g>
+const { dx, dy, scale } = mapping.stoneTransform;
+// Apply transform to your headstone <g> wrapper.
+```
+
+---
+
+## Optional: Print / Hi-Res Export (physical mm)
+
+When exporting to millimeters or a target DPI, add a **third** transform (Design Space → Physical):
+
+```
+pxPerMm = targetDpi / 25.4
+exportScale = (stoneWidthMm * pxPerMm) / (vw * stoneScale0)
+// or derive from height, both must match within rounding.
+
+exportX = designX * exportScale
+exportY = designY * exportScale
+exportFontSize = designFontSize * exportScale
+```
+
+This keeps on-screen fidelity (Stages 1–2) and yields correct physical sizing for print (Stage 3), with no re-layout.
+
+---
+
+## Why this works (and fixes your pain points)
+
+* **DPR-proof**: saved CSS pixels are canonical; we only scale once at the end.
+* **Screenshot-faithful**: we replay the authoring composition exactly, then scale uniformly.
+* **No mirroring or drift**: a single, consistent origin convention eliminates left/right flips and vertical drift.
+* **Bases & motifs**: they’re just elements in the poster—no special cases, no re-interpretation.
