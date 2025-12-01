@@ -20,7 +20,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   
   if (isDesignsRoute) {
     return (
-      <div className="hidden md:block fixed top-0 left-0 z-10 flex h-full flex-col border-r border-slate-200 bg-gradient-to-b from-slate-50 to-white shadow-xl" style={{ width: '400px' }}>
+      <div className="hidden md:block fixed top-0 left-0 z-10 flex h-full flex-col border-r border-gray-800 bg-gray-50" style={{ width: '400px' }}>
         <DesignsTreeNav />
       </div>
     );
@@ -28,7 +28,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   
   if (isDesignerRoute) {
     return (
-      <div className="hidden md:block fixed top-0 left-0 z-10 flex h-full flex-col border-r border-slate-200 bg-gradient-to-b from-slate-50 to-white shadow-xl" style={{ width: '400px' }}>
+      <div className="hidden md:block fixed top-0 left-0 z-10 flex h-full flex-col border-r border-gray-800 bg-gray-50" style={{ width: '400px' }}>
         <DesignerNav />
       </div>
     );

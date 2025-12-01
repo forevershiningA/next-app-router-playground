@@ -54,42 +54,42 @@ export default function DesignerNav() {
   };
 
   return (
-    <nav className="overflow-y-auto h-full">
+    <nav className="overflow-y-auto h-full bg-black">
       {/* Product Header - shown when catalog is loaded */}
       {catalog && (
-        <div className="border-b border-slate-200 bg-white/80 backdrop-blur-sm p-4">
-          <h1 className="text-lg font-semibold text-slate-800">
+        <div className="border-b border-gray-800 bg-black p-4">
+          <h1 className="text-lg font-semibold text-white">
             {catalog.product.name}
             <br />
-            <span className="text-slate-600">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
+            {widthMm} x {heightMm} mm (${price.toFixed(2)})
           </h1>
         </div>
       )}
 
       {/* Header */}
-      <div className="p-4 border-b border-slate-200">
+      <div className="p-4 border-b border-gray-800">
         <Link href="/" className="hover:opacity-80 transition-opacity">
           <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
         </Link>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl font-serif font-light text-slate-800 tracking-tight">
+          <h2 className="text-xl font-serif font-light text-white tracking-tight">
             3D Designer
           </h2>
           <Link
             href="/designs"
-            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all text-sm font-medium shadow-md hover:shadow-lg"
+            className="px-3 py-1.5 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all text-sm font-medium"
           >
             Browse Designs
           </Link>
         </div>
-        <p className="text-sm text-slate-600 font-light">
+        <p className="text-sm text-gray-400 font-light">
           Design your perfect memorial
         </p>
       </div>
 
       {/* Menu Items */}
       <div className="p-4">
-        <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-slate-500 uppercase">
+        <div className="mb-2 px-3 font-mono text-sm font-semibold tracking-wide text-gray-600 uppercase">
           Design Tools
         </div>
         <div className="flex flex-col gap-1">
@@ -102,10 +102,10 @@ export default function DesignerNav() {
                 key={item.slug}
                 href={`/${item.slug}`}
                 onClick={(e) => handleMenuClick(item.slug, e)}
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-all ${
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-base font-medium transition-colors ${
                   isActive 
-                    ? 'text-slate-900 bg-white shadow-sm border border-slate-200' 
-                    : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'
+                    ? 'text-white bg-gray-800' 
+                    : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
                 }`}
               >
                 <Icon className="h-5 w-5 flex-shrink-0" />
