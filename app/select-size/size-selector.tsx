@@ -59,12 +59,12 @@ export default function SizeSelector({
 
   return (
     <SceneOverlayController section="size" title="Select Size" persistKey="size" isOpen={isOpen}>
-      <p className="mb-3 text-sm leading-relaxed text-white/85">
+      <p className="mb-3 text-sm leading-relaxed md:text-gray-700">
         Choose the headstone width &amp; height in millimetres. Thickness is
         computed from size; cemeteries may have regulations on allowable
         dimensions.
       </p>
-      <div className="bg-gray-900/50 p-4 space-y-3">
+      <div className="md:bg-white/30 bg-gray-900/50 p-4 space-y-3 rounded-lg">
         <TailwindSlider
           label="Width"
           value={widthMm}
