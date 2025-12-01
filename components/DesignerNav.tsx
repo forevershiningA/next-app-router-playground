@@ -73,9 +73,6 @@ export default function DesignerNav() {
             </h1>
           )}
         </div>
-        <p className="text-sm text-slate-300 font-light">
-          Design your perfect memorial
-        </p>
       </div>
 
       {/* Menu Items */}
