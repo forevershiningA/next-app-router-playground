@@ -18,7 +18,7 @@ import {
 } from '#/lib/motif-pricing';
 
 const TEX_BASE = '/textures/forever/l/';
-const DEFAULT_TEX = 'Imperial-Red.jpg';
+const DEFAULT_TEX = 'Imperial-Red.webp';
 
 /* clamps */
 const MIN_HEADSTONE_DIM = 300;
@@ -418,17 +418,23 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setMaterialUrl(materialUrl) {
-    set({ materialUrl });
+    // Convert .jpg to .webp for all texture files
+    const convertedUrl = materialUrl.replace(/\.jpg$/i, '.webp');
+    set({ materialUrl: convertedUrl });
   },
 
   headstoneMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setHeadstoneMaterialUrl(url) {
-    set({ headstoneMaterialUrl: url });
+    // Convert .jpg to .webp for all texture files
+    const convertedUrl = url.replace(/\.jpg$/i, '.webp');
+    set({ headstoneMaterialUrl: convertedUrl });
   },
 
   baseMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setBaseMaterialUrl(url) {
-    set({ baseMaterialUrl: url, baseSwapping: true });
+    // Convert .jpg to .webp for all texture files
+    const convertedUrl = url.replace(/\.jpg$/i, '.webp');
+    set({ baseMaterialUrl: convertedUrl, baseSwapping: true });
   },
 
   baseSwapping: false,

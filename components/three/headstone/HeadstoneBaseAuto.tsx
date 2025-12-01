@@ -84,8 +84,9 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
 
     const requestedBaseTex = React.useMemo(() => {
       const file = baseMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
-      const jpg = file.replace(/\.(png|webp|jpeg)$/i, '.jpg');
-      return TEX_BASE + jpg;
+      // Keep the original extension or convert .jpg to .webp
+      const webp = file.replace(/\.jpg$/i, '.webp');
+      return TEX_BASE + webp;
     }, [baseMaterialUrl]);
 
     const [visibleBaseTex, setVisibleBaseTex] =

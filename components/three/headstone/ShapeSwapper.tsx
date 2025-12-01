@@ -21,7 +21,7 @@ import type { Component, ReactNode } from 'react';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
-const DEFAULT_TEX = 'Imperial-Red.jpg';
+const DEFAULT_TEX = 'Imperial-Red.webp';
 const BASE_H = 2; // used by AutoFit only
 
 /* --------------------------------- font map --------------------------------- */
@@ -491,8 +491,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     }
     // Otherwise extract filename and use default base
     const file = headstoneMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
-    const jpg = file.replace(/\.(png|webp|jpeg)$/i, '.jpg');
-    return TEX_BASE + jpg;
+    // Keep the original extension or convert .jpg to .webp
+    const webp = file.replace(/\.jpg$/i, '.webp');
+    return TEX_BASE + webp;
   }, [headstoneMaterialUrl]);
 
   const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);

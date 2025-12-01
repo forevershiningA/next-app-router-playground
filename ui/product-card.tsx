@@ -87,7 +87,9 @@ export function ProductCard<E extends ElementType = 'div'>({
         : '/select-product/');
 
   const slug = toSlug(product.name);
-  const selectedUrl = assetBase + product.image;
+  // Convert .jpg to .webp for material textures (shop previews use .jpg, 3D textures use .webp)
+  const textureImage = type === 'material' ? product.image.replace(/\.jpg$/i, '.webp') : product.image;
+  const selectedUrl = assetBase + textureImage;
 
   return (
     <Comp
@@ -97,7 +99,7 @@ export function ProductCard<E extends ElementType = 'div'>({
       <div className="overflow-hidden bg-gray-900/50 p-4 group-hover:bg-gray-900">
         <Image
           className="pointer"
-          src={`/shop/${product.image}`}
+          src={selectedUrl}
           alt={product.name}
           quality={90}
           width={400}

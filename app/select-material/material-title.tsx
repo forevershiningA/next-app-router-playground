@@ -59,7 +59,9 @@ export default function MaterialTitle({
   // Keep store aligned with URL on material routes
   useEffect(() => {
     if (!slugMatch) return;
-    const desired = `/materials/${slugMatch.image}`;
+    // Convert .jpg to .webp for actual texture files
+    const textureImage = slugMatch.image.replace(/\.jpg$/i, '.webp');
+    const desired = `/textures/forever/l/${textureImage}`;
     if ((materialUrl ?? '').toLowerCase() !== desired.toLowerCase()) {
       setMaterialUrl(desired);
     }

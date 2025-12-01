@@ -308,7 +308,7 @@ const materials: Material[] = [
   {
     id: '23',
     name: 'Multicolour Red',
-    image: 'Multicolour-Red.webp',
+    image: 'Multicolour-red.webp',
     category: '2',
   },
   { id: '24', name: 'Noble Black', image: 'Noble-Black.webp', category: '2' },

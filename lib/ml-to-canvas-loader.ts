@@ -83,7 +83,10 @@ export function mapTextureToFile(mlTexture: string): string {
   
   // Extract filename from path
   const parts = mlTexture.split('/');
-  const filename = parts[parts.length - 1];
+  let filename = parts[parts.length - 1];
+  
+  // Convert .jpg to .webp since all textures are in webp format
+  filename = filename.replace(/\.jpg$/i, '.webp');
   
   // Check if it's granite or bronze
   if (mlTexture.includes('granite')) {

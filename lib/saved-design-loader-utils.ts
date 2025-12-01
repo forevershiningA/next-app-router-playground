@@ -99,13 +99,22 @@ function mapTexture(texturePath: string, productId: string): string {
     }
   }
   
-  // If path already looks valid, return as is
+  // If path already looks valid, convert .jpg to .webp if needed
   if (texturePath.startsWith('/textures/')) {
-    return texturePath;
+    return texturePath.replace(/\.jpg$/i, '.webp');
   }
   
-  // Default fallback
-  return texturePath;
+  // Handle legacy paths like "src/granites/forever2/l/Blue-Pearl.jpg"
+  if (texturePath.includes('granites/forever') || texturePath.includes('forever2')) {
+    const match = texturePath.match(/[\/\\]([\w-]+)\.(jpg|webp)$/i);
+    if (match) {
+      const materialName = match[1];
+      return `/textures/forever/l/${materialName}.webp`;
+    }
+  }
+  
+  // Default fallback - convert .jpg to .webp
+  return texturePath.replace(/\.jpg$/i, '.webp');
 }
 
 /**

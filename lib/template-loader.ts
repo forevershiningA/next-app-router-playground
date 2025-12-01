@@ -79,11 +79,11 @@ export function loadMemorialTemplate(params: {
   // Set material if provided
   if (template.material) {
     const materialMap: Record<string, string> = {
-      'imperial-red': 'Imperial-Red.jpg',
-      'blue-pearl': 'Blue-Pearl.jpg',
-      'emerald-pearl': 'Emerald-Pearl.jpg',
-      'african-black': 'African-Black.jpg',
-      'balmoral-red': 'Balmoral-Red.jpg',
+      'imperial-red': 'Imperial-Red.webp',
+      'blue-pearl': 'Blue-Pearl.webp',
+      'emerald-pearl': 'Emerald-Pearl.webp',
+      'african-black': 'African-Black.webp',
+      'balmoral-red': 'Balmoral-Red.webp',
     };
     const materialFile = materialMap[template.material];
     if (materialFile) {
@@ -142,13 +142,13 @@ export function loadMaterialShapeCombo(materialSlug: string, shapeSlug?: string)
 
   // Material mapping
   const materialMap: Record<string, string> = {
-    'imperial-red': 'Imperial-Red.jpg',
-    'blue-pearl': 'Blue-Pearl.jpg',
-    'emerald-pearl': 'Emerald-Pearl.jpg',
-    'african-black': 'African-Black.jpg',
-    'balmoral-red': 'Balmoral-Red.jpg',
-    'chinese-calca': 'Chinese-Calca.jpg',
-    'white-carrara': 'White-Carrara.jpg',
+    'imperial-red': 'Imperial-Red.webp',
+    'blue-pearl': 'Blue-Pearl.webp',
+    'emerald-pearl': 'Emerald-Pearl.webp',
+    'african-black': 'African-Black.webp',
+    'balmoral-red': 'Balmoral-Red.webp',
+    'chinese-calca': 'Chinese-Calca.webp',
+    'white-carrara': 'White-Carrara.webp',
   };
 
   const materialFile = materialMap[materialSlug];
