@@ -125,7 +125,7 @@ export function ProductCard<E extends ElementType = 'div'>({
       </div>
 
       <div className="flex flex-col gap-2 text-center">
-        <h2 className="md:text-gray-900 text-white text-sm font-medium">{product.name}</h2>
+        <h2 className="md:text-gray-900 text-sm font-medium">{product.name}</h2>
       </div>
 
       {children}

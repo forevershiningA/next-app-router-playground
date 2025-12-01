@@ -43,7 +43,7 @@ export default function ShapePanelWrapper({
   return (
     <SceneOverlayController section="shape" title="Select Shape" isOpen={isOpen}>
       <ShapeTitle products={products} />
-      <div className="mb-3 text-sm leading-relaxed md:text-gray-700 text-white/85">
+      <div className="mb-3 text-sm leading-relaxed md:text-gray-700">
         Pick a headstone outline. Click any card to apply it.
       </div>
       <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 w-full">
