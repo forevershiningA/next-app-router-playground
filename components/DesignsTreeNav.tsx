@@ -204,40 +204,40 @@ export default function DesignsTreeNav() {
   }, 0);
 
   return (
-    <nav className="overflow-y-auto h-full bg-black">
+    <nav className="overflow-y-auto h-full">
       {/* Product Header - shown when catalog is loaded */}
       {catalog && (
-        <div className="border-b border-gray-800 bg-black p-4">
-          <h1 className="text-lg font-semibold text-white">
+        <div className="border-b border-slate-200 bg-white/80 backdrop-blur-sm p-4">
+          <h1 className="text-lg font-semibold text-slate-800">
             {catalog.product.name}
             <br />
-            {widthMm} x {heightMm} mm (${price.toFixed(2)})
+            <span className="text-slate-600">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
           </h1>
         </div>
       )}
 
       {/* Header */}
-      <div className="p-4 border-b border-gray-800">
+      <div className="p-4 border-b border-slate-200">
         <Link href="/designs" className="hover:opacity-80 transition-opacity">
           <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
         </Link>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-serif font-light text-white tracking-tight">
+          <h2 className="text-2xl font-serif font-light text-slate-800 tracking-tight">
             Memorial Designs
           </h2>
           <Link
             href="/"
-            className="px-3 py-1.5 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all text-sm font-medium"
+            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all text-sm font-medium shadow-md hover:shadow-lg"
           >
             3D Designer
           </Link>
         </div>
-        <p className="text-sm text-gray-400 font-light">
+        <p className="text-sm text-slate-600 font-light">
           {totalDesigns.toLocaleString()} saved designs
         </p>
       </div>
       
-      <div className="px-4 pb-4 space-y-3">
+      <div className="px-4 pb-4 pt-4 space-y-3">
         {treeData.map((productNode) => {
           const productKey = productNode.productSlug;
           const isProductExpanded = expandedNodes.has(productKey);
@@ -245,14 +245,14 @@ export default function DesignsTreeNav() {
           const productLabel = productNode.productSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
           
           return (
-            <div key={productKey} className="mb-4">
+            <div key={productKey} className="mb-3">
               {/* Product Type Level */}
               <button
                 onClick={() => toggleNode(productKey)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                   isActive(productPath) 
-                    ? 'bg-gray-800 text-white' 
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
+                    ? 'bg-white text-slate-900 shadow-sm border border-slate-200' 
+                    : 'text-slate-700 hover:bg-white/50 hover:text-slate-900'
                 }`}
                 aria-expanded={isProductExpanded}
               >
@@ -263,7 +263,7 @@ export default function DesignsTreeNav() {
                 )}
                 <span className="flex-1 text-left">{productLabel}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${
-                  isActive(productPath) ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400'
+                  isActive(productPath) ? 'bg-slate-200 text-slate-700' : 'bg-slate-100 text-slate-600'
                 }`}>
                   {Object.keys(productNode.categories).length}
                 </span>
@@ -282,10 +282,10 @@ export default function DesignsTreeNav() {
                         {/* Category Level */}
                         <button
                           onClick={() => toggleNode(categoryNodeKey)}
-                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all ${
+                          className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-all ${
                             isActive(categoryPath) && !pathname?.includes(categoryPath + '/') 
-                              ? 'bg-gray-800 text-white' 
-                              : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
+                              ? 'bg-white text-slate-900 shadow-sm border border-slate-200' 
+                              : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'
                           }`}
                           aria-expanded={isCategoryExpanded}
                         >
@@ -295,7 +295,7 @@ export default function DesignsTreeNav() {
                             <ChevronRightIcon className="w-3 h-3 flex-shrink-0" />
                           )}
                           <span className="flex-1 text-left">{categoryData.name}</span>
-                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-gray-800 text-gray-400">
+                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
                             {categoryData.designs.length}
                           </span>
                         </button>
@@ -311,10 +311,10 @@ export default function DesignsTreeNav() {
                                 <Link
                                   key={`${productNode.productSlug}-${categoryKey}-${design.id}-${index}`}
                                   href={designPath}
-                                  className={`block px-3 py-2 rounded-md text-sm transition-all ${
+                                  className={`block px-3 py-2.5 rounded-lg text-sm transition-all ${
                                     isDesignActive 
-                                      ? 'bg-gray-800 text-white' 
-                                      : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
+                                      ? 'bg-white text-slate-900 shadow-sm border border-slate-200 font-medium' 
+                                      : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'
                                   }`}
                                 >
                                   {design.title}
