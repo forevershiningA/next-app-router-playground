@@ -260,7 +260,7 @@ export default function SceneOverlayController({
     >
       <div
         className={clsx(
-          'bg-[rgba(0,0,0,0.79)]',
+          'md:bg-[#C3DCF4] bg-[rgba(0,0,0,0.79)]',
           collapsed ? 'opacity-80' : 'opacity-100',
         )}
       >
@@ -270,7 +270,7 @@ export default function SceneOverlayController({
           role="banner"
           aria-label="Panel header"
         >
-          <h2 className="font-semibold text-white">{title}</h2>
+          <h2 className="font-semibold md:text-gray-900 text-white">{title}</h2>
 
           <button
             type="button"
@@ -287,7 +287,7 @@ export default function SceneOverlayController({
               // Navigate to home to hide the section panels
               router.push('/');
             }}
-            className="flex items-center space-x-1 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 rounded transition-colors cursor-pointer"
+            className="flex items-center space-x-1 md:bg-gray-900/10 md:text-gray-900 md:hover:bg-gray-900/20 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 rounded transition-colors cursor-pointer"
             title="Back to menu"
           >
             <span>←</span>
@@ -296,7 +296,7 @@ export default function SceneOverlayController({
         </div>
 
         {/* Body */}
-        <div className="px-4 pt-2 pb-4 max-h-[25vh] overflow-auto">
+        <div className="px-4 pt-2 pb-4 max-h-[25vh] overflow-auto md:text-gray-900 text-white/85">
           {children}
         </div>
       </div>

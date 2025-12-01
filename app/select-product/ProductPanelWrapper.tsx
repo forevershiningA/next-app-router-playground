@@ -25,7 +25,7 @@ export default function ProductPanelWrapper({ products }: { products: Product[] 
 
   return (
     <SceneOverlayController section="product" title="Select Product" isOpen={isOpen}>
-      <div className="mb-3 text-sm leading-relaxed text-white/85">
+      <div className="mb-3 text-sm leading-relaxed md:text-gray-700 text-white/85">
         Choose a product. Click any card to apply it.
       </div>
 

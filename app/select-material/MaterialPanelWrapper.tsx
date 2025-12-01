@@ -25,7 +25,7 @@ export default function MaterialPanelWrapper({ materials }: { materials: Materia
 
   return (
     <SceneOverlayController section="material" title="Select Material" isOpen={isOpen}>
-      <div className="mb-3 text-sm leading-relaxed text-white/85">
+      <div className="mb-3 text-sm leading-relaxed md:text-gray-700 text-white/85">
         Choose a stone material to preview on the headstone.
       </div>
       <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 w-full">
