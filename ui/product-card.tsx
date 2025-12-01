@@ -96,7 +96,7 @@ export function ProductCard<E extends ElementType = 'div'>({
       {...(rest as any)}
       className={clsx('group flex flex-col gap-2.5', className)}
     >
-      <div className="overflow-hidden bg-gray-900/50 p-4 group-hover:bg-gray-900">
+      <div className="overflow-hidden md:bg-white/50 md:group-hover:bg-white/70 bg-gray-900/50 p-4 group-hover:bg-gray-900 rounded-lg">
         <Image
           className="pointer"
           src={selectedUrl}
@@ -125,7 +125,7 @@ export function ProductCard<E extends ElementType = 'div'>({
       </div>
 
       <div className="flex flex-col gap-2 text-center">
-        <h2>{product.name}</h2>
+        <h2 className="md:text-gray-900 text-white text-sm font-medium">{product.name}</h2>
       </div>
 
       {children}
