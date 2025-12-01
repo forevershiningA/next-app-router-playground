@@ -8,10 +8,11 @@ import { type DemoCategory } from '#/lib/db';
 export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const pathname = usePathname();
   
-  // Check if we're on /designs route
+  // Check if we're on /designs route OR homepage
   const isDesignsRoute = pathname?.startsWith('/designs');
+  const isHomepage = pathname === '/';
   
-  if (isDesignsRoute) {
+  if (isDesignsRoute || isHomepage) {
     return (
       <div className="hidden md:block fixed top-0 left-0 z-10 flex h-full flex-col border-r border-gray-800 bg-gray-50" style={{ width: '400px' }}>
         <DesignsTreeNav />
