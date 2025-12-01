@@ -4,7 +4,20 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { 
+  CubeIcon,
+  Squares2X2Icon,
+  ArrowsPointingOutIcon,
+  SwatchIcon,
+  DocumentTextIcon,
+  PlusCircleIcon,
+  SparklesIcon,
+  CurrencyDollarIcon,
+  LightBulbIcon,
+} from '@heroicons/react/24/outline';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { calculatePrice } from '#/lib/xml-parser';
 
 interface DesignTreeNode {
   productType: string;
@@ -83,11 +96,38 @@ function buildDesignTitle(shapeName: string | undefined, slug: string): string {
   return slugTitle;
 }
 
+// Menu items with icons
+const menuItems = [
+  { slug: 'select-product', name: 'Select Product', icon: CubeIcon },
+  { slug: 'select-shape', name: 'Select Shape', icon: Squares2X2Icon },
+  { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
+  { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
+  { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
+  { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
+  { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
+  { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
+];
+
 export default function DesignsTreeNav() {
   const pathname = usePathname();
   const [treeData, setTreeData] = useState<DesignTreeNode[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  
+  // Get catalog info
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+
+  let quantity = widthMm * heightMm;
+  if (catalog) {
+    const qt = catalog.product.priceModel.quantityType;
+    if (qt === 'Width + Height') {
+      quantity = widthMm + heightMm;
+    }
+  }
+  const price = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
 
   useEffect(() => {
     // Load all designs and organize into tree structure
@@ -187,32 +227,75 @@ export default function DesignsTreeNav() {
     return total + Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0);
   }, 0);
 
+  const handleMenuClick = (slug: string, e: React.MouseEvent) => {
+    if (slug === 'check-price') {
+      e.preventDefault();
+      setActivePanel('checkprice');
+    }
+  };
+
   return (
-    <nav className="overflow-y-auto h-full p-4 bg-gradient-to-tr from-sky-900 to-yellow-900">
-      {/* Elegant Header */}
-      <div className="mb-8 pb-6 border-b border-slate-700/50">
-        <Link href="/designs" className="hover:text-slate-300 transition-colors">
-          <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
-        </Link>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl font-serif font-light text-white tracking-tight">
-            <Link href="/designs" className="hover:text-slate-300 transition-colors">
-              Memorial Designs
-            </Link>
-          </h2>
-          <Link
-            href="/"
-            className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all text-sm font-light uppercase tracking-wider backdrop-blur-sm border border-white/20"
-          >
-            DYO
-          </Link>
+    <nav className="overflow-y-auto h-full bg-black">
+      {/* Product Header - shown when catalog is loaded */}
+      {catalog && (
+        <div className="border-b border-gray-800 bg-black p-4">
+          <h1 className="text-lg font-semibold text-white">
+            {catalog.product.name}
+            <br />
+            {widthMm} x {heightMm} mm (${price.toFixed(2)})
+          </h1>
         </div>
-        <p className="text-sm text-slate-400 font-light tracking-wide">
-          {totalDesigns.toLocaleString()} thoughtfully crafted designs
-        </p>
+      )}
+
+      {/* Menu Items */}
+      <div className="border-b border-gray-800">
+        <div className="px-2 py-4">
+          <div className="mb-2 px-3 font-mono text-sm font-semibold tracking-wide text-gray-600 uppercase">
+            Design Tools
+          </div>
+          <div className="flex flex-col gap-1">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === `/${item.slug}`;
+              
+              return (
+                <Link
+                  key={item.slug}
+                  href={`/${item.slug}`}
+                  onClick={(e) => handleMenuClick(item.slug, e)}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-base font-medium hover:text-gray-300 ${
+                    isActive ? 'text-white' : 'text-gray-400 hover:bg-gray-800'
+                  }`}
+                >
+                  <Icon className="h-5 w-5 flex-shrink-0" />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Saved Designs Section */}
+      <div className="p-4">
+        <div className="mb-4">
+          <Link href="/designs" className="hover:opacity-80 transition-opacity">
+            <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
+          </Link>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-serif font-light text-white tracking-tight">
+              <Link href="/designs" className="hover:text-gray-300 transition-colors">
+                Memorial Designs
+              </Link>
+            </h2>
+          </div>
+          <p className="text-sm text-gray-400 font-light tracking-wide">
+            {totalDesigns.toLocaleString()} saved designs
+          </p>
+        </div>
       </div>
       
-      <div className="space-y-3">
+      <div className="px-4 pb-4 space-y-3">
         {treeData.map((productNode) => {
           const productKey = productNode.productSlug;
           const isProductExpanded = expandedNodes.has(productKey);
@@ -221,32 +304,32 @@ export default function DesignsTreeNav() {
           
           return (
             <div key={productKey} className="mb-4">
-              {/* Product Type Level - Refined */}
+              {/* Product Type Level */}
               <button
                 onClick={() => toggleNode(productKey)}
-                className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-lg text-base font-light transition-all ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all ${
                   isActive(productPath) 
-                    ? 'bg-white/15 text-white shadow-lg border border-white/30 backdrop-blur-sm' 
-                    : 'bg-white/5 text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    ? 'bg-gray-800 text-white' 
+                    : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
                 }`}
                 aria-expanded={isProductExpanded}
               >
                 {isProductExpanded ? (
-                  <ChevronDownIcon className="w-5 h-5 flex-shrink-0 text-slate-300" />
+                  <ChevronDownIcon className="w-4 h-4 flex-shrink-0" />
                 ) : (
-                  <ChevronRightIcon className="w-5 h-5 flex-shrink-0 text-slate-300" />
+                  <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
                 )}
-                <span className="flex-1 text-left tracking-wide">{productLabel}</span>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-light tracking-wider ${
-                  isActive(productPath) ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-300'
+                <span className="flex-1 text-left">{productLabel}</span>
+                <span className={`text-xs px-2 py-0.5 rounded-full ${
+                  isActive(productPath) ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400'
                 }`}>
                   {Object.keys(productNode.categories).length}
                 </span>
               </button>
               
-              {/* Categories - Elegant spacing */}
+              {/* Categories */}
               {isProductExpanded && (
-                <div className="ml-4 mt-2 space-y-2">
+                <div className="ml-4 mt-2 space-y-1">
                   {Object.entries(productNode.categories).map(([categoryKey, categoryData]) => {
                     const categoryNodeKey = `${productKey}/${categoryKey}`;
                     const isCategoryExpanded = expandedNodes.has(categoryNodeKey);
@@ -254,30 +337,30 @@ export default function DesignsTreeNav() {
                     
                     return (
                       <div key={categoryNodeKey}>
-                        {/* Category Level - Refined */}
+                        {/* Category Level */}
                         <button
                           onClick={() => toggleNode(categoryNodeKey)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all ${
+                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all ${
                             isActive(categoryPath) && !pathname?.includes(categoryPath + '/') 
-                              ? 'bg-white/10 text-white font-normal border border-white/20 backdrop-blur-sm' 
-                              : 'bg-white/5 text-slate-300 hover:bg-white/8 border border-white/5 font-light'
+                              ? 'bg-gray-800 text-white' 
+                              : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
                           }`}
                           aria-expanded={isCategoryExpanded}
                         >
                           {isCategoryExpanded ? (
-                            <ChevronDownIcon className="w-4 h-4 flex-shrink-0 text-slate-400" />
+                            <ChevronDownIcon className="w-3 h-3 flex-shrink-0" />
                           ) : (
-                            <ChevronRightIcon className="w-4 h-4 flex-shrink-0 text-slate-400" />
+                            <ChevronRightIcon className="w-3 h-3 flex-shrink-0" />
                           )}
-                          <span className="flex-1 text-left tracking-wide">{categoryData.name}</span>
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-slate-300 font-light">
+                          <span className="flex-1 text-left">{categoryData.name}</span>
+                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-gray-800 text-gray-400">
                             {categoryData.designs.length}
                           </span>
                         </button>
                         
-                        {/* Designs - Clean list */}
+                        {/* Designs */}
                         {isCategoryExpanded && (
-                          <div className="ml-4 mt-2 space-y-1.5">
+                          <div className="ml-4 mt-1 space-y-0.5">
                             {categoryData.designs.map((design, index) => {
                               const designPath = `/designs/${productNode.productSlug}/${categoryKey}/${design.slug}`;
                               const isDesignActive = pathname === designPath;
@@ -286,13 +369,13 @@ export default function DesignsTreeNav() {
                                 <Link
                                   key={`${productNode.productSlug}-${categoryKey}-${design.id}-${index}`}
                                   href={designPath}
-                                  className={`block px-4 py-2.5 rounded-lg text-sm transition-all ${
+                                  className={`block px-3 py-2 rounded-md text-sm transition-all ${
                                     isDesignActive 
-                                      ? 'bg-white/15 text-white font-normal shadow-md border border-white/30' 
-                                      : 'bg-white/5 text-slate-300 hover:bg-white/8 border border-transparent hover:border-white/10 font-light'
+                                      ? 'bg-gray-800 text-white' 
+                                      : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
                                   }`}
                                 >
-                                  <span className="leading-relaxed tracking-wide">{design.title}</span>
+                                  {design.title}
                                 </Link>
                               );
                             })}
