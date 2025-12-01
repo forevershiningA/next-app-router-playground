@@ -4,17 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
-import { 
-  CubeIcon,
-  Squares2X2Icon,
-  ArrowsPointingOutIcon,
-  SwatchIcon,
-  DocumentTextIcon,
-  PlusCircleIcon,
-  SparklesIcon,
-  CurrencyDollarIcon,
-  LightBulbIcon,
-} from '@heroicons/react/24/outline';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
@@ -96,18 +85,6 @@ function buildDesignTitle(shapeName: string | undefined, slug: string): string {
   return slugTitle;
 }
 
-// Menu items with icons
-const menuItems = [
-  { slug: 'select-product', name: 'Select Product', icon: CubeIcon },
-  { slug: 'select-shape', name: 'Select Shape', icon: Squares2X2Icon },
-  { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
-  { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
-  { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
-  { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
-  { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
-  { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
-];
-
 export default function DesignsTreeNav() {
   const pathname = usePathname();
   const [treeData, setTreeData] = useState<DesignTreeNode[]>([]);
@@ -118,7 +95,6 @@ export default function DesignsTreeNav() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
-  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
@@ -227,13 +203,6 @@ export default function DesignsTreeNav() {
     return total + Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0);
   }, 0);
 
-  const handleMenuClick = (slug: string, e: React.MouseEvent) => {
-    if (slug === 'check-price') {
-      e.preventDefault();
-      setActivePanel('checkprice');
-    }
-  };
-
   return (
     <nav className="overflow-y-auto h-full bg-black">
       {/* Product Header - shown when catalog is loaded */}
@@ -247,52 +216,25 @@ export default function DesignsTreeNav() {
         </div>
       )}
 
-      {/* Menu Items */}
-      <div className="border-b border-gray-800">
-        <div className="px-2 py-4">
-          <div className="mb-2 px-3 font-mono text-sm font-semibold tracking-wide text-gray-600 uppercase">
-            Design Tools
-          </div>
-          <div className="flex flex-col gap-1">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === `/${item.slug}`;
-              
-              return (
-                <Link
-                  key={item.slug}
-                  href={`/${item.slug}`}
-                  onClick={(e) => handleMenuClick(item.slug, e)}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-base font-medium hover:text-gray-300 ${
-                    isActive ? 'text-white' : 'text-gray-400 hover:bg-gray-800'
-                  }`}
-                >
-                  <Icon className="h-5 w-5 flex-shrink-0" />
-                  <span>{item.name}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Saved Designs Section */}
-      <div className="p-4">
-        <div className="mb-4">
-          <Link href="/designs" className="hover:opacity-80 transition-opacity">
-            <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
+      {/* Header */}
+      <div className="p-4 border-b border-gray-800">
+        <Link href="/designs" className="hover:opacity-80 transition-opacity">
+          <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
+        </Link>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xl font-serif font-light text-white tracking-tight">
+            Memorial Designs
+          </h2>
+          <Link
+            href="/"
+            className="px-3 py-1.5 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all text-sm font-medium"
+          >
+            3D Designer
           </Link>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-serif font-light text-white tracking-tight">
-              <Link href="/designs" className="hover:text-gray-300 transition-colors">
-                Memorial Designs
-              </Link>
-            </h2>
-          </div>
-          <p className="text-sm text-gray-400 font-light tracking-wide">
-            {totalDesigns.toLocaleString()} saved designs
-          </p>
         </div>
+        <p className="text-sm text-gray-400 font-light">
+          {totalDesigns.toLocaleString()} saved designs
+        </p>
       </div>
       
       <div className="px-4 pb-4 space-y-3">
