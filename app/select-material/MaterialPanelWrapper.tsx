@@ -28,9 +28,9 @@ export default function MaterialPanelWrapper({ materials }: { materials: Materia
       <div className="mb-3 text-sm leading-relaxed text-white/85">
         Choose a stone material to preview on the headstone.
       </div>
-      <div className="grid grid-cols-3 gap-2 w-full">
+      <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 w-full">
         {materials.map((p) => (
-          <ProductCard key={p.id} product={p} type="material" />
+          <ProductCard key={p.id} product={p} type="material" className="max-w-[128px]" />
         ))}
       </div>
     </SceneOverlayController>

@@ -296,7 +296,7 @@ export default function SceneOverlayController({
         </div>
 
         {/* Body */}
-        <div className="px-4 pt-2 pb-4 max-h-[40vh] overflow-auto">
+        <div className="px-4 pt-2 pb-4 max-h-[25vh] overflow-auto">
           {children}
         </div>
       </div>

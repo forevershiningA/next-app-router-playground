@@ -46,9 +46,9 @@ export default function ShapePanelWrapper({
       <div className="mb-3 text-sm leading-relaxed text-white/85">
         Pick a headstone outline. Click any card to apply it.
       </div>
-      <div className="grid grid-cols-3 gap-2 w-full">
+      <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 w-full">
         {shapes.map((p) => (
-          <ProductCard key={p.id} product={p} type="shape" />
+          <ProductCard key={p.id} product={p} type="shape" className="max-w-[128px]" />
         ))}
       </div>
     </SceneOverlayController>

@@ -29,9 +29,9 @@ export default function ProductPanelWrapper({ products }: { products: Product[] 
         Choose a product. Click any card to apply it.
       </div>
 
-      <div className="grid grid-cols-3 gap-2 w-full">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 w-full">
         {products.map((p) => (
-          <ProductCard key={p.id} product={p} type="product" />
+          <ProductCard key={p.id} product={p} type="product" className="max-w-[128px]" />
         ))}
       </div>
     </SceneOverlayController>
