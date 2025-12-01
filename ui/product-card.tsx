@@ -96,7 +96,7 @@ export function ProductCard<E extends ElementType = 'div'>({
       {...(rest as any)}
       className={clsx('group flex flex-col gap-2.5', className)}
     >
-      <div className="overflow-hidden md:bg-white/50 md:group-hover:bg-white/70 p-4 rounded-lg">
+      <div className="overflow-hidden md:bg-white/50 md:group-hover:bg-white/70 bg-gray-900/50 p-4 group-hover:bg-gray-900 rounded-lg">
         <Image
           className="pointer"
           src={selectedUrl}
@@ -138,7 +138,7 @@ export function ProductCardSkeleton() {
     <div className="group flex flex-col gap-2.5">
       <div
         className={clsx(
-          'aspect-square overflow-hidden md:bg-white/30 bg-gray-900/50',
+          'aspect-square overflow-hidden bg-gray-900/50',
           'relative before:absolute before:inset-0',
           'before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent',
           'before:translate-x-[-50%] before:opacity-0',
@@ -146,8 +146,8 @@ export function ProductCardSkeleton() {
         )}
       />
       <div className="flex flex-col gap-2">
-        <div className="h-2 w-4/5 md:bg-gray-300 bg-gray-800" />
-        <div className="h-2 w-1/3 md:bg-gray-300 bg-gray-800" />
+        <div className="h-2 w-4/5 bg-gray-800" />
+        <div className="h-2 w-1/3 bg-gray-800" />
       </div>
     </div>
   );
