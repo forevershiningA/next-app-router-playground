@@ -247,16 +247,15 @@ export default function SceneOverlayController({
         'pointer-events-auto fixed transition-opacity duration-200',
         // Dynamic z-index: active panel gets highest z-index to appear above nav
         isActivePanel ? 'z-[99999]' : 'z-[99998]',
-        // Mobile portrait: stick to bottom, full width
-        'max-md:!left-0 max-md:!bottom-0 max-md:!top-auto max-md:!w-full max-md:!max-w-full',
+        // Stick to bottom, full width on all screens
+        '!left-0 !bottom-0 !top-auto !w-full !max-w-full',
+        // On desktop, left margin for sidebar
+        'md:!left-[400px] md:!w-[calc(100%-400px)]',
         isVisible ? 'opacity-100' : 'opacity-0',
         className
       )}
       style={{ 
-        left: pos.x, 
-        top: pos.y, 
-        width: 380, 
-        maxWidth: '92vw' 
+        // Don't use inline positioning on all screens now
       }}
     >
       <div
@@ -265,14 +264,11 @@ export default function SceneOverlayController({
           collapsed ? 'opacity-80' : 'opacity-100',
         )}
       >
-        {/* Header (drag handle) */}
+        {/* Header (no longer draggable) */}
         <div
-          className="flex cursor-grab items-center justify-between px-4 py-3 select-none"
-          onPointerDown={onHeaderPointerDown}
-          onPointerMove={onHeaderPointerMove}
-          onPointerUp={onHeaderPointerUp}
+          className="flex items-center justify-between px-4 py-3 select-none"
           role="banner"
-          aria-label="Draggable overlay header"
+          aria-label="Panel header"
         >
           <h2 className="font-semibold text-white">{title}</h2>
 
@@ -300,7 +296,7 @@ export default function SceneOverlayController({
         </div>
 
         {/* Body */}
-        <div className="px-4 pt-2 pb-4 max-h-[75vh] max-md:max-h-[30vh] overflow-auto">
+        <div className="px-4 pt-2 pb-4 max-h-[40vh] overflow-auto">
           {children}
         </div>
       </div>
