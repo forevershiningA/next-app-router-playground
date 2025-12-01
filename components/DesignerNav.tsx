@@ -54,42 +54,42 @@ export default function DesignerNav() {
   };
 
   return (
-    <nav className="overflow-y-auto h-full bg-black">
+    <nav className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
       {/* Product Header - shown when catalog is loaded */}
       {catalog && (
-        <div className="border-b border-gray-800 bg-black p-4">
+        <div className="border-b border-slate-700/50 bg-black/20 backdrop-blur-sm p-4">
           <h1 className="text-lg font-semibold text-white">
             {catalog.product.name}
             <br />
-            {widthMm} x {heightMm} mm (${price.toFixed(2)})
+            <span className="text-slate-300">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
           </h1>
         </div>
       )}
 
       {/* Header */}
-      <div className="p-4 border-b border-gray-800">
+      <div className="p-4 border-b border-slate-700/50">
         <Link href="/" className="hover:opacity-80 transition-opacity">
           <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
         </Link>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-serif font-light text-white tracking-tight">
+          <h2 className="text-2xl font-serif font-light text-white tracking-tight">
             3D Designer
           </h2>
           <Link
             href="/designs"
-            className="px-3 py-1.5 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all text-sm font-medium"
+            className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all text-sm font-medium backdrop-blur-sm border border-white/20"
           >
             Browse Designs
           </Link>
         </div>
-        <p className="text-sm text-gray-400 font-light">
+        <p className="text-sm text-slate-300 font-light">
           Design your perfect memorial
         </p>
       </div>
 
       {/* Menu Items */}
       <div className="p-4">
-        <div className="mb-2 px-3 font-mono text-sm font-semibold tracking-wide text-gray-600 uppercase">
+        <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-slate-400 uppercase">
           Design Tools
         </div>
         <div className="flex flex-col gap-1">
@@ -102,10 +102,10 @@ export default function DesignerNav() {
                 key={item.slug}
                 href={`/${item.slug}`}
                 onClick={(e) => handleMenuClick(item.slug, e)}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                   isActive 
-                    ? 'text-white bg-gray-800' 
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
+                    ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                    : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                 }`}
               >
                 <Icon className="h-5 w-5 flex-shrink-0" />
