@@ -55,32 +55,23 @@ export default function DesignerNav() {
 
   return (
     <nav className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
-      {/* Product Header - shown when catalog is loaded */}
-      {catalog && (
-        <div className="border-b border-slate-700/50 bg-black/20 backdrop-blur-sm p-4">
-          <h1 className="text-lg font-semibold text-white">
-            {catalog.product.name}
-            <br />
-            <span className="text-slate-300">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
-          </h1>
-        </div>
-      )}
-
       {/* Header */}
       <div className="p-4 border-b border-slate-700/50">
         <Link href="/" className="hover:opacity-80 transition-opacity">
           <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
         </Link>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl font-serif font-light text-white tracking-tight">
-            3D Designer
-          </h2>
-          <Link
-            href="/designs"
-            className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all text-sm font-medium backdrop-blur-sm border border-white/20"
-          >
-            Browse Designs
-          </Link>
+        <div className="mb-3">
+          {catalog ? (
+            <h1 className="text-2xl font-serif font-light text-white tracking-tight">
+              {catalog.product.name}
+              <br />
+              <span className="text-base text-slate-300">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
+            </h1>
+          ) : (
+            <h1 className="text-2xl font-serif font-light text-white tracking-tight">
+              3D Designer
+            </h1>
+          )}
         </div>
         <p className="text-sm text-slate-300 font-light">
           Design your perfect memorial
@@ -113,6 +104,15 @@ export default function DesignerNav() {
               </Link>
             );
           })}
+          
+          {/* Browse Designs CTA */}
+          <Link
+            href="/designs"
+            className="flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all mt-2 text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
+          >
+            <SparklesIcon className="h-5 w-5 flex-shrink-0" />
+            <span>Browse Designs</span>
+          </Link>
         </div>
       </div>
     </nav>
