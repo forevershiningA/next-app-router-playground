@@ -22,7 +22,31 @@ export default function ConditionalCanvas() {
   const segments = pathname?.split('/').filter(Boolean) || [];
   const isDesignPage = pathname?.startsWith('/designs') && segments.length >= 1;
   
-  if (isDesignPage) {
+  // Check if we're on the homepage
+  const isHomePage = pathname === '/';
+  
+  // Hide canvas on select-product page
+  const isSelectProductPage = pathname === '/select-product';
+  
+  // Hide canvas on select-shape page
+  const isSelectShapePage = pathname === '/select-shape';
+  
+  // Hide canvas on select-material page
+  const isSelectMaterialPage = pathname === '/select-material';
+  
+  // Hide canvas on select-additions page
+  const isSelectAdditionsPage = pathname === '/select-additions';
+  
+  // Hide canvas on select-motifs page
+  const isSelectMotifsPage = pathname === '/select-motifs';
+  
+  // Hide canvas on check-price page
+  const isCheckPricePage = pathname === '/check-price';
+  
+  // Show canvas on select-size page
+  const isSelectSizePage = pathname === '/select-size';
+  
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isSelectMotifsPage || isCheckPricePage) && !isSelectSizePage) {
     return null;
   }
 

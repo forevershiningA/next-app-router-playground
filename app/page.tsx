@@ -1,9 +1,11 @@
-import db from '#/lib/db';
-import { Boundary } from '#/ui/boundary';
-import { LinkStatus } from '#/ui/link-status';
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import HomeSplash from './_ui/HomeSplash';
+
+export const metadata: Metadata = {
+  title: 'Design Your Own Headstone Online | Forever Shining',
+  description: 'Create custom headstones, plaques and monuments. Choose stone, shape, size, inscriptions and motifs. Transparent pricing, world-wide delivery.',
+};
 
 export default function Page() {
-  // Root page - just show the canvas with no content below
-  return null;
+  return <HomeSplash />;
 }

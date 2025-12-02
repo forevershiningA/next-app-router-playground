@@ -423,6 +423,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
@@ -555,6 +556,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             onClick: (e) => {
               e.stopPropagation();
               setSelected('headstone');
+              setEditingObject('headstone');
               setSelectedInscriptionId(null);
               setSelectedAdditionId(null); // Close addition panel
               setSelectedMotifId(null); // Close motif panel

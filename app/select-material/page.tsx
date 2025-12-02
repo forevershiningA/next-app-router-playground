@@ -1,19 +1,19 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+import MaterialSelectionGrid from './_ui/MaterialSelectionGrid';
 import db from '#/lib/db';
-import ProductCard from '#/ui/product-card';
+
+export const metadata: Metadata = {
+  title: 'Granite & Marble for Headstones – Colours & Finishes | Forever Shining',
+  description: 'Choose from premium granite and marble in various colours and finishes. Each stone selected for durability and lasting beauty.',
+};
 
 export default async function Page() {
-  const materials = await db.material.findMany({ limit: 32 });
+  const materials = await db.material.findMany({ limit: 100 });
 
   return (
     <Suspense fallback={null}>
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {materials.map((mat) => (
-            <ProductCard key={mat.id} product={mat as any} type="material" />
-          ))}
-        </div>
-      </div>
+      <MaterialSelectionGrid materials={materials} />
     </Suspense>
   );
 }

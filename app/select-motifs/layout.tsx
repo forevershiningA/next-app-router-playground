@@ -1,31 +1,15 @@
-'use client';
+import React from 'react';
+import { type Metadata } from 'next';
+import db from '#/lib/db';
 
-import React, { useEffect } from 'react';
-import { useHeadstoneStore } from '#/lib/headstone-store';
-import MotifOverlayPanel from '#/components/MotifOverlayPanel';
+export async function generateMetadata(): Promise<Metadata> {
+  const demo = db.demo.find({ where: { slug: 'select-motifs' } });
+  return {
+    title: demo?.name || 'Select Motifs',
+    openGraph: { title: demo?.name || 'Select Motifs', images: [`/api/og?title=${demo?.name || 'Select Motifs'}`] },
+  };
+}
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
-  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
-  const activePanel = useHeadstoneStore((s) => s.activePanel);
-  
-  // Open motifs panel when this route mounts
-  useEffect(() => {
-    setActivePanel('motifs');
-    
-    // Cleanup: close panel when navigating away
-    return () => {
-      setActivePanel(null);
-    };
-  }, [setActivePanel]);
-  
-  // Hide the selection overlay when a motif is selected for editing
-  const shouldShowSelection = !selectedMotifId || activePanel !== 'motif';
-  
-  return (
-    <div className="relative w-full">
-      {shouldShowSelection && <MotifOverlayPanel />}
-      {children}
-    </div>
-  );
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

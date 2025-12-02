@@ -15,6 +15,7 @@ const BASE_H = 2;
 export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
@@ -114,6 +115,7 @@ export default function HeadstoneAssembly() {
             onClick={(e) => {
               e.stopPropagation();
               setSelected('base');
+              setEditingObject('base');
               setSelectedInscriptionId(null);
             }}
           />

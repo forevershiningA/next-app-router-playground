@@ -271,32 +271,10 @@ export default function SceneOverlayController({
           aria-label="Panel header"
         >
           <h2 className="font-semibold md:text-gray-900">{title}</h2>
-
-          <button
-            type="button"
-            data-nodrag
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onClose) {
-                onClose();
-              } else {
-                setActivePanel(null);
-              }
-              // Dispatch event to show all sections in nav
-              window.dispatchEvent(new CustomEvent('back-to-menu'));
-              // Navigate to home to hide the section panels
-              router.push('/');
-            }}
-            className="flex items-center space-x-1 md:bg-gray-900/10 md:text-gray-900 md:hover:bg-gray-900/20 px-4 py-2 text-sm rounded transition-colors cursor-pointer"
-            title="Back to menu"
-          >
-            <span>←</span>
-            <span>Back to menu</span>
-          </button>
         </div>
 
         {/* Body */}
-        <div className="px-4 pt-2 pb-4 max-h-[25vh] overflow-auto md:text-gray-900">
+        <div className="px-4 pt-2 pb-4 max-h-[30vh] overflow-auto md:text-gray-900">
           {children}
         </div>
       </div>

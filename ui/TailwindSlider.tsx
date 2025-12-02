@@ -68,7 +68,7 @@ export default function TailwindSlider({
           step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="h-2 flex-1 cursor-pointer appearance-none rounded-lg md:bg-gray-300 bg-gray-700"
+          className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-700"
         />
         <button
           onClick={increment}

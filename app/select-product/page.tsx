@@ -1,30 +1,16 @@
 'use cache';
 
+import type { Metadata } from 'next';
+import ProductSelectionGrid from './_ui/ProductSelectionGrid';
 import db from '#/lib/db';
-import { Boundary } from '#/ui/boundary';
-import { ProductCard } from '#/ui/product-card';
+
+export const metadata: Metadata = {
+  title: 'Headstones, Plaques & Monuments – Choose a Product | Forever Shining',
+  description: 'Select from our range of memorial products including headstones, plaques, urns and full monuments. Each product crafted with care and precision.',
+};
 
 export default async function Page() {
-  const products = db.product.findMany({ limit: 9 });
+  const products = db.product.findMany({ limit: 100 });
 
-  return (
-    <Boundary label="page.tsx">
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
-          <h1 className="text-xl font-semibold text-gray-300">
-            All{' '}
-            <span className="font-mono tracking-tighter text-gray-600">
-              ({products.length})
-            </span>
-          </h1>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} type="product" />
-          ))}
-        </div>
-      </div>
-    </Boundary>
-  );
+  return <ProductSelectionGrid products={products} />;
 }

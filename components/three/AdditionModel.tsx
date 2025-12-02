@@ -71,7 +71,7 @@ function AdditionModelInner({
   
   // Load GLB and texture - these must be called unconditionally
   const gltf = useGLTF(glbPath);
-  const colorMap = useTexture(`/additions/${dirNum}/colorMap.png`);
+  const colorMap = useTexture(`/additions/${dirNum}/colorMap.webp`);
   
   // These must come after other hooks but before conditional returns
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);

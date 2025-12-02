@@ -308,8 +308,36 @@ body:has([data-seo-page="true"]) .lg\:pl-\[400px\] {
   .canvas-with-border {
     border: 1px solid white !important;
   }
-  
+
   div:has(> .canvas-with-border) {
     padding: 40px !important;
   }
+}
+
+/* Range slider thumb/handle styling */
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgb(207, 172, 108);
+  cursor: pointer;
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgb(207, 172, 108);
+  cursor: pointer;
+  border: none;
+}
+
+input[type='range']::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgb(207, 172, 108);
+  cursor: pointer;
+  border: none;
 }

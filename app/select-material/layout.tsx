@@ -1,7 +1,6 @@
 import React from 'react';
 import { type Metadata } from 'next';
 import db from '#/lib/db';
-import MaterialPanelWrapper from './MaterialPanelWrapper';
 
 export async function generateMetadata(): Promise<Metadata> {
   const demo = db.demo.find({ where: { slug: 'select-material' } });
@@ -11,12 +10,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const materials = await db.material.findMany({ limit: 32 });
-
-  return <MaterialPanelWrapper materials={materials} />;
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

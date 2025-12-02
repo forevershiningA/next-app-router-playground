@@ -96,6 +96,9 @@ type HeadstoneState = {
   showBase: boolean;
   setShowBase: (showBase: boolean) => void;
 
+  editingObject: 'headstone' | 'base';
+  setEditingObject: (obj: 'headstone' | 'base') => void;
+
   showInscriptionColor: boolean;
   inscriptionPriceModel: PriceModel | null;
 
@@ -206,6 +209,8 @@ type HeadstoneState = {
   openSizePanel: () => void;
   openAdditionsPanel: () => void;
   closeInscriptions: () => void;
+
+  resetDesign: () => void;
 };
 
 let nextId = 0;
@@ -402,6 +407,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   showBase: true,
   setShowBase: (showBase) => set({ showBase }),
+
+  editingObject: 'headstone',
+  setEditingObject: (obj) => set({ editingObject: obj }),
 
   showInscriptionColor: true,
   inscriptionPriceModel: null,
@@ -917,5 +925,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   closeInscriptions: () => {
     set({ selectedInscriptionId: null });
     get().setActivePanel(null);
+  },
+
+  resetDesign: () => {
+    set({
+      inscriptions: [],
+      selectedAdditions: [],
+      selectedMotifs: [],
+      selectedInscriptionId: null,
+      selectedAdditionId: null,
+      selectedMotifId: null,
+      activePanel: null,
+      // Reset to default dimensions
+      widthMm: 900,
+      heightMm: 900,
+    });
   },
 }));

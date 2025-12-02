@@ -143,7 +143,7 @@ export default function ThreeScene() {
       )}
       <div 
         ref={containerRef}
-        className="relative w-full md:h-[75vh] h-screen" 
+        className="relative w-full h-screen" 
         style={{ 
           background: '#000000', 
           padding: '0' 
