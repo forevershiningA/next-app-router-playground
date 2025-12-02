@@ -49,6 +49,7 @@ export default function DesignerNav() {
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
 
   // Check if anything has been added to the headstone
   const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;

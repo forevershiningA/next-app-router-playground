@@ -4,8 +4,15 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { Motif } from '#/lib/db';
 import { getMotifCategoryName } from '#/lib/motif-translations';
+
+type Motif = {
+  id: string | number;
+  name: string;
+  src: string;
+  img?: string;
+  traditional?: boolean;
+};
 
 type MotifCategory = {
   id: string;

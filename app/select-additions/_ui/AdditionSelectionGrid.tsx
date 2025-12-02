@@ -121,7 +121,7 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
               {filteredAdditions.map((addition) => {
                 const isSelected = selectedAdditions.includes(addition.id);
                 // Extract directory from file path (e.g., "207/Art207.glb" -> "207")
-                const dirName = addition.file.split('/')[0];
+                const dirName = addition.file?.split('/')[0] || '';
                 const imagePath = `/additions/${dirName}/${addition.image}`;
                 
                 return (

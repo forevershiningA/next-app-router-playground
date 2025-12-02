@@ -3,12 +3,12 @@
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function CheckPriceGrid() {
-  const selectedProduct = useHeadstoneStore((s) => s.selectedProduct);
+  const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
-  const textBoxes = useHeadstoneStore((s) => s.textBoxes);
+  const inscriptions = useHeadstoneStore((s) => s.inscriptions);
 
   // Calculate pricing based on selections
   const basePrice = 500; // Base price for headstone
@@ -16,7 +16,7 @@ export default function CheckPriceGrid() {
   const materialPrice = 150; // Additional for premium materials
   const additionsPrice = selectedAdditions.length * 75;
   const motifsPrice = selectedMotifs.length * 25;
-  const inscriptionPrice = (textBoxes || []).filter(tb => tb.text?.trim()).length * 50;
+  const inscriptionPrice = (inscriptions || []).filter(line => line.text?.trim()).length * 50;
 
   const subtotal = basePrice + materialPrice + additionsPrice + motifsPrice + inscriptionPrice;
   const tax = subtotal * 0.1; // 10% tax
@@ -51,7 +51,7 @@ export default function CheckPriceGrid() {
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
                 <div>
                   <p className="text-sm text-gray-400">Product Type</p>
-                  <p className="text-lg text-white">{selectedProduct || 'Not selected'}</p>
+                  <p className="text-lg text-white">{productId || 'Not selected'}</p>
                 </div>
                 <p className="text-xl text-white font-semibold">${basePrice}</p>
               </div>
@@ -96,7 +96,7 @@ export default function CheckPriceGrid() {
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
                 <div>
                   <p className="text-sm text-gray-400">Custom Inscriptions</p>
-                  <p className="text-lg text-white">{(textBoxes || []).filter(tb => tb.text?.trim()).length} inscription{(textBoxes || []).filter(tb => tb.text?.trim()).length !== 1 ? 's' : ''}</p>
+                  <p className="text-lg text-white">{(inscriptions || []).filter(line => line.text?.trim()).length} inscription{(inscriptions || []).filter(line => line.text?.trim()).length !== 1 ? 's' : ''}</p>
                 </div>
                 <p className="text-xl text-white font-semibold">${inscriptionPrice}</p>
               </div>
