@@ -41,6 +41,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const handleShapeSelect = (shape: Shape) => {
     const shapeUrl = `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);
+    router.push('/select-size');
   };
 
   const handleCustomUpload = () => {

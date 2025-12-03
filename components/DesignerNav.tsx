@@ -19,7 +19,9 @@ import {
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
+import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
+import { data } from '#/app/_internal/_data';
 
 // Menu items with icons
 const menuItems = [
@@ -58,6 +60,26 @@ export default function DesignerNav() {
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   
+  // State for Select Motifs expansion
+  const [isMotifsExpanded, setIsMotifsExpanded] = React.useState(false);
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+  const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
+  const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
+  const removeMotif = useHeadstoneStore((s) => s.removeMotif);
+  const duplicateMotif = useHeadstoneStore((s) => s.duplicateMotif);
+  const setMotifColor = useHeadstoneStore((s) => s.setMotifColor);
+  const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
+  
+  // State for Select Additions expansion
+  const [isAdditionsExpanded, setIsAdditionsExpanded] = React.useState(false);
+  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
+  const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
+  const removeAddition = useHeadstoneStore((s) => s.removeAddition);
+  const duplicateAddition = useHeadstoneStore((s) => s.duplicateAddition);
+  
   // Auto-expand Select Size panel and show canvas when on select-size page
   useEffect(() => {
     if (pathname === '/select-size') {
@@ -65,6 +87,20 @@ export default function DesignerNav() {
       setShowCanvas(true);
     }
   }, [pathname]);
+  
+  // Auto-expand Edit Motif panel when a motif is selected
+  useEffect(() => {
+    if (selectedMotifId) {
+      setIsMotifsExpanded(true);
+    }
+  }, [selectedMotifId]);
+  
+  // Auto-expand Edit Addition panel when an addition is selected
+  useEffect(() => {
+    if (selectedAdditionId) {
+      setIsAdditionsExpanded(true);
+    }
+  }, [selectedAdditionId]);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
@@ -140,14 +176,16 @@ export default function DesignerNav() {
           Design Tools
         </div>
         <div className="flex flex-col gap-1">
-          {/* 3D Preview Button */}
-          <button
-            onClick={handlePreviewClick}
-            className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
-          >
-            <EyeIcon className="h-5 w-5 flex-shrink-0" />
-            <span>3D Preview</span>
-          </button>
+          {/* 3D Preview Button - Hide when canvas is already visible */}
+          {!showCanvas && pathname !== '/' && (
+            <button
+              onClick={handlePreviewClick}
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+            >
+              <EyeIcon className="h-5 w-5 flex-shrink-0" />
+              <span>3D Preview</span>
+            </button>
+          )}
           
           {menuItems.map((item, index) => {
             const Icon = item.icon;
@@ -155,6 +193,11 @@ export default function DesignerNav() {
             
             // Insert "New Design" button after "Select Product" if there are customizations
             const showNewDesignAfter = index === 0 && hasCustomizations;
+            
+            // Hide 3D Preview when canvas is already visible or on select-size page
+            if (item.slug === '3d-preview' && (showCanvas || pathname === '/select-size')) {
+              return null;
+            }
             
             // Special handling for Select Size - navigate to page and expand
             if (item.slug === 'select-size') {
@@ -186,7 +229,7 @@ export default function DesignerNav() {
                     )}
                   </Link>
                   
-                  {isSizeExpanded && (
+                  {isSizeExpanded && !selectedMotifId && !selectedAdditionId && (
                     <div className="fs-size-panel mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
                       {/* Headstone/Base Toggle */}
                       <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
@@ -257,6 +300,343 @@ export default function DesignerNav() {
                   {showNewDesignAfter && (
                     <button
                       key="new-design-size"
+                      onClick={handleNewDesign}
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    >
+                      <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
+                      <span>New Design</span>
+                    </button>
+                  )}
+                </React.Fragment>
+              );
+            }
+            
+            // Special handling for Select Additions - show Edit Addition panel when expanded
+            if (item.slug === 'select-additions') {
+              const activeAddition = selectedAdditions.find((a) => a.id === selectedAdditionId);
+              const activeOffset = selectedAdditionId ? (additionOffsets[selectedAdditionId] || {
+                xPos: 0,
+                yPos: 0,
+                scale: 1,
+                rotationZ: 0,
+              }) : null;
+              
+              return (
+                <React.Fragment key={item.slug}>
+                  <Link
+                    href={`/${item.slug}`}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                      isActive 
+                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span>{item.name}</span>
+                  </Link>
+                  
+                  {selectedAdditionId && activeOffset && activeAddition && activePanel === 'addition' && (
+                    <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-slate-300">
+                          Selected: <span className="font-semibold text-white">{selectedAdditionId}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setSelectedAdditionId(null);
+                            setIsAdditionsExpanded(false);
+                            setActivePanel(null);
+                          }}
+                          className="text-white/60 hover:text-white transition-colors"
+                          title="Close"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          className="flex-1 cursor-pointer rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
+                          onClick={() => {
+                            if (selectedAdditionId) {
+                              duplicateAddition(selectedAdditionId);
+                            }
+                          }}
+                          title="Duplicate this addition"
+                        >
+                          Duplicate
+                        </button>
+                        <button
+                          className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+                          onClick={() => {
+                            if (selectedAdditionId) {
+                              removeAddition(selectedAdditionId);
+                              setSelectedAdditionId(null);
+                              setIsAdditionsExpanded(false);
+                            }
+                          }}
+                          title="Remove this addition"
+                        >
+                          Delete
+                        </button>
+                      </div>
+
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-white">
+                          Size: {(activeOffset.scale ?? 1).toFixed(2)}×
+                        </label>
+                        <input
+                          type="range"
+                          min={0.1}
+                          max={3}
+                          step={0.05}
+                          value={activeOffset.scale ?? 1}
+                          onChange={(e) => {
+                            if (selectedAdditionId && activeOffset) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeOffset,
+                                scale: Number(e.target.value),
+                              });
+                            }
+                          }}
+                          className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-white">
+                          Rotation: {Math.round(((activeOffset.rotationZ ?? 0) * 180) / Math.PI)}°
+                        </label>
+                        <input
+                          type="range"
+                          min={-180}
+                          max={180}
+                          step={1}
+                          value={((activeOffset.rotationZ ?? 0) * 180) / Math.PI}
+                          onChange={(e) => {
+                            if (selectedAdditionId && activeOffset) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeOffset,
+                                rotationZ: (Number(e.target.value) * Math.PI) / 180,
+                              });
+                            }
+                          }}
+                          className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {showNewDesignAfter && (
+                    <button
+                      key="new-design-additions"
+                      onClick={handleNewDesign}
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    >
+                      <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
+                      <span>New Design</span>
+                    </button>
+                  )}
+                </React.Fragment>
+              );
+            }
+            
+            // Special handling for Select Motifs - show Edit Motif panel when expanded
+            if (item.slug === 'select-motifs') {
+              const activeMotif = selectedMotifs.find((m) => m.id === selectedMotifId);
+              const activeOffset = selectedMotifId ? (motifOffsets[selectedMotifId] || {
+                xPos: 0,
+                yPos: 0,
+                scale: 1,
+                rotationZ: 0,
+                heightMm: 100,
+              }) : null;
+              
+              // Determine motif size limits based on product type
+              const isLaser = catalog?.product.laser === '1';
+              const isBronze = catalog?.product.type === 'bronze_plaque';
+              
+              let minHeight = 40;
+              let maxHeight = 1000;
+              let initHeight = 100;
+              
+              if (isLaser) {
+                minHeight = 40;
+                maxHeight = 600;
+                initHeight = 40;
+              } else if (isBronze) {
+                minHeight = 40;
+                maxHeight = 150;
+                initHeight = 100;
+              } else {
+                minHeight = 40;
+                maxHeight = 1000;
+                initHeight = 100;
+              }
+              
+              return (
+                <React.Fragment key={item.slug}>
+                  <Link
+                    href={`/${item.slug}`}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                      isActive 
+                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span>{item.name}</span>
+                  </Link>
+                  
+                  {isMotifsExpanded && selectedMotifId && activeOffset && activeMotif && (
+                    <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-slate-300">
+                          Selected: <span className="font-semibold text-white">{selectedMotifId}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setSelectedMotifId(null);
+                            setIsMotifsExpanded(false);
+                          }}
+                          className="text-slate-400 hover:text-white text-sm"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      {motifPriceModel && !isLaser && (
+                        <div className="border border-white/20 bg-white/5 p-3 rounded-lg">
+                          <div className="text-xs text-white/70 mb-1">Motif Price</div>
+                          <div className="text-2xl font-bold text-white">
+                            ${(calculateMotifPrice(activeOffset.heightMm ?? 100, activeMotif.color ?? '#c99d44', motifPriceModel.priceModel, isLaser)).toFixed(2)}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex gap-2">
+                        <button
+                          className="flex-1 rounded-md bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 cursor-pointer"
+                          onClick={() => {
+                            if (selectedMotifId) duplicateMotif(selectedMotifId);
+                          }}
+                        >
+                          Duplicate
+                        </button>
+                        <button
+                          className="flex-1 rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 cursor-pointer"
+                          onClick={() => {
+                            if (selectedMotifId) {
+                              removeMotif(selectedMotifId);
+                              setSelectedMotifId(null);
+                              setIsMotifsExpanded(false);
+                            }
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-200">
+                            Height: {activeOffset.heightMm ?? initHeight} <span className="text-slate-500">mm</span>
+                          </label>
+                          <input
+                            type="range"
+                            min={minHeight}
+                            max={maxHeight}
+                            step={1}
+                            value={activeOffset.heightMm ?? initHeight}
+                            onChange={(e) => {
+                              if (selectedMotifId && activeOffset) {
+                                setMotifOffset(selectedMotifId, {
+                                  ...activeOffset,
+                                  heightMm: Number(e.target.value),
+                                });
+                              }
+                            }}
+                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-200">
+                            Rotation: {Math.round(((activeOffset.rotationZ ?? 0) * 180) / Math.PI)} <span className="text-slate-500">°</span>
+                          </label>
+                          <input
+                            type="range"
+                            min={-180}
+                            max={180}
+                            step={1}
+                            value={((activeOffset.rotationZ ?? 0) * 180) / Math.PI}
+                            onChange={(e) => {
+                              if (selectedMotifId && activeOffset) {
+                                setMotifOffset(selectedMotifId, {
+                                  ...activeOffset,
+                                  rotationZ: (Number(e.target.value) * Math.PI) / 180,
+                                });
+                              }
+                            }}
+                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          />
+                        </div>
+
+                        {!isLaser && (
+                          <div>
+                            <label className="mb-2 block text-sm font-medium text-white">
+                              Select Color
+                            </label>
+                            <div className="grid grid-cols-2 gap-2 mb-2">
+                              <div
+                                className={`flex cursor-pointer flex-col items-center gap-1.5 border p-2 transition-colors rounded-lg ${
+                                  activeMotif.color === '#c99d44' ? 'border-[#D7B356] bg-white/10' : 'border-white/20 hover:bg-white/10'
+                                }`}
+                                onClick={() => selectedMotifId && setMotifColor(selectedMotifId, '#c99d44')}
+                              >
+                                <div
+                                  className="h-5 w-5 border border-white/20 rounded"
+                                  style={{ backgroundColor: '#c99d44' }}
+                                />
+                                <span className="text-xs text-slate-200">Gold</span>
+                              </div>
+                              <div
+                                className={`flex cursor-pointer flex-col items-center gap-1.5 border p-2 transition-colors rounded-lg ${
+                                  activeMotif.color === '#eeeeee' ? 'border-[#D7B356] bg-white/10' : 'border-white/20 hover:bg-white/10'
+                                }`}
+                                onClick={() => selectedMotifId && setMotifColor(selectedMotifId, '#eeeeee')}
+                              >
+                                <div
+                                  className="h-5 w-5 border border-white/20 rounded"
+                                  style={{ backgroundColor: '#eeeeee' }}
+                                />
+                                <span className="text-xs text-slate-200">Silver</span>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-7 gap-1">
+                              {data.colors.map((color) => (
+                                <div
+                                  key={color.id}
+                                  className={`h-6 w-6 cursor-pointer border rounded ${
+                                    activeMotif.color === color.hex ? 'border-[#D7B356] ring-2 ring-[#D7B356]' : 'border-white/20'
+                                  }`}
+                                  style={{ backgroundColor: color.hex }}
+                                  onClick={() => selectedMotifId && setMotifColor(selectedMotifId, color.hex)}
+                                  title={color.name}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {showNewDesignAfter && (
+                    <button
                       onClick={handleNewDesign}
                       className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >

@@ -21,10 +21,13 @@ export default function Scene() {
       
       {is2DMode && <color attach="background" args={['#CFE8FC']} />}
       
-      <ambientLight intensity={0.6} />
-      <directionalLight 
-        position={[5, 8, 5]} 
-        intensity={1.2} 
+      {/* Hero canvas style lighting */}
+      <ambientLight intensity={0.3} />
+      <spotLight 
+        position={[5, 5, 5]} 
+        angle={0.5} 
+        penumbra={1} 
+        intensity={1} 
         castShadow
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
@@ -34,12 +37,10 @@ export default function Scene() {
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
       />
-      <directionalLight position={[-3, 4, -3]} intensity={0.4} />
-      <hemisphereLight
-        color={0xffffff}
-        groundColor={0x444444}
-        intensity={0.5}
-      />
+      <pointLight position={[-2, 3, 2]} intensity={0.5} color="#badbff" />
+      
+      {/* Environment map for polished granite reflections */}
+      <Environment preset="city" />
 
       <HeadstoneAssembly />
 

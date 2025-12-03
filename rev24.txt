@@ -1,3 +1,29 @@
+This instruction addresses the issue where motifs and additions appear upside down and positioned incorrectly.
+
+The Issue:
+The current code "bakes" the Y-axis flip (to make the headstone upright) directly into the geometry vertices (merged.scale(1, -1, 1)). However, it sets the Mesh/Group scale to positive numbers.
+
+Upside Down: SVG-based "Additions" (like text or motifs) usually expect an SVG coordinate system (Y goes down). When placed in a standard 3D coordinate system (Y goes up), they appear upside down unless the container flips them.
+
+Off Position: Because the geometry was flipped and shifted internally, the local coordinate (0,0) of the mesh no longer matches the coordinate system expected by children elements calculated from 2D SVG logic.
+
+The Fix:
+
+Remove Geometry Flip: We stop flipping the geometry vertices. We leave the geometry "upside down" (Y-negative) relative to the object center.
+
+Apply Mesh Scale Flip: We apply a negative Y-scale (-scale) to the Mesh/Group. This visualizes the headstone upright while creating a "Y-Down" local coordinate system that matches the original SVG logic. This fixes the orientation of children elements automatically.
+
+Adjust UV Mapping: We update the UV calculation to map the now-negative Y coordinates back to the original SVG Y space.
+
+Preserve Winding Fix: Since we are using a negative scale on the mesh, we must keep the vertex winding swap (making vertices CW) so the negative scale flips them back to CCW (visible).
+
+Here is the corrected file:
+
+code
+Tsx
+download
+content_copy
+expand_less
 // components/SvgHeadstone.tsx
 'use client';
 
@@ -101,7 +127,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   faceRepeatX = 6,
   faceRepeatY = 6,
   sideRepeatX = 8,
-  sideRepeatY = 4,
+  sideRepeatY = 1,
   targetHeight,
   targetWidth,
   preserveTop = true,
@@ -217,25 +243,22 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     if (merged.index) merged = merged.toNonIndexed();
 
     // =========================================================
-    // GEOMETRY NORMALIZATION (BAKE TO Y-UP)
+    // GEOMETRY NORMALIZATION (FIXED for Child Coordinates)
     // =========================================================
     
-    // 1. Center X. 
-    //    Align "SVG Bottom" (maxY in most cases, but we use calculated bottomTarget_SV) to Y=0.
-    //    This temporarily puts the shape upside down sitting on 0 (range 0 to -Height).
-    //    Center Z to 0.
+    // 1. Center X and Z.
+    //    Align "SVG Bottom" (bottomTarget_SV) to Y=0.
+    //    Geometry Y range is now [Height (negative) -> 0].
     merged.translate(-(minX + maxX) / 2, -bottomTarget_SV, -depth / 2);
 
-    // 2. Flip Y.
-    //    The shape flips vertically. 
-    //    Previously: Base at 0, Top at -Height.
-    //    Now: Base at 0, Top at +Height.
-    //    This creates the correct Upright orientation.
-    merged.scale(1, -1, 1);
+    // NOTE: We do NOT flip geometry vertices (merged.scale(1,-1,1)). 
+    // We maintain "Y-Down" geometry structure so standard negative-scale 
+    // containers (used for SVG alignment) work correctly for children.
 
-    // 3. FIX WINDING ORDER.
-    //    Scaling by -1 on one axis (Y) inverts the winding order (Inside-Out).
-    //    We swap vertices 1 and 2 to restore correct Outward facing normals.
+    // 2. SWAP WINDING ORDER (For Negative Scale)
+    //    We will apply a negative Y-scale to the Mesh to make it stand upright.
+    //    Negative scale inverts winding (CCW becomes CW). This makes faces disappear (culling).
+    //    To fix, we PRE-SWAP vertices here to be CW, so the scale flips them back to CCW (visible).
     const posAttr = merged.getAttribute('position');
     for (let i = 0; i < posAttr.count; i += 3) {
        const x1 = posAttr.getX(i + 1), y1 = posAttr.getY(i + 1), z1 = posAttr.getZ(i + 1);
@@ -271,7 +294,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     for (let t = 0; t < triCount; t++) {
       const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
-      // Front is now at +zFront due to centering
       const z0 = pos.getZ(i0);
       const cap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
       
@@ -289,17 +311,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const bb = merged.boundingBox!;
     const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
     
-    // Geometry is Y-Up [0, Height]. Texture is V-Up [0, 1].
-    // Direct mapping works perfectly now.
+    // Geometry is in local space (Y negative). 
     const y0 = bb.min.y; 
     const dyU = bb.max.y - bb.min.y;
     
     const uvArr = new Float32Array(pos.count * 2);
     const centerX = (minX + maxX) / 2;
     
-    // Total visual height in SVG units
-    const svgTotalHeight = bottomTarget_SV - minY;
-
     for (let i = 0; i < pos.count; i += 3) {
       const z0 = pos.getZ(i), z1 = pos.getZ(i+1);
       const isCap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
@@ -314,12 +332,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       } else {
         for (let j = 0; j < 3; j++) {
           const px = pos.getX(i + j);
-          const py = pos.getY(i + j);
+          const py = pos.getY(i + j); // This is now negative (0 to -H)
           const pz = pos.getZ(i + j);
           
-          // Map 3D Y (0 to H) back to SVG Y (H to 0) for side wrapping
-          // Original SVG Y = TotalH - GeomY + minY
-          const originalSvgY = svgTotalHeight - py + minY;
+          // Map local Y back to SVG Y for correct texture wrapping
+          // We translated by -bottomTarget_SV. So SVG_Y = py + bottomTarget_SV
+          const originalSvgY = py + bottomTarget_SV;
           
           const s = nearestS(px + centerX, originalSvgY, outline.pts, outline.cum, outline.total);
           // Map Z from [-d/2, +d/2] to [0, 1]
@@ -337,16 +355,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const worldPerim = outline.total * Math.abs(scale) * sCore;
     const worldDepth = Math.abs(depth * scale);
 
-    // Standard Scale (1,1,1) because geometry is normalized
-    const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
+    // Apply NEGATIVE Y Scale to the Mesh. 
+    // This flips the geometry upright visually, but creates a Y-Down local coordinate
+    // system that matches standard SVG logic for children elements.
+    const finalScale: [number, number, number] = [scale * sCore, -scale * sCore, scale];
 
     // =========================================================
     // CHILD WRAPPER POSITION
     // =========================================================
-    // Children use mesh-local coordinates from raycasting.
-    // Raycaster returns coords in geometry's coordinate system (Y-up, base at 0).
-    // Wrapper should be at origin with identity transform.
-    
     const wrapperX = 0;  
     const wrapperY = 0;  
     const wrapperZ = 0;
@@ -356,7 +372,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       dims: { worldW, worldH, worldPerim, worldDepth },
       meshScale: finalScale,
       apiData: {
-        frontZ: depth / 2, // Z Position of the front face in local space
+        frontZ: depth / 2,
         unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
         version: Math.random(),
         worldWidth: worldW,
@@ -385,7 +401,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     clonedSideMap.needsUpdate = true;
   }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap]);
 
-  // 5. Create Materials (FIX: Return data from useMemo, not JSX)
+  // 5. Create Materials
   const materials = useMemo(() => {
     const common = {
       roughness: 0.15,
@@ -403,7 +419,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   const meshRef = useRef<THREE.Mesh>(null!);
   const groupRef = useRef<THREE.Group>(null!);
   
-  // Force re-render after mount to ensure children can access populated meshRef
   const [isReady, setIsReady] = useState(false);
   useLayoutEffect(() => {
     setIsReady(true);
@@ -411,7 +426,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   useImperativeHandle(ref, () => groupRef.current);
 
-  // Stable API for children
   const childApi = useMemo(() => ({
     group: groupRef,
     mesh: meshRef,
@@ -420,11 +434,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     version: apiData?.version ?? 0,
     worldWidth: apiData?.worldWidth ?? 1,
     worldHeight: apiData?.worldHeight ?? 1
-  }), [apiData, isReady]); // Include isReady to ensure update after mount
+  }), [apiData, isReady]);
 
   if (!geometries.length || !dims) return null;
 
-  // 6. Return JSX (FIX: JSX in return, not useMemo)
   return (
     <group ref={groupRef} scale={meshScale}>
       {geometries.map((geom, i) => (
@@ -441,11 +454,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         </mesh>
       ))}
 
-      {/* 
-         CHILDREN WRAPPER:
-         Identity transform - children positioned in mesh-local coordinates.
-         Raycasting returns mesh-local coords which are already in geometry space.
-      */}
       <group position={childWrapperPos} scale={[1, 1, 1]}>
          {typeof children === 'function' && children(childApi, selectedAdditions)}
       </group>

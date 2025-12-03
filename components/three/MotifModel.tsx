@@ -110,11 +110,15 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
         localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
-        const offset = motifOffsets[id] ?? {};
+        // Calculate center position (like inscriptions)
+        const centerX = (bbox.min.x + bbox.max.x) / 2;
+        const centerY = (bbox.min.y + bbox.max.y) / 2;
+        
+        // Store as OFFSET from center, but NEGATE Y to match old Y-down saved format
         setMotifOffset(id, {
           ...offset,
-          xPos: localPt.x,
-          yPos: localPt.y,
+          xPos: localPt.x - centerX,
+          yPos: -(localPt.y - centerY),  // Negate to convert Y-up to Y-down format
         });
       }
     },
@@ -183,29 +187,31 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
     return null;
   }
 
-  // Get headstone bounds
+  // Get headstone bounds and calculate center (like inscriptions)
   if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
   const bbox = stone.geometry.boundingBox!.clone();
+  
+  const centerX = (bbox.min.x + bbox.max.x) / 2;
+  const centerY = (bbox.min.y + bbox.max.y) / 2;
+  const centerZ = headstone.frontZ + 0.5;
 
   const inset = 0.01;
   const spanY = bbox.max.y - bbox.min.y;
   const minX = bbox.min.x + inset;
   const maxX = bbox.max.x - inset;
-  // With negative Y scale: bbox.max.y becomes bottom, bbox.min.y becomes top
-  // So for positioning: higher Y value = lower on screen, lower Y value = higher on screen
-  const minY = bbox.min.y + inset + 0.04 * spanY; // Top area (after flip = bottom on screen) - prevent going too high
-  const maxY = bbox.max.y - inset; // Bottom area (after flip = top on screen)
+  const minY = bbox.min.y + inset + 0.04 * spanY;
+  const maxY = bbox.max.y - inset;
 
-  // Default position in center
-  const defaultX = THREE.MathUtils.lerp(minX, maxX, 0.5);
-  const defaultY = THREE.MathUtils.lerp(minY, maxY, 0.5);
+  // Default position at center (as OFFSET from center = 0, like inscriptions)
+  const defaultX = 0;
+  const defaultY = 0;
 
   const defaultOffset = {
     xPos: defaultX,
     yPos: defaultY,
     scale: 1,
     rotationZ: 0,
-    heightMm: 100, // Default height in mm (init_height from XML)
+    heightMm: 100,
   };
 
   const offset = motifOffsets[id] ?? defaultOffset;
@@ -221,9 +227,6 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   // Calculate scale to make the motif's height match the heightMm value
   const finalScale = meshHeight > 0 ? targetHeightInUnits / meshHeight : 1;
 
-  // Position on headstone surface (front) with enough offset to prevent z-fighting
-  const zPosition = headstone.frontZ + 0.5;
-
   const isSelected = selectedMotifId === id;
 
   // Calculate scaled bounds for SelectionBox (in world space)
@@ -232,17 +235,22 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
     height: mesh.size.y * finalScale,
   };
 
+  // Convert offset from old Y-down saved format to Y-up display format
+  const displayY = centerY - (offset.yPos || 0);
+  
+  console.log(`[DISPLAY] Motif ${id}: offset=(${offset.xPos?.toFixed(1)}, ${offset.yPos?.toFixed(1)}) center=(${centerX.toFixed(1)}, ${centerY.toFixed(1)}) → display=(${(centerX + (offset.xPos || 0)).toFixed(1)}, ${displayY.toFixed(1)})`);
+
   return (
     <>
-      {/* Parent group for positioning only - no scale applied here */}
+      {/* Parent group for positioning - same coordinate system as inscriptions */}
       <group
-        position={[offset.xPos, offset.yPos, zPosition]}
+        position={[centerX + offset.xPos, displayY, centerZ]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
-        {/* Motif mesh with scale */}
+        {/* Motif mesh with scale - Y-flipped because SVG shapes are stored Y-down */}
         <group
           ref={ref}
-          scale={[finalScale, finalScale, 1]}
+          scale={[finalScale, -finalScale, 1]}
           visible={true}
           name={`motif-${id}`}
           onClick={handleClick}

@@ -537,15 +537,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   additionRefs: {},
   // Sample template: Pre-positioned additions for beautiful composition
   additionOffsets: {
-    'B2127': { xPos: 0, yPos: -330, scale: 0.6, rotationZ: 0 },        // Cross at center above first inscription
-    'B1134S': { xPos: 150, yPos: -130, scale: 0.7, rotationZ: 0 },     // Angel at right side
+    'B2127': { xPos: 0, yPos: -130, scale: 0.6, rotationZ: 0 },        // Cross at top
+    'B1134S': { xPos: 150, yPos: -90, scale: 0.7, rotationZ: 0 },     // Angel at right side
   },
 
   selectedMotifId: null,
   motifRefs: {},
   // Sample template: Pre-positioned motif
   motifOffsets: {
-    'motif_dove_1': { xPos: -170, yPos: -200, scale: 1.2, rotationZ: 0, heightMm: 40 },   // Dove - top left
+    'motif_dove_1': { xPos: -170, yPos: 0, scale: 1.2, rotationZ: 0, heightMm: 40 },   // Dove - centered vertically
   },
 
   setInscriptions: (inscriptions) => {

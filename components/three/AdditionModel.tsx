@@ -62,6 +62,7 @@ function AdditionModelInner({
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   
@@ -172,11 +173,15 @@ function AdditionModelInner({
       localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
       localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
       
-      const offset = additionOffsets[id] ?? {};
+      // Calculate center position (like inscriptions)
+      const centerX = (bbox.min.x + bbox.max.x) / 2;
+      const centerY = (bbox.min.y + bbox.max.y) / 2;
+      
+      // Store as OFFSET from center, but NEGATE Y to match old Y-down saved format
       setAdditionOffset(id, {
         ...offset,
-        xPos: localPt.x,
-        yPos: localPt.y,
+        xPos: localPt.x - centerX,
+        yPos: -(localPt.y - centerY),  // Negate to convert Y-up to Y-down format
       });
     }
   }, [headstone, gl, camera, raycaster, mouse, id, additionOffsets, setAdditionOffset, addition.type, threeScene]);
@@ -185,10 +190,11 @@ function AdditionModelInner({
     e.stopPropagation();
 
     setSelectedAdditionId(id);
+    setActivePanel('addition');
     
     // Dispatch event to hide nav when clicking on addition
     window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'addition' } }));
-  }, [id, setSelectedAdditionId]);
+  }, [id, setSelectedAdditionId, setActivePanel]);
 
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
@@ -281,6 +287,10 @@ function AdditionModelInner({
   // bbox in HEADSTONE LOCAL SPACE
   if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
   const bbox = stone.geometry.boundingBox!.clone();
+  
+  // Calculate center (like inscriptions and motifs)
+  const centerX = (bbox.min.x + bbox.max.x) / 2;
+  const centerY = (bbox.min.y + bbox.max.y) / 2;
 
   const inset = 0.01;
   const spanY = bbox.max.y - bbox.min.y;
@@ -289,19 +299,18 @@ function AdditionModelInner({
   const minY = bbox.min.y + inset + 0.04 * spanY;
   const maxY = bbox.max.y - inset;
 
-  // Different default positions based on type
+  // Different default positions based on type (as OFFSETS from center)
   let defaultX = 0, defaultY = 0;
   if (addition.type === 'application') {
-    defaultX = THREE.MathUtils.lerp(minX, maxX, 0.5);
-    defaultY = THREE.MathUtils.lerp(minY, maxY, 0.5);
+    defaultX = 0;  // Center
+    defaultY = 0;  // Center
   } else if (addition.type === 'statue') {
     // Position on the base, left of headstone
-    // With negative Y scale: lower Y values appear higher (at base)
-    defaultX = minX - 80; // Left of the headstone
-    defaultY = minY; // Near the top (base level after flip)
+    defaultX = minX - 80 - centerX; // Left of the headstone (as offset)
+    defaultY = minY - centerY; // Near the top (as offset)
   } else if (addition.type === 'vase') {
-    defaultX = maxX + 30; // 30mm right
-    defaultY = minY; // Near the top (base level after flip)
+    defaultX = maxX + 30 - centerX; // 30mm right (as offset)
+    defaultY = minY - centerY; // Near the top (as offset)
   }
 
   const defaultOffset = {
@@ -347,15 +356,15 @@ function AdditionModelInner({
 
   return (
     <>      
-      {/* Parent group for positioning only - no scale applied here */}
+      {/* Parent group for positioning - convert Y-down saved coords to Y-up display */}
       <group
-        position={[offset.xPos, offset.yPos, zPosition]}
+        position={[centerX + offset.xPos, centerY - offset.yPos, zPosition]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
-        {/* Addition mesh with scale */}
+        {/* Addition mesh with scale and Y-flip to display right-side-up */}
         <group
           ref={ref}
-          scale={[finalScale, finalScale, finalScale]}
+          scale={[finalScale, -finalScale, finalScale]}
           visible={true}
           name={`addition-${id}`}
           onClick={handleClick}

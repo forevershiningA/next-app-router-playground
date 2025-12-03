@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
   CubeIcon,
   PencilIcon,
@@ -13,6 +14,15 @@ import {
   EyeIcon,
   BookmarkIcon,
 } from '@heroicons/react/24/outline';
+
+const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="mx-auto flex items-center justify-center" style={{ width: '480px', height: '480px' }}>
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
+    </div>
+  ),
+});
 
 export default function HomeSplash() {
   const router = useRouter();
@@ -31,7 +41,13 @@ export default function HomeSplash() {
               Create a beautiful, personalized memorial with our intuitive 3D design system. 
               Choose from hundreds of options and see your design come to life in real-time.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-6">
+            
+            {/* 3D Canvas Preview */}
+            <div className="mt-10 mb-8">
+              <HeroCanvas />
+            </div>
+            
+            <div className="flex items-center justify-center gap-6">
               <Link
                 href="/select-product"
                 className="rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-8 py-4 text-base font-semibold text-slate-900 shadow-lg transition-all hover:scale-105 hover:shadow-[#cfac6c]/30"

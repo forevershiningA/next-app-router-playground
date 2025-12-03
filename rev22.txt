@@ -1,3 +1,10 @@
+This solution normalizes the geometry to a standard Y-Up, Base-at-Zero coordinate system by manipulating the geometry buffer directly. It places the children (inscriptions/motifs) in a wrapper group that perfectly maps SVG coordinates (Y-Down, 0 at Top) to the 3D surface (Y-Up, Height at Top).
+
+code
+Tsx
+download
+content_copy
+expand_less
 // components/SvgHeadstone.tsx
 'use client';
 
@@ -101,7 +108,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   faceRepeatX = 6,
   faceRepeatY = 6,
   sideRepeatX = 8,
-  sideRepeatY = 4,
+  sideRepeatY = 1,
   targetHeight,
   targetWidth,
   preserveTop = true,
@@ -114,14 +121,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   inscriptions = [],
 }, ref) => {
   
-  // 1. Load SVG and Textures
+  // 1. Load Data
   const svgData = useLoader(SVGLoader, url);
   const textures = useTexture({
     face: faceTexture,
     side: sideTexture ?? faceTexture
   });
 
-  // 2. Clone Textures (FIX: Texture Mutation Bug)
+  // 2. Clone Textures
   const [clonedFaceMap, clonedSideMap] = useMemo(() => {
     const f = textures.face.clone();
     const s = textures.side.clone();
@@ -134,7 +141,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       t.generateMipmaps = true;
       t.needsUpdate = true;
     });
-    
     return [f, s];
   }, [textures.face, textures.side]);
 
@@ -161,20 +167,18 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const widthW = dx * Math.abs(scale);
     const heightW = dy * Math.abs(scale);
 
-    // Targets
+    // Scaling Targets
     const wantW = targetWidth ?? widthW;
     const wantH = targetHeight ?? heightW;
-
-    // Uniform scale (width)
     const sCore = wantW / Math.max(EPS, widthW);
-    const coreH_world = heightW * sCore;
+    // const coreH_world = heightW * sCore; // Unused
 
-    // Bottom target (top fixed) in SVG space
+    // SVG Space Targets
     const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
     const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
     const bottomTarget_SV = minY + targetH_SV;
 
-    // Build extrudes
+    // Geometry Generation
     const extrudeSettings = {
       depth,
       steps: 1,
@@ -187,17 +191,15 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     let coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
     const geoms: THREE.BufferGeometry[] = [coreGeom];
 
-    // Preserve top logic
-    if (preserveTop && wantH > coreH_world + 1e-9) {
+    if (preserveTop && wantH > heightW + 1e-9) {
       const s = new THREE.Shape();
       s.moveTo(minX, maxY);
       s.lineTo(maxX, maxY);
       s.lineTo(maxX, bottomTarget_SV);
       s.lineTo(minX, bottomTarget_SV);
       s.closePath();
-      const band = new THREE.ExtrudeGeometry(s, extrudeSettings);
-      geoms.push(band);
-    } else if (preserveTop && wantH < coreH_world - 1e-9) {
+      geoms.push(new THREE.ExtrudeGeometry(s, extrudeSettings));
+    } else if (preserveTop && wantH < heightW - 1e-9) {
       const pos = coreGeom.getAttribute('position') as THREE.BufferAttribute;
       const P = pos.array as Float32Array;
       for (let i = 0; i < P.length; i += 3)
@@ -205,15 +207,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       pos.needsUpdate = true;
     }
 
-    // Merge geometries if needed
-    let merged: THREE.BufferGeometry;
-    if (geoms.length > 1) {
-      merged = BufferGeometryUtils.mergeGeometries(geoms);
-    } else {
-      merged = geoms[0];
-    }
+    let merged: THREE.BufferGeometry = geoms.length > 1 
+      ? BufferGeometryUtils.mergeGeometries(geoms) 
+      : geoms[0];
 
-    // Convert to non-indexed for material groups
     if (merged.index) merged = merged.toNonIndexed();
 
     // =========================================================
@@ -260,21 +257,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const pos = merged.getAttribute('position') as THREE.BufferAttribute;
     const triCount = Math.floor(pos.count / 3);
     let currentMat = -1, start = 0, count = 0;
-
-    const flush = () => {
-      if (count > 0) {
-        merged.addGroup(start, count, currentMat);
-        start += count;
-        count = 0;
-      }
-    };
+    const flush = () => { if (count > 0) { merged.addGroup(start, count, currentMat); start += count; count = 0; } };
 
     for (let t = 0; t < triCount; t++) {
       const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
-      // Front is now at +zFront due to centering
       const z0 = pos.getZ(i0);
       const cap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
-      
       const matIndex = cap ? 0 : 1;
       if (currentMat === -1) currentMat = matIndex;
       if (matIndex !== currentMat) { flush(); currentMat = matIndex; }
@@ -290,7 +278,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
     
     // Geometry is Y-Up [0, Height]. Texture is V-Up [0, 1].
-    // Direct mapping works perfectly now.
     const y0 = bb.min.y; 
     const dyU = bb.max.y - bb.min.y;
     
@@ -331,7 +318,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     }
     merged.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
 
-    // Stats & Output
+    // =========================================================
+    // OUTPUT STATS
+    // =========================================================
     const worldW = (maxX - minX) * Math.abs(scale) * sCore;
     const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
     const worldPerim = outline.total * Math.abs(scale) * sCore;
@@ -343,13 +332,25 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // =========================================================
     // CHILD WRAPPER POSITION
     // =========================================================
-    // Children use mesh-local coordinates from raycasting.
-    // Raycaster returns coords in geometry's coordinate system (Y-up, base at 0).
-    // Wrapper should be at origin with identity transform.
+    // We want Child(0,0) [SVG Top-Left] to map to Stone Top-Left.
+    // Stone Top-Left in World Coords: X = -Width/2, Y = Height.
     
-    const wrapperX = 0;  
-    const wrapperY = 0;  
-    const wrapperZ = 0;
+    // X Offset: 
+    // SVG Center X is (minX+maxX)/2. 
+    // We want SVG 0 to be at -(minX+maxX)/2 relative to center.
+    // If we shift the wrapper LEFT by the SVG Center, then Child(Center) -> World(0).
+    const wrapperX = -(minX + maxX) / 2;
+
+    // Y Offset:
+    // SVG Top Y is `minY`. We want this to be at World `Height`.
+    // But `Height` is `bottomTarget - minY`.
+    // Child(minY) * (-1) + WrapperY = Height.
+    // -minY + WrapperY = bottomTarget - minY.
+    // WrapperY = bottomTarget.
+    const wrapperY = bottomTarget_SV;
+
+    // Z Offset: Front face
+    const wrapperZ = zFront + 0.05;
 
     return {
       geometries: [merged],
@@ -366,7 +367,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     };
   }, [svgData, depth, bevel, scale, targetWidth, targetHeight, preserveTop]);
 
-  // 4. Update Texture Repeats (Side Effect)
+  // 4. Update Texture Repeats
   useLayoutEffect(() => {
     if (!dims) return;
     
@@ -385,7 +386,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     clonedSideMap.needsUpdate = true;
   }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap]);
 
-  // 5. Create Materials (FIX: Return data from useMemo, not JSX)
+  // 5. Materials
   const materials = useMemo(() => {
     const common = {
       roughness: 0.15,
@@ -402,16 +403,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   const meshRef = useRef<THREE.Mesh>(null!);
   const groupRef = useRef<THREE.Group>(null!);
-  
-  // Force re-render after mount to ensure children can access populated meshRef
   const [isReady, setIsReady] = useState(false);
-  useLayoutEffect(() => {
-    setIsReady(true);
-  }, []);
-
+  
+  useLayoutEffect(() => { setIsReady(true); }, []);
   useImperativeHandle(ref, () => groupRef.current);
 
-  // Stable API for children
   const childApi = useMemo(() => ({
     group: groupRef,
     mesh: meshRef,
@@ -420,11 +416,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     version: apiData?.version ?? 0,
     worldWidth: apiData?.worldWidth ?? 1,
     worldHeight: apiData?.worldHeight ?? 1
-  }), [apiData, isReady]); // Include isReady to ensure update after mount
+  }), [apiData, isReady]);
 
   if (!geometries.length || !dims) return null;
 
-  // 6. Return JSX (FIX: JSX in return, not useMemo)
   return (
     <group ref={groupRef} scale={meshScale}>
       {geometries.map((geom, i) => (
@@ -443,10 +438,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
       {/* 
          CHILDREN WRAPPER:
-         Identity transform - children positioned in mesh-local coordinates.
-         Raycasting returns mesh-local coords which are already in geometry space.
+         1. Positioned at [LeftEdge, TopEdge, Front].
+         2. Scale Y by -1. 
+            This maps Child(y) -> WrapperY - y.
+            Since WrapperY = Top, Child(0) = Top. Child(H) = Base.
       */}
-      <group position={childWrapperPos} scale={[1, 1, 1]}>
+      <group position={childWrapperPos} scale={[1, -1, 1]}>
          {typeof children === 'function' && children(childApi, selectedAdditions)}
       </group>
     </group>

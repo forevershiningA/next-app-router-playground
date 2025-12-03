@@ -281,7 +281,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         ref={groupRef}
         position={[pos.x + xPos, pos.y + yPos, pos.z + zBump]}
         rotation={[0, 0, (rotationDeg * Math.PI) / 180]}
-        scale={[1, -1, 1]}
       >
         <Text
           font={font}

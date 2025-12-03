@@ -4,11 +4,8 @@ import { Suspense } from 'react';
 import { usePathname } from 'next/navigation';
 import ThreeScene from '#/components/ThreeScene';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
-import AdditionOverlayPanel from '#/components/AdditionOverlayPanel';
-import EditMotifPanel from '#/components/EditMotifPanel';
 import CheckPricePanel from '#/components/CheckPricePanel';
 import SEOPanel from '#/components/SEOPanel';
-import InscriptionOverlayPanel from '#/app/inscriptions/InscriptionOverlayPanel';
 import ErrorBoundary from '#/components/ErrorBoundary';
 
 export default function ConditionalCanvas() {
@@ -77,9 +74,6 @@ export default function ConditionalCanvas() {
         }
       >
         <SceneOverlayHost />
-        <InscriptionOverlayPanel products={[]} />
-        <AdditionOverlayPanel />
-        <EditMotifPanel />
         <CheckPricePanel />
         <SEOPanel />
         <ThreeScene />

@@ -1,8 +1,32 @@
+It appears the previous implementation broke the rendering because scaling geometry by a negative value (scale(1, -1, 1)) in Three.js inverts the "Winding Order" of the triangles.
+
+This makes the 3D mesh inside-out (the faces point inwards). The renderer culls the "back" faces, so the headstone essentially becomes invisible or looks like a weird graphical glitch (black/transparent).
+
+Additionally, the UV mapping logic for the sides was disconnected from the coordinate flip, causing textures to stretch or disappear.
+
+Here is the corrected file.
+
+Key Fixes Applied:
+
+Winding Order Fix: After flipping the geometry upright (scale(1, -1, 1)), we now explicitly swap vertices to force the faces to point outwards again.
+
+UV Coordinate Correction: The side-mapping logic now correctly aligns the flipped 3D geometry Y-axis with the original SVG Y-axis outline.
+
+Imports: Moved BufferGeometryUtils to the top level to prevent runtime crashing in some bundlers.
+
+Reference Safety: Fixed how groupRef and meshRef are exposed to ensure text/children attach correctly.
+
+SvgHeadstone.tsx
+code
+Tsx
+download
+content_copy
+expand_less
 // components/SvgHeadstone.tsx
 'use client';
 
 import * as React from 'react';
-import { useMemo, useLayoutEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useMemo, useLayoutEffect, useImperativeHandle, useRef } from 'react';
 import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import type { ThreeElements } from '@react-three/fiber';
@@ -16,9 +40,6 @@ export type HeadstoneAPI = {
   mesh: React.RefObject<THREE.Mesh>;
   frontZ: number;
   unitsPerMeter: number;
-  version: number;
-  worldWidth: number;
-  worldHeight: number;
 };
 
 const EPS = 1e-9;
@@ -26,7 +47,7 @@ const EPS = 1e-9;
 type Props = {
   url: string;
   depth: number;
-  scale?: number;
+  scale?: number; // SVG units to World units conversion
   faceTexture: string;
   sideTexture?: string;
   autoRepeat?: boolean;
@@ -37,15 +58,15 @@ type Props = {
   faceRepeatY?: number;
   sideRepeatX?: number;
   sideRepeatY?: number;
-  targetHeight?: number;
-  targetWidth?: number;
-  preserveTop?: boolean;
+  targetHeight?: number; // Desired physical height in meters
+  targetWidth?: number;  // Desired physical width in meters
+  preserveTop?: boolean; // If scaling height, keep the serpentine top shape intact?
   bevel?: boolean;
   doubleSided?: boolean;
   showEdges?: boolean;
   meshProps?: ThreeElements['mesh'];
   children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
-  inscriptions: Line[];
+  inscriptions?: Line[];
   selectedAdditions?: string[];
 };
 
@@ -101,7 +122,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   faceRepeatX = 6,
   faceRepeatY = 6,
   sideRepeatX = 8,
-  sideRepeatY = 4,
+  sideRepeatY = 1,
   targetHeight,
   targetWidth,
   preserveTop = true,
@@ -121,7 +142,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     side: sideTexture ?? faceTexture
   });
 
-  // 2. Clone Textures (FIX: Texture Mutation Bug)
+  // 2. Clone Textures to allow per-instance repeats
   const [clonedFaceMap, clonedSideMap] = useMemo(() => {
     const f = textures.face.clone();
     const s = textures.side.clone();
@@ -131,7 +152,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       t.minFilter = THREE.LinearMipmapLinearFilter;
       t.magFilter = THREE.LinearFilter;
       (t as any).anisotropy = 8;
-      t.generateMipmaps = true;
+      // t.generateMipmaps = true; // Auto in newer Three.js
       t.needsUpdate = true;
     });
     
@@ -139,19 +160,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   }, [textures.face, textures.side]);
 
   // 3. Generate Geometry
-  const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
+  const { geometries, dims, meshScale } = useMemo(() => {
     const shapes: THREE.Shape[] = [];
     svgData.paths.forEach((p: any) => shapes.push(...SVGLoader.createShapes(p)));
     
-    if (!shapes.length) {
-      return { 
-        geometries: [], 
-        dims: null, 
-        meshScale: [1, 1, 1] as [number, number, number],
-        apiData: { frontZ: 0, unitsPerMeter: 1, version: 0, worldWidth: 1, worldHeight: 1 },
-        childWrapperPos: [0, 0, 0] as [number, number, number]
-      };
-    }
+    if (!shapes.length) return { geometries: [], dims: null, meshScale: [1, 1, 1] as [number, number, number] };
 
     const base = shapes[0];
     const outline = spacedOutline(base, 1024);
@@ -187,7 +200,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     let coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
     const geoms: THREE.BufferGeometry[] = [coreGeom];
 
-    // Preserve top logic
+    // Preserve top logic (Stretch bottom or add geometry)
     if (preserveTop && wantH > coreH_world + 1e-9) {
       const s = new THREE.Shape();
       s.moveTo(minX, maxY);
@@ -205,55 +218,48 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       pos.needsUpdate = true;
     }
 
-    // Merge geometries if needed
+    // Merge
     let merged: THREE.BufferGeometry;
     if (geoms.length > 1) {
       merged = BufferGeometryUtils.mergeGeometries(geoms);
     } else {
       merged = geoms[0];
     }
-
-    // Convert to non-indexed for material groups
+    
+    // Convert to non-indexed for precise material grouping
     if (merged.index) merged = merged.toNonIndexed();
 
-    // =========================================================
-    // GEOMETRY NORMALIZATION (BAKE TO Y-UP)
-    // =========================================================
-    
-    // 1. Center X. 
-    //    Align "SVG Bottom" (maxY in most cases, but we use calculated bottomTarget_SV) to Y=0.
-    //    This temporarily puts the shape upside down sitting on 0 (range 0 to -Height).
-    //    Center Z to 0.
+    // --- GEOMETRY TRANSFORMATION FIX ---
+    // 1. Center the geometry on X and align Bottom to 0
     merged.translate(-(minX + maxX) / 2, -bottomTarget_SV, -depth / 2);
+    
+    // 2. Flip Y to make it upright (SVG is Y-down, 3D is Y-up).
+    // This creates "Inside-Out" faces (Clockwise winding).
+    merged.scale(1, -1, 1); 
 
-    // 2. Flip Y.
-    //    The shape flips vertically. 
-    //    Previously: Base at 0, Top at -Height.
-    //    Now: Base at 0, Top at +Height.
-    //    This creates the correct Upright orientation.
-    merged.scale(1, -1, 1);
-
-    // 3. FIX WINDING ORDER.
-    //    Scaling by -1 on one axis (Y) inverts the winding order (Inside-Out).
-    //    We swap vertices 1 and 2 to restore correct Outward facing normals.
+    // 3. FIX WINDING ORDER
+    // We must swap vertex 2 and 3 of every triangle to restore Counter-Clockwise winding
+    // so the faces point outwards again.
     const posAttr = merged.getAttribute('position');
     for (let i = 0; i < posAttr.count; i += 3) {
-       const x1 = posAttr.getX(i + 1), y1 = posAttr.getY(i + 1), z1 = posAttr.getZ(i + 1);
-       const x2 = posAttr.getX(i + 2), y2 = posAttr.getY(i + 2), z2 = posAttr.getZ(i + 2);
+       const x1 = posAttr.getX(i + 1);
+       const y1 = posAttr.getY(i + 1);
+       const z1 = posAttr.getZ(i + 1);
+
+       const x2 = posAttr.getX(i + 2);
+       const y2 = posAttr.getY(i + 2);
+       const z2 = posAttr.getZ(i + 2);
+
        // Swap
        posAttr.setXYZ(i + 1, x2, y2, z2);
        posAttr.setXYZ(i + 2, x1, y1, z1);
     }
     
-    // Recompute normals for correct lighting
     merged.computeVertexNormals();
 
-    // =========================================================
-    // MATERIAL GROUPS
-    // =========================================================
-    // Front face is at +depth/2 (since we centered Z at step 1)
-    const zFront = depth / 2;
-    const zBack = -depth / 2;
+    // --- MATERIAL GROUPS ---
+    const zFront = -depth / 2;
+    const zBack = depth / 2;
     const zTol = Math.max(0.25, Math.abs(depth) * 0.01);
     
     merged.clearGroups();
@@ -271,9 +277,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     for (let t = 0; t < triCount; t++) {
       const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
-      // Front is now at +zFront due to centering
-      const z0 = pos.getZ(i0);
-      const cap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
+      const z0 = pos.getZ(i0), z1 = pos.getZ(i1), z2 = pos.getZ(i2);
+      
+      // Check if face is on the front or back plane
+      const cap = (Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol) ||
+                  (Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol && Math.abs(z2 - zBack) <= zTol);
       
       const matIndex = cap ? 0 : 1;
       if (currentMat === -1) currentMat = matIndex;
@@ -282,48 +290,57 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     }
     flush();
 
-    // =========================================================
-    // UV MAPPING
-    // =========================================================
+    // --- UV MAPPING FIX ---
+    // Prepare offset for Outline to match the Translated Geometry
+    const centerX = (minX + maxX) / 2;
+    // Note: Geometry Y was translated by -bottomTarget_SV, then scaled by -1.
+    // This means geometry Y=0 corresponds to SVG Y=bottomTarget_SV.
+    // Geometry Y increases (goes up), SVG Y decreases (goes up).
+    // so: geomY = -(svgY - bottomTarget_SV)
+    // or: svgY = -geomY + bottomTarget_SV
+    
+    const outlinePtsCentered = outline.pts.map(p => 
+      new THREE.Vector2(p.x - centerX, p.y - bottomTarget_SV)
+    );
+
     merged.computeBoundingBox();
     const bb = merged.boundingBox!;
-    const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
-    
-    // Geometry is Y-Up [0, Height]. Texture is V-Up [0, 1].
-    // Direct mapping works perfectly now.
-    const y0 = bb.min.y; 
-    const dyU = bb.max.y - bb.min.y;
-    
+    const bbMinX = bb.min.x; 
+    const bbDx = bb.max.x - bb.min.x;
+    const bbMinY = bb.min.y; 
+    const bbDy = bb.max.y - bb.min.y;
+
     const uvArr = new Float32Array(pos.count * 2);
-    const centerX = (minX + maxX) / 2;
-    
-    // Total visual height in SVG units
-    const svgTotalHeight = bottomTarget_SV - minY;
 
     for (let i = 0; i < pos.count; i += 3) {
-      const z0 = pos.getZ(i), z1 = pos.getZ(i+1);
-      const isCap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
+      const z0 = pos.getZ(i);
+      const z1 = pos.getZ(i+1);
+      
+      // Re-check cap status for UV logic
+      const isCap = (Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol) ||
+                    (Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol);
       
       if (isCap) {
+        // Planar mapping for faces
         for (let j = 0; j < 3; j++) {
-          const u = (pos.getX(i + j) - x0) / dxU;
-          const v = (pos.getY(i + j) - y0) / dyU; 
-          uvArr[2 * (i + j)] = u;
-          uvArr[2 * (i + j) + 1] = v;
+          uvArr[2 * (i + j)] = (pos.getX(i + j) - bbMinX) / bbDx;
+          uvArr[2 * (i + j) + 1] = (pos.getY(i + j) - bbMinY) / bbDy;
         }
       } else {
+        // Cylindrical mapping for sides
         for (let j = 0; j < 3; j++) {
           const px = pos.getX(i + j);
           const py = pos.getY(i + j);
           const pz = pos.getZ(i + j);
           
-          // Map 3D Y (0 to H) back to SVG Y (H to 0) for side wrapping
-          // Original SVG Y = TotalH - GeomY + minY
-          const originalSvgY = svgTotalHeight - py + minY;
+          // Map 3D point back to 2D Outline space for "S" (Perimeter) calculation
+          // Since we flipped geometry Y, we unflip it to find the outline match
+          // geomY = -(svgY_centered) -> svgY_centered = -geomY
+          const searchY = -py; 
+
+          const s = nearestS(px, searchY, outlinePtsCentered, outline.cum, outline.total);
+          const t = (pz - zFront) / (zBack - zFront);
           
-          const s = nearestS(px + centerX, originalSvgY, outline.pts, outline.cum, outline.total);
-          // Map Z from [-d/2, +d/2] to [0, 1]
-          const t = (pz - zBack) / depth; 
           uvArr[2 * (i + j)] = s;
           uvArr[2 * (i + j) + 1] = t;
         }
@@ -331,42 +348,23 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     }
     merged.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
 
-    // Stats & Output
+    // Stats for texture repeat
     const worldW = (maxX - minX) * Math.abs(scale) * sCore;
     const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
     const worldPerim = outline.total * Math.abs(scale) * sCore;
     const worldDepth = Math.abs(depth * scale);
-
-    // Standard Scale (1,1,1) because geometry is normalized
-    const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
-
-    // =========================================================
-    // CHILD WRAPPER POSITION
-    // =========================================================
-    // Children use mesh-local coordinates from raycasting.
-    // Raycaster returns coords in geometry's coordinate system (Y-up, base at 0).
-    // Wrapper should be at origin with identity transform.
     
-    const wrapperX = 0;  
-    const wrapperY = 0;  
-    const wrapperZ = 0;
+    // We are now 1:1 with world units in geometry, but we still apply the user's base scale
+    const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
 
     return {
       geometries: [merged],
       dims: { worldW, worldH, worldPerim, worldDepth },
-      meshScale: finalScale,
-      apiData: {
-        frontZ: depth / 2, // Z Position of the front face in local space
-        unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
-        version: Math.random(),
-        worldWidth: worldW,
-        worldHeight: worldH
-      },
-      childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number]
+      meshScale: finalScale
     };
   }, [svgData, depth, bevel, scale, targetWidth, targetHeight, preserveTop]);
 
-  // 4. Update Texture Repeats (Side Effect)
+  // 4. Update Texture Repeats
   useLayoutEffect(() => {
     if (!dims) return;
     
@@ -381,11 +379,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     clonedFaceMap.repeat.set(repFaceX, repFaceY);
     clonedSideMap.repeat.set(repSideX, repSideY);
+    // Force update
     clonedFaceMap.needsUpdate = true;
     clonedSideMap.needsUpdate = true;
   }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap]);
 
-  // 5. Create Materials (FIX: Return data from useMemo, not JSX)
+  // 5. Materials
   const materials = useMemo(() => {
     const common = {
       roughness: 0.15,
@@ -402,29 +401,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   const meshRef = useRef<THREE.Mesh>(null!);
   const groupRef = useRef<THREE.Group>(null!);
-  
-  // Force re-render after mount to ensure children can access populated meshRef
-  const [isReady, setIsReady] = useState(false);
-  useLayoutEffect(() => {
-    setIsReady(true);
-  }, []);
 
   useImperativeHandle(ref, () => groupRef.current);
 
-  // Stable API for children
-  const childApi = useMemo(() => ({
-    group: groupRef,
-    mesh: meshRef,
-    frontZ: apiData?.frontZ ?? 0,
-    unitsPerMeter: apiData?.unitsPerMeter ?? 100,
-    version: apiData?.version ?? 0,
-    worldWidth: apiData?.worldWidth ?? 1,
-    worldHeight: apiData?.worldHeight ?? 1
-  }), [apiData, isReady]); // Include isReady to ensure update after mount
-
   if (!geometries.length || !dims) return null;
 
-  // 6. Return JSX (FIX: JSX in return, not useMemo)
   return (
     <group ref={groupRef} scale={meshScale}>
       {geometries.map((geom, i) => (
@@ -441,14 +422,16 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         </mesh>
       ))}
 
-      {/* 
-         CHILDREN WRAPPER:
-         Identity transform - children positioned in mesh-local coordinates.
-         Raycasting returns mesh-local coords which are already in geometry space.
-      */}
-      <group position={childWrapperPos} scale={[1, 1, 1]}>
-         {typeof children === 'function' && children(childApi, selectedAdditions)}
-      </group>
+      {/* Children passed here will now render upright and correctly positioned relative to the stone */}
+      {typeof children === 'function' && children(
+        {
+          group: groupRef,
+          mesh: meshRef,
+          frontZ: depth / 2,
+          unitsPerMeter: 1 / Math.max(EPS, meshScale[0]),
+        },
+        selectedAdditions
+      )}
     </group>
   );
 });

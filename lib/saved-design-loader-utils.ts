@@ -364,9 +364,12 @@ export async function loadSavedDesignIntoEditor(
       const xMmFromCenter = xPixels / designPixelsPerMmX;
       const yMmFromCenter = yPixels / designPixelsPerMmY;
       
-      // Motifs need Y negation (different from inscriptions which have scale flip)
+      // OLD designs: saved in Y-down coordinates (entire group was Y-flipped)
+      // NEW geometry: Y-up (no group flip). So negate Y to convert.
       const xPos = xMmFromCenter;
       const yPos = -yMmFromCenter;
+      
+      console.log(`[LOADER] Motif ${newMotif.file}: saved=(${item.x}, ${item.y}) → offset=(${xPos.toFixed(1)}, ${yPos.toFixed(1)})`);
       
       // Set the motif offset with position, scale, rotation, and height
       store.setMotifOffset(newMotif.id, {

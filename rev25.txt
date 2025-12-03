@@ -1,0 +1,64 @@
+You’re down to a simple frame-of-reference mismatch: the mesh is now Y-up with its base at **Y = 0**, but your Motifs/Additions are still being positioned with a screen-style Y that grows **downwards**. So they land mirrored in Y.
+
+### The fix (minimal + robust)
+
+Add a tiny mapper to the `childApi` so every Motif/Addition can convert its saved canvas coords to the headstone’s local space (including the Y-flip):
+
+```ts
+// ⬇️ inside SvgHeadstone, when creating childApi
+const childApi = useMemo(() => {
+  const api = {
+    group: groupRef,
+    mesh: meshRef,
+    frontZ: apiData?.frontZ ?? 0,
+    unitsPerMeter: apiData?.unitsPerMeter ?? 100,
+    version: apiData?.version ?? 0,
+    worldWidth: apiData?.worldWidth ?? 1,
+    worldHeight: apiData?.worldHeight ?? 1,
+
+    // NEW: map canvas (authoring) pixels → mesh-local coords
+    toLocalFromCanvas(x: number, y: number, initW: number, initH: number, useUniform = true) {
+      const sx = (apiData?.worldWidth ?? 1) / Math.max(1e-9, initW);
+      const sy = (apiData?.worldHeight ?? 1) / Math.max(1e-9, initH);
+      const s  = useUniform ? Math.min(sx, sy) : undefined;
+
+      // canvas has origin at center (x), top-left (y)? -> common pattern:
+      // • center X at 0
+      // • flip Y so base is 0 and +Y goes up
+      const localX = (x - initW / 2) * (useUniform ? s! : sx);
+      const localY = (initH - y)     * (useUniform ? s! : sy); // <-- Y FIX
+      const localZ = (apiData?.frontZ ?? 0) + 0.001;           // sit on front face
+
+      return new THREE.Vector3(localX, localY, localZ);
+    }
+  };
+  return api;
+}, [apiData, isReady]);
+```
+
+Then, wherever you render a Motif/Addition, replace your current `position` calculation with:
+
+```ts
+// example usage inside your additions layer:
+const p = api.toLocalFromCanvas(savedX, savedY, initWidth, initHeight);
+<group position={[p.x, p.y, p.z]}>
+  {/* motif mesh */}
+</group>
+```
+
+### Why this works
+
+* Your geometry is normalized to Y-up and “base at 0” in `SvgHeadstone` (after the flip).
+* Saved Motif/Additions Y values were authored in a downward-increasing canvas.
+* `initH - y` flips that Y into the mesh’s coordinate system, so vertical placement matches the screenshot authoring.
+
+If you already center X at the canvas center in your data, you only needed the **`initH - y`** change; the helper just makes it hard to regress.
+
+If some motifs are stored in normalized (0..1) coordinates, use the same idea:
+
+```ts
+const localX = (nx - 0.5) * api.worldWidth;
+const localY = (1 - ny)   * api.worldHeight; // flip Y
+```
+
+That’s it—the Y will line up for both Motifs and Additions. 

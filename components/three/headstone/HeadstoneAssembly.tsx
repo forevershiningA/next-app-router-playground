@@ -10,7 +10,7 @@ import BoxOutline from '../BoxOutline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 
-const BASE_H = 2;
+const BASE_H = 0.1;
 
 export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
