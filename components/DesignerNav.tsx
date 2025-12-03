@@ -45,6 +45,7 @@ export default function DesignerNav() {
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
+  const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selectedAdditions = useHeadstoneStore ((s) => s.selectedAdditions);
@@ -313,7 +314,7 @@ export default function DesignerNav() {
             
             // Special handling for Select Additions - show Edit Addition panel when expanded
             if (item.slug === 'select-additions') {
-              const activeAddition = selectedAdditions.find((a) => a.id === selectedAdditionId);
+              const activeAddition = selectedAdditions.find((a) => a === selectedAdditionId);
               const activeOffset = selectedAdditionId ? (additionOffsets[selectedAdditionId] || {
                 xPos: 0,
                 yPos: 0,

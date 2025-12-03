@@ -415,6 +415,7 @@ export default function MotifOverlayPanel() {
           </div>
         )}
       </div>
+              </div>
             )}
           </div>
         </div>
