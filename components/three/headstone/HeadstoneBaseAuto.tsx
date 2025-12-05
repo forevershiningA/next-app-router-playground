@@ -122,6 +122,11 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       const hsW = widthMm / 1000;
       const hsH = heightMm / 1000;
       
+      // Get headstone depth from mesh geometry
+      // Headstone depth is 15 for regular, 5 for plaques (in SvgHeadstone units before 0.01 scale)
+      // After 0.01 scale: depth = 0.15 for regular, 0.05 for plaques
+      const headstoneDepth = 0.15; // Default for regular headstone
+      
       // Extend base width by 200mm (0.2 units) if a statue is present
       const statueExtension = hasStatue() ? 0.2 : 0;
       let baseW = Math.max(hsW * BASE_WIDTH_MULTIPLIER + statueExtension, BASE_MIN_WIDTH);
@@ -136,11 +141,16 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       // Shift base center to the left when statue is present
       const xOffset = statueExtension / 2;
       
+      // Align base back face with headstone back face
+      // Headstone back face is at Z = -headstoneDepth/2
+      // Base center should be at: backFace + baseD/2
+      const baseZCenter = -(headstoneDepth / 2) + (baseD / 2);
+      
       // Position base center at Y = height/2 (base spans from 0 to height in world space)
       const centerW = new THREE.Vector3(
         -xOffset, // Center X (shifted if statue)
         height * 0.5 + EPSILON, // Center at half height above Y=0
-        baseD * 0.5 // Center Z at half depth
+        baseZCenter // Align back face with headstone back face
       );
 
       w.updateWorldMatrix(true, false);
