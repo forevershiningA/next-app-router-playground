@@ -12,7 +12,7 @@ export default function WithSceneLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       <Suspense fallback={<SkeletonCard />}>
         <SceneOverlayHost /> {/* ← one host, one overlay */}
         <ThreeScene />
@@ -20,6 +20,6 @@ export default function WithSceneLayout({
       <CanvasFallback>
         <div className="pt-4 pb-10">{children}</div>
       </CanvasFallback>
-    </>
+    </div>
   );
 }

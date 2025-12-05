@@ -1,5 +1,5 @@
 'use client';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
 import SkyShader from './SkyShader';
@@ -14,12 +14,38 @@ import {
 export default function Scene() {
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+
+  const handleCanvasClick = (e: any) => {
+    // Only deselect if clicking on empty space (not on any 3D object)
+    if (e.eventObject === e.object) {
+      setSelected(null);
+      setEditingObject('headstone');
+      setSelectedInscriptionId(null);
+      setSelectedAdditionId(null);
+      setSelectedMotifId(null);
+    }
+  };
 
   return (
     <>
-      {!is2DMode && <SkyShader />}
+      {/* Disable Sky Shader for transparent background */}
+      {/* {!is2DMode && <SkyShader />} */}
       
       {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      
+      {/* Invisible background plane to capture clicks */}
+      <mesh
+        position={[0, 0, -5]}
+        onClick={handleCanvasClick}
+      >
+        <planeGeometry args={[100, 100]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
       
       {/* Hero canvas style lighting */}
       <ambientLight intensity={0.3} />
@@ -43,6 +69,16 @@ export default function Scene() {
       <Environment preset="city" />
 
       <HeadstoneAssembly />
+      
+      {/* Contact shadows like Hero canvas */}
+      <ContactShadows 
+        opacity={0.6} 
+        scale={10} 
+        blur={2} 
+        far={2} 
+        resolution={256} 
+        color="#000000" 
+      />
 
       <OrbitControls
         makeDefault

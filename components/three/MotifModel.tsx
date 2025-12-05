@@ -7,6 +7,7 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import SelectionBox from '../SelectionBox';
+import { useRouter, usePathname } from 'next/navigation';
 
 type Props = {
   id: string; // unique motif ID
@@ -18,11 +19,14 @@ type Props = {
 
 export default function MotifModel({ id, svgPath, color, headstone, index = 0 }: Props) {
   const { gl, camera, controls } = useThree();
+  const router = useRouter();
+  const pathname = usePathname();
   const setMotifRef = useHeadstoneStore((s) => s.setMotifRef);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
 
@@ -130,8 +134,14 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
       e.stopPropagation();
 
       setSelectedMotifId(id);
+      setActivePanel('motif');
+      
+      // Navigate to select-motifs if not already there
+      if (pathname !== '/select-motifs') {
+        router.push('/select-motifs');
+      }
     },
-    [id, setSelectedMotifId]
+    [id, setSelectedMotifId, setActivePanel, pathname, router]
   );
 
   const handlePointerDown = React.useCallback((e: any) => {
@@ -237,8 +247,6 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
 
   // Convert offset from old Y-down saved format to Y-up display format
   const displayY = centerY - (offset.yPos || 0);
-  
-  console.log(`[DISPLAY] Motif ${id}: offset=(${offset.xPos?.toFixed(1)}, ${offset.yPos?.toFixed(1)}) center=(${centerX.toFixed(1)}, ${centerY.toFixed(1)}) → display=(${(centerX + (offset.xPos || 0)).toFixed(1)}, ${displayY.toFixed(1)})`);
 
   return (
     <>

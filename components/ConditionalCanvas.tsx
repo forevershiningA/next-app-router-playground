@@ -34,50 +34,55 @@ export default function ConditionalCanvas() {
   // Hide canvas on select-additions page
   const isSelectAdditionsPage = pathname === '/select-additions';
   
-  // Hide canvas on select-motifs page
-  const isSelectMotifsPage = pathname === '/select-motifs';
-  
   // Hide canvas on check-price page
   const isCheckPricePage = pathname === '/check-price';
   
   // Show canvas on select-size page
   const isSelectSizePage = pathname === '/select-size';
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isSelectMotifsPage || isCheckPricePage) && !isSelectSizePage) {
+  // Show canvas on inscriptions page
+  const isInscriptionsPage = pathname === '/inscriptions';
+  
+  // Show canvas on select-motifs page
+  const isSelectMotifsPage = pathname === '/select-motifs';
+  
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage) {
     return null;
   }
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-[400px] items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
-            <p className="text-sm text-gray-400">Loading scene...</p>
-          </div>
-        </div>
-      }
-    >
-      <ErrorBoundary
+    <div className="fixed inset-0 lg:left-[400px] z-0">
+      <Suspense
         fallback={
-          <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-red-500/20 bg-red-950/10">
-            <div className="flex flex-col items-center gap-4 p-8">
-              <div className="text-4xl">⚠️</div>
-              <h2 className="text-lg font-semibold text-red-400">
-                Failed to load 3D scene
-              </h2>
-              <p className="text-sm text-gray-400">
-                Please refresh the page to try again
-              </p>
+          <div className="flex min-h-[400px] items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
+              <p className="text-sm text-gray-400">Loading scene...</p>
             </div>
           </div>
         }
       >
-        <SceneOverlayHost />
-        <CheckPricePanel />
-        <SEOPanel />
-        <ThreeScene />
-      </ErrorBoundary>
-    </Suspense>
+        <ErrorBoundary
+          fallback={
+            <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-red-500/20 bg-red-950/10">
+              <div className="flex flex-col items-center gap-4 p-8">
+                <div className="text-4xl">⚠️</div>
+                <h2 className="text-lg font-semibold text-red-400">
+                  Failed to load 3D scene
+                </h2>
+                <p className="text-sm text-gray-400">
+                  Please refresh the page to try again
+                </p>
+              </div>
+            </div>
+          }
+        >
+          <SceneOverlayHost />
+          <CheckPricePanel />
+          <SEOPanel />
+          <ThreeScene />
+        </ErrorBoundary>
+      </Suspense>
+    </div>
   );
 }

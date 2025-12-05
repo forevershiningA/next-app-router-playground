@@ -25,32 +25,17 @@ export default function HeadstoneAssembly() {
   );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const additionRefs = useHeadstoneStore((s) => s.additionRefs);
-  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
-  const motifRefs = useHeadstoneStore((s) => s.motifRefs);
   const loading = useHeadstoneStore((s) => s.loading);
   const showBase = useHeadstoneStore((s) => s.showBase);
 
   const assemblyRef = useRef<THREE.Group>(null!);
-  const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
+  const tabletRef = useRef<THREE.Object3D>(null!);
   const baseRef = useRef<THREE.Mesh>(null!);
   const headstoneMeshRef = useRef<THREE.Mesh>(null!);
 
   const selectedInscription = inscriptions.find(
     (inscription) => inscription.id === selectedInscriptionId,
   );
-
-  // Check if selected addition is an application type (2D, flat on headstone)
-  const isApplicationAddition = React.useMemo(() => {
-    if (!selectedAdditionId) return false;
-    
-    // Extract base ID from instance ID (remove timestamp suffix)
-    const baseId = selectedAdditionId.split('_')[0];
-    const addition = data.additions.find((a) => a.id === baseId);
-    
-    // For now, show BoxOutline for ALL additions (not just 3D ones)
-    // SelectionBox doesn't work well with the 3D coordinate system
-    return false; // This will make BoxOutline show for all additions
-  }, [selectedAdditionId]);
 
   return (
     <>
@@ -83,8 +68,8 @@ export default function HeadstoneAssembly() {
           />
         )}
 
-        {/* Only show BoxOutline for 3D additions (statues, vases), not application type */}
-        {selectedAdditionId && additionRefs[selectedAdditionId] && !isApplicationAddition && (
+        {/* Show BoxOutline for all additions */}
+        {selectedAdditionId && additionRefs[selectedAdditionId] && (
           <BoxOutline
             targetRef={additionRefs[selectedAdditionId]}
             visible={true}
@@ -93,17 +78,6 @@ export default function HeadstoneAssembly() {
             through={false}
           />
         )}
-
-        {/* Motifs are 2D, so don't show BoxOutline - they use SelectionBox instead */}
-        {/* selectedMotifId && motifRefs[selectedMotifId] && (
-          <BoxOutline
-            targetRef={motifRefs[selectedMotifId]}
-            visible={true}
-            color="white"
-            pad={0.02}
-            through={false}
-          />
-        ) */}
 
         {showBase && (
           <HeadstoneBaseAuto

@@ -22,6 +22,7 @@ import { calculatePrice } from '#/lib/xml-parser';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
+import InscriptionEditPanel from './InscriptionEditPanel';
 
 // Menu items with icons
 const menuItems = [
@@ -38,6 +39,9 @@ const menuItems = [
 export default function DesignerNav() {
   const pathname = usePathname();
   const router = useRouter();
+  
+  // Ref for the nav container
+  const navRef = React.useRef<HTMLElement>(null);
   
   // Get catalog info
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -81,13 +85,33 @@ export default function DesignerNav() {
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
   const duplicateAddition = useHeadstoneStore((s) => s.duplicateAddition);
   
-  // Auto-expand Select Size panel and show canvas when on select-size page
+  // Show Select Size panel when on select-size page
+  const isSelectSizePage = pathname === '/select-size';
+  
+  // Auto-scroll to section when it becomes active
   useEffect(() => {
-    if (pathname === '/select-size') {
-      setIsSizeExpanded(true);
-      setShowCanvas(true);
+    if (navRef.current) {
+      const sections = ['select-size', 'inscriptions', 'select-additions', 'select-motifs'];
+      const currentSection = sections.find(section => pathname === `/${section}`);
+      
+      if (currentSection) {
+        setTimeout(() => {
+          const element = navRef.current?.querySelector(`[data-section="${currentSection}"]`);
+          if (element && navRef.current) {
+            const navRect = navRef.current.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            const scrollTop = navRef.current.scrollTop;
+            const targetScroll = scrollTop + elementRect.top - navRect.top - (navRect.height / 2) + (elementRect.height / 2);
+            
+            navRef.current.scrollTo({
+              top: targetScroll,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
     }
-  }, [pathname]);
+  }, [pathname, activePanel]);
   
   // Auto-expand Edit Motif panel when a motif is selected
   useEffect(() => {
@@ -148,7 +172,7 @@ export default function DesignerNav() {
   const isCheckPricePage = pathname === '/check-price';
 
   return (
-    <nav className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
+    <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
       {/* Header */}
       <div className="p-4 border-b border-slate-700/50">
         <Link href="/" className="hover:opacity-80 transition-opacity">
@@ -177,8 +201,8 @@ export default function DesignerNav() {
           Design Tools
         </div>
         <div className="flex flex-col gap-1">
-          {/* 3D Preview Button - Hide when canvas is already visible */}
-          {!showCanvas && pathname !== '/' && (
+          {/* 3D Preview Button - Hide when canvas is already visible or on select-size page */}
+          {!showCanvas && pathname !== '/' && pathname !== '/select-size' && (
             <button
               onClick={handlePreviewClick}
               className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
@@ -200,7 +224,7 @@ export default function DesignerNav() {
               return null;
             }
             
-            // Special handling for Select Size - navigate to page and expand
+            // Special handling for Select Size - show controls only on /select-size page
             if (item.slug === 'select-size') {
               const sizeTitle = editingObject === 'base' ? "Select Size of Base" : "Select Size of Headstone";
               const firstShape = catalog?.product?.shapes?.[0];
@@ -213,24 +237,18 @@ export default function DesignerNav() {
                 <React.Fragment key={item.slug}>
                   <Link
                     href={`/${item.slug}`}
-                    onClick={(e) => {
-                      setIsSizeExpanded(true);
-                      setShowCanvas(true);
-                    }}
-                    className="flex items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    data-section={item.slug}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                      isActive 
+                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <Icon className="h-5 w-5 flex-shrink-0" />
-                      <span>{item.name}</span>
-                    </div>
-                    {isSizeExpanded ? (
-                      <ChevronUpIcon className="h-4 w-4 flex-shrink-0" />
-                    ) : (
-                      <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
-                    )}
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span>{item.name}</span>
                   </Link>
                   
-                  {isSizeExpanded && !selectedMotifId && !selectedAdditionId && (
+                  {isSelectSizePage && !selectedMotifId && !selectedAdditionId && (
                     <div className="fs-size-panel mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
                       {/* Headstone/Base Toggle */}
                       <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
@@ -312,6 +330,50 @@ export default function DesignerNav() {
               );
             }
             
+            // Special handling for Inscriptions - show inline editing panel when inscription is selected
+            if (item.slug === 'inscriptions') {
+              return (
+                <React.Fragment key={item.slug}>
+                  <button
+                    onClick={() => {
+                      router.push(`/${item.slug}`);
+                      // Open the inscription overlay panel
+                      if (activePanel !== 'inscription') {
+                        setActivePanel('inscription');
+                      }
+                    }}
+                    data-section={item.slug}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left ${
+                      isActive 
+                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span>{item.name}</span>
+                  </button>
+                  
+                  {/* Inscription editing panel - shown when on inscriptions page or panel is active */}
+                  {(isActive || activePanel === 'inscription') && (
+                    <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                      <InscriptionEditPanel />
+                    </div>
+                  )}
+                  
+                  {showNewDesignAfter && (
+                    <button
+                      key="new-design-inscriptions"
+                      onClick={handleNewDesign}
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    >
+                      <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
+                      <span>New Design</span>
+                    </button>
+                  )}
+                </React.Fragment>
+              );
+            }
+            
             // Special handling for Select Additions - show Edit Addition panel when expanded
             if (item.slug === 'select-additions') {
               const activeAddition = selectedAdditions.find((a) => a === selectedAdditionId);
@@ -326,6 +388,7 @@ export default function DesignerNav() {
                 <React.Fragment key={item.slug}>
                   <Link
                     href={`/${item.slug}`}
+                    data-section={item.slug}
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
@@ -481,6 +544,7 @@ export default function DesignerNav() {
                 <React.Fragment key={item.slug}>
                   <Link
                     href={`/${item.slug}`}
+                    data-section={item.slug}
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
@@ -491,7 +555,7 @@ export default function DesignerNav() {
                     <span>{item.name}</span>
                   </Link>
                   
-                  {isMotifsExpanded && selectedMotifId && activeOffset && activeMotif && (
+                  {isMotifsExpanded && selectedMotifId && activeOffset && activeMotif && activePanel === 'motif' && (
                     <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
                       <div className="flex items-center justify-between">
                         <div className="text-sm text-slate-300">

@@ -10,22 +10,11 @@ import OverlayTitle from '#/ui/overlay-title';
 
 /* --------------------------- types + helpers --------------------------- */
 
-type Product = { id: string; name: string; image: string; category: string };
-
 const FONTS = data.fonts;
-
-const FONT_FILE_MAP: Record<string, string> = FONTS.reduce(
-  (map, font) => {
-    const base = font.image.replace(/\.(otf|ttf|woff|woff2)$/i, '');
-    map[font.name] = `/fonts/${base}.woff2`; // Prefer woff2 for better compression
-    return map;
-  },
-  {} as Record<string, string>,
-);
 
 /* --------------------------- component --------------------------- */
 
-export default function InscriptionOverlayPanel({ products }: { products: Product[] }) {
+export default function InscriptionOverlayPanel() {
   const lines = useHeadstoneStore((s) => s.inscriptions);
   const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
   const duplicateInscription = useHeadstoneStore((s) => s.duplicateInscription);
@@ -84,12 +73,6 @@ export default function InscriptionOverlayPanel({ products }: { products: Produc
     }
   }, []);
 
-  useEffect(() => {
-    if (!active) {
-      setActiveInscriptionText('');
-    }
-  }, [active, setActiveInscriptionText]);
-  
   useEffect(() => {
     if (!active) {
       setActiveInscriptionText('');

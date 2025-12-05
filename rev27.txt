@@ -1,3 +1,14 @@
+The issue is that the Base is likely being rendered inside the scale={meshScale} context (either via the children group or inherited from the parent group in previous versions), which shrinks it by a factor of ~100 (from World Meters to SVG Units).
+
+Since your Headstone geometry is scaled inside the render loop (scale={meshScale} on the mesh), we must place the Base outside that scaling context so it retains its World Dimensions (meters).
+
+Here is the corrected code. It adds explicit Base Props, loads the Base Texture, and renders the Base as a sibling to the Headstone with standard World scaling [1,1,1].
+
+code
+Tsx
+download
+content_copy
+expand_less
 // components/SvgHeadstone.tsx
 'use client';
 
@@ -45,7 +56,14 @@ type Props = {
   showEdges?: boolean;
   meshProps?: ThreeElements['mesh'];
   children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
+  inscriptions: Line[];
   selectedAdditions?: string[];
+  // --- New Base Props ---
+  showBase?: boolean;
+  baseWidth?: number;
+  baseHeight?: number; // Defaults to ~6 inches (0.15m)
+  baseDepth?: number;
+  baseTexture?: string;
 };
 
 /* ---------------- helpers ---------------- */
@@ -110,21 +128,33 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   meshProps,
   children,
   selectedAdditions = [],
+  inscriptions = [],
+  // Base Defaults
+  showBase = false,
+  baseWidth,
+  baseHeight = 0.15, 
+  baseDepth,
+  baseTexture,
 }, ref) => {
   
-  // 1. Load SVG and Textures
+  // 1. Load SVG and Textures (Include Base Texture)
   const svgData = useLoader(SVGLoader, url);
-  const textures = useTexture({
+  
+  const textureUrlMap = useMemo(() => ({
     face: faceTexture,
-    side: sideTexture ?? faceTexture
-  });
+    side: sideTexture ?? faceTexture,
+    base: baseTexture ?? sideTexture ?? faceTexture
+  }), [faceTexture, sideTexture, baseTexture]);
+
+  const textures = useTexture(textureUrlMap);
 
   // 2. Clone Textures (FIX: Texture Mutation Bug)
-  const [clonedFaceMap, clonedSideMap] = useMemo(() => {
+  const [clonedFaceMap, clonedSideMap, clonedBaseMap] = useMemo(() => {
     const f = textures.face.clone();
     const s = textures.side.clone();
+    const b = textures.base.clone();
     
-    [f, s].forEach(t => {
+    [f, s, b].forEach(t => {
       t.wrapS = t.wrapT = THREE.RepeatWrapping;
       t.minFilter = THREE.LinearMipmapLinearFilter;
       t.magFilter = THREE.LinearFilter;
@@ -133,18 +163,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       t.needsUpdate = true;
     });
     
-    return [f, s];
-  }, [textures.face, textures.side]);
+    return [f, s, b];
+  }, [textures.face, textures.side, textures.base]);
 
-  // 2a. Dispose cloned textures on cleanup
-  React.useEffect(() => {
-    return () => {
-      clonedFaceMap.dispose();
-      clonedSideMap.dispose();
-    };
-  }, [clonedFaceMap, clonedSideMap]);
-
-  // 3. Generate Geometry (with disposal cleanup)
+  // 3. Generate Geometry
   const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
     const shapes: THREE.Shape[] = [];
     svgData.paths.forEach((p: any) => shapes.push(...SVGLoader.createShapes(p)));
@@ -228,20 +250,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     
     // 1. Center X. 
     //    Align "SVG Bottom" (maxY in most cases, but we use calculated bottomTarget_SV) to Y=0.
-    //    This temporarily puts the shape upside down sitting on 0 (range 0 to -Height).
     //    Center Z to 0.
     merged.translate(-(minX + maxX) / 2, -bottomTarget_SV, -depth / 2);
 
     // 2. Flip Y.
-    //    The shape flips vertically. 
-    //    Previously: Base at 0, Top at -Height.
-    //    Now: Base at 0, Top at +Height.
-    //    This creates the correct Upright orientation.
+    //    The shape flips vertically. Base at 0, Top at +Height.
     merged.scale(1, -1, 1);
 
     // 3. FIX WINDING ORDER.
-    //    Scaling by -1 on one axis (Y) inverts the winding order (Inside-Out).
-    //    We swap vertices 1 and 2 to restore correct Outward facing normals.
     const posAttr = merged.getAttribute('position');
     for (let i = 0; i < posAttr.count; i += 3) {
        const x1 = posAttr.getX(i + 1), y1 = posAttr.getY(i + 1), z1 = posAttr.getZ(i + 1);
@@ -257,7 +273,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // =========================================================
     // MATERIAL GROUPS
     // =========================================================
-    // Front face is at +depth/2 (since we centered Z at step 1)
     const zFront = depth / 2;
     const zBack = -depth / 2;
     const zTol = Math.max(0.25, Math.abs(depth) * 0.01);
@@ -276,11 +291,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     };
 
     for (let t = 0; t < triCount; t++) {
-      const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
-      // Front is now at +zFront due to centering
+      const i0 = t * 3;
       const z0 = pos.getZ(i0);
       const cap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
-      
       const matIndex = cap ? 0 : 1;
       if (currentMat === -1) currentMat = matIndex;
       if (matIndex !== currentMat) { flush(); currentMat = matIndex; }
@@ -294,20 +307,15 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     merged.computeBoundingBox();
     const bb = merged.boundingBox!;
     const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
-    
-    // Geometry is Y-Up [0, Height]. Texture is V-Up [0, 1].
-    // Direct mapping works perfectly now.
     const y0 = bb.min.y; 
     const dyU = bb.max.y - bb.min.y;
     
     const uvArr = new Float32Array(pos.count * 2);
     const centerX = (minX + maxX) / 2;
-    
-    // Total visual height in SVG units
     const svgTotalHeight = bottomTarget_SV - minY;
 
     for (let i = 0; i < pos.count; i += 3) {
-      const z0 = pos.getZ(i), z1 = pos.getZ(i+1);
+      const z0 = pos.getZ(i);
       const isCap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
       
       if (isCap) {
@@ -322,13 +330,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           const px = pos.getX(i + j);
           const py = pos.getY(i + j);
           const pz = pos.getZ(i + j);
-          
-          // Map 3D Y (0 to H) back to SVG Y (H to 0) for side wrapping
-          // Original SVG Y = TotalH - GeomY + minY
           const originalSvgY = svgTotalHeight - py + minY;
-          
           const s = nearestS(px + centerX, originalSvgY, outline.pts, outline.cum, outline.total);
-          // Map Z from [-d/2, +d/2] to [0, 1]
           const t = (pz - zBack) / depth; 
           uvArr[2 * (i + j)] = s;
           uvArr[2 * (i + j) + 1] = t;
@@ -343,16 +346,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const worldPerim = outline.total * Math.abs(scale) * sCore;
     const worldDepth = Math.abs(depth * scale);
 
-    // Standard Scale (1,1,1) because geometry is normalized
     const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
 
-    // =========================================================
-    // CHILD WRAPPER POSITION
-    // =========================================================
-    // Children use mesh-local coordinates from raycasting.
-    // Raycaster returns coords in geometry's coordinate system (Y-up, base at 0).
-    // Wrapper should be at origin with identity transform.
-    
+    // Child Wrapper is at 0,0,0
     const wrapperX = 0;  
     const wrapperY = 0;  
     const wrapperZ = 0;
@@ -372,7 +368,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     };
   }, [svgData, depth, bevel, scale, targetWidth, targetHeight, preserveTop]);
 
-  // 4. Update Texture Repeats (Side Effect)
+  // 4. Update Texture Repeats (Headstone AND Base)
   useLayoutEffect(() => {
     if (!dims) return;
     
@@ -387,11 +383,23 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     clonedFaceMap.repeat.set(repFaceX, repFaceY);
     clonedSideMap.repeat.set(repSideX, repSideY);
+
+    // Base Repeats
+    if (showBase) {
+      const bW = baseWidth ?? (dims.worldW + 0.2);
+      const bH = baseHeight ?? 0.15;
+      const bD = baseDepth ?? (dims.worldDepth + 0.1);
+      const repBaseX = Math.max(1, bW / sideTile);
+      const repBaseY = Math.max(1, bH / sideTile);
+      clonedBaseMap.repeat.set(repBaseX, repBaseY);
+      clonedBaseMap.needsUpdate = true;
+    }
+
     clonedFaceMap.needsUpdate = true;
     clonedSideMap.needsUpdate = true;
-  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap]);
+  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, clonedBaseMap, showBase, baseWidth, baseHeight, baseDepth]);
 
-  // 5. Create Materials (FIX: Return data from useMemo, not JSX)
+  // 5. Create Materials
   const materials = useMemo(() => {
     const common = {
       roughness: 0.15,
@@ -406,45 +414,47 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     ];
   }, [clonedFaceMap, clonedSideMap, doubleSided]);
 
-  // 5a. Dispose geometries and materials on cleanup
-  React.useEffect(() => {
-    return () => {
-      geometries.forEach(geom => geom.dispose());
-      materials.forEach(mat => mat.dispose());
-    };
-  }, [geometries, materials]);
+  const baseMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      roughness: 0.2,
+      metalness: 0.05,
+      color: 0xffffff,
+      map: clonedBaseMap,
+      envMapIntensity: 1.2
+    });
+  }, [clonedBaseMap]);
 
   const meshRef = useRef<THREE.Mesh>(null!);
   const groupRef = useRef<THREE.Group>(null!);
-  const scaledWrapperRef = useRef<THREE.Group>(null!);
   
-  // Force re-render after mount to ensure children can access populated meshRef
+  // Force re-render after mount
   const [isReady, setIsReady] = useState(false);
-  useLayoutEffect(() => {
-    setIsReady(true);
-  }, []);
+  useLayoutEffect(() => { setIsReady(true); }, []);
 
   useImperativeHandle(ref, () => groupRef.current);
 
-  // Stable API for children
-  // Note: api.group points to the scaled wrapper for proper child alignment
   const childApi = useMemo(() => ({
-    group: scaledWrapperRef,
+    group: groupRef,
     mesh: meshRef,
     frontZ: apiData?.frontZ ?? 0,
     unitsPerMeter: apiData?.unitsPerMeter ?? 100,
     version: apiData?.version ?? 0,
     worldWidth: apiData?.worldWidth ?? 1,
     worldHeight: apiData?.worldHeight ?? 1
-  }), [apiData, isReady]); // Include isReady to ensure update after mount
+  }), [apiData, isReady]);
 
   if (!geometries.length || !dims) return null;
 
-  // 6. Return JSX (FIX: JSX in return, not useMemo)
-  // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance
+  // Calculate Base Logic
+  const bW = baseWidth ?? (dims.worldW + 0.2); // Default to headstone width + 20cm
+  const bH = baseHeight ?? 0.15;
+  const bD = baseDepth ?? (dims.worldDepth + 0.15); // Default to headstone depth + 15cm
+
   return (
+    // Top group has identity scale (World Units)
     <group ref={groupRef}>
-      {/* Apply SVG scale only to headstone mesh */}
+      
+      {/* 1. Headstone: Scaled from SVG to World */}
       {geometries.map((geom, i) => (
         <mesh
           key={`hs-${i}`}
@@ -460,13 +470,21 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         </mesh>
       ))}
 
-      {/* 
-         CHILDREN WRAPPER:
-         Apply SVG scale here so children (inscriptions/motifs) align with headstone.
-         Raycasting returns mesh-local coords which are already in geometry space.
-         API.group points to this scaled wrapper for proper child alignment.
-      */}
-      <group ref={scaledWrapperRef} position={childWrapperPos} scale={meshScale}>
+      {/* 2. Base: Already in World Units (No SVG scaling) */}
+      {showBase && (
+        <mesh 
+          position={[0, -bH / 2, 0]} 
+          castShadow 
+          receiveShadow
+        >
+          <boxGeometry args={[bW, bH, bD]} />
+          <primitive object={baseMaterial} attach="material" />
+          {showEdges && <Edges threshold={15} color="#dddddd" />}
+        </mesh>
+      )}
+
+      {/* 3. Children: Scaled to match Headstone coordinate system */}
+      <group position={childWrapperPos} scale={meshScale}>
          {typeof children === 'function' && children(childApi, selectedAdditions)}
       </group>
     </group>

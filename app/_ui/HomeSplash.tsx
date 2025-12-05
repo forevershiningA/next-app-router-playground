@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 import {
   CubeIcon,
   PencilIcon,
@@ -26,6 +27,20 @@ const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
 
 export default function HomeSplash() {
   const router = useRouter();
+  const [showCanvas, setShowCanvas] = useState(false);
+
+  // Only show canvas when on home page
+  useEffect(() => {
+    // Small delay to ensure any previous canvas is cleaned up
+    const timer = setTimeout(() => {
+      setShowCanvas(true);
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+      setShowCanvas(false);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -44,7 +59,7 @@ export default function HomeSplash() {
             
             {/* 3D Canvas Preview */}
             <div className="mt-10 mb-8">
-              <HeroCanvas />
+              {showCanvas && <HeroCanvas />}
             </div>
             
             <div className="flex items-center justify-center gap-6">

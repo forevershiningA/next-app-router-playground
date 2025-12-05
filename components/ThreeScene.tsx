@@ -6,7 +6,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import CanvasClickOverlay from './CanvasClickOverlay';
+import { calculatePrice } from '#/lib/xml-parser';
 import {
   CAMERA_2D_TILT_ANGLE,
   CAMERA_2D_DISTANCE,
@@ -24,14 +24,9 @@ function CameraController() {
   useEffect(() => {
     if (!controls) return;
     
-    if (is2DMode) {
-      (controls as any).target.set(0, 4.2, 0);
-      (controls as any).update();
-    } else {
-      // Set en face view for 3D mode
-      (controls as any).target.set(0, 4.2, 0);
-      (controls as any).update();
-    }
+    // Set camera target to same position for both 2D and 3D modes
+    (controls as any).target.set(0, 4.2, 0);
+    (controls as any).update();
   }, [is2DMode, controls]);
 
   if (is2DMode) {
@@ -79,6 +74,37 @@ function ViewToggleButton() {
   );
 }
 
+// Product Name Header Component
+function ProductNameHeader() {
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  
+  // Calculate price from catalog
+  const quantity = catalog?.product?.priceModel
+    ? widthMm * heightMm / 100000
+    : 0;
+  const price = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+
+  return (
+    <div className="text-center">
+      {catalog ? (
+        <h1 className="py-10 text-3xl font-serif font-light tracking-tight text-white sm:text-4xl">
+          {catalog.product.name}
+          <br />
+          <span className="text-lg text-slate-300">
+            {widthMm} x {heightMm} mm (${(price || 0).toFixed(2)})
+          </span>
+        </h1>
+      ) : (
+        <h1 className="py-10 text-3xl font-serif font-light tracking-tight text-white sm:text-4xl">
+          3D Designer
+        </h1>
+      )}
+    </div>
+  );
+}
+
 export default function ThreeScene() {
   const is2DMode = useHeadstoneStore ((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
@@ -89,6 +115,33 @@ export default function ThreeScene() {
   const [showLoader, setShowLoader] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const hasInitiallyLoaded = useRef(false);
+  const glRef = useRef<any>(null);
+  const contextLostHandler = useRef<any>(null);
+  const contextRestoredHandler = useRef<any>(null);
+
+  // Cleanup WebGL context on unmount
+  useEffect(() => {
+    return () => {
+      if (glRef.current) {
+        const gl = glRef.current;
+        
+        // Remove event listeners
+        if (contextLostHandler.current) {
+          gl.domElement.removeEventListener('webglcontextlost', contextLostHandler.current);
+        }
+        if (contextRestoredHandler.current) {
+          gl.domElement.removeEventListener('webglcontextrestored', contextRestoredHandler.current);
+        }
+        
+        // Dispose of the WebGL context properly
+        gl.dispose?.();
+        const loseContext = gl.getContext()?.getExtension('WEBGL_lose_context');
+        if (loseContext) {
+          loseContext.loseContext();
+        }
+      }
+    };
+  }, []);
 
   // Only show loader after initial load (prevents double loader on page load)
   useEffect(() => {
@@ -132,7 +185,7 @@ export default function ThreeScene() {
     <>
       <ViewToggleButton />
       {showLoader && (
-        <div className="absolute inset-0 z-50 grid place-items-center bg-black">
+        <div className="absolute inset-0 z-50 grid place-items-center bg-transparent">
           <div className="flex flex-col items-center gap-4 text-white drop-shadow">
             <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
             <div className="font-mono text-sm opacity-90">
@@ -141,49 +194,56 @@ export default function ThreeScene() {
           </div>
         </div>
       )}
-      <div 
-        ref={containerRef}
-        className="relative w-full h-screen" 
-        style={{ 
-          background: '#000000', 
-          padding: '0' 
-        }}
-      >
-        {isVisible && (
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#09171E] to-[#291E14] pointer-events-none" />
+      
+      {isVisible && (
+        <div ref={containerRef} className="relative w-full h-screen flex flex-col items-center justify-center">
+          {/* Product Name Above Canvas */}
+          <ProductNameHeader />
+          
           <Canvas 
-          shadows
-          dpr={[1, 2]}
-          gl={{ 
-            alpha: false,
-            preserveDrawingBuffer: false, // Changed to false to reduce memory usage
-            antialias: true,
-            powerPreference: 'high-performance',
-            failIfMajorPerformanceCaveat: false
-          }}
-          onCreated={({ gl }) => {
-            // Handle WebGL context loss
-            gl.domElement.addEventListener('webglcontextlost', (event) => {
-              event.preventDefault();
-              console.warn('WebGL context lost, attempting to restore...');
-            });
-            
-            gl.domElement.addEventListener('webglcontextrestored', () => {
-              console.log('WebGL context restored');
-              // Force a re-render
-              window.dispatchEvent(new Event('resize'));
-            });
-          }}
-          camera={{ position: [0, 0, 10] }}
-          style={{ border: 'none', borderRadius: '0' }}
-          className={isDesignsPage ? 'canvas-with-border' : ''}
-        >
-          <Suspense fallback={null}>
-            <Scene />
-            <CameraController key={is2DMode ? 'ortho' : 'persp'} />
-          </Suspense>
-        </Canvas>
-        )}
-      </div>
+            key="main-canvas"
+            shadows
+            dpr={[1, 2]}
+            gl={{ 
+              alpha: true,
+              preserveDrawingBuffer: false,
+              antialias: true,
+              powerPreference: 'high-performance',
+              failIfMajorPerformanceCaveat: false,
+              stencil: false,
+              depth: true,
+            }}
+            onCreated={({ gl }) => {
+              glRef.current = gl;
+              
+              // Handle WebGL context loss
+              contextLostHandler.current = (event: Event) => {
+                event.preventDefault();
+                console.warn('WebGL context lost, attempting to restore...');
+              };
+              
+              contextRestoredHandler.current = () => {
+                console.log('WebGL context restored');
+                // Force a re-render
+                window.dispatchEvent(new Event('resize'));
+              };
+              
+              gl.domElement.addEventListener('webglcontextlost', contextLostHandler.current);
+              gl.domElement.addEventListener('webglcontextrestored', contextRestoredHandler.current);
+            }}
+            camera={{ position: [0, 0, 10] }}
+            style={{ background: 'transparent', width: '100%', height: '100%' }}
+            className={isDesignsPage ? 'canvas-with-border' : ''}
+          >
+            <Suspense fallback={null}>
+              <Scene />
+              <CameraController key={is2DMode ? 'ortho' : 'persp'} />
+            </Suspense>
+          </Canvas>
+        </div>
+      )}
     </>
   );
 }

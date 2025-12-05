@@ -155,6 +155,22 @@ const SceneContent = () => {
 // --- Main Component ---
 
 export default function HeroCanvas() {
+  const glRef = React.useRef<any>(null);
+
+  // Cleanup WebGL context on unmount
+  React.useEffect(() => {
+    return () => {
+      if (glRef.current) {
+        const gl = glRef.current;
+        gl.dispose?.();
+        const loseContext = gl.getContext()?.getExtension('WEBGL_lose_context');
+        if (loseContext) {
+          loseContext.loseContext();
+        }
+      }
+    };
+  }, []);
+
   return (
     <div style={{ width: '480px', height: '480px', margin: '0 auto' }}>
       <React.Suspense fallback={
@@ -162,7 +178,22 @@ export default function HeroCanvas() {
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
         </div>
       }>
-        <Canvas shadows gl={{ alpha: true }} style={{ background: 'transparent' }}>
+        <Canvas 
+          key="hero-canvas"
+          shadows 
+          gl={{ 
+            alpha: true, 
+            preserveDrawingBuffer: false,
+            antialias: true,
+            powerPreference: 'high-performance',
+            stencil: false,
+            depth: true,
+          }} 
+          style={{ background: 'transparent' }}
+          onCreated={({ gl }) => {
+            glRef.current = gl;
+          }}
+        >
           <PerspectiveCamera makeDefault position={[2, 1.5, 3.5]} fov={45} />
           
           {/* Lighting Setup */}

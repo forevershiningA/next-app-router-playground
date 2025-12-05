@@ -1,296 +1,82 @@
-layout.js:722 React instrumentation encountered an error: Error: Invalid argument not valid semver ('' received).
-overrideMethod @ hook.js:608
-error @ intercept-console-error.js:57
-injectInternals @ react-reconciler.development.js:740
-exports.injectIntoDevTools @ react-reconciler.development.js:8741
-createReconciler @ events-e3cb66e2.esm.js:1285
-eval @ events-e3cb66e2.esm.js:1585
-(app-pages-browser)/./node_modules/.pnpm/@react-three+fiber@9.3.0_@types+react@19.1.12_react-dom@19.1.1_react@19.1.1__react@19.1.1_three@0.180.0/node_modules/@react-three/fiber/dist/events-e3cb66e2.esm.js @ layout.js:722
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-eval @ ThreeScene.tsx:6
-(app-pages-browser)/./components/ThreeScene.tsx @ layout.js:205
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-eval @ ConditionalCanvas.tsx:9
-(app-pages-browser)/./components/ConditionalCanvas.tsx @ layout.js:62
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-Promise.then
-eval @ next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CConditionalCanvas.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CConditionalNav.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CErrorBoundary.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CMainContent.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5Csystem%5C%5CRouterBinder.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Cstyles%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Cnode_modules%5C%5C.pnpm%5C%5Cnext%4015.5.2_react-dom%4019.1.1_react%4019.1.1__react%4019.1.1%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Cgoogle%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22app%5C%5C%5C%5Clayout.tsx%5C%22%2C%5C%22import%5C%22%3A%5C%22Geist%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22subsets%5C%22%3A%5B%5C%22latin%5C%22%5D%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Cnode_modules%5C%5C.pnpm%5C%5Cnext%4015.5.2_react-dom%4019.1.1_react%4019.1.1__react%4019.1.1%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Cgoogle%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22app%5C%5C%5C%5Clayout.tsx%5C%22%2C%5C%22import%5C%22%3A%5C%22Geist_Mono%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22subsets%5C%22%3A%5B%5C%22latin%5C%22%5D%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&server=false!:1
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CConditionalCanvas.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CConditionalNav.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CErrorBoundary.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5CMainContent.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Ccomponents%5C%5Csystem%5C%5CRouterBinder.tsx%22%2C%22ids%22%3A%5B%22default%22%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Cstyles%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Cnode_modules%5C%5C.pnpm%5C%5Cnext%4015.5.2_react-dom%4019.1.1_react%4019.1.1__react%4019.1.1%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Cgoogle%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22app%5C%5C%5C%5Clayout.tsx%5C%22%2C%5C%22import%5C%22%3A%5C%22Geist%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22subsets%5C%22%3A%5B%5C%22latin%5C%22%5D%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5Cpolcr%5C%5CDocuments%5C%5CGitHub%5C%5Cnext-dyo%5C%5Cnode_modules%5C%5C.pnpm%5C%5Cnext%4015.5.2_react-dom%4019.1.1_react%4019.1.1__react%4019.1.1%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Cgoogle%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22app%5C%5C%5C%5Clayout.tsx%5C%22%2C%5C%22import%5C%22%3A%5C%22Geist_Mono%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22subsets%5C%22%3A%5B%5C%22latin%5C%22%5D%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&server=false! @ layout.js:798
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-__webpack_exec__ @ layout.js:1570
-(anonimowa) @ layout.js:1571
-__webpack_require__.O @ webpack.js:1
-(anonimowa) @ layout.js:1572
-webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ layout.js:9
-layout.tsx:49 ReferenceError: isHomePage is not defined
-    at ConditionalCanvas (C:\Users\polcr\Documents\GitHub\next-dyo\components\ConditionalCanvas.tsx:40:3)
-    at Object.react_stack_bottom_frame (react-dom-client.development.js:29129:20)
-    at renderWithHooks (react-dom-client.development.js:7909:22)
-    at updateFunctionComponent (react-dom-client.development.js:10489:19)
-    at beginWork (react-dom-client.development.js:12102:35)
-    at runWithFiberInDEV (react-dom-client.development.js:975:30)
-    at performUnitOfWork (react-dom-client.development.js:19428:22)
-    at workLoopSync (react-dom-client.development.js:19256:41)
-    at renderRootSync (react-dom-client.development.js:19237:11)
-    at performWorkOnRoot (react-dom-client.development.js:18401:35)
-    at performWorkOnRootViaSchedulerTask (react-dom-client.development.js:21073:7)
-    at MessagePort.performWorkUntilDeadline (scheduler.development.js:36:48)
+index.js:640 Uncaught ModuleBuildError: Module build failed (from ./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   × Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\select-motifs\_ui\MotifSelectionGrid.tsx:307:1]
+ 304 │                 </div>
+ 305 │               </>
+ 306 │             )}
+ 307 │         )}
+     ·          ▲
+ 308 │       </div>
+ 309 │     </div>
+ 309 │   );
+     ╰────
+  × Expected '</', got 'div'
+     ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\select-motifs\_ui\MotifSelectionGrid.tsx:308:1]
+ 305 │               </>
+ 306 │             )}
+ 307 │         )}
+ 308 │       </div>
+     ·         ───
+ 309 │     </div>
+ 310 │   );
+ 310 │ }
+     ╰────
 
-The above error occurred in the <ConditionalCanvas> component. It was handled by the <ErrorBoundary> error boundary.
-overrideMethod @ hook.js:608
-onCaughtError @ error-boundary-callbacks.js:68
-logCaughtError @ react-dom-client.development.js:9745
-runWithFiberInDEV @ react-dom-client.development.js:975
-inst.componentDidCatch.update.callback @ react-dom-client.development.js:9792
-callCallback @ react-dom-client.development.js:7670
-commitCallbacks @ react-dom-client.development.js:7690
-runWithFiberInDEV @ react-dom-client.development.js:975
-commitClassCallbacks @ react-dom-client.development.js:13811
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15075
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15080
-flushLayoutEffects @ react-dom-client.development.js:19960
-commitRoot @ react-dom-client.development.js:19769
-onUnsuspend @ react-dom-client.development.js:26508
-"use client"
-RootLayout @ layout.tsx:49
-initializeElement @ react-server-dom-webpack-client.browser.development.js:1818
-eval @ react-server-dom-webpack-client.browser.development.js:4124
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1720
-getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2111
-parseModelString @ react-server-dom-webpack-client.browser.development.js:2477
-eval @ react-server-dom-webpack-client.browser.development.js:4054
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1720
-resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1573
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3957
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3807
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4027
-progress @ react-server-dom-webpack-client.browser.development.js:4291
-<RootLayout>
-initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3018
-initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3043
-initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1665
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3891
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3807
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4027
-progress @ react-server-dom-webpack-client.browser.development.js:4291
-"use server"
-ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2527
-createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4152
-exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4549
-eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-index.js @ main-app.js:160
+
+Caused by:
+    Syntax Error
+    at processResult (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\compiled\webpack\bundle5.js:29:407086)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\compiled\webpack\bundle5.js:29:408881)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:8645)
+    at <unknown> (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:5019)
+    at r.callback (file://C:\Users\polcr\Documents\GitHub\next-dyo\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\compiled\loader-runner\LoaderRunner.js:1:4039)
+getServerError @ node-stack-frames.js:41
+eval @ index.js:640
+setTimeout
+hydrate @ index.js:618
+await in hydrate
+pageBootstrap @ page-bootstrap.js:28
+eval @ next-dev.js:24
+Promise.then
+eval @ next-dev.js:22
+(pages-dir-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/next-dev.js @ main.js:314
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-eval @ app-next-dev.js:14
-eval @ app-bootstrap.js:59
-loadScriptsInSequence @ app-bootstrap.js:24
-appBootstrap @ app-bootstrap.js:53
-eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-next-dev.js @ main-app.js:182
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js:1998
-(anonimowa) @ main-app.js:1999
+__webpack_exec__ @ main.js:1546
+(anonimowa) @ main.js:1547
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js:9
-C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28 ErrorBoundary caught error: ReferenceError: isHomePage is not defined
-    at ConditionalCanvas (C:\Users\polcr\Documents\GitHub\next-dyo\components\ConditionalCanvas.tsx:40:3)
-    at Object.react_stack_bottom_frame (react-dom-client.development.js:29129:20)
-    at renderWithHooks (react-dom-client.development.js:7909:22)
-    at updateFunctionComponent (react-dom-client.development.js:10489:19)
-    at beginWork (react-dom-client.development.js:12102:35)
-    at runWithFiberInDEV (react-dom-client.development.js:975:30)
-    at performUnitOfWork (react-dom-client.development.js:19428:22)
-    at workLoopSync (react-dom-client.development.js:19256:41)
-    at renderRootSync (react-dom-client.development.js:19237:11)
-    at performWorkOnRoot (react-dom-client.development.js:18401:35)
-    at performWorkOnRootViaSchedulerTask (react-dom-client.development.js:21073:7)
-    at MessagePort.performWorkUntilDeadline (scheduler.development.js:36:48) {componentStack: '\n    at ConditionalCanvas (webpack-internal:///(ap…ext-devtools/userspace/app/client-entry.js:17:11)'}
+(anonimowa) @ main.js:9
+websocket.js:46 [HMR] connected
+hook.js:608 ./app/select-motifs/_ui/MotifSelectionGrid.tsx
+Error:   × Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\select-motifs\_ui\MotifSelectionGrid.tsx:307:1]
+ 304 │                 </div>
+ 305 │               </>
+ 306 │             )}
+ 307 │         )}
+     ·          ▲
+ 308 │       </div>
+ 309 │     </div>
+ 309 │   );
+     ╰────
+  × Expected '</', got 'div'
+     ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\app\select-motifs\_ui\MotifSelectionGrid.tsx:308:1]
+ 305 │               </>
+ 306 │             )}
+ 307 │         )}
+ 308 │       </div>
+     ·         ───
+ 309 │     </div>
+ 310 │   );
+ 310 │ }
+     ╰────
+
+Caused by:
+    Syntax Error
 overrideMethod @ hook.js:608
-error @ intercept-console-error.js:57
-componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28
-react_stack_bottom_frame @ react-dom-client.development.js:29184
-inst.componentDidCatch.update.callback @ react-dom-client.development.js:9803
-callCallback @ react-dom-client.development.js:7670
-commitCallbacks @ react-dom-client.development.js:7690
-runWithFiberInDEV @ react-dom-client.development.js:975
-commitClassCallbacks @ react-dom-client.development.js:13811
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15075
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15080
-flushLayoutEffects @ react-dom-client.development.js:19960
-commitRoot @ react-dom-client.development.js:19769
-onUnsuspend @ react-dom-client.development.js:26508
-"use client"
-RootLayout @ layout.tsx:45
-initializeElement @ react-server-dom-webpack-client.browser.development.js:1818
-eval @ react-server-dom-webpack-client.browser.development.js:4124
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1720
-getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2111
-parseModelString @ react-server-dom-webpack-client.browser.development.js:2477
-eval @ react-server-dom-webpack-client.browser.development.js:4054
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1720
-resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1573
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3957
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3807
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4027
-progress @ react-server-dom-webpack-client.browser.development.js:4291
-<RootLayout>
-initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3018
-initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3043
-initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1665
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3891
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3807
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4027
-progress @ react-server-dom-webpack-client.browser.development.js:4291
-"use server"
-ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2527
-createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4152
-exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4549
-eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-index.js @ main-app.js:160
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-eval @ app-next-dev.js:14
-eval @ app-bootstrap.js:59
-loadScriptsInSequence @ app-bootstrap.js:24
-appBootstrap @ app-bootstrap.js:53
-eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.2_react-dom@19.1.1_react@19.1.1__react@19.1.1/node_modules/next/dist/client/app-next-dev.js @ main-app.js:182
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js:1998
-(anonimowa) @ main-app.js:1999
-webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js:9
+nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
+handleErrors @ hot-reloader-pages.js:164
+processMessage @ hot-reloader-pages.js:228
+eval @ hot-reloader-pages.js:72
+handleMessage @ websocket.js:69
+index.js:1631 {file: {…}}

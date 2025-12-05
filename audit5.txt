@@ -1,0 +1,44 @@
+Audit Report: HeadstoneBaseAuto.tsx
+Overview
+HeadstoneBaseAuto
+ renders the base of the headstone, adjusting its width and depth based on the headstone dimensions and the presence of statues. It handles texture loading and smooth transitions (lerping) for position and scale.
+
+Findings
+1. Critical Performance Issue: Console Log in Loop
+Location: Lines 116-117.
+console.log('Base world scale:', b.scale.toArray(), ...);
+Issue: This console.log is inside useFrame, meaning it executes 60 times per second (or more).
+Impact: Severe performance degradation and console spam, making debugging other issues difficult.
+Recommendation: Remove immediately.
+2. Positioning Logic Error (Floating/Underground Base)
+Location: Line 141.
+-height * 0.5 + EPSILON, // Just below Y=0
+Analysis:
+The 
+HeadstoneAssembly
+ places the wrapper group at Y = BASE_H (0.1m).
+The Headstone (
+ShapeSwapper
+) sits at Local Y=0 inside this wrapper, so its bottom is at World Y=0.1.
+The Base should fill the space from World Y=0 to World Y=0.1.
+Its center should be at World Y = 0.05.
+The current code sets centerW.y (World Target Y) to -height * 0.5 (approx -0.05).
+This targets a World position of -0.05 (Underground).
+Result: The base is rendered from World Y=-0.1 to Y=0.
+Gap: There is a 0.1m gap between the top of the base (0) and the bottom of the headstone (0.1).
+Recommendation: Change the target Y calculation to height * 0.5 (positive) to position the base on the ground (0 to 0.1).
+height * 0.5 + EPSILON, // Center at 0.05 (World)
+3. Matrix Inversion Performance
+Location: Line 146.
+const inv = new THREE.Matrix4().copy(w.matrixWorld).invert();
+Issue: Creating and inverting a matrix every frame.
+Impact: Minor, but avoidable.
+Recommendation: Reuse a module-level or ref-stored Matrix4 to avoid garbage collection churn, though for a single object this is low priority.
+4. Hardcoded Multipliers
+Location: Lines 126, 130.
+baseW = baseW * 1.25;
+Observation: Magic numbers for statue adjustments.
+Recommendation: Extract to constants if they are likely to change or need tuning.
+Action Plan
+Remove Console Log: Delete lines 116-117.
+Fix Position: Change -height * 0.5 to height * 0.5 in centerW calculation.

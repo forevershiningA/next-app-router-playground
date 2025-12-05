@@ -1,0 +1,69 @@
+Audit Report: ShapeSwapper.tsx
+Overview
+ShapeSwapper
+ is a high-level component that manages the headstone shape, material, and its children (inscriptions, additions, motifs). It handles asset preloading, view mode switching (2D/3D), and auto-fitting the camera.
+
+Findings
+1. Unused Components & Dead Code
+Location: Lines 58-66 (
+AdditionImage
+, 
+AdditionApplication
+), Lines 145-405 (
+HeadstoneAddition
+).
+Issue:
+AdditionImage
+ and 
+AdditionApplication
+ are defined but return null (placeholders).
+HeadstoneAddition
+ is a large, complex component (250+ lines) that implements drag-and-drop logic for additions. It is NOT used in the render method.
+The render method (Lines 606-616) uses AdditionModel instead.
+Impact: Significant code bloat. 
+HeadstoneAddition
+ seems to be a legacy or alternative implementation of addition handling.
+Recommendation: Delete 
+HeadstoneAddition
+, 
+AdditionImage
+, and 
+AdditionApplication
+ if AdditionModel is the correct implementation.
+2. Unused Props
+Location: Line 411 (inscriptionRef).
+Issue: inscriptionRef is defined in 
+ShapeSwapperProps
+ but marked as deprecated and not used.
+Recommendation: Remove it.
+3. Side Effects in Render
+Location: Lines 569-571.
+if (headstoneMeshRef && api.mesh.current) {
+  (headstoneMeshRef as any).current = api.mesh.current;
+}
+Issue: Assigning to a ref (headstoneMeshRef.current) during the render phase is generally discouraged in React (Concurrent Mode unsafe), though often "works".
+Impact: Potential inconsistency if render is interrupted.
+Recommendation: Move this assignment to a useLayoutEffect or useEffect inside a small wrapper component, or accept it if "it works" and refactoring is low priority. Given SvgHeadstone exposes api only via render prop, a useEffect inside the render prop function isn't directly possible without a wrapper component.
+Better approach: Pass headstoneMeshRef to SvgHeadstone and let it assign it, or use useImperativeHandle in SvgHeadstone to expose the mesh. (Actually SvgHeadstone already exposes mesh in its API).
+4. AutoFit Trigger Logic
+Location: Lines 506-523.
+Issue: The useEffect dependencies include visibleUrl, requestedUrl, etc., and it increments fitTick.
+Observation: Logic seems sound for triggering autofit when assets change.
+5. Suspense & Error Boundaries
+Location: Lines 579, 607, 619.
+Observation: Good use of Suspense and 
+ErrorBoundary
+ for individual children. This prevents the whole headstone from crashing if one font or model fails to load.
+6. Legacy/Commented Code
+Location: Lines 455-456 (Comments about controls disabling).
+Recommendation: Remove comments if they are just historical logs.
+Action Plan
+Delete Dead Components: Remove 
+HeadstoneAddition
+, 
+AdditionImage
+, 
+AdditionApplication
+.
+Clean Props: Remove inscriptionRef.
+Refactor Ref Assignment: (Optional) Consider moving headstoneMeshRef assignment to a safer place, or leave it if it's not causing issues. (I will likely leave it for now to minimize regression risk, but note it).

@@ -21,6 +21,9 @@ import {
   EPSILON,
 } from '#/lib/headstone-constants';
 
+// Base statue width multiplier constant
+const STATUE_BASE_WIDTH_MULTIPLIER = 1.25;
+
 type HeadstoneBaseAutoProps = {
   headstoneObject: React.RefObject<THREE.Object3D>;
   wrapper: React.RefObject<THREE.Object3D>;
@@ -106,6 +109,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const hasTx = useRef(false);
     const targetPos = useRef(new THREE.Vector3());
     const targetScale = useRef(new THREE.Vector3(1, height, 1));
+    const invMatrix = useRef(new THREE.Matrix4());
 
     useFrame(() => {
       const t = headstoneObject.current;
@@ -122,9 +126,9 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       const statueExtension = hasStatue() ? 0.2 : 0;
       let baseW = Math.max(hsW * BASE_WIDTH_MULTIPLIER + statueExtension, BASE_MIN_WIDTH);
       
-      // Make the base 25% wider when statue is added
+      // Make the base wider when statue is added
       if (hasStatue()) {
-        baseW = baseW * 1.25;
+        baseW = baseW * STATUE_BASE_WIDTH_MULTIPLIER;
       }
       
       const baseD = Math.max(0.2 * BASE_DEPTH_MULTIPLIER, BASE_MIN_DEPTH); // Default depth
@@ -132,16 +136,16 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       // Shift base center to the left when statue is present
       const xOffset = statueExtension / 2;
       
-      // Position base at bottom of headstone (Y=0 in normalized geometry)
+      // Position base center at Y = height/2 (base spans from 0 to height in world space)
       const centerW = new THREE.Vector3(
         -xOffset, // Center X (shifted if statue)
-        -height * 0.5 + EPSILON, // Just below Y=0
+        height * 0.5 + EPSILON, // Center at half height above Y=0
         baseD * 0.5 // Center Z at half depth
       );
 
       w.updateWorldMatrix(true, false);
-      const inv = new THREE.Matrix4().copy(w.matrixWorld).invert();
-      const posLocal = centerW.applyMatrix4(inv);
+      invMatrix.current.copy(w.matrixWorld).invert();
+      const posLocal = centerW.applyMatrix4(invMatrix.current);
 
       // Base scale is absolute (not relative to wrapper scale)
       targetPos.current.copy(posLocal);

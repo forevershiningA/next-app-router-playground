@@ -1,0 +1,38 @@
+Audit Report: HeadstoneAssembly.tsx
+Overview
+HeadstoneAssembly
+ orchestrates the rendering of the headstone, its base, and selection outlines for various components (headstone, base, inscriptions, additions). It positions the assembly vertically to account for the base height.
+
+Findings
+1. Unused Variables & Commented Out Code
+Location: Lines 28-29 (selectedMotifId, motifRefs), Lines 98-106 (Commented out JSX).
+Issue: The variables selectedMotifId and motifRefs are fetched from the store but their usage is commented out.
+Impact: Unnecessary store subscriptions/re-renders if these change, though likely minimal. Clutters the code.
+Recommendation: Remove the unused variables and the commented-out block if the decision to use SelectionBox (or whatever replaced it) is final. If it's a "TODO", mark it as such.
+2. Dead Code in useMemo
+Location: Lines 43-53 (isApplicationAddition).
+Issue: The useMemo contains logic to check addition types but unconditionally returns false at the end.
+// ... logic ...
+return false; // This will make BoxOutline show for all additions
+Impact: The logic before the return is dead code. It executes but has no effect.
+Recommendation: Simplify isApplicationAddition to false (or remove it and hardcode the condition) and remove the dead logic, OR restore the logic if the "For now" condition is resolved.
+3. useRef Initialization Anti-Pattern
+Location: Line 34.
+Code: const tabletRef = useRef<THREE.Object3D>(new THREE.Group());
+Issue: new THREE.Group() is executed on every render, even though useRef only uses the initial value once.
+Impact: Minor performance hit (creating throwaway objects).
+Recommendation: Use useRef<THREE.Group>(null) and initialize lazily if needed, or just rely on the fact that ShapeSwapper likely populates it. If ShapeSwapper expects it to be instantiated, use const tabletRef = useRef<THREE.Group>(null); if (!tabletRef.current) tabletRef.current = new THREE.Group(); (inside a useMemo or effect, or just lazy init). Correction: You can't lazy init ref current during render safely in Concurrent mode, but for this simple case: const tabletRef = useRef<THREE.Group>(null); and letting the child attach to it or populating it in useLayoutEffect is better. However, if ShapeSwapper needs it immediately, the current way is "safe" but wasteful.
+4. Coordinate System / Base Positioning
+Location: Line 57 (group position [0, BASE_H, 0]) and Line 109 (HeadstoneBaseAuto).
+Observation: The entire assembly is lifted by BASE_H.
+ShapeSwapper (Headstone) is at 0 in this group -> World Y = BASE_H. (Correct, sits on base).
+HeadstoneBaseAuto is also in this group.
+Question: Does HeadstoneBaseAuto account for being inside a lifted group? If it draws a base of height BASE_H, and it's at Y=0 local (World BASE_H), the base would float in the air (from BASE_H to 2*BASE_H).
+Hypothesis: HeadstoneBaseAuto likely has internal logic to position itself down, or 
+HeadstoneAssembly
+ assumes HeadstoneBaseAuto handles it.
+Recommendation: Verify HeadstoneBaseAuto implementation. If it doesn't offset itself, the base is floating.
+Action Plan
+Clean up Dead Code: Remove the unused logic in isApplicationAddition and the unused motif variables.
+Fix Ref Init: Optimize tabletRef initialization.
+Verify Base Position: Check HeadstoneBaseAuto (next step in audit) to ensure it positions correctly.

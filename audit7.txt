@@ -1,0 +1,59 @@
+Audit Report: ThreeScene.tsx
+Overview
+ThreeScene
+ is the main entry point for the 3D canvas. It manages the camera, view mode (2D/3D), loading states, and WebGL context lifecycle.
+
+Findings
+1. Unused Import
+Location: Line 9 (CanvasClickOverlay).
+Issue: Imported but never used in the component.
+Recommendation: Remove the import.
+2. Camera Logic Discrepancy
+Location: Lines 20-63 (
+CameraController
+).
+Issue:
+The useEffect (Lines 24-35) sets the controls target to 
+(0, 4.2, 0)
+ for both 2D and 3D modes.
+The 2D camera (Line 44) is positioned at 4.2 + ... in Y.
+The 3D camera (Line 57) is positioned at 4.8 in Y.
+Observation: The target 4.2 seems to be the "center of attention".
+Redundancy: The useEffect has an if/else block that does the exact same thing in both branches:
+if (is2DMode) {
+  (controls as any).target.set(0, 4.2, 0);
+  // ...
+} else {
+  (controls as any).target.set(0, 4.2, 0);
+  // ...
+}
+Recommendation: Simplify the effect to remove the redundant conditional.
+3. Hardcoded Styles
+Location: Lines 204-207.
+style={{ 
+  height: '100vh',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '10%'
+}}
+Issue: Inline styles mixed with Tailwind classes (className="relative w-full ...").
+Recommendation: Move these to Tailwind classes if possible (e.g., h-screen max-w-[1200px] mx-auto p-[10%]) for consistency.
+4. 
+ProductNameHeader
+ Placement
+Location: Lines 83-106.
+Issue: This component renders HTML text inside the 
+ThreeScene
+ component but outside the Canvas.
+Observation: It uses absolute positioning.
+Status: Acceptable, but ensure it doesn't block canvas interaction (it has pointer-events-none, so it's good).
+5. WebGL Context Loss Handling
+Location: Lines 230-243.
+Observation: Good practice to handle context loss.
+Note: gl.dispose?.() in cleanup (Line 137) is a good safety measure, though React Three Fiber usually handles this.
+Action Plan
+Remove Unused Import: Delete CanvasClickOverlay.
+Simplify Camera Logic: Merge the if/else in 
+CameraController
+ effect.
+Refactor Styles: Convert inline styles to Tailwind classes.

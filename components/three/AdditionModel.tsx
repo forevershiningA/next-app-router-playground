@@ -7,6 +7,31 @@ import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
+import { useRouter, usePathname } from 'next/navigation';
+
+// Addition positioning constants
+const DEFAULT_POSITIONS = {
+  statue: {
+    xOffset: -80, // mm left of headstone
+    yOffset: 0,   // Near top
+  },
+  vase: {
+    xOffset: 30,  // mm right of headstone
+    yOffset: 0,   // Near top
+  },
+  application: {
+    xOffset: 0,   // Center
+    yOffset: 0,   // Center
+  },
+};
+
+const TARGET_HEIGHTS = {
+  statue: 15,      // 150mm
+  vase: 12,        // 120mm
+  application: 10, // 100mm
+};
+
+const APPLICATION_Z_OFFSET = 1.5; // Offset to prevent deep embedding
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -57,6 +82,8 @@ function AdditionModelInner({
 }) {
   // ALL hooks must be called unconditionally at the top - before any early returns
   const { gl, camera, controls, scene: threeScene } = useThree();
+  const router = useRouter();
+  const pathname = usePathname();
   const setAdditionRef = useHeadstoneStore((s) => s.setAdditionRef);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
@@ -192,9 +219,14 @@ function AdditionModelInner({
     setSelectedAdditionId(id);
     setActivePanel('addition');
     
+    // Navigate to select-additions if not already there
+    if (pathname !== '/select-additions') {
+      router.push('/select-additions');
+    }
+    
     // Dispatch event to hide nav when clicking on addition
     window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'addition' } }));
-  }, [id, setSelectedAdditionId, setActivePanel]);
+  }, [id, setSelectedAdditionId, setActivePanel, pathname, router]);
 
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
@@ -222,24 +254,26 @@ function AdditionModelInner({
   React.useEffect(() => {
     if (!scene) return;
     
-    let meshCount = 0;
+    const materials: THREE.Material[] = [];
+    
     scene.traverse((child: THREE.Object3D) => {
       if (child instanceof THREE.Mesh) {
-        meshCount++;
-        
         // Make sure mesh is visible
         child.visible = true;
         child.castShadow = true;
         child.receiveShadow = true;
         
         // Replace with a simple bright material
-        child.material = new THREE.MeshStandardMaterial({
+        const material = new THREE.MeshStandardMaterial({
           color: 0xffffff,
           map: colorMap || undefined,
           metalness: 0.3,
           roughness: 0.7,
           side: THREE.DoubleSide,
         });
+        
+        child.material = material;
+        materials.push(material);
         
         // Texture orientation
         if (colorMap) {
@@ -248,6 +282,11 @@ function AdditionModelInner({
         }
       }
     });
+    
+    // Cleanup: dispose materials when component unmounts or scene changes
+    return () => {
+      materials.forEach(mat => mat.dispose());
+    };
   }, [scene, colorMap, id]);
 
   React.useEffect(() => {
@@ -274,6 +313,9 @@ function AdditionModelInner({
 
     return () => {
       canvas.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      if (controls) (controls as any).enabled = true;
+      document.body.style.cursor = 'auto';
     };
   }, [dragging, gl, controls, placeFromClientXY]);
 
@@ -301,16 +343,17 @@ function AdditionModelInner({
 
   // Different default positions based on type (as OFFSETS from center)
   let defaultX = 0, defaultY = 0;
-  if (addition.type === 'application') {
-    defaultX = 0;  // Center
-    defaultY = 0;  // Center
-  } else if (addition.type === 'statue') {
-    // Position on the base, left of headstone
-    defaultX = minX - 80 - centerX; // Left of the headstone (as offset)
-    defaultY = minY - centerY; // Near the top (as offset)
+  const posConfig = DEFAULT_POSITIONS[addition.type as keyof typeof DEFAULT_POSITIONS] || DEFAULT_POSITIONS.application;
+  
+  if (addition.type === 'statue') {
+    defaultX = minX + posConfig.xOffset - centerX;
+    defaultY = minY + posConfig.yOffset - centerY;
   } else if (addition.type === 'vase') {
-    defaultX = maxX + 30 - centerX; // 30mm right (as offset)
-    defaultY = minY - centerY; // Near the top (as offset)
+    defaultX = maxX + posConfig.xOffset - centerX;
+    defaultY = minY + posConfig.yOffset - centerY;
+  } else {
+    defaultX = posConfig.xOffset;
+    defaultY = posConfig.yOffset;
   }
 
   const defaultOffset = {
@@ -323,9 +366,7 @@ function AdditionModelInner({
   const offset = additionOffsets[id] ?? defaultOffset;
 
   // scale: target sizes in headstone units (1 unit = 10mm)
-  let targetH = 10; // 10 units = 100mm for applications
-  if (addition.type === 'statue') targetH = 15; // 150mm for statues
-  else if (addition.type === 'vase') targetH = 12; // 120mm for vases
+  const targetH = TARGET_HEIGHTS[addition.type as keyof typeof TARGET_HEIGHTS] || TARGET_HEIGHTS.application;
 
   // Size is in headstone units
   const maxDim = Math.max(size.x, size.y);
@@ -335,7 +376,8 @@ function AdditionModelInner({
   const finalScale = auto * user;
 
   // Determine Z position based on type
-  // Models are centered at origin after rotation
+  // Models are rotated 180° around Z (line 109), then Y-flipped via scale (line 367)
+  // This combination ensures models display right-side-up in Y-up coordinate system
   // For applications: position so model sits on headstone surface
   // For statues/vases: on the base (z=0 or below)
   const modelDepth = size.z * finalScale;
@@ -348,8 +390,7 @@ function AdditionModelInner({
   } else if (addition.type === 'application') {
     // Position so the front of the model is at headstone surface
     // Model is centered, so we need to offset by half depth + headstone surface
-    // Increased offset from 0.1 to 1.5 to bring applications more forward (less embedded)
-    zPosition = headstone.frontZ + modelDepth / 2 + 1.5; // half depth + larger offset to prevent deep embedding
+    zPosition = headstone.frontZ + modelDepth / 2 + APPLICATION_Z_OFFSET;
   }
 
   const isSelected = selectedAdditionId === id;
