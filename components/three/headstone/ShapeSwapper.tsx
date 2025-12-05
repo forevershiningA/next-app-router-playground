@@ -194,8 +194,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     prevIs2DMode.current = is2DMode;
   }, [is2DMode, controls, invalidate, camera]);
 
-  const heightM = React.useMemo(() => heightMm / 100, [heightMm]);
-  const widthM = React.useMemo(() => widthMm / 100, [widthMm]);
+  const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
+  const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
 
   const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
   const requestedTex = React.useMemo(() => {
@@ -255,7 +255,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         <SvgHeadstone
           key={`${visibleUrl}::${visibleTex}`}
           url={visibleUrl}
-          depth={isPlaque ? 5 : 100}
+          depth={isPlaque ? 5 : 15}
           scale={0.01}
           faceTexture={visibleTex}
           sideTexture={visibleTex}

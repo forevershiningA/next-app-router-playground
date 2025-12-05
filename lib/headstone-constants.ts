@@ -22,7 +22,7 @@ export const MAX_INSCRIPTION_ROTATION_DEG = 45;
 // Base configuration
 export const BASE_HEIGHT_METERS = 0.5; // Base height in meters (500mm)
 export const BASE_WIDTH_MULTIPLIER = 1.4; // Base is 1.4x wider than headstone
-export const BASE_DEPTH_MULTIPLIER = 2.0; // Base is 2x deeper than headstone
+export const BASE_DEPTH_MULTIPLIER = 1.5; // Base is 1.5x deeper than headstone
 export const BASE_MIN_WIDTH = 0.05; // Minimum base width in meters
 export const BASE_MIN_DEPTH = 0.05; // Minimum base depth in meters
 

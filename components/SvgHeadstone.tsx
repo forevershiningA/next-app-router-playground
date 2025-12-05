@@ -100,7 +100,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   faceRepeatX = 6,
   faceRepeatY = 6,
   sideRepeatX = 8,
-  sideRepeatY = 4,
+  sideRepeatY = 1,
   targetHeight,
   targetWidth,
   preserveTop = true,

@@ -26,9 +26,9 @@ const DEFAULT_POSITIONS = {
 };
 
 const TARGET_HEIGHTS = {
-  statue: 15,      // 150mm
-  vase: 12,        // 120mm
-  application: 10, // 100mm
+  statue: 0.15,      // 150mm
+  vase: 0.12,        // 120mm
+  application: 0.10, // 100mm
 };
 
 const APPLICATION_Z_OFFSET = 1.5; // Offset to prevent deep embedding
@@ -153,8 +153,8 @@ function AdditionModelInner({
     szMM.y = Math.abs(szMM.y);
     szMM.z = Math.abs(szMM.z);
     
-    // Convert to headstone units (1 unit = 10mm)
-    const sz = szMM.divideScalar(10);
+    // Use raw bounds for ratio calculation
+    const sz = szMM.divideScalar(1);
     
     return sz;
   }, [scene, id]);

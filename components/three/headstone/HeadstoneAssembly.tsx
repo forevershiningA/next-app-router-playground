@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import ShapeSwapper from './ShapeSwapper';
 import HeadstoneBaseAuto from './HeadstoneBaseAuto';
 import BoxOutline from '../BoxOutline';
+import SelectionBox from '../SelectionBox';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 
@@ -36,6 +37,9 @@ export default function HeadstoneAssembly() {
   const selectedInscription = inscriptions.find(
     (inscription) => inscription.id === selectedInscriptionId,
   );
+  
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const motifRefs = useHeadstoneStore((s) => s.motifRefs);
 
   return (
     <>
@@ -59,23 +63,40 @@ export default function HeadstoneAssembly() {
         />
 
         {selectedInscription && (
-          <BoxOutline
+          <SelectionBox
             targetRef={selectedInscription.ref}
             visible={true}
-            color="white"
+            color="#4CAF50"
             pad={0.02}
-            through={false}
+            through={true}
+            showHandles={true}
+            handleSize={0.05}
           />
         )}
 
-        {/* Show BoxOutline for all additions */}
+        {/* Show SelectionBox for selected motif */}
+        {selectedMotifId && motifRefs[selectedMotifId] && (
+          <SelectionBox
+            targetRef={motifRefs[selectedMotifId]}
+            visible={true}
+            color="#FF9800"
+            pad={0.02}
+            through={true}
+            showHandles={true}
+            handleSize={0.05}
+          />
+        )}
+
+        {/* Show SelectionBox for selected addition */}
         {selectedAdditionId && additionRefs[selectedAdditionId] && (
-          <BoxOutline
+          <SelectionBox
             targetRef={additionRefs[selectedAdditionId]}
             visible={true}
-            color="white"
+            color="#2196F3"
             pad={0.02}
-            through={false}
+            through={true}
+            showHandles={true}
+            handleSize={0.05}
           />
         )}
 
