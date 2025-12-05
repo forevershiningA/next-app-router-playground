@@ -13,6 +13,14 @@ const nextConfig = {
     prerenderEarlyExit: false,
     routerBFCache: true,
   },
+  // Exclude large static assets from serverless functions
+  outputFileTracingExcludes: {
+    '*': [
+      'public/ml/**/*',
+      'public/shapes/**/*',
+      'public/additions/**/*',
+    ],
+  },
   turbopack: { root: process.cwd() },
   images: {
     remotePatterns: [
