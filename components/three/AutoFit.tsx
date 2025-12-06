@@ -93,11 +93,8 @@ export default function AutoFit({
     camera.position.copy(toPos);
     camera.lookAt(toTgt);
     
-    // For 2D view, ensure camera stays perfectly level (no tilt)
-    if (view === '2d') {
-      camera.rotation.z = 0; // No roll
-      camera.up.set(0, 1, 0); // Ensure up vector is correct
-    }
+    camera.rotation.z = 0; // No roll
+    camera.up.set(0, 1, 0); // Ensure up vector is correct
 
     // If controls exist, update their target as well
     if (controls?.target) {

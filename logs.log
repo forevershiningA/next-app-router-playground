@@ -97,7 +97,7 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765029871603:160
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765043204945:160
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
 fn @ webpack.js:1
@@ -106,13 +106,13 @@ eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765029871603:182
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765043204945:182
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765029871603:1998
-(anonimowa) @ main-app.js?v=1765029871603:1999
+__webpack_exec__ @ main-app.js?v=1765043204945:1998
+(anonimowa) @ main-app.js?v=1765043204945:1999
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765029871603:9
+(anonimowa) @ main-app.js?v=1765043204945:9
 index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
     at validateAndParse (index.js:120:15)
     at esm_compareVersions (index.js:10:16)
@@ -146,287 +146,196 @@ emit @ hook.js:268
 (anonimowa) @ backend.js:19
 (anonimowa) @ react_devtools_backend_compact.js:1
 (anonimowa) @ react_devtools_backend_compact.js:1
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182 Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. You can only call Hooks at the top level of your React function. For more information, see https://react.dev/link/rules-of-hooks Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:608
-error @ intercept-console-error.js:57
-warnInvalidHookAccess @ react-reconciler.development.js:69
-useMemo @ react-reconciler.development.js:7859
-exports.useMemo @ react.development.js:1326
-eval @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182
-mountMemo @ react-reconciler.development.js:2952
-useMemo @ react-reconciler.development.js:7369
-exports.useMemo @ react.development.js:1326
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:148
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooks @ react-reconciler.development.js:2235
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopConcurrent @ react-reconciler.development.js:6368
-renderRootConcurrent @ react-reconciler.development.js:6350
-performWorkOnRoot @ react-reconciler.development.js:5983
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182 Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. You can only call Hooks at the top level of your React function. For more information, see https://react.dev/link/rules-of-hooks Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:600
-error @ intercept-console-error.js:57
-warnInvalidHookAccess @ react-reconciler.development.js:69
-useMemo @ react-reconciler.development.js:7859
-exports.useMemo @ react.development.js:1326
-eval @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182
-mountMemo @ react-reconciler.development.js:2956
-useMemo @ react-reconciler.development.js:7369
-exports.useMemo @ react.development.js:1326
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:148
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooks @ react-reconciler.development.js:2235
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopConcurrent @ react-reconciler.development.js:6368
-renderRootConcurrent @ react-reconciler.development.js:6350
-performWorkOnRoot @ react-reconciler.development.js:5983
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:470 React has detected a change in the order of Hooks called by SvgHeadstone. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks   Previous render            Next render   ------------------------------------------------------1. useContext                 useContext2. useRef                     useRef3. useMemo                    useMemo4. useSyncExternalStore       useSyncExternalStore5. useEffect                  useEffect6. useDebugValue              useDebugValue7. useDebugValue              useDebugValue8. useLayoutEffect            useLayoutEffect9. useEffect                  useEffect10. useMemo                   useMemo11. useMemo                   useMemo12. useEffect                 useEffect13. useMemo                   useMemo14. useMemo                   useLayoutEffect   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:600
-error @ intercept-console-error.js:57
-updateHookTypesDev @ react-reconciler.development.js:2202
-useLayoutEffect @ react-reconciler.development.js:7723
-exports.useLayoutEffect @ react.development.js:1323
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:470
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooksAgain @ react-reconciler.development.js:2290
-renderWithHooks @ react-reconciler.development.js:2241
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopConcurrent @ react-reconciler.development.js:6368
-renderRootConcurrent @ react-reconciler.development.js:6350
-performWorkOnRoot @ react-reconciler.development.js:5983
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:489 The final argument passed to useMemo changed size between renders. The order and size of this array must remain constant.Previous: [[object Object], true, 0.6, 0.5999250093738282, 0, 400.05, 400, 400.05, 400, 400.05]Incoming: [[object Object], [object Object], false] Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:600
-error @ intercept-console-error.js:57
-areHookInputsEqual @ react-reconciler.development.js:2219
-updateMemo @ react-reconciler.development.js:2971
-useMemo @ react-reconciler.development.js:7732
-exports.useMemo @ react.development.js:1326
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:489
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooksAgain @ react-reconciler.development.js:2290
-renderWithHooks @ react-reconciler.development.js:2241
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopConcurrent @ react-reconciler.development.js:6368
-renderRootConcurrent @ react-reconciler.development.js:6350
-performWorkOnRoot @ react-reconciler.development.js:5983
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182 Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. You can only call Hooks at the top level of your React function. For more information, see https://react.dev/link/rules-of-hooks Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:608
-error @ intercept-console-error.js:57
-warnInvalidHookAccess @ react-reconciler.development.js:69
-useMemo @ react-reconciler.development.js:7859
-exports.useMemo @ react.development.js:1326
-eval @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182
-mountMemo @ react-reconciler.development.js:2952
-useMemo @ react-reconciler.development.js:7369
-exports.useMemo @ react.development.js:1326
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:148
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooks @ react-reconciler.development.js:2235
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopSync @ react-reconciler.development.js:6265
-renderRootSync @ react-reconciler.development.js:6248
-performWorkOnRoot @ react-reconciler.development.js:6008
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182 Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. You can only call Hooks at the top level of your React function. For more information, see https://react.dev/link/rules-of-hooks Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:600
-error @ intercept-console-error.js:57
-warnInvalidHookAccess @ react-reconciler.development.js:69
-useMemo @ react-reconciler.development.js:7859
-exports.useMemo @ react.development.js:1326
-eval @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:182
-mountMemo @ react-reconciler.development.js:2956
-useMemo @ react-reconciler.development.js:7369
-exports.useMemo @ react.development.js:1326
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:148
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooks @ react-reconciler.development.js:2235
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopSync @ react-reconciler.development.js:6265
-renderRootSync @ react-reconciler.development.js:6248
-performWorkOnRoot @ react-reconciler.development.js:6008
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:489 The final argument passed to useMemo changed size between renders. The order and size of this array must remain constant.Previous: [[object Object], true, 0.6, 0.5999250093738282, 0, 400.05, 400, 400.05, 400, 400.05]Incoming: [[object Object], [object Object], false] Error Component Stack
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:92:3)
-    at group (<anonymous>)
-    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
-    at group (<anonymous>)
-    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
-    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
-    at Suspense (<anonymous>)
-    at Suspense (<anonymous>)
-    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
-    at m (index.js:51:1)
-    at eval (events-e3cb66e2.esm.js:106:5)
-    at Provider (events-e3cb66e2.esm.js:2045:3)
-overrideMethod @ hook.js:600
-error @ intercept-console-error.js:57
-areHookInputsEqual @ react-reconciler.development.js:2219
-updateMemo @ react-reconciler.development.js:2971
-useMemo @ react-reconciler.development.js:7732
-exports.useMemo @ react.development.js:1326
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:489
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooksAgain @ react-reconciler.development.js:2290
-renderWithHooks @ react-reconciler.development.js:2241
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
-runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopSync @ react-reconciler.development.js:6265
-renderRootSync @ react-reconciler.development.js:6248
-performWorkOnRoot @ react-reconciler.development.js:6008
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
-performWorkUntilDeadline @ scheduler.development.js:44
-react-reconciler.development.js:2516 Uncaught Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)
-    at rerenderReducer (react-reconciler.development.js:2516:35)
-    at Object.useState (react-reconciler.development.js:7759:24)
-    at exports.useState (react.development.js:1336:34)
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:516:41)
-    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
-    at renderWithHooksAgain (react-reconciler.development.js:2290:24)
-    at renderWithHooks (react-reconciler.development.js:2241:28)
-    at updateForwardRef (react-reconciler.development.js:3429:21)
-    at beginWork (react-reconciler.development.js:4172:24)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97 Uncaught ReferenceError: view is not defined
+    at AutoFit.useLayoutEffect (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97:5)
+    at react-stack-bottom-frame (react-reconciler.development.js:7241:22)
     at runWithFiberInDEV (react-reconciler.development.js:399:20)
-    at performUnitOfWork (react-reconciler.development.js:6372:87)
-    at workLoopSync (react-reconciler.development.js:6265:40)
-    at renderRootSync (react-reconciler.development.js:6248:13)
-    at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
-    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
-rerenderReducer @ react-reconciler.development.js:2516
-useState @ react-reconciler.development.js:7759
-exports.useState @ react.development.js:1336
-SvgHeadstone @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:516
-react-stack-bottom-frame @ react-reconciler.development.js:7191
-renderWithHooksAgain @ react-reconciler.development.js:2290
-renderWithHooks @ react-reconciler.development.js:2241
-updateForwardRef @ react-reconciler.development.js:3429
-beginWork @ react-reconciler.development.js:4172
+    at commitHookEffectListMount (react-reconciler.development.js:4782:628)
+    at commitHookLayoutEffects (react-reconciler.development.js:4770:60)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5061:30)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+AutoFit.useLayoutEffect @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97
+react-stack-bottom-frame @ react-reconciler.development.js:7241
 runWithFiberInDEV @ react-reconciler.development.js:399
-performUnitOfWork @ react-reconciler.development.js:6372
-workLoopSync @ react-reconciler.development.js:6265
-renderRootSync @ react-reconciler.development.js:6248
-performWorkOnRoot @ react-reconciler.development.js:6008
+commitHookEffectListMount @ react-reconciler.development.js:4782
+commitHookLayoutEffects @ react-reconciler.development.js:4770
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5061
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+commitRootImpl @ react-reconciler.development.js:6525
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+setTimeout
+performWorkOnRoot @ react-reconciler.development.js:6059
 performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
 performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\ThreeScene.tsx:205 Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)
-    at rerenderReducer (react-reconciler.development.js:2516:35)
-    at Object.useState (react-reconciler.development.js:7759:24)
-    at exports.useState (react.development.js:1336:34)
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:516:41)
-    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
-    at renderWithHooksAgain (react-reconciler.development.js:2290:24)
-    at renderWithHooks (react-reconciler.development.js:2241:28)
-    at updateForwardRef (react-reconciler.development.js:3429:21)
-    at beginWork (react-reconciler.development.js:4172:24)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\ThreeScene.tsx:166 ReferenceError: view is not defined
+    at AutoFit.useLayoutEffect (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97:5)
+    at react-stack-bottom-frame (react-reconciler.development.js:7241:22)
     at runWithFiberInDEV (react-reconciler.development.js:399:20)
-    at performUnitOfWork (react-reconciler.development.js:6372:87)
-    at workLoopSync (react-reconciler.development.js:6265:40)
-    at renderRootSync (react-reconciler.development.js:6248:13)
-    at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
-    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+    at commitHookEffectListMount (react-reconciler.development.js:4782:628)
+    at commitHookLayoutEffects (react-reconciler.development.js:4770:60)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5061:30)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
 
 The above error occurred in the <CanvasImpl> component. It was handled by the <ErrorBoundary> error boundary.
 overrideMethod @ hook.js:608
@@ -534,7 +443,7 @@ performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
 performWorkUntilDeadline @ scheduler.development.js:36
 <Canvas>
 exports.jsxDEV @ react-jsx-dev-runtime.development.js:326
-ThreeScene @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ThreeScene.tsx:205
+ThreeScene @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ThreeScene.tsx:166
 react_stack_bottom_frame @ react-dom-client.development.js:29129
 renderWithHooksAgain @ react-dom-client.development.js:8009
 renderWithHooks @ react-dom-client.development.js:7921
@@ -589,7 +498,7 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765029871603:160
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765043204945:160
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
 fn @ webpack.js:1
@@ -598,30 +507,64 @@ eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765029871603:182
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765043204945:182
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765029871603:1998
-(anonimowa) @ main-app.js?v=1765029871603:1999
+__webpack_exec__ @ main-app.js?v=1765043204945:1998
+(anonimowa) @ main-app.js?v=1765043204945:1999
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765029871603:9
-C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28 ErrorBoundary caught error: Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)
-    at rerenderReducer (react-reconciler.development.js:2516:35)
-    at Object.useState (react-reconciler.development.js:7759:24)
-    at exports.useState (react.development.js:1336:34)
-    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:516:41)
-    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
-    at renderWithHooksAgain (react-reconciler.development.js:2290:24)
-    at renderWithHooks (react-reconciler.development.js:2241:28)
-    at updateForwardRef (react-reconciler.development.js:3429:21)
-    at beginWork (react-reconciler.development.js:4172:24)
+(anonimowa) @ main-app.js?v=1765043204945:9
+C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28 ErrorBoundary caught error: ReferenceError: view is not defined
+    at AutoFit.useLayoutEffect (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97:5)
+    at react-stack-bottom-frame (react-reconciler.development.js:7241:22)
     at runWithFiberInDEV (react-reconciler.development.js:399:20)
-    at performUnitOfWork (react-reconciler.development.js:6372:87)
-    at workLoopSync (react-reconciler.development.js:6265:40)
-    at renderRootSync (react-reconciler.development.js:6248:13)
-    at performWorkOnRoot (react-reconciler.development.js:6008:56)
-    at performWorkOnRootViaSchedulerTask (react-reconciler.development.js:1356:9)
-    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at CanvasImpl (webpack-internal:///(app-pages…ode_modules/next/dist/client/app-index.js:156:11)'}
+    at commitHookEffectListMount (react-reconciler.development.js:4782:628)
+    at commitHookLayoutEffects (react-reconciler.development.js:4770:60)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5061:30)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
+    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
+    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17) {componentStack: '\n    at CanvasImpl (webpack-internal:///(app-pages…ode_modules/next/dist/client/app-index.js:156:11)'}
 overrideMethod @ hook.js:608
 error @ intercept-console-error.js:57
 componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28
@@ -752,7 +695,7 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765029871603:160
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765043204945:160
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
 fn @ webpack.js:1
@@ -761,13 +704,13 @@ eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765029871603:182
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765043204945:182
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765029871603:1998
-(anonimowa) @ main-app.js?v=1765029871603:1999
+__webpack_exec__ @ main-app.js?v=1765043204945:1998
+(anonimowa) @ main-app.js?v=1765043204945:1999
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765029871603:9
+(anonimowa) @ main-app.js?v=1765043204945:9
 hook.js:608 THREE.WebGLRenderer: WEBGL_lose_context extension not supported.
 overrideMethod @ hook.js:608
 warnOnce @ three.core.js:5165
