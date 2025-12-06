@@ -66,7 +66,8 @@ function shapeBounds(shape: THREE.Shape) {
   };
 }
 
-function spacedOutline(shape: THREE.Shape, segments = 1024) {
+function spacedOutline(shape: THREE.Shape, segments = 2048) {
+  // Get spaced points to ensure uniform density along the curve
   const pts = shape.getSpacedPoints(segments).map((p) => new THREE.Vector2(p.x, p.y));
   const cum = new Array<number>(pts.length).fill(0);
   let L = 0;
@@ -78,14 +79,67 @@ function spacedOutline(shape: THREE.Shape, segments = 1024) {
   return { pts, cum, total: L };
 }
 
-function nearestS(x: number, y: number, pts: THREE.Vector2[], cum: number[], total: number) {
+// Helper to calculate distance from point P to segment AB
+function distToSegmentSquared(p: THREE.Vector2, a: THREE.Vector2, b: THREE.Vector2) {
+  const l2 = a.distanceToSquared(b);
+  if (l2 === 0) return p.distanceToSquared(a);
+  let t = ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y)) / l2;
+  t = Math.max(0, Math.min(1, t));
+  const px = a.x + t * (b.x - a.x);
+  const py = a.y + t * (b.y - a.y);
+  return (p.x - px) ** 2 + (p.y - py) ** 2;
+}
+
+// Robust projection function that avoids "stepping" artifacts
+function getProjectedPerimeter(x: number, y: number, pts: THREE.Vector2[], cum: number[], total: number) {
   let bi = 0, bd2 = Infinity;
+  
+  // 1. Find approximate nearest point index
   for (let i = 0; i < pts.length; i++) {
     const dx = x - pts[i].x, dy = y - pts[i].y;
     const d2 = dx * dx + dy * dy;
     if (d2 < bd2) { bd2 = d2; bi = i; }
   }
-  return total > 0 ? cum[bi] / total : 0;
+
+  // 2. Interpolate between segments (Prev vs Next)
+  const iPrev = (bi - 1 + pts.length) % pts.length;
+  const iNext = (bi + 1) % pts.length;
+  const v = new THREE.Vector2(x, y);
+
+  // Dist to PREVIOUS segment (bi-1 -> bi)
+  const dPrevSq = distToSegmentSquared(v, pts[iPrev], pts[bi]);
+  
+  // Dist to NEXT segment (bi -> bi+1)
+  const dNextSq = distToSegmentSquared(v, pts[bi], pts[iNext]);
+
+  let baseIndex = bi;
+  let nextIndex = iNext;
+  
+  // Choose the closer segment
+  if (dPrevSq < dNextSq) {
+    baseIndex = iPrev;
+    nextIndex = bi;
+  }
+
+  // Project onto the chosen segment to get exact T
+  const p1 = pts[baseIndex];
+  const p2 = pts[nextIndex];
+  const seg = new THREE.Vector2().subVectors(p2, p1);
+  const len = seg.length();
+  
+  if (len < EPS) return cum[baseIndex] / total;
+
+  const rel = new THREE.Vector2().subVectors(v, p1);
+  const proj = rel.dot(seg.normalize()); // Distance along segment
+  
+  let startDist = cum[baseIndex];
+  let finalDist = startDist + proj;
+  
+  // Normalize 0..1
+  if (finalDist < 0) finalDist += total;
+  if (finalDist > total) finalDist -= total;
+
+  return total > 0 ? finalDist / total : 0;
 }
 
 const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
@@ -119,17 +173,18 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     side: sideTexture ?? faceTexture
   });
 
-  // 2. Clone Textures (FIX: Texture Mutation Bug)
+  // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
   const [clonedFaceMap, clonedSideMap] = useMemo(() => {
     const f = textures.face.clone();
     const s = textures.side.clone();
     
     [f, s].forEach(t => {
       t.wrapS = t.wrapT = THREE.RepeatWrapping;
-      t.minFilter = THREE.LinearMipmapLinearFilter;
+      // LinearMipmapLinearFilter is essential for removing aliasing/noise at distance
+      t.minFilter = THREE.LinearMipmapLinearFilter; 
       t.magFilter = THREE.LinearFilter;
-      (t as any).anisotropy = 8;
-      t.generateMipmaps = true;
+      (t as any).anisotropy = 16;
+      t.generateMipmaps = true; // Must be true for anisotropic filtering to work
       t.needsUpdate = true;
     });
     
@@ -144,12 +199,95 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     };
   }, [clonedFaceMap, clonedSideMap]);
 
-  // 3. Generate Geometry (with disposal cleanup)
-  const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
+  // 3. Pre-calculate shape bounds and parameters
+  const shapeParams = useMemo(() => {
     const shapes: THREE.Shape[] = [];
     svgData.paths.forEach((p: any) => shapes.push(...SVGLoader.createShapes(p)));
     
     if (!shapes.length) {
+      return null;
+    }
+
+    const base = shapes[0];
+    const { minX, maxX, minY, maxY, dx, dy } = shapeBounds(base);
+    const widthW = dx * Math.abs(scale);
+    const heightW = dy * Math.abs(scale);
+    const wantW = targetWidth ?? widthW;
+    const wantH = targetHeight ?? heightW;
+    const sCore = wantW / Math.max(EPS, widthW);
+    const coreH_world = heightW * sCore;
+    const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
+    const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
+    const bottomTarget_SV = minY + targetH_SV;
+
+    return { base, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV };
+  }, [svgData, scale, targetWidth, targetHeight, preserveTop]);
+
+  // 3a. Calculate outline (now at top level)
+  const outline = useMemo(() => {
+    if (!shapeParams) return null;
+
+    const { base, minX, maxX, maxY, dx, dy, wantH, coreH_world, bottomTarget_SV } = shapeParams;
+    const isExpanded = preserveTop && wantH > coreH_world + 1e-4;
+    
+    let ptsForOutline = base.getPoints(12);
+    
+    if (isExpanded) {
+      let idxL = -1, idxR = -1;
+      let minDiffL = Infinity, minDiffR = Infinity;
+      const tol = Math.max(dx, dy) * 0.05;
+
+      ptsForOutline.forEach((p, i) => {
+        const distL = Math.hypot(p.x - minX, p.y - maxY);
+        const distR = Math.hypot(p.x - maxX, p.y - maxY);
+        if (distL < minDiffL) { minDiffL = distL; idxL = i; }
+        if (distR < minDiffR) { minDiffR = distR; idxR = i; }
+      });
+
+      if (minDiffL < tol && minDiffR < tol && idxL !== idxR) {
+        const newPts: THREE.Vector2[] = [];
+        const len = ptsForOutline.length;
+        const fwdDist = (idxR - idxL + len) % len;
+        const revDist = (idxL - idxR + len) % len;
+        const pL = ptsForOutline[idxL];
+        const pR = ptsForOutline[idxR];
+        const pL_new = new THREE.Vector2(pL.x, bottomTarget_SV);
+        const pR_new = new THREE.Vector2(pR.x, bottomTarget_SV);
+
+        if (fwdDist < revDist) {
+          let curr = idxR;
+          while (curr !== idxL) {
+            newPts.push(ptsForOutline[curr]);
+            curr = (curr + 1) % len;
+          }
+          newPts.push(ptsForOutline[idxL]);
+          newPts.push(pL_new);
+          newPts.push(pR_new);
+          newPts.push(ptsForOutline[idxR]);
+        } else {
+          let curr = idxL;
+          while (curr !== idxR) {
+            newPts.push(ptsForOutline[curr]);
+            curr = (curr + 1) % len;
+          }
+          newPts.push(ptsForOutline[idxR]);
+          newPts.push(pR_new);
+          newPts.push(pL_new);
+          newPts.push(ptsForOutline[idxL]);
+        }
+        
+        const shape = new THREE.Shape(newPts);
+        // Use high segment count for smooth lookup
+        return spacedOutline(shape, 4096); 
+      }
+    }
+    
+    return spacedOutline(base, 4096);
+  }, [shapeParams, preserveTop]);
+
+  // 3b. Generate Geometry (with disposal cleanup)
+  const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
+    if (!shapeParams || !outline) {
       return { 
         geometries: [], 
         dims: null, 
@@ -159,26 +297,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       };
     }
 
-    const base = shapes[0];
-    const outline = spacedOutline(base, 1024);
-    
-    // Bounds and world size
-    const { minX, maxX, minY, maxY, dx, dy } = shapeBounds(base);
-    const widthW = dx * Math.abs(scale);
-    const heightW = dy * Math.abs(scale);
-
-    // Targets
-    const wantW = targetWidth ?? widthW;
-    const wantH = targetHeight ?? heightW;
-
-    // Uniform scale (width)
-    const sCore = wantW / Math.max(EPS, widthW);
-    const coreH_world = heightW * sCore;
-
-    // Bottom target (top fixed) in SVG space
-    const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
-    const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
-    const bottomTarget_SV = minY + targetH_SV;
+    const { base, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
 
     // Build extrudes
     const extrudeSettings = {
@@ -188,6 +307,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       bevelSegments: bevel ? 2 : 0,
       bevelSize: bevel ? 0.8 : 0,
       bevelThickness: bevel ? 0.8 : 0,
+      curveSegments: 32 // Ensure smooth geometry curve
     };
 
     let coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
@@ -277,9 +397,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     for (let t = 0; t < triCount; t++) {
       const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
-      // Front is now at +zFront due to centering
-      const z0 = pos.getZ(i0);
-      const cap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
+      // Check if all three vertices are at front or back
+      const z0 = pos.getZ(i0), z1 = pos.getZ(i1), z2 = pos.getZ(i2);
+      const cap = (Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol) || 
+                  (Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol && Math.abs(z2 - zBack) <= zTol);
       
       const matIndex = cap ? 0 : 1;
       if (currentMat === -1) currentMat = matIndex;
@@ -289,28 +410,31 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     flush();
 
     // =========================================================
-    // UV MAPPING
+    // UV MAPPING (Normalized 0..1 Strategy)
     // =========================================================
     merged.computeBoundingBox();
     const bb = merged.boundingBox!;
     const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
-    
-    // Geometry is Y-Up [0, Height]. Texture is V-Up [0, 1].
-    // Direct mapping works perfectly now.
-    const y0 = bb.min.y; 
-    const dyU = bb.max.y - bb.min.y;
+    const y0 = bb.min.y, dyU = bb.max.y - bb.min.y;
     
     const uvArr = new Float32Array(pos.count * 2);
     const centerX = (minX + maxX) / 2;
-    
-    // Total visual height in SVG units
     const svgTotalHeight = bottomTarget_SV - minY;
 
+    // Calculate Physical World Dimensions (Used for Repeats, not UV baking)
+    const worldW = (maxX - minX) * Math.abs(scale) * sCore;
+    const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
+    const worldPerimeterLen = outline.total * Math.abs(scale) * sCore;
+    // Important: worldDepth is physical thickness
+    const worldZDepth = Math.abs(depth * scale); 
+
     for (let i = 0; i < pos.count; i += 3) {
-      const z0 = pos.getZ(i), z1 = pos.getZ(i+1);
-      const isCap = (Math.abs(z0 - zFront) <= zTol) || (Math.abs(z0 - zBack) <= zTol);
+      const z0 = pos.getZ(i), z1 = pos.getZ(i+1), z2 = pos.getZ(i+2);
+      const isCap = (Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol) || 
+                    (Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol && Math.abs(z2 - zBack) <= zTol);
       
       if (isCap) {
+        // Front/Back: Normalized 0..1
         for (let j = 0; j < 3; j++) {
           const u = (pos.getX(i + j) - x0) / dxU;
           const v = (pos.getY(i + j) - y0) / dyU; 
@@ -318,30 +442,47 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           uvArr[2 * (i + j) + 1] = v;
         }
       } else {
+        // Sides: Normalized 0..1
+        // U = Perimeter Fraction
+        // V = Depth Fraction
+        const rawUVs: {s: number, v: number}[] = [];
+        
         for (let j = 0; j < 3; j++) {
           const px = pos.getX(i + j);
           const py = pos.getY(i + j);
           const pz = pos.getZ(i + j);
           
-          // Map 3D Y (0 to H) back to SVG Y (H to 0) for side wrapping
-          // Original SVG Y = TotalH - GeomY + minY
           const originalSvgY = svgTotalHeight - py + minY;
+          const s = getProjectedPerimeter(px + centerX, originalSvgY, outline.pts, outline.cum, outline.total);
           
-          const s = nearestS(px + centerX, originalSvgY, outline.pts, outline.cum, outline.total);
-          // Map Z from [-d/2, +d/2] to [0, 1]
-          const t = (pz - zBack) / depth; 
-          uvArr[2 * (i + j)] = s;
-          uvArr[2 * (i + j) + 1] = t;
+          // Map depth to 0..1
+          const v = (pz - zBack) / (zFront - zBack);
+          
+          rawUVs.push({ s, v });
+        }
+
+        // Seam Fix: If we cross the 1.0 -> 0.0 boundary
+        const s0 = rawUVs[0].s;
+        const s1 = rawUVs[1].s;
+        const s2 = rawUVs[2].s;
+        if (Math.abs(s0 - s1) > 0.5 || Math.abs(s1 - s2) > 0.5 || Math.abs(s2 - s0) > 0.5) {
+           if (s0 < 0.5) rawUVs[0].s += 1;
+           if (s1 < 0.5) rawUVs[1].s += 1;
+           if (s2 < 0.5) rawUVs[2].s += 1;
+        }
+
+        // Write UVs (NO SCALE APPLIED HERE)
+        for (let j = 0; j < 3; j++) {
+           uvArr[2 * (i + j)] = rawUVs[j].s;
+           uvArr[2 * (i + j) + 1] = rawUVs[j].v;
         }
       }
     }
     merged.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
 
     // Stats & Output
-    const worldW = (maxX - minX) * Math.abs(scale) * sCore;
-    const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
-    const worldPerim = outline.total * Math.abs(scale) * sCore;
-    const worldDepth = Math.abs(depth * scale);
+    const worldPerim = worldPerimeterLen;
+    const worldDepth = worldZDepth;
 
     // Standard Scale (1,1,1) because geometry is normalized
     const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
@@ -370,23 +511,28 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       },
       childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number]
     };
-  }, [svgData, depth, bevel, scale, targetWidth, targetHeight, preserveTop]);
+  }, [shapeParams, outline, depth, bevel, scale]);
 
-  // 4. Update Texture Repeats (Side Effect)
+  // 4. Handle Repeats via Texture Matrix (Just like the old version)
   useLayoutEffect(() => {
     if (!dims) return;
     
     const usePhysical = autoRepeat || tileSize != null || sideTileSize != null;
-    const faceTile = tileSize ?? 0.1;
-    const sideTile = sideTileSize ?? faceTile;
+    const faceTile = Math.max(0.001, tileSize ?? 0.1);
+    const sideTile = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
 
+    // Face Repeats
     const repFaceX = usePhysical ? Math.max(1, dims.worldW / faceTile) : (faceRepeatX ?? 6);
     const repFaceY = usePhysical ? Math.max(1, dims.worldH / faceTile) : (faceRepeatY ?? 6);
+
+    // Side Repeats (Key Fix: Use worldPerim for X, worldDepth for Y)
+    // This allows the texture to tile naturally without baked scaling.
     const repSideX = usePhysical ? Math.max(1, dims.worldPerim / sideTile) : (sideRepeatX ?? 8);
     const repSideY = usePhysical ? Math.max(1, dims.worldDepth / sideTile) : (sideRepeatY ?? 1);
 
     clonedFaceMap.repeat.set(repFaceX, repFaceY);
     clonedSideMap.repeat.set(repSideX, repSideY);
+    
     clonedFaceMap.needsUpdate = true;
     clonedSideMap.needsUpdate = true;
   }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap]);
