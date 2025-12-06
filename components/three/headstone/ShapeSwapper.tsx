@@ -282,11 +282,12 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           }}
         >
           {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
-            // Set the headstone mesh ref directly (safe in render since it's just a ref assignment)
-            if (headstoneMeshRef && api.mesh.current) {
-              // Direct assignment - refs can be updated synchronously in render
-              (headstoneMeshRef as any).current = api.mesh.current;
-            }
+            // Safe ref assignment using useLayoutEffect to avoid render phase side-effects
+            React.useLayoutEffect(() => {
+              if (headstoneMeshRef && api.mesh.current) {
+                (headstoneMeshRef as any).current = api.mesh.current;
+              }
+            }, [headstoneMeshRef, api.mesh]);
             
             return (
             <>

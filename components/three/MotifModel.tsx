@@ -82,6 +82,26 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
     return { group, size };
   }, [svgData, id, color]);
 
+  // Cleanup effect: dispose of manually created resources
+  React.useEffect(() => {
+    return () => {
+      if (mesh && mesh.group) {
+        mesh.group.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach((m) => m.dispose());
+              } else {
+                child.material.dispose();
+              }
+            }
+          }
+        });
+      }
+    };
+  }, [mesh]);
+
   const placeFromClientXY = React.useCallback(
     (clientX: number, clientY: number) => {
       if (!headstone?.mesh?.current || !gl?.domElement) return;

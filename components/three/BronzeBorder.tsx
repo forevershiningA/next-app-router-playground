@@ -136,6 +136,13 @@ function SimpleBorder({
     return tex;
   }, [svgPath, bounds, plaqueWidth, plaqueHeight, color]);
 
+  // Cleanup texture
+  useEffect(() => {
+    return () => {
+      texture.dispose();
+    };
+  }, [texture]);
+
   return (
     <mesh position={[0, 0, depth / 2 + 0.001]}>
       <planeGeometry args={[plaqueWidth, plaqueHeight]} />
@@ -189,6 +196,16 @@ function DetailedBorder({
     if (!details.right) return null;
     return createRepeatingTexture(details.right.svgPath, details.right.bounds, color, 30, plaqueHeight);
   }, [details.right, color, plaqueHeight]);
+
+  // Cleanup textures
+  useEffect(() => {
+    return () => {
+      if (topTexture) topTexture.dispose();
+      if (bottomTexture) bottomTexture.dispose();
+      if (leftTexture) leftTexture.dispose();
+      if (rightTexture) rightTexture.dispose();
+    };
+  }, [topTexture, bottomTexture, leftTexture, rightTexture]);
 
   const zOffset = depth / 2 + 0.001;
 
