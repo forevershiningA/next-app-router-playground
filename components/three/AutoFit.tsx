@@ -84,12 +84,7 @@ export default function AutoFit({
     const dX = sphere.radius / Math.tan(hFov / 2);
     const dist = Math.max(dX, dY) * Math.max(1, margin) + pad;
 
-    let dir;
-    if (view === '2d') {
-      dir = new THREE.Vector3(0, 0, 1); // Front view
-    } else {
-      dir = new THREE.Vector3(0, 0, 1); // Fixed front view for 3D
-    }
+    const dir = new THREE.Vector3(0, 0, 1); // Front view
     dir.normalize();
 
     const toPos = toTgt.clone().addScaledVector(dir, dist);
