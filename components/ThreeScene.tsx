@@ -8,9 +8,6 @@ import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
 import {
-  CAMERA_2D_TILT_ANGLE,
-  CAMERA_2D_DISTANCE,
-  CAMERA_3D_POSITION_Y,
   CAMERA_3D_POSITION_Z,
   CAMERA_FOV,
   CAMERA_NEAR,
@@ -18,33 +15,15 @@ import {
 } from '#/lib/headstone-constants';
 
 function CameraController() {
-  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const { controls } = useThree();
 
   useEffect(() => {
     if (!controls) return;
     
-    // Set camera target to same position for both 2D and 3D modes
+    // Set camera target
     (controls as any).target.set(0, 4.2, 0);
     (controls as any).update();
-  }, [is2DMode, controls]);
-
-  if (is2DMode) {
-    const tiltRad = (CAMERA_2D_TILT_ANGLE * Math.PI) / 180;
-    return (
-      <PerspectiveCamera
-        makeDefault
-        position={[
-          0,
-          4.2 + CAMERA_2D_DISTANCE * Math.sin(tiltRad),
-          CAMERA_2D_DISTANCE * Math.cos(tiltRad),
-        ]}
-        fov={CAMERA_FOV}
-        near={CAMERA_NEAR}
-        far={CAMERA_FAR}
-      />
-    );
-  }
+  }, [controls]);
 
   return (
     <PerspectiveCamera
@@ -54,23 +33,6 @@ function CameraController() {
       near={CAMERA_NEAR}
       far={CAMERA_FAR}
     />
-  );
-}
-
-function ViewToggleButton() {
-  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
-  const toggleViewMode = useHeadstoneStore((s) => s.toggleViewMode);
-
-  return (
-    <button
-      data-view-toggle
-      onClick={toggleViewMode}
-      className="fixed z-50 cursor-pointer rounded border border-white/20 bg-black/50 px-3 py-2 text-2xl font-bold text-white backdrop-blur-sm hover:bg-black/70"
-      aria-label={`Switch to ${is2DMode ? '3D' : '2D'} view`}
-      style={{ fontSize: '24px', top: '20px', right: '20px' }}
-    >
-      {is2DMode ? '3D' : '2D'}
-    </button>
   );
 }
 
@@ -183,7 +145,6 @@ export default function ThreeScene() {
 
   return (
     <>
-      <ViewToggleButton />
       {showLoader && (
         <div className="absolute inset-0 z-50 grid place-items-center bg-transparent">
           <div className="flex flex-col items-center gap-4 text-white drop-shadow">
@@ -239,7 +200,7 @@ export default function ThreeScene() {
           >
             <Suspense fallback={null}>
               <Scene />
-              <CameraController key={is2DMode ? 'ortho' : 'persp'} />
+              <CameraController />
             </Suspense>
           </Canvas>
         </div>

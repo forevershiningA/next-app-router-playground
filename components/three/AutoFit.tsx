@@ -14,7 +14,6 @@ type Props = {
   readyTimeoutMs?: number; // wait up to this long for a stable first fit
   resizeDebounceMs?: number; // debounce for resize refit
   trigger?: unknown; // bump to force a refit (e.g. after texture/shape is ready)
-  view?: '2d' | '3d';
 };
 
 export default function AutoFit({
@@ -25,7 +24,6 @@ export default function AutoFit({
   readyTimeoutMs = 50,
   resizeDebounceMs = 1,
   trigger,
-  view = '2d',
 }: Props) {
   const { camera, size, controls, invalidate } = useThree() as {
     camera: THREE.PerspectiveCamera;
@@ -71,16 +69,8 @@ export default function AutoFit({
       verticalOffset = 0;
     } else {
       // Headstone with base: use proportional offset for header
-      // Different offsets for 2D vs 3D view
-      if (view === '2d') {
-        // 2D view: use same offset as 3D for seamless transition
-        const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
-        verticalOffset = boxSize.y * heightRatio;
-      } else {
-        // 3D view: same offset for seamless transition
-        const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
-        verticalOffset = boxSize.y * heightRatio;
-      }
+      const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
+      verticalOffset = boxSize.y * heightRatio;
     }
     
     // Offset the target downward so camera shows more of the top

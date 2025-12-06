@@ -162,37 +162,12 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
-  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque';
-
-  const prevIs2DMode = React.useRef(is2DMode);
-
-  React.useEffect(() => {
-    if (controls && prevIs2DMode.current !== is2DMode) {
-      (controls as any).enabled = false;
-
-      // Explicitly set camera position and target for 2D/3D switch
-      if (is2DMode) {
-        camera.position.set(0, 0, 5); // Example 2D position
-        camera.lookAt(0, 0, 0); // Example 2D target
-      } else {
-        camera.position.set(0, 2, 5); // Example 3D position (slightly elevated)
-        camera.lookAt(0, 0, 0); // Example 3D target
-      }
-      camera.updateProjectionMatrix();
-      invalidate();
-
-      setTimeout(() => {
-        (controls as any).enabled = true;
-      }, 100); // Re-enable controls after a short delay
-    }
-    prevIs2DMode.current = is2DMode;
-  }, [is2DMode, controls, invalidate, camera]);
 
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
@@ -227,11 +202,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
       visibleUrl === requestedUrl &&
       visibleTex === requestedTex
     ) {
-      // Trigger fit on view mode changes
+      // Trigger fit
       setFitTick((n) => n + 1);
     }
   }, [
-    is2DMode, // Trigger on mode change
     isMaterialChange,
     visibleUrl,
     requestedUrl,
@@ -378,7 +352,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           duration={0.25}
           readyTimeoutMs={100}
           trigger={fitTick}
-          view={is2DMode ? '2d' : '3d'}
         />
       </group>
 

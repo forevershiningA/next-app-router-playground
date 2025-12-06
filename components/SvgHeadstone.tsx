@@ -582,7 +582,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     version: apiData?.version ?? 0,
     worldWidth: apiData?.worldWidth ?? 1,
     worldHeight: apiData?.worldHeight ?? 1
-  }), [apiData, isReady]); // Include isReady to ensure update after mount
+  }), [apiData]);
 
   if (!geometries.length || !dims) return null;
 
