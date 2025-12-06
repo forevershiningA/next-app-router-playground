@@ -116,7 +116,7 @@ export default function AutoFit({
     camera.far = far;
     camera.updateProjectionMatrix();
     invalidate();
-  }, [target, camera, size.width, size.height, margin, pad, controls, view, trigger, heightMm, widthMm, showBase]);
+  }, [target, camera, size.width, size.height, margin, pad, controls, trigger, heightMm, widthMm, showBase]);
 
   return null;
 }
