@@ -713,6 +713,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedMotifId: null, // Deselect any motif
         selected: null, // Deselect headstone/base
       });
+      // Navigate to select-additions page
+      const { navTo } = get();
+      if (navTo) {
+        navTo('/select-additions');
+      }
     }
   },
   setAdditionRef: (id, ref) =>
@@ -767,6 +772,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedAdditionId: null, // Deselect any addition
         selected: null, // Deselect headstone/base
       });
+      // Navigate to select-motifs page
+      const { navTo } = get();
+      if (navTo) {
+        navTo('/select-motifs');
+      }
     }
   },
   setMotifRef: (id, ref) =>

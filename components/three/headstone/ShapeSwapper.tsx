@@ -347,7 +347,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
         <AutoFit
           target={tabletRef}
-          margin={0.5}
+          margin={1.04}
           pad={0}
           duration={0.25}
           readyTimeoutMs={100}

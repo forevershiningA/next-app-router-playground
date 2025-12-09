@@ -21,14 +21,14 @@ function CameraController() {
     if (!controls) return;
     
     // Set camera target
-    (controls as any).target.set(0, 4.2, 0);
+    (controls as any).target.set(0, 3.8, 0);
     (controls as any).update();
   }, [controls]);
 
   return (
     <PerspectiveCamera
       makeDefault
-      position={[0, 4.8, CAMERA_3D_POSITION_Z]}
+      position={[0, 4.2, CAMERA_3D_POSITION_Z]}
       fov={CAMERA_FOV}
       near={CAMERA_NEAR}
       far={CAMERA_FAR}

@@ -203,6 +203,16 @@ export default function DesignerNav() {
             const Icon = item.icon;
             const isActive = pathname === `/${item.slug}`;
             
+            // Hide "Select Material" for laser etched products
+            if (item.slug === 'select-material' && catalog?.product?.laser === '1') {
+              return null;
+            }
+            
+            // Hide "Select Additions" for laser etched products
+            if (item.slug === 'select-additions' && catalog?.product?.laser === '1') {
+              return null;
+            }
+            
             // Insert "New Design" button after "Select Product" if there are customizations
             const showNewDesignAfter = index === 0 && hasCustomizations;
             

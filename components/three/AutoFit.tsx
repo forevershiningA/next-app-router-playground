@@ -69,7 +69,7 @@ export default function AutoFit({
       verticalOffset = 0;
     } else {
       // Headstone with base: use proportional offset for header
-      const heightRatio = boxSize.y > 1 ? 0.15 : 0.20;
+      const heightRatio = boxSize.y > 1 ? 0.10 : 0.15;
       verticalOffset = boxSize.y * heightRatio;
     }
     
@@ -83,6 +83,14 @@ export default function AutoFit({
     const dY = sphere.radius / Math.tan(vFov / 2);
     const dX = sphere.radius / Math.tan(hFov / 2);
     const dist = Math.max(dX, dY) * Math.max(1, margin) + pad;
+    
+    console.log('AutoFit camera calculation:', {
+      margin,
+      pad,
+      sphereRadius: sphere.radius,
+      calculatedDist: dist,
+      boxSize: boxSize.toArray(),
+    });
 
     const dir = new THREE.Vector3(0, 0, 1); // Front view
     dir.normalize();

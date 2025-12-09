@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useThree } from '@react-three/fiber';
+import { useThree, useFrame } from '@react-three/fiber';
 import { Html, Line } from '@react-three/drei';
 
 type Props = {
@@ -340,6 +340,7 @@ export default function SelectionBox({
 
   // Refs for non-interactive elements
   const outlineRef = React.useRef<any>(null);
+  const groupRef = React.useRef<THREE.Group>(null);
 
   // Cleanup timeout on unmount
   React.useEffect(() => {
@@ -357,8 +358,35 @@ export default function SelectionBox({
     }
   }, []);
 
+  const [isVisible, setIsVisible] = React.useState(true);
+  
+  // Use useFrame to check visibility on every frame
+  useFrame(() => {
+    if (groupRef.current) {
+      const worldPos = new THREE.Vector3();
+      groupRef.current.getWorldPosition(worldPos);
+      
+      const worldNormal = new THREE.Vector3();
+      groupRef.current.getWorldDirection(worldNormal);
+      
+      const cameraDir = new THREE.Vector3();
+      cameraDir.subVectors(camera.position, worldPos).normalize();
+      
+      const dotProduct = cameraDir.dot(worldNormal);
+      
+      // Update visibility based on dot product
+      // Positive = front view (visible), Negative = back view (hidden)
+      setIsVisible(dotProduct >= 0);
+    }
+  });
+  
+  // Don't render if not visible
+  if (!isVisible) {
+    return null;
+  }
+
   return (
-    <group position={position} rotation={[0, 0, rotation]}>
+    <group ref={groupRef} position={position} rotation={[0, 0, rotation]}>
       {/* Box outline */}
       <Line
         ref={outlineRef}
