@@ -674,9 +674,23 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
     const line = get().inscriptions.find((l) => l.id === id);
     if (line) {
-      set({ selectedInscriptionId: id, activeInscriptionText: line.text });
+      set({ 
+        selectedInscriptionId: id, 
+        activeInscriptionText: line.text,
+        selectedMotifId: null, // Deselect any motif
+        selectedAdditionId: null, // Deselect any addition
+        selected: null, // Deselect headstone/base
+        activePanel: 'inscription', // Set active panel to inscription
+      });
     } else {
-      set({ selectedInscriptionId: id, activeInscriptionText: '' });
+      set({ 
+        selectedInscriptionId: id, 
+        activeInscriptionText: '',
+        selectedMotifId: null, // Deselect any motif
+        selectedAdditionId: null, // Deselect any addition
+        selected: null, // Deselect headstone/base
+        activePanel: 'inscription', // Set active panel to inscription
+      });
     }
     get().calculateInscriptionCost();
   },
@@ -697,6 +711,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'addition',
         selectedInscriptionId: null, // Deselect any inscription
         selectedMotifId: null, // Deselect any motif
+        selected: null, // Deselect headstone/base
       });
     }
   },
@@ -750,6 +765,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'motif',
         selectedInscriptionId: null, // Deselect any inscription
         selectedAdditionId: null, // Deselect any addition
+        selected: null, // Deselect headstone/base
       });
     }
   },

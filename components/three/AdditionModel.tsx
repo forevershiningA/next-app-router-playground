@@ -8,6 +8,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
+import SelectionBox from '../SelectionBox';
 
 // Addition positioning constants
 const DEFAULT_POSITIONS = {
@@ -26,12 +27,12 @@ const DEFAULT_POSITIONS = {
 };
 
 const TARGET_HEIGHTS = {
-  statue: 0.15,      // 150mm
-  vase: 0.12,        // 120mm
-  application: 0.10, // 100mm
+  statue: 150,      // 150mm
+  vase: 120,        // 120mm
+  application: 100, // 100mm
 };
 
-const APPLICATION_Z_OFFSET = 1.5; // Offset to prevent deep embedding
+const APPLICATION_Z_OFFSET = 0.002; // Small offset from headstone surface (2mm)
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -84,6 +85,15 @@ function AdditionModelInner({
   const { gl, camera, controls, scene: threeScene } = useThree();
   const router = useRouter();
   const pathname = usePathname();
+  
+  // Check if this is a Traditional Engraved product (sandblasted effect)
+  const productId = useHeadstoneStore((s) => s.productId);
+  const product = React.useMemo(() => {
+    if (!productId) return null;
+    return data.products.find(p => p.id === productId);
+  }, [productId]);
+  const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
+  
   const setAdditionRef = useHeadstoneStore((s) => s.setAdditionRef);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
@@ -219,14 +229,9 @@ function AdditionModelInner({
     setSelectedAdditionId(id);
     setActivePanel('addition');
     
-    // Navigate to select-additions if not already there
-    if (pathname !== '/select-additions') {
-      router.push('/select-additions');
-    }
-    
-    // Dispatch event to hide nav when clicking on addition
+    // Don't navigate away - keep canvas visible and show addition panel
     window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'addition' } }));
-  }, [id, setSelectedAdditionId, setActivePanel, pathname, router]);
+  }, [id, setSelectedAdditionId, setActivePanel]);
 
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
@@ -376,24 +381,26 @@ function AdditionModelInner({
   const finalScale = auto * user;
 
   // Determine Z position based on type
-  // Models are rotated 180° around Z (line 109), then Y-flipped via scale (line 367)
-  // This combination ensures models display right-side-up in Y-up coordinate system
-  // For applications: position so model sits on headstone surface
-  // For statues/vases: on the base (z=0 or below)
-  const modelDepth = size.z * finalScale;
+  // Coordinate system: 1 unit = 1mm
+  const zScaleFactor = 0.1; // Reduced Z-scale to make additions flatter (10% depth)
+  const modelDepth = size.z * finalScale * zScaleFactor;
   let zPosition = 0;
   
   if (addition.type === 'statue' || addition.type === 'vase') {
-    // Statues and vases sit on the base at z=0
-    // Move to the front by using positive Z (same as headstone front)
+    // Statues and vases sit on the base
     zPosition = headstone.frontZ;
   } else if (addition.type === 'application') {
-    // Position so the front of the model is at headstone surface
-    // Model is centered, so we need to offset by half depth + headstone surface
-    zPosition = headstone.frontZ + modelDepth / 2 + APPLICATION_Z_OFFSET;
+    // Position application on headstone surface (same as motifs use frontZ + 0.5)
+    zPosition = headstone.frontZ + 0.5;
   }
 
   const isSelected = selectedAdditionId === id;
+
+  // Calculate scaled bounds for SelectionBox (in world space)
+  const scaledBounds = {
+    width: size.x * finalScale,
+    height: size.y * finalScale,
+  };
 
   return (
     <>      
@@ -402,10 +409,10 @@ function AdditionModelInner({
         position={[centerX + offset.xPos, centerY - offset.yPos, zPosition]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
-        {/* Addition mesh with scale and Y-flip to display right-side-up */}
+        {/* Addition mesh with scale and Y-flip, with reduced Z-scale for flatter appearance */}
         <group
           ref={ref}
-          scale={[finalScale, -finalScale, finalScale]}
+          scale={[finalScale, -finalScale, finalScale * zScaleFactor]}
           visible={true}
           name={`addition-${id}`}
           onClick={handleClick}
@@ -416,7 +423,32 @@ function AdditionModelInner({
           <primitive object={scene} />
         </group>
         
-        {/* SelectionBox removed for additions - use BoxOutline instead */}
+        {/* Selection box with resize and rotation handles */}
+        {isSelected && scaledBounds.width > 0 && scaledBounds.height > 0 && (
+          <SelectionBox
+            objectId={id}
+            position={new THREE.Vector3(0, 0, 0.002)}
+            bounds={scaledBounds}
+            rotation={0}
+            unitsPerMeter={headstone.unitsPerMeter}
+            currentSizeMm={targetH * (offset.scale ?? 1)}
+            objectType="addition"
+            additionType={addition.type as 'application' | 'statue' | 'vase'}
+            onUpdate={(data) => {
+              if (data.scaleFactor !== undefined) {
+                // Update scale based on scale factor
+                const newScale = (offset.scale ?? 1) * data.scaleFactor;
+                const clampedScale = Math.max(0.05, Math.min(5, newScale));
+                setAdditionOffset(id, { ...offset, scale: clampedScale });
+              }
+              if (data.rotationDeg !== undefined) {
+                // Add the rotation delta to current rotation
+                const newRotation = (offset.rotationZ || 0) + (data.rotationDeg * Math.PI / 180);
+                setAdditionOffset(id, { ...offset, rotationZ: newRotation });
+              }
+            }}
+          />
+        )}
       </group>
     </>
   );

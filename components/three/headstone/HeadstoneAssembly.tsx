@@ -24,8 +24,6 @@ export default function HeadstoneAssembly() {
   const setSelectedInscriptionId = useHeadstoneStore(
     (s) => s.setSelectedInscriptionId,
   );
-  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
-  const additionRefs = useHeadstoneStore((s) => s.additionRefs);
   const loading = useHeadstoneStore((s) => s.loading);
   const showBase = useHeadstoneStore((s) => s.showBase);
 
@@ -37,9 +35,6 @@ export default function HeadstoneAssembly() {
   const selectedInscription = inscriptions.find(
     (inscription) => inscription.id === selectedInscriptionId,
   );
-  
-  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
-  const motifRefs = useHeadstoneStore((s) => s.motifRefs);
 
   return (
     <>
@@ -67,32 +62,6 @@ export default function HeadstoneAssembly() {
             targetRef={selectedInscription.ref}
             visible={true}
             color="#4CAF50"
-            pad={0.02}
-            through={true}
-            showHandles={true}
-            handleSize={0.05}
-          />
-        )}
-
-        {/* Show SelectionBox for selected motif */}
-        {selectedMotifId && motifRefs[selectedMotifId] && (
-          <SelectionBox
-            targetRef={motifRefs[selectedMotifId]}
-            visible={true}
-            color="#FF9800"
-            pad={0.02}
-            through={true}
-            showHandles={true}
-            handleSize={0.05}
-          />
-        )}
-
-        {/* Show SelectionBox for selected addition */}
-        {selectedAdditionId && additionRefs[selectedAdditionId] && (
-          <SelectionBox
-            targetRef={additionRefs[selectedAdditionId]}
-            visible={true}
-            color="#2196F3"
             pad={0.02}
             through={true}
             showHandles={true}

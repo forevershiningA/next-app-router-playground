@@ -10,6 +10,12 @@ export default function SelectSizeOverlayCard() {
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selected = useHeadstoneStore((s) => s.selected);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   
   // Hide when addition, motif, or inscription panel is active
   if (
@@ -128,6 +134,24 @@ export default function SelectSizeOverlayCard() {
     });
   };
 
+  const handleHeadstoneClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelected('headstone');
+    setEditingObject('headstone');
+    setSelectedInscriptionId(null);
+    setSelectedAdditionId(null);
+    setSelectedMotifId(null);
+  };
+
+  const handleBaseClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelected('base');
+    setEditingObject('base');
+    setSelectedInscriptionId(null);
+    setSelectedAdditionId(null);
+    setSelectedMotifId(null);
+  };
+
   React.useEffect(() => {
     return () => {
       if (dragRaf.current) cancelAnimationFrame(dragRaf.current);
@@ -194,6 +218,30 @@ export default function SelectSizeOverlayCard() {
                   Thickness is computed from size; cemeteries may have
                   regulations on allowable dimensions.
                 </p>
+                
+                {/* Selection buttons */}
+                <div className="flex gap-2 mb-3">
+                  <button
+                    onClick={handleHeadstoneClick}
+                    className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      selected === 'headstone'
+                        ? 'bg-white text-black'
+                        : 'bg-white/10 text-white hover:bg-white/20'
+                    }`}
+                  >
+                    Headstone
+                  </button>
+                  <button
+                    onClick={handleBaseClick}
+                    className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      selected === 'base'
+                        ? 'bg-white text-black'
+                        : 'bg-white/10 text-white hover:bg-white/20'
+                    }`}
+                  >
+                    Base
+                  </button>
+                </div>
               </div>
             )}
           </div>

@@ -8,6 +8,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import SelectionBox from '../SelectionBox';
 import { useRouter, usePathname } from 'next/navigation';
+import { data } from '#/app/_internal/_data';
 
 type Props = {
   id: string; // unique motif ID
@@ -21,6 +22,15 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const { gl, camera, controls } = useThree();
   const router = useRouter();
   const pathname = usePathname();
+  
+  // Check if this is a Traditional Engraved product (sandblasted effect)
+  const productId = useHeadstoneStore((s) => s.productId);
+  const product = React.useMemo(() => {
+    if (!productId) return null;
+    return data.products.find(p => p.id === productId);
+  }, [productId]);
+  const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
+  
   const setMotifRef = useHeadstoneStore((s) => s.setMotifRef);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
@@ -156,12 +166,10 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
       setSelectedMotifId(id);
       setActivePanel('motif');
       
-      // Navigate to select-motifs if not already there
-      if (pathname !== '/select-motifs') {
-        router.push('/select-motifs');
-      }
+      // Don't navigate away - keep canvas visible and show motif panel
+      window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'motif' } }));
     },
-    [id, setSelectedMotifId, setActivePanel, pathname, router]
+    [id, setSelectedMotifId, setActivePanel]
   );
 
   const handlePointerDown = React.useCallback((e: any) => {
@@ -275,6 +283,34 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         position={[centerX + offset.xPos, displayY, centerZ]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
+        {/* Drop shadow for Traditional Engraved (sandblasted effect) */}
+        {isTraditionalEngraved && (
+          <>
+            {/* Blur simulation - multiple layers at same position with increasing size */}
+            <group
+              scale={[finalScale * 1.08, -finalScale * 1.08, 1]}
+              position={[0, 0, -0.05]}
+            >
+              <primitive object={mesh.group.clone()} />
+              <meshBasicMaterial color="#000000" opacity={0.2} transparent depthTest={true} />
+            </group>
+            <group
+              scale={[finalScale * 1.05, -finalScale * 1.05, 1]}
+              position={[0, 0, -0.02]}
+            >
+              <primitive object={mesh.group.clone()} />
+              <meshBasicMaterial color="#000000" opacity={0.3} transparent depthTest={true} />
+            </group>
+            <group
+              scale={[finalScale, -finalScale, 1]}
+              position={[0, 0, 0]}
+            >
+              <primitive object={mesh.group.clone()} />
+              <meshBasicMaterial color="#000000" opacity={0.8} transparent depthTest={true} />
+            </group>
+          </>
+        )}
+        
         {/* Motif mesh with scale - Y-flipped because SVG shapes are stored Y-down */}
         <group
           ref={ref}

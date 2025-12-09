@@ -8,6 +8,7 @@ import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { ThreeContextValue } from '#/lib/three-types';
 import SelectionBox from './SelectionBox';
+import { data } from '#/app/_internal/_data';
 
 /* ------------------------------------------------------------------ */
 /* Props                                                               */
@@ -60,6 +61,14 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const threeContext = useThree() as ThreeContextValue;
     const { camera, gl, controls, scene } = threeContext;
 
+    // Check if this is a Traditional Engraved product (sandblasted effect)
+    const productId = useHeadstoneStore((s) => s.productId);
+    const product = React.useMemo(() => {
+      if (!productId) return null;
+      return data.products.find(p => p.id === productId);
+    }, [productId]);
+    const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
+
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
     React.useImperativeHandle(ref, () => groupRef.current!, []);
@@ -72,7 +81,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const mouse = React.useMemo(() => new THREE.Vector2(), []);
 
     const units = headstone.unitsPerMeter;
-    const liftLocal = lift * units;
+    // Keep text on surface for both types (0.5mm offset prevents z-fighting)
+    const liftLocal = 0.5;
 
     // initial Y based on approx height
     const initialYLocal = React.useMemo(() => {
@@ -282,14 +292,60 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         position={[pos.x + xPos, pos.y + yPos, pos.z + zBump]}
         rotation={[0, 0, (rotationDeg * Math.PI) / 180]}
       >
+        {/* Drop shadow for Traditional Engraved (sandblasted effect) */}
+        {/* Single blurred shadow layer behind the text */}
+        {isTraditionalEngraved && (
+          <>
+            {/* Blur simulation - multiple layers at same position with increasing size */}
+            <Text
+              font={font}
+              color="#000000"
+              anchorX="center"
+              anchorY="middle"
+              fontSize={height * 1.08}
+              outlineWidth={0}
+              fillOpacity={0.2}
+              position={[0, 0, -0.55]}
+            >
+              {text}
+            </Text>
+            <Text
+              font={font}
+              color="#000000"
+              anchorX="center"
+              anchorY="middle"
+              fontSize={height * 1.05}
+              outlineWidth={0}
+              fillOpacity={0.3}
+              position={[0, 0, -0.52]}
+            >
+              {text}
+            </Text>
+            <Text
+              font={font}
+              color="#000000"
+              anchorX="center"
+              anchorY="middle"
+              fontSize={height}
+              outlineWidth={0}
+              fillOpacity={0.8}
+              position={[0, 0, -0.5]}
+            >
+              {text}
+            </Text>
+          </>
+        )}
+        
+        {/* Main text */}
         <Text
           font={font}
           color={color}
           anchorX="center"
           anchorY="middle"
           fontSize={height}
-          outlineWidth={0.002 * units}
-          outlineColor="black"
+          outlineWidth={isTraditionalEngraved ? 0 : 0.002 * units}
+          outlineColor={isTraditionalEngraved ? color : "black"}
+          fillOpacity={isTraditionalEngraved ? 1 : 1}
           onSync={handleTextSync}
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {
@@ -340,7 +396,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         {selected && textBounds.width > 0 && (
           <SelectionBox
             objectId={id}
-            position={new THREE.Vector3(0, 0, 0.002)}
+            position={new THREE.Vector3(0, 0, 0.01)}
             bounds={{
               width: textBounds.width,
               height: textBounds.height,

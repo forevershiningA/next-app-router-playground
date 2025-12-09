@@ -57,6 +57,8 @@ export default function DesignerNav() {
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const selected = useHeadstoneStore((s) => s.selected);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
 
   // Check if anything has been added to the headstone
   const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;
@@ -178,21 +180,6 @@ export default function DesignerNav() {
         <Link href="/" className="hover:opacity-80 transition-opacity">
           <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
         </Link>
-        {!isSelectProductPage && !isSelectShapePage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isHomePage && !isCheckPricePage && (
-          <div className="mb-3">
-            {catalog ? (
-              <h1 className="text-2xl font-serif font-light text-white tracking-tight">
-                {catalog.product.name}
-                <br />
-                <span className="text-base text-slate-300">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
-              </h1>
-            ) : (
-              <h1 className="text-2xl font-serif font-light text-white tracking-tight">
-                3D Designer
-              </h1>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Menu Items */}
@@ -256,6 +243,7 @@ export default function DesignerNav() {
                           onClick={() => {
                             if (editingObject !== 'headstone') {
                               setEditingObject('headstone');
+                              setSelected('headstone');
                             }
                           }}
                           className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
@@ -270,6 +258,7 @@ export default function DesignerNav() {
                           onClick={() => {
                             if (editingObject !== 'base') {
                               setEditingObject('base');
+                              setSelected('base');
                             }
                           }}
                           className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
@@ -353,8 +342,8 @@ export default function DesignerNav() {
                     <span>{item.name}</span>
                   </button>
                   
-                  {/* Inscription editing panel - shown when on inscriptions page or panel is active */}
-                  {(isActive || activePanel === 'inscription') && (
+                  {/* Inscription editing panel - shown only when inscription panel is active */}
+                  {activePanel === 'inscription' && (
                     <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
                       <InscriptionEditPanel />
                     </div>

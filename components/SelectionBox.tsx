@@ -59,31 +59,19 @@ export default function SelectionBox({
                      (objectType === 'addition' && additionType === 'application');
 
   // Visual constants
-  // For additions, use a fixed size that's visible (1.0 units in headstone space)
-  // For motifs/inscriptions, use the standard formula
-  const fixedHandleSize = objectType === 'addition' && additionType === 'application'
-    ? 1.0  // Fixed 1.0 headstone units (= 10mm = 1cm) - visible size
-    : is2DObject
-    ? 750 / unitsPerMeter  // 750mm for inscriptions and motifs
-    : 150 / unitsPerMeter;  // 150mm for 3D additions (statues, vases)
+  // Fixed handle sizes - don't scale with object, act as separate overlay layer
+  const fixedHandleSize = 5.0;  // Fixed 5.0 units for ALL types - constant size like overlay
     
-  // Different thickness for different object types due to different coordinate systems
-  const handleThickness = objectType === 'motif'
-    ? 100 / unitsPerMeter  // Motifs need much thicker (100mm) due to their coordinate system
-    : objectType === 'addition' && additionType === 'application'
-    ? 25 / unitsPerMeter  // Applications use same as inscriptions (25mm)
-    : 25 / unitsPerMeter;  // Inscriptions use 25mm
-  const handleZOffset = 0.01; // Move handles forward in Z
+  // Thickness - proportional to handle size
+  const handleThickness = fixedHandleSize * 0.15;  // 15% of handle size for depth
+  const handleZOffset = 0.02; // Move handles further forward in Z
   
-  const outlineColor = 0x00ffff; // Cyan
-  const handleColor = 0xffffff; // White
+  const outlineColor = 0x2196F3; // Blue (Material Design Blue 500)
+  const handleColor = 0x2196F3; // Blue - same as outline
 
-  // Debug log for additions and motifs
-  React.useEffect(() => {
-    if ((objectType === 'addition' && additionType === 'application') || objectType === 'motif') {
-
-    }
-  }, [objectId, bounds, position, objectType, additionType, fixedHandleSize, unitsPerMeter]);
+  // Calculate handle positions - ensure minimum spacing (MUST be before useEffect)
+  const minHalfWidth = Math.max(bounds.width / 2, fixedHandleSize * 1.5);
+  const minHalfHeight = Math.max(bounds.height / 2, fixedHandleSize * 1.5);
 
   const [hoveredHandle, setHoveredHandle] = React.useState<HandleType | null>(null);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -105,8 +93,8 @@ export default function SelectionBox({
 
   // Create box outline points
   const outlinePoints = React.useMemo(() => {
-    const w = bounds.width / 2;
-    const h = bounds.height / 2;
+    const w = minHalfWidth;
+    const h = minHalfHeight;
     const points = [
       new THREE.Vector3(-w, -h, 0),
       new THREE.Vector3(w, -h, 0),
@@ -115,7 +103,7 @@ export default function SelectionBox({
       new THREE.Vector3(-w, -h, 0),
     ];
     return points;
-  }, [bounds.width, bounds.height]);
+  }, [minHalfWidth, minHalfHeight]);
 
   // Handle pointer down on handles
   const handlePointerDown = React.useCallback(
@@ -371,7 +359,7 @@ export default function SelectionBox({
 
   return (
     <group position={position} rotation={[0, 0, rotation]}>
-      {/* Box outline - try both Line and backup mesh approach */}
+      {/* Box outline */}
       <Line
         ref={outlineRef}
         points={outlinePoints}
@@ -383,7 +371,7 @@ export default function SelectionBox({
         visible={true}
       />
       
-      {/* Backup outline using thin boxes - always render for debugging */}
+      {/* Backup outline using thin boxes */}
       {outlinePoints.map((point, i) => {
         if (i === outlinePoints.length - 1) return null;
         const nextPoint = outlinePoints[i + 1];
@@ -407,7 +395,7 @@ export default function SelectionBox({
 
       {/* Corner Handles - Top-Left */}
       <mesh
-        position={[-bounds.width / 2, bounds.height / 2, handleZOffset]}
+        position={[-minHalfWidth, minHalfHeight, handleZOffset]}
         renderOrder={1002}
         visible={true}
         onClick={(e) => e.stopPropagation()}
@@ -420,12 +408,13 @@ export default function SelectionBox({
           color={handleColor} 
           transparent={false}
           depthWrite={false}
+          depthTest={false}
         />
       </mesh>
 
       {/* Top-Right */}
       <mesh
-        position={[bounds.width / 2, bounds.height / 2, handleZOffset]}
+        position={[minHalfWidth, minHalfHeight, handleZOffset]}
         renderOrder={1002}
         visible={true}
         onClick={(e) => e.stopPropagation()}
@@ -438,12 +427,13 @@ export default function SelectionBox({
           color={handleColor} 
           transparent={false}
           depthWrite={false}
+          depthTest={false}
         />
       </mesh>
 
       {/* Bottom-Left */}
       <mesh
-        position={[-bounds.width / 2, -bounds.height / 2, handleZOffset]}
+        position={[-minHalfWidth, -minHalfHeight, handleZOffset]}
         renderOrder={1002}
         visible={true}
         onClick={(e) => e.stopPropagation()}
@@ -456,12 +446,13 @@ export default function SelectionBox({
           color={handleColor} 
           transparent={false}
           depthWrite={false}
+          depthTest={false}
         />
       </mesh>
 
       {/* Bottom-Right */}
       <mesh
-        position={[bounds.width / 2, -bounds.height / 2, handleZOffset]}
+        position={[minHalfWidth, -minHalfHeight, handleZOffset]}
         renderOrder={1002}
         visible={true}
         onClick={(e) => e.stopPropagation()}
@@ -474,6 +465,71 @@ export default function SelectionBox({
           color={handleColor} 
           transparent={false}
           depthWrite={false}
+          depthTest={false}
+        />
+      </mesh>
+
+      {/* Edge Handles - Top Center */}
+      <mesh
+        position={[0, minHalfHeight, handleZOffset]}
+        renderOrder={1002}
+        visible={true}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+        <meshBasicMaterial 
+          color={handleColor} 
+          transparent={false}
+          depthWrite={false}
+          depthTest={false}
+        />
+      </mesh>
+
+      {/* Edge Handles - Bottom Center */}
+      <mesh
+        position={[0, -minHalfHeight, handleZOffset]}
+        renderOrder={1002}
+        visible={true}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+        <meshBasicMaterial 
+          color={handleColor} 
+          transparent={false}
+          depthWrite={false}
+          depthTest={false}
+        />
+      </mesh>
+
+      {/* Edge Handles - Left Center */}
+      <mesh
+        position={[-minHalfWidth, 0, handleZOffset]}
+        renderOrder={1002}
+        visible={true}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+        <meshBasicMaterial 
+          color={handleColor} 
+          transparent={false}
+          depthWrite={false}
+          depthTest={false}
+        />
+      </mesh>
+
+      {/* Edge Handles - Right Center */}
+      <mesh
+        position={[minHalfWidth, 0, handleZOffset]}
+        renderOrder={1002}
+        visible={true}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+        <meshBasicMaterial 
+          color={handleColor} 
+          transparent={false}
+          depthWrite={false}
+          depthTest={false}
         />
       </mesh>
     </group>

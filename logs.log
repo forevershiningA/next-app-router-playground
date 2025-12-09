@@ -1,3 +1,36 @@
+index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
+    at validateAndParse (index.js:120:15)
+    at esm_compareVersions (index.js:10:16)
+    at gte (index.js:249:10)
+    at k.registerRendererInterface (agent.js:960:24)
+    at registerRendererInterface (index.js:31:11)
+    at index.js:70:5
+    at Map.forEach (<anonymous>)
+    at initBackend (index.js:69:27)
+    at activateBackend (backendManager.js:1:13128)
+    at backendManager.js:1:14182
+    at hook.js:268:34
+    at Array.map (<anonymous>)
+    at Object.emit (hook.js:268:24)
+    at backend.js:33:8
+    at backend.js:19:1
+    at react_devtools_backend_compact.js:1:51014
+    at react_devtools_backend_compact.js:1:51018
+validateAndParse @ index.js:120
+esm_compareVersions @ index.js:10
+gte @ index.js:249
+registerRendererInterface @ agent.js:960
+registerRendererInterface @ index.js:31
+(anonimowa) @ index.js:70
+initBackend @ index.js:69
+activateBackend @ backendManager.js:1
+(anonimowa) @ backendManager.js:1
+(anonimowa) @ hook.js:268
+emit @ hook.js:268
+(anonimowa) @ backend.js:33
+(anonimowa) @ backend.js:19
+(anonimowa) @ react_devtools_backend_compact.js:1
+(anonimowa) @ react_devtools_backend_compact.js:1
 C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:314 [Store] setProductId call stack
 overrideMethod @ hook.js:608
 setProductId @ C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:314
@@ -97,7 +130,7 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765043204945:160
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765276123241:160
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
 fn @ webpack.js:1
@@ -106,103 +139,90 @@ eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765043204945:182
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765276123241:182
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765043204945:1998
-(anonimowa) @ main-app.js?v=1765043204945:1999
+__webpack_exec__ @ main-app.js?v=1765276123241:1998
+(anonimowa) @ main-app.js?v=1765276123241:1999
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765043204945:9
-index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
-    at validateAndParse (index.js:120:15)
-    at esm_compareVersions (index.js:10:16)
-    at gte (index.js:249:10)
-    at k.registerRendererInterface (agent.js:960:24)
-    at registerRendererInterface (index.js:31:11)
-    at index.js:70:5
-    at Map.forEach (<anonymous>)
-    at initBackend (index.js:69:27)
-    at activateBackend (backendManager.js:1:13128)
-    at backendManager.js:1:14182
-    at hook.js:268:34
-    at Array.map (<anonymous>)
-    at Object.emit (hook.js:268:24)
-    at backend.js:33:8
-    at backend.js:19:1
-    at react_devtools_backend_compact.js:1:51014
-    at react_devtools_backend_compact.js:1:51018
-validateAndParse @ index.js:120
-esm_compareVersions @ index.js:10
-gte @ index.js:249
-registerRendererInterface @ agent.js:960
-registerRendererInterface @ index.js:31
-(anonimowa) @ index.js:70
-initBackend @ index.js:69
-activateBackend @ backendManager.js:1
-(anonimowa) @ backendManager.js:1
-(anonimowa) @ hook.js:268
-emit @ hook.js:268
-(anonimowa) @ backend.js:33
-(anonimowa) @ backend.js:19
-(anonimowa) @ react_devtools_backend_compact.js:1
-(anonimowa) @ react_devtools_backend_compact.js:1
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97 Uncaught ReferenceError: view is not defined
-    at AutoFit.useLayoutEffect (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97:5)
-    at react-stack-bottom-frame (react-reconciler.development.js:7241:22)
+(anonimowa) @ main-app.js?v=1765276123241:9
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
     at runWithFiberInDEV (react-reconciler.development.js:399:20)
-    at commitHookEffectListMount (react-reconciler.development.js:4782:628)
-    at commitHookLayoutEffects (react-reconciler.development.js:4770:60)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5061:30)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-AutoFit.useLayoutEffect @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97
-react-stack-bottom-frame @ react-reconciler.development.js:7241
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
 runWithFiberInDEV @ react-reconciler.development.js:399
-commitHookEffectListMount @ react-reconciler.development.js:4782
-commitHookLayoutEffects @ react-reconciler.development.js:4770
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5061
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
 recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
 commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
 recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
@@ -278,455 +298,929 @@ commitRootWhenReady @ react-reconciler.development.js:6082
 performWorkOnRoot @ react-reconciler.development.js:6062
 performSyncWorkOnRoot @ react-reconciler.development.js:1364
 flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
-commitRootImpl @ react-reconciler.development.js:6525
-commitRoot @ react-reconciler.development.js:6480
-commitRootWhenReady @ react-reconciler.development.js:6082
-setTimeout
-performWorkOnRoot @ react-reconciler.development.js:6059
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
 performWorkUntilDeadline @ scheduler.development.js:44
-C:\Users\polcr\Documents\GitHub\next-dyo\components\ThreeScene.tsx:166 ReferenceError: view is not defined
-    at AutoFit.useLayoutEffect (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97:5)
-    at react-stack-bottom-frame (react-reconciler.development.js:7241:22)
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
     at runWithFiberInDEV (react-reconciler.development.js:399:20)
-    at commitHookEffectListMount (react-reconciler.development.js:4782:628)
-    at commitHookLayoutEffects (react-reconciler.development.js:4770:60)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5061:30)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-
-The above error occurred in the <CanvasImpl> component. It was handled by the <ErrorBoundary> error boundary.
-overrideMethod @ hook.js:608
-onCaughtError @ error-boundary-callbacks.js:68
-logCaughtError @ react-dom-client.development.js:9745
-runWithFiberInDEV @ react-dom-client.development.js:975
-inst.componentDidCatch.update.callback @ react-dom-client.development.js:9792
-callCallback @ react-dom-client.development.js:7670
-commitCallbacks @ react-dom-client.development.js:7690
-runWithFiberInDEV @ react-dom-client.development.js:975
-commitClassCallbacks @ react-dom-client.development.js:13811
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15075
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15206
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15166
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15080
-flushLayoutEffects @ react-dom-client.development.js:19960
-commitRoot @ react-dom-client.development.js:19769
-commitRootWhenReady @ react-dom-client.development.js:18639
-performWorkOnRoot @ react-dom-client.development.js:18538
-performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
-performWorkUntilDeadline @ scheduler.development.js:36
-<CanvasImpl>
-exports.jsx @ react-jsx-runtime.development.js:326
-Canvas @ react-three-fiber.esm.js:204
-react_stack_bottom_frame @ react-dom-client.development.js:29129
-renderWithHooksAgain @ react-dom-client.development.js:8009
-renderWithHooks @ react-dom-client.development.js:7921
-updateFunctionComponent @ react-dom-client.development.js:10489
-beginWork @ react-dom-client.development.js:12153
-runWithFiberInDEV @ react-dom-client.development.js:975
-performUnitOfWork @ react-dom-client.development.js:19428
-workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
-renderRootConcurrent @ react-dom-client.development.js:19404
-performWorkOnRoot @ react-dom-client.development.js:18321
-performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
-performWorkUntilDeadline @ scheduler.development.js:36
-<Canvas>
-exports.jsxDEV @ react-jsx-dev-runtime.development.js:326
-ThreeScene @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ThreeScene.tsx:166
-react_stack_bottom_frame @ react-dom-client.development.js:29129
-renderWithHooksAgain @ react-dom-client.development.js:8009
-renderWithHooks @ react-dom-client.development.js:7921
-updateFunctionComponent @ react-dom-client.development.js:10489
-beginWork @ react-dom-client.development.js:12153
-runWithFiberInDEV @ react-dom-client.development.js:975
-performUnitOfWork @ react-dom-client.development.js:19428
-workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
-renderRootConcurrent @ react-dom-client.development.js:19404
-performWorkOnRoot @ react-dom-client.development.js:18321
-performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
-performWorkUntilDeadline @ scheduler.development.js:36
-<ThreeScene>
-exports.jsxDEV @ react-jsx-dev-runtime.development.js:326
-ConditionalCanvas @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ConditionalCanvas.tsx:83
-react_stack_bottom_frame @ react-dom-client.development.js:29129
-renderWithHooksAgain @ react-dom-client.development.js:8009
-renderWithHooks @ react-dom-client.development.js:7921
-updateFunctionComponent @ react-dom-client.development.js:10489
-beginWork @ react-dom-client.development.js:12102
-runWithFiberInDEV @ react-dom-client.development.js:975
-performUnitOfWork @ react-dom-client.development.js:19428
-workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
-renderRootConcurrent @ react-dom-client.development.js:19404
-performWorkOnRoot @ react-dom-client.development.js:18321
-performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
-performWorkUntilDeadline @ scheduler.development.js:36
-"use client"
-RootLayout @ layout.tsx:49
-initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
-eval @ react-server-dom-webpack-client.browser.development.js:4122
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
-getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2109
-parseModelString @ react-server-dom-webpack-client.browser.development.js:2475
-eval @ react-server-dom-webpack-client.browser.development.js:4052
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
-resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1571
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3955
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
-progress @ react-server-dom-webpack-client.browser.development.js:4289
-<RootLayout>
-initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
-initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
-initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
-progress @ react-server-dom-webpack-client.browser.development.js:4289
-"use server"
-ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
-createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
-exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
-eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765043204945:160
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-eval @ app-next-dev.js:14
-eval @ app-bootstrap.js:59
-loadScriptsInSequence @ app-bootstrap.js:24
-appBootstrap @ app-bootstrap.js:53
-eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765043204945:182
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765043204945:1998
-(anonimowa) @ main-app.js?v=1765043204945:1999
-webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765043204945:9
-C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28 ErrorBoundary caught error: ReferenceError: view is not defined
-    at AutoFit.useLayoutEffect (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:97:5)
-    at react-stack-bottom-frame (react-reconciler.development.js:7241:22)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
     at runWithFiberInDEV (react-reconciler.development.js:399:20)
-    at commitHookEffectListMount (react-reconciler.development.js:4782:628)
-    at commitHookLayoutEffects (react-reconciler.development.js:4770:60)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5061:30)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5104:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5131:208)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5122:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5138:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5064:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17)
-    at recursivelyTraverseLayoutEffects (react-reconciler.development.js:5505:105)
-    at commitLayoutEffectOnFiber (react-reconciler.development.js:5060:17) {componentStack: '\n    at CanvasImpl (webpack-internal:///(app-pages…ode_modules/next/dist/client/app-index.js:156:11)'}
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
 overrideMethod @ hook.js:608
 error @ intercept-console-error.js:57
-componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28
-react_stack_bottom_frame @ react-dom-client.development.js:29184
-inst.componentDidCatch.update.callback @ react-dom-client.development.js:9803
-callCallback @ react-dom-client.development.js:7670
-commitCallbacks @ react-dom-client.development.js:7690
-runWithFiberInDEV @ react-dom-client.development.js:975
-commitClassCallbacks @ react-dom-client.development.js:13811
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15075
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15206
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15166
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
-recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
-commitLayoutEffectOnFiber @ react-dom-client.development.js:15080
-flushLayoutEffects @ react-dom-client.development.js:19960
-commitRoot @ react-dom-client.development.js:19769
-commitRootWhenReady @ react-dom-client.development.js:18639
-performWorkOnRoot @ react-dom-client.development.js:18538
-performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
-performWorkUntilDeadline @ scheduler.development.js:36
-<ErrorBoundary>
-exports.jsxDEV @ react-jsx-dev-runtime.development.js:326
-ConditionalCanvas @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ConditionalCanvas.tsx:65
-react_stack_bottom_frame @ react-dom-client.development.js:29129
-renderWithHooksAgain @ react-dom-client.development.js:8009
-renderWithHooks @ react-dom-client.development.js:7921
-updateFunctionComponent @ react-dom-client.development.js:10489
-beginWork @ react-dom-client.development.js:12102
-runWithFiberInDEV @ react-dom-client.development.js:975
-performUnitOfWork @ react-dom-client.development.js:19428
-workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
-renderRootConcurrent @ react-dom-client.development.js:19404
-performWorkOnRoot @ react-dom-client.development.js:18321
-performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
-performWorkUntilDeadline @ scheduler.development.js:36
-"use client"
-RootLayout @ layout.tsx:49
-initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
-eval @ react-server-dom-webpack-client.browser.development.js:4122
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
-getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2109
-parseModelString @ react-server-dom-webpack-client.browser.development.js:2475
-eval @ react-server-dom-webpack-client.browser.development.js:4052
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
-resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1571
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3955
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
-progress @ react-server-dom-webpack-client.browser.development.js:4289
-<RootLayout>
-initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
-initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
-initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
-progress @ react-server-dom-webpack-client.browser.development.js:4289
-"use server"
-ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
-createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
-exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
-eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765043204945:160
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-fn @ webpack.js:1
-eval @ app-next-dev.js:14
-eval @ app-bootstrap.js:59
-loadScriptsInSequence @ app-bootstrap.js:24
-appBootstrap @ app-bootstrap.js:53
-eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765043204945:182
-options.factory @ webpack.js:1
-__webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765043204945:1998
-(anonimowa) @ main-app.js?v=1765043204945:1999
-webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765043204945:9
-hook.js:608 THREE.WebGLRenderer: WEBGL_lose_context extension not supported.
-overrideMethod @ hook.js:608
-warnOnce @ three.core.js:5165
-get @ three.module.js:4230
-WebGLRenderer.forceContextLoss @ three.module.js:15824
-eval @ events-e3cb66e2.esm.js:2084
-setTimeout
-eval @ events-e3cb66e2.esm.js:2079
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
 callCallback @ react-reconciler.development.js:1630
 commitCallbacks @ react-reconciler.development.js:1638
 runWithFiberInDEV @ react-reconciler.development.js:399
-commitLayoutEffectOnFiber @ react-reconciler.development.js:5089
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
 commitLayoutEffects @ react-reconciler.development.js:5501
 commitRootImpl @ react-reconciler.development.js:6512
 commitRoot @ react-reconciler.development.js:6480
 commitRootWhenReady @ react-reconciler.development.js:6082
 performWorkOnRoot @ react-reconciler.development.js:6062
-performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93 Uncaught ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+SelectionBox @ C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93
+react-stack-bottom-frame @ react-reconciler.development.js:7191
+renderWithHooks @ react-reconciler.development.js:2235
+updateFunctionComponent @ react-reconciler.development.js:3523
+beginWork @ react-reconciler.development.js:4115
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49 Font/model loading error: ReferenceError: Cannot access 'minHalfWidth' before initialization
+    at SelectionBox (C:\Users\polcr\Documents\GitHub\next-dyo\components\SelectionBox.tsx:93:110)
+    at react-stack-bottom-frame (react-reconciler.development.js:7191:24)
+    at renderWithHooks (react-reconciler.development.js:2235:24)
+    at updateFunctionComponent (react-reconciler.development.js:3523:21)
+    at beginWork (react-reconciler.development.js:4115:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at SelectionBox (webpack-internal:///(app-pag…t-three/fiber/dist/events-e3cb66e2.esm.js:2045:3)'} Error Component Stack
+    at ErrorBoundary (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:42:5)
+    at group (<anonymous>)
+    at group (<anonymous>)
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:146:3)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:17:37)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:15:37)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:49
+react-stack-bottom-frame @ react-reconciler.development.js:7225
+inst.componentDidCatch.update.callback @ react-reconciler.development.js:3356
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitClassCallbacks @ react-reconciler.development.js:4828
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5072
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5104
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5131
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5122
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5064
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5138
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5060
+recursivelyTraverseLayoutEffects @ react-reconciler.development.js:5505
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5077
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
 performWorkUntilDeadline @ scheduler.development.js:44

@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useThree } from '@react-three/fiber';
-import { Suspense, useEffect, useState, useRef } from 'react';
+import { Suspense, useEffect, useState, useRef, useMemo } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
@@ -41,12 +41,28 @@ function ProductNameHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
+  const motifCost = useHeadstoneStore((s) => s.motifCost);
   
-  // Calculate price from catalog
-  const quantity = catalog?.product?.priceModel
-    ? widthMm * heightMm / 100000
-    : 0;
-  const price = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+  // Calculate quantity based on catalog's quantity type
+  const quantity = useMemo(() => {
+    let qty = widthMm * heightMm; // default to area
+    if (catalog) {
+      const qt = catalog.product.priceModel.quantityType;
+      if (qt === 'Width + Height') {
+        qty = widthMm + heightMm;
+      }
+    }
+    return qty;
+  }, [catalog, widthMm, heightMm]);
+  
+  // Calculate total price including inscriptions and motifs
+  const totalPrice = useMemo(() => {
+    const headstonePrice = catalog 
+      ? calculatePrice(catalog.product.priceModel, quantity) 
+      : 0;
+    return headstonePrice + inscriptionCost + motifCost;
+  }, [catalog, quantity, inscriptionCost, motifCost]);
 
   return (
     <div className="text-center">
@@ -55,7 +71,7 @@ function ProductNameHeader() {
           {catalog.product.name}
           <br />
           <span className="text-lg text-slate-300">
-            {widthMm} x {heightMm} mm (${(price || 0).toFixed(2)})
+            {widthMm} x {heightMm} mm (${totalPrice.toFixed(2)})
           </span>
         </h1>
       ) : (
