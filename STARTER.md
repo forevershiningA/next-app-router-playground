@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-08  
+**Last Updated:** 2025-12-10  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -278,21 +278,31 @@ const TARGET_HEIGHTS = {
 ```
 
 ### Lighting (Scene.tsx)
-- **Ambient Light**: Base illumination (0.4)
-- **Directional Light**: Main sunlight (1.2 intensity)
-- **Hemisphere Light**: Sky/ground bounce (0.3)
-- **Point Light**: Rim accent
-- **Environment**: HDRI "park" preset
+- **Ambient Light**: Base illumination (0.3)
+- **Spot Light**: Main directional light (intensity 1.0, with shadows)
+- **Point Light**: Blue-tinted accent light (0.5 intensity, color #badbff)
+- **Environment**: HDRI "city" preset with intensity 1.5
+  - Provides realistic reflections for polished granite surfaces
 
-### Material Configuration
+### Material Configuration (PBR)
+**Updated to MeshPhysicalMaterial for polished granite effect:**
 ```typescript
-MeshStandardMaterial({
+MeshPhysicalMaterial({
   map: texture,
-  roughness: 0.15,
-  metalness: 0.1,
-  envMapIntensity: 1.5
+  color: 0x888888,           // Darker tint for better reflections
+  roughness: 0.15,           // Low = high gloss (polished stone)
+  metalness: 0.0,            // Stone is dielectric (non-metal)
+  envMapIntensity: 1.5,      // Strong environment reflections
+  clearcoat: 1.0,            // Maximum polish layer
+  clearcoatRoughness: 0.1    // Very smooth coating ("wet" look)
 })
 ```
+
+**Key Improvements:**
+- Switched from `MeshStandardMaterial` to `MeshPhysicalMaterial`
+- Added clearcoat for polished granite "wet" appearance
+- Optimized roughness/metalness for realistic stone
+- Enhanced environment reflections
 
 ### Camera Setup
 - **Type**: PerspectiveCamera
@@ -308,13 +318,21 @@ MeshStandardMaterial({
 ✅ **Good:**
 - WebP format (smaller file size)
 - Mipmap generation enabled
-- Anisotropic filtering (16x)
-- Texture repeat for smaller memory
+- **Anisotropic filtering (16x)** - Prevents blurriness at angles
+- **Texture repeat (2-3x seamless tiling)** - Prevents stretched appearance
+- **RepeatWrapping** mode for seamless edges
+- Proper texture scale based on physical dimensions
+
+**Texture Tiling Settings:**
+- **Base**: `textureScale = 0.15` meters per tile
+- **Headstone**: `tileSize = 0.35` meters per tile
+- **Side/Top**: Same scale for consistency
 
 ❌ **Avoid:**
 - Loading unnecessary texture variants
 - Not disposing old textures
 - Excessive texture resolution (> 4K)
+- Single stretched texture (causes distortion)
 
 ### Geometry Management
 ✅ **Good:**
@@ -424,7 +442,34 @@ useEffect(() => {
 texture.generateMipmaps = true;
 texture.minFilter = THREE.LinearMipmapLinearFilter;
 texture.anisotropy = 16;
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
 ```
+
+### Issue: Stretched Textures on Base/Headstone
+**Cause:** Single texture stretched across large surface  
+**Solution:**
+```typescript
+// Calculate proper repeat based on dimensions
+const textureScale = 0.15; // meters per tile
+const repeatX = width / textureScale;
+const repeatY = height / textureScale;
+texture.repeat.set(repeatX, repeatY);
+```
+
+### Issue: UV Stretching on Curved/Side Surfaces
+**Cause:** Improper UV mapping in 3D geometry  
+**Known Limitations:**
+- Curved top edges show "zebra stripes" (UV stretching)
+- Base top surface appears washed out (texture magnified 100x)
+- Side faces have horizontal streaking
+
+**Solutions:**
+1. **Fix in Blender** (Recommended): Re-unwrap UVs using Smart UV Project
+2. **Triplanar Mapping**: Shader-based solution that ignores UVs (complex)
+3. **Current Workaround**: Texture repeat helps front/back faces but doesn't fully solve sides
+
+*See TEXTURE_IMPROVEMENTS_SUMMARY.md for detailed analysis*
 
 ### Issue: Inscriptions Not Visible
 **Cause:** Z-fighting or incorrect positioning  
@@ -504,6 +549,7 @@ npm start
 2. `components/SvgHeadstone.tsx` - Core 3D logic
 3. `components/ThreeScene.tsx` - Canvas setup
 4. `components/three/Scene.tsx` - Lighting/environment
+5. `TEXTURE_IMPROVEMENTS_SUMMARY.md` - Texture optimization & known limitations
 
 ### For Adding Features
 - **New Shape**: Add SVG to `/public/shapes/`, update data
@@ -515,6 +561,7 @@ npm start
 - **Performance**: Check `SvgHeadstone.tsx` memoization
 - **Positioning**: Check `HeadstoneInscription.tsx` raycasting
 - **Materials**: Check texture loading in `ShapeSwapper.tsx`
+- **Texture Issues**: Review `TEXTURE_IMPROVEMENTS_SUMMARY.md` for UV mapping limitations
 
 ---
 
@@ -522,9 +569,9 @@ npm start
 
 ### Documentation Clutter
 - `rev1.txt` through `rev34.txt` (34 files) - Old revision notes
-- `audit1.txt` through `audit7.txt` - Old audit files
+- `audit1.txt` through `audit7.txt` - Texture improvement audit files (info captured in TEXTURE_IMPROVEMENTS_SUMMARY.md)
 - `motif.txt`, `shape.txt`, `text.txt`, `style1.txt`, `style2.txt`, `shapeData.txt`
-- Most `*.md` files in root (except readme.md, license.md, changelog.md)
+- Most `*.md` files in root (except readme.md, license.md, changelog.md, STARTER.md, TEXTURE_IMPROVEMENTS_SUMMARY.md)
 
 ### Backup Files
 - `components/SvgHeadstone.v9.backup`
@@ -597,6 +644,13 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-10**: Texture and PBR material improvements
+  - Added seamless 2-3x texture tiling to prevent stretching
+  - Upgraded to MeshPhysicalMaterial with clearcoat for polished granite
+  - Added 16x anisotropic filtering for sharper textures at angles
+  - Optimized material settings: roughness 0.15, metalness 0.0, clearcoat 1.0
+  - Enhanced environment reflections (intensity 1.5)
+  - Documented UV mapping limitations requiring Blender fixes
 - **2025-12-07**: Initial STARTER.md creation
 - **2025-12-07**: Added canvas click selection for headstone/base
 - **2025-11-30**: Performance optimizations
@@ -606,4 +660,7 @@ git log --oneline -10   # Recent commits
 
 **Happy Coding! 🚀**
 
-For questions or issues, check the audit files or existing documentation in the root directory.
+For questions or issues:
+- Check `TEXTURE_IMPROVEMENTS_SUMMARY.md` for material/texture optimization details
+- Review existing documentation in the root directory
+- See audit files for detailed texture improvement analysis
