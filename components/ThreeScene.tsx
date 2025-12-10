@@ -71,7 +71,7 @@ function ProductNameHeader() {
   return (
     <div className="text-center">
       {catalog ? (
-        <div className="py-10">
+        <div>
           <h1 className="text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl mb-4">
             {catalog.product.name}
           </h1>
@@ -90,7 +90,7 @@ function ProductNameHeader() {
           </div>
         </div>
       ) : (
-        <h1 className="py-10 text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl">
+        <h1 className="text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl">
           3D Designer
         </h1>
       )}
