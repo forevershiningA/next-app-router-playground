@@ -11,7 +11,17 @@ import {
   GRASS_LIGHT_COLOR,
 } from '#/lib/headstone-constants';
 
-export default function Scene() {
+import { useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
+
+export default function Scene({ 
+  targetRotation = 0,
+  currentRotation
+}: { 
+  targetRotation?: number;
+  currentRotation?: React.MutableRefObject<number>;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
@@ -19,6 +29,19 @@ export default function Scene() {
   const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+
+  // Smooth rotation animation
+  useFrame(() => {
+    if (groupRef.current && currentRotation) {
+      const diff = targetRotation - currentRotation.current;
+      const delta = diff * 0.1; // Lerp factor (adjust for speed)
+      
+      if (Math.abs(diff) > 0.001) {
+        currentRotation.current += delta;
+        groupRef.current.rotation.y = currentRotation.current;
+      }
+    }
+  });
 
   const handleCanvasClick = (e: any) => {
     // Only deselect if clicking on empty space (not on any 3D object)
@@ -71,10 +94,12 @@ export default function Scene() {
         environmentIntensity={1.5}
       />
 
-      <HeadstoneAssembly />
+      <group ref={groupRef}>
+        <HeadstoneAssembly />
+      </group>
       
       {/* Contact shadows like Hero canvas */}
-      <ContactShadows 
+      <ContactShadows
         opacity={0.6} 
         scale={10} 
         blur={2} 

@@ -67,15 +67,22 @@ function ProductNameHeader() {
   return (
     <div className="text-center">
       {catalog ? (
-        <h1 className="py-10 text-3xl font-serif font-light tracking-tight text-white sm:text-4xl">
-          {catalog.product.name}
-          <br />
-          <span className="text-lg text-slate-300">
-            {widthMm} x {heightMm} mm (${totalPrice.toFixed(2)})
-          </span>
-        </h1>
+        <div className="py-10">
+          <h1 className="text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl mb-4">
+            {catalog.product.name}
+          </h1>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20">
+            <span className="text-sm font-medium text-slate-200">
+              {widthMm} × {heightMm} mm
+            </span>
+            <span className="text-white/40">•</span>
+            <span className="text-sm font-bold text-white">
+              ${totalPrice.toFixed(2)}
+            </span>
+          </div>
+        </div>
       ) : (
-        <h1 className="py-10 text-3xl font-serif font-light tracking-tight text-white sm:text-4xl">
+        <h1 className="py-10 text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl">
           3D Designer
         </h1>
       )}
@@ -91,11 +98,21 @@ export default function ThreeScene() {
   
   const [isVisible, setIsVisible] = useState(true);
   const [showLoader, setShowLoader] = useState(false);
+  const [targetRotation, setTargetRotation] = useState(0);
+  const currentRotation = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const hasInitiallyLoaded = useRef(false);
   const glRef = useRef<any>(null);
   const contextLostHandler = useRef<any>(null);
   const contextRestoredHandler = useRef<any>(null);
+
+  const rotateLeft = () => {
+    setTargetRotation(prev => prev - Math.PI / 12); // -15 degrees
+  };
+
+  const rotateRight = () => {
+    setTargetRotation(prev => prev + Math.PI / 12); // +15 degrees
+  };
 
   // Cleanup WebGL context on unmount
   useEffect(() => {
@@ -215,10 +232,40 @@ export default function ThreeScene() {
             className={isDesignsPage ? 'canvas-with-border' : ''}
           >
             <Suspense fallback={null}>
-              <Scene />
+              <Scene 
+                targetRotation={targetRotation} 
+                currentRotation={currentRotation}
+              />
               <CameraController />
             </Suspense>
           </Canvas>
+
+          {/* Rotation Controls */}
+          {!is2DMode && (
+            <>
+              {/* Left Arrow */}
+              <button
+                onClick={rotateLeft}
+                className="absolute left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                aria-label="Rotate left"
+              >
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Right Arrow */}
+              <button
+                onClick={rotateRight}
+                className="absolute right-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                aria-label="Rotate right"
+              >
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </>
+          )}
         </div>
       )}
     </>
