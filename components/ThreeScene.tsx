@@ -64,9 +64,9 @@ function ProductNameHeader() {
     return headstonePrice + inscriptionCost + motifCost;
   }, [catalog, quantity, inscriptionCost, motifCost]);
 
-  // Convert mm to inches (1 inch = 25.4 mm)
-  const widthInches = useMemo(() => (widthMm / 25.4).toFixed(1), [widthMm]);
-  const heightInches = useMemo(() => (heightMm / 25.4).toFixed(1), [heightMm]);
+  // Convert mm to inches (1 inch = 25.4 mm) and round up
+  const widthInches = useMemo(() => Math.ceil(widthMm / 25.4), [widthMm]);
+  const heightInches = useMemo(() => Math.ceil(heightMm / 25.4), [heightMm]);
 
   return (
     <div className="text-center">
