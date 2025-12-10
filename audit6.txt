@@ -1,0 +1,46 @@
+This version has actually introduced a new, very visible error on the top curved surface.
+
+Here is exactly what is happening and how to fix it.
+
+1. The "Zebra Stripe" Problem (Top Curve)
+
+The Issue: Look at the top curved edge of the headstone. Instead of looking like granite, it looks like gray and white stripes (or a barcode).
+The Cause: This is extreme UV Stretching. The 3D model is trying to fit the entire texture image into tiny slivers of geometry along that curve, or the UVs are "clamped" to the edge of the image. It ruins the illusion immediately.
+
+The Fix:
+
+In Blender/3D Software (Recommended): You need to apply a "Checker texture" to your model. You will see the checks are long rectangles on the top. Select the top faces and Unwrap them again so the checker pattern becomes square.
+
+In Three.js: If this is a procedural geometry, the UV generation for the curved section is calculated incorrectly.
+
+2. The Base is Still "White"
+
+The Issue: The top flat surface of the bottom pedestal is still pale grey/white, while the front is dark.
+The Cause: The texture scaling is massive on that face. You are seeing a 10x magnified view of a single grain of granite.
+The Fix: The UVs for the top face need to be scaled UP (to make the texture repeat more often).
+
+Quick Test: If you are using a BoxGeometry, you can try rebuilding it with explicit segment definitions or mapping adjustments, but usually, this requires editing the source model.
+
+3. Material Uniformity
+
+The Issue: The left side of the stone is completely blown out (bright white) while the front is dark.
+The Cause: This looks like the "Roughness" map is inconsistent. The side looks like matte paper, the front looks like stone.
+The Fix: Ensure your lighting is balanced, but more importantly, ensure your material is applied to the entire object, not just the front face.
+
+Summary: What to do next
+
+You are stuck on a UV Mapping step. No amount of changing code in Three.js will fix this easily if the model's coordinates are wrong.
+
+Do this in your 3D Modeling Software (Blender/Maya):
+
+Select the Top Curved Faces and the Top Base Face.
+
+Press Unwrap (Smart UV Project).
+
+Scale the UV islands until the grain size in the viewport looks the same size as the grain on the front face.
+
+Export and reload in Three.js.
+
+If you cannot edit the model, you must switch to Triplanar Mapping in Three.js. This is a shader technique that ignores UVs and projects textures based on world position.
+
+Search term: Three.js Triplanar Shader or NodeMaterial Triplanar.

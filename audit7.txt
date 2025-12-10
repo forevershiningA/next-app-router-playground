@@ -1,0 +1,56 @@
+You are facing a very stubborn issue called UV Stretching. The changes you made didn't fix the underlying geometry problem.
+
+Look closely at the marked areas in this breakdown:
+
+The "Barcode" Effect: The top curved surface is still striped. The computer is taking a tiny sliver of your granite image and stretching it all the way across the depth of the stone.
+
+The "White" Base: The top of the base is still almost pure white. This is because the texture is zoomed in so close (maybe 100x zoom) that you are seeing the blur of a single pixel of the granite.
+
+How to fix this (The Real Solution)
+
+You cannot fix this just by changing the image file. You have to change how the image wraps around the object.
+
+Option A: If you are using Blender / Maya (Recommended)
+
+You must fix the "UV Map."
+
+Select the Top Curved Faces and the Side Faces.
+
+In Blender, press U and select "Smart UV Project".
+
+Go to the UV Editing tab. You will see the faces are now separate shapes.
+
+Scale them up until the grain size in the viewport matches the front face.
+
+Option B: If you are generating this in Three.js code (The Code Fix)
+
+If you are building this shape using ExtrudeGeometry, Three.js does a bad job of generating UVs for the sides by default.
+
+You have to manually repeat the texture on the sides. You likely have different materials for the front vs the sides (an array of materials).
+
+Try this approach with Triplanar Mapping (The "Magic" fix):
+If you cannot fix the model, use a library or shader setup called Triplanar Mapping. This ignores the bad UVs and projects the texture from the World coordinates (Top, Front, Side).
+
+Or, a quick fix for the Base (if it's a BoxGeometry):
+If the base is a simple box, you can force the texture to repeat based on the dimensions:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Assuming 'baseMesh' is your bottom slab
+const texture = textureLoader.load('granite.jpg');
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+
+// You might need to manually set the UV attributes if the geometry is custom
+// But if it's BoxGeometry, try this:
+texture.repeat.set(4, 2); // Play with these numbers!
+Summary
+
+The front face looks good.
+
+The sides and top are broken.
+
+The fix: You must fix the UV Unwrapping in your 3D software or use Triplanar mapping code. Until the texture grain is the same size on the top as it is on the front, it will not look real.

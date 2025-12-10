@@ -62,12 +62,19 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
 
       for (const shape of shapes) {
         const geometry = new THREE.ShapeGeometry(shape);
-        // Use the motif color instead of path color
-        const material = new THREE.MeshBasicMaterial({
+        // Use the motif color with metallic properties for realistic rendering
+        const isGoldColor = color.toLowerCase().includes('gold') || 
+                           color.toLowerCase() === '#d4af37' || 
+                           color.toLowerCase() === '#ffd700';
+        
+        const material = new THREE.MeshStandardMaterial({
           color: motifColor,
           side: THREE.DoubleSide,
           depthWrite: true,
           depthTest: true,
+          metalness: isGoldColor ? 1.0 : 0.2,
+          roughness: isGoldColor ? 0.3 : 0.4,
+          envMapIntensity: isGoldColor ? 2.0 : 1.5,
         });
 
         const shapeMesh = new THREE.Mesh(geometry, material);

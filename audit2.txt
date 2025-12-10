@@ -1,0 +1,130 @@
+This is a solid start for a tombstone visualization, but if you want to achieve photorealism in Three.js, the current textures feel a bit "flat" and digital. The stone lacks the physical depth of granite, and the gold lettering looks painted on rather than engraved or attached.
+
+Here is a review of the current state and specific improvements you can implement using Three.js standard workflows.
+
+1. Visual Analysis
+
+The Stone: It currently looks like a flat noise texture. Real polished granite has depth—some crystals reflect light, others are dark, and the surface is usually highly polished (glass-like) while the rough sides are matte.
+
+The Text/Symbols: They appear to be floating on top of the surface. On real tombstones, text is either sandblasted in (engraved) or attached as bronze plaques (extruded).
+
+Lighting: The gold lacks a metallic reflection, making it look like yellow plastic.
+
+2. Suggested Improvements (Three.js Implementation)
+
+To improve this, you should move from a simple color map to a full PBR (Physically Based Rendering) workflow using MeshStandardMaterial or MeshPhysicalMaterial.
+
+A. Implement an Environment Map (HDRI)
+
+Granite and gold are reflective materials. They will look fake without something to reflect.
+
+Why: This provides realistic lighting and reflections.
+
+Code: Use RGBELoader to load an HDRI.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+
+new RGBELoader().load('path/to/quarry_01_1k.hdr', function (texture) {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.environment = texture; // Applies lighting to everything
+    // scene.background = texture; // Optional: shows the background
+});
+B. Improve Material Maps (The PBR Stack)
+
+You need more than just the color image. You need to separate the material properties into different textures.
+
+Roughness Map (Crucial):
+
+Real granite is polished. The stone face should be very dark in the roughness map (smooth/shiny), while the text area should be lighter (rougher) if it's sandblasted, or smooth if it's polished metal.
+
+Three.js: material.roughnessMap = texture;
+
+Normal Map or Displacement Map:
+
+The text is too flat. You need a Normal Map to fake the lighting angles so the text looks engraved.
+
+Better approach: Since tombstones have deep cuts, a Displacement Map (grayscale height map) works best if you have enough vertices in your geometry. Black pixels stay down; white pixels push up.
+
+Three.js:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+material.normalMap = normalTexture; // Good for performance
+// OR
+material.displacementMap = heightTexture; // Better realism
+material.displacementScale = 0.02; // Adjust depth
+
+Metalness Map:
+
+Currently, the stone and the gold are likely sharing settings. You need a black-and-white mask.
+
+Black parts (Stone): Non-metallic.
+
+White parts (Gold text/angels): Metallic.
+
+Three.js: material.metalnessMap = maskTexture; material.metalness = 1.0;
+
+C. Texture Filtering (Fixing Blurriness)
+
+The texture on the base looks slightly blurry at oblique angles.
+
+Fix: Enable Anisotropic filtering.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+D. UV Mapping Fixes
+
+Issue: The texture on the top curved edge of the headstone looks "stretched" compared to the face.
+
+Fix: This is a 3D modeling issue, not strictly a Three.js issue. Go back to Blender/Maya and relax the UVs on the top faces so the granite grain size matches the front face.
+
+3. Example Material Setup
+
+Here is how your material configuration should look to achieve a photorealistic result:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const textureLoader = new THREE.TextureLoader();
+
+const stoneMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    
+    // 1. The visual color (Granite pattern + Gold text color)
+    map: textureLoader.load('textures/tombstone_base_color.jpg'),
+    
+    // 2. Defines where it is shiny (stone) vs matte (inside unfinished letters)
+    roughnessMap: textureLoader.load('textures/tombstone_roughness.jpg'),
+    roughness: 1.0, // The map drives the value
+    
+    // 3. Defines what is gold (white pixels) vs stone (black pixels)
+    metalnessMap: textureLoader.load('textures/tombstone_metalness.jpg'),
+    metalness: 1.0, 
+    
+    // 4. Fakes the engraving depth
+    normalMap: textureLoader.load('textures/tombstone_normal.jpg'),
+    normalScale: new THREE.Vector2(1, 1),
+});
+
+// Ensure textures repeat correctly if your UVs rely on tiling
+stoneMaterial.map.wrapS = THREE.RepeatWrapping;
+stoneMaterial.map.wrapT = THREE.RepeatWrapping;
+Summary of Visual Changes
+
+Before: Flat image pasted on a box.
+
+After: The stone will reflect the environment (sky/trees). As you rotate the camera, the light will catch the edges of the engraved text (thanks to the Normal map) and the gold will sparkle (thanks to the Metalness map + HDRI).

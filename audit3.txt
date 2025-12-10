@@ -1,0 +1,88 @@
+You have improved the texture resolution on the front face, and the "Blue Pearl" granite style is much more appropriate. However, there are now distinct UV mapping (stretching) issues and lighting issues that make it look like a 3D model rather than a real object.
+
+Here are the specific steps to fix the current issues in Three.js and your modeling workflow.
+
+1. Fix the "Stretched" Texture on the Sides (Crucial)
+
+The Problem: Look at the side thickness of the headstone and the side of the base. The granite grains are stretched into long vertical streaks. This happens when the UV map for the sides is too small or distorted.
+
+The Fix (Two Options):
+
+Option A (The 3D Modeler way - Best): Go back to Blender/Maya. Select the side faces and "Unwrap" them again so their aspect ratio matches the front face. The checkerboard pattern should be squares, not rectangles.
+
+Option B (The Three.js Shader way): If you cannot edit the model, use Triplanar Mapping. This projects the texture from X, Y, and Z directions so it never stretches. You can implement this using NodeMaterial or a custom shader, but the easiest way standard way involves adjusting the UVs as mentioned in Option A.
+
+2. Add "Clearcoat" for Polished Stone
+
+The Problem: The stone currently looks matte, like dry concrete or unpolished rock. Tombstones are usually highly polished.
+
+The Fix: Switch from MeshStandardMaterial to MeshPhysicalMaterial. This allows you to add a clearcoat layer, which simulates the polish on top of the stone grain.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const stoneMaterial = new THREE.MeshPhysicalMaterial({
+    map: textureLoader.load('granite_diffuse.jpg'),
+    roughness: 0.2,            // Low roughness = shiny base
+    metalness: 0.1,            // Stone is dielectric, keep low
+    clearcoat: 1.0,            // MAX polish
+    clearcoatRoughness: 0.1,   // The polish is very smooth
+});
+3. Add Beveled Edges (Chamfer)
+
+The Problem: The corners of the stone are razor-sharp 90-degree angles. In real life, stone creates a dangerous sharp edge, so masons "chamfer" or bevel the edges. The computer-perfect sharpness immediately reveals this is a fake object.
+
+The Fix:
+
+Modeling: Add a small "Bevel Modifier" to your mesh in your 3D software. Even a tiny 2mm bevel catches the light and creates a "highlight line" that defines the shape.
+
+Three.js Geometry: If creating geometry in code, look into RoundedBoxGeometry (an external Three.js utility) instead of standard BoxGeometry.
+
+4. Improve the Gold Text (Metallicity)
+
+The Problem: The gold still looks a bit like yellow plastic. It needs to reflect the world to look like metal.
+
+The Fix:
+
+Environment Map: As mentioned before, you must have an HDRI environment map loaded, or metal will just look black or flat color.
+
+Settings:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const goldMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffd700, // Gold color
+    metalness: 1.0,  // MUST be 1.0 for realistic metal
+    roughness: 0.3,  // Slight texture, not perfect mirror
+    envMapIntensity: 1.0
+});
+5. Bump/Normal Mapping
+
+The Problem: The surface looks perfectly flat. Granite usually has tiny pits, and the text should have depth.
+
+The Fix: If you have a Normal Map (the purple texture) for this granite:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+stoneMaterial.normalMap = textureLoader.load('granite_normal.jpg');
+stoneMaterial.normalScale.set(0.5, 0.5); // Adjust intensity
+
+If you don't have a normal map: You can generate one from your color image using free online tools (search "Normal Map Generator"). It adds the tiny surface imperfections that make stone look heavy.
+
+Summary Checklist for Next Version:
+
+Relax UVs on the sides so the texture isn't streaky.
+
+Add Environment Lighting (HDRI).
+
+Use MeshPhysicalMaterial with clearcoat: 1.0 for the stone.
+
+Bevel the edges of the 3D model.

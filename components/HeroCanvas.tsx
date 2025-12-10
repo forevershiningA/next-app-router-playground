@@ -35,9 +35,9 @@ const GraniteMaterial = () => {
   return (
     <meshStandardMaterial
       map={texture}
-      roughness={0.15} // Polished
-      metalness={0.1}
-      envMapIntensity={1.5}
+      roughness={0.12} // Polished
+      metalness={0.15}
+      envMapIntensity={2.5}
     />
   );
 };

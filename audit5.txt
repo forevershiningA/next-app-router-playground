@@ -1,0 +1,64 @@
+This iteration is getting closer, but there is one major visual error that is currently breaking the realism entirely: The top of the base.
+
+Here is exactly what is wrong and how to fix it in Three.js or your modeling software.
+
+1. The "White Base" Problem (Critical)
+
+The Issue: Look at the top surface of the bottom pedestal. It is bright white and lacks detail, while the front face of that same pedestal is dark granite.
+
+Why is this happening? This is almost certainly a UV Mapping scale issue. The texture is zoomed in so close on that top face that you are seeing just a tiny, blurry patch of a light-colored grain, making the whole surface look white.
+
+The Fix: You need to scale the UVs for that top face down significantly so the grain size matches the front face.
+
+If editing in 3D software: Select that top face and scale up the UV island until the checkerboard size matches the front.
+
+If editing in Three.js code: If the base is a separate mesh from the headstone, you can try increasing the texture repeat:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+baseTexture.wrapS = THREE.RepeatWrapping;
+baseTexture.wrapT = THREE.RepeatWrapping;
+baseTexture.repeat.set(4, 4); // Increase this number until the grain looks small
+2. The "Smeared" Top Edge
+
+The Issue: Look at the curved top surface of the headstone. The granite texture is streaked horizontally.
+
+Why: The UV map for that strip is being projected from the front, meaning the texture is being stretched across the depth.
+
+The Fix: This requires a 3D modeling fix. That top strip needs to be UV unwrapped separately so it lays flat on the texture image.
+
+3. Lighting & Gloss (The "Wet" Look)
+
+The Issue: The stone looks dry and dusty. Polished granite acts almost like a mirror.
+The Fix: You need to tighten the material settings in Three.js to make it look like a hard, polished stone.
+
+Use this setup for your material:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const graniteMaterial = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('granite_diffuse.jpg'),
+    color: 0x888888, // Slightly darken the base color to make reflections pop
+    
+    roughness: 0.15, // Low roughness = High Gloss
+    metalness: 0.0,  // Stone is not metal
+    
+    envMap: scene.environment, // You MUST have an HDRI loaded for this to work
+    envMapIntensity: 1.5
+});
+
+Note: If you are using MeshPhysicalMaterial, add clearcoat: 1.0 and clearcoatRoughness: 0.1.
+
+Summary Checklist for Next Version:
+
+Fix the Base Top: It must match the color and grain size of the front. Currently, it looks like white plaster on top of dark stone.
+
+Fix Top Edge UVs: Stop the streaking texture on the curve.
+
+Add HDRI: The gold and stone look flat because they aren't reflecting a world. Load an environment map (even a simple studio lighting HDRI) to give the gold its metallic shine.
