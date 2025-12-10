@@ -346,6 +346,18 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           outlineWidth={isTraditionalEngraved ? 0 : 0.002 * units}
           outlineColor={isTraditionalEngraved ? color : "black"}
           fillOpacity={isTraditionalEngraved ? 1 : 1}
+          {...(color.toLowerCase().includes('gold') || color.toLowerCase() === '#d4af37' || color.toLowerCase() === '#ffd700'
+            ? { 
+                metalness: 1.0,
+                roughness: 0.3,
+                envMapIntensity: 2.0
+              }
+            : {
+                metalness: 0.2,
+                roughness: 0.4,
+                envMapIntensity: 1.5
+              }
+          )}
           onSync={handleTextSync}
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {

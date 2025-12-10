@@ -233,9 +233,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           scale={0.01}
           faceTexture={visibleTex}
           sideTexture={visibleTex}
-          tileSize={10}
-          sideTileSize={10}
-          topTileSize={10}
+          tileSize={0.35}
+          sideTileSize={0.35}
+          topTileSize={0.35}
           targetHeight={heightM}
           targetWidth={widthM}
           preserveTop

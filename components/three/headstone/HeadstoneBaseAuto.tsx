@@ -52,12 +52,33 @@ function BaseMesh({
   baseTexture,
   onClick,
   name,
+  dimensions,
 }: {
   baseRef: React.RefObject<THREE.Mesh | null>;
   baseTexture: THREE.Texture;
   onClick?: (e: any) => void;
   name?: string;
+  dimensions: { width: number; height: number; depth: number };
 }) {
+  React.useEffect(() => {
+    if (baseTexture) {
+      baseTexture.wrapS = THREE.RepeatWrapping;
+      baseTexture.wrapT = THREE.RepeatWrapping;
+      
+      // Calculate repeat based on dimensions to maintain consistent texture scale
+      const textureScale = 0.15; // Size in meters that one texture tile should cover
+      const repeatX = dimensions.width / textureScale;
+      const repeatY = dimensions.height / textureScale;
+      
+      baseTexture.repeat.set(repeatX, repeatY);
+      
+      // Enable anisotropic filtering for better quality at angles
+      baseTexture.anisotropy = 16; // Maximum quality
+      
+      baseTexture.needsUpdate = true;
+    }
+  }, [baseTexture, dimensions.width, dimensions.height, dimensions.depth]);
+
   return (
     <mesh
       ref={baseRef}
@@ -67,11 +88,14 @@ function BaseMesh({
       receiveShadow
     >
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial
+      <meshPhysicalMaterial
         map={baseTexture}
-        metalness={0.1}
+        color={0x888888}
+        metalness={0.0}
         roughness={0.15}
         envMapIntensity={1.5}
+        clearcoat={1.0}
+        clearcoatRoughness={0.1}
       />
     </mesh>
   );
@@ -110,6 +134,11 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const targetPos = useRef(new THREE.Vector3());
     const targetScale = useRef(new THREE.Vector3(1, height, 1));
     const invMatrix = useRef(new THREE.Matrix4());
+    const [baseDimensions, setBaseDimensions] = React.useState({ 
+      width: 1, 
+      height: height, 
+      depth: 1 
+    });
 
     useFrame(() => {
       const t = headstoneObject.current;
@@ -161,6 +190,13 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       targetPos.current.copy(posLocal);
       targetScale.current.set(baseW, height, baseD);
 
+      // Update dimensions if changed
+      if (baseDimensions.width !== baseW || 
+          baseDimensions.height !== height || 
+          baseDimensions.depth !== baseD) {
+        setBaseDimensions({ width: baseW, height: height, depth: baseD });
+      }
+
       if (!hasTx.current) {
         b.position.copy(targetPos.current);
         b.scale.copy(targetScale.current);
@@ -192,6 +228,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
             baseTexture={baseTexture}
             onClick={onClick}
             name={name}
+            dimensions={baseDimensions}
           />
         </Suspense>
 

@@ -65,8 +65,11 @@ export default function Scene() {
       />
       <pointLight position={[-2, 3, 2]} intensity={0.5} color="#badbff" />
       
-      {/* Environment map for polished granite reflections */}
-      <Environment preset="city" />
+      {/* Environment map for realistic reflections on polished granite */}
+      <Environment 
+        preset="city" 
+        environmentIntensity={1.5}
+      />
 
       <HeadstoneAssembly />
       

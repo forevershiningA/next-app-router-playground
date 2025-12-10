@@ -540,15 +540,17 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   // 5. Create Materials (FIX: Return data from useMemo, not JSX)
   const materials = useMemo(() => {
     const common = {
+      color: new THREE.Color(0x888888), // Slightly darker to make reflections pop
       roughness: 0.15,
-      metalness: 0.1,
-      color: new THREE.Color(0xffffff),
+      metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
       envMapIntensity: 1.5,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.1,
     };
     return [
-      new THREE.MeshStandardMaterial({ ...common, map: clonedFaceMap }),
-      new THREE.MeshStandardMaterial({ ...common, map: clonedSideMap })
+      new THREE.MeshPhysicalMaterial({ ...common, map: clonedFaceMap }),
+      new THREE.MeshPhysicalMaterial({ ...common, map: clonedSideMap })
     ];
   }, [clonedFaceMap, clonedSideMap, doubleSided]);
 
