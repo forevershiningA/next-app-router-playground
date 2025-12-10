@@ -64,6 +64,10 @@ function ProductNameHeader() {
     return headstonePrice + inscriptionCost + motifCost;
   }, [catalog, quantity, inscriptionCost, motifCost]);
 
+  // Convert mm to inches (1 inch = 25.4 mm)
+  const widthInches = useMemo(() => (widthMm / 25.4).toFixed(1), [widthMm]);
+  const heightInches = useMemo(() => (heightMm / 25.4).toFixed(1), [heightMm]);
+
   return (
     <div className="text-center">
       {catalog ? (
@@ -74,6 +78,10 @@ function ProductNameHeader() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20">
             <span className="text-sm font-medium text-slate-200">
               {widthMm} × {heightMm} mm
+            </span>
+            <span className="text-white/40">•</span>
+            <span className="text-sm font-medium text-slate-200">
+              {widthInches} × {heightInches} in
             </span>
             <span className="text-white/40">•</span>
             <span className="text-sm font-bold text-white">
