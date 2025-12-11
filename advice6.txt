@@ -1,0 +1,90 @@
+You have encountered the "Checkerboard Effect" (or visible tiling).
+
+This happens because the texture you are using has very distinct dark and light spots (high contrast). When you repeat it, your eye immediately spots the pattern, making it look like a quilt or a tiled bathroom floor instead of a solid piece of stone.
+
+Here is how to fix this to get that natural granite look:
+
+1. The Texture Choice is Wrong
+
+The texture you are using has a large "diamond" or "X" pattern. That is why it looks like wallpaper.
+
+You need a "Seamless Noise" texture.
+For Rock Pitch, you don't want a pattern. You want "chaos."
+
+Search for: "Granite Rock Face Seamless" or "Perlin Noise Normal Map".
+
+Look for: An image that looks gray and boring. If it has big dark blobs, don't use it.
+
+2. Increase the "Repeat" (Make it smaller)
+
+Right now, your "chips" look huge (like 1 foot wide). Real rock pitch chips are small (about 1-2 inches). You need to zoom out.
+
+You need to increase the numbers in your repeat settings significantly.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Example: If the base is 10 units wide...
+// Try repeating it 10 or 20 times, not just 4 or 5.
+materialFront.normalMap.repeat.set(20, 4);
+3. Match the Density (The Math)
+
+Look at the corner of your image. The pattern on the Front is big, but the pattern on the Side is tiny and squished. They need to be the same "density."
+
+The Golden Rule of UV Mapping:
+The repeat value must be proportional to the object's size.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Define a "Density" factor (How many rock chips per unit?)
+const density = 2.0; 
+
+// Base Dimensions
+const width = 10;
+const height = 2;
+const depth = 4;
+
+// 1. Configure the Texture
+const texture = loader.load('path/to/noise_normal.jpg');
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+
+// 2. Material for FRONT/BACK (Width x Height)
+const matLong = new THREE.MeshStandardMaterial({ 
+    color: 0x333333, // Dark Grey
+    normalMap: texture.clone(), // Clone is crucial to have different settings
+    roughness: 0.9 
+});
+// Math: Size * Density
+matLong.normalMap.repeat.set(width * density, height * density);
+
+// 3. Material for SIDES (Depth x Height)
+const matShort = new THREE.MeshStandardMaterial({ 
+    color: 0x333333,
+    normalMap: texture.clone(), 
+    roughness: 0.9 
+});
+// Math: Size * Density
+matShort.normalMap.repeat.set(depth * density, height * density);
+
+// Apply
+const materials = [
+    matShort, // Right
+    matShort, // Left
+    polishedMat, // Top
+    polishedMat, // Bottom
+    matLong, // Front
+    matLong  // Back
+];
+Summary
+
+Ditch the current texture. It has too much pattern. Find a "Noise" or "Concrete" normal map.
+
+Crank up the repeat. Make the texture 4x smaller.
+
+Sync the sides. Use the code above to make sure the side pattern is the same size as the front pattern.

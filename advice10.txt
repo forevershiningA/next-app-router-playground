@@ -1,0 +1,70 @@
+This is looking excellent. You have solved the geometry, the tearing, the stretching, and the weird wavy artifacts. The rounded edges (chamfer) make it look like a solid, heavy object.
+
+You are now at the "Turtle Shell" / "Paving Stone" stage.
+
+The Diagnosis
+
+The texture you are using creates large flat areas separated by deep cracks. It looks like dried mud or a stone walkway.
+
+Real Rock Pitch: Is created by striking the stone with a chisel. It leaves sharp, jagged, concave divots. There are no "flat" spots on a rock pitch face; every inch is rough.
+
+Here are the final 3 tweaks to graduate from "CG Stone" to "Real Granite":
+
+1. Invert or Swap the Normal Map
+
+Your current texture looks like flat stones with cracks between them. Rock pitch needs to be the opposite: sharp peaks and valleys.
+
+Try Inverting: Sometimes normal maps are rendered "Y-Down" instead of "Y-Up". Try adding this line to flip the shadows:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+rockMaterial.normalMap.repeat.y = - 1; // Sometimes flips the depth perception
+
+Better Texture: If that doesn't work, you need a texture that is "Noisier." You currently have low-frequency noise (big shapes). You need high-frequency noise (sandpaper/gravel look) mixed in.
+
+2. Make the Chips Smaller (Scale)
+
+Look at the height of the base. If that base is ~6-8 inches tall, the "stones" in your texture are huge (like 3 inches wide). Rock pitch chips are usually the size of a thumb.
+
+Double your repeat values.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// If it was (4, 1), try (8, 2)
+rockMaterial.normalMap.repeat.set(width * 2, height * 2);
+3. The "Granite Sparkle" (The Polish)
+
+Granite contains quartz. Even on the rough sides, it shouldn't look like matte rubber or clay. It needs tiny, sharp specular highlights.
+
+Decrease Roughness: Lower it slightly (e.g., from 0.9 to 0.6 or 0.7).
+
+Aggressive Normal Scale: Make the light catch the edges harder.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const finalMaterial = new THREE.MeshStandardMaterial({
+    color: 0x222222, // Dark Grey
+    normalMap: yourTexture,
+    
+    // Make the bumps VERY deep to catch light
+    normalScale: new THREE.Vector2(3, 3), 
+    
+    // Lower roughness = more sparkle. 
+    // 1.0 is rubber, 0.0 is mirror. 
+    // 0.6 is good for rough stone that catches sunlight.
+    roughness: 0.6, 
+    
+    envMapIntensity: 1.0
+});
+Final Verdict
+
+You are 90% there. The geometry is perfect. You just need a texture that is rougher/sandier and scaled down smaller so it looks like one solid chipped block rather than many stones glued together.

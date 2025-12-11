@@ -34,14 +34,23 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const router = useRouter();
   const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
+  const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
   const currentMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const selected = useHeadstoneStore((s) => s.selected);
 
   const handleMaterialSelect = (material: Material) => {
     const materialUrl = `/textures/forever/l/${material.image}`;
     setIsMaterialChange(true);
-    setHeadstoneMaterialUrl(materialUrl);
+    // Apply material to headstone or base depending on what's selected
+    if (selected === 'base') {
+      setBaseMaterialUrl(materialUrl);
+    } else {
+      setHeadstoneMaterialUrl(materialUrl);
+    }
     setTimeout(() => setIsMaterialChange(false), 100);
+    // Navigate to select-size to show 3D preview with the new material
+    router.push('/select-size');
   };
 
   const filteredMaterials = materials.filter((material) => {

@@ -6,12 +6,10 @@ import * as THREE from 'three';
 
 import ShapeSwapper from './ShapeSwapper';
 import HeadstoneBaseAuto from './HeadstoneBaseAuto';
-import BoxOutline from '../BoxOutline';
+import RotatingBoxOutline from '../RotatingBoxOutline';
 import SelectionBox from '../SelectionBox';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
-
-const BASE_H = 0.1;
 
 export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
@@ -26,6 +24,10 @@ export default function HeadstoneAssembly() {
   );
   const loading = useHeadstoneStore((s) => s.loading);
   const showBase = useHeadstoneStore((s) => s.showBase);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  
+  // Convert base height from mm to meters
+  const baseHeightMeters = baseHeightMm / 1000;
 
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(null!);
@@ -38,10 +40,10 @@ export default function HeadstoneAssembly() {
 
   return (
     <>
-      <group ref={assemblyRef} position={[0, BASE_H, 0]} visible={!loading}>
+      <group ref={assemblyRef} position={[0, baseHeightMeters, 0]} visible={!loading}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
-        <BoxOutline
+        <RotatingBoxOutline
           targetRef={headstoneMeshRef}
           visible={selected === 'headstone'}
           color="white"
@@ -49,7 +51,7 @@ export default function HeadstoneAssembly() {
           through={false}
         />
 
-        <BoxOutline
+        <RotatingBoxOutline
           targetRef={baseRef}
           visible={selected === 'base'}
           color="white"
@@ -75,7 +77,7 @@ export default function HeadstoneAssembly() {
             headstoneObject={tabletRef}
             wrapper={assemblyRef}
             name="base"
-            height={BASE_H}
+            height={baseHeightMeters}
             onClick={(e) => {
               e.stopPropagation();
               setSelected('base');

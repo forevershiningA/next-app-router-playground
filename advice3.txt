@@ -1,0 +1,85 @@
+This is a great example of the "Displacement Bleeding" problem.
+
+You have successfully applied the rough texture, but now the physics of the stone are broken. In the real world, a granite base is sawn flat on the top and bottom, and pitched (chipped) only on the sides.
+
+Currently, your displacement map is pushing the vertices at the edge of the top face, making the straight sawn line look like "melted wax" or torn paper.
+
+Here are the 3 steps to fix this specific look in Three.js:
+
+1. Fix the "Melted" Top Edge (Critical)
+
+You cannot use the same material settings for the Top and the Sides. The Top needs to be perfectly flat (0 displacement), and the Sides need to be rough.
+
+Since BoxGeometry shares vertices at the corners, when the side moves out, it pulls the top down.
+
+The Solution: Use an Array of Materials.
+You need to assign a separate material to the Top/Bottom faces that has displacementScale: 0.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// 1. The Rough Material (For the sides)
+const roughMaterial = new THREE.MeshStandardMaterial({
+    map: graniteTexture,
+    displacementMap: heightTexture,
+    displacementScale: 0.3, // The strength of the spikes
+    roughness: 0.8
+});
+
+// 2. The Polished Material (For Top/Bottom)
+// CRITICAL: No displacement map here!
+const polishedMaterial = new THREE.MeshStandardMaterial({
+    map: graniteTexture,
+    displacementScale: 0, // Keeps the edge essentially a straight line
+    roughness: 0.1
+});
+
+// 3. Apply to the mesh
+// BoxGeometry material order: Right, Left, Top, Bottom, Front, Back
+const materials = [
+    roughMaterial,    // Right (Rough)
+    roughMaterial,    // Left (Rough)
+    polishedMaterial, // Top (FLAT & POLISHED)
+    polishedMaterial, // Bottom (Flat)
+    roughMaterial,    // Front (Rough)
+    roughMaterial     // Back (Rough)
+];
+
+const base = new THREE.Mesh(geometry, materials);
+2. Fix the "Stretched Taffy" Look (UV Mapping)
+
+Look at the long side of your block. The waves look stretched horizontally. This happens because the texture is being stretched across a long surface.
+
+The Solution: You need to repeat the texture so the "rock chips" stay the same size regardless of how long the block is.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Set the texture to repeat
+graniteTexture.wrapS = THREE.RepeatWrapping;
+graniteTexture.wrapT = THREE.RepeatWrapping;
+
+// Adjust repeat based on the size of your block
+// If width is 10 and height is 2, repeat X should be 5x higher than Y
+graniteTexture.repeat.set(5, 1);
+3. Improve the "Sharpness" (Normals)
+
+Right now, the shadows on the bumps look very soft, like dough or clay. Granite chips are sharp crystals.
+
+The Solution:
+
+Flat Shading: If you want a "low poly" chiseled look, set flatShading: true in your material.
+
+Normal Map: If you want a realistic look, you need to load a Normal Map (the purple texture) along with your displacement map. The Normal map creates the illusion of sharp lighting cracks that the Displacement map (geometry) cannot create on its own.
+
+Summary Checklist to render next:
+
+Separate Top Material: Ensure the top face has Zero displacement.
+
+Straight Edge: The line between the top gray face and the side black face must be straight (or very slightly jagged), not wavy.
+
+Texture Repeat: Fix the stretching on the long side.

@@ -116,6 +116,10 @@ export function ProductCard<E extends ElementType = 'div'>({
                   setHeadstoneMaterialUrl(selectedUrl);
                 else if (selected === 'base') setBaseMaterialUrl(selectedUrl);
                 setTimeout(() => setIsMaterialChange(false), 100);
+                // Navigate to select-size to show 3D preview with the new material
+                window.scrollTo({ top: 0 });
+                router.push('/select-size');
+                return;
               }
               window.scrollTo({ top: 0 });
               router.push(routeBase + slug);

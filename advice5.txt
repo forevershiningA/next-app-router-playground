@@ -1,0 +1,82 @@
+You have successfully fixed the geometry tearing—the corners are now solid, which is great!
+
+However, you have now hit the "Wallpaper Effect" (also known as Texture Stretching/Tiling).
+
+The Diagnosis:
+
+Stretching: Look at the right side (short side) vs the left side (long side). The pattern is "squashed" on the right and "stretched" on the left. This is because a standard 3D Box stretches 1 image across the whole face, regardless of how long the face is.
+
+Tiling: The pattern repeats so frequently it looks like a checkerboard or a woven basket, not natural rock.
+
+Wrong Texture: The pattern looks diagonal/diamond-shaped. Real "Rock Pitch" is vertical (up and down chisel marks).
+
+Here is how to fix this:
+
+1. Fix the Stretching (Aspect Ratio)
+
+You need to tell Three.js to repeat the texture based on the width of the specific side.
+
+Since BoxGeometry applies the same UV mapping (0 to 1) to every face, you need to create Clones of your material so you can change the repeat settings for the long sides vs the short sides.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Assume your Base dimensions are:
+const width = 10;
+const height = 2;
+const depth = 4;
+
+// 1. Create the base texture
+const rockTexture = textureLoader.load('path/to/rock_normal.jpg');
+rockTexture.wrapS = THREE.RepeatWrapping;
+rockTexture.wrapT = THREE.RepeatWrapping;
+
+// 2. Create Material for the LONG sides (Front/Back)
+// The texture should repeat more times horizontally because the wall is longer
+const matLong = new THREE.MeshStandardMaterial({ normalMap: rockTexture.clone() });
+matLong.normalMap.repeat.set(width / 2, height / 2); // Divide by 2 to control density
+
+// 3. Create Material for the SHORT sides (Left/Right)
+// The texture repeats fewer times here
+const matShort = new THREE.MeshStandardMaterial({ normalMap: rockTexture.clone() });
+matShort.normalMap.repeat.set(depth / 2, height / 2);
+
+// 4. Apply (Order: Right, Left, Top, Bottom, Front, Back)
+const materials = [
+    matShort, // Right
+    matShort, // Left
+    polishedMaterial, // Top
+    polishedMaterial, // Bottom
+    matLong,  // Front
+    matLong   // Back
+];
+
+const base = new THREE.Mesh(geometry, materials);
+2. Get a better "Normal Map"
+
+The texture you are using currently has a very distinct "Diamond" pattern. When this repeats, it looks fake.
+
+For Rock Pitch, you want a "Cliff" or "Strata" normal map. It should look like vertical noise.
+
+Search for: "Rock Face Normal Map" or "Cliff Normal Map".
+
+Look for: Vertical lines, not diagonal cross-hatching.
+
+3. Rotate the Texture (If needed)
+
+If your texture lines are going left-to-right, but you want them up-and-down (like rain), you can rotate the texture in the code:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Rotate texture 90 degrees (PI/2 radians)
+matLong.normalMap.rotation = Math.PI / 2;
+// You usually need to center the rotation point too
+matLong.normalMap.center.set(0.5, 0.5);
+Summary
+
+To get to the finish line: Scale your texture repeat so it matches the dimensions of the box (e.g. if the box is 5x longer, the texture repeats 5x more).

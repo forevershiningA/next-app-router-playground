@@ -1,0 +1,587 @@
+This is a very common preference! The "Turtle Shell" look (technically called Voronoi or Cellular Noise) reads very clearly as "Rock Pitch" to the human eye because it creates distinct, faceted "islands" that look like heavy hammer strikes.
+
+I have updated the code to generate a High-Quality Cellular Voronoi pattern.
+
+What creates the "Good" Turtle/Rock Pitch look:
+
+Voronoi Algorithm: Instead of sine waves (clouds), we calculate the distance to random center points. This creates geometric shapes.
+
+Inverted Distance: We make the center of the cell "High" and the edges "Low". This creates a pyramid-like "Chip" shape.
+
+Jitter: We randomize the grid significantly so it doesn't look like a bathroom tile floor.
+
+Here is the updated file restoring the Cellular look but sharpening it for production quality.
+
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+import * as THREE from 'three';
+import React, {
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  Suspense,
+} from 'react';
+import { useFrame } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import { useHeadstoneStore, Line } from '#/lib/headstone-store';
+import HeadstoneInscription from '../../HeadstoneInscription';
+import MotifModel from '../MotifModel';
+import type { HeadstoneAPI } from '../../SvgHeadstone';
+import {
+  TEX_BASE,
+  DEFAULT_TEX,
+  BASE_WIDTH_MULTIPLIER,
+  BASE_DEPTH_MULTIPLIER,
+  BASE_MIN_DEPTH,
+  LERP_FACTOR,
+  EPSILON,
+} from '#/lib/headstone-constants';
+
+type HeadstoneBaseAutoProps = {
+  headstoneObject: React.RefObject<THREE.Object3D>;
+  wrapper: React.RefObject<THREE.Object3D>;
+  onClick?: (e: any) => void;
+  height?: number;
+  name?: string;
+};
+
+function PreloadTexture({
+  url,
+  onReady,
+}: {
+  url: string;
+  onReady?: () => void;
+}) {
+  useTexture(url);
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => onReady?.());
+    return () => cancelAnimationFrame(id);
+  }, [onReady]);
+  return null;
+}
+
+/**
+ * Helper to fix Multi-Material support on RoundedBoxGeometry
+ */
+function fixRoundedBoxUVs(geometry: THREE.BufferGeometry) {
+  if (!geometry.attributes.position || !geometry.index) return;
+  geometry.clearGroups();
+  const normal = geometry.attributes.normal;
+  const index = geometry.index;
+
+  // 0: Right (+x), 1: Left (-x), 2: Top (+y), 3: Bottom (-y), 4: Front (+z), 5: Back (-z)
+  for (let i = 0; i < index.count; i += 3) {
+    const a = index.getX(i);
+    const nx = normal.getX(a);
+    const ny = normal.getY(a);
+    const nz = normal.getZ(a);
+    let matIdx = 0;
+    if (Math.abs(nx) > Math.abs(ny) && Math.abs(nx) > Math.abs(nz)) {
+      matIdx = nx > 0 ? 0 : 1; // Right : Left
+    } else if (Math.abs(ny) > Math.abs(nx) && Math.abs(ny) > Math.abs(nz)) {
+      matIdx = ny > 0 ? 2 : 3; // Top : Bottom
+    } else {
+      matIdx = nz > 0 ? 4 : 5; // Front : Back
+    }
+    geometry.addGroup(i, 3, matIdx);
+  }
+}
+
+function BaseMesh({
+  baseRef,
+  baseTexture,
+  onClick,
+  name,
+  dimensions,
+  finish,
+}: {
+  baseRef: React.RefObject<THREE.Mesh | null>;
+  baseTexture: THREE.Texture;
+  onClick?: (e: any) => void;
+  name?: string;
+  dimensions: { width: number; height: number; depth: number };
+  finish: 'default' | 'rock-pitch';
+}) {
+  // 1. Generate the Source Canvas (The "Turtle" Voronoi Texture)
+  const rockNormalCanvas = useMemo(() => {
+    if (finish !== 'rock-pitch') return null;
+
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const imageData = ctx.getImageData(0, 0, size, size);
+    const data = imageData.data;
+
+    // Pseudo-random function
+    const random2 = (x: number, y: number) => {
+      const sinX = Math.sin(x * 12.9898 + y * 78.233);
+      const sinY = Math.sin(x * 39.346 + y * 11.135);
+      // Return fractional part to get 0..1
+      return {
+        x: Math.abs(sinX - Math.floor(sinX)),
+        y: Math.abs(sinY - Math.floor(sinY))
+      };
+    };
+
+    // CELLULAR / VORONOI NOISE (The "Turtle" Look)
+    const voronoi = (uvX: number, uvY: number) => {
+      // Scale controls how many "cells" fit in the canvas.
+      // 8.0 = 8x8 grid (Big chips)
+      const scale = 12.0; 
+      
+      const iX = Math.floor(uvX * scale);
+      const iY = Math.floor(uvY * scale);
+      const fX = (uvX * scale) - iX;
+      const fY = (uvY * scale) - iY;
+
+      let minDist = 1.0; 
+
+      // Check 3x3 neighbor grid to find closest point
+      for (let y = -1; y <= 1; y++) {
+        for (let x = -1; x <= 1; x++) {
+          // Neighbor grid coord
+          const neighborX = x;
+          const neighborY = y;
+          
+          // Random point inside that neighbor cell
+          const point = random2(iX + neighborX, iY + neighborY);
+          
+          // Animate? No, static.
+          // Jitter the point (0.5 + 0.5*sin...) 
+          // For static rock, just use the raw random 0..1
+          // Add offset to make it look organic
+          const pX = 0.5 + 0.4 * Math.sin(point.x * 6.28 + 1.0);
+          const pY = 0.5 + 0.4 * Math.cos(point.y * 6.28 + 2.0);
+
+          // Vector from current pixel to that random point
+          const diffX = neighborX + pX - fX;
+          const diffY = neighborY + pY - fY;
+
+          // Euclidean distance
+          const dist = Math.sqrt(diffX*diffX + diffY*diffY);
+
+          if (dist < minDist) {
+            minDist = dist;
+          }
+        }
+      }
+      
+      // Invert distance: Center of cell = 1 (High), Edge = 0 (Low)
+      // This makes "Pyramids" or "Chips"
+      return minDist; 
+    };
+
+    // Generate Normal Map from Voronoi Height
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const idx = (y * size + x) * 4;
+        
+        // Normalize coordinates 0..1
+        const u = x / size;
+        const v = y / size;
+
+        // Sample Center
+        // We actually want 1.0 - voronoi to make the center POP OUT
+        const h0 = 1.0 - voronoi(u, v);
+        
+        // Sample Neighbors for Slope
+        const step = 1.0 / size;
+        const hRight = 1.0 - voronoi(u + step, v);
+        const hDown = 1.0 - voronoi(u, v + step);
+        
+        // Calculate Slope
+        // Scale determines depth. 20.0 = Very deep cuts.
+        const scale = 25.0; 
+        const dX = (h0 - hRight) * scale;
+        const dY = (h0 - hDown) * scale;
+        const dZ = 1.0; 
+
+        const len = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+        
+        // Pack Normal
+        data[idx] = ((dX / len) * 0.5 + 0.5) * 255;     // R
+        data[idx + 1] = ((dY / len) * 0.5 + 0.5) * 255; // G
+        data[idx + 2] = ((dZ / len) * 0.5 + 0.5) * 255; // B
+        data[idx + 3] = 255;
+      }
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
+  }, [finish]);
+
+  // 2. Manage Base Texture Settings
+  useLayoutEffect(() => {
+    if (baseTexture) {
+      baseTexture.wrapS = THREE.RepeatWrapping;
+      baseTexture.wrapT = THREE.RepeatWrapping;
+      const textureScale = 0.15;
+      baseTexture.repeat.set(
+        dimensions.width / textureScale,
+        dimensions.height / textureScale
+      );
+      baseTexture.anisotropy = 16;
+      baseTexture.needsUpdate = true;
+    }
+  }, [baseTexture, dimensions.width, dimensions.height]);
+
+  // 3. Create Materials
+  const materials = useMemo(() => {
+    const polishedMaterial = new THREE.MeshPhysicalMaterial({
+      map: baseTexture,
+      color: 0x888888,
+      metalness: 0.0,
+      roughness: 0.15,
+      envMapIntensity: 1.5,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.1,
+    });
+
+    if (finish === 'rock-pitch' && rockNormalCanvas) {
+      const texShort = new THREE.CanvasTexture(rockNormalCanvas);
+      const texLong = new THREE.CanvasTexture(rockNormalCanvas);
+
+      [texShort, texLong].forEach((tex) => {
+        tex.wrapS = THREE.RepeatWrapping;
+        tex.wrapT = THREE.RepeatWrapping;
+        tex.colorSpace = THREE.NoColorSpace; 
+        tex.needsUpdate = true;
+      });
+
+      // Rock Pitch Settings
+      const rockColor = 0x444444; 
+      const matSettings = {
+        map: baseTexture,
+        // High scale for that deep "turtle" look
+        normalScale: new THREE.Vector2(3.5, 3.5),
+        color: rockColor,
+        metalness: 0.0,
+        roughness: 0.7, 
+        envMapIntensity: 1.0,
+      };
+
+      const matShort = new THREE.MeshStandardMaterial({
+        ...matSettings,
+        normalMap: texShort,
+      });
+
+      const matLong = new THREE.MeshStandardMaterial({
+        ...matSettings,
+        normalMap: texLong,
+      });
+
+      return [
+        matShort,
+        matShort,
+        polishedMaterial,
+        polishedMaterial,
+        matLong,
+        matLong,
+      ];
+    }
+
+    return polishedMaterial;
+  }, [baseTexture, finish, rockNormalCanvas]);
+
+  // 4. Update Material Repeats
+  useLayoutEffect(() => {
+    if (Array.isArray(materials) && finish === 'rock-pitch') {
+      // DENSITY: 
+      // 5.0 = Standard "Turtle Shell" size
+      const density = 5.0; 
+      
+      const matRight = materials[0] as THREE.MeshStandardMaterial;
+      const matFront = materials[4] as THREE.MeshStandardMaterial;
+
+      if (matRight.normalMap) {
+        matRight.normalMap.repeat.set(
+          Math.max(1, dimensions.depth * density),
+          Math.max(1, dimensions.height * 4) 
+        );
+      }
+
+      if (matFront.normalMap) {
+        matFront.normalMap.repeat.set(
+          Math.max(1, dimensions.width * density),
+          Math.max(1, dimensions.height * 4)
+        );
+      }
+    }
+  }, [materials, dimensions, finish]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (Array.isArray(materials)) {
+        materials.forEach((m) => {
+          if (m instanceof THREE.MeshStandardMaterial && m.normalMap) {
+            m.normalMap.dispose();
+          }
+        });
+      }
+    };
+  }, [materials]);
+
+  // 5. Geometry Logic
+  const geometry = useMemo(() => {
+    if (finish === 'rock-pitch') {
+      const geo = new RoundedBoxGeometry(1, 1, 1, 8, 0.03);
+      fixRoundedBoxUVs(geo);
+      return geo;
+    }
+    return new THREE.BoxGeometry(1, 1, 1);
+  }, [finish]);
+
+  return (
+    <mesh
+      ref={baseRef}
+      name={name}
+      onClick={onClick}
+      castShadow
+      receiveShadow
+      geometry={geometry}
+      onUpdate={(self) => {
+        if (self.geometry) self.geometry.computeBoundingBox();
+      }}
+    >
+      {Array.isArray(materials) ? (
+        materials.map((mat, i) => (
+          <primitive key={i} object={mat} attach={`material-${i}`} />
+        ))
+      ) : (
+        <primitive object={materials} attach="material" />
+      )}
+    </mesh>
+  );
+}
+
+const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
+  ({ headstoneObject, wrapper, onClick, height = 0.1, name }, ref) => {
+    const baseRef = useRef<THREE.Mesh>(null);
+    useImperativeHandle(ref, () => baseRef.current!);
+
+    const dummyGroupRef = useRef<THREE.Group>(null);
+
+    const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+    const setBaseSwapping = useHeadstoneStore((s) => s.setBaseSwapping);
+    const hasStatue = useHeadstoneStore((s) => s.hasStatue);
+    const widthMm = useHeadstoneStore((s) => s.widthMm);
+    const heightMm = useHeadstoneStore((s) => s.heightMm);
+    const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+    const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+    const baseFinish = useHeadstoneStore((s) => s.baseFinish);
+    const inscriptions = useHeadstoneStore((s) => s.inscriptions);
+    const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
+    const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
+
+    const baseHeightMeters = baseHeightMm / 1000;
+    const selectedInscriptionId = useHeadstoneStore(
+      (s) => s.selectedInscriptionId
+    );
+    const setSelectedInscriptionId = useHeadstoneStore(
+      (s) => s.setSelectedInscriptionId
+    );
+    const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+    const setSelected = useHeadstoneStore((s) => s.setSelected);
+    const setSelectedAdditionId = useHeadstoneStore(
+      (s) => s.setSelectedAdditionId
+    );
+    const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+
+    const baseAPI: HeadstoneAPI = useMemo(() => {
+      const baseDepth = 0.2 * BASE_DEPTH_MULTIPLIER;
+      return {
+        group: dummyGroupRef as React.RefObject<THREE.Group>,
+        mesh: baseRef as React.RefObject<THREE.Mesh>,
+        frontZ: baseDepth / 2,
+        unitsPerMeter: 1000,
+        version: 1,
+        worldWidth: (widthMm / 1000) * BASE_WIDTH_MULTIPLIER,
+        worldHeight: height,
+      };
+    }, [widthMm, height]);
+
+    const requestedBaseTex = useMemo(() => {
+      const file = baseMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
+      const webp = file.replace(/\.jpg$/i, '.webp');
+      return TEX_BASE + webp;
+    }, [baseMaterialUrl]);
+
+    const [visibleBaseTex, setVisibleBaseTex] = React.useState(requestedBaseTex);
+
+    const baseSwapping = requestedBaseTex !== visibleBaseTex;
+
+    useEffect(() => {
+      setBaseSwapping(baseSwapping);
+    }, [baseSwapping, setBaseSwapping]);
+
+    const baseTexture = useTexture(visibleBaseTex);
+
+    const hasTx = useRef(false);
+    const targetPos = useRef(new THREE.Vector3());
+    const targetScale = useRef(new THREE.Vector3(1, height, 1));
+    const invMatrix = useRef(new THREE.Matrix4());
+    const [baseDimensions, setBaseDimensions] = React.useState({
+      width: 1,
+      height: height,
+      depth: 1,
+    });
+
+    useFrame(() => {
+      const t = headstoneObject.current;
+      const w = wrapper.current;
+      const b = baseRef.current;
+      if (!t || !w || !b) return;
+
+      const baseW = baseWidthMm / 1000;
+      const baseD = Math.max(0.2 * BASE_DEPTH_MULTIPLIER, BASE_MIN_DEPTH);
+      const statueExtension = hasStatue() ? 0.2 : 0;
+      const xOffset = statueExtension / 2;
+      const headstoneDepth = 0.15;
+      const baseZCenter = -(headstoneDepth / 2) + baseD / 2;
+
+      const centerW = new THREE.Vector3(
+        -xOffset,
+        baseHeightMeters * 0.5 + EPSILON,
+        baseZCenter
+      );
+
+      w.updateWorldMatrix(true, false);
+      invMatrix.current.copy(w.matrixWorld).invert();
+      const posLocal = centerW.applyMatrix4(invMatrix.current);
+
+      targetPos.current.copy(posLocal);
+      targetScale.current.set(baseW, baseHeightMeters, baseD);
+
+      if (
+        baseDimensions.width !== baseW ||
+        baseDimensions.height !== baseHeightMeters ||
+        baseDimensions.depth !== baseD
+      ) {
+        setBaseDimensions({
+          width: baseW,
+          height: baseHeightMeters,
+          depth: baseD,
+        });
+      }
+
+      if (!hasTx.current) {
+        b.position.copy(targetPos.current);
+        b.scale.copy(targetScale.current);
+        hasTx.current = true;
+      }
+
+      b.visible = true;
+
+      if (!hasTx.current) {
+        return;
+      }
+
+      if (!baseSwapping) {
+        b.position.lerp(targetPos.current, LERP_FACTOR);
+        b.scale.lerp(targetScale.current, LERP_FACTOR);
+      }
+
+      b.visible = true;
+    });
+
+    return (
+      <React.Fragment>
+        <Suspense fallback={null}>
+          <BaseMesh
+            baseRef={baseRef}
+            baseTexture={baseTexture}
+            onClick={(e) => {
+              // Prevent click from interfering with drag
+              e.stopPropagation();
+              // Only handle click if not dragging (check for small movement)
+              if (onClick && (!e.delta || e.delta < 2)) {
+                onClick(e);
+              }
+            }}
+            name={name}
+            dimensions={baseDimensions}
+            finish={baseFinish}
+          />
+        </Suspense>
+
+        {/* Render inscriptions that belong to the base */}
+        {inscriptions
+          .filter((line: Line) => line.target === 'base')
+          .map((line: Line, i: number) => {
+            const zBump = (inscriptions.length - 1 - i) * 0.00005;
+            return (
+              <Suspense key={line.id} fallback={null}>
+                <HeadstoneInscription
+                  id={line.id}
+                  headstone={baseAPI}
+                  font={`/fonts/${line.font}.woff2`}
+                  editable
+                  selected={selectedInscriptionId === line.id}
+                  onSelectInscription={() => {
+                    setSelected('base');
+                    setSelectedMotifId(null);
+                    setSelectedAdditionId(null);
+                    setSelectedInscriptionId(line.id);
+                    setActivePanel('inscription');
+                  }}
+                  color={line.color}
+                  lift={0.002}
+                  xPos={line.xPos}
+                  yPos={line.yPos}
+                  rotationDeg={line.rotationDeg}
+                  height={line.sizeMm}
+                  text={line.text}
+                  zBump={zBump}
+                />
+              </Suspense>
+            );
+          })}
+
+        {/* Render motifs that belong to the base */}
+        {selectedMotifs
+          .filter((motif) => {
+            const offset = motifOffsets[motif.id];
+            return offset?.target === 'base';
+          })
+          .map((motif, i) => (
+            <Suspense key={`${motif.id}-${i}`} fallback={null}>
+              <MotifModel
+                id={motif.id}
+                svgPath={motif.svgPath}
+                color={motif.color}
+                headstone={baseAPI}
+                index={i}
+              />
+            </Suspense>
+          ))}
+
+        {requestedBaseTex !== visibleBaseTex && (
+          <Suspense fallback={null}>
+            <PreloadTexture
+              url={requestedBaseTex}
+              onReady={() => {
+                setVisibleBaseTex(requestedBaseTex);
+              }}
+            />
+          </Suspense>
+        )}
+      </React.Fragment>
+    );
+  },
+);
+
+HeadstoneBaseAuto.displayName = 'HeadstoneBaseAuto';
+export default HeadstoneBaseAuto;

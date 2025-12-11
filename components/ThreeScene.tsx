@@ -115,11 +115,11 @@ export default function ThreeScene() {
   const contextRestoredHandler = useRef<any>(null);
 
   const rotateLeft = () => {
-    setTargetRotation(prev => prev - Math.PI / 12); // -15 degrees
+    setTargetRotation(prev => prev - Math.PI / 6); // -30 degrees
   };
 
   const rotateRight = () => {
-    setTargetRotation(prev => prev + Math.PI / 12); // +15 degrees
+    setTargetRotation(prev => prev + Math.PI / 6); // +30 degrees
   };
 
   // Cleanup WebGL context on unmount

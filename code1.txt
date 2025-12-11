@@ -1,0 +1,117 @@
+import {
+  BoxGeometry,
+  Mesh,
+  MeshPhongMaterial,
+  Vector3,
+  Group,
+  Plane,
+  PlaneHelper,
+  PointsMaterial,
+  Points,
+  Matrix4
+} from "three";
+import * as dat from "dat.gui";
+import { createDemoScene } from "./demo.scene.js";
+import { float } from "./random.util.js";
+import { slice, jitter } from "./geometry.util.js";
+
+// For Debugging
+let planeGroup = new Group();
+let pointsBeforeMat = new PointsMaterial({ color: 0x008800 });
+let pointsAfterMat = new PointsMaterial({ color: 0x880000 });
+let pointsBefore, pointsAfter;
+
+// SCENE SETUP
+const { scene, play } = createDemoScene("container");
+
+// MATERIAL
+const RockMaterial = new MeshPhongMaterial({
+  color: 0x666666,
+  flatShading: true,
+  shininess: 0
+});
+
+// GEOMETRY
+function RockGeometry(size = [1, 1, 1]) {
+  let geometry = new BoxGeometry(
+    size[0],
+    size[1],
+    size[2],
+    size[0] * 2,
+    size[1] * 2,
+    size[2] * 2
+  );
+  // make the box less boxy
+  geometry = jitter(geometry, 0.2);
+  pointsBefore = new Points(geometry.clone(), pointsBeforeMat);
+  pointsBefore.position.set(0, size[1] / 2, 0);
+  // slice off some edges
+  geometry = makeSlices(
+    geometry.clone(),
+    16,
+    Math.max(...size),
+    Math.max(...size) / 4
+  );
+  // move origing to the bottom of the box
+  geometry.translate(0, size[1] / 2, 0);
+  pointsAfter = new Points(geometry.clone(), pointsAfterMat);
+  // scene.add(pointsAfter)
+  return geometry;
+}
+
+function makeSlices(geometry, sliceCount = 1, size = 1, offset = 1) {
+  for (let i = 0; i < sliceCount; ++i) {
+    let normal = new Vector3(float(-1, 1), float(-1, 1), float(-1, 1));
+    let off = float(size - offset, size);
+    geometry = slice(geometry.clone(), normal, off);
+    // For Debugging:
+    let plane = new Plane(normal, off);
+    plane.applyMatrix4(new Matrix4().makeTranslation(0, size / 2, 0));
+    let helper = new PlaneHelper(plane, size, 0xffff00);
+    planeGroup.add(helper);
+  }
+
+  return geometry.clone();
+}
+
+export function makeRock(size) {
+  let geometry = new RockGeometry(size);
+  let mesh = new Mesh(geometry, RockMaterial);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+scene.add(makeRock([5, 5, 5]));
+
+// dat.GUI
+let gui = new dat.GUI({
+  autoplace: false,
+  hideable: false
+});
+gui.closed = false;
+const guiContainer = document.getElementById("gui");
+guiContainer.appendChild(gui.domElement);
+
+// use Dispatch Here
+let params = {
+  showPlanes: () => (planeGroup.visible = !planeGroup.visible),
+  showBeforePoints: () => (pointsBefore.visible = !pointsBefore.visible),
+  showAfterPoints: () => (pointsAfter.visible = !pointsAfter.visible)
+};
+
+// planeGroup.position.set(0, 2.5, 0);
+planeGroup.visible = false;
+pointsBefore.visible = false;
+pointsAfter.visible = false;
+scene.add(planeGroup);
+scene.add(pointsBefore);
+scene.add(pointsAfter);
+
+let dayTimeGUI = gui.addFolder("debug");
+dayTimeGUI.add(params, "showPlanes");
+dayTimeGUI.add(params, "showBeforePoints");
+dayTimeGUI.add(params, "showAfterPoints");
+dayTimeGUI.open();
+
+play();

@@ -156,6 +156,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setSelectedMotifId = useHeadstoneStore(
     (s) => s.setSelectedMotifId,
   );
+  const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
   const openSizePanel = useHeadstoneStore((s) => s.openSizePanel);
   const fontLoading = useHeadstoneStore((s) => s.fontLoading);

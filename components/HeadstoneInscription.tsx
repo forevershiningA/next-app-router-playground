@@ -152,7 +152,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         // next is in headstone-local space, corrected by the initial grab offset
         const next = local.add(dragOffset);
 
-        // Update store with new position offsets
+        // Update store with new position offsets (no target change)
         updateLineStore(id, { xPos: next.x, yPos: next.y });
 
         // Reset local pos to base position (0, 0)

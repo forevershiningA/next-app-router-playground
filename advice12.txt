@@ -1,0 +1,60 @@
+This usually happens for one of two reasons: either the light isn't hitting the bumps, or the texture has become so small it blurred out.
+
+Since the geometry (RoundedBox) is now perfect, you just need to "turn the texture back on."
+
+Here is the checklist to bring the detail back:
+
+1. The Lighting Problem (Most Likely)
+
+Normal maps disappear in the dark.
+Your top face is bright white, but your side face is pitch black. If a light isn't hitting the side at an angle, the "bumps" cannot cast shadows, so the surface looks flat and smooth.
+
+The Fix: You need a light pointing directly at the front/side of the stone, not just from the top.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Add a "Flashlight" to see the texture
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
+directionalLight.position.set(5, 2, 10); // x=5, y=2, z=10 (Front-Right)
+scene.add(directionalLight);
+2. The "Over-Repeat" Problem
+
+If you followed the advice to "make the chips smaller" but went too far (e.g., repeat.set(50, 10)), the texture becomes so tiny that the pixels blend together into a smooth grey blur. This is called "Mipmapping."
+
+The Fix: Reset your repeat values to something modest to verify the texture is actually there. Start with (4, 1). If you see the bumps return, slowly increase the number until it looks right.
+
+3. Verify the Code
+
+Here is a "Safe Mode" code snippet to force the texture to appear. It uses a bright color and deep bump intensity just to prove it works.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const debugMaterial = new THREE.MeshStandardMaterial({
+    color: 0x555555, // Medium Grey (easier to see shadows than Black)
+    normalMap: rockTexture, // Make sure this file is actually loading!
+    
+    // CRITICAL: Reset these to safe values
+    normalScale: new THREE.Vector2(3, 3), // Very bumpy
+    roughness: 0.7,
+});
+
+// Reset the tiling to be very large, just to find it
+debugMaterial.normalMap.repeat.set(5, 1); 
+
+// Ensure UVs wrap
+debugMaterial.normalMap.wrapS = THREE.RepeatWrapping;
+debugMaterial.normalMap.wrapT = THREE.RepeatWrapping;
+
+Summary:
+
+Add a light hitting the side face.
+
+Change color from black to grey (temporarily) to help you see the shadows.
+
+Lower the repeat values to ensure you didn't shrink the texture into invisibility.

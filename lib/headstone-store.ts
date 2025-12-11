@@ -293,7 +293,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const defaultColor = isLaser ? '#ffffff' : '#c99d44'; // White for laser, gold for others
     
     // Set target based on currently selected object (headstone or base)
-    const target = selected === 'base' ? 'base' : 'headstone';
+    const target: 'base' | 'headstone' = selected === 'base' ? 'base' : 'headstone';
     
     set((s) => {
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];

@@ -49,6 +49,12 @@ export default function DesignerNav() {
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const setBaseWidthMm = useHeadstoneStore((s) => s.setBaseWidthMm);
+  const setBaseHeightMm = useHeadstoneStore((s) => s.setBaseHeightMm);
+  const baseFinish = useHeadstoneStore((s) => s.baseFinish);
+  const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
@@ -225,10 +231,19 @@ export default function DesignerNav() {
             if (item.slug === 'select-size') {
               const sizeTitle = editingObject === 'base' ? "Select Size of Base" : "Select Size of Headstone";
               const firstShape = catalog?.product?.shapes?.[0];
-              const minWidth = firstShape?.table?.minWidth ?? 40;
-              const maxWidth = firstShape?.table?.maxWidth ?? 1200;
-              const minHeight = firstShape?.table?.minHeight ?? 40;
-              const maxHeight = firstShape?.table?.maxHeight ?? 1200;
+              
+              // Use different dimensions based on what's being edited
+              const currentWidthMm = editingObject === 'base' ? baseWidthMm : widthMm;
+              const currentHeightMm = editingObject === 'base' ? baseHeightMm : heightMm;
+              const setCurrentWidthMm = editingObject === 'base' ? setBaseWidthMm : setWidthMm;
+              const setCurrentHeightMm = editingObject === 'base' ? setBaseHeightMm : setHeightMm;
+              
+              // For base, use different min/max values
+              // Base width minimum is the headstone width (cannot be smaller)
+              const minWidth = editingObject === 'base' ? widthMm : (firstShape?.table?.minWidth ?? 40);
+              const maxWidth = editingObject === 'base' ? 2000 : (firstShape?.table?.maxWidth ?? 1200);
+              const minHeight = editingObject === 'base' ? 50 : (firstShape?.table?.minHeight ?? 40);
+              const maxHeight = editingObject === 'base' ? 200 : (firstShape?.table?.maxHeight ?? 1200);
               
               return (
                 <React.Fragment key={item.slug}>
@@ -284,15 +299,18 @@ export default function DesignerNav() {
                       {/* Width Slider */}
                       <div className="space-y-2">
                         <label className="block text-sm font-medium text-slate-200">
-                          Width: {widthMm} <span className="text-slate-500">mm</span>
+                          Width: {currentWidthMm} <span className="text-slate-500">mm</span>
+                          {editingObject === 'base' && (
+                            <span className="text-xs text-slate-400 ml-2">(min: {widthMm}mm)</span>
+                          )}
                         </label>
                         <input
                           type="range"
                           min={minWidth}
                           max={maxWidth}
                           step={10}
-                          value={widthMm}
-                          onChange={(e) => setWidthMm(Number(e.target.value))}
+                          value={currentWidthMm}
+                          onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
                           className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                         />
                       </div>
@@ -300,18 +318,54 @@ export default function DesignerNav() {
                       {/* Height Slider */}
                       <div className="space-y-2">
                         <label className="block text-sm font-medium text-slate-200">
-                          Height: {heightMm} <span className="text-slate-500">mm</span>
+                          Height: {currentHeightMm} <span className="text-slate-500">mm</span>
                         </label>
                         <input
                           type="range"
                           min={minHeight}
                           max={maxHeight}
                           step={10}
-                          value={heightMm}
-                          onChange={(e) => setHeightMm(Number(e.target.value))}
+                          value={currentHeightMm}
+                          onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
                           className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                         />
                       </div>
+                      
+                      {/* Base Finish Selection - Only show when editing base */}
+                      {editingObject === 'base' && (
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-200">
+                            Base Finish
+                          </label>
+                          <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-950 p-1">
+                            <button
+                              onClick={() => setBaseFinish('default')}
+                              className={`rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                                baseFinish === 'default'
+                                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                              }`}
+                            >
+                              Polished
+                            </button>
+                            <button
+                              onClick={() => setBaseFinish('rock-pitch')}
+                              className={`rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                                baseFinish === 'rock-pitch'
+                                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                              }`}
+                            >
+                              Rock Pitch
+                            </button>
+                          </div>
+                          <p className="text-xs text-slate-400">
+                            {baseFinish === 'default' 
+                              ? 'Smooth polished finish on all sides' 
+                              : 'Polished flat top with rough rock-pitched sides'}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                   
