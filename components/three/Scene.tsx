@@ -88,6 +88,13 @@ export default function Scene({
       />
       <pointLight position={[-2, 3, 2]} intensity={0.5} color="#badbff" />
       
+      {/* advice12: Directional light to illuminate rock pitch sides */}
+      <directionalLight 
+        position={[5, 2, 10]} 
+        intensity={2.0} 
+        color="#ffffff"
+      />
+      
       {/* Environment map for realistic reflections on polished granite */}
       <Environment 
         preset="city" 

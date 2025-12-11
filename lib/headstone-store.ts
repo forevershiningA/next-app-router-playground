@@ -52,6 +52,7 @@ export type Line = {
   xPos: number;
   yPos: number;
   rotationDeg: number;
+  target?: 'headstone' | 'base'; // Which object the inscription is on
   ref: React.RefObject<Group | null>; // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
@@ -125,6 +126,15 @@ type HeadstoneState = {
 
   heightMm: number;
   setHeightMm: (v: number) => void;
+  
+  baseWidthMm: number;
+  setBaseWidthMm: (v: number) => void;
+  
+  baseHeightMm: number;
+  setBaseHeightMm: (v: number) => void;
+  
+  baseFinish: 'default' | 'rock-pitch';
+  setBaseFinish: (finish: 'default' | 'rock-pitch') => void;
 
   selected: Part;
   setSelected: (p: Part) => void;
@@ -153,7 +163,7 @@ type HeadstoneState = {
   motifRefs: Record<string, React.RefObject<Group | null>>;
   motifOffsets: Record<
     string,
-    { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number }
+    { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number; target?: 'headstone' | 'base' }
   >;
 
   setInscriptions: (
@@ -277,19 +287,37 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   ],
   addMotif: (svgPath) => {
     const id = `motif_${Date.now()}`;
-    const { catalog } = get();
+    const state = get();
+    const { catalog, selected } = state;
     const isLaser = catalog?.product.laser === '1';
     const defaultColor = isLaser ? '#ffffff' : '#c99d44'; // White for laser, gold for others
+    
+    // Set target based on currently selected object (headstone or base)
+    const target = selected === 'base' ? 'base' : 'headstone';
+    
     set((s) => {
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
+      // Initialize offset with target
+      const newOffsets = {
+        ...s.motifOffsets,
+        [id]: {
+          xPos: 0,
+          yPos: 0,
+          scale: 1,
+          rotationZ: 0,
+          heightMm: 100,
+          target,
+        }
+      };
       return {
         selectedMotifs: newMotifs,
+        motifOffsets: newOffsets,
         selectedMotifId: id, // Auto-select the newly added motif
         activePanel: 'motif', // Open the edit panel instead of closing
       };
     });
     // Calculate cost after adding
-    setTimeout(() => get().calculateMotifCost(), 0);
+    setTimeout(() => state.calculateMotifCost(), 0);
   },
   removeMotif: (id) => {
     set((s) => ({
@@ -372,6 +400,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         set({
           widthMm: shape.table.initWidth,
           heightMm: shape.table.initHeight,
+          baseWidthMm: Math.round(shape.table.initWidth * 1.4), // Base is 40% wider
         });
 
         if (shape.table.color) {
@@ -451,13 +480,39 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   widthMm: 900,
   setWidthMm(v) {
 
-    set({ widthMm: clampHeadstoneDim(v) });
+    const newWidth = clampHeadstoneDim(v);
+    set({ widthMm: newWidth });
+    
+    // Ensure base width is at least as wide as headstone
+    const state = get();
+    if (state.baseWidthMm < newWidth) {
+      set({ baseWidthMm: newWidth });
+    }
   },
 
   heightMm: 900,
   setHeightMm(v) {
 
     set({ heightMm: clampHeadstoneDim(v) });
+  },
+  
+  baseWidthMm: 1260, // Default: 900 * 1.4
+  setBaseWidthMm(v) {
+    const state = get();
+    // Base width cannot be smaller than headstone width
+    const minBaseWidth = state.widthMm;
+    const clampedWidth = Math.max(minBaseWidth, clampHeadstoneDim(v));
+    set({ baseWidthMm: clampedWidth });
+  },
+  
+  baseHeightMm: 100, // Base height is 100mm
+  setBaseHeightMm(v) {
+    set({ baseHeightMm: Math.max(50, Math.min(200, v)) }); // Clamp between 50-200mm
+  },
+  
+  baseFinish: 'default',
+  setBaseFinish(finish) {
+    set({ baseFinish: finish });
   },
 
   selected: null,
@@ -559,19 +614,23 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   addInscriptionLine: (patch: LinePatch = {}) => {
     const id = genId();
+    const state = get();
 
     const text = patch.text ?? 'New line';
     const font = patch.font ?? 'Garamond';
     const sizeMm = clampInscriptionSize(
-      patch.sizeMm ?? get().inscriptionMinHeight,
+      patch.sizeMm ?? state.inscriptionMinHeight,
     );
     const rotationDeg = clampInscriptionRotation(patch.rotationDeg ?? 0);
     const xPos = patch.xPos ?? 0;
     const yPos = patch.yPos ?? 0;
     const color =
-      get().showInscriptionColor === false
+      state.showInscriptionColor === false
         ? '#ffffff'
         : (patch.color ?? '#c99d44');
+    
+    // Set target based on currently selected object (headstone or base)
+    const target = state.selected === 'base' ? 'base' : 'headstone';
 
     const newLine: Line = {
       id,
@@ -582,6 +641,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       xPos,
       yPos,
       color,
+      target,
       ref: React.createRef<Group>(),
     };
 
@@ -589,7 +649,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       inscriptions: [...s.inscriptions, newLine],
       selectedInscriptionId: id,
     }));
-    get().calculateInscriptionCost();
+    state.calculateInscriptionCost();
     return id;
   },
 
