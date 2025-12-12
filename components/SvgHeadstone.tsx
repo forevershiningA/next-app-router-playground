@@ -43,6 +43,7 @@ type Props = {
   bevel?: boolean;
   doubleSided?: boolean;
   showEdges?: boolean;
+  headstoneStyle?: 'upright' | 'slant';
   meshProps?: ThreeElements['mesh'];
   children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
   selectedAdditions?: string[];
@@ -161,6 +162,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   bevel = false,
   doubleSided = false,
   showEdges = false,
+  headstoneStyle = 'upright',
   meshProps,
   children,
   selectedAdditions = [],
@@ -198,6 +200,113 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       clonedSideMap.dispose();
     };
   }, [clonedFaceMap, clonedSideMap]);
+
+  // 2b. Generate Rock Pitch Normal Map for Slant Headstones
+  const rockNormalCanvas = useMemo(() => {
+    if (headstoneStyle !== 'slant') return null;
+
+    const size = 1024; // Increased resolution for better detail
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const imageData = ctx.getImageData(0, 0, size, size);
+    const data = imageData.data;
+
+    // Pseudo-random deterministic noise
+    const fract = (x: number) => x - Math.floor(x);
+    const random2 = (x: number, y: number) => {
+      return {
+        x: fract(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453),
+        y: fract(Math.sin(x * 26.345 + y * 42.123) * 31421.3551)
+      };
+    };
+
+    // Voronoi-based faceted height map - increased scale for smaller chips
+    const getHeight = (u: number, v: number) => {
+      const scale = 20.0; // Reduced from 24.0 for balance
+      const su = u * scale;
+      const sv = v * scale;
+
+      let minDist = 999;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const cellX = Math.floor(su) + dx;
+          const cellY = Math.floor(sv) + dy;
+          const rand = random2(cellX, cellY);
+          const pointX = cellX + rand.x;
+          const pointY = cellY + rand.y;
+          const dist = Math.sqrt((su - pointX) ** 2 + (sv - pointY) ** 2);
+          if (dist < minDist) minDist = dist;
+        }
+      }
+
+      return Math.pow(1.0 - Math.min(minDist, 1.0), 0.5);
+    };
+
+    // Generate height map and convert to normal map
+    const heights: number[][] = [];
+    for (let y = 0; y < size; y++) {
+      heights[y] = [];
+      for (let x = 0; x < size; x++) {
+        heights[y][x] = getHeight(x / size, y / size);
+      }
+    }
+
+    // Negative strength for "pop-out" bumps
+    const strength = -15.0;
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const xRight = (x + 1) % size;
+        const yDown = (y + 1) % size;
+
+        const h0 = heights[y][x];
+        const hRight = heights[y][xRight];
+        const hDown = heights[yDown][x];
+
+        const dX = (h0 - hRight) * strength;
+        const dY = (h0 - hDown) * strength;
+
+        const norm = Math.sqrt(dX * dX + dY * dY + 1);
+        const nx = dX / norm;
+        const ny = dY / norm;
+        const nz = 1 / norm;
+
+        const idx = (y * size + x) * 4;
+        data[idx] = ((nx * 0.5 + 0.5) * 255) | 0;
+        data[idx + 1] = ((ny * 0.5 + 0.5) * 255) | 0;
+        data[idx + 2] = ((nz * 0.5 + 0.5) * 255) | 0;
+        data[idx + 3] = 255;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
+  }, [headstoneStyle]);
+
+  // 2c. Create normal map texture from canvas
+  const rockNormalTexture = useMemo(() => {
+    if (!rockNormalCanvas) return null;
+    
+    const tex = new THREE.CanvasTexture(rockNormalCanvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = THREE.NoColorSpace;
+    tex.needsUpdate = true;
+    
+    return tex;
+  }, [rockNormalCanvas]);
+
+  // 2d. Cleanup rock normal texture
+  React.useEffect(() => {
+    return () => {
+      if (rockNormalTexture) {
+        rockNormalTexture.dispose();
+      }
+    };
+  }, [rockNormalTexture]);
 
   // 3. Pre-calculate shape bounds and parameters
   const shapeParams = useMemo(() => {
@@ -286,18 +395,272 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   }, [shapeParams, preserveTop]);
 
   // 3b. Generate Geometry (with disposal cleanup)
-  const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
+  const { geometries, dims, meshScale, apiData, childWrapperPos, childWrapperRotation } = useMemo(() => {
     if (!shapeParams || !outline) {
       return { 
         geometries: [], 
         dims: null, 
         meshScale: [1, 1, 1] as [number, number, number],
         apiData: { frontZ: 0, unitsPerMeter: 1, version: 0, worldWidth: 1, worldHeight: 1 },
-        childWrapperPos: [0, 0, 0] as [number, number, number]
+        childWrapperPos: [0, 0, 0] as [number, number, number],
+        childWrapperRotation: [0, 0, 0] as [number, number, number]
       };
     }
 
     const { base, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
+
+    // FOR SLANT: Create trapezoidal prism geometry
+    if (headstoneStyle === 'slant') {
+      const slantGeometry = new THREE.BufferGeometry();
+      
+      // FIX: Use Thickness Ratios instead of fixed Angle to ensure a Trapezoidal shape
+      // The provided 'depth' is the Base Thickness (Nose)
+      const baseThickness = depth;
+      const topThickness = baseThickness * 0.2; // Top is 20% of base thickness (standard cemetery proportion: 2" / 10")
+      
+      // Calculate how far back the top-front edge starts
+      const frontTopZOffset = baseThickness - topThickness;
+      
+      // Calculate the slant angle for rotating inscriptions/motifs
+      // The front face slants from bottom (Z=0) to top (Z=-frontTopZOffset)
+      const height_svg_units = (maxY - minY);
+      const slantAngleRad = Math.atan2(frontTopZOffset, height_svg_units); // Angle from vertical
+      
+      // Calculate the SLANT HEIGHT (diagonal length of the front face)
+      // This is the actual surface length that inscriptions should span
+      const slantHeightUnits = Math.sqrt(height_svg_units ** 2 + frontTopZOffset ** 2);
+      
+      // Define all vertices (duplicated per face for proper UVs and normals)
+      const positions: number[] = [];
+      const uvs: number[] = [];
+      
+      // Helper to add a quad (2 triangles)
+      // IMPORTANT: Ensure consistent winding order (counter-clockwise when looking from outside)
+      const addQuad = (
+        v0: [number, number, number], v1: [number, number, number],
+        v2: [number, number, number], v3: [number, number, number],
+        uv0: [number, number], uv1: [number, number],
+        uv2: [number, number], uv3: [number, number]
+      ) => {
+        // Triangle 1: v0, v1, v2 (Counter-clockwise)
+        positions.push(...v0, ...v1, ...v2);
+        uvs.push(...uv0, ...uv1, ...uv2);
+        
+        // Triangle 2: v0, v2, v3 (Counter-clockwise)
+        positions.push(...v0, ...v2, ...v3);
+        uvs.push(...uv0, ...uv2, ...uv3);
+      };
+      
+      // Define the 8 unique corner points of the trapezoidal prism
+      // Naming: P_[Front/Back]_[Bottom/Top]_[Left/Right]
+      // Z-axis: 0 is front, -depth is back.
+      // Y-axis: minY is bottom, maxY is top.
+      // X-axis: minX is left, maxX is right.
+
+      // Front Face Corners (z=0 at bottom, z=-frontTopZOffset at top)
+      const P_FBL = new THREE.Vector3(minX, minY, 0);                 // Front Bottom Left
+      const P_FBR = new THREE.Vector3(maxX, minY, 0);                 // Front Bottom Right
+      const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left
+      const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right
+
+      // Back Face Corners (z=-depth for both bottom and top, assuming vertical back)
+      const P_BBL = new THREE.Vector3(minX, minY, -depth);            // Back Bottom Left
+      const P_BBR = new THREE.Vector3(maxX, minY, -depth);            // Back Bottom Right
+      const P_BTL = new THREE.Vector3(minX, maxY, -depth);            // Back Top Left
+      const P_BTR = new THREE.Vector3(maxX, maxY, -depth);            // Back Top Right
+      
+      // --- Faces ---
+
+      // 1. FRONT FACE (polished) - Group 0
+      // Vertices: P_FBL, P_FBR, P_FTR, P_FTL (viewed from front, counter-clockwise)
+      const frontFaceStartIdx = positions.length / 3; // Record start index for material group
+      addQuad(
+        P_FBL.toArray() as [number, number, number],   // V0 (Bottom Left)
+        P_FBR.toArray() as [number, number, number],  // V1 (Bottom Right)
+        P_FTR.toArray() as [number, number, number],  // V2 (Top Right)
+        P_FTL.toArray() as [number, number, number],  // V3 (Top Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      const frontFaceEndIdx = positions.length / 3;
+
+      // 2. BACK FACE (rock pitch) - Group 1
+      // Vertices: P_BBR, P_BBL, P_BTL, P_BTR (viewed from back, counter-clockwise)
+      addQuad(
+        P_BBR.toArray() as [number, number, number],   // V0 (Bottom Right)
+        P_BBL.toArray() as [number, number, number],  // V1 (Bottom Left)
+        P_BTL.toArray() as [number, number, number],  // V2 (Top Left)
+        P_BTR.toArray() as [number, number, number],  // V3 (Top Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 3. TOP FACE (rock pitch) - Group 1
+      // Vertices: P_FTL, P_FTR, P_BTR, P_BTL (viewed from top, counter-clockwise)
+      addQuad(
+        P_FTL.toArray() as [number, number, number],  // V0 (Front Top Left)
+        P_FTR.toArray() as [number, number, number],  // V1 (Front Top Right)
+        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
+        P_BTL.toArray() as [number, number, number],  // V3 (Back Top Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 4. BOTTOM FACE (rock pitch) - Group 1
+      // Vertices: P_FBR, P_FBL, P_BBL, P_BBR (viewed from bottom, counter-clockwise)
+      addQuad(
+        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
+        P_FBL.toArray() as [number, number, number],  // V1 (Front Bottom Left)
+        P_BBL.toArray() as [number, number, number],  // V2 (Back Bottom Left)
+        P_BBR.toArray() as [number, number, number],  // V3 (Back Bottom Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 5. LEFT SIDE FACE (rock pitch) - Group 1
+      // Vertices: P_FBL, P_FTL, P_BTL, P_BBL (viewed from left, counter-clockwise)
+      addQuad(
+        P_FBL.toArray() as [number, number, number],  // V0 (Front Bottom Left)
+        P_FTL.toArray() as [number, number, number],  // V1 (Front Top Left)
+        P_BTL.toArray() as [number, number, number],  // V2 (Back Top Left)
+        P_BBL.toArray() as [number, number, number],  // V3 (Back Bottom Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 6. RIGHT SIDE FACE (rock pitch) - Group 1
+      // Vertices: P_FBR, P_BBR, P_BTR, P_FTR (viewed from right, counter-clockwise)
+      addQuad(
+        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
+        P_BBR.toArray() as [number, number, number],  // V1 (Back Bottom Right)
+        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
+        P_FTR.toArray() as [number, number, number],  // V3 (Front Top Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      slantGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+      slantGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
+      slantGeometry.computeVertexNormals();
+      
+      // =========================================================
+      // GEOMETRY NORMALIZATION (BAKE TO Y-UP) for SLANT
+      // =========================================================
+      // Translate geometry so:
+      // 1. X is centered
+      // 2. Bottom (minY) is at Y=0
+      // 3. FIX: Translate Z by +depth/2 to center the footprint on (0,0,0)
+      slantGeometry.translate(-(minX + maxX) / 2, -minY, depth / 2);
+      slantGeometry.computeVertexNormals();
+      
+      // Material groups: 0 = front, 1 = everything else
+      slantGeometry.clearGroups();
+      slantGeometry.addGroup(0, (frontFaceEndIdx - frontFaceStartIdx), 0); // Front face
+      slantGeometry.addGroup((frontFaceEndIdx - frontFaceStartIdx), (positions.length / 3) - (frontFaceEndIdx - frontFaceStartIdx), 1); // All other faces
+      
+      // =========================================================
+      // Calculate world dimensions BEFORE UV mapping
+      const worldW = dx * Math.abs(scale) * sCore;
+      const worldH = (maxY - minY) * Math.abs(scale) * sCore;
+      const worldDepth = depth * Math.abs(scale);
+      
+      // Calculate world SLANT height (diagonal surface length)
+      const worldSlantH = slantHeightUnits * Math.abs(scale) * sCore;
+      
+      // UV MAPPING (Recalculate based on normalized geometry)
+      // =========================================================
+      slantGeometry.computeBoundingBox();
+      const bb = slantGeometry.boundingBox!;
+      const bb_dx = bb.max.x - bb.min.x;
+      const bb_dy = bb.max.y - bb.min.y;
+      
+      const posAttr = slantGeometry.getAttribute('position') as THREE.BufferAttribute;
+      const uvAttr = slantGeometry.getAttribute('uv') as THREE.BufferAttribute;
+      const localFrontZ = bb.max.z;
+      const localBackZ = bb.min.z;
+      
+      // Texture density for rock pitch - baked into UVs
+      const textureDensity = 20.0;
+      
+      for (let triIdx = 0; triIdx < posAttr.count / 3; triIdx++) {
+        const i = triIdx * 3;
+        let isFrontFace = false;
+        
+        for (let g = 0; g < slantGeometry.groups.length; g++) {
+          const group = slantGeometry.groups[g];
+          if (i >= group.start && i < group.start + group.count) {
+            isFrontFace = (group.materialIndex === 0);
+            break;
+          }
+        }
+        
+        if (isFrontFace) {
+          // Front face: Standard UV mapping for text texture (0-1 range)
+          for (let j = 0; j < 3; j++) {
+            const x = posAttr.getX(i + j);
+            const y = posAttr.getY(i + j);
+            uvAttr.setXY(i + j,
+              (x - bb.min.x) / bb_dx,  // U: 0-1 across width
+              (y - bb.min.y) / bb_dy   // V: 0-1 across height
+            );
+          }
+        } else {
+          // Other faces: BAKE density into UVs for uniform rock pitch without distortion
+          const v0 = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
+          const v1 = new THREE.Vector3(posAttr.getX(i + 1), posAttr.getY(i + 1), posAttr.getZ(i + 1));
+          const v2 = new THREE.Vector3(posAttr.getX(i + 2), posAttr.getY(i + 2), posAttr.getZ(i + 2));
+          
+          const edge1 = new THREE.Vector3().subVectors(v1, v0);
+          const edge2 = new THREE.Vector3().subVectors(v2, v0);
+          const normal = new THREE.Vector3().crossVectors(edge1, edge2).normalize();
+          
+          for (let j = 0; j < 3; j++) {
+            const x = posAttr.getX(i + j);
+            const y = posAttr.getY(i + j);
+            const z = posAttr.getZ(i + j);
+            
+            // Determine UV orientation based on dominant normal direction
+            if (Math.abs(normal.x) > Math.abs(normal.y) && Math.abs(normal.x) > Math.abs(normal.z)) {
+              // Side face: U=Depth(Z), V=Height(Y) MULTIPLIED by world dimensions * density
+              // Use (localFrontZ - z) to flip direction so texture flows front-to-back
+              uvAttr.setXY(i + j,
+                ((localFrontZ - z) / (localFrontZ - localBackZ)) * worldDepth * textureDensity,
+                ((y - bb.min.y) / bb_dy) * worldH * textureDensity
+              );
+            } else if (Math.abs(normal.y) > Math.abs(normal.x) && Math.abs(normal.y) > Math.abs(normal.z)) {
+              // Top/Bottom face: U=Width(X), V=Depth(Z) MULTIPLIED by world dimensions * density
+              // Use (localFrontZ - z) to flip direction
+              uvAttr.setXY(i + j,
+                ((x - bb.min.x) / bb_dx) * worldW * textureDensity,
+                ((localFrontZ - z) / (localFrontZ - localBackZ)) * worldDepth * textureDensity
+              );
+            } else {
+              // Back face: U=Width(X), V=Height(Y) MULTIPLIED by world dimensions * density
+              uvAttr.setXY(i + j,
+                ((x - bb.min.x) / bb_dx) * worldW * textureDensity,
+                ((y - bb.min.y) / bb_dy) * worldH * textureDensity
+              );
+            }
+          }
+        }
+      }
+      uvAttr.needsUpdate = true;
+      
+      // World dimensions and final values (already calculated above before UV mapping)
+      const perim = 2 * (worldW + worldH);
+      const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
+      
+      return {
+        geometries: [slantGeometry],
+        dims: { worldW, worldH, worldPerim: perim, worldDepth },
+        meshScale: finalScale,
+        apiData: {
+          frontZ: 5.0, // Offset to ensure inscriptions/motifs are fully visible on slanted surface
+          unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+          version: Math.random(),
+          worldWidth: worldW,
+          worldHeight: worldSlantH // CRITICAL: Report slant height so children fit the slanted surface
+        },
+        childWrapperPos: [0, 0, 0] as [number, number, number],
+        childWrapperRotation: [-slantAngleRad, 0, 0] as [number, number, number]
+      };
+    }
+
+    // NORMAL UPRIGHT HEADSTONE (existing code)
 
     // Build extrudes
     const extrudeSettings = {
@@ -503,15 +866,16 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       dims: { worldW, worldH, worldPerim, worldDepth },
       meshScale: finalScale,
       apiData: {
-        frontZ: depth / 2, // Z Position of the front face in local space
+        frontZ: depth / 2, // Upright headstones are vertical, so frontZ is just half depth
         unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
         version: Math.random(),
         worldWidth: worldW,
         worldHeight: worldH
       },
-      childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number]
+      childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number],
+      childWrapperRotation: [0, 0, 0] as [number, number, number] // No rotation for upright
     };
-  }, [shapeParams, outline, depth, bevel, scale]);
+  }, [shapeParams, outline, depth, bevel, scale, headstoneStyle]);
 
   // 4. Handle Repeats via Texture Matrix (Just like the old version)
   useLayoutEffect(() => {
@@ -521,13 +885,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const faceTile = Math.max(0.001, tileSize ?? 0.1);
     const sideTile = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
 
-    // Face Repeats
     const repFaceX = usePhysical ? Math.max(1, dims.worldW / faceTile) : (faceRepeatX ?? 6);
     const repFaceY = usePhysical ? Math.max(1, dims.worldH / faceTile) : (faceRepeatY ?? 6);
 
-    // Side Repeats (Key Fix: Use worldPerim for X, worldDepth for Y)
-    // This allows the texture to tile naturally without baked scaling.
-    const repSideX = usePhysical ? Math.max(1, dims.worldPerim / sideTile) : (sideRepeatX ?? 8);
+    const repSideX = usePhysical 
+      ? Math.max(1, (headstoneStyle === 'slant' ? dims.worldW : dims.worldPerim) / sideTile) 
+      : (sideRepeatX ?? 8);
     const repSideY = usePhysical ? Math.max(1, dims.worldDepth / sideTile) : (sideRepeatY ?? 1);
 
     clonedFaceMap.repeat.set(repFaceX, repFaceY);
@@ -535,24 +898,58 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     
     clonedFaceMap.needsUpdate = true;
     clonedSideMap.needsUpdate = true;
-  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap]);
+    
+    if (headstoneStyle === 'slant' && rockNormalTexture) {
+      rockNormalTexture.repeat.set(1, 1);
+      rockNormalTexture.needsUpdate = true;
+    }
+  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, headstoneStyle, rockNormalTexture]);
 
   // 5. Create Materials (FIX: Return data from useMemo, not JSX)
   const materials = useMemo(() => {
     const common = {
-      color: new THREE.Color(0x888888), // Slightly darker to make reflections pop
-      roughness: 0.15,
+      color: new THREE.Color(headstoneStyle === 'slant' ? 0x444444 : 0x888888),
+      roughness: headstoneStyle === 'slant' ? 0.65 : 0.15,
       metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-      envMapIntensity: 1.5,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.1,
+      envMapIntensity: headstoneStyle === 'slant' ? 1.0 : 1.5,
     };
+    
+    // For slant headstones, apply rock pitch normal map to side material
+    if (headstoneStyle === 'slant' && rockNormalTexture) {
+      return [
+        new THREE.MeshPhysicalMaterial({ 
+          ...common, 
+          map: clonedFaceMap,
+          clearcoat: 0,
+          clearcoatRoughness: 0,
+        }),
+        new THREE.MeshPhysicalMaterial({ 
+          ...common, 
+          map: clonedSideMap,
+          normalMap: rockNormalTexture,
+          normalScale: new THREE.Vector2(2.0, 2.0),
+          clearcoat: 0,
+          clearcoatRoughness: 0,
+        })
+      ];
+    }
+    
     return [
-      new THREE.MeshPhysicalMaterial({ ...common, map: clonedFaceMap }),
-      new THREE.MeshPhysicalMaterial({ ...common, map: clonedSideMap })
+      new THREE.MeshPhysicalMaterial({ 
+        ...common, 
+        map: clonedFaceMap,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+      }),
+      new THREE.MeshPhysicalMaterial({ 
+        ...common, 
+        map: clonedSideMap,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+      })
     ];
-  }, [clonedFaceMap, clonedSideMap, doubleSided]);
+  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {
@@ -588,10 +985,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   if (!geometries.length || !dims) return null;
 
+  // Fixed: Position at origin as geometry is already normalized to ground
+  // The slantGeometry.translate(-(minX + maxX) / 2, -minY, 0) already positions base at Y=0
+  const groupPosition: [number, number, number] = [0, 0, 0];
+
   // 6. Return JSX (FIX: JSX in return, not useMemo)
   // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} position={groupPosition}>
       {/* Apply SVG scale only to headstone mesh */}
       {geometries.map((geom, i) => (
         <mesh
@@ -614,7 +1015,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
          Raycasting returns mesh-local coords which are already in geometry space.
          API.group points to this scaled wrapper for proper child alignment.
       */}
-      <group ref={scaledWrapperRef} position={childWrapperPos} scale={meshScale}>
+      <group 
+        ref={scaledWrapperRef} 
+        position={childWrapperPos} 
+        rotation={childWrapperRotation}
+        scale={meshScale}
+      >
          {typeof children === 'function' && children(childApi, selectedAdditions)}
       </group>
     </group>

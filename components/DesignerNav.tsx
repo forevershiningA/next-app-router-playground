@@ -55,6 +55,8 @@ export default function DesignerNav() {
   const setBaseHeightMm = useHeadstoneStore((s) => s.setBaseHeightMm);
   const baseFinish = useHeadstoneStore((s) => s.baseFinish);
   const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
+  const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
+  const setHeadstoneStyle = useHeadstoneStore((s) => s.setHeadstoneStyle);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
@@ -330,6 +332,42 @@ export default function DesignerNav() {
                           className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                         />
                       </div>
+                      
+                      {/* Headstone Style Selection - Only show when editing headstone */}
+                      {editingObject === 'headstone' && (
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-200">
+                            Headstone Style
+                          </label>
+                          <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-950 p-1">
+                            <button
+                              onClick={() => setHeadstoneStyle('upright')}
+                              className={`rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                                headstoneStyle === 'upright'
+                                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                              }`}
+                            >
+                              Upright
+                            </button>
+                            <button
+                              onClick={() => setHeadstoneStyle('slant')}
+                              className={`rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                                headstoneStyle === 'slant'
+                                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                              }`}
+                            >
+                              Slant
+                            </button>
+                          </div>
+                          <p className="text-xs text-slate-400">
+                            {headstoneStyle === 'upright' 
+                              ? 'Traditional vertical monument' 
+                              : 'Beveled marker at an angle'}
+                          </p>
+                        </div>
+                      )}
                       
                       {/* Base Finish Selection - Only show when editing base */}
                       {editingObject === 'base' && (

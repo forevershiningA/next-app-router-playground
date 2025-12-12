@@ -15,6 +15,8 @@ export default function SizeSelector({
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
+  const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
+  const setHeadstoneStyle = useHeadstoneStore((s) => s.setHeadstoneStyle);
 
   return (
     <div className="relative w-full">
@@ -28,6 +30,41 @@ export default function SizeSelector({
           computed from size; cemeteries may have regulations on allowable
           dimensions.
         </p>
+        
+        {/* Headstone Style Selection */}
+        <div className="mb-4 space-y-2">
+          <label className="block text-sm font-medium text-slate-200">
+            Headstone Style
+          </label>
+          <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-950 p-1">
+            <button
+              onClick={() => setHeadstoneStyle('upright')}
+              className={`rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                headstoneStyle === 'upright'
+                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              }`}
+            >
+              Upright
+            </button>
+            <button
+              onClick={() => setHeadstoneStyle('slant')}
+              className={`rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                headstoneStyle === 'slant'
+                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              }`}
+            >
+              Slant
+            </button>
+          </div>
+          <p className="text-xs text-slate-400">
+            {headstoneStyle === 'upright' 
+              ? 'Traditional vertical monument' 
+              : 'Beveled marker at an angle'}
+          </p>
+        </div>
+
         <div className="space-y-3">
           <TailwindSlider
             label="Width"

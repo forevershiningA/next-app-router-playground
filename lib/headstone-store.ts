@@ -136,6 +136,9 @@ type HeadstoneState = {
   baseFinish: 'default' | 'rock-pitch';
   setBaseFinish: (finish: 'default' | 'rock-pitch') => void;
 
+  headstoneStyle: 'upright' | 'slant';
+  setHeadstoneStyle: (style: 'upright' | 'slant') => void;
+
   selected: Part;
   setSelected: (p: Part) => void;
 
@@ -513,6 +516,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   baseFinish: 'default',
   setBaseFinish(finish) {
     set({ baseFinish: finish });
+  },
+
+  headstoneStyle: 'upright',
+  setHeadstoneStyle(style) {
+    set({ headstoneStyle: style });
   },
 
   selected: null,

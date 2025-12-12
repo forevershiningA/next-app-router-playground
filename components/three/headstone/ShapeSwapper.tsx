@@ -144,6 +144,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
@@ -241,6 +242,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           targetWidth={widthM}
           preserveTop
           showEdges={false}
+          headstoneStyle={headstoneStyle}
           selectedAdditions={selectedAdditions}
           meshProps={{
             name: 'headstone',

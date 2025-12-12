@@ -101,7 +101,7 @@ function BaseMesh({
   const rockNormalCanvas = useMemo(() => {
     if (finish !== 'rock-pitch') return null;
 
-    const size = 512;
+    const size = 1024; // Increased from 512 for better detail
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
@@ -120,74 +120,56 @@ function BaseMesh({
       };
     };
 
-    // VORONOI GENERATOR (The "Turtle" Logic)
-    // Generates values 0 (Edge) to 1 (Center of Chip)
+    // Voronoi-based faceted height map - matching slant headstone quality
     const getHeight = (u: number, v: number) => {
-      // INTERNAL SCALE: Bake 12x12 chips directly into the texture image.
-      // This prevents the "stretched noise" look because the chips are square in the source.
-      const scale = 12.0; 
-      
-      const iX = Math.floor(u * scale);
-      const iY = Math.floor(v * scale);
-      const fX = (u * scale) - iX;
-      const fY = (v * scale) - iY;
+      const scale = 24.0; // Increased from 12.0 for smaller, sharper chips
+      const su = u * scale;
+      const sv = v * scale;
 
-      let minDist = 1.0; 
-
-      // Check 3x3 neighbor grid
-      for (let y = -1; y <= 1; y++) {
-        for (let x = -1; x <= 1; x++) {
-          const neighbor = { x: x, y: y };
-          const point = random2(iX + x, iY + y);
-          
-          // Animate point? No, keep it static but organic.
-          // Jitter: 0.5 center + random offset
-          const p = { 
-            x: 0.5 + 0.4 * Math.sin(point.x * 6.28 + 1), 
-            y: 0.5 + 0.4 * Math.cos(point.y * 6.28 + 1)
-          };
-
-          const diff = {
-            x: neighbor.x + p.x - fX,
-            y: neighbor.y + p.y - fY
-          };
-
-          const dist = Math.sqrt(diff.x * diff.x + diff.y * diff.y);
+      let minDist = 999;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const cellX = Math.floor(su) + dx;
+          const cellY = Math.floor(sv) + dy;
+          const rand = random2(cellX, cellY);
+          const pointX = cellX + rand.x;
+          const pointY = cellY + rand.y;
+          const dist = Math.sqrt((su - pointX) ** 2 + (sv - pointY) ** 2);
           if (dist < minDist) minDist = dist;
         }
       }
-      
-      // Invert: 1.0 = High Center, 0.0 = Low Edge (Crack)
-      // Power function (x^0.5) makes the chips look rounder/chunkier
-      return Math.pow(1.0 - minDist, 0.5); 
+      return Math.pow(1.0 - Math.min(minDist, 1.0), 0.5);
     };
 
-    // Generate Normals via Sobel Filter
+    // Generate height map first
+    const heights: number[][] = [];
+    for (let y = 0; y < size; y++) {
+      heights[y] = [];
+      for (let x = 0; x < size; x++) {
+        heights[y][x] = getHeight(x / size, y / size);
+      }
+    }
+
+    // FIX from advice22: Invert strength to make chips convex (bumps) not concave (holes)
+    const strength = -25.0; // Negative makes chips pop out instead of looking like craters
+
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
-        const idx = (y * size + x) * 4;
-        const u = x / size;
-        const v = y / size;
-        const step = 1.0 / size;
-
-        const h0 = getHeight(u, v);
-        const hRight = getHeight(u + step, v);
-        const hDown = getHeight(u, v + step);
-
-        // STRENGTH: How deep are the chips? 
-        // 15.0 = Standard. 25.0 = Deep Chisel.
-        const strength = 20.0; 
-        
+        const xRight = (x + 1) % size;
+        const yDown = (y + 1) % size;
+        const h0 = heights[y][x];
+        const hRight = heights[y][xRight];
+        const hDown = heights[yDown][x];
         const dX = (h0 - hRight) * strength;
         const dY = (h0 - hDown) * strength;
-        const dZ = 1.0; 
-
-        const len = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
-        
-        // Convert -1..1 Vector to 0..255 RGB
-        data[idx] = ((dX / len) * 0.5 + 0.5) * 255;     // R
-        data[idx + 1] = ((dY / len) * 0.5 + 0.5) * 255; // G
-        data[idx + 2] = ((dZ / len) * 0.5 + 0.5) * 255; // B
+        const norm = Math.sqrt(dX * dX + dY * dY + 1);
+        const nx = dX / norm;
+        const ny = dY / norm;
+        const nz = 1 / norm;
+        const idx = (y * size + x) * 4;
+        data[idx] = ((nx * 0.5 + 0.5) * 255) | 0;
+        data[idx + 1] = ((ny * 0.5 + 0.5) * 255) | 0;
+        data[idx + 2] = ((nz * 0.5 + 0.5) * 255) | 0;
         data[idx + 3] = 255;
       }
     }
@@ -234,14 +216,14 @@ function BaseMesh({
         tex.needsUpdate = true;
       });
 
-      // Rock Pitch Material Settings
+      // Rock Pitch Material Settings - matching slant headstone quality
       const rockColor = 0x444444; 
       
       const matShort = new THREE.MeshStandardMaterial({
         map: baseTexture,
         normalMap: texShort,
-        // High scale for visible bumps
-        normalScale: new THREE.Vector2(3.0, 3.0),
+        // Reduced from 3.0 to match slant headstone
+        normalScale: new THREE.Vector2(1.5, 1.5),
         color: rockColor,
         metalness: 0.0,
         // 0.65 = Rough but catches light (Granite Sparkle)
@@ -252,7 +234,7 @@ function BaseMesh({
       const matLong = new THREE.MeshStandardMaterial({
         map: baseTexture,
         normalMap: texLong,
-        normalScale: new THREE.Vector2(3.0, 3.0),
+        normalScale: new THREE.Vector2(1.5, 1.5),
         color: rockColor,
         metalness: 0.0,
         roughness: 0.65,
@@ -272,30 +254,29 @@ function BaseMesh({
     return polishedMaterial;
   }, [baseTexture, finish, rockNormalCanvas]);
 
-  // 4. Update Material Repeats (The Aspect Ratio Fix)
+  // 4. Update Material Repeats - matching slant headstone quality
   useLayoutEffect(() => {
     if (Array.isArray(materials) && finish === 'rock-pitch') {
-      // DENSITY: 
-      // Because we baked 12x12 chips into the texture, 
-      // a density of 1.0 means "12 chips per meter".
-      // A density of 0.5 means "6 big chips per meter".
-      const density = 0.5; // Lower number = Bigger Chips
+      // Increased density from 0.5 to 20.0 to match slant headstone
+      // Creates much smaller, sharper chips matching the 24x24 Voronoi grid
+      const density = 20.0;
       
       const matRight = materials[0] as THREE.MeshStandardMaterial;
       const matFront = materials[4] as THREE.MeshStandardMaterial;
 
       if (matRight.normalMap) {
+        // Right/Left sides (shorter dimension = depth)
         matRight.normalMap.repeat.set(
-          Math.max(1, dimensions.depth * density * 4), // *4 to match the internal scale
-          Math.max(1, dimensions.height * 2) 
+          Math.max(1, dimensions.depth * density),
+          Math.max(1, dimensions.height * density)
         );
       }
 
       if (matFront.normalMap) {
-        // Crucial: Increase horizontal repeat relative to width to prevent stretching
+        // Front/Back sides (longer dimension = width)
         matFront.normalMap.repeat.set(
-          Math.max(1, dimensions.width * density * 4), 
-          Math.max(1, dimensions.height * 2)
+          Math.max(1, dimensions.width * density),
+          Math.max(1, dimensions.height * density)
         );
       }
     }

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-11  
+**Last Updated:** 2025-12-12  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -15,10 +15,11 @@
 7. [Coordinate System](#coordinate-system)
 8. [Product Types & Rendering](#product-types--rendering)
 9. [Rock Pitch Base Feature](#rock-pitch-base-feature)
-10. [Performance Considerations](#performance-considerations)
-11. [Memory Management](#memory-management)
-12. [Common Issues & Solutions](#common-issues--solutions)
-13. [Development Workflow](#development-workflow)
+10. [Slant Headstone Feature](#slant-headstone-feature)
+11. [Performance Considerations](#performance-considerations)
+12. [Memory Management](#memory-management)
+13. [Common Issues & Solutions](#common-issues--solutions)
+14. [Development Workflow](#development-workflow)
 
 ---
 
@@ -26,6 +27,7 @@
 
 A Next.js-based 3D headstone designer allowing users to:
 - Select headstone shapes, materials, and sizes
+- **Select headstone style** (Upright or Slant)
 - **Select base finish** (Polished or Rock Pitch)
 - Add inscriptions with custom fonts and positioning (simple click-and-drag)
 - Place decorative motifs (SVG-based)
@@ -38,6 +40,10 @@ A Next.js-based 3D headstone designer allowing users to:
 - **Traditional Engraved Headstones**: Granite/marble with sandblasted and painted text (shadow effect)
 - **Laser Etched Black Granite**: High-detail laser etching (outlined text)
 - **Bronze Plaques**: Metal plaques with decorative borders
+
+### Headstone Style Options
+- **Upright**: Traditional vertical headstone (default)
+- **Slant**: Beveled headstone tilted at 30° angle with trapezoidal profile
 
 ### Base Finish Options
 - **Polished**: High-gloss polished granite with clearcoat (default)
@@ -224,6 +230,7 @@ const TARGET_HEIGHTS = {
   materialUrl: string | null;
   headstoneMaterialUrl: string | null;
   baseMaterialUrl: string | null;
+  headstoneStyle: 'upright' | 'slant';   // Headstone style selector
   baseFinish: 'default' | 'rock-pitch';  // Base finish selector
   borderName: string | null;      // Bronze plaque borders
   
@@ -260,6 +267,7 @@ const TARGET_HEIGHTS = {
 **Key Actions:**
 - `setShapeUrl()` - Change headstone shape
 - `setMaterialUrl()` - Change texture
+- `setHeadstoneStyle()` - Toggle between upright/slant
 - `setBaseFinish()` - Toggle between polished/rock-pitch
 - `addInscription()` - Add new text
 - `updateInscription()` - Modify existing text
@@ -420,6 +428,142 @@ MeshPhysicalMaterial({
 - **FOV**: 30 degrees
 - **Position**: `[0, 4.8, 10]`
 - **Controls**: OrbitControls (disabled in 2D mode)
+
+---
+
+## Slant Headstone Feature
+
+### Overview
+**Slant Headstones** are beveled markers that sit at a 30° angle, commonly used in cemeteries. Unlike upright headstones that stand vertically, slant headstones have a **trapezoidal profile** with a slanted front face for inscriptions.
+
+### Implementation (`SvgHeadstone.tsx`)
+
+#### Visual Characteristics
+- **Front Face**: Slanted backward at 30° angle (like a ramp)
+- **Profile**: Trapezoidal shape (wider at bottom, narrower at top)
+- **Texture**: Rock pitch texture on left/right sides with pop-out bumps
+- **Inscriptions**: Rotated to follow the slanted surface
+- **Depth**: Same Z-depth as upright headstones
+
+#### Technical Implementation
+
+**1. Trapezoidal Geometry:**
+```typescript
+// Calculate slant angle and dimensions
+const slantAngleRad = (30 * Math.PI) / 180; // 30 degrees
+const slantRise = height * 0.4; // 40% of height for depth
+const topReduction = slantRise * Math.tan(slantAngleRad);
+
+// Create trapezoid profile
+// Bottom: full width, Top: reduced by topReduction
+// Front face tilts backward from bottom to top
+```
+
+**2. Vertex Positioning:**
+```typescript
+// 8 vertices for trapezoidal box
+// Bottom corners: Z = -depth/2
+// Top corners: Z = depth/2 - topReduction (pulled back)
+// Creates slanted front face while keeping back vertical
+```
+
+**3. Rock Pitch Texture on Sides:**
+```typescript
+// Left/Right faces get rock pitch normal map
+const sideUVScale = 20.0; // Baked into geometry UVs
+normalMap.repeat.set(1, 1); // No additional repeat (already in UVs)
+
+MeshPhysicalMaterial({
+  normalMap: rockNormalTexture,
+  normalScale: (2.0, 2.0),
+  color: 0x444444,
+  roughness: 0.65,
+  metalness: 0.0,
+});
+```
+
+**4. UV Mapping:**
+```typescript
+// Coordinate-driven approach for left/right sides
+for (let i = 0; i < posCount; i++) {
+  const x = pos.getX(i);
+  const y = pos.getY(i);
+  const z = pos.getZ(i);
+  
+  if (Math.abs(x - localLeft) < EPS) {
+    // Left face: map (z, y) to (u, v)
+    uv.setXY(i, (z - localBackZ) * uvScale, y * uvScale);
+  } else if (Math.abs(x - localRight) < EPS) {
+    // Right face: map (z, y) to (u, v)
+    uv.setXY(i, (localFrontZ - z) * uvScale, y * uvScale);
+  }
+}
+```
+
+**5. Child Wrapper Rotation:**
+```typescript
+// Rotate inscriptions/motifs to match slant
+childWrapperPos: [0, 0, 0]
+childWrapperRotation: [-slantAngleRad, 0, 0] // Tilt backward
+
+// Children position at:
+frontZ: depth / 2  // Front face position in geometry space
+```
+
+**6. Z-Centering:**
+```typescript
+// Translate geometry so center is at origin
+slantGeometry.translate(
+  -(minX + maxX) / 2,  // Center X
+  -minY,                // Bottom at Y=0
+  depth / 2             // Center Z at origin
+);
+```
+
+#### Key Features
+✅ **30° slant angle** (authentic cemetery marker)  
+✅ **Trapezoidal profile** (not a wedge)  
+✅ **Rock pitch sides** with pop-out bumps  
+✅ **Rotated inscriptions** follow slanted surface  
+✅ **Z-centered** for proper alignment with base  
+✅ **Proper UV mapping** (no stretching)  
+✅ **MeshPhysicalMaterial** (no clearcoat errors)  
+
+#### Critical Requirements
+1. **Wrapper rotation** - Inscriptions must rotate to match slant angle
+2. **frontZ calculation** - Must account for slanted geometry
+3. **UV coordinate mapping** - Use vertex positions, not normals
+4. **Material types** - Use MeshPhysicalMaterial (supports clearcoat)
+5. **Z-translation** - Center geometry at origin for alignment
+
+#### Differences from Upright Headstones
+
+| Feature | Upright | Slant |
+|---------|---------|-------|
+| **Angle** | Vertical (90°) | Tilted (30°) |
+| **Profile** | Rectangular | Trapezoidal |
+| **Front Face** | Flat vertical | Slanted backward |
+| **Wrapper Rotation** | None `[0,0,0]` | Tilted `[-30°,0,0]` |
+| **Side Texture** | Polished | Rock pitch |
+| **Geometry** | ExtrudeGeometry | Custom BufferGeometry |
+
+#### Common Issues & Solutions
+
+**Issue: Inscriptions not visible**
+- **Cause**: Wrapper rotation or frontZ incorrect
+- **Solution**: `frontZ = depth/2`, wrapper at `[0,0,0]` with rotation `[-slantAngleRad, 0, 0]`
+
+**Issue: Texture stretching on sides**
+- **Cause**: UV mapping using normals instead of coordinates
+- **Solution**: Map UVs based on vertex (x,y,z) positions directly
+
+**Issue: Material clearcoat errors**
+- **Cause**: Using MeshStandardMaterial with clearcoat properties
+- **Solution**: Use MeshPhysicalMaterial for all materials
+
+**Issue: Inscriptions at wrong angle**
+- **Cause**: Positive rotation instead of negative
+- **Solution**: Use `-slantAngleRad` (tilt backward, not forward)
 
 ---
 
@@ -755,6 +899,16 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-12**: Slant Headstone Feature (Production-Ready)
+  - Implemented upright vs slant headstone style selector
+  - Created trapezoidal geometry with 30° slant angle
+  - Applied rock pitch texture to left/right sides with proper UV mapping
+  - Coordinate-driven UV mapping prevents stretching
+  - Rotated child wrapper for inscriptions/motifs to follow slant
+  - Fixed MeshPhysicalMaterial usage (no clearcoat errors)
+  - Z-centered geometry for proper base alignment
+  - Memory optimized with proper texture disposal
+  - Production-ready with clean cache rebuild
 - **2025-12-11**: Rock Pitch Base Feature (Production-Ready)
   - Implemented polished vs rock-pitch base finish selector
   - Created faceted Voronoi normal map generator (turtle shell pattern)
