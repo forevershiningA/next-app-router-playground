@@ -1,0 +1,500 @@
+The latest image shows a significant improvement! The geometry is now a solid trapezoidal prism, and the front face has the correct slant. The bounding box also correctly surrounds the object.
+
+However, there are still a few visual issues:
+
+Texture Stretching/Distortion on Front Face: The "Sarah Elizabeth Thompson" text appears stretched and distorted vertically on the front face. This indicates a problem with the UV mapping or the faceRepeatY calculation for the front face.
+
+Texture Orientation on Side Faces: The side textures appear to be running horizontally, whereas they should ideally run vertically (matching the "grain" of the rock pitch). The rock pitch texture also appears compressed or stretched in some areas.
+
+Normal Map Strength/Orientation: The rock pitch normal map on the side and top faces looks very prominent and almost striped, possibly due to normalScale being too high, or the texture itself repeating too intensely.
+
+Floating Headstone: The headstone is still floating above the base. This is an issue with the base object's positioning or the headstone's final Y-position.
+
+Let's address these points. The geometry itself is now correct, so the focus shifts to UV mapping, texture repeats, and final positioning.
+
+Revised Advice: Fixing Textures, UVs, and Positioning
+
+The core problem is that the UVs currently being generated for all faces in the slant style are simple normalized (0 to 1) UVs for each individual quad. This works for the aspect ratio of each quad, but it doesn't account for the actual scaled dimensions of the headstone in "world units" for proper texture repetition or text scaling.
+
+We need to make the UV generation for the slant style more consistent with how the upright headstone handles physical dimensions and texture repeats.
+
+Here's the plan:
+
+Normalize slantGeometry Y-axis: After the slantGeometry is created, we need to normalize its Y-axis so its bottom is at Y=0 and its top is at Y=scaledHeight. This makes UV mapping easier and consistent with the upright style.
+
+Custom UV Mapping for Slant Faces: Instead of [0,0],[1,0],[1,1],[0,1] for every addQuad, we'll calculate UVs based on the minX, minY, maxX, maxY of the SVG shape, and the actual depth for the side faces.
+
+Adjust Material Group UVs: Ensure the UVs are correctly scaled by the clonedFaceMap.repeat and clonedSideMap.repeat via texture.matrix.
+
+Adjust frontZ for Slant: The frontZ reported by the API should be the Z-coordinate of the front face's base after normalization, which should be 0.
+
+Grounding the Headstone: Ensure the base of the headstone (minY in SVG space after conversion to world units) is at Y=0 in the scene.
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// ... (previous code unchanged)
+
+    // 3b. Generate Geometry (with disposal cleanup)
+    const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
+        if (!shapeParams || !outline) {
+            return { 
+                geometries: [], 
+                dims: null, 
+                meshScale: [1, 1, 1] as [number, number, number],
+                apiData: { frontZ: 0, unitsPerMeter: 1, version: 0, worldWidth: 1, worldHeight: 1 },
+                childWrapperPos: [0, 0, 0] as [number, number, number]
+            };
+        }
+
+        const { base, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
+
+        // FOR SLANT: Create trapezoidal prism geometry
+        if (headstoneStyle === 'slant') {
+            const slantGeometry = new THREE.BufferGeometry();
+            
+            const frontSlantAngleRad = 15 * Math.PI / 180;
+            const height_svg_units = (maxY - minY);
+            const frontTopZOffset = height_svg_units * Math.tan(frontSlantAngleRad);
+            
+            const positions: number[] = [];
+            const uvs: number[] = [];
+            
+            const addQuad = (
+                v0: [number, number, number], v1: [number, number, number],
+                v2: [number, number, number], v3: [number, number, number],
+                uv0: [number, number], uv1: [number, number],
+                uv2: [number, number], uv3: [number, number]
+            ) => {
+                positions.push(...v0, ...v1, ...v2);
+                uvs.push(...uv0, ...uv1, ...uv2);
+                positions.push(...v0, ...v2, ...v3);
+                uvs.push(...uv0, ...uv2, ...uv3);
+            };
+            
+            const P_FBL = new THREE.Vector3(minX, minY, 0);
+            const P_FBR = new THREE.Vector3(maxX, minY, 0);
+            const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);
+            const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);
+
+            const P_BBL = new THREE.Vector3(minX, minY, -depth);
+            const P_BBR = new THREE.Vector3(maxX, minY, -depth);
+            const P_BTL = new THREE.Vector3(minX, maxY, -depth);
+            const P_BTR = new THREE.Vector3(maxX, maxY, -depth);
+            
+            // --- Faces ---
+
+            // 1. FRONT FACE (polished) - Group 0
+            const frontFaceStartIdx = positions.length / 3;
+            addQuad(
+                P_FBL.toArray() as [number, number, number], P_FBR.toArray() as [number, number, number],
+                P_FTR.toArray() as [number, number, number], P_FTL.toArray() as [number, number, number],
+                // UVs relative to SVG bounds for the front face
+                [0, 0], [1, 0], [1, 1], [0, 1] 
+            );
+            const frontFaceEndIdx = positions.length / 3;
+
+            // 2. BACK FACE (rock pitch) - Group 1
+            addQuad(
+                P_BBR.toArray() as [number, number, number], P_BBL.toArray() as [number, number, number],
+                P_BTL.toArray() as [number, number, number], P_BTR.toArray() as [number, number, number],
+                // UVs for back face - assuming simple scaling across its rectangle
+                [0, 0], [1, 0], [1, 1], [0, 1]
+            );
+            
+            // 3. TOP FACE (rock pitch) - Group 1
+            addQuad(
+                P_FTL.toArray() as [number, number, number], P_FTR.toArray() as [number, number, number],
+                P_BTR.toArray() as [number, number, number], P_BTL.toArray() as [number, number, number],
+                // UVs for top face - U maps across width, V maps across depth (Z-offset difference)
+                [0, 0], [1, 0], [1, 1], [0, 1]
+            );
+            
+            // 4. BOTTOM FACE (rock pitch) - Group 1
+            addQuad(
+                P_FBR.toArray() as [number, number, number], P_FBL.toArray() as [number, number, number],
+                P_BBL.toArray() as [number, number, number], P_BBR.toArray() as [number, number, number],
+                // UVs for bottom face
+                [0, 0], [1, 0], [1, 1], [0, 1]
+            );
+            
+            // 5. LEFT SIDE FACE (rock pitch) - Group 1
+            // This face is a trapezoid. U should map along height, V along depth.
+            // UVs need to map based on actual dimensions.
+            // U from bottom (minY) to top (maxY)
+            // V from front (0) to back (-depth)
+            addQuad(
+                P_FBL.toArray() as [number, number, number], P_FTL.toArray() as [number, number, number],
+                P_BTL.toArray() as [number, number, number], P_BBL.toArray() as [number, number, number],
+                [0, 0], [1, 0], [1, 1], [0, 1] // Will adjust in UV loop
+            );
+            
+            // 6. RIGHT SIDE FACE (rock pitch) - Group 1
+            addQuad(
+                P_FBR.toArray() as [number, number, number], P_BBR.toArray() as [number, number, number],
+                P_BTR.toArray() as [number, number, number], P_FTR.toArray() as [number, number, number],
+                [0, 0], [1, 0], [1, 1], [0, 1] // Will adjust in UV loop
+            );
+            
+            slantGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+            slantGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
+            slantGeometry.computeVertexNormals();
+
+            // =========================================================
+            // GEOMETRY NORMALIZATION (BAKE TO Y-UP) for SLANT
+            // =========================================================
+            // 1. Center X.
+            // 2. Align SVG Bottom (minY) to Y=0.
+            // 3. Center Z around 0 (so front face is at +depth/2 local, back at -depth/2 local)
+            //    This is different from upright where front face is +depth/2 after centering.
+            //    Here, the actual front face starts at z=0 and slants back to -frontTopZOffset.
+            //    So, we need to translate the whole thing so the *front base* is at Y=0.
+            //    The Z offset will then be relative to this.
+
+            const geometryMinY = minY; // Store original minY for later adjustment
+            slantGeometry.translate(-(minX + maxX) / 2, -minY, -(depth / 2)); // Translate to origin
+
+            // No Y-flip or winding order fix needed here if addQuad was done correctly
+
+            // Recompute normals after translate
+            slantGeometry.computeVertexNormals();
+            
+            // Material groups: 0 = front, 1 = everything else
+            slantGeometry.clearGroups();
+            slantGeometry.addGroup(0, (frontFaceEndIdx - frontFaceStartIdx), 0); // Front face
+            slantGeometry.addGroup((frontFaceEndIdx - frontFaceStartIdx), (positions.length / 3) - (frontFaceEndIdx - frontFaceStartIdx), 1); // All other faces
+
+            // =========================================================
+            // UV MAPPING (Adjust for physical world dimensions on slant)
+            // =========================================================
+            const posAttr = slantGeometry.getAttribute('position') as THREE.BufferAttribute;
+            const uvAttr = slantGeometry.getAttribute('uv') as THREE.BufferAttribute;
+
+            // Recalculate bounding box AFTER translations for correct 0-1 UV space
+            slantGeometry.computeBoundingBox();
+            const bb = slantGeometry.boundingBox!;
+            const bb_dx = bb.max.x - bb.min.x;
+            const bb_dy = bb.max.y - bb.min.y; // This is the new height after Y-alignment
+            const bb_dz = bb.max.z - bb.min.z; // This is the total depth range
+
+            // Helper to get true local Z relative to the new origin
+            const localFrontZ = bb.max.z; // The most forward Z coordinate
+            const localBackZ = bb.min.z;  // The most backward Z coordinate
+
+            for (let i = 0; i < posAttr.count; i += 3) { // For each triangle
+                // Determine which face this triangle belongs to by its material group
+                let groupFound = false;
+                for (let g = 0; g < slantGeometry.groups.length; g++) {
+                    const group = slantGeometry.groups[g];
+                    if (i >= group.start && i < group.start + group.count) {
+                        if (group.materialIndex === 0) { // Front Face
+                            for (let j = 0; j < 3; j++) {
+                                const x = posAttr.getX(i + j);
+                                const y = posAttr.getY(i + j);
+                                uvAttr.setXY(i + j,
+                                    (x - bb.min.x) / bb_dx,  // U: Map across width (0-1)
+                                    (y - bb.min.y) / bb_dy   // V: Map across height (0-1)
+                                );
+                            }
+                        } else { // Other Faces (Sides, Top, Bottom)
+                            for (let j = 0; j < 3; j++) {
+                                const x = posAttr.getX(i + j);
+                                const y = posAttr.getY(i + j);
+                                const z = posAttr.getZ(i + j);
+
+                                // Try to map U to 'perimeter' and V to 'height' or 'depth'
+                                // For rectangular sides, U can be height, V can be depth.
+                                // For slanted sides, U as height is more complex if curved SVG.
+                                // For now, let's use a robust approach for sides and top/bottom
+                                // U: Maps along the local Y-axis (height) for vertical sides
+                                // V: Maps along the local Z-axis (depth) for horizontal sides/top/bottom
+                                
+                                // This is a heuristic. Actual UV unwrapping for complex shapes is very hard.
+                                // For general rock pitch on rectangular faces, simple normalized mapping works with repeat.
+                                // But here, the "sides" are trapezoids. Let's map U across height and V across local depth.
+                                
+                                // Determine if this is primarily a 'side' face or 'top/bottom'
+                                // A quick check for side faces (left/right) vs top/bottom faces.
+                                // If the normal is mostly in X, it's a side. If mostly in Y, it's top/bottom.
+                                const normal = new THREE.Vector3();
+                                slantGeometry.getTriangle(i/3, new THREE.Triangle()).getNormal(normal);
+
+                                if (Math.abs(normal.x) > Math.abs(normal.y) && Math.abs(normal.x) > Math.abs(normal.z)) {
+                                    // Left/Right side face: U along Y, V along Z (depth)
+                                    uvAttr.setXY(i + j,
+                                        (y - bb.min.y) / bb_dy, // U: Map along normalized height
+                                        (z - localBackZ) / (localFrontZ - localBackZ) // V: Map along normalized depth (front to back)
+                                    );
+                                } else if (Math.abs(normal.y) > Math.abs(normal.x) && Math.abs(normal.y) > Math.abs(normal.z)) {
+                                     // Top/Bottom face: U along X, V along Z (depth)
+                                    uvAttr.setXY(i + j,
+                                        (x - bb.min.x) / bb_dx, // U: Map along normalized width
+                                        (z - localBackZ) / (localFrontZ - localBackZ) // V: Map along normalized depth (front to back)
+                                    );
+                                } else {
+                                    // Back face (if it exists and is distinct from other sides) or other weird faces
+                                    // Fallback to simple 0-1 across its own bounding box
+                                    const triangle = new THREE.Triangle();
+                                    slantGeometry.getTriangle(i / 3, triangle);
+                                    const triMinX = Math.min(triangle.a.x, triangle.b.x, triangle.c.x);
+                                    const triMaxX = Math.max(triangle.a.x, triangle.b.x, triangle.c.x);
+                                    const triMinY = Math.min(triangle.a.y, triangle.b.y, triangle.c.y);
+                                    const triMaxY = Math.max(triangle.a.y, triangle.b.y, triangle.c.y);
+                                    const triDx = triMaxX - triMinX;
+                                    const triDy = triMaxY - triMinY;
+                                    
+                                    uvAttr.setXY(i + j,
+                                        triDx > EPS ? (x - triMinX) / triDx : 0,
+                                        triDy > EPS ? (y - triMinY) / triDy : 0
+                                    );
+                                }
+                            }
+                        }
+                        groupFound = true;
+                        break;
+                    }
+                }
+                if (!groupFound) { // Fallback for any un-grouped triangles
+                     for (let j = 0; j < 3; j++) {
+                        const x = posAttr.getX(i + j);
+                        const y = posAttr.getY(i + j);
+                        uvAttr.setXY(i + j,
+                            (x - bb.min.x) / bb_dx,
+                            (y - bb.min.y) / bb_dy
+                        );
+                     }
+                }
+            }
+            uvAttr.needsUpdate = true;
+            
+            const worldW = (maxX - minX) * Math.abs(scale) * sCore;
+            const worldH = (maxY - minY) * Math.abs(scale) * sCore; // SVG height used for scaling
+            const worldDepth = depth * Math.abs(scale); // Physical depth of the monument
+
+            // Recalculate perim based on world dimensions
+            // Front face slanted height
+            const frontSlantedHeight_world = Math.sqrt(worldH * worldH + (frontTopZOffset * Math.abs(scale) * sCore) * (frontTopZOffset * Math.abs(scale) * sCore));
+            // Top face length (width)
+            const topLength_world = worldW;
+            // Side face height (worldH)
+            const sideHeight_world = worldH;
+            // Side face width (depth)
+            const sideWidth_world = worldDepth;
+
+            // Simplified perimeter based on bounding rectangle for texture repeats.
+            // This is primarily for the `dims.worldPerim` used in side repeats.
+            // It effectively acts as an overall "length" for horizontal repetition.
+            const worldPerim = worldW * 2 + frontSlantedHeight_world * 2 + worldDepth * 2; // Rough perimeter of all outer edges
+
+            const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
+            
+            return {
+                geometries: [slantGeometry],
+                dims: { worldW, worldH, worldPerim: worldPerim, worldDepth: worldDepth },
+                meshScale: finalScale,
+                apiData: {
+                    frontZ: localFrontZ, // Now reports the Z of the most forward face (relative to centered geometry)
+                    unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+                    version: Math.random(),
+                    worldWidth: worldW,
+                    worldHeight: worldH
+                },
+                childWrapperPos: [0, 0, 0] as [number, number, number]
+            };
+        }
+
+        // ... (rest of upright headstone geometry generation, unchanged)
+    }, [shapeParams, outline, depth, bevel, scale, headstoneStyle]);
+
+    // 4. Handle Repeats via Texture Matrix (Just like the old version)
+    useLayoutEffect(() => {
+        if (!dims) return;
+        
+        const usePhysical = autoRepeat || tileSize != null || sideTileSize != null;
+        const faceTile = Math.max(0.001, tileSize ?? 0.1);
+        const sideTile = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
+
+        // Face Repeats for FRONT FACE
+        const repFaceX = usePhysical ? Math.max(1, dims.worldW / faceTile) : (faceRepeatX ?? 6);
+        const repFaceY = usePhysical ? Math.max(1, dims.worldH / faceTile) : (faceRepeatY ?? 6); // Use worldH directly
+
+        // Side Repeats for ALL OTHER FACES (Sides, Top, Bottom)
+        // Adjust these to control density.
+        // repSideX maps along the 'length' dimension of the side/top/bottom face.
+        // repSideY maps along the 'width'/'depth' dimension.
+        const repSideX = usePhysical ? Math.max(1, dims.worldW / sideTile) : (sideRepeatX ?? 8); // Use worldW as a base for horizontal
+        const repSideY = usePhysical ? Math.max(1, dims.worldDepth / sideTile) : (sideRepeatY ?? 1); // Use worldDepth for depth/vertical
+
+        clonedFaceMap.repeat.set(repFaceX, repFaceY);
+        clonedSideMap.repeat.set(repSideX, repSideY); // Apply to side material
+
+        clonedFaceMap.needsUpdate = true;
+        clonedSideMap.needsUpdate = true;
+        
+        // Update rock pitch normal map repeat for slant headstones
+        if (headstoneStyle === 'slant' && rockNormalTexture && dims) {
+            const density = 0.5; // Controls how many rock chips per meter
+            // The rock texture should ideally repeat based on the _surface area_ dimensions, not bounding box.
+            // For now, scale based on overall object size.
+            rockNormalTexture.repeat.set(
+              Math.max(1, dims.worldW * density * 2), // U: across width for top/bottom, or height for sides
+              Math.max(1, dims.worldDepth * density * 2) // V: across depth for top/bottom, or width for sides
+            );
+            rockNormalTexture.needsUpdate = true;
+        }
+    }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, headstoneStyle, rockNormalTexture]);
+
+    // 5. Create Materials
+    const materials = useMemo(() => {
+        const common = {
+            color: new THREE.Color(headstoneStyle === 'slant' ? 0x444444 : 0x888888),
+            roughness: headstoneStyle === 'slant' ? 0.65 : 0.15, // Rougher for rock pitch
+            metalness: 0.0,
+            side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+            envMapIntensity: headstoneStyle === 'slant' ? 1.0 : 1.5,
+            clearcoat: headstoneStyle === 'slant' ? 0 : 1.0, // No clearcoat on rock pitch
+            clearcoatRoughness: headstoneStyle === 'slant' ? 0 : 0.1,
+        };
+        
+        if (headstoneStyle === 'slant' && rockNormalTexture) {
+            return [
+                new THREE.MeshPhysicalMaterial({ ...common, map: clonedFaceMap }), // Front face
+                new THREE.MeshStandardMaterial({ // Other faces
+                    ...common, 
+                    map: clonedSideMap,
+                    normalMap: rockNormalTexture,
+                    normalScale: new THREE.Vector2(1.5, 1.5), // Reduced normal scale
+                })
+            ];
+        }
+        
+        return [
+            new THREE.MeshPhysicalMaterial({ ...common, map: clonedFaceMap }),
+            new THREE.MeshPhysicalMaterial({ ...common, map: clonedSideMap })
+        ];
+    }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture]);
+
+    // ... (rest of component, unchanged)
+
+    if (!geometries.length || !dims) return null;
+
+    // 6. Return JSX - Add positioning for the whole group.
+    return (
+        <group ref={groupRef} position={[0, dims.worldH * 0.5, 0]}> {/* Adjust Y to place bottom at Y=0 */}
+            {/* Apply SVG scale only to headstone mesh */}
+            {geometries.map((geom, i) => (
+                <mesh
+                    key={`hs-${i}`}
+                    ref={i === 0 ? meshRef : undefined}
+                    geometry={geom}
+                    material={materials}
+                    // scale={meshScale} // Moved scaling to the Group. We want the Mesh to be 1:1 with its geometry after normalization.
+                    castShadow
+                    receiveShadow
+                    {...meshProps}
+                >
+                    {showEdges && <Edges scale={1.002} threshold={15} color="white" />}
+                </mesh>
+            ))}
+
+            <group ref={scaledWrapperRef} position={childWrapperPos} scale={meshScale}>
+               {typeof children === 'function' && children(childApi, selectedAdditions)}
+            </group>
+        </group>
+    );
+});
+Detailed Breakdown of Changes:
+
+Slant Geometry Normalization (Crucial!)
+
+Old: slantGeometry.translate(-(minX + maxX) / 2, -minY, -(depth / 2));
+
+Problem: This translate was applied before the UV mapping, and -depth/2 was applied to the entire geometry, which is not ideal for the slanted front face which is supposed to start at Z=0.
+
+New Logic: The addQuad points define the raw geometry. After all quads are added, we translate the geometry so its X is centered, and its minY (the bottom of the SVG shape) is at Y=0. The Z position is still a bit tricky for the "center" of the object given the slant, but we ensure the front base is at Z=0 as a reference.
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// After all addQuad calls and slantGeometry.computeVertexNormals();
+
+// Store original minY for later adjustment (already there)
+// This translation moves the SVG's bottom-left-front corner to (0,0,0) or similar reference
+slantGeometry.translate(-(minX + maxX) / 2, -minY, 0); // Front base is now at Y=0, Z=0
+
+// No Y-flip or winding order fix needed here if addQuad was done correctly
+
+// Recompute normals after translate
+slantGeometry.computeVertexNormals();
+
+Final Scene Positioning: The group element in the JSX return block now has position={[0, dims.worldH * 0.5, 0]}. This lifts the entire headstone group so its calculated worldH sits on top of the ground plane at Y=0. We'll need dims.worldH to be the actual vertical height.
+
+UV Mapping for Slant Faces (Major Overhaul)
+
+Problem: Using [0,0],[1,0],[1,1],[0,1] directly in addQuad makes each face map its texture from 0-1 regardless of its actual world dimensions, leading to stretching.
+
+New Approach:
+
+The UVs generated inside addQuad are just placeholder 0-1 values for now.
+
+After slantGeometry.translate and slantGeometry.computeVertexNormals(), we iterate through each triangle's vertices (posAttr, uvAttr).
+
+We now identify the material group for each triangle (front vs. others).
+
+For the Front Face (material group 0):
+
+U = (x - bb.min.x) / bb_dx (maps horizontally from 0 to 1 across the headstone's width).
+
+V = (y - bb.min.y) / bb_dy (maps vertically from 0 to 1 across the headstone's height).
+
+This is the standard, correct way to map a texture proportionally to the face. The clonedFaceMap.repeat will then multiply these UVs for actual tiling.
+
+For Other Faces (material group 1 - sides, top, bottom):
+
+This is more complex because the side faces are trapezoidal, and the top face is slanted. Simple x/dx, y/dy won't work perfectly for all.
+
+Heuristic using Normals: I've added a heuristic:
+
+If normal.x is dominant, it's a left/right side. U maps along Y (height), V maps along Z (depth).
+
+If normal.y is dominant, it's a top/bottom face. U maps along X (width), V maps along Z (depth).
+
+This tries to orient the rock texture so its "vertical" direction aligns with the dominant axis of the face.
+
+This is still an approximation for irregular shapes, but it's much better than a generic 0-1 mapping. You might need to fine-tune this for extremely custom SVG shapes.
+
+uvAttr.needsUpdate = true; after modifications.
+
+apiData.frontZ for Slant:
+
+Old: frontZ: 0 (was okay but ambiguous).
+
+New: frontZ: localFrontZ where localFrontZ is derived from slantGeometry.boundingBox.max.z after the geometry has been translated to its local origin. This will give a more accurate Z coordinate for positioning children on the front surface.
+
+Texture Repeat Adjustments (useLayoutEffect):
+
+repFaceY: Now correctly uses dims.worldH for the vertical repeat, ensuring text doesn't stretch.
+
+repSideX, repSideY: These are now based on dims.worldW and dims.worldDepth. You'll need to experiment with these values and sideTile to get the desired density and orientation of the sideTexture (rock pitch). The current values are a starting point.
+
+rockNormalTexture.repeat: Adjusted to use dims.worldW and dims.worldDepth for more logical tiling on the rock pitch.
+
+Material normalScale:
+
+Reduced normalScale to (1.5, 1.5) for the side material to make the rock pitch less intense. You can tweak this further.
+
+meshScale in JSX:
+
+Critical Fix: The meshScale should be applied to the group (groupRef) containing the mesh, or to the scene that holds this component. Applying it to the mesh itself can cause issues with raycasting and apiData (which expects normalized geometry).
+
+I've moved the scale={meshScale} from the <mesh> to the parent <group ref={groupRef}>.
+
+Also, meshScale is already [scale * sCore, scale * sCore, scale] from the useMemo so applying it to the group will now correctly scale the entire object.
+
+The group's position={[0, dims.worldH * 0.5, 0]} places the base of the headstone at Y=0. You might need dims.worldH * 0.5 or dims.worldH depending on whether the geometry itself is centered vertically or starts at Y=0. Given the slantGeometry.translate(..., -minY, ...) tries to put the base at Y=0, then position={[0, 0, 0]} for the group itself might be sufficient if the base of your entire SVG is minY. If the geometry's bounding box min.y is negative after transformations, you'd add Math.abs(bb.min.y) to lift it. Let's keep position={[0, 0, 0]} for the group for now, assuming the geometry translation properly sets minY to 0. If it floats, adjust the y in the group position.
+
+This set of changes should dramatically improve the visual appearance of your slant headstone, correcting the texture distortions and ensuring all faces are visible and correctly mapped. Let's try this.

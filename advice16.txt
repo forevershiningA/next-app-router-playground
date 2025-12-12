@@ -1,0 +1,781 @@
+Okay, the new image with the bounding box clearly shows the issue. The geometry is not a solid trapezoidal prism; it's more like a collection of disconnected or incorrectly oriented planes, and the bounding box is much larger than the visible geometry.
+
+The primary problem is likely in the slant geometry block within your useMemo. Even with the previous vertex ordering advice, there are two common culprits for this kind of result:
+
+Incorrect Winding Order for addQuad: While you aimed for counter-clockwise, it's very easy to get this wrong when defining 3D points. If triangles have their normals pointing inward instead of outward, they become invisible or cause rendering artifacts with single-sided materials.
+
+Incorrect Number of Vertices for Material Groups: Your slantGeometry.addGroup(6, 30, 1) line expects 30 vertices for the remaining faces. If the actual positions.length - 6 is not 30 (which it almost certainly isn't given the current state), then material groups will be applied to the wrong parts of the geometry, leading to visual errors.
+
+Let's meticulously re-construct the slant geometry block, focusing on robust vertex definition and consistent winding order. We'll also simplify the material grouping logic slightly.
+
+Revised Advice: Fixing the Slant Headstone Geometry (Again, more carefully)
+
+The addQuad helper is the correct approach, but the points fed into it must be precise. We need to ensure that when looking at each face from the outside, the vertices are listed in counter-clockwise order.
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// FOR SLANT: Create trapezoidal prism geometry
+    if (headstoneStyle === 'slant') {
+      const slantGeometry = new THREE.BufferGeometry();
+      
+      // Define the slant angle for the front face (15 degrees from vertical)
+      const frontSlantAngleRad = 15 * Math.PI / 180; // Angle from vertical, positive means slanting back
+      
+      // Calculate the Z-offset for the top edge of the front face
+      const height_svg_units = (maxY - minY);
+      const frontTopZOffset = height_svg_units * Math.tan(frontSlantAngleRad);
+      
+      // Define all vertices (duplicated per face for proper UVs and normals)
+      const positions: number[] = [];
+      const uvs: number[] = [];
+      
+      // Helper to add a quad (2 triangles)
+      // IMPORTANT: Vertices v0, v1, v2, v3 must be in counter-clockwise order when viewed from outside the mesh.
+      const addQuad = (
+        v0: [number, number, number], v1: [number, number, number],
+        v2: [number, number, number], v3: [number, number, number],
+        uv0: [number, number], uv1: [number, number],
+        uv2: [number, number], uv3: [number, number]
+      ) => {
+        // Triangle 1: v0, v1, v2
+        positions.push(...v0, ...v1, ...v2);
+        uvs.push(...uv0, ...uv1, ...uv2);
+        
+        // Triangle 2: v0, v2, v3
+        positions.push(...v0, ...v2, ...v3);
+        uvs.push(...uv0, ...uv2, ...uv3);
+      };
+      
+      // Define the 8 unique corner points of the trapezoidal prism
+      // Naming: P_[front/back]_[bottom/top]_[left/right]
+      // Z-axis: 0 is front, -depth is back.
+      // Y-axis: minY is bottom, maxY is top.
+      // X-axis: minX is left, maxX is right.
+
+      // Front Face Corners (z=0 at bottom, z=-frontTopZOffset at top)
+      const P_FBL = new THREE.Vector3(minX, minY, 0);                 // Front Bottom Left
+      const P_FBR = new THREE.Vector3(maxX, minY, 0);                 // Front Bottom Right
+      const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left
+      const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right
+
+      // Back Face Corners (z=-depth for both bottom and top, assuming vertical back)
+      const P_BBL = new THREE.Vector3(minX, minY, -depth);            // Back Bottom Left
+      const P_BBR = new THREE.Vector3(maxX, minY, -depth);            // Back Bottom Right
+      const P_BTL = new THREE.Vector3(minX, maxY, -depth);            // Back Top Left
+      const P_BTR = new THREE.Vector3(maxX, maxY, -depth);            // Back Top Right
+      
+      // --- Faces ---
+
+      // 1. FRONT FACE (polished) - Group 0
+      // Vertices: P_FBL, P_FBR, P_FTR, P_FTL (viewed from front, counter-clockwise)
+      const frontFaceStartIdx = positions.length / 3; // Record start index for material group
+      addQuad(
+        P_FBL.toArray() as [number, number, number],   // V0 (Bottom Left)
+        P_FBR.toArray() as [number, number, number],  // V1 (Bottom Right)
+        P_FTR.toArray() as [number, number, number],  // V2 (Top Right)
+        P_FTL.toArray() as [number, number, number],  // V3 (Top Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      const frontFaceEndIdx = positions.length / 3;
+
+      // 2. BACK FACE (rock pitch) - Group 1
+      // Vertices: P_BBR, P_BBL, P_BTL, P_BTR (viewed from back, counter-clockwise)
+      addQuad(
+        P_BBR.toArray() as [number, number, number],   // V0 (Bottom Right)
+        P_BBL.toArray() as [number, number, number],  // V1 (Bottom Left)
+        P_BTL.toArray() as [number, number, number],  // V2 (Top Left)
+        P_BTR.toArray() as [number, number, number],  // V3 (Top Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 3. TOP FACE (rock pitch) - Group 1
+      // Vertices: P_FTL, P_FTR, P_BTR, P_BTL (viewed from top, counter-clockwise)
+      addQuad(
+        P_FTL.toArray() as [number, number, number],  // V0 (Front Top Left)
+        P_FTR.toArray() as [number, number, number],  // V1 (Front Top Right)
+        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
+        P_BTL.toArray() as [number, number, number],  // V3 (Back Top Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 4. BOTTOM FACE (rock pitch) - Group 1
+      // Vertices: P_FBR, P_FBL, P_BBL, P_BBR (viewed from bottom, counter-clockwise)
+      addQuad(
+        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
+        P_FBL.toArray() as [number, number, number],  // V1 (Front Bottom Left)
+        P_BBL.toArray() as [number, number, number],  // V2 (Back Bottom Left)
+        P_BBR.toArray() as [number, number, number],  // V3 (Back Bottom Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 5. LEFT SIDE FACE (rock pitch) - Group 1
+      // Vertices: P_FBL, P_FTL, P_BTL, P_BBL (viewed from left, counter-clockwise)
+      addQuad(
+        P_FBL.toArray() as [number, number, number],  // V0 (Front Bottom Left)
+        P_FTL.toArray() as [number, number, number],  // V1 (Front Top Left)
+        P_BTL.toArray() as [number, number, number],  // V2 (Back Top Left)
+        P_BBL.toArray() as [number, number, number],  // V3 (Back Bottom Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 6. RIGHT SIDE FACE (rock pitch) - Group 1
+      // Vertices: P_FBR, P_BBR, P_BTR, P_FTR (viewed from right, counter-clockwise)
+      addQuad(
+        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
+        P_BBR.toArray() as [number, number, number],  // V1 (Back Bottom Right)
+        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
+        P_FTR.toArray() as [number, number, number],  // V3 (Front Top Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      slantGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+      slantGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
+      slantGeometry.computeVertexNormals();
+      
+      // Material groups: 0 = front, 1 = everything else
+      slantGeometry.clearGroups();
+      slantGeometry.addGroup(0, (frontFaceEndIdx - frontFaceStartIdx), 0); // Front face
+      slantGeometry.addGroup((frontFaceEndIdx - frontFaceStartIdx), positions.length / 3 - (frontFaceEndIdx - frontFaceStartIdx), 1); // All other faces
+
+      // Calculate world dimensions
+      // Use SVG bounds for width/height. Depth is fixed.
+      const worldW = (maxX - minX) * Math.abs(scale) * sCore;
+      const worldH = (maxY - minY) * Math.abs(scale) * sCore; // Height of SVG shape
+      const worldDepth = depth * Math.abs(scale); // Physical depth of the monument
+
+      // For perim, we need actual side lengths.
+      // Front slanted height in SVG units: sqrt( (maxY-minY)^2 + (frontTopZOffset)^2 )
+      const frontSlantedHeight_svg = Math.sqrt( height_svg_units * height_svg_units + frontTopZOffset * frontTopZOffset );
+
+      // A rough perimeter for texture repeats on sides, assuming it flows over top.
+      // This is a complex topic for non-rectangular shapes. For now, a simplified linear sum.
+      // For rectangular front/back, perimeter can be (Width + SlantedHeight + Width + Depth + SideHeight + SlantedHeight)
+      const perimeterSideLength = Math.hypot(depth, frontTopZOffset); // Rough avg for slanted side in local depth/z offset
+      const worldPerim = 2 * (worldW + worldH) * Math.abs(scale); // This is still very approximate.
+      // If SVG outline is simple rectangle, perim can be more accurate:
+      // worldPerim = (worldW * 2) + (frontSlantedHeight_svg * Math.abs(scale) * sCore * 2) + (worldDepth * 2);
+
+      const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
+      
+      return {
+        geometries: [slantGeometry],
+        dims: { worldW, worldH, worldPerim: worldPerim, worldDepth: worldDepth },
+        meshScale: finalScale,
+        apiData: {
+          frontZ: 0, // The front face's base is at Z=0 in local space
+          unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+          version: Math.random(),
+          worldWidth: worldW,
+          worldHeight: worldH
+        },
+        childWrapperPos: [0, 0, 0] as [number, number, number]
+      };
+    }
+Key Changes and Rationale:
+
+Unique Point Variables: Introduced P_FBL, P_FBR, P_FTL, etc., to explicitly define the 8 corner points of the trapezoidal prism. This helps prevent errors from reusing and modifying temporary Vector3 objects or misinterpreting minX, maxY directly in addQuad calls.
+
+Meticulous addQuad Ordering: Each addQuad call now uses these explicit corner points with a carefully determined counter-clockwise winding order for each face when viewed from outside the object. This is critical for visible faces and correct normals.
+
+Front Face: Bottom-left, Bottom-right, Top-right, Top-left.
+
+Back Face: Bottom-right, Bottom-left, Top-left, Top-right (it's "reversed" because you're looking from the back, so CCW from the back is still outward).
+
+Top Face: Front-top-left, Front-top-right, Back-top-right, Back-top-left.
+
+Bottom Face: Front-bottom-right, Front-bottom-left, Back-bottom-left, Back-bottom-right.
+
+Left Side: Back-bottom-left, Front-bottom-left, Front-top-left, Back-top-left.
+
+Right Side: Front-bottom-right, Back-bottom-right, Back-top-right, Front-top-right.
+
+Correct Material Grouping Calculation:
+
+frontFaceStartIdx and frontFaceEndIdx are now used to calculate the exact number of vertices in the front face.
+
+slantGeometry.addGroup(0, (frontFaceEndIdx - frontFaceStartIdx), 0); correctly assigns the first face.
+
+slantGeometry.addGroup((frontFaceEndIdx - frontFaceStartIdx), positions.length / 3 - (frontFaceEndIdx - frontFaceStartIdx), 1); now dynamically calculates the remaining vertices.
+
+frontTopZOffset for P_FTL and P_FTR: This ensures the top of the front face correctly recedes in Z based on the frontSlantAngleRad.
+
+worldH and worldPerim Update: worldH is now correctly (maxY - minY) * Math.abs(scale) * sCore, representing the SVG's scaled height. worldPerim is still tricky for a generic SVG, but for a rectangular SVG, a more precise perimeter calculation involving the slanted front face's height can be used. I've left a more detailed comment in the code for this.
+
+With these changes, the slant headstone geometry should be a solid, correctly oriented trapezoidal prism. The bounding box should also now correctly encompass the geometry.
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// Final Check of the Slant Block logic with detailed comments
+// components/SvgHeadstone.tsx
+'use client';
+
+import * as React from 'react';
+import { useMemo, useLayoutEffect, useImperativeHandle, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useLoader } from '@react-three/fiber';
+import type { ThreeElements } from '@react-three/fiber';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { Edges, useTexture } from '@react-three/drei';
+import { Line } from '#/lib/headstone-store';
+
+export type HeadstoneAPI = {
+  group: React.RefObject<THREE.Group>;
+  mesh: React.RefObject<THREE.Mesh>;
+  frontZ: number;
+  unitsPerMeter: number;
+  version: number;
+  worldWidth: number;
+  worldHeight: number;
+};
+
+const EPS = 1e-9;
+
+type Props = {
+  url: string;
+  depth: number;
+  scale?: number;
+  faceTexture: string;
+  sideTexture?: string;
+  autoRepeat?: boolean;
+  tileSize?: number;
+  sideTileSize?: number;
+  topTileSize?: number;
+  faceRepeatX?: number;
+  faceRepeatY?: number;
+  sideRepeatX?: number;
+  sideRepeatY?: number;
+  targetHeight?: number;
+  targetWidth?: number;
+  preserveTop?: boolean;
+  bevel?: boolean;
+  doubleSided?: boolean;
+  showEdges?: boolean;
+  headstoneStyle?: 'upright' | 'slant';
+  meshProps?: ThreeElements['mesh'];
+  children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
+  selectedAdditions?: string[];
+};
+
+/* ---------------- helpers ---------------- */
+
+function shapeBounds(shape: THREE.Shape) {
+  const pts = shape.getPoints(256);
+  let minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
+  for (const p of pts) {
+    if (p.x < minX) minX = p.x;
+    if (p.x > maxX) maxX = p.x;
+    if (p.y < minY) minY = p.y;
+    if (p.y > maxY) maxY = p.y;
+  }
+  return {
+    minX, maxX, minY, maxY,
+    dx: Math.max(EPS, maxX - minX),
+    dy: Math.max(EPS, maxY - minY),
+  };
+}
+
+function spacedOutline(shape: THREE.Shape, segments = 2048) {
+  // Get spaced points to ensure uniform density along the curve
+  const pts = shape.getSpacedPoints(segments).map((p) => new THREE.Vector2(p.x, p.y));
+  const cum = new Array<number>(pts.length).fill(0);
+  let L = 0;
+  for (let i = 1; i < pts.length; i++) {
+    L += pts[i].distanceTo(pts[i - 1]);
+    cum[i] = L;
+  }
+  L += pts[0].distanceTo(pts[pts.length - 1]);
+  return { pts, cum, total: L };
+}
+
+// Helper to calculate distance from point P to segment AB
+function distToSegmentSquared(p: THREE.Vector2, a: THREE.Vector2, b: THREE.Vector2) {
+  const l2 = a.distanceToSquared(b);
+  if (l2 === 0) return p.distanceToSquared(a);
+  let t = ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y)) / l2;
+  t = Math.max(0, Math.min(1, t));
+  const px = a.x + t * (b.x - a.x);
+  const py = a.y + t * (b.y - a.y);
+  return (p.x - px) ** 2 + (p.y - py) ** 2;
+}
+
+// Robust projection function that avoids "stepping" artifacts
+function getProjectedPerimeter(x: number, y: number, pts: THREE.Vector2[], cum: number[], total: number) {
+  let bi = 0, bd2 = Infinity;
+  
+  // 1. Find approximate nearest point index
+  for (let i = 0; i < pts.length; i++) {
+    const dx = x - pts[i].x, dy = y - pts[i].y;
+    const d2 = dx * dx + dy * dy;
+    if (d2 < bd2) { bd2 = d2; bi = i; }
+  }
+
+  // 2. Interpolate between segments (Prev vs Next)
+  const iPrev = (bi - 1 + pts.length) % pts.length;
+  const iNext = (bi + 1) % pts.length;
+  const v = new THREE.Vector2(x, y);
+
+  // Dist to PREVIOUS segment (bi-1 -> bi)
+  const dPrevSq = distToSegmentSquared(v, pts[iPrev], pts[bi]);
+  
+  // Dist to NEXT segment (bi -> bi+1)
+  const dNextSq = distToSegmentSquared(v, pts[bi], pts[iNext]);
+
+  let baseIndex = bi;
+  let nextIndex = iNext;
+  
+  // Choose the closer segment
+  if (dPrevSq < dNextSq) {
+    baseIndex = iPrev;
+    nextIndex = bi;
+  }
+
+  // Project onto the chosen segment to get exact T
+  const p1 = pts[baseIndex];
+  const p2 = pts[nextIndex];
+  const seg = new THREE.Vector2().subVectors(p2, p1);
+  const len = seg.length();
+  
+  if (len < EPS) return cum[baseIndex] / total;
+
+  const rel = new THREE.Vector2().subVectors(v, p1);
+  const proj = rel.dot(seg.normalize()); // Distance along segment
+  
+  let startDist = cum[baseIndex];
+  let finalDist = startDist + proj;
+  
+  // Normalize 0..1
+  if (finalDist < 0) finalDist += total;
+  if (finalDist > total) finalDist -= total;
+
+  return total > 0 ? finalDist / total : 0;
+}
+
+const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
+  url,
+  depth,
+  scale = 0.01,
+  faceTexture,
+  sideTexture,
+  autoRepeat = false,
+  tileSize = 0.1,
+  sideTileSize,
+  faceRepeatX = 6,
+  faceRepeatY = 6,
+  sideRepeatX = 8,
+  sideRepeatY = 1,
+  targetHeight,
+  targetWidth,
+  preserveTop = true,
+  bevel = false,
+  doubleSided = false,
+  showEdges = false,
+  headstoneStyle = 'upright',
+  meshProps,
+  children,
+  selectedAdditions = [],
+}, ref) => {
+  
+  // 1. Load SVG and Textures
+  const svgData = useLoader(SVGLoader, url);
+  const textures = useTexture({
+    face: faceTexture,
+    side: sideTexture ?? faceTexture
+  });
+
+  // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
+  const [clonedFaceMap, clonedSideMap] = useMemo(() => {
+    const f = textures.face.clone();
+    const s = textures.side.clone();
+    
+    [f, s].forEach(t => {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      // LinearMipmapLinearFilter is essential for removing aliasing/noise at distance
+      t.minFilter = THREE.LinearMipmapLinearFilter; 
+      t.magFilter = THREE.LinearFilter;
+      (t as any).anisotropy = 16;
+      t.generateMipmaps = true; // Must be true for anisotropic filtering to work
+      t.needsUpdate = true;
+    });
+    
+    return [f, s];
+  }, [textures.face, textures.side]);
+
+  // 2a. Dispose cloned textures on cleanup
+  React.useEffect(() => {
+    return () => {
+      clonedFaceMap.dispose();
+      clonedSideMap.dispose();
+    };
+  }, [clonedFaceMap, clonedSideMap]);
+
+  // 2b. Generate Rock Pitch Normal Map for Slant Headstones
+  const rockNormalCanvas = useMemo(() => {
+    if (headstoneStyle !== 'slant') return null;
+
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const imageData = ctx.getImageData(0, 0, size, size);
+    const data = imageData.data;
+
+    // Pseudo-random deterministic noise
+    const fract = (x: number) => x - Math.floor(x);
+    const random2 = (x: number, y: number) => {
+      return {
+        x: fract(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453),
+        y: fract(Math.sin(x * 26.345 + y * 42.123) * 31421.3551)
+      };
+    };
+
+    // Voronoi-based faceted height map (12x12 grid baked in)
+    const getHeight = (u: number, v: number) => {
+      const scale = 12.0;
+      const su = u * scale;
+      const sv = v * scale;
+
+      let minDist = 999;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const cellX = Math.floor(su) + dx;
+          const cellY = Math.floor(sv) + dy;
+          const rand = random2(cellX, cellY);
+          const pointX = cellX + rand.x;
+          const pointY = cellY + rand.y;
+          const dist = Math.sqrt((su - pointX) ** 2 + (sv - pointY) ** 2);
+          if (dist < minDist) minDist = dist;
+        }
+      }
+
+      return Math.pow(1.0 - Math.min(minDist, 1.0), 0.5);
+    };
+
+    // Generate height map and convert to normal map
+    const heights: number[][] = [];
+    for (let y = 0; y < size; y++) {
+      heights[y] = [];
+      for (let x = 0; x < size; x++) {
+        heights[y][x] = getHeight(x / size, y / size);
+      }
+    }
+
+    // Sobel filter for normals
+    const strength = 20.0;
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const xRight = (x + 1) % size;
+        const yDown = (y + 1) % size;
+
+        const h0 = heights[y][x];
+        const hRight = heights[y][xRight];
+        const hDown = heights[yDown][x];
+
+        const dX = (h0 - hRight) * strength;
+        const dY = (h0 - hDown) * strength;
+
+        const norm = Math.sqrt(dX * dX + dY * dY + 1);
+        const nx = dX / norm;
+        const ny = dY / norm;
+        const nz = 1 / norm;
+
+        const idx = (y * size + x) * 4;
+        data[idx] = ((nx * 0.5 + 0.5) * 255) | 0;
+        data[idx + 1] = ((ny * 0.5 + 0.5) * 255) | 0;
+        data[idx + 2] = ((nz * 0.5 + 0.5) * 255) | 0;
+        data[idx + 3] = 255;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
+  }, [headstoneStyle]);
+
+  // 2c. Create normal map texture from canvas
+  const rockNormalTexture = useMemo(() => {
+    if (!rockNormalCanvas) return null;
+    
+    const tex = new THREE.CanvasTexture(rockNormalCanvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = THREE.NoColorSpace;
+    tex.needsUpdate = true;
+    
+    return tex;
+  }, [rockNormalCanvas]);
+
+  // 2d. Cleanup rock normal texture
+  React.useEffect(() => {
+    return () => {
+      if (rockNormalTexture) {
+        rockNormalTexture.dispose();
+      }
+    };
+  }, [rockNormalTexture]);
+
+  // 3. Pre-calculate shape bounds and parameters
+  const shapeParams = useMemo(() => {
+    const shapes: THREE.Shape[] = [];
+    svgData.paths.forEach((p: any) => shapes.push(...SVGLoader.createShapes(p)));
+    
+    if (!shapes.length) {
+      return null;
+    }
+
+    const base = shapes[0];
+    const { minX, maxX, minY, maxY, dx, dy } = shapeBounds(base);
+    const widthW = dx * Math.abs(scale);
+    const heightW = dy * Math.abs(scale);
+    const wantW = targetWidth ?? widthW;
+    const wantH = targetHeight ?? heightW;
+    const sCore = wantW / Math.max(EPS, widthW);
+    const coreH_world = heightW * sCore;
+    const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
+    const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
+    const bottomTarget_SV = minY + targetH_SV;
+
+    return { base, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV };
+  }, [svgData, scale, targetWidth, targetHeight, preserveTop]);
+
+  // 3a. Calculate outline (now at top level)
+  const outline = useMemo(() => {
+    if (!shapeParams) return null;
+
+    const { base, minX, maxX, maxY, dx, dy, wantH, coreH_world, bottomTarget_SV } = shapeParams;
+    const isExpanded = preserveTop && wantH > coreH_world + 1e-4;
+    
+    let ptsForOutline = base.getPoints(12);
+    
+    if (isExpanded) {
+      let idxL = -1, idxR = -1;
+      let minDiffL = Infinity, minDiffR = Infinity;
+      const tol = Math.max(dx, dy) * 0.05;
+
+      ptsForOutline.forEach((p, i) => {
+        const distL = Math.hypot(p.x - minX, p.y - maxY);
+        const distR = Math.hypot(p.x - maxX, p.y - maxY);
+        if (distL < minDiffL) { minDiffL = distL; idxL = i; }
+        if (distR < minDiffR) { minDiffR = distR; idxR = i; }
+      });
+
+      if (minDiffL < tol && minDiffR < tol && idxL !== idxR) {
+        const newPts: THREE.Vector2[] = [];
+        const len = ptsForOutline.length;
+        const fwdDist = (idxR - idxL + len) % len;
+        const revDist = (idxL - idxR + len) % len;
+        const pL = ptsForOutline[idxL];
+        const pR = ptsForOutline[idxR];
+        const pL_new = new THREE.Vector2(pL.x, bottomTarget_SV);
+        const pR_new = new THREE.Vector2(pR.x, bottomTarget_SV);
+
+        if (fwdDist < revDist) {
+          let curr = idxR;
+          while (curr !== idxL) {
+            newPts.push(ptsForOutline[curr]);
+            curr = (curr + 1) % len;
+          }
+          newPts.push(ptsForOutline[idxL]);
+          newPts.push(pL_new);
+          newPts.push(pR_new);
+          newPts.push(ptsForOutline[idxR]);
+        } else {
+          let curr = idxL;
+          while (curr !== idxR) {
+            newPts.push(ptsForOutline[curr]);
+            curr = (curr + 1) % len;
+          }
+          newPts.push(ptsForOutline[idxR]);
+          newPts.push(pR_new);
+          newPts.push(pL_new);
+          newPts.push(ptsForOutline[idxL]);
+        }
+        
+        const shape = new THREE.Shape(newPts);
+        // Use high segment count for smooth lookup
+        return spacedOutline(shape, 4096); 
+      }
+    }
+    
+    return spacedOutline(base, 4096);
+  }, [shapeParams, preserveTop]);
+
+  // 3b. Generate Geometry (with disposal cleanup)
+  const { geometries, dims, meshScale, apiData, childWrapperPos } = useMemo(() => {
+    if (!shapeParams || !outline) {
+      return { 
+        geometries: [], 
+        dims: null, 
+        meshScale: [1, 1, 1] as [number, number, number],
+        apiData: { frontZ: 0, unitsPerMeter: 1, version: 0, worldWidth: 1, worldHeight: 1 },
+        childWrapperPos: [0, 0, 0] as [number, number, number]
+      };
+    }
+
+    const { base, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
+
+    // FOR SLANT: Create trapezoidal prism geometry
+    if (headstoneStyle === 'slant') {
+      const slantGeometry = new THREE.BufferGeometry();
+      
+      // Define the slant angle for the front face (15 degrees from vertical)
+      const frontSlantAngleRad = 15 * Math.PI / 180; // Angle from vertical, positive means slanting back
+      
+      // Calculate the Z-offset for the top edge of the front face
+      const height_svg_units = (maxY - minY);
+      const frontTopZOffset = height_svg_units * Math.tan(frontSlantAngleRad);
+      
+      // Define all vertices (duplicated per face for proper UVs and normals)
+      const positions: number[] = [];
+      const uvs: number[] = [];
+      
+      // Helper to add a quad (2 triangles)
+      // IMPORTANT: Vertices v0, v1, v2, v3 must be in counter-clockwise order when viewed from outside the mesh.
+      const addQuad = (
+        v0: [number, number, number], v1: [number, number, number],
+        v2: [number, number, number], v3: [number, number, number],
+        uv0: [number, number], uv1: [number, number],
+        uv2: [number, number], uv3: [number, number]
+      ) => {
+        // Triangle 1: v0, v1, v2
+        positions.push(...v0, ...v1, ...v2);
+        uvs.push(...uv0, ...uv1, ...uv2);
+        
+        // Triangle 2: v0, v2, v3
+        positions.push(...v0, ...v2, ...v3);
+        uvs.push(...uv0, ...uv2, ...uv3);
+      };
+      
+      // Define the 8 unique corner points of the trapezoidal prism
+      // Naming: P_[front/back]_[bottom/top]_[left/right]
+      // Z-axis: 0 is front, -depth is back.
+      // Y-axis: minY is bottom, maxY is top.
+      // X-axis: minX is left, maxX is right.
+
+      // Front Face Corners (z=0 at bottom, z=-frontTopZOffset at top)
+      const P_FBL = new THREE.Vector3(minX, minY, 0);                 // Front Bottom Left
+      const P_FBR = new THREE.Vector3(maxX, minY, 0);                 // Front Bottom Right
+      const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left
+      const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right
+
+      // Back Face Corners (z=-depth for both bottom and top, assuming vertical back)
+      const P_BBL = new THREE.Vector3(minX, minY, -depth);            // Back Bottom Left
+      const P_BBR = new THREE.Vector3(maxX, minY, -depth);            // Back Bottom Right
+      const P_BTL = new THREE.Vector3(minX, maxY, -depth);            // Back Top Left
+      const P_BTR = new THREE.Vector3(maxX, maxY, -depth);            // Back Top Right
+      
+      // --- Faces ---
+
+      // 1. FRONT FACE (polished) - Group 0
+      // Vertices: P_FBL, P_FBR, P_FTR, P_FTL (viewed from front, counter-clockwise)
+      const frontFaceStartIdx = positions.length / 3; // Record start index for material group
+      addQuad(
+        P_FBL.toArray() as [number, number, number],   // V0 (Bottom Left)
+        P_FBR.toArray() as [number, number, number],  // V1 (Bottom Right)
+        P_FTR.toArray() as [number, number, number],  // V2 (Top Right)
+        P_FTL.toArray() as [number, number, number],  // V3 (Top Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      const frontFaceEndIdx = positions.length / 3;
+
+      // 2. BACK FACE (rock pitch) - Group 1
+      // Vertices: P_BBR, P_BBL, P_BTL, P_BTR (viewed from back, counter-clockwise)
+      addQuad(
+        P_BBR.toArray() as [number, number, number],   // V0 (Bottom Right)
+        P_BBL.toArray() as [number, number, number],  // V1 (Bottom Left)
+        P_BTL.toArray() as [number, number, number],  // V2 (Top Left)
+        P_BTR.toArray() as [number, number, number],  // V3 (Top Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 3. TOP FACE (rock pitch) - Group 1
+      // Vertices: P_FTL, P_FTR, P_BTR, P_BTL (viewed from top, counter-clockwise)
+      addQuad(
+        P_FTL.toArray() as [number, number, number],  // V0 (Front Top Left)
+        P_FTR.toArray() as [number, number, number],  // V1 (Front Top Right)
+        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
+        P_BTL.toArray() as [number, number, number],  // V3 (Back Top Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 4. BOTTOM FACE (rock pitch) - Group 1
+      // Vertices: P_FBR, P_FBL, P_BBL, P_BBR (viewed from bottom, counter-clockwise)
+      addQuad(
+        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
+        P_FBL.toArray() as [number, number, number],  // V1 (Front Bottom Left)
+        P_BBL.toArray() as [number, number, number],  // V2 (Back Bottom Left)
+        P_BBR.toArray() as [number, number, number],  // V3 (Back Bottom Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 5. LEFT SIDE FACE (rock pitch) - Group 1
+      // Vertices: P_FBL, P_FTL, P_BTL, P_BBL (viewed from left, counter-clockwise)
+      addQuad(
+        P_FBL.toArray() as [number, number, number],  // V0 (Front Bottom Left)
+        P_FTL.toArray() as [number, number, number],  // V1 (Front Top Left)
+        P_BTL.toArray() as [number, number, number],  // V2 (Back Top Left)
+        P_BBL.toArray() as [number, number, number],  // V3 (Back Bottom Left)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      // 6. RIGHT SIDE FACE (rock pitch) - Group 1
+      // Vertices: P_FBR, P_BBR, P_BTR, P_FTR (viewed from right, counter-clockwise)
+      addQuad(
+        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
+        P_BBR.toArray() as [number, number, number],  // V1 (Back Bottom Right)
+        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
+        P_FTR.toArray() as [number, number, number],  // V3 (Front Top Right)
+        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
+      );
+      
+      slantGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+      slantGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
+      slantGeometry.computeVertexNormals();
+      
+      // Material groups: 0 = front, 1 = everything else
+      slantGeometry.clearGroups();
+      slantGeometry.addGroup(0, (frontFaceEndIdx - frontFaceStartIdx), 0); // Front face (2 triangles * 3 vertices/triangle)
+      slantGeometry.addGroup((frontFaceEndIdx - frontFaceStartIdx), (positions.length / 3) - (frontFaceEndIdx - frontFaceStartIdx), 1); // All other faces
+      
+      // Calculate world dimensions
+      // Use SVG bounds for width/height. Depth is fixed.
+      const worldW = (maxX - minX) * Math.abs(scale) * sCore;
+      const worldH = (maxY - minY) * Math.abs(scale) * sCore; // Height of SVG shape
+      const worldDepth = depth * Math.abs(scale); // Physical depth of the monument
+
+      // For perim, we need actual side lengths.
+      // Front slanted height in SVG units: sqrt( (maxY-minY)^2 + (frontTopZOffset)^2 )
+      const frontSlantedHeight_svg = Math.sqrt( height_svg_units * height_svg_units + frontTopZOffset * frontTopZOffset );
+
+      // A rough perimeter for texture repeats on sides, assuming it flows over top.
+      // This is a complex topic for non-rectangular shapes. For now, a simplified linear sum.
+      // For rectangular front/back, perimeter can be (Width + SlantedHeight + Width + Depth + SideHeight + SlantedHeight)
+      const perimeterSideLength = Math.hypot(depth, frontTopZOffset); // Rough avg for slanted side in local depth/z offset
+      const worldPerim = 2 * (worldW + worldH) * Math.abs(scale); // This is still very approximate.
+      // If SVG outline is simple rectangle, perim can be more accurate:
+      // worldPerim = (worldW * 2) + (frontSlantedHeight_svg * Math.abs(scale) * sCore * 2) + (worldDepth * 2);
+
+      const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
+      
+      return {
+        geometries: [slantGeometry],
+        dims: { worldW, worldH, worldPerim: worldPerim, worldDepth: worldDepth },
+        meshScale: finalScale,
+        apiData: {
+          frontZ: 0, // The front face's base is at Z=0 in local space
+          unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+          version: Math.random(),
+          worldWidth: worldW,
+          worldHeight: worldH
+        },
+        childWrapperPos: [0, 0, 0] as [number, number, number]
+      };
+    }

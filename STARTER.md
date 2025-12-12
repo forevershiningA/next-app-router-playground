@@ -503,11 +503,14 @@ for (let i = 0; i < posCount; i++) {
 **5. Child Wrapper Rotation:**
 ```typescript
 // Rotate inscriptions/motifs to match slant
-childWrapperPos: [0, 0, 0]
+childWrapperPos: [0, 0, 0]  // CRITICAL: Keep at origin (geometry already centered)
 childWrapperRotation: [-slantAngleRad, 0, 0] // Tilt backward
 
-// Children position at:
-frontZ: depth / 2  // Front face position in geometry space
+// apiData.frontZ controls offset from slanted surface:
+apiData: {
+  frontZ: 5.0,  // SVG units offset (adjusted to keep content visible on slanted surface)
+  worldHeight: worldSlantH  // Diagonal slant height for proper text scaling
+}
 ```
 
 **6. Z-Centering:**
@@ -516,8 +519,22 @@ frontZ: depth / 2  // Front face position in geometry space
 slantGeometry.translate(
   -(minX + maxX) / 2,  // Center X
   -minY,                // Bottom at Y=0
-  depth / 2             // Center Z at origin
+  depth / 2             // Center Z at origin (CRITICAL for alignment)
 );
+```
+
+**7. Thickness Ratio (Trapezoidal Shape):**
+```typescript
+// Use thickness ratios instead of fixed angles for proper trapezoid
+const baseThickness = depth;
+const topThickness = baseThickness * 0.2; // 20% ratio (2"/10" cemetery standard)
+const frontTopZOffset = baseThickness - topThickness;
+
+// Calculate slant angle from thickness ratio
+const slantAngleRad = Math.atan2(frontTopZOffset, height_svg_units);
+
+// Calculate diagonal slant height for inscription scaling
+const worldSlantH = Math.sqrt(height_world ** 2 + (frontTopZOffset * scale) ** 2);
 ```
 
 #### Key Features
@@ -530,11 +547,13 @@ slantGeometry.translate(
 ✅ **MeshPhysicalMaterial** (no clearcoat errors)  
 
 #### Critical Requirements
-1. **Wrapper rotation** - Inscriptions must rotate to match slant angle
-2. **frontZ calculation** - Must account for slanted geometry
-3. **UV coordinate mapping** - Use vertex positions, not normals
-4. **Material types** - Use MeshPhysicalMaterial (supports clearcoat)
-5. **Z-translation** - Center geometry at origin for alignment
+1. **Wrapper rotation** - Inscriptions must rotate to match slant angle (`-slantAngleRad`)
+2. **Wrapper position** - Keep at `[0, 0, 0]` (geometry already centered with `translate(0, 0, depth/2)`)
+3. **frontZ offset** - Use `5.0` SVG units to prevent embedding in stone
+4. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
+5. **UV coordinate mapping** - Use vertex positions, not normals
+6. **Material types** - Use MeshPhysicalMaterial (supports clearcoat)
+7. **Thickness ratio** - Use 20% top/base ratio for trapezoidal shape (not fixed angle)
 
 #### Differences from Upright Headstones
 
@@ -549,9 +568,14 @@ slantGeometry.translate(
 
 #### Common Issues & Solutions
 
-**Issue: Inscriptions not visible**
-- **Cause**: Wrapper rotation or frontZ incorrect
-- **Solution**: `frontZ = depth/2`, wrapper at `[0,0,0]` with rotation `[-slantAngleRad, 0, 0]`
+**Issue: Inscriptions embedded in slant headstone (not visible)**
+- **Cause**: `frontZ` too small - inscriptions inside the stone
+- **Solution**: Increase `frontZ` to 5.0 or higher in SVG units
+- **Note**: Wrapper rotation transforms Z-axis, so frontZ works differently than upright
+
+**Issue: Inscriptions floating far away (z=-1000)**
+- **Cause**: `childWrapperPos` incorrectly set to `[0, 0, depth/2]` (double offset)
+- **Solution**: Keep wrapper at origin `[0, 0, 0]` since geometry is already Z-centered
 
 **Issue: Texture stretching on sides**
 - **Cause**: UV mapping using normals instead of coordinates
@@ -564,6 +588,10 @@ slantGeometry.translate(
 **Issue: Inscriptions at wrong angle**
 - **Cause**: Positive rotation instead of negative
 - **Solution**: Use `-slantAngleRad` (tilt backward, not forward)
+
+**Issue: Wedge shape instead of trapezoid**
+- **Cause**: Fixed 15° angle causes top to meet at sharp point
+- **Solution**: Use thickness ratio approach: `topThickness = baseThickness * 0.2`
 
 ---
 
@@ -900,15 +928,18 @@ git log --oneline -10   # Recent commits
 ## Version History
 
 - **2025-12-12**: Slant Headstone Feature (Production-Ready)
-  - Implemented upright vs slant headstone style selector
-  - Created trapezoidal geometry with 30° slant angle
-  - Applied rock pitch texture to left/right sides with proper UV mapping
-  - Coordinate-driven UV mapping prevents stretching
-  - Rotated child wrapper for inscriptions/motifs to follow slant
-  - Fixed MeshPhysicalMaterial usage (no clearcoat errors)
-  - Z-centered geometry for proper base alignment
+  - Implemented upright vs slant headstone style selector in size-selector UI
+  - Created trapezoidal geometry using thickness ratio (20% top/base) instead of fixed angle
+  - Applied rock pitch texture to left/right sides with coordinate-driven UV mapping
+  - Fixed inscription positioning: wrapper at `[0,0,0]` with `frontZ: 5.0` SVG units
+  - Rotated child wrapper by `-slantAngleRad` for inscriptions/motifs to follow slant
+  - Report `worldSlantH` (diagonal height) instead of vertical height for text scaling
+  - Fixed MeshPhysicalMaterial usage (no clearcoat errors in logs)
+  - Z-centered geometry with `translate(0, 0, depth/2)` for proper base alignment
   - Memory optimized with proper texture disposal
-  - Production-ready with clean cache rebuild
+  - Debugged and fixed z=-1000 inscription positioning bug
+  - Debugged and fixed embedded inscription visibility issue
+  - Production-ready with all inscriptions/motifs/additions visible on slanted surface
 - **2025-12-11**: Rock Pitch Base Feature (Production-Ready)
   - Implemented polished vs rock-pitch base finish selector
   - Created faceted Voronoi normal map generator (turtle shell pattern)
