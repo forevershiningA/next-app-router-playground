@@ -896,6 +896,39 @@ useEffect(() => {
 
 ## Common Issues & Solutions
 
+### Issue: Designer UI Showing on Design Gallery Pages
+**Symptom:** Product header (e.g., "Traditional Engraved Headstone 600x600mm $1434.94") visible on `/designs` routes
+
+**Root Causes** (Fixed Dec 14, 2025):
+1. **MobileHeader**: Pathname check was `/designs/` (with slash) not `/designs`
+   - Fix: Changed to `pathname?.startsWith('/designs')` to match all routes
+2. **DesignsTreeNav**: Product header shown whenever catalog loaded in store
+   - Fix: Added `!pathname?.startsWith('/designs')` condition
+3. **SceneOverlayHost**: Overlay panel persisting when navigating away
+   - Fix: Call `hideOverlay()` in useEffect when on pages without canvas
+
+**Commits**: `b5df4cf0dc`, `e9c4387284`, `29eb8a1643`
+
+### Issue: Build Time Suddenly Increased (15+ minutes)
+**Symptom:** Build taking 16-19 minutes instead of 3-6 minutes (Nov 3, 2025)
+
+**Diagnosis Steps**:
+1. Check for large TypeScript files: `Get-ChildItem -Recurse -Filter "*.ts" | Where { $_.Length -gt 1MB }`
+2. Look for auto-generated data files imported at build time
+3. Check `git log` for when slowdown started
+
+**Root Cause**: Large SEO template files (29.6 MB) in `lib/`
+- `seo-templates-unified.ts` (24 MB, 577k lines, 4,118 designs)
+- `seo-templates-ml.ts` (5.5 MB, 100k+ lines)
+- TypeScript had to parse/compile massive arrays at every build
+- Files were auto-generated but never imported/used
+
+**Solution** (Fixed Dec 14, 2025):
+- Moved to `lib/.backup/*.bak` (excluded from build)
+- Result: **16-19 min → 53 sec (95% improvement)** ✅
+- Alternative: Use JSON in `public/` + fetch() at runtime
+- Commit: `bb7d47ee3b`
+
 ### Issue: Blurry Textures
 **Cause:** Missing mipmap or anisotropic filtering  
 **Solution:**
@@ -994,6 +1027,19 @@ npm start
    - Memory leaks (growing heap)
    - Excessive re-renders
 
+### Build Time Optimization
+**Critical Performance Issue (Fixed Dec 14, 2025)**:
+- Build time increased from 3-6 min to 16-19 min on Nov 3, 2025
+- Root cause: Large TypeScript files in `lib/seo-templates-*.ts` (29.6 MB total)
+- Solution: Moved to `lib/.backup/*.bak` (excluded from build)
+- Result: **Build time: 16-19 min → ~53 sec (95% improvement)** ✅
+
+**Key Lessons**:
+- Never bundle large data as TypeScript arrays (use JSON + fetch)
+- Auto-generated files should be in `public/` or external DB
+- TypeScript compilation overhead is significant for large files
+- Check build time after adding/importing new large files
+
 ### Memory Profiling
 1. Chrome DevTools → Memory
 2. Take heap snapshot
@@ -1038,6 +1084,17 @@ npm start
 
 ### Backup Files
 - `components/SvgHeadstone.v9.backup`
+- `components/SvgHeadstone.tsx.backup`
+- `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx.backup`
+- `app/select-material/MaterialPanelWrapper-old.tsx`
+- `app/select-shape/ShapePanelWrapper-old.tsx`
+- `lib/.backup/*.bak` - Large SEO template files (excluded from build for performance)
+
+### Large Data Files (Moved to Backup)
+- `lib/.backup/seo-templates-unified.ts.bak` - 24 MB (4,118 ML design templates as TypeScript)
+- `lib/.backup/seo-templates-ml.ts.bak` - 5.5 MB (ML metadata)
+- **Why moved**: Caused 16-19 min build times, never imported/used, actual data in `public/ml/*/json/`
+- **Alternative**: Load JSON files on-demand via fetch() or create lightweight index
 - `components/SvgHeadstone.tsx.backup`
 - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx.backup`
 - `app/select-material/MaterialPanelWrapper-old.tsx`
@@ -1107,6 +1164,26 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-14 (Late Evening)**: Build Performance & UI Cleanup
+  - **Build Optimization**: Moved large SEO template files (29.6 MB) to `.backup` folder
+    - `seo-templates-unified.ts` (24 MB, 577k lines, 4,118 designs)
+    - `seo-templates-ml.ts` (5.5 MB, 100k+ lines)
+    - Build time reduced from 16-19 minutes to ~53 seconds (95% improvement) ✅
+    - Files were auto-generated but never imported/used in application
+    - Actual JSON data already exists in `public/ml/*/saved-designs/json/`
+    - Commit: `bb7d47ee3b`
+  - **UI Fixes**: Removed leftover designer headers from /designs pages
+    - Fixed MobileHeader visibility check: `/designs/` → `/designs` (now matches all routes)
+    - Fixed DesignsTreeNav product header showing on design gallery pages
+    - Added pathname check: `!pathname?.startsWith('/designs')`
+    - Cleaned up ConditionalCanvas overlay hiding logic
+    - Changed h2 to h1 for proper semantic HTML on /designs landing page
+    - Commits: `b5df4cf0dc`, `e9c4387284`, `1100cb66bb`, `69c6d13e82`, `29eb8a1643`
+  - **Documentation**: Updated STARTER.md with all recent changes
+    - Slant thickness slider documentation
+    - Build performance improvements
+    - UI cleanup fixes
+    - Commit: `817cdd09e7`
 - **2025-12-14 (Evening)**: Adjustable Slant Thickness Slider (100-300mm)
   - Added user-controlled thickness slider in DesignerNav (appears after Height slider)
   - Changed from ratio-based (0.1-1.0) to absolute millimeter values (100-300mm)
