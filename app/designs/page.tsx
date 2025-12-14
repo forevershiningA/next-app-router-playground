@@ -58,9 +58,9 @@ export default function DesignsPage() {
 
         {/* Sophisticated Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
+          <h1 className="text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
             Memorial Design Collection
-          </h2>
+          </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent mx-auto mb-6" />
           <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
             Thoughtfully crafted designs to honor and celebrate the memory of your loved ones
