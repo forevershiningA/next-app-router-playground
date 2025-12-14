@@ -31,7 +31,7 @@ export default function Scene({
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
 
   // Smooth rotation animation
-  useFrame(() => {
+  useFrame(({ camera }) => {
     if (groupRef.current && currentRotation) {
       const diff = targetRotation - currentRotation.current;
       const delta = diff * 0.1; // Lerp factor (adjust for speed)
@@ -127,6 +127,8 @@ export default function Scene({
         zoomSpeed={0.8}
         panSpeed={0.8}
         maxPolarAngle={Math.PI / 2}
+        minAzimuthAngle={0}
+        maxAzimuthAngle={0}
       />
     </>
   );
