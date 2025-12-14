@@ -139,6 +139,9 @@ type HeadstoneState = {
   headstoneStyle: 'upright' | 'slant';
   setHeadstoneStyle: (style: 'upright' | 'slant') => void;
 
+  slantThickness: number; // Range 0.1 to 1.0 (ratio of top to base thickness)
+  setSlantThickness: (thickness: number) => void;
+
   selected: Part;
   setSelected: (p: Part) => void;
 
@@ -521,6 +524,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   headstoneStyle: 'upright',
   setHeadstoneStyle(style) {
     set({ headstoneStyle: style });
+  },
+
+  slantThickness: 0.2, // Default 20% ratio (standard cemetery marker)
+  setSlantThickness(thickness) {
+    const clamped = Math.max(0.1, Math.min(1.0, thickness));
+    set({ slantThickness: clamped });
   },
 
   selected: null,

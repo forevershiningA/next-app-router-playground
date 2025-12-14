@@ -44,6 +44,7 @@ type Props = {
   doubleSided?: boolean;
   showEdges?: boolean;
   headstoneStyle?: 'upright' | 'slant';
+  slantThickness?: number; // Ratio of top to base thickness (0.1 to 1.0)
   meshProps?: ThreeElements['mesh'];
   children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
   selectedAdditions?: string[];
@@ -163,6 +164,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   doubleSided = false,
   showEdges = false,
   headstoneStyle = 'upright',
+  slantThickness = 0.2, // Default 20% ratio
   meshProps,
   children,
   selectedAdditions = [],
@@ -416,7 +418,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       // FIX: Use Thickness Ratios instead of fixed Angle to ensure a Trapezoidal shape
       // The provided 'depth' is the Base Thickness (Nose)
       const baseThickness = depth;
-      const topThickness = baseThickness * 0.2; // Top is 20% of base thickness (standard cemetery proportion: 2" / 10")
+      const topThickness = baseThickness * slantThickness; // User-controlled ratio (0.1 to 1.0)
       
       // Calculate how far back the top-front edge starts
       const frontTopZOffset = baseThickness - topThickness;

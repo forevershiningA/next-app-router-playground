@@ -17,6 +17,8 @@ export default function SizeSelector({
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
   const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const setHeadstoneStyle = useHeadstoneStore((s) => s.setHeadstoneStyle);
+  const slantThickness = useHeadstoneStore((s) => s.slantThickness);
+  const setSlantThickness = useHeadstoneStore((s) => s.setSlantThickness);
 
   return (
     <div className="relative w-full">
@@ -64,6 +66,27 @@ export default function SizeSelector({
               : 'Beveled marker at an angle'}
           </p>
         </div>
+
+        {/* Slant Thickness Control (only for slant style) */}
+        {headstoneStyle === 'slant' && (
+          <div className="mb-4">
+            <TailwindSlider
+              label="Slant Angle"
+              value={slantThickness * 100} // Convert 0.1-1.0 to 10-100 for display
+              min={10}
+              max={100}
+              step={5}
+              onChange={(val) => setSlantThickness(val / 100)} // Convert back to 0.1-1.0
+              unit="%"
+            />
+            <p className="mt-1 text-xs text-slate-400">
+              {slantThickness <= 0.15 ? 'Very steep angle (~45°)' :
+               slantThickness <= 0.25 ? 'Standard cemetery angle (~30°)' :
+               slantThickness <= 0.5 ? 'Moderate angle (~20°)' :
+               'Shallow angle (nearly vertical)'}
+            </p>
+          </div>
+        )}
 
         <div className="space-y-3">
           <TailwindSlider
