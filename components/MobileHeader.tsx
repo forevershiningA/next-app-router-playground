@@ -16,7 +16,7 @@ export default function MobileHeader() {
   
   // Check if we're on a design list page (product or category level)
   const segments = pathname?.split('/').filter(s => s) || [];
-  const isDesignListPage = pathname?.startsWith('/designs/') && (segments.length === 2 || segments.length === 3);
+  const isDesignListPage = pathname?.startsWith('/designs') && segments.length >= 1;
 
   // Detect desktop for header positioning
   useEffect(() => {

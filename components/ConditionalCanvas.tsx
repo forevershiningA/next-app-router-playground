@@ -50,7 +50,12 @@ export default function ConditionalCanvas() {
   
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage) {
+    const shouldHideCanvas = (isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage;
+    
+    console.log('[ConditionalCanvas] pathname:', pathname, 'isDesignPage:', isDesignPage, 'shouldHideCanvas:', shouldHideCanvas);
+    
+    if (shouldHideCanvas) {
+      console.log('[ConditionalCanvas] Hiding overlay');
       hideOverlay();
     }
   }, [pathname, isHomePage, isDesignPage, isSelectProductPage, isSelectShapePage, isSelectMaterialPage, isSelectAdditionsPage, isCheckPricePage, isSelectSizePage, isInscriptionsPage, isSelectMotifsPage, hideOverlay]);
