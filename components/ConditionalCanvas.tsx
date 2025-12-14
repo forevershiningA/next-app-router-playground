@@ -1,15 +1,17 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import ThreeScene from '#/components/ThreeScene';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
 import CheckPricePanel from '#/components/CheckPricePanel';
 import SEOPanel from '#/components/SEOPanel';
 import ErrorBoundary from '#/components/ErrorBoundary';
+import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 
 export default function ConditionalCanvas() {
   const pathname = usePathname();
+  const hideOverlay = useSceneOverlayStore((s) => s.hide);
   
   // Hide canvas on design pages:
   // /designs/ -> ['designs'] = 1 segment (root page)
@@ -45,6 +47,13 @@ export default function ConditionalCanvas() {
   
   // Show canvas on select-motifs page
   const isSelectMotifsPage = pathname === '/select-motifs';
+  
+  // Close overlay when navigating to pages where canvas is hidden
+  useEffect(() => {
+    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage) {
+      hideOverlay();
+    }
+  }, [pathname, isHomePage, isDesignPage, isSelectProductPage, isSelectShapePage, isSelectMaterialPage, isSelectAdditionsPage, isCheckPricePage, isSelectSizePage, isInscriptionsPage, isSelectMotifsPage, hideOverlay]);
   
   if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage) {
     return null;
