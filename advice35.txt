@@ -1,0 +1,53 @@
+You *are* computing the slant and even building a quaternion—but it’s never applied. In **react-three-fiber** the `quaternion` prop expects a `THREE.Quaternion` object, not a `[x,y,z,w]` tuple. You’re passing an array, so the wrapper never rotates, which is why the inscriptions/motifs still look upright.
+
+Do these two surgical fixes:
+
+### 1) Keep a real `THREE.Quaternion` and pass it directly
+
+Change the types you return from the big `useMemo` and stop converting to an array.
+
+```ts
+// return shape (types changed)
+return {
+  // ...
+  childWrapperPos: [0, 0, (depth / 2) * scale * sCore] as [number, number, number],
+  childWrapperRotation: wrapperQuaternion as THREE.Quaternion
+};
+```
+
+And where you declare the default for the non-slant branch:
+
+```ts
+childWrapperRotation: new THREE.Quaternion(), // identity
+```
+
+In JSX:
+
+```tsx
+<group
+  ref={scaledWrapperRef}
+  position={childWrapperPos}
+  quaternion={childWrapperRotation}   // <-- pass the object, not an array
+>
+  <group scale={meshScale}>
+    {typeof children === 'function' && children(childApi, selectedAdditions)}
+  </group>
+</group>
+```
+
+### 2) Fix the normal sign used to build that quaternion
+
+Your current normal uses `sin(-slantAngleRad)`, which tilts it the wrong way. Use a positive angle about **+X**:
+
+```ts
+const slantAngleRad = Math.atan2(frontTopZOffset, height_svg_units);
+
+// outward normal of the polished face
+const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
+
+// align local +Z to that normal
+const wrapperQuaternion = new THREE.Quaternion()
+  .setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
+```
+
+That’s it. With a real quaternion applied (and the correct sign), the child wrapper’s local **+Z** becomes the face normal, so all inscriptions/motifs/additions that you place at `z = api.frontZ` will sit flush and visibly match the slant. If anything still looks “upright,” scan the child components for `billboard`, `lookAt`, or code that resets `rotation/quaternion` each frame, and remove it for these meshes. 

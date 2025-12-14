@@ -1,0 +1,135 @@
+Great base! The slant silhouette reads well, but the “rock pitch” still looks a bit like a uniform bumpy plastic. Here’s how I’d make it read as hand-chipped stone, targeted exactly to your TSX:
+
+### 1) Add a jagged “rocked arris” band around the polished face
+
+Real slants have an irregular chipped margin where the polished face meets the rough sides. Create a thin ring geometry from the front shape (offset inwards by ~8–15 mm), extrude it ~6–10 mm, and give that ring the rock material. That single detail sells the craft.
+
+```ts
+// after you define P_F* points (slant branch)
+const arrisInset = 0.012; // ~12 mm in world
+const arrisDepth = 0.006; // ~6 mm proud from face
+
+// Build a 2D inset of the front face shape
+const frontShape = shapeParams!.base.clone();
+const insetShape = frontShape.clone().offset(-arrisInset);
+
+// Triangulate ring: frontShape (outer) with insetShape (hole)
+const ring = new THREE.Shape(frontShape.getPoints())
+ring.holes = [new THREE.Path(insetShape.getPoints())];
+
+const arrisGeom = new THREE.ExtrudeGeometry(ring, {
+  depth: arrisDepth / (scale * shapeParams!.sCore),
+  bevelEnabled: false,
+  steps: 1,
+});
+arrisGeom.translate(0, 0, 0.0005); // sit just in front of the polished plane
+
+// then push arrisGeom into geometries and assign rock material index (1)
+```
+
+Pro tip: apply a little vertex noise to the arris ring (±2–4 mm) so it isn’t perfectly parallel to the front.
+
+### 2) Use triplanar mapping for the rock sides
+
+Your current side UVs are better than planar, but rock pitch really pops when the texture is projected in world space with triplanar blending (no stretch on corners, consistent scale everywhere).
+
+* Keep your polished **front** as is.
+* Replace only the **side** MeshPhysicalMaterial with a triplanar ShaderMaterial (or Nodes) sampling the **same** albedo + **two** normal maps (large chips + micro rough).
+* Blend weights from `abs(normal)` and sample using world-space `position`.
+
+Minimal hook:
+
+```ts
+const rockSide = new THREE.ShaderMaterial({
+  uniforms: {
+    map: { value: clonedSideMap },
+    n1: { value: rockNormalTexture },     // your Voronoi normals = large chips
+    n2: { value: detailNormalTexture },   // small detail (make a 256px FBM canvas)
+    scale: { value: 0.12 },               // ~120 mm world scale
+    detailScale: { value: 0.02 },
+    strength1: { value: 1.4 },
+    strength2: { value: 0.4 },
+  },
+  vertexShader: `varying vec3 vPos; varying vec3 vN;
+  void main(){ vPos = (modelMatrix * vec4(position,1.)).xyz;
+               vN = normalize(normalMatrix * normal);
+               gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }`,
+  fragmentShader: `#include <common>
+  uniform sampler2D map,n1,n2;
+  uniform float scale, detailScale, strength1, strength2;
+  varying vec3 vPos; varying vec3 vN;
+
+  vec2 uvX(vec3 p,float s){return p.yz/s;}
+  vec2 uvY(vec3 p,float s){return p.xz/s;}
+  vec2 uvZ(vec3 p,float s){return p.xy/s;}
+
+  vec4 samp(sampler2D t, vec2 uv){ return texture2D(t, uv); }
+
+  void main(){
+    vec3 n = abs(normalize(vN)) + 1e-5;
+    vec3 w = n / (n.x+n.y+n.z);
+
+    vec4 c =   w.x*samp(map, uvX(vPos, scale))
+             + w.y*samp(map, uvY(vPos, scale))
+             + w.z*samp(map, uvZ(vPos, scale));
+
+    // combine two normal maps (cheap blend)
+    vec3 N1 = (w.x*(samp(n1, uvX(vPos, scale     )).xyz*2.-1.)
+             + w.y*(samp(n1, uvY(vPos, scale     )).xyz*2.-1.)
+             + w.z*(samp(n1, uvZ(vPos, scale     )).xyz*2.-1.)) * strength1;
+
+    vec3 N2 = (w.x*(samp(n2, uvX(vPos, detailScale)).xyz*2.-1.)
+             + w.y*(samp(n2, uvY(vPos, detailScale)).xyz*2.-1.)
+             + w.z*(samp(n2, uvZ(vPos, detailScale)).xyz*2.-1.)) * strength2;
+
+    vec3 N = normalize(N1 + N2 + vec3(0,0,1));
+    gl_FragColor = vec4(c.rgb, 1.);
+    // hand off N via onBeforeCompile or port this to Nodes to drive lighting
+  }`
+});
+```
+
+(If you prefer Nodes, this is a straight mapping to three-nodes’ Triplanar node; just keep **front** on MeshPhysicalMaterial and **sides/top/back/arris ring** on the triplanar shader.)
+
+### 3) Derive AO & roughness from the height field (cheap, but effective)
+
+Darken crevices and raise roughness where height gradient is high. You’re already generating a height field for the normal; quickly compute:
+
+* `ao = smoothstep(0.35, 0.7, 1. - curvature)`
+* `roughness = mix(0.55, 0.9, ao)`
+
+Feed those to the side shader so chips catch light correctly.
+
+### 4) Vary chip orientation by face
+
+Left/right faces of a slant often show vertical tooling patterns; top/back are more random. Randomly rotate the triplanar space per face (seed from triangle normal) so the pitch doesn’t look stamped.
+
+### 5) Give sides a slightly darker albedo and higher energy loss
+
+In your `materials` block, sides currently use the same texture and near-identical energy model. For rock pitch:
+
+* `color` a touch darker than face
+* `roughness: 0.85–0.95`, `clearcoat: 0`, `sheen: 0.2`, `envMapIntensity: 0.6–0.8`
+
+This instantly reads as unpolished vs polished.
+
+### 6) Add micro-displacement only on the arris ring (optional)
+
+True vertex displacement on all sides needs dense meshes. Instead, subdivide **just the arris ring** (6–8 segments across its width) and apply your height map as `displacementMap` with amplitude 2–3 mm. It gives a tactile fractured edge without heavy geometry.
+
+### 7) Keep scale truly world-constant
+
+Even with triplanar, keep your current **physical repeat** logic for sides so chip size matches real stone (~80–150 mm facets). For the normal maps, don’t link repeat to UVs; drive it from world-space scale uniforms (as in the shader above).
+
+### 8) Tidy the current normal-map generator
+
+Your Voronoi height → normal is good, but for more “split chisel” look:
+
+* Add a second pass of **ridged FBM** (abs(sin) style) to create linear fractures.
+* Slight directional bias on dX/dY to emulate gravity-biased chisel blows on the slant.
+
+---
+
+If you want the smallest change with the biggest visual win: **(1) add the rocked arris band** and **(2) switch the side material to triplanar**. Everything else is icing.
+
+All suggestions map directly onto the attached component (`SvgHeadstone.tsx`) and its slant branch / materials section. 

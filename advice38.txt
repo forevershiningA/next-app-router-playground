@@ -1,0 +1,62 @@
+Yep—that helps. Your slant wrapper is correct; the issue is that your inscription/motif components are still overriding orientation (billboard/lookAt/Html without `transform`, or they recompute their own quaternion each frame). If you can’t or don’t want to edit all those components, clamp them from the **SvgHeadstone** side.
+
+Drop this “orientation clamp” right into your current file and wrap the children with it. It forces every direct child to inherit the slant quaternion on render (while still letting you move/scale/rotate them in-plane).
+
+```tsx
+// Add near the top of SvgHeadstone.tsx file
+function LockToSlant({
+  quat, frontZ, children,
+}: { quat: THREE.Quaternion; frontZ: number; children: React.ReactNode }) {
+  const g = React.useRef<THREE.Group>(null!);
+
+  // Keep group's quaternion locked to the slant
+  useLayoutEffect(() => {
+    if (g.current && quat) g.current.quaternion.copy(quat);
+  }, [quat]);
+
+  // As a safety net, reapply the same before every render
+  // (wins over any child "lookAt/billboard" done in their useFrame)
+  const onBeforeRender = React.useCallback(() => {
+    if (g.current && quat) g.current.quaternion.copy(quat);
+  }, [quat]);
+
+  return (
+    <group ref={g} position-z={frontZ} onBeforeRender={onBeforeRender}>
+      {children}
+    </group>
+  );
+}
+```
+
+Use it where you render the children (inside your slant wrapper):
+
+```tsx
+<group 
+  ref={scaledWrapperRef}
+  position={childWrapperPos}
+  quaternion={childWrapperRotation}
+>
+  {/* optional debug plane/axes */}
+
+  {/* Lock all children to the slant face */}
+  <LockToSlant quat={childWrapperRotation} frontZ={apiData.frontZ}>
+    <group scale={meshScale}>
+      {typeof children === 'function' && children(childApi, selectedAdditions)}
+    </group>
+  </LockToSlant>
+</group>
+```
+
+This does three things:
+
+1. Sets the children group’s quaternion to the **slant face normal** once,
+2. Re-applies it every frame via `onBeforeRender` (so any internal `lookAt()`/billboard in child components can’t “stand them up”),
+3. Offsets them a hair along the face normal (`frontZ`) so they sit flush without z-fighting.
+
+Still do a quick pass on child components when you can:
+
+* Use `<Html transform>` (not the default) if you render HTML on the stone.
+* Avoid `<Billboard>`/`<Sprite>` or `useFrame(() => mesh.lookAt(camera.position))` for on-stone meshes.
+* Ensure `matrixAutoUpdate` is **true**; don’t freeze local matrices.
+
+With this clamp in place, your inscriptions/motifs/additions will visibly match the slant regardless of what those components try to do internally. The rest of your slant pipeline in the file looks solid. 

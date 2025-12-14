@@ -1,0 +1,90 @@
+Thanks—your latest screenshot actually shows the blue gizmo **tilted** with the face, which means the slant wrapper/quaternion in `SvgHeadstone.tsx` is working. The reason the motifs/inscriptions still look “upright” is downstream: those child components are defeating the parent transform (billboarding, `lookAt`, `Html` without `transform`, or freezing their own matrices). Here’s a surgical way to make this bullet-proof from the headstone side, *without* rewriting all children.
+
+## Do this (two small patches)
+
+### 1) Wrap children in a **FaceSpace** that is *physically the slanted plane*
+
+Put the children into a group whose local axes are: X = width, Y = **slant height**, Z = face normal. Then draw them at `z=0.001`. This guarantees they inherit the slant regardless of what they try to do.
+
+Add this helper near the top of `SvgHeadstone.tsx`:
+
+```tsx
+function FaceSpace({
+  quat, width, slantHeight, z = 0.001, children
+}: {
+  quat: THREE.Quaternion; width: number; slantHeight: number; z?: number; children: React.ReactNode;
+}) {
+  const g = React.useRef<THREE.Group>(null!);
+
+  // Lock the transform to the face normal
+  React.useLayoutEffect(() => {
+    if (!g.current) return;
+    g.current.quaternion.copy(quat);
+    g.current.updateMatrix();
+  }, [quat]);
+
+  // Safety net against children that re-orient themselves each frame
+  const onBeforeRender = React.useCallback(() => {
+    if (!g.current) return;
+    g.current.quaternion.copy(quat);
+  }, [quat]);
+
+  return (
+    <group ref={g} position-z={z} onBeforeRender={onBeforeRender}>
+      {/* Optional: a thin invisible pick plane exactly on the slanted face */}
+      {/* <mesh visible={false}><planeGeometry args={[width, slantHeight]} /><meshBasicMaterial /></mesh> */}
+      {children}
+    </group>
+  );
+}
+```
+
+Then **use it** in your returned JSX (inside the existing slant wrapper), replacing the previous lock:
+
+```tsx
+<group 
+  ref={scaledWrapperRef}
+  position={childWrapperPos}
+  quaternion={childWrapperRotation}
+>
+  {/* DEBUG canary: keep while testing */}
+  {/* ...pink plane / axes... */}
+
+  <FaceSpace
+    quat={childWrapperRotation}
+    width={apiData.worldWidth}
+    slantHeight={apiData.worldHeight}  // you already report the slant height here
+    z={apiData.frontZ}
+  >
+    <group scale={meshScale}>
+      {typeof children === 'function' && children(childApi, selectedAdditions)}
+    </group>
+  </FaceSpace>
+</group>
+```
+
+### 2) One quick sanity check in child code (if you can touch it)
+
+Wherever you render inscriptions/motifs/additions:
+
+* **No** `<Billboard>` or `<Sprite>`.
+* If using `<Text>`, keep `billboard={false}` and no `lookAt`.
+* If using `<Html>`, use `<Html transform ...>` so it respects parent transforms.
+* Ensure `matrixAutoUpdate` is **true** (don’t freeze local matrices).
+
+Now, even if some child tries to face the camera, the parent `FaceSpace` re-applies the correct quaternion **before each render**, so it will stay flush to the slant.
+
+---
+
+If you want a visual proof that the children are truly on the plane, momentarily add:
+
+```tsx
+<mesh position={[0, apiData.worldHeight*0.5, 0]} >
+  <planeGeometry args={[apiData.worldWidth*0.8, apiData.worldHeight*0.2]} />
+  <meshBasicMaterial color="cyan" wireframe />
+</mesh>
+```
+
+inside `<FaceSpace>`. Your blue rectangle should lie exactly on that plane and share the tilt.
+
+Your current file already computes the correct slant, quaternion, and reports **slant height** in `apiData.worldHeight`; the patches above just make child orientation inheritance unconditional. 

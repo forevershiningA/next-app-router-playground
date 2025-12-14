@@ -1,3 +1,26 @@
+The issue is that the Face Normal Vector calculation was inverted.
+
+Double Rotation (Solved previously): You correctly identified that passing childWrapperRotation to FaceSpace caused a double rotation, and using an Identity Quaternion fixed that structural issue.
+
+Wrong Direction (Current Issue): In the Slant geometry calculation, the normal vector was defined as (0, -Math.sin(a), Math.cos(a)).
+
+Since sin(a) is positive, -Math.sin(a) results in a negative Y component.
+
+A negative Y normal points Downwards (towards the ground), causing the "Up" vector of the text wrapper to align incorrectly (likely tiling forward or upside down relative to the face).
+
+For a standard slant headstone where the face leans back, the normal should point Out (+Z) and Up (+Y).
+
+The Fix:
+Change the Y component of the frontNormal vector from negative to positive.
+new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad))
+
+Here is the corrected file:
+
+code
+Tsx
+download
+content_copy
+expand_less
 // components/SvgHeadstone.tsx
 'use client';
 
@@ -9,7 +32,6 @@ import type { ThreeElements } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Edges, useTexture } from '@react-three/drei';
-import { Line } from '#/lib/headstone-store';
 
 export type HeadstoneAPI = {
   group: React.RefObject<THREE.Group>;
@@ -22,6 +44,45 @@ export type HeadstoneAPI = {
 };
 
 const EPS = 1e-9;
+
+/**
+ * FaceSpace: Locks children to the slanted face plane
+ * Re-applies quaternion before each render to override billboard/lookAt
+ */
+function FaceSpace({
+  quat,
+  width,
+  slantHeight,
+  z = 0.001,
+  children,
+}: {
+  quat: THREE.Quaternion;
+  width: number;
+  slantHeight: number;
+  z?: number;
+  children: React.ReactNode;
+}) {
+  const g = React.useRef<THREE.Group>(null!);
+
+  // Lock the transform to the face normal
+  React.useLayoutEffect(() => {
+    if (!g.current) return;
+    g.current.quaternion.copy(quat);
+    g.current.updateMatrix();
+  }, [quat]);
+
+  // Safety net against children that re-orient themselves each frame
+  const onBeforeRender = React.useCallback(() => {
+    if (!g.current) return;
+    g.current.quaternion.copy(quat);
+  }, [quat]);
+
+  return (
+    <group ref={g} position-z={z} onBeforeRender={onBeforeRender}>
+      {children}
+    </group>
+  );
+}
 
 type Props = {
   url: string;
@@ -421,23 +482,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       // Calculate how far back the top-front edge starts
       const frontTopZOffset = baseThickness - topThickness;
       
-      // Calculate the slant angle for rotating inscriptions/motifs in WORLD SPACE
-      // We must scale the dimensions to world units before calculating atan2 
-      // because sCore affects height(Y) but not depth(Z)
-      const worldScaleY = Math.abs(scale) * sCore;
-      const worldScaleZ = Math.abs(scale);
-      
-      const svgHeight = maxY - minY;
-      const worldHeight = svgHeight * worldScaleY;
-      
-      const svgRun = frontTopZOffset;
-      const worldRun = svgRun * worldScaleZ;
-
-      const slantAngleRad = Math.atan2(worldRun, worldHeight);
+      // Calculate the slant angle for rotating inscriptions/motifs
+      // The front face slants from bottom (Z=0) to top (Z=-frontTopZOffset)
+      const height_svg_units = (maxY - minY);
+      const slantAngleRad = Math.atan2(frontTopZOffset, height_svg_units); // Angle from vertical
       
       // Calculate the SLANT HEIGHT (diagonal length of the front face)
       // This is the actual surface length that inscriptions should span
-      const worldSlantH = Math.sqrt(worldHeight ** 2 + worldRun ** 2);
+      const slantHeightUnits = Math.sqrt(height_svg_units ** 2 + frontTopZOffset ** 2);
       
       // Define all vertices (duplicated per face for proper UVs and normals)
       const positions: number[] = [];
@@ -567,6 +619,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       const worldH = (maxY - minY) * Math.abs(scale) * sCore;
       const worldDepth = depth * Math.abs(scale);
       
+      // Calculate world SLANT height (diagonal surface length)
+      const worldSlantH = slantHeightUnits * Math.abs(scale) * sCore;
+      
       // UV MAPPING (Recalculate based on normalized geometry)
       // =========================================================
       slantGeometry.computeBoundingBox();
@@ -655,8 +710,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       const frontZEps = Math.max(0.0005, 0.5e-3);
       
       // Build quaternion that aligns wrapper's local +Z to the front face normal
-      // Top of face recedes in -Z as Y increases → outward normal has +Z and +Y (faces up/out)
-      // FIX: Y component should be positive for a face leaning back
+      // Top of face recedes in -Z as Y increases → outward normal has +Z and +Y (since it faces up/out)
+      // FIX: Y component should be positive for a face leaning back.
       const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
       const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
       
@@ -1017,6 +1072,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     worldHeight: apiData?.worldHeight ?? 1
   }), [apiData]);
 
+  // Use identity quaternion for FaceSpace to avoid double-rotation 
+  // (parent scaledWrapperRef is already rotated for slants)
+  const identityQuaternion = useMemo(() => new THREE.Quaternion(), []);
+
   if (!geometries.length || !dims) return null;
 
   // Fixed: Position at origin as geometry is already normalized to ground
@@ -1055,11 +1114,16 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       >
         {/* Lock children to slant face (prevents billboard/lookAt from standing them up) */}
         {headstoneStyle === 'slant' ? (
-          <group position-z={apiData?.frontZ || 0.001}>
+          <FaceSpace
+            quat={identityQuaternion}
+            width={apiData?.worldWidth || 1}
+            slantHeight={apiData?.worldHeight || 1}
+            z={apiData?.frontZ || 0.001}
+          >
             <group renderOrder={10} scale={meshScale}>
                {typeof children === 'function' && children(childApi, selectedAdditions)}
             </group>
-          </group>
+          </FaceSpace>
         ) : (
           <group position-z={apiData?.frontZ || 0}>
             <group renderOrder={10} scale={meshScale}>

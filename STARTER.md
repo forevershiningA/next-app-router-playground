@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-12  
+**Last Updated:** 2025-12-13  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -541,19 +541,52 @@ const worldSlantH = Math.sqrt(height_world ** 2 + (frontTopZOffset * scale) ** 2
 ✅ **30° slant angle** (authentic cemetery marker)  
 ✅ **Trapezoidal profile** (not a wedge)  
 ✅ **Rock pitch sides** with pop-out bumps  
-✅ **Rotated inscriptions** follow slanted surface  
+✅ **Rotated inscriptions** follow slanted surface (quaternion-based)  
 ✅ **Z-centered** for proper alignment with base  
 ✅ **Proper UV mapping** (no stretching)  
 ✅ **MeshPhysicalMaterial** (no clearcoat errors)  
+✅ **FaceSpace lock** prevents child rotation override  
+✅ **No z-fighting** (depthWrite=false + polygonOffset)  
 
 #### Critical Requirements
-1. **Wrapper rotation** - Inscriptions must rotate to match slant angle (`-slantAngleRad`)
-2. **Wrapper position** - Keep at `[0, 0, 0]` (geometry already centered with `translate(0, 0, depth/2)`)
-3. **frontZ offset** - Use `5.0` SVG units to prevent embedding in stone
-4. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
-5. **UV coordinate mapping** - Use vertex positions, not normals
-6. **Material types** - Use MeshPhysicalMaterial (supports clearcoat)
-7. **Thickness ratio** - Use 20% top/base ratio for trapezoidal shape (not fixed angle)
+1. **THREE.Quaternion object** - Not array! R3F `quaternion` prop requires object
+2. **Negative Y normal** - `frontNormal = (0, -Math.sin(slantAngleRad), Math.cos(slantAngleRad))`
+3. **Wrapper position** - `[0, 0, (depth/2) * scale]` matches mesh Z-scale (no sCore)
+4. **frontZ epsilon only** - `0.0005` (wrapper already at face, no full depth offset)
+5. **FaceSpace component** - Re-applies quaternion every frame via `onBeforeRender`
+6. **depthWrite=false** - On all Text components to prevent stacked line shimmer
+7. **renderOrder=10** - Children draw after granite (prevents z-fighting)
+8. **polygonOffset** - On granite materials (factor: 1, units: 1)
+9. **Force-apply quaternion** - useLayoutEffect to copy quaternion (R3F prop diffing workaround)
+10. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
+
+#### FaceSpace Component (Rotation Lock)
+```typescript
+function FaceSpace({ quat, width, slantHeight, z = 0.001, children }) {
+  const g = React.useRef<THREE.Group>(null!);
+
+  // Lock transform to face normal on mount
+  React.useLayoutEffect(() => {
+    if (!g.current) return;
+    g.current.quaternion.copy(quat);
+    g.current.updateMatrix();
+  }, [quat]);
+
+  // Re-apply before every render (defeats billboard/lookAt)
+  const onBeforeRender = React.useCallback(() => {
+    if (!g.current) return;
+    g.current.quaternion.copy(quat);
+  }, [quat]);
+
+  return (
+    <group ref={g} position-z={z} onBeforeRender={onBeforeRender}>
+      {children}
+    </group>
+  );
+}
+```
+
+**Purpose:** Locks all children to slanted face plane by re-applying quaternion every frame. Prevents child components from undoing rotation with billboard/lookAt/Html transforms.
 
 #### Differences from Upright Headstones
 
@@ -567,6 +600,48 @@ const worldSlantH = Math.sqrt(height_world ** 2 + (frontTopZOffset * scale) ** 2
 | **Geometry** | ExtrudeGeometry | Custom BufferGeometry |
 
 #### Common Issues & Solutions
+
+**Issue: Inscriptions not rotating with slant (appear upright)**
+- **Cause**: Using array instead of THREE.Quaternion object, or wrong normal sign
+- **Solution**: 
+  ```typescript
+  const frontNormal = new THREE.Vector3(0, -Math.sin(slantAngleRad), Math.cos(slantAngleRad));
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1), frontNormal);
+  // Pass object, not array!
+  ```
+
+**Issue: Inscriptions floating in front of headstone (both upright and slant)**
+- **Cause**: Double Z-offset - wrapper at origin, frontZ includes full depth
+- **Solution**:
+  ```typescript
+  // Position wrapper AT the face
+  childWrapperPos: [0, 0, (depth / 2) * scale]
+  // frontZ is epsilon only
+  apiData: { frontZ: 0.0005 }
+  ```
+
+**Issue: Z-fighting shimmer between stacked text lines**
+- **Cause**: Multiple texts writing to depth buffer
+- **Solution**: `depthWrite={false}` on all Text components + `renderOrder={10}` on parent
+
+**Issue: Rotation not applying (R3F prop diffing)**
+- **Cause**: R3F doesn't detect quaternion object changes
+- **Solution**:
+  ```typescript
+  useLayoutEffect(() => {
+    if (ref.current && quaternion) {
+      ref.current.quaternion.copy(quaternion);
+    }
+  }, [quaternion]);
+  ```
+
+**Issue: Child components "standing up" (ignoring parent rotation)**
+- **Cause**: Child using billboard, lookAt, or Html without transform
+- **Solution**: Use FaceSpace component with `onBeforeRender` to re-apply quaternion every frame
+
+**Issue: Wrapper too far forward (z-position incorrect)**
+- **Cause**: Using `(depth/2) * scale * sCore` but mesh Z-scale is only `scale`
+- **Solution**: Match meshScale[2]: `(depth / 2) * scale` (no sCore on Z axis)
 
 **Issue: Inscriptions embedded in slant headstone (not visible)**
 - **Cause**: `frontZ` too small - inscriptions inside the stone
@@ -832,7 +907,9 @@ npm start
 2. `components/SvgHeadstone.tsx` - Core 3D logic
 3. `components/ThreeScene.tsx` - Canvas setup
 4. `components/three/Scene.tsx` - Lighting/environment
-5. `TEXTURE_IMPROVEMENTS_SUMMARY.md` - Texture optimization & known limitations
+5. `SLANT_COMPLETE_SUMMARY.md` - Slant rotation implementation (production-ready)
+6. `SLANT_ROTATION_FIX.md` - Rotation debugging process
+7. `TEXTURE_IMPROVEMENTS_SUMMARY.md` - Texture optimization & known limitations
 
 ### For Adding Features
 - **New Shape**: Add SVG to `/public/shapes/`, update data
@@ -927,6 +1004,23 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-13**: Slant Headstone Rotation & Positioning Fix (Production-Ready)
+  - **CRITICAL FIX**: Implemented quaternion-based rotation for inscriptions/motifs on slant surfaces
+  - Fixed double Z-offset bug in upright headstones (text floating at 2x distance)
+  - Created FaceSpace component to lock children to slanted face plane
+  - Force-apply quaternion via useLayoutEffect to prevent R3F prop diffing issues
+  - Fixed normal direction: `-Math.sin(slantAngleRad)` (negative Y for backward tilt)
+  - Wrapper positioning: `[0, 0, (depth/2) * scale]` for both upright and slant
+  - frontZ epsilon: `0.0005` (wrapper already at face, no double offset)
+  - Added `depthWrite={false}` on Text components to prevent z-fighting shimmer
+  - Added `renderOrder={10}` to children group (draw after granite)
+  - Added `polygonOffset` to all granite materials (factor: 1, units: 1)
+  - Scale-aware frontZ epsilon (~0.5mm) prevents z-fighting at grazing angles
+  - FaceSpace `onBeforeRender` defeats child billboard/lookAt attempts
+  - Removed debug helpers (pink plane + axes)
+  - All 48 advice files reviewed and implemented
+  - Created comprehensive documentation: SLANT_ROTATION_FIX.md, SLANT_COMPLETE_SUMMARY.md
+  - Both upright and slant inscriptions now perfectly positioned and visible
 - **2025-12-12**: Slant Headstone Feature (Production-Ready)
   - Implemented upright vs slant headstone style selector in size-selector UI
   - Created trapezoidal geometry using thickness ratio (20% top/base) instead of fixed angle

@@ -1,0 +1,130 @@
+Okay, I see you're working on a Three.js component for SVG headstones, specifically looking for ways to improve the "pitch rock" texture on slant headstones. That's a great goal, as a realistic rock texture can significantly enhance the visual quality.
+
+From your code, I can see you're currently generating a normal map using a Voronoi-based faceted height map. This is a good procedural approach!
+
+Here are some ideas to improve the pitch rock appearance, building on your existing method and introducing some new techniques:
+
+I. Enhancements to Your Current Procedural Normal Map Generation
+
+Refine Voronoi Noise Parameters:
+
+More Layers (FBM/Turbulence): Instead of just one getHeight pass, try layering several Voronoi noise functions at different scales and amplitudes (Fractal Brownian Motion or FBM). This creates more natural, varied erosion patterns.
+
+Cell Shape Variation: Currently, your Voronoi is based on Euclidean distance, leading to somewhat uniform "chips." Explore other distance metrics (e.g., Manhattan, Chebyshev) or combinations to create more irregular cell shapes.
+
+Randomness within Cells: Introduce a slight random offset to the pointX and pointY within each cell to break up perfect hexagonal/square patterns.
+
+Edge Feathering/Smoothing: The current Math.pow(1.0 - Math.min(minDist, 1.0), 0.5) helps, but you could try a smoother interpolation (e.g., quintic Hermite interpolation) at the cell edges to soften the harsh facets and make the "chips" look more eroded.
+
+Varying strength: Instead of a constant strength for the normal calculation, make it procedurally vary slightly across the canvas using another low-frequency noise function. This would make some areas appear more deeply pitted and others shallower.
+
+Add a Roughness Map:
+
+Currently, you're using a fixed roughness: 0.65 for slant headstones. Real rock isn't uniformly rough.
+
+Generate a separate grayscale texture alongside your normal map that represents local roughness. Areas with deeper pits/sharper edges might be rougher, while flatter parts could be smoother. You can derive this from your minDist or height values.
+
+Pass this roughnessMap to MeshPhysicalMaterial.
+
+Ambient Occlusion (AO) Map:
+
+Procedural AO can add a lot of depth by darkening crevices. You can calculate a basic AO map by sampling the generated height map at neighboring points. If a point is significantly lower than its neighbors, it's likely occluded.
+
+Even a simple pass that darkens the lowest points in your getHeight function can help.
+
+Apply this as an aoMap to MeshPhysicalMaterial.
+
+II. Advanced Procedural Generation Techniques
+
+Worley Noise (FBM for Cells): This is essentially what you're doing with Voronoi. To enhance it:
+
+Multiple Feature Points: Instead of finding the single closest point, find the 2nd, 3rd closest, etc., and combine their distances in various ways (e.g., F2-F1) to get different patterns like ridges and valleys.
+
+Domain Warping: "Warp" the input UVs before feeding them into your Voronoi function using another noise function. This creates very organic, swirling, and eroded patterns.
+
+Perlin/Simplex Noise Combination:
+
+Use a base layer of low-frequency Perlin noise for large-scale undulations.
+
+Layer higher-frequency Perlin noise or your Voronoi noise on top for finer details and chips.
+
+This combination is powerful for multi-scale natural textures.
+
+Cellular Automata / Erosion Simulation:
+
+This is more complex but can yield extremely realistic results. Imagine starting with a flat surface and simulating water or wind erosion over time, carving out the rock. Libraries exist for this, or you could implement a simplified version.
+
+III. Texture-Based Approaches (Hybrid or Full)
+
+Combined Albedo/Normal/Roughness Maps:
+
+Start with a Base Rock Texture: Find or create a good seamless PBR (Physically Based Rendering) texture for granite or rough stone (Albedo, Normal, Roughness, AO).
+
+Blend Procedural Detail: Your procedural normal map can be blended on top of or multiplied with a base normal map to add unique, localized "pitch rock" detail without having to generate a full texture from scratch. This gives you the best of both worlds: high-quality base, unique procedural details.
+
+clonedFaceMap and clonedSideMap: These are already using RepeatWrapping and proper filtering. Ensure your base textures are tileable.
+
+Triplanar Mapping (for Sides/Top):
+
+For the sides and top, instead of trying to perfectly unwrap UVs along complex extrusions, Triplanar mapping projects a texture from 3 axes (X, Y, Z) and blends them based on the surface normal. This inherently handles distortion on sharp angles and ensures consistent scale.
+
+This is especially useful for complex geometries where UV unwrapping is hard. Three.js materials don't have this built-in, but you can achieve it with a custom shader or a library like drei's useNormalTexture if you adapt it.
+
+IV. Code-Specific Suggestions for Your rockNormalCanvas
+
+Normalize getHeight Output: Ensure your getHeight function returns values consistently in a 0-1 range. This makes the strength parameter more predictable.
+
+Normal Map Calculation Precision:
+
+Your normal calculation (h0 - hRight) * strength is good. For even more precise normals, consider using a Sobel operator or similar convolution filter across your height map.
+
+The strength value (currently -15.0) controls the intensity of the normal map. Experiment with this carefully. Too high, and it looks jaggy; too low, and it's flat.
+
+Color Space for Normal Maps: You're correctly setting tex.colorSpace = THREE.NoColorSpace; which is crucial for normal maps to prevent gamma correction.
+
+normalScale: You're using normalScale: new THREE.Vector2(2.0, 2.0). This is good for adjusting the normal map intensity in the shader. You can expose this as a prop or link it to overall detail.
+
+textureDensity for Side UVs: Your textureDensity = 20.0 for the side UVs is essentially applying a repeat. This is a good approach to ensure the rock texture doesn't stretch. Make sure this value makes sense relative to the normalScale and the expected size of the "chips."
+
+Example of Layered Noise (Conceptual)
+code
+TypeScript
+download
+content_copy
+expand_less
+// Inside getHeight
+const getHeight = (u: number, v: number) => {
+    const scale1 = 20.0; // Fine details
+    const scale2 = 5.0;  // Medium details
+    const scale3 = 1.0;  // Large undulations
+
+    const getVoronoiDist = (su: number, sv: number, currentScale: number) => {
+        let minDist = 999;
+        for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+                const cellX = Math.floor(su / currentScale) + dx;
+                const cellY = Math.floor(sv / currentScale) + dy;
+                const rand = random2(cellX, cellY);
+                const pointX = cellX * currentScale + rand.x * currentScale;
+                const pointY = cellY * currentScale + rand.y * currentScale;
+                const dist = Math.sqrt((su - pointX) ** 2 + (sv - pointY) ** 2);
+                if (dist < minDist) minDist = dist;
+            }
+        }
+        return Math.pow(1.0 - Math.min(minDist / currentScale, 1.0), 0.5); // Normalize by scale
+    };
+
+    const h1 = getVoronoiDist(u, v, scale1);
+    const h2 = getVoronoiDist(u, v, scale2);
+    const h3 = getVoronoiDist(u, v, scale3);
+
+    // Combine with weights - experiment with these
+    return h1 * 0.4 + h2 * 0.3 + h3 * 0.3;
+};
+Visualizing the Normal Map
+
+A crucial step in debugging and improving procedural normal maps is to visualize just the normal map itself. You can temporarily apply the rockNormalTexture directly to a MeshBasicMaterial and look at it under different lighting conditions in your scene to see if the details are coming out as expected.
+
+By incrementally applying these improvements, you should be able to achieve a much more convincing and visually rich "pitch rock" effect for your slant headstones.
+
+Let me know if you'd like to dive deeper into any of these specific techniques!

@@ -1,0 +1,38 @@
+Yep—that screenshot explains it. In the **upright** style your children “vanish” because they’re being pushed to **z = depth/2 in *unscaled* units**, while the stone mesh is scaled on Z by `scale`. So the front face ends up at `(+depth/2) * scale`, but the children sit at `+depth/2` (10–100× farther away), so they’re not on the face and can even fall outside the camera frustum.
+
+### One-line fix (upright branch)
+
+Compute `frontZ` in **world units** (apply the mesh’s Z scale), and add a hairline epsilon:
+
+```ts
+// UPRIGHT branch — replace apiData.frontZ
+const frontZWorld = (depth / 2) * (scale);  // match meshScale[2]
+...
+apiData: {
+  frontZ: frontZWorld + 0.0005,
+  unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+  version: Math.random(),
+  worldWidth: worldW,
+  worldHeight: worldH
+},
+```
+
+(Leave `childWrapperPos` at `[0,0,0]` for upright; the `FaceSpace` wrapper will add this `frontZ` offset.)
+
+### Optional tidy
+
+Only use the `FaceSpace` “lock” on **slant** stones (identity quaternion is fine on upright, but you can skip the extra onBeforeRender):
+
+```tsx
+{headstoneStyle === 'slant' ? (
+  <FaceSpace quat={childWrapperRotation} width={apiData.worldWidth} slantHeight={apiData.worldHeight} z={apiData.frontZ}>
+    <group scale={meshScale}>{typeof children === 'function' && children(childApi, selectedAdditions)}</group>
+  </FaceSpace>
+) : (
+  <group position-z={apiData.frontZ}>
+    <group scale={meshScale}>{typeof children === 'function' && children(childApi, selectedAdditions)}</group>
+  </group>
+)}
+```
+
+After this change, upright items will reappear (sitting exactly on the polished face), and slant items will remain correctly locked to the slanted plane. 

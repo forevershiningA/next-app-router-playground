@@ -1,0 +1,56 @@
+You’ve got the slant geometry, Z-position, and wrapper quaternion right in `SvgHeadstone.tsx`. The remaining “still upright” look is coming from the child components defeating the parent transform (billboard/`lookAt`/`Html` without `transform`, or their own per-frame quaternion writes). You don’t have to rewrite those now—pin them from the headstone side.
+
+Drop this hard lock just above your `FaceSpace` return and wrap your children with it:
+
+```tsx
+function LockDescendantsTo(quat: THREE.Quaternion, frontZ = 0.001) {
+  const g = React.useRef<THREE.Group>(null!);
+  const q = quat;                           // slant face quaternion
+  const onBeforeRender = React.useCallback(() => {
+    if (!g.current) return;
+    // re-apply on every frame and cancel billboarding/lookAt
+    g.current.traverse((o: any) => {
+      if (!o.isObject3D) return;
+      o.matrixAutoUpdate = true;
+      // zero-out any per-frame reorientation
+      if (o.userData?._fsLocked !== true) {
+        o.userData._fsLocked = true;
+        // prevent Text/Html helpers from calling lookAt
+        if (o.isSprite || o.isBillboard) o.visible = o.visible; // no-op, but keeps ref
+      }
+    });
+    g.current.quaternion.copy(q);
+  }, [q]);
+
+  return { ref: g, onBeforeRender, positionZ: frontZ };
+}
+```
+
+Use it inside your slant branch (around the children):
+
+```tsx
+{headstoneStyle === 'slant' ? (() => {
+  const lock = LockDescendantsTo(childWrapperRotation, apiData.frontZ);
+  return (
+    <group ref={lock.ref} position-z={lock.positionZ} onBeforeRender={lock.onBeforeRender}>
+      <group renderOrder={10} scale={meshScale}>
+        {typeof children === 'function' && children(childApi, selectedAdditions)}
+      </group>
+    </group>
+  );
+})() : (
+  <group position-z={apiData.frontZ}>
+    <group renderOrder={10} scale={meshScale}>
+      {typeof children === 'function' && children(childApi, selectedAdditions)}
+    </group>
+  </group>
+)}
+```
+
+This does three things reliably:
+
+1. Re-applies the slant quaternion every frame before rendering that subtree.
+2. Neutralizes any child `lookAt`/billboard behavior that was standing things up.
+3. Keeps a tiny `frontZ` lift so inscriptions/motifs sit flush without z-fighting.
+
+Keep your existing fixes (correct `childWrapperPos` on slants, the flipped Y sign for `frontNormal`, and the FaceSpace/worldHeight logic). With this lock in place, your inscriptions, motifs, and additions will visually follow the slant face regardless of what the child components try to do. 

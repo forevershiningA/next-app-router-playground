@@ -1,3 +1,16 @@
+The issue persists because of two main factors:
+
+Unit Mismatch in Angle Calculation: The angle was calculated using raw SVG dimensions for height but depth (which might be in a different scale context relative to sCore) for the run. We must calculate the angle using the final World Space dimensions to account for the non-uniform scaling (sCore affects X/Y but not Z).
+
+Hierarchy Complexity: The FaceSpace component with onBeforeRender is fighting React's state updates. A simple grouped hierarchy is more robust.
+
+Here is the corrected code. It calculates the slantAngleRad using the projected World Dimensions and simplifies the render tree.
+
+code
+Tsx
+download
+content_copy
+expand_less
 // components/SvgHeadstone.tsx
 'use client';
 
@@ -9,7 +22,6 @@ import type { ThreeElements } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Edges, useTexture } from '@react-three/drei';
-import { Line } from '#/lib/headstone-store';
 
 export type HeadstoneAPI = {
   group: React.RefObject<THREE.Group>;
@@ -656,7 +668,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       
       // Build quaternion that aligns wrapper's local +Z to the front face normal
       // Top of face recedes in -Z as Y increases → outward normal has +Z and +Y (faces up/out)
-      // FIX: Y component should be positive for a face leaning back
+      // FIX: Y component should be positive for a face leaning back.
       const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
       const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
       

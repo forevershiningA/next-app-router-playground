@@ -1,0 +1,53 @@
+Looking much better—the children are finally living on the slanted face. The last mismatches are coming from **how the children map Y-size/position** and a bit of overdraw. Here’s the tight finish you can apply **without touching the stone geometry**:
+
+### 1) Map children using the *slant* height (not vertical height)
+
+In your inscription/motif components, when converting authoring-normalized coords (0..1) to local FaceSpace:
+
+```ts
+// api comes from SvgHeadstone
+const x = (nx - 0.5) * api.worldWidth;   // center-based X across face
+const y =  ny        * api.worldHeight;  // <-- use slant height from api
+const z =  api.frontZ;                   // tiny lift off the face
+group.position.set(x, y, z);
+
+// Font or motif sizing:
+const hWorld = desiredNormalizedHeight * api.worldHeight;
+text.scale.setScalar(hWorld / text.boundingBoxHeight);
+```
+
+`api.worldHeight` already equals the **diagonal slant length** on slants (and the vertical height on uprights), so this unifies both styles. 
+
+### 2) Make on-stone graphics sort cleanly
+
+For each material used by inscriptions/motifs:
+
+```ts
+material.depthWrite = false;  // prevent line-on-line z-fighting
+mesh.renderOrder = 10;        // children after granite
+```
+
+(Granite already has `polygonOffset`, so this combo removes flicker.) 
+
+### 3) Keep inheritance intact
+
+Double-check your child components:
+
+* no `<Billboard>` / `<Sprite>` / `lookAt()` calls,
+* `<Html transform />` (if you use HTML),
+* `matrixAutoUpdate = true`.
+
+You’ve already got the FaceSpace wrapper that re-applies the quaternion each frame, so nothing can “stand up” to the camera. ✔️ 
+
+### 4) Optional: edge safety
+
+Clamp to a small in-plane margin so glyphs don’t rub the trapezoid edge:
+
+```ts
+const m = 0.01; // 10 mm
+const xClamped = THREE.MathUtils.clamp(x, -api.worldWidth/2 + m, api.worldWidth/2 - m);
+const yClamped = THREE.MathUtils.clamp(y, m, api.worldHeight - m);
+group.position.set(xClamped, yClamped, api.frontZ);
+```
+
+With those changes, slant and upright will render identically from the children’s perspective—positions/scales will line up, and the stack of lines will stay crisp.
