@@ -67,11 +67,11 @@ export default function SizeSelector({
           </p>
         </div>
 
-        {/* Slant Thickness Control (only for slant style) */}
+        {/* Slant Depth/Thickness Control (only for slant style) */}
         {headstoneStyle === 'slant' && (
-          <div className="mb-4">
+          <div className="mb-4 space-y-2">
             <TailwindSlider
-              label="Slant Angle"
+              label="Depth / Thickness"
               value={slantThickness * 100} // Convert 0.1-1.0 to 10-100 for display
               min={10}
               max={100}

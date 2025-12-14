@@ -44,7 +44,7 @@ type Props = {
   doubleSided?: boolean;
   showEdges?: boolean;
   headstoneStyle?: 'upright' | 'slant';
-  slantThickness?: number; // Ratio of top to base thickness (0.1 to 1.0)
+  slantThickness?: number; // Absolute thickness in mm (100-300mm)
   meshProps?: ThreeElements['mesh'];
   children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
   selectedAdditions?: string[];
@@ -164,7 +164,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   doubleSided = false,
   showEdges = false,
   headstoneStyle = 'upright',
-  slantThickness = 0.2, // Default 20% ratio
+  slantThickness = 150, // Default 150mm
   meshProps,
   children,
   selectedAdditions = [],
@@ -415,10 +415,16 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     if (headstoneStyle === 'slant') {
       const slantGeometry = new THREE.BufferGeometry();
       
-      // FIX: Use Thickness Ratios instead of fixed Angle to ensure a Trapezoidal shape
-      // The provided 'depth' is the Base Thickness (Nose)
-      const baseThickness = depth;
-      const topThickness = baseThickness * slantThickness; // User-controlled ratio (0.1 to 1.0)
+      // FIX: Use absolute thickness in mm instead of ratios
+      // The slantThickness parameter is now in mm (100-200mm)
+      const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js units
+      const topThickness = baseThickness * 0.2; // 20% ratio for top (standard cemetery slant)
+      
+      console.log('[SvgHeadstone] SLANT MODE:', {
+        slantThicknessMm: slantThickness,
+        baseThicknessCm: baseThickness,
+        topThicknessCm: topThickness,
+      });
       
       // Calculate how far back the top-front edge starts
       const frontTopZOffset = baseThickness - topThickness;
@@ -474,11 +480,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left
       const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right
 
-      // Back Face Corners (z=-depth for both bottom and top, assuming vertical back)
-      const P_BBL = new THREE.Vector3(minX, minY, -depth);            // Back Bottom Left
-      const P_BBR = new THREE.Vector3(maxX, minY, -depth);            // Back Bottom Right
-      const P_BTL = new THREE.Vector3(minX, maxY, -depth);            // Back Top Left
-      const P_BTR = new THREE.Vector3(maxX, maxY, -depth);            // Back Top Right
+      // Back Face Corners (z=-baseThickness for both bottom and top)
+      const P_BBL = new THREE.Vector3(minX, minY, -baseThickness);            // Back Bottom Left
+      const P_BBR = new THREE.Vector3(maxX, minY, -baseThickness);            // Back Bottom Right
+      const P_BTL = new THREE.Vector3(minX, maxY, -baseThickness);            // Back Top Left
+      const P_BTR = new THREE.Vector3(maxX, maxY, -baseThickness);            // Back Top Right
       
       // --- Faces ---
 
@@ -554,8 +560,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       // Translate geometry so:
       // 1. X is centered
       // 2. Bottom (minY) is at Y=0
-      // 3. FIX: Translate Z by +depth/2 to center the footprint on (0,0,0)
-      slantGeometry.translate(-(minX + maxX) / 2, -minY, depth / 2);
+      // 3. Z translation: Align back edge with upright headstone back
+      //    Upright back is at -depth/2 after translation
+      //    Slant back is at -baseThickness before translation
+      //    To get slant back to -depth/2: translate by (-baseThickness) - (-depth/2) = depth/2 - baseThickness
+      //    But we want positive translation, so: baseThickness - depth/2
+      //    Actually: translate by (baseThickness - depth/2) so back moves from -baseThickness to -depth/2
+      slantGeometry.translate(-(minX + maxX) / 2, -minY, baseThickness - depth / 2);
       slantGeometry.computeVertexNormals();
       
       // Material groups: 0 = front, 1 = everything else
@@ -673,7 +684,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           worldWidth: worldW,
           worldHeight: worldSlantH // CRITICAL: Report slant height so children fit the slanted surface
         },
-        childWrapperPos: [0, 0, (depth / 2) * scale] as [number, number, number], // Match meshScale[2] (no sCore on Z)
+        childWrapperPos: [0, 0, (baseThickness - depth / 2) * scale] as [number, number, number], // Match geometry translation
         childWrapperRotation: wrapperQuaternion // Return THREE.Quaternion object, not array
       };
     }
@@ -892,7 +903,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number],
       childWrapperRotation: new THREE.Quaternion() // Identity quaternion for upright
     };
-  }, [shapeParams, outline, depth, bevel, scale, headstoneStyle]);
+  }, [shapeParams, outline, depth, bevel, scale, headstoneStyle, slantThickness]);
 
   // 4. Handle Repeats via Texture Matrix (Just like the old version)
   useLayoutEffect(() => {

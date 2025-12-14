@@ -57,6 +57,8 @@ export default function DesignerNav() {
   const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
   const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const setHeadstoneStyle = useHeadstoneStore((s) => s.setHeadstoneStyle);
+  const slantThickness = useHeadstoneStore((s) => s.slantThickness);
+  const setSlantThickness = useHeadstoneStore((s) => s.setSlantThickness);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
@@ -332,6 +334,28 @@ export default function DesignerNav() {
                           className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                         />
                       </div>
+                      
+                      {/* Thickness Slider - Only show when editing headstone and slant style is selected */}
+                      {editingObject === 'headstone' && headstoneStyle === 'slant' && (
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-200">
+                            Thickness: {Math.round(slantThickness)} <span className="text-slate-500">mm</span>
+                          </label>
+                          <input
+                            type="range"
+                            min={100}
+                            max={300}
+                            step={10}
+                            value={slantThickness}
+                            onChange={(e) => {
+                              const newValue = Number(e.target.value);
+                              console.log('[DesignerNav] Thickness slider changed to:', newValue);
+                              setSlantThickness(newValue);
+                            }}
+                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          />
+                        </div>
+                      )}
                       
                       {/* Headstone Style Selection - Only show when editing headstone */}
                       {editingObject === 'headstone' && (
