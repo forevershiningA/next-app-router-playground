@@ -231,6 +231,7 @@ const TARGET_HEIGHTS = {
   headstoneMaterialUrl: string | null;
   baseMaterialUrl: string | null;
   headstoneStyle: 'upright' | 'slant';   // Headstone style selector
+  slantThickness: number;                // Slant depth in mm (100-300mm)
   baseFinish: 'default' | 'rock-pitch';  // Base finish selector
   borderName: string | null;      // Bronze plaque borders
   
@@ -268,6 +269,7 @@ const TARGET_HEIGHTS = {
 - `setShapeUrl()` - Change headstone shape
 - `setMaterialUrl()` - Change texture
 - `setHeadstoneStyle()` - Toggle between upright/slant
+- `setSlantThickness()` - Adjust slant depth (100-300mm)
 - `setBaseFinish()` - Toggle between polished/rock-pitch
 - `addInscription()` - Add new text
 - `updateInscription()` - Modify existing text
@@ -434,20 +436,38 @@ MeshPhysicalMaterial({
 ## Slant Headstone Feature
 
 ### Overview
-**Slant Headstones** are beveled markers that sit at a 30° angle, commonly used in cemeteries. Unlike upright headstones that stand vertically, slant headstones have a **trapezoidal profile** with a slanted front face for inscriptions.
+**Slant Headstones** are beveled markers that sit at an angle, commonly used in cemeteries. Unlike upright headstones that stand vertically, slant headstones have a **trapezoidal profile** with a slanted front face for inscriptions.
+
+### User Controls
+- **Headstone Style Selector**: Toggle between "Upright" and "Slant" styles
+- **Thickness Slider**: Adjustable depth control (100-300mm) for slant headstones
+  - **100mm**: Steep angle (~45°)
+  - **150mm**: Standard cemetery angle (~30°) - Default
+  - **300mm**: Shallow/gradual slant
+- **Location**: DesignerNav → Select Size → Appears after Height slider when Slant is selected
 
 ### Implementation (`SvgHeadstone.tsx`)
 
 #### Visual Characteristics
-- **Front Face**: Slanted backward at 30° angle (like a ramp)
+- **Front Face**: Slanted backward (angle varies with thickness slider)
 - **Profile**: Trapezoidal shape (wider at bottom, narrower at top)
 - **Texture**: Rock pitch texture on left/right sides with pop-out bumps
 - **Inscriptions**: Rotated to follow the slanted surface
-- **Depth**: Same Z-depth as upright headstones
+- **Back Alignment**: Back edge aligns with base at `-depth/2` position regardless of thickness
 
 #### Technical Implementation
 
-**1. Trapezoidal Geometry:**
+**1. Thickness Control (100-300mm):**
+```typescript
+// User-controlled thickness in millimeters (via slider in DesignerNav)
+const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js
+const topThickness = baseThickness * 0.2; // 20% ratio for top (standard trapezoid)
+
+// Calculate how far back the top-front edge is pushed
+const frontTopZOffset = baseThickness - topThickness;
+```
+
+**2. Trapezoidal Geometry:**
 ```typescript
 // Use thickness ratios instead of fixed angle for proper trapezoid
 const baseThickness = depth;
@@ -470,12 +490,34 @@ const worldSlantH = Math.sqrt(worldHeight ** 2 + worldRun ** 2);
 **2. Vertex Positioning:**
 ```typescript
 // 8 vertices for trapezoidal box
-// Bottom corners: Z = -depth/2
-// Top corners: Z = depth/2 - topReduction (pulled back)
-// Creates slanted front face while keeping back vertical
+// Front Face: Bottom at Z=0, Top pushed back to Z=-frontTopZOffset
+const P_FBL = new THREE.Vector3(minX, minY, 0);                 // Front Bottom Left
+const P_FBR = new THREE.Vector3(maxX, minY, 0);                 // Front Bottom Right
+const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left (pushed back)
+const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right (pushed back)
+
+// Back Face: Vertical back at Z=-baseThickness
+const P_BBL = new THREE.Vector3(minX, minY, -baseThickness);    // Back Bottom Left
+const P_BBR = new THREE.Vector3(maxX, minY, -baseThickness);    // Back Bottom Right
+const P_BTL = new THREE.Vector3(minX, maxY, -baseThickness);    // Back Top Left
+const P_BTR = new THREE.Vector3(maxX, maxY, -baseThickness);    // Back Top Right
 ```
 
-**3. Rock Pitch Texture on Sides:**
+**3. Back Alignment with Base:**
+```typescript
+// CRITICAL: Align back edge with upright headstone back at -depth/2
+// Translate by (baseThickness - depth/2) so back moves from -baseThickness to -depth/2
+slantGeometry.translate(
+  -(minX + maxX) / 2,              // Center X
+  -minY,                            // Bottom at Y=0
+  baseThickness - depth / 2         // Align back edge
+);
+
+// Wrapper position matches translation
+childWrapperPos: [0, 0, (baseThickness - depth / 2) * scale]
+```
+
+**4. Rock Pitch Texture on Sides:**
 ```typescript
 // Left/Right faces get rock pitch normal map
 const sideUVScale = 20.0; // Baked into geometry UVs
@@ -490,7 +532,22 @@ MeshPhysicalMaterial({
 });
 ```
 
-**4. UV Mapping:**
+**4. Rock Pitch Texture on Sides:**
+```typescript
+// Left/Right faces get rock pitch normal map
+const sideUVScale = 20.0; // Baked into geometry UVs
+normalMap.repeat.set(1, 1); // No additional repeat (already in UVs)
+
+MeshPhysicalMaterial({
+  normalMap: rockNormalTexture,
+  normalScale: (2.0, 2.0),
+  color: 0x444444,
+  roughness: 0.65,
+  metalness: 0.0,
+});
+```
+
+**5. UV Mapping:**
 ```typescript
 // Coordinate-driven approach for left/right sides
 for (let i = 0; i < posCount; i++) {
@@ -508,15 +565,15 @@ for (let i = 0; i < posCount; i++) {
 }
 ```
 
-**5. Child Wrapper Rotation:**
+**6. Child Wrapper Rotation:**
 ```typescript
 // Build quaternion that aligns wrapper's local +Z to the front face normal
 // CRITICAL: Y component must be POSITIVE for backward-leaning slant
 const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
 const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
 
-// Position wrapper at front face (no double Z-offset)
-childWrapperPos: [0, 0, (depth / 2) * scale]  // Match meshScale[2] (no sCore on Z)
+// Position wrapper to match geometry translation
+childWrapperPos: [0, 0, (baseThickness - depth / 2) * scale]
 childWrapperRotation: wrapperQuaternion  // THREE.Quaternion object (not array!)
 
 // apiData.frontZ is epsilon only (wrapper already at face)
@@ -526,10 +583,42 @@ apiData: {
 }
 ```
 
-**6. Z-Centering:**
+**7. Real-Time Updates:**
 ```typescript
-// Translate geometry so center is at origin
-slantGeometry.translate(
+// CRITICAL: Add slantThickness to useMemo dependencies
+}, [shapeParams, outline, depth, bevel, scale, headstoneStyle, slantThickness]);
+
+// Geometry re-creates when thickness slider changes
+```
+
+#### Key Features
+✅ **Adjustable thickness** (100-300mm via slider in DesignerNav)  
+✅ **Back edge alignment** with base at `-depth/2` regardless of thickness  
+✅ **Real-time geometry updates** when slider changes  
+✅ **World-space angle calculation** (accounts for non-uniform scaling)  
+✅ **Trapezoidal profile** (20% thickness ratio)  
+✅ **Rock pitch sides** with pop-out bumps  
+✅ **Quaternion-based rotation** (positive Y normal)  
+✅ **Simplified hierarchy** (no FaceSpace complexity)  
+✅ **Z-centered geometry** for proper base alignment  
+✅ **Proper UV mapping** (no stretching)  
+✅ **MeshPhysicalMaterial** (no clearcoat errors)  
+✅ **No z-fighting** (polygonOffset on materials)  
+✅ **Production-ready** (TypeScript build passes)  
+
+#### Critical Requirements
+1. **World-space angle calculation** - Use `worldScaleY * svgHeight` and `worldScaleZ * frontTopZOffset` in atan2
+2. **Positive Y normal** - `frontNormal = (0, Math.sin(slantAngleRad), Math.cos(slantAngleRad))`
+3. **THREE.Quaternion object** - Not array! R3F `quaternion` prop requires object
+4. **Back alignment translation** - `baseThickness - depth/2` ensures back at `-depth/2`
+5. **slantThickness dependency** - Must be in useMemo array for real-time updates
+6. **Wrapper position** - `[0, 0, (baseThickness - depth/2) * scale]` matches geometry translation
+7. **frontZ epsilon only** - `0.0005` (wrapper already at face, no full depth offset)
+8. **No FaceSpace** - Removed for simplicity; children inherit rotation naturally
+9. **renderOrder=10** - Children draw after granite (prevents z-fighting)
+10. **polygonOffset** - On granite materials (factor: 1, units: 1)
+11. **Force-apply quaternion** - useLayoutEffect to copy quaternion (R3F prop diffing workaround)
+12. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
   -(minX + maxX) / 2,  // Center X
   -minY,                // Bottom at Y=0
   depth / 2             // Center Z at origin (CRITICAL for alignment)
@@ -1018,7 +1107,17 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
-- **2025-12-14**: Slant Headstone Rotation Fix - World-Space Angle Calculation (Production-Ready)
+- **2025-12-14 (Evening)**: Adjustable Slant Thickness Slider (100-300mm)
+  - Added user-controlled thickness slider in DesignerNav (appears after Height slider)
+  - Changed from ratio-based (0.1-1.0) to absolute millimeter values (100-300mm)
+  - Slider controls `baseThickness` which determines slant angle
+  - 100mm = steep angle (~45°), 150mm = standard (~30°), 300mm = shallow/gradual
+  - Fixed back edge alignment: translates by `baseThickness - depth/2` to keep back at `-depth/2`
+  - Added `slantThickness` to useMemo dependencies for real-time geometry updates
+  - Back edge remains perfectly aligned with base regardless of thickness value
+  - Production-ready with proper TypeScript types and error handling
+  - Commit: `7bd432fc59`
+- **2025-12-14 (Morning)**: Slant Headstone Rotation Fix - World-Space Angle Calculation (Production-Ready)
   - **CRITICAL FIX**: Fixed unit mismatch in slant angle calculation (advice49-53)
   - Calculate angle using world-space dimensions: `atan2(worldRun, worldHeight)`
   - Account for non-uniform scaling: `worldScaleY = scale * sCore`, `worldScaleZ = scale`
