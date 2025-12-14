@@ -205,8 +205,8 @@ export default function DesignsTreeNav() {
 
   return (
     <nav className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
-      {/* Product Header - shown when catalog is loaded */}
-      {catalog && (
+      {/* Product Header - shown when catalog is loaded AND not on design gallery pages */}
+      {catalog && !pathname?.startsWith('/designs') && (
         <div className="border-b border-slate-700/50 bg-black/20 backdrop-blur-sm p-4">
           <h1 className="text-lg font-semibold text-white">
             {catalog.product.name}
