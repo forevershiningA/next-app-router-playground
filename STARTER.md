@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-13  
+**Last Updated:** 2025-12-14  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -449,14 +449,22 @@ MeshPhysicalMaterial({
 
 **1. Trapezoidal Geometry:**
 ```typescript
-// Calculate slant angle and dimensions
-const slantAngleRad = (30 * Math.PI) / 180; // 30 degrees
-const slantRise = height * 0.4; // 40% of height for depth
-const topReduction = slantRise * Math.tan(slantAngleRad);
+// Use thickness ratios instead of fixed angle for proper trapezoid
+const baseThickness = depth;
+const topThickness = baseThickness * 0.2; // 20% ratio (2"/10" cemetery standard)
+const frontTopZOffset = baseThickness - topThickness;
 
-// Create trapezoid profile
-// Bottom: full width, Top: reduced by topReduction
-// Front face tilts backward from bottom to top
+// CRITICAL: Calculate slant angle in WORLD SPACE to account for non-uniform scaling
+// sCore affects height(Y) but NOT depth(Z), so we must scale before atan2
+const worldScaleY = Math.abs(scale) * sCore;
+const worldScaleZ = Math.abs(scale);
+const svgHeight = maxY - minY;
+const worldHeight = svgHeight * worldScaleY;
+const worldRun = frontTopZOffset * worldScaleZ;
+const slantAngleRad = Math.atan2(worldRun, worldHeight); // Angle from vertical
+
+// Calculate diagonal slant height for inscription scaling
+const worldSlantH = Math.sqrt(worldHeight ** 2 + worldRun ** 2);
 ```
 
 **2. Vertex Positioning:**
@@ -502,13 +510,18 @@ for (let i = 0; i < posCount; i++) {
 
 **5. Child Wrapper Rotation:**
 ```typescript
-// Rotate inscriptions/motifs to match slant
-childWrapperPos: [0, 0, 0]  // CRITICAL: Keep at origin (geometry already centered)
-childWrapperRotation: [-slantAngleRad, 0, 0] // Tilt backward
+// Build quaternion that aligns wrapper's local +Z to the front face normal
+// CRITICAL: Y component must be POSITIVE for backward-leaning slant
+const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
+const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
 
-// apiData.frontZ controls offset from slanted surface:
+// Position wrapper at front face (no double Z-offset)
+childWrapperPos: [0, 0, (depth / 2) * scale]  // Match meshScale[2] (no sCore on Z)
+childWrapperRotation: wrapperQuaternion  // THREE.Quaternion object (not array!)
+
+// apiData.frontZ is epsilon only (wrapper already at face)
 apiData: {
-  frontZ: 5.0,  // SVG units offset (adjusted to keep content visible on slanted surface)
+  frontZ: 0.0005,  // Scale-aware epsilon (~0.5mm)
   worldHeight: worldSlantH  // Diagonal slant height for proper text scaling
 }
 ```
@@ -523,70 +536,57 @@ slantGeometry.translate(
 );
 ```
 
-**7. Thickness Ratio (Trapezoidal Shape):**
+**7. Simplified Hierarchy (No FaceSpace):**
 ```typescript
-// Use thickness ratios instead of fixed angles for proper trapezoid
-const baseThickness = depth;
-const topThickness = baseThickness * 0.2; // 20% ratio (2"/10" cemetery standard)
-const frontTopZOffset = baseThickness - topThickness;
-
-// Calculate slant angle from thickness ratio
-const slantAngleRad = Math.atan2(frontTopZOffset, height_svg_units);
-
-// Calculate diagonal slant height for inscription scaling
-const worldSlantH = Math.sqrt(height_world ** 2 + (frontTopZOffset * scale) ** 2);
+// FaceSpace component removed for simplicity and natural rotation inheritance
+// Children now inherit rotation directly from scaledWrapperRef
+<group 
+  ref={scaledWrapperRef}
+  position={childWrapperPos}
+  quaternion={childWrapperRotation}
+>
+  {headstoneStyle === 'slant' ? (
+    <group position-z={apiData?.frontZ || 0.001}>
+      <group renderOrder={10} scale={meshScale}>
+         {typeof children === 'function' && children(childApi, selectedAdditions)}
+      </group>
+    </group>
+  ) : (
+    <group position-z={apiData?.frontZ || 0}>
+      <group renderOrder={10} scale={meshScale}>
+         {typeof children === 'function' && children(childApi, selectedAdditions)}
+      </group>
+    </group>
+  )}
+</group>
 ```
 
 #### Key Features
-✅ **30° slant angle** (authentic cemetery marker)  
-✅ **Trapezoidal profile** (not a wedge)  
+✅ **World-space angle calculation** (accounts for non-uniform scaling)  
+✅ **Trapezoidal profile** (20% thickness ratio)  
 ✅ **Rock pitch sides** with pop-out bumps  
-✅ **Rotated inscriptions** follow slanted surface (quaternion-based)  
-✅ **Z-centered** for proper alignment with base  
+✅ **Quaternion-based rotation** (positive Y normal)  
+✅ **Simplified hierarchy** (no FaceSpace complexity)  
+✅ **Z-centered geometry** for proper base alignment  
 ✅ **Proper UV mapping** (no stretching)  
 ✅ **MeshPhysicalMaterial** (no clearcoat errors)  
-✅ **FaceSpace lock** prevents child rotation override  
-✅ **No z-fighting** (depthWrite=false + polygonOffset)  
+✅ **No z-fighting** (polygonOffset on materials)  
+✅ **Production-ready** (TypeScript build passes)  
 
 #### Critical Requirements
-1. **THREE.Quaternion object** - Not array! R3F `quaternion` prop requires object
-2. **Negative Y normal** - `frontNormal = (0, -Math.sin(slantAngleRad), Math.cos(slantAngleRad))`
-3. **Wrapper position** - `[0, 0, (depth/2) * scale]` matches mesh Z-scale (no sCore)
-4. **frontZ epsilon only** - `0.0005` (wrapper already at face, no full depth offset)
-5. **FaceSpace component** - Re-applies quaternion every frame via `onBeforeRender`
-6. **depthWrite=false** - On all Text components to prevent stacked line shimmer
+1. **World-space angle calculation** - Use `worldScaleY * svgHeight` and `worldScaleZ * frontTopZOffset` in atan2
+2. **Positive Y normal** - `frontNormal = (0, Math.sin(slantAngleRad), Math.cos(slantAngleRad))`
+3. **THREE.Quaternion object** - Not array! R3F `quaternion` prop requires object
+4. **Wrapper position** - `[0, 0, (depth/2) * scale]` matches mesh Z-scale (no sCore)
+5. **frontZ epsilon only** - `0.0005` (wrapper already at face, no full depth offset)
+6. **No FaceSpace** - Removed for simplicity; children inherit rotation naturally
 7. **renderOrder=10** - Children draw after granite (prevents z-fighting)
 8. **polygonOffset** - On granite materials (factor: 1, units: 1)
 9. **Force-apply quaternion** - useLayoutEffect to copy quaternion (R3F prop diffing workaround)
 10. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
 
-#### FaceSpace Component (Rotation Lock)
-```typescript
-function FaceSpace({ quat, width, slantHeight, z = 0.001, children }) {
-  const g = React.useRef<THREE.Group>(null!);
-
-  // Lock transform to face normal on mount
-  React.useLayoutEffect(() => {
-    if (!g.current) return;
-    g.current.quaternion.copy(quat);
-    g.current.updateMatrix();
-  }, [quat]);
-
-  // Re-apply before every render (defeats billboard/lookAt)
-  const onBeforeRender = React.useCallback(() => {
-    if (!g.current) return;
-    g.current.quaternion.copy(quat);
-  }, [quat]);
-
-  return (
-    <group ref={g} position-z={z} onBeforeRender={onBeforeRender}>
-      {children}
-    </group>
-  );
-}
-```
-
-**Purpose:** Locks all children to slanted face plane by re-applying quaternion every frame. Prevents child components from undoing rotation with billboard/lookAt/Html transforms.
+#### FaceSpace Component (REMOVED)
+**Note:** The FaceSpace component was removed in the December 2025 refactor for simplicity and to avoid `onBeforeRender` conflicts with React Three Fiber's natural rotation propagation. Children now inherit rotation directly from the parent `scaledWrapperRef` group, which is already positioned and rotated correctly for the slanted surface.
 
 #### Differences from Upright Headstones
 
@@ -602,13 +602,28 @@ function FaceSpace({ quat, width, slantHeight, z = 0.001, children }) {
 #### Common Issues & Solutions
 
 **Issue: Inscriptions not rotating with slant (appear upright)**
-- **Cause**: Using array instead of THREE.Quaternion object, or wrong normal sign
+- **Cause**: Unit mismatch in angle calculation or wrong normal sign
 - **Solution**: 
   ```typescript
-  const frontNormal = new THREE.Vector3(0, -Math.sin(slantAngleRad), Math.cos(slantAngleRad));
+  // CRITICAL: Calculate angle in world space
+  const worldScaleY = Math.abs(scale) * sCore;
+  const worldScaleZ = Math.abs(scale);
+  const worldHeight = svgHeight * worldScaleY;
+  const worldRun = frontTopZOffset * worldScaleZ;
+  const slantAngleRad = Math.atan2(worldRun, worldHeight);
+  
+  // CRITICAL: Y component must be POSITIVE
+  const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad));
   const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1), frontNormal);
-  // Pass object, not array!
   ```
+
+**Issue: Inscriptions at wrong angle or scale**
+- **Cause**: Using SVG dimensions instead of world-space dimensions
+- **Solution**: Always use `worldHeight` and `worldRun` (scaled by `sCore` and `scale`) before atan2
+
+**Issue: Double rotation**
+- **Cause**: Passing parent rotation to child wrapper again
+- **Solution**: Remove FaceSpace or pass identity quaternion; let children inherit from parent naturally
 
 **Issue: Inscriptions floating in front of headstone (both upright and slant)**
 - **Cause**: Double Z-offset - wrapper at origin, frontZ includes full depth
@@ -621,8 +636,12 @@ function FaceSpace({ quat, width, slantHeight, z = 0.001, children }) {
   ```
 
 **Issue: Z-fighting shimmer between stacked text lines**
-- **Cause**: Multiple texts writing to depth buffer
-- **Solution**: `depthWrite={false}` on all Text components + `renderOrder={10}` on parent
+- **Cause**: Multiple texts writing to depth buffer (Note: `depthWrite` is not a valid Text prop)
+- **Solution**: Use `renderOrder={10}` on parent group and `polygonOffset` on materials
+
+**Issue: TypeScript build errors on Text components**
+- **Cause**: `depthWrite` is not a valid prop on `@react-three/drei` Text component
+- **Solution**: Remove `depthWrite` props; drei Text handles materials internally
 
 **Issue: Rotation not applying (R3F prop diffing)**
 - **Cause**: R3F doesn't detect quaternion object changes
@@ -636,17 +655,12 @@ function FaceSpace({ quat, width, slantHeight, z = 0.001, children }) {
   ```
 
 **Issue: Child components "standing up" (ignoring parent rotation)**
-- **Cause**: Child using billboard, lookAt, or Html without transform
-- **Solution**: Use FaceSpace component with `onBeforeRender` to re-apply quaternion every frame
+- **Cause**: Complex FaceSpace logic interfering with React Three Fiber updates
+- **Solution**: Remove FaceSpace; use simple group hierarchy for natural rotation inheritance
 
 **Issue: Wrapper too far forward (z-position incorrect)**
 - **Cause**: Using `(depth/2) * scale * sCore` but mesh Z-scale is only `scale`
 - **Solution**: Match meshScale[2]: `(depth / 2) * scale` (no sCore on Z axis)
-
-**Issue: Inscriptions embedded in slant headstone (not visible)**
-- **Cause**: `frontZ` too small - inscriptions inside the stone
-- **Solution**: Increase `frontZ` to 5.0 or higher in SVG units
-- **Note**: Wrapper rotation transforms Z-axis, so frontZ works differently than upright
 
 **Issue: Inscriptions floating far away (z=-1000)**
 - **Cause**: `childWrapperPos` incorrectly set to `[0, 0, depth/2]` (double offset)
@@ -1004,23 +1018,25 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
-- **2025-12-13**: Slant Headstone Rotation & Positioning Fix (Production-Ready)
-  - **CRITICAL FIX**: Implemented quaternion-based rotation for inscriptions/motifs on slant surfaces
-  - Fixed double Z-offset bug in upright headstones (text floating at 2x distance)
-  - Created FaceSpace component to lock children to slanted face plane
-  - Force-apply quaternion via useLayoutEffect to prevent R3F prop diffing issues
-  - Fixed normal direction: `-Math.sin(slantAngleRad)` (negative Y for backward tilt)
-  - Wrapper positioning: `[0, 0, (depth/2) * scale]` for both upright and slant
+- **2025-12-14**: Slant Headstone Rotation Fix - World-Space Angle Calculation (Production-Ready)
+  - **CRITICAL FIX**: Fixed unit mismatch in slant angle calculation (advice49-53)
+  - Calculate angle using world-space dimensions: `atan2(worldRun, worldHeight)`
+  - Account for non-uniform scaling: `worldScaleY = scale * sCore`, `worldScaleZ = scale`
+  - Fixed inverted normal: Y component now positive `Math.sin(slantAngleRad)`
+  - Removed FaceSpace component for simplified hierarchy
+  - Natural rotation inheritance from parent wrapper eliminates `onBeforeRender` conflicts
+  - Fixed TypeScript build errors: removed invalid `depthWrite` props from Text components
+  - Wrapper position: `[0, 0, (depth/2) * scale]` matches meshScale[2] (no sCore)
   - frontZ epsilon: `0.0005` (wrapper already at face, no double offset)
-  - Added `depthWrite={false}` on Text components to prevent z-fighting shimmer
+  - Production build successful with all inscriptions/motifs properly aligned to slant surface
+- **2025-12-13**: Slant Headstone Rotation & Positioning Fix (Superseded by 2025-12-14)
+  - Implemented quaternion-based rotation for inscriptions/motifs on slant surfaces
+  - Fixed double Z-offset bug in upright headstones (text floating at 2x distance)
+  - Created FaceSpace component to lock children to slanted face plane (later removed)
+  - Fixed normal direction (later corrected to positive Y)
   - Added `renderOrder={10}` to children group (draw after granite)
   - Added `polygonOffset` to all granite materials (factor: 1, units: 1)
-  - Scale-aware frontZ epsilon (~0.5mm) prevents z-fighting at grazing angles
-  - FaceSpace `onBeforeRender` defeats child billboard/lookAt attempts
-  - Removed debug helpers (pink plane + axes)
-  - All 48 advice files reviewed and implemented
   - Created comprehensive documentation: SLANT_ROTATION_FIX.md, SLANT_COMPLETE_SUMMARY.md
-  - Both upright and slant inscriptions now perfectly positioned and visible
 - **2025-12-12**: Slant Headstone Feature (Production-Ready)
   - Implemented upright vs slant headstone style selector in size-selector UI
   - Created trapezoidal geometry using thickness ratio (20% top/base) instead of fixed angle
