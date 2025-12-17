@@ -896,6 +896,50 @@ useEffect(() => {
 
 ## Common Issues & Solutions
 
+### Issue: Headstone Disappearing During Material Changes
+**Symptom:** Headstone briefly disappears (flash/blink) when selecting a new material texture
+
+**Root Cause** (Fixed Dec 17, 2025):
+- `SvgHeadstone` component uses `useTexture` hook which suspends during loading
+- When new texture URL passed as prop, component suspends and React hides it during Suspense boundary
+- Original approach passed `requestedTex` directly, causing component to suspend immediately
+
+**Solution** (React 18 `useTransition`):
+```typescript
+// ShapeSwapper.tsx
+const [visibleTex, setVisibleTex] = useState(requestedTex);
+const [isPending, startTransition] = useTransition();
+
+// When material changes, use transition to keep old texture visible
+useEffect(() => {
+  if (requestedTex !== visibleTex) {
+    if (shapeSwapping) {
+      setVisibleTex(requestedTex); // Immediate during shape swap (loader covers)
+    } else {
+      startTransition(() => {
+        setVisibleTex(requestedTex); // Transition keeps old visible until new loads
+        invalidate();
+      });
+    }
+  }
+}, [requestedTex, visibleTex, shapeSwapping]);
+
+// Pass visibleTex (not requestedTex) to SvgHeadstone
+<SvgHeadstone
+  key={visibleUrl}
+  faceTexture={visibleTex}  // Currently visible texture
+  sideTexture={visibleTex}
+/>
+```
+
+**Key Points**:
+- `startTransition` tells React to keep showing old content while new loads
+- `isPending` state shows loading indicator without hiding headstone
+- No manual preloading needed - React handles it automatically
+- Component only remounts when shape changes (not texture)
+
+**Commits**: `88a06c5270`
+
 ### Issue: Designer UI Showing on Design Gallery Pages
 **Symptom:** Product header (e.g., "Traditional Engraved Headstone 600x600mm $1434.94") visible on `/designs` routes
 
@@ -1164,6 +1208,27 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-17**: Material/Shape Thumbnail Simplification & Texture Loading Fix
+  - **UI Simplification**: Removed hover effects, marks, color overlays, and drop shadows from thumbnails
+    - Added 2px border to selected materials/shapes using Headstone/Base tab color
+    - Fixed inconsistent border radius on all thumbnails
+    - Normalized material name heights to prevent layout shifting
+    - Added cursor pointer (hand icon) to all interactive elements (thumbnails, sidebar links)
+  - **Texture Loading Optimization**: Fixed headstone disappearing during material changes
+    - **Root Cause**: SvgHeadstone suspends when `useTexture` loads new texture, causing React to hide component
+    - **Solution**: Implemented React 18's `useTransition` for seamless texture swapping
+    - Pass `visibleTex` (current texture) to SvgHeadstone while loading `requestedTex` in background
+    - `startTransition(() => setVisibleTex(requestedTex))` keeps old texture visible until new one loads
+    - Removed manual `PreloadTexture` component (React handles it automatically)
+    - Added loading animation for texture transitions using `isPending` state
+  - **Component Updates**:
+    - Created `MaterialSelector.tsx` and `ShapeSelector.tsx` for sidebar selection
+    - Created `MaterialsLoader.tsx` for efficient material data loading
+    - Added loading spinner to material thumbnails matching shape selector behavior
+    - Fixed BoxOutline visibility after material changes by adding material URL to component key
+    - Auto-close inscription panel when shape selector is visible (better UX)
+  - **Performance**: Headstone now stays visible throughout material changes with smooth transitions
+  - Commits: `88a06c5270`
 - **2025-12-14 (Late Evening)**: Build Performance & UI Cleanup
   - **Build Optimization**: Moved large SEO template files (29.6 MB) to `.backup` folder
     - `seo-templates-unified.ts` (24 MB, 577k lines, 4,118 designs)
