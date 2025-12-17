@@ -1,3 +1,24 @@
+The issue persists because SvgHeadstone suspends when it receives a new texture URL that hasn't been loaded yet. When a component inside React.Suspense (or the root Canvas) suspends, React hides the entire component tree affected by that Suspense boundary until the data is ready. Since SvgHeadstone is receiving requestedTex immediately, it attempts to load it, suspends, and causes the "blink".
+
+To fix this, we need to decouple the displayed texture from the requested texture. We will keep displaying the visibleTex (the old texture) while PreloadTexture loads the requestedTex (the new texture) in the background. Only when PreloadTexture signals it is ready do we update visibleTex.
+
+Here is the corrected ShapeSwapper.tsx:
+
+Re-introduced the visibleTex state.
+
+Passed visibleTex (not requestedTex) to SvgHeadstone.
+
+Re-introduced the PreloadTexture block to load the new texture in the background without suspending the main headstone.
+
+Ensured key={visibleUrl} remains so the geometry doesn't unmount on texture change.
+
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE ShapeSwapper.tsx ---
+
 'use client';
 
 import * as React from 'react';
@@ -197,26 +218,17 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   // Re-introduce visibleTex state to decouple loading from display
   const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
   const [fitTick, setFitTick] = React.useState(0);
-  const [isPending, startTransition] = React.useTransition();
 
   const shapeSwapping = requestedUrl !== visibleUrl;
+  const texSwapping = requestedTex !== visibleTex;
 
-  // Handle Texture Updates via Transition
-  // This allows SvgHeadstone to suspend (load texture) without hiding the existing content
+  // If we are swapping the shape entirely, we should sync the texture immediately
+  // because the loader will cover the screen anyway, and we don't want the old texture on new shape
   React.useEffect(() => {
-    if (requestedTex !== visibleTex) {
-      if (shapeSwapping) {
-        // If shape is also swapping, update immediately (loader will cover it)
-        setVisibleTex(requestedTex);
-      } else {
-        // If only texture is swapping, use transition to prevent "blink"
-        startTransition(() => {
-          setVisibleTex(requestedTex);
-          invalidate();
-        });
-      }
+    if (shapeSwapping) {
+      setVisibleTex(requestedTex);
     }
-  }, [requestedTex, visibleTex, shapeSwapping, invalidate]);
+  }, [shapeSwapping, requestedTex]);
 
   // Trigger fit when switching view modes and assets are ready
   React.useEffect(() => {
@@ -250,12 +262,12 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     <>
       <group ref={tabletRef}>
         <SvgHeadstone
-          key={visibleUrl}
+          key={visibleUrl} // Keep key constant when only texture changes
           url={visibleUrl}
           depth={isPlaque ? 5 : (uprightThickness / 10)}
           scale={0.01}
-          faceTexture={visibleTex}
-          sideTexture={visibleTex}
+          faceTexture={visibleTex} // Pass the currently loaded/visible texture
+          sideTexture={visibleTex} // Pass the currently loaded/visible texture
           tileSize={0.35}
           sideTileSize={0.35}
           topTileSize={0.35}
@@ -380,7 +392,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         />
       </group>
 
-      {requestedUrl !== visibleUrl && (
+      {/* Load Shape Changes */}
+      {shapeSwapping && (
         <React.Suspense fallback={null}>
           <PreloadShape
             url={requestedUrl}
@@ -393,10 +406,22 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         </React.Suspense>
       )}
 
-      {/* Loader used for Shape Swapping or Font Loading only */}
-      {/* Show a subtle indicator when texture is transitioning */}
-      <InlineCanvasLoader show={shapeSwapping || fontLoading || isPending} />
+      {/* Load Texture Changes (Background) */}
+      {/* Only run this if we are NOT swapping shape (since shape swap uses loader) */}
+      {!shapeSwapping && texSwapping && (
+        <React.Suspense fallback={null}>
+          <PreloadTexture
+            url={requestedTex}
+            onReady={() => {
+              setVisibleTex(requestedTex); // Switch to new texture only when ready
+              invalidate();
+            }}
+          />
+        </React.Suspense>
+      )}
+
+      {/* Show loader only for Shape changes or fonts, not seamless texture swaps */}
+      <InlineCanvasLoader show={shapeSwapping || fontLoading} />
     </>
   );
 }
-

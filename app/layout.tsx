@@ -10,6 +10,7 @@ import MobileHeader from '#/components/MobileHeader';
 import MainContent from '#/components/MainContent';
 import ConditionalCanvas from '#/components/ConditionalCanvas';
 import ConditionalNav from '#/components/ConditionalNav';
+import MaterialsLoader from '#/components/MaterialsLoader';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -31,12 +32,14 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image' },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const demos = db.demo.findMany();
+  const materials = await db.material.findMany({ limit: 100 });
+  
   return (
     <html lang="en" className="[color-scheme:dark]">
       <body
@@ -44,6 +47,7 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <RouterBinder /> {/* ← mount once, early */}
+          <MaterialsLoader materials={materials} />
           <ConditionalNav items={demos} />
           <MainContent>
             <ConditionalCanvas />

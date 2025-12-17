@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import SceneOverlayController from '#/components/SceneOverlayController';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
@@ -15,6 +16,7 @@ const FONTS = data.fonts;
 /* --------------------------- component --------------------------- */
 
 export default function InscriptionOverlayPanel() {
+  const pathname = usePathname();
   const lines = useHeadstoneStore((s) => s.inscriptions);
   const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
   const duplicateInscription = useHeadstoneStore((s) => s.duplicateInscription);
@@ -30,6 +32,7 @@ export default function InscriptionOverlayPanel() {
   );
   const closeInscriptions = useHeadstoneStore((s) => s.closeInscriptions);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptionMinHeight = useHeadstoneStore((s) => s.inscriptionMinHeight);
   const inscriptionMaxHeight = useHeadstoneStore((s) => s.inscriptionMaxHeight);
   const setFontLoading = useHeadstoneStore((s) => s.setFontLoading);
@@ -51,6 +54,13 @@ export default function InscriptionOverlayPanel() {
       setSelectedFont(active.font);
     }
   }, [active?.font, active?.id]);
+
+  // Close inscription panel when on select-shape page
+  useEffect(() => {
+    if (pathname === '/select-shape' && activePanel === 'inscription') {
+      setActivePanel(null);
+    }
+  }, [pathname, activePanel, setActivePanel]);
 
   const preloadFont = useCallback(async (fontName: string) => {
     const font = FONTS.find((f) => f.name === fontName);

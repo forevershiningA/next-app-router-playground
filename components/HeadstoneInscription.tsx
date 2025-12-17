@@ -92,7 +92,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     }, [approxHeight, units]);
 
     const [pos, setPos] = React.useState(
-      () => new THREE.Vector3(0, initialYLocal, headstone.frontZ + liftLocal),
+      () => new THREE.Vector3(0, 0, headstone.frontZ + liftLocal),
     );
     const [dragging, setDragging] = React.useState(false);
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());

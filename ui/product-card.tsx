@@ -12,6 +12,7 @@ import {
   ComponentPropsWithoutRef,
   PropsWithChildren,
   ReactNode,
+  useState,
 } from 'react';
 
 export type PolymorphicProps<
@@ -58,6 +59,7 @@ export function ProductCard<E extends ElementType = 'div'>({
   ...rest
 }: ProductCardProps<E>) {
   const Comp: any = as || 'div';
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
   const {
@@ -94,16 +96,27 @@ export function ProductCard<E extends ElementType = 'div'>({
   return (
     <Comp
       {...(rest as any)}
-      className={clsx('group flex flex-col gap-2.5', className)}
+      className={clsx('flex flex-col gap-2.5', className)}
     >
-      <div className="overflow-hidden md:bg-white/50 md:group-hover:bg-white/70 bg-gray-900/50 p-4 group-hover:bg-gray-900 rounded-lg">
+      <div className={clsx(
+        'overflow-hidden p-4 relative aspect-square',
+        type === 'material' || type === 'product' || type === 'shape'
+          ? 'md:bg-white/50 bg-gray-900/50'
+          : 'md:bg-white/50 md:group-hover:bg-white/70 bg-gray-900/50 group-hover:bg-gray-900 rounded-lg'
+      )}>
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/70 z-10">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-700 border-t-[#cfac6c]" />
+          </div>
+        )}
         <Image
-          className="pointer"
+          className={type === 'material' || type === 'product' || type === 'shape' ? 'cursor-pointer' : 'pointer'}
           src={selectedUrl}
           alt={product.name}
           quality={90}
           width={400}
           height={400}
+          onLoadingComplete={() => setIsLoading(false)}
           onClick={() => {
             if (onPick) {
               onPick({ product, slug, type, selectedUrl });

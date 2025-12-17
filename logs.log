@@ -1,6 +1,6 @@
-C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:348 [Store] setProductId call stack
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:365 [Store] setProductId call stack
 overrideMethod @ hook.js:608
-setProductId @ C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:348
+setProductId @ C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:365
 RouterBinder.useEffect @ C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:97
 react_stack_bottom_frame @ react-dom-client.development.js:29214
 runWithFiberInDEV @ react-dom-client.development.js:975
@@ -71,19 +71,26 @@ flushPassiveEffects @ react-dom-client.development.js:20504
 eval @ react-dom-client.development.js:19715
 performWorkUntilDeadline @ scheduler.development.js:36
 "use client"
-RootLayout @ layout.tsx:46
+RootLayout @ layout.tsx:49
 initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
 eval @ react-server-dom-webpack-client.browser.development.js:4122
 initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
-getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2109
-parseModelString @ react-server-dom-webpack-client.browser.development.js:2475
-eval @ react-server-dom-webpack-client.browser.development.js:4052
-initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
-resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1571
-processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3955
-processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
-processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
-progress @ react-server-dom-webpack-client.browser.development.js:4289
+readChunk @ react-server-dom-webpack-client.browser.development.js:1399
+react_stack_bottom_frame @ react-dom-client.development.js:29236
+resolveLazy @ react-dom-client.development.js:6225
+createChild @ react-dom-client.development.js:6543
+reconcileChildrenArray @ react-dom-client.development.js:6862
+reconcileChildFibersImpl @ react-dom-client.development.js:7219
+eval @ react-dom-client.development.js:7336
+reconcileChildren @ react-dom-client.development.js:10028
+beginWork @ react-dom-client.development.js:12503
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
 <RootLayout>
 initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
 initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
@@ -97,7 +104,7 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765727476727:160
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1765974590739:160
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
 fn @ webpack.js:1
@@ -106,13 +113,13 @@ eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765727476727:182
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1765974590739:182
 options.factory @ webpack.js:1
 __webpack_require__ @ webpack.js:1
-__webpack_exec__ @ main-app.js?v=1765727476727:1998
-(anonimowa) @ main-app.js?v=1765727476727:1999
+__webpack_exec__ @ main-app.js?v=1765974590739:1998
+(anonimowa) @ main-app.js?v=1765974590739:1999
 webpackJsonpCallback @ webpack.js:1
-(anonimowa) @ main-app.js?v=1765727476727:9
+(anonimowa) @ main-app.js?v=1765974590739:9
 index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
     at validateAndParse (index.js:120:15)
     at esm_compareVersions (index.js:10:16)
@@ -146,35 +153,328 @@ emit @ hook.js:268
 (anonimowa) @ backend.js:19
 (anonimowa) @ react_devtools_backend_compact.js:1
 (anonimowa) @ react_devtools_backend_compact.js:1
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.4308421793679999, calculatedDist: 1.4211150893912832, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.4308421793679999, calculatedDist: 1.4211150893912832, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.4308421793679999, calculatedDist: 1.4211150893912832, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
-C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43081608457156, calculatedDist: 1.4210290167856954, boxSize: Array(3)}
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43152515064067204, calculatedDist: 1.423367841855396, boxSize: Array(3)}
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43152515064067204, calculatedDist: 1.423367841855396, boxSize: Array(3)}
+C:\Users\polcr\Documents\GitHub\next-dyo\components\three\AutoFit.tsx:87 AutoFit camera calculation: {margin: 1.04, pad: 0, sphereRadius: 0.43152515064067204, calculatedDist: 1.423367841855396, boxSize: Array(3)}
+hook.js:608 Encountered two children with the same key, `/shapes/headstones/serpentine.svg::/textures/forever/l/Blue-Pearl.webp`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. Error Component Stack
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:148:3)
+    at Suspense (<anonymous>)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:15:37)
+    at group (<anonymous>)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:18:3)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+eval @ react-reconciler.development.js:1939
+runWithFiberInDEV @ react-reconciler.development.js:399
+warnOnInvalidKey @ react-reconciler.development.js:1938
+reconcileChildrenArray @ react-reconciler.development.js:1968
+reconcileChildFibersImpl @ react-reconciler.development.js:2071
+eval @ react-reconciler.development.js:2103
+reconcileChildren @ react-reconciler.development.js:3418
+updateOffscreenComponent @ react-reconciler.development.js:3487
+beginWork @ react-reconciler.development.js:4190
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:5983
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+hook.js:608 Encountered two children with the same key, `/shapes/headstones/serpentine.svg::/textures/forever/l/Blue-Pearl.webp`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. Error Component Stack
+    at SvgHeadstone (C:\Users\polcr\Documents\GitHub\next-dyo\components\SvgHeadstone.tsx:148:3)
+    at Suspense (<anonymous>)
+    at group (<anonymous>)
+    at ShapeSwapper (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\ShapeSwapper.tsx:134:40)
+    at group (<anonymous>)
+    at HeadstoneAssembly (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\headstone\HeadstoneAssembly.tsx:15:37)
+    at group (<anonymous>)
+    at Scene (C:\Users\polcr\Documents\GitHub\next-dyo\components\three\Scene.tsx:18:3)
+    at Suspense (<anonymous>)
+    at Suspense (<anonymous>)
+    at ErrorBoundary (events-e3cb66e2.esm.js:130:5)
+    at m (index.js:51:1)
+    at eval (events-e3cb66e2.esm.js:106:5)
+    at Provider (events-e3cb66e2.esm.js:2045:3)
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+eval @ react-reconciler.development.js:1939
+runWithFiberInDEV @ react-reconciler.development.js:399
+warnOnInvalidKey @ react-reconciler.development.js:1938
+reconcileChildrenArray @ react-reconciler.development.js:1968
+reconcileChildFibersImpl @ react-reconciler.development.js:2071
+eval @ react-reconciler.development.js:2103
+reconcileChildren @ react-reconciler.development.js:3418
+updateOffscreenComponent @ react-reconciler.development.js:3487
+beginWork @ react-reconciler.development.js:4190
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+react-reconciler.development.js:2265 Uncaught Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.
+    at finishRenderingHooks (react-reconciler.development.js:2265:41)
+    at renderWithHooks (react-reconciler.development.js:2246:9)
+    at updateForwardRef (react-reconciler.development.js:3429:21)
+    at beginWork (react-reconciler.development.js:4172:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+finishRenderingHooks @ react-reconciler.development.js:2265
+renderWithHooks @ react-reconciler.development.js:2246
+updateForwardRef @ react-reconciler.development.js:3429
+beginWork @ react-reconciler.development.js:4172
+runWithFiberInDEV @ react-reconciler.development.js:399
+performUnitOfWork @ react-reconciler.development.js:6372
+workLoopSync @ react-reconciler.development.js:6265
+renderRootSync @ react-reconciler.development.js:6248
+performWorkOnRoot @ react-reconciler.development.js:6008
+performSyncWorkOnRoot @ react-reconciler.development.js:1364
+flushSyncWorkAcrossRoots_impl @ react-reconciler.development.js:1288
+processRootScheduleInMicrotask @ react-reconciler.development.js:1305
+performWorkUntilDeadline @ scheduler.development.js:44
+hook.js:608 Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.
+    at finishRenderingHooks (react-reconciler.development.js:2265:41)
+    at renderWithHooks (react-reconciler.development.js:2246:9)
+    at updateForwardRef (react-reconciler.development.js:3429:21)
+    at beginWork (react-reconciler.development.js:4172:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48)
+
+The above error occurred in the <CanvasImpl> component. It was handled by the <ErrorBoundary> error boundary.
+overrideMethod @ hook.js:608
+onCaughtError @ error-boundary-callbacks.js:68
+logCaughtError @ react-dom-client.development.js:9745
+runWithFiberInDEV @ react-dom-client.development.js:975
+inst.componentDidCatch.update.callback @ react-dom-client.development.js:9792
+callCallback @ react-dom-client.development.js:7670
+commitCallbacks @ react-dom-client.development.js:7690
+runWithFiberInDEV @ react-dom-client.development.js:975
+commitClassCallbacks @ react-dom-client.development.js:13811
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15075
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15206
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15166
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15080
+flushLayoutEffects @ react-dom-client.development.js:19960
+commitRoot @ react-dom-client.development.js:19769
+commitRootWhenReady @ react-dom-client.development.js:18639
+performWorkOnRoot @ react-dom-client.development.js:18538
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28 ErrorBoundary caught error: Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.
+    at finishRenderingHooks (react-reconciler.development.js:2265:41)
+    at renderWithHooks (react-reconciler.development.js:2246:9)
+    at updateForwardRef (react-reconciler.development.js:3429:21)
+    at beginWork (react-reconciler.development.js:4172:24)
+    at runWithFiberInDEV (react-reconciler.development.js:399:20)
+    at performUnitOfWork (react-reconciler.development.js:6372:87)
+    at workLoopSync (react-reconciler.development.js:6265:40)
+    at renderRootSync (react-reconciler.development.js:6248:13)
+    at performWorkOnRoot (react-reconciler.development.js:6008:56)
+    at performSyncWorkOnRoot (react-reconciler.development.js:1364:9)
+    at flushSyncWorkAcrossRoots_impl (react-reconciler.development.js:1288:245)
+    at processRootScheduleInMicrotask (react-reconciler.development.js:1305:9)
+    at MessagePort.performWorkUntilDeadline (scheduler.development.js:44:48) {componentStack: '\n    at CanvasImpl (webpack-internal:///(app-pages…ode_modules/next/dist/client/app-index.js:156:11)'}
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+componentDidCatch @ C:\Users\polcr\Documents\GitHub\next-dyo\components\ErrorBoundary.tsx:28
+react_stack_bottom_frame @ react-dom-client.development.js:29184
+inst.componentDidCatch.update.callback @ react-dom-client.development.js:9803
+callCallback @ react-dom-client.development.js:7670
+commitCallbacks @ react-dom-client.development.js:7690
+runWithFiberInDEV @ react-dom-client.development.js:975
+commitClassCallbacks @ react-dom-client.development.js:13811
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15075
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15206
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15166
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15114
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15003
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:14998
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15219
+recursivelyTraverseLayoutEffects @ react-dom-client.development.js:16316
+commitLayoutEffectOnFiber @ react-dom-client.development.js:15080
+flushLayoutEffects @ react-dom-client.development.js:19960
+commitRoot @ react-dom-client.development.js:19769
+commitRootWhenReady @ react-dom-client.development.js:18639
+performWorkOnRoot @ react-dom-client.development.js:18538
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+hook.js:608 THREE.WebGLRenderer: WEBGL_lose_context extension not supported.
+overrideMethod @ hook.js:608
+warnOnce @ three.core.js:5165
+get @ three.module.js:4230
+WebGLRenderer.forceContextLoss @ three.module.js:15824
+eval @ events-e3cb66e2.esm.js:2084
+setTimeout
+eval @ events-e3cb66e2.esm.js:2079
+callCallback @ react-reconciler.development.js:1630
+commitCallbacks @ react-reconciler.development.js:1638
+runWithFiberInDEV @ react-reconciler.development.js:399
+commitLayoutEffectOnFiber @ react-reconciler.development.js:5089
+commitLayoutEffects @ react-reconciler.development.js:5501
+commitRootImpl @ react-reconciler.development.js:6512
+commitRoot @ react-reconciler.development.js:6480
+commitRootWhenReady @ react-reconciler.development.js:6082
+performWorkOnRoot @ react-reconciler.development.js:6062
+performWorkOnRootViaSchedulerTask @ react-reconciler.development.js:1356
+performWorkUntilDeadline @ scheduler.development.js:44

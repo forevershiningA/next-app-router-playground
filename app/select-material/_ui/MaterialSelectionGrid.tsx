@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
@@ -33,11 +34,22 @@ const materialCategories: MaterialCategory[] = [
 export default function MaterialSelectionGrid({ materials }: { materials: Material[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const router = useRouter();
+  const pathname = usePathname();
   const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
   const currentMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const selected = useHeadstoneStore((s) => s.selected);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+
+  // Check if user has already selected shape (canvas should be visible)
+  // If shape is selected, the sidebar MaterialSelector will be shown instead
+  const hasSelectedShape = !!shapeUrl;
+  
+  // Don't show the full grid when canvas is visible (shape already selected)
+  if (hasSelectedShape) {
+    return null;
+  }
 
   const handleMaterialSelect = (material: Material) => {
     const materialUrl = `/textures/forever/l/${material.image}`;

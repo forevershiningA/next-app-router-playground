@@ -25,6 +25,8 @@ export default function HeadstoneAssembly() {
   const loading = useHeadstoneStore((s) => s.loading);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   
   // Convert base height from mm to meters
   const baseHeightMeters = baseHeightMm / 1000;
@@ -40,10 +42,11 @@ export default function HeadstoneAssembly() {
 
   return (
     <>
-      <group ref={assemblyRef} position={[0, baseHeightMeters, 0]} visible={!loading}>
+      <group ref={assemblyRef} position={[0, baseHeightMeters, 0]}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
         <RotatingBoxOutline
+          key={`headstone-outline-${headstoneMaterialUrl}`}
           targetRef={headstoneMeshRef}
           visible={selected === 'headstone'}
           color="white"
@@ -52,6 +55,7 @@ export default function HeadstoneAssembly() {
         />
 
         <RotatingBoxOutline
+          key={`base-outline-${baseMaterialUrl}`}
           targetRef={baseRef}
           visible={selected === 'base'}
           color="white"

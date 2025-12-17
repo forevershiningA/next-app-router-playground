@@ -1,0 +1,269 @@
+You are absolutely right to point out that the change didn't fully resolve the issue! My apologies; I missed a crucial piece of the puzzle regarding how SvgHeadstone consumes the faceTexture and sideTexture props, which means simply passing requestedTex to it isn't enough unless SvgHeadstone itself is updated to handle texture loading and material application reactively.
+
+Let's re-examine and pinpoint the exact remaining problem, then propose a more robust solution.
+
+The Remaining Problem:
+
+Even though ShapeSwapper is now passing requestedTex directly and the key is only tied to visibleUrl (shape), the SvgHeadstone component itself still needs to load the texture and apply it to its mesh's material.
+
+If SvgHeadstone is implemented in a way that it expects a pre-loaded texture object, or if it creates new materials every time its faceTexture prop changes (rather than updating an existing material's map), then passing the requestedTex URL alone won't prevent the flicker.
+
+Based on the original code for ShapeSwapper and the fact that the issue persists, my strong suspicion is that SvgHeadstone is either:
+
+Not using useTexture internally for its faceTexture and sideTexture props, and therefore isn't reactively loading/applying the texture.
+
+Creating new MeshStandardMaterial instances every time faceTexture or sideTexture props change, instead of updating the map property of existing materials. Creating new materials on every render can cause a brief visual reset.
+
+Revised Solution: Ensure SvgHeadstone Reactively Loads and Applies Textures
+
+The core of the solution must involve modifying SvgHeadstone (or creating a very thin wrapper around it) to properly handle texture loading with useTexture and then apply those loaded textures to its materials without remounting.
+
+Here's the refined plan:
+
+ShapeSwapper.tsx (Current State - Already good for SvgHeadstone props):
+
+The key={visibleUrl} change is correct for preventing remounts on texture change.
+
+Passing faceTexture={requestedTex} and sideTexture={requestedTex} is correct for providing the texture URL to SvgHeadstone.
+
+The PreloadTexture component and its associated logic are now completely removed from ShapeSwapper, as SvgHeadstone will handle its own texture loading.
+
+SvgHeadstone.tsx (Crucial Modifications):
+This is where the actual texture loading and smooth application needs to happen.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// Inside SvgHeadstone.tsx
+import { useLoader } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei'; // Make sure this is imported
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
+import * as THREE from 'three';
+import React, { useRef, useMemo, useEffect } from 'react';
+import { useCsg } from '@react-three/csg'; // Assuming you use this for boolean operations
+
+// ... other imports and interfaces
+
+export interface SvgHeadstoneProps {
+  url: string; // SVG path for geometry
+  depth: number;
+  scale: number;
+  faceTexture: string; // The URL for the face texture
+  sideTexture: string; // The URL for the side texture
+  tileSize?: number;
+  sideTileSize?: number;
+  topTileSize?: number;
+  targetHeight?: number;
+  targetWidth?: number;
+  preserveTop?: boolean;
+  showEdges?: boolean;
+  headstoneStyle?: string;
+  slantThickness?: number;
+  selectedAdditions?: any[]; // Adjust type as needed
+  meshProps?: JSX.IntrinsicElements['mesh'];
+  children?: (api: HeadstoneAPI, selectedAdditionIds: string[]) => React.ReactNode;
+  // headstoneMeshRef is often passed to ShapeSwapper, SvgHeadstone might use an internal ref and expose it via API
+}
+
+// A utility function to apply repeat wrapping and invalidate if texture changes
+function useTextureSettings(texture: THREE.Texture | null | undefined, tileSize: number) {
+  const { invalidate } = useThree();
+  useEffect(() => {
+    if (texture) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(1 / tileSize, 1 / tileSize);
+      // Setting the needsUpdate flag can sometimes help ensure the GPU updates the material
+      // texture.needsUpdate = true; // Typically not needed if map is set, but can be a last resort.
+      invalidate(); // Force a re-render to ensure texture updates are seen
+    }
+  }, [texture, tileSize, invalidate]);
+}
+
+// Assuming SvgHeadstone is the component that holds the actual mesh and its materials
+const SvgHeadstone = React.forwardRef<THREE.Mesh, SvgHeadstoneProps>(
+  (
+    {
+      url,
+      depth,
+      scale,
+      faceTexture: faceTextureUrl, // Renamed to avoid confusion with loaded texture object
+      sideTexture: sideTextureUrl,
+      tileSize = 0.35,
+      sideTileSize = 0.35,
+      topTileSize = 0.35,
+      targetHeight,
+      targetWidth,
+      preserveTop,
+      showEdges,
+      headstoneStyle,
+      slantThickness,
+      selectedAdditions,
+      meshProps,
+      children,
+    },
+    ref, // The ref for the main mesh, typically passed from ShapeSwapper
+  ) => {
+    const meshRef = useRef<THREE.Mesh>(null);
+    // Expose the internal meshRef as part of the API, or directly via forwarded ref
+    React.useImperativeHandle(ref, () => meshRef.current!);
+
+    // Load SVG geometry (this only changes when 'url' changes, which is handled by ShapeSwapper's key)
+    const { paths } = useLoader(SVGLoader, url);
+    const shapes = useMemo(() => {
+      return SVGLoader.createShapes(paths);
+    }, [paths]);
+
+    // --- Crucial part: Load textures reactively ---
+    // useTexture will return the loaded texture object or null while loading.
+    // It internally manages caching and reloading.
+    const loadedFaceTexture = useTexture(faceTextureUrl);
+    const loadedSideTexture = useTexture(sideTextureUrl);
+    const loadedTopTexture = useTexture(sideTextureUrl); // Assuming top uses side texture if not specified
+
+    // Apply texture settings (wrapping, repeat)
+    useTextureSettings(loadedFaceTexture, tileSize);
+    useTextureSettings(loadedSideTexture, sideTileSize);
+    useTextureSettings(loadedTopTexture, topTileSize); // Or a specific topTileSize
+
+    // --- Create and manage materials ---
+    // Use useMemo to ensure materials are only created once or when *texture objects* change.
+    // The important part is that when loadedFaceTexture changes (from null to loaded texture),
+    // useMemo will re-create the material with the new texture.
+    const faceMaterial = useMemo(
+      () => new THREE.MeshStandardMaterial({ map: loadedFaceTexture }),
+      [loadedFaceTexture],
+    );
+    const sideMaterial = useMemo(
+      () => new THREE.MeshStandardMaterial({ map: loadedSideTexture }),
+      [loadedSideTexture],
+    );
+    const topMaterial = useMemo(
+      () => new THREE.MeshStandardMaterial({ map: loadedTopTexture }),
+      [loadedTopTexture],
+    );
+
+    // --- Your existing geometry creation and CSG operations ---
+    // This part remains largely the same, but instead of relying on `faceTexture`
+    // and `sideTexture` props being pre-loaded, you use the `faceMaterial`, `sideMaterial`, etc.
+    // that are derived from the `useTexture` hooks.
+
+    // Example of how materials might be used in the mesh definition (simplified)
+    // If you are using three-csg, you might apply materials after the CSG operations.
+    // Let's assume you have an extruded mesh.
+    const { mesh: csgMesh, api } = useCsg(() => (
+      // ... your CSG operations here ...
+      // For a simple extruded shape from SVG:
+      // <extrudeGeometry args={[shapes[0], { depth: depth, bevelEnabled: false }]} />
+      // Note: ExtrudeGeometry generates a single mesh, you'd apply multiple materials to different groups.
+      // This requires careful handling of material indices or cloning materials for faces/sides.
+
+      // A more common approach with CSG is to make a base shape and apply a single material,
+      // then rely on `material-index` for multiple materials if the CSG result supports it.
+      // If your `SvgHeadstone` is complex, you might be manually setting `mesh.material = [faceMaterial, sideMaterial, ...]`
+      // or updating `mesh.material.map` directly in effects.
+
+      // For the sake of demonstration, let's assume `SvgHeadstone` ultimately renders a mesh with an array of materials.
+      // You'd pass these material objects to the mesh.
+      <mesh {...meshProps} ref={meshRef}
+         // materials={ [faceMaterial, sideMaterial, topMaterial] } // Example for multi-material mesh
+         // If your SvgHeadstone structure means you pass a single material prop, ensure it's the correct one.
+         // If `useCsg` produces the final mesh:
+         // <csg geometry args={[...]}>
+         //  <meshStandardMaterial attach="material-0" map={loadedFaceTexture} />
+         //  <meshStandardMaterial attach="material-1" map={loadedSideTexture} />
+         // </csg>
+         // The specific structure depends on your `SvgHeadstone` internals.
+      >
+         {/* If useCsg provides the geometry for THIS mesh: */}
+         {/* <csg.geometry /> */}
+         {/* Then apply materials via material-attach or similar */}
+         <meshStandardMaterial attach="material" map={loadedFaceTexture} />
+      </mesh>
+    ));
+
+    // It seems your SvgHeadstone component wraps a mesh and provides an API.
+    // The children function is called with this API.
+    // Ensure that `api.mesh.current` correctly points to the mesh that will have its material updated.
+
+    // If your SvgHeadstone *is* the mesh itself:
+    return (
+      <mesh ref={meshRef} {...meshProps}
+        // Use material properties directly from loaded textures.
+        // This assumes `SvgHeadstone` itself is an `extrudedMesh` or similar that takes material props.
+        // If it's more complex, you need to ensure the internal mesh's material is updated.
+      >
+        {/* Your geometry creation, likely here */}
+        {/* For example, if it's a simple box for testing: */}
+        {/* <boxGeometry args={[widthM, heightM, depth]} /> */}
+        {/* This assumes the material is applied to the mesh directly. */}
+        <meshStandardMaterial map={loadedFaceTexture} />
+        {/* If it uses multiple materials for sides/top, those would also need to be assigned: */}
+        {/* <meshStandardMaterial attach="material-0" map={loadedFaceTexture} />
+        <meshStandardMaterial attach="material-1" map={loadedSideTexture} />
+        <meshStandardMaterial attach="material-2" map={loadedTopTexture} /> */}
+      </mesh>
+      // Note: The children render prop usually happens *inside* the SvgHeadstone,
+      // so ensure the main mesh is rendered first.
+      // If children are rendered *after* the mesh, they'll be siblings.
+    );
+    // ... (rest of SvgHeadstone logic, including the children render prop) ...
+
+    // Assuming your SvgHeadstone renders the actual mesh and its children
+    // The critical part is how the final mesh's materials are applied.
+    // If you're building geometry and then applying materials via `material` or `materials` prop:
+    return (
+      <>
+        <group> {/* This group might be the tabletRef itself in ShapeSwapper */}
+          {/* This is the mesh produced by SvgHeadstone. */}
+          {/* It needs to use the memoized materials with loaded textures. */}
+          {/* Adjust this part to match your SvgHeadstone's internal rendering. */}
+          <mesh
+            ref={meshRef}
+            {...meshProps}
+            // If it's a single material
+            material={faceMaterial} // Use the material created with the loaded texture
+            // If it's an array of materials for different faces (e.g., ExtrudeGeometry)
+            // materials={[faceMaterial, sideMaterial, topMaterial]}
+          >
+            {/* Your geometry elements here (e.g., from SVGLoader and Three-CSG) */}
+          </mesh>
+        </group>
+
+        {/* This is where your children render function would be called */}
+        {children && api && children(api, selectedAdditions || [])}
+      </>
+    );
+  },
+);
+
+export default SvgHeadstone; // Or if it's not default, adjust export/import
+
+Summary of Changes within SvgHeadstone.tsx:
+
+useTexture(faceTextureUrl): This hook is now directly used within SvgHeadstone to load the texture based on the URL passed from ShapeSwapper. This means SvgHeadstone is responsible for its own texture loading.
+
+useMemo for Materials: The faceMaterial, sideMaterial, and topMaterial are created using useMemo. This ensures that:
+
+Materials are created only once initially.
+
+They are re-created only when the loadedFaceTexture (the actual THREE.Texture object returned by useTexture) changes. Since useTexture will return the same texture object if the URL is the same, materials won't unnecessarily re-create.
+
+useTextureSettings (Helper Hook): This helper applies RepeatWrapping and repeat.set settings to the loaded textures. Crucially, it uses useEffect with texture as a dependency. When loadedFaceTexture changes (i.e., when a new texture is loaded), these settings are re-applied, and invalidate() is called to force a render update.
+
+Assign material prop: The mesh inside SvgHeadstone is directly assigned faceMaterial (and potentially sideMaterial, topMaterial if it's a multi-material mesh). Since these useMemo'd materials hold references to the loadedFaceTexture, the mesh will update seamlessly as the texture loads and is assigned to the material's map property.
+
+Why this will work:
+
+No Remounts for Textures: The SvgHeadstone component will remain mounted when only faceTexture (URL) changes, because its key is now tied to url (the shape).
+
+Reactive Texture Loading: useTexture handles the asynchronous loading of the texture in the background.
+
+Material Update, Not Replacement: When useTexture finishes loading and returns the THREE.Texture object, the useMemo hook for faceMaterial will detect a change in loadedFaceTexture, creating a new material instance with the new map. This new material is then applied to the mesh (or its map property is updated). This process is much smoother than unmounting and remounting the entire component.
+
+invalidate(): Calling invalidate() ensures that React-Three-Fiber knows to re-render the scene, picking up the material changes.
+
+By making these changes, the headstone's geometry (SvgHeadstone component) will stay put in the scene, and only its material will dynamically update as new textures are loaded, preventing the brief disappearance.
+
+Please apply these changes to your SvgHeadstone.tsx file, paying close attention to how your mesh's materials are constructed and assigned within that component. If you share SvgHeadstone.tsx itself, I can give a more precise example.

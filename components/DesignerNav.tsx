@@ -23,6 +23,8 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
 import InscriptionEditPanel from './InscriptionEditPanel';
+import MaterialSelector from './MaterialSelector';
+import ShapeSelector from './ShapeSelector';
 
 // Menu items with icons
 const menuItems = [
@@ -57,6 +59,8 @@ export default function DesignerNav() {
   const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
   const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const setHeadstoneStyle = useHeadstoneStore((s) => s.setHeadstoneStyle);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
+  const setUprightThickness = useHeadstoneStore((s) => s.setUprightThickness);
   const slantThickness = useHeadstoneStore((s) => s.slantThickness);
   const setSlantThickness = useHeadstoneStore((s) => s.setSlantThickness);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
@@ -97,8 +101,18 @@ export default function DesignerNav() {
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
   const duplicateAddition = useHeadstoneStore((s) => s.duplicateAddition);
   
+  // Get materials and shapes from store
+  const materials = useHeadstoneStore((s) => s.materials);
+  const shapes = React.useMemo(() => {
+    return data.shapes || [];
+  }, []);
+  
   // Show Select Size panel when on select-size page
   const isSelectSizePage = pathname === '/select-size';
+  
+  // Determine if canvas is visible (on pages with 3D scene)
+  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-shape'];
+  const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   
   // Auto-scroll to section when it becomes active
   useEffect(() => {
@@ -138,6 +152,13 @@ export default function DesignerNav() {
       setIsAdditionsExpanded(true);
     }
   }, [selectedAdditionId]);
+  
+  // Sync canvas selection with editingObject on select-size page
+  useEffect(() => {
+    if (isSelectSizePage && selected !== editingObject) {
+      setSelected(editingObject);
+    }
+  }, [isSelectSizePage, editingObject, selected, setSelected]);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
@@ -335,22 +356,26 @@ export default function DesignerNav() {
                         />
                       </div>
                       
-                      {/* Thickness Slider - Only show when editing headstone and slant style is selected */}
-                      {editingObject === 'headstone' && headstoneStyle === 'slant' && (
+                      {/* Thickness Slider - Show for both upright and slant when editing headstone */}
+                      {editingObject === 'headstone' && (
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-slate-200">
-                            Thickness: {Math.round(slantThickness)} <span className="text-slate-500">mm</span>
+                            Thickness: {Math.round(headstoneStyle === 'upright' ? uprightThickness : slantThickness)} <span className="text-slate-500">mm</span>
                           </label>
                           <input
                             type="range"
                             min={100}
                             max={300}
                             step={10}
-                            value={slantThickness}
+                            value={headstoneStyle === 'upright' ? uprightThickness : slantThickness}
                             onChange={(e) => {
                               const newValue = Number(e.target.value);
                               console.log('[DesignerNav] Thickness slider changed to:', newValue);
-                              setSlantThickness(newValue);
+                              if (headstoneStyle === 'upright') {
+                                setUprightThickness(newValue);
+                              } else {
+                                setSlantThickness(newValue);
+                              }
                             }}
                             className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                           />
@@ -458,7 +483,7 @@ export default function DesignerNav() {
                       }
                     }}
                     data-section={item.slug}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left ${
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
                         : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
@@ -817,6 +842,128 @@ export default function DesignerNav() {
                   
                   {showNewDesignAfter && (
                     <button
+                      onClick={handleNewDesign}
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    >
+                      <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
+                      <span>New Design</span>
+                    </button>
+                  )}
+                </React.Fragment>
+              );
+            }
+            
+            // Special handling for Select Shape - show shape selector in sidebar when canvas is visible
+            if (item.slug === 'select-shape') {
+              return (
+                <React.Fragment key={item.slug}>
+                  {isCanvasVisible ? (
+                    // Show shape selector in sidebar when canvas is visible, with click handler to navigate
+                    <>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Navigate to select-shape page to keep canvas visible and show shape selector
+                          if (pathname !== '/select-shape') {
+                            router.push('/select-shape');
+                          }
+                        }}
+                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
+                          isActive
+                            ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                            : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span>{item.name}</span>
+                      </button>
+                      
+                      {isActive && !selectedMotifId && !selectedAdditionId && shapes.length > 0 && (
+                        <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                          <ShapeSelector shapes={shapes} />
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    // Show link when canvas is not visible (first-time selection)
+                    <Link
+                      href={`/${item.slug}`}
+                      data-section={item.slug}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                        isActive 
+                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                          : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
+                  
+                  {showNewDesignAfter && (
+                    <button
+                      key="new-design-shape"
+                      onClick={handleNewDesign}
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    >
+                      <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
+                      <span>New Design</span>
+                    </button>
+                  )}
+                </React.Fragment>
+              );
+            }
+            
+            // Special handling for Select Material - show material selector in sidebar when canvas is visible
+            if (item.slug === 'select-material') {
+              return (
+                <React.Fragment key={item.slug}>
+                  {isCanvasVisible ? (
+                    // Show material selector in sidebar when canvas is visible, with click handler to navigate
+                    <>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Navigate to select-material page to keep canvas visible and show material selector
+                          if (pathname !== '/select-material') {
+                            router.push('/select-material');
+                          }
+                        }}
+                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
+                          isActive
+                            ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                            : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span>{item.name}</span>
+                      </button>
+                      
+                      {isActive && !selectedMotifId && !selectedAdditionId && materials.length > 0 && (
+                        <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                          <MaterialSelector materials={materials} />
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    // Show link when canvas is not visible (first-time selection)
+                    <Link
+                      href={`/${item.slug}`}
+                      data-section={item.slug}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                        isActive 
+                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                          : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
+                  
+                  {showNewDesignAfter && (
+                    <button
+                      key="new-design-material"
                       onClick={handleNewDesign}
                       className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >

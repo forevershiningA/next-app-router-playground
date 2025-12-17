@@ -125,55 +125,27 @@ export default function ProductSelectionGrid({ products }: { products: Product[]
                   <button
                     key={product.id}
                     onClick={() => handleProductSelect(product)}
-                    className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
-                      isSelected
-                        ? 'border-[#cfac6c]/70 bg-gradient-to-br from-[#cfac6c]/20 to-gray-900/50 shadow-lg shadow-[#cfac6c]/20'
-                        : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/60 hover:to-gray-800/60 hover:border-[#cfac6c]/30'
-                    }`}
+                    className="relative overflow-hidden cursor-pointer"
                   >
-                    {/* Selected Badge */}
-                    {isSelected && (
-                      <div className="absolute top-2 right-2 z-10 rounded-full bg-[#cfac6c] px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
-                        Selected
-                      </div>
-                    )}
                   {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4">
+                  <div className="relative aspect-square overflow-hidden mb-4">
                     <Image
                       src={`/webp/products/${product.image}`}
                       alt={product.name}
                       fill
-                      className="object-cover"
+                      className={`object-cover ${
+                        isSelected ? 'border-2 border-[#cfac6c]' : ''
+                      }`}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   </div>
 
                   {/* Product Info */}
-                  <div>
-                    <h3 className="text-lg font-medium text-white line-clamp-2 mb-2">
+                  <div className="p-2 h-12 flex items-center justify-center">
+                    <div className="text-sm text-slate-200 text-center line-clamp-2">
                       {product.name}
-                    </h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
-                      <span>Start Design</span>
-                      <svg
-                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
                     </div>
                   </div>
-
-                  {/* Hover Glow Effect */}
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
                 </button>
               );
             })}

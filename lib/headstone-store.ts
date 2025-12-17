@@ -56,6 +56,12 @@ export type Line = {
   ref: React.RefObject<Group | null>; // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
+export type Material = {
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+};
 export type PanelName =
   | 'shape'
   | 'size'
@@ -80,6 +86,9 @@ type LinePatch = Partial<
 type HeadstoneState = {
   catalog: CatalogData | null;
   setCatalog: (catalog: CatalogData) => void;
+
+  materials: Material[];
+  setMaterials: (materials: Material[]) => void;
 
   selectedAdditions: string[];
   addAddition: (id: string) => void;
@@ -138,6 +147,9 @@ type HeadstoneState = {
 
   headstoneStyle: 'upright' | 'slant';
   setHeadstoneStyle: (style: 'upright' | 'slant') => void;
+
+  uprightThickness: number; // Absolute thickness in mm (100-300mm)
+  setUprightThickness: (thickness: number) => void;
 
   slantThickness: number; // Absolute thickness in mm (100-300mm)
   setSlantThickness: (thickness: number) => void;
@@ -236,6 +248,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   catalog: null,
   setCatalog(catalog) {
     set({ catalog });
+  },
+
+  materials: [],
+  setMaterials(materials) {
+    set({ materials });
   },
 
   // Sample template: Beautiful headstone with angel and cross (all with colorMap textures)
@@ -526,6 +543,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ headstoneStyle: style });
   },
 
+  uprightThickness: 150, // Default 150mm thickness
+  setUprightThickness(thickness) {
+    const clamped = Math.max(100, Math.min(300, thickness));
+    set({ uprightThickness: clamped });
+  },
+
   slantThickness: 150, // Default 150mm thickness
   setSlantThickness(thickness) {
     const clamped = Math.max(100, Math.min(300, thickness));
@@ -723,7 +746,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           ...src,
           id: newId,
           ref: React.createRef<Group>(),
-          yPos: src.yPos + offset, // Position below current position accounting for actual text height
+          yPos: src.yPos - offset, // Position below current position accounting for actual text height
         },
       ],
       selectedInscriptionId: newId, // Select the newly duplicated inscription

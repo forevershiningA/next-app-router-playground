@@ -345,6 +345,9 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
     const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
     const baseFinish = useHeadstoneStore((s) => s.baseFinish);
+    const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
+    const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
+    const slantThickness = useHeadstoneStore((s) => s.slantThickness);
     const inscriptions = useHeadstoneStore((s) => s.inscriptions);
     const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
     const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
@@ -407,7 +410,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       if (!t || !w || !b) return;
 
       const hsH = heightMm / 1000;
-      const headstoneDepth = 0.15;
+      // Use actual headstone depth based on style and thickness
+      const headstoneDepth = (headstoneStyle === 'slant' ? slantThickness : uprightThickness) / 1000;
       const baseW = baseWidthMm / 1000;
       const baseD = Math.max(0.2 * BASE_DEPTH_MULTIPLIER, BASE_MIN_DEPTH);
 
@@ -537,7 +541,10 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
             <PreloadTexture
               url={requestedBaseTex}
               onReady={() => {
-                setVisibleBaseTex(requestedBaseTex);
+                // Wait longer to ensure texture is fully cached in GPU
+                setTimeout(() => {
+                  setVisibleBaseTex(requestedBaseTex);
+                }, 500);
               }}
             />
           </Suspense>

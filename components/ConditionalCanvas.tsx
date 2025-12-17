@@ -27,10 +27,10 @@ export default function ConditionalCanvas() {
   // Hide canvas on select-product page
   const isSelectProductPage = pathname === '/select-product';
   
-  // Hide canvas on select-shape page
+  // Show canvas on select-shape page (used in sidebar flow)
   const isSelectShapePage = pathname === '/select-shape';
   
-  // Hide canvas on select-material page
+  // Show canvas on select-material page (used in sidebar flow)
   const isSelectMaterialPage = pathname === '/select-material';
   
   // Hide canvas on select-additions page
@@ -50,12 +50,12 @@ export default function ConditionalCanvas() {
   
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage) {
+    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage && !isSelectMaterialPage && !isSelectShapePage) {
       hideOverlay();
     }
   }, [pathname, isHomePage, isDesignPage, isSelectProductPage, isSelectShapePage, isSelectMaterialPage, isSelectAdditionsPage, isCheckPricePage, isSelectSizePage, isInscriptionsPage, isSelectMotifsPage, hideOverlay]);
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectMaterialPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage) {
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage && !isSelectMaterialPage && !isSelectShapePage) {
     return null;
   }
 

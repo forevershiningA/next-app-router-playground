@@ -1,3 +1,26 @@
+The "total disappearance" suggests that the Suspense boundary handling PreloadTexture was interfering with the main render tree, or SvgHeadstone itself was suspending in a way that bubbled up and hid the content.
+
+To fix this reliably in React 18+ (which Next.js uses), we should switch to using useTransition. This hook allows us to update the state (visibleTex) without hiding the current content ("suspending") while the new data loads. React will keep the old texture visible on the screen until the new one is fully loaded and ready to render.
+
+This removes the need for the manual PreloadTexture component entirely and relies on React's native concurrent features to handle the swap smoothly.
+
+Key Changes:
+
+Removed PreloadTexture: We no longer need a separate component to "preload" the texture.
+
+Added useTransition: We use startTransition to update visibleTex. This tells React: "Try to update to the new texture, but if it suspends (loading), keep showing the old one until it's ready."
+
+Simplified Logic: The code is cleaner and less prone to race conditions or suspense boundary issues.
+
+Here is the updated ShapeSwapper.tsx:
+
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE ShapeSwapper.tsx ---
+
 'use client';
 
 import * as React from 'react';
@@ -18,6 +41,7 @@ import { data } from '#/app/_internal/_data';
 import { AdditionData } from '#/lib/xml-parser';
 import { usePathname, useRouter } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
+import { useTransition } from 'react'; // Import useTransition
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -25,7 +49,6 @@ const DEFAULT_TEX = 'Imperial-Red.webp';
 const BASE_H = 2; // used by AutoFit only
 
 /* --------------------------------- font map --------------------------------- */
-// Simply use the font files as specified in the data
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
   (map, font) => {
     map[font.name] = `/fonts/${font.image}`;
@@ -57,21 +80,6 @@ class ErrorBoundary extends (
 /* ------------------------------ preload helpers ----------------------------- */
 function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
   useLoader(SVGLoader, url);
-  React.useEffect(() => {
-    const id = requestAnimationFrame(() => onReady?.());
-    return () => cancelAnimationFrame(id);
-  }, [onReady]);
-  return null;
-}
-
-function PreloadTexture({
-  url,
-  onReady,
-}: {
-  url: string;
-  onReady?: () => void;
-}) {
-  useTexture(url);
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
@@ -135,6 +143,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const { invalidate, controls, camera } = useThree();
   const router = useRouter();
 
+  // Store data
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
@@ -147,18 +156,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const slantThickness = useHeadstoneStore((s) => s.slantThickness);
-  const selectedInscriptionId = useHeadstoneStore(
-    (s) => s.selectedInscriptionId,
-  );
-  const setSelectedInscriptionId = useHeadstoneStore(
-    (s) => s.setSelectedInscriptionId,
-  );
-  const setSelectedAdditionId = useHeadstoneStore(
-    (s) => s.setSelectedAdditionId,
-  );
-  const setSelectedMotifId = useHeadstoneStore(
-    (s) => s.setSelectedMotifId,
-  );
+  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
   const openSizePanel = useHeadstoneStore((s) => s.openSizePanel);
@@ -176,28 +177,25 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
 
+  // Texture calculation
   const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
   const requestedTex = React.useMemo(() => {
-    // Check if it's already a full path starting with /textures/
     if (headstoneMaterialUrl?.startsWith('/textures/')) {
       return headstoneMaterialUrl;
     }
-    // Check if it's a path without leading slash
     if (headstoneMaterialUrl?.startsWith('textures/')) {
       return `/${headstoneMaterialUrl}`;
     }
-    // Otherwise extract filename and use default base
     const file = headstoneMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
-    // Keep the original extension or convert .jpg to .webp
     const webp = file.replace(/\.jpg$/i, '.webp');
     return TEX_BASE + webp;
   }, [headstoneMaterialUrl]);
 
+  // State
   const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);
-  // Re-introduce visibleTex state to decouple loading from display
   const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
   const [fitTick, setFitTick] = React.useState(0);
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const shapeSwapping = requestedUrl !== visibleUrl;
 
@@ -218,23 +216,16 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     }
   }, [requestedTex, visibleTex, shapeSwapping, invalidate]);
 
-  // Trigger fit when switching view modes and assets are ready
+  // Handle Fit Trigger
   React.useEffect(() => {
     if (
       !isMaterialChange &&
       visibleUrl === requestedUrl &&
       visibleTex === requestedTex
     ) {
-      // Trigger fit
       setFitTick((n) => n + 1);
     }
-  }, [
-    isMaterialChange,
-    visibleUrl,
-    requestedUrl,
-    visibleTex,
-    requestedTex
-  ]);
+  }, [isMaterialChange, visibleUrl, requestedUrl, visibleTex, requestedTex]);
 
   React.useEffect(() => {
     const id = requestAnimationFrame(() => setFitTick((n) => n + 1));
@@ -250,11 +241,11 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     <>
       <group ref={tabletRef}>
         <SvgHeadstone
-          key={visibleUrl}
+          key={visibleUrl} // Key is stable during texture swaps
           url={visibleUrl}
           depth={isPlaque ? 5 : (uprightThickness / 10)}
           scale={0.01}
-          faceTexture={visibleTex}
+          faceTexture={visibleTex} // Pass the currently visible texture
           sideTexture={visibleTex}
           tileSize={0.35}
           sideTileSize={0.35}
@@ -273,15 +264,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
               setSelected('headstone');
               setEditingObject('headstone');
               setSelectedInscriptionId(null);
-              setSelectedAdditionId(null); // Close addition panel
-              setSelectedMotifId(null); // Close motif panel
-              // Disabled: Don't open size panel when clicking headstone
-              // openSizePanel?.();
+              setSelectedAdditionId(null);
+              setSelectedMotifId(null);
             },
           }}
         >
           {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
-            // Safe ref assignment using useLayoutEffect to avoid render phase side-effects
+            // Safe ref assignment
             React.useLayoutEffect(() => {
               if (headstoneMeshRef && api.mesh.current) {
                 (headstoneMeshRef as any).current = api.mesh.current;
@@ -303,11 +292,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       selected={selectedInscriptionId === line.id}
                       onSelectInscription={() => {
                         setSelected(null);
-                        setSelectedMotifId(null); // Clear motif selection
-                        setSelectedAdditionId(null); // Clear addition selection
+                        setSelectedMotifId(null);
+                        setSelectedAdditionId(null);
                         setSelectedInscriptionId(line.id);
-                        
-                        // Navigate to inscriptions if not already there
                         if (pathname !== '/inscriptions') {
                           router.push('/inscriptions');
                         }
@@ -351,7 +338,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                 </ErrorBoundary>
               ))}
 
-              {/* Render bronze border if set */}
               {borderName && isPlaque && (
                 <ErrorBoundary>
                   <React.Suspense fallback={null}>
@@ -380,7 +366,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         />
       </group>
 
-      {requestedUrl !== visibleUrl && (
+      {/* Preload Shape changes (explicit loader) */}
+      {shapeSwapping && (
         <React.Suspense fallback={null}>
           <PreloadShape
             url={requestedUrl}
@@ -394,9 +381,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
       )}
 
       {/* Loader used for Shape Swapping or Font Loading only */}
-      {/* Show a subtle indicator when texture is transitioning */}
-      <InlineCanvasLoader show={shapeSwapping || fontLoading || isPending} />
+      <InlineCanvasLoader show={shapeSwapping || fontLoading} />
     </>
   );
 }
-
