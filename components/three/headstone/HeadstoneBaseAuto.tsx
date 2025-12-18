@@ -418,7 +418,11 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       const statueExtension = hasStatue() ? 0.2 : 0;
       const xOffset = statueExtension / 2;
 
-      const baseZCenter = -(headstoneDepth / 2) + baseD / 2;
+      // FIX: Base position should be FIXED, not dependent on varying headstone thickness
+      // Use a fixed reference depth (0.2m = 200mm standard) instead of actual headstone depth
+      // This ensures base stays in place when slant thickness changes
+      const FIXED_REFERENCE_DEPTH = 0.2; // 200mm standard depth for alignment
+      const baseZCenter = -(FIXED_REFERENCE_DEPTH / 2) + baseD / 2;
 
       const centerW = new THREE.Vector3(
         -xOffset,
