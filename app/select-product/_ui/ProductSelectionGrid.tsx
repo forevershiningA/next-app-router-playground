@@ -133,8 +133,8 @@ export default function ProductSelectionGrid({ products }: { products: Product[]
                       src={`/webp/products/${product.image}`}
                       alt={product.name}
                       fill
-                      className={`object-cover ${
-                        isSelected ? 'border-2 border-[#cfac6c]' : ''
+                      className={`object-cover transition-all ${
+                        isSelected ? 'border-2 border-[#cfac6c]' : 'border-2 border-transparent hover:border-[#cfac6c]'
                       }`}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />

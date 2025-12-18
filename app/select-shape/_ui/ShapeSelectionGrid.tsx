@@ -38,15 +38,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
 
-  // Check if user has already selected shape (canvas should be visible)
-  // If shape is selected, the sidebar ShapeSelector will be shown instead
-  const hasSelectedShape = !!currentShapeUrl;
-  
-  // Don't show the full grid when canvas is visible (shape already selected)
-  if (hasSelectedShape) {
-    return null;
-  }
-
   const handleShapeSelect = (shape: Shape) => {
     const shapeUrl = `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);

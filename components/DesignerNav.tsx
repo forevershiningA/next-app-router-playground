@@ -111,7 +111,7 @@ export default function DesignerNav() {
   const isSelectSizePage = pathname === '/select-size';
   
   // Determine if canvas is visible (on pages with 3D scene)
-  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-shape'];
+  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   
   // Auto-scroll to section when it becomes active
