@@ -272,6 +272,10 @@ export default function DesignerNav() {
               const minHeight = editingObject === 'base' ? 50 : (firstShape?.table?.minHeight ?? 40);
               const maxHeight = editingObject === 'base' ? 200 : (firstShape?.table?.maxHeight ?? 1200);
               
+              // Thickness min/max from catalog (for headstone only, base doesn't have thickness slider)
+              const minThickness = firstShape?.table?.minDepth ?? 100;
+              const maxThickness = firstShape?.table?.maxDepth ?? 300;
+              
               return (
                 <React.Fragment key={item.slug}>
                   <Link
@@ -528,23 +532,23 @@ export default function DesignerNav() {
                                 }}
                                 onBlur={(e) => {
                                   const val = Number(e.target.value);
-                                  if (val < 100) {
+                                  if (val < minThickness) {
                                     if (headstoneStyle === 'upright') {
-                                      setUprightThickness(100);
+                                      setUprightThickness(minThickness);
                                     } else {
-                                      setSlantThickness(100);
+                                      setSlantThickness(minThickness);
                                     }
-                                  } else if (val > 300) {
+                                  } else if (val > maxThickness) {
                                     if (headstoneStyle === 'upright') {
-                                      setUprightThickness(300);
+                                      setUprightThickness(maxThickness);
                                     } else {
-                                      setSlantThickness(300);
+                                      setSlantThickness(maxThickness);
                                     }
                                   }
                                 }}
                                 className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
-                                  (headstoneStyle === 'upright' ? uprightThickness : slantThickness) < 100 || 
-                                  (headstoneStyle === 'upright' ? uprightThickness : slantThickness) > 300
+                                  (headstoneStyle === 'upright' ? uprightThickness : slantThickness) < minThickness || 
+                                  (headstoneStyle === 'upright' ? uprightThickness : slantThickness) > maxThickness
                                     ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                                     : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                                 }`}
@@ -555,8 +559,8 @@ export default function DesignerNav() {
                           <div className="relative">
                             <input
                               type="range"
-                              min={100}
-                              max={300}
+                              min={minThickness}
+                              max={maxThickness}
                               step={10}
                               value={headstoneStyle === 'upright' ? uprightThickness : slantThickness}
                               onChange={(e) => {
@@ -570,8 +574,8 @@ export default function DesignerNav() {
                               className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                             />
                             <div className="flex justify-between text-xs text-slate-500 mt-0.5">
-                              <span>100mm</span>
-                              <span>300mm</span>
+                              <span>{minThickness}mm</span>
+                              <span>{maxThickness}mm</span>
                             </div>
                           </div>
                         </div>
