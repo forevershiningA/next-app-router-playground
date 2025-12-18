@@ -1,0 +1,23 @@
+# Backup files
+**/.backup
+*.backup
+*.bak
+
+# Documentation
+*.md
+!readme.md
+
+# Legacy/unused
+ml/
+legacy/
+docs/
+
+# Logs and temp files
+*.log
+*.txt
+!package.json
+!tsconfig.json
+
+# Test files
+*.test.*
+*.spec.*
