@@ -358,7 +358,7 @@ export default function DesignerNav() {
                                 name="headstoneStyle"
                                 checked={headstoneStyle === 'upright'}
                                 onChange={() => setHeadstoneStyle('upright')}
-                                className="h-4 w-4 border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
+                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                               />
                               {/* Upright icon - solid vertical rectangle */}
                               <svg className={`h-5 w-5 transition-colors ${
@@ -376,7 +376,7 @@ export default function DesignerNav() {
                                 name="headstoneStyle"
                                 checked={headstoneStyle === 'slant'}
                                 onChange={() => setHeadstoneStyle('slant')}
-                                className="h-4 w-4 border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
+                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                               />
                               {/* Slant icon - solid trapezoid */}
                               <svg className={`h-5 w-5 transition-colors ${
@@ -398,8 +398,8 @@ export default function DesignerNav() {
                       {/* Width Slider */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
-                          <label className="text-sm font-medium text-slate-200">Width</label>
-                          <div className="flex items-center gap-0.5">
+                          <label className="text-sm font-medium text-slate-200 w-20">Width</label>
+                          <div className="flex items-center gap-0.5 justify-end">
                             <input
                               type="number"
                               min={minWidth}
@@ -424,7 +424,7 @@ export default function DesignerNav() {
                                   : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                               }`}
                             />
-                            <span className="text-sm font-medium text-slate-200">mm</span>
+                            <span className="text-sm font-medium text-slate-200 w-6">mm</span>
                           </div>
                         </div>
                         <input
@@ -445,8 +445,8 @@ export default function DesignerNav() {
                       {/* Height Slider */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
-                          <label className="text-sm font-medium text-slate-200">Height</label>
-                          <div className="flex items-center gap-0.5">
+                          <label className="text-sm font-medium text-slate-200 w-20">Height</label>
+                          <div className="flex items-center gap-0.5 justify-end">
                             <input
                               type="number"
                               min={minHeight}
@@ -471,7 +471,7 @@ export default function DesignerNav() {
                                   : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                               }`}
                             />
-                            <span className="text-sm font-medium text-slate-200">mm</span>
+                            <span className="text-sm font-medium text-slate-200 w-6">mm</span>
                           </div>
                         </div>
                         <input
@@ -493,8 +493,8 @@ export default function DesignerNav() {
                       {editingObject === 'headstone' && (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between gap-2">
-                            <label className="text-sm font-medium text-slate-200">Thickness</label>
-                            <div className="flex items-center gap-0.5">
+                            <label className="text-sm font-medium text-slate-200 w-20">Thickness</label>
+                            <div className="flex items-center gap-0.5 justify-end">
                               <input
                                 type="number"
                                 min={100}
@@ -532,7 +532,7 @@ export default function DesignerNav() {
                                     : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                                 }`}
                               />
-                              <span className="text-sm font-medium text-slate-200">mm</span>
+                              <span className="text-sm font-medium text-slate-200 w-6">mm</span>
                             </div>
                           </div>
                           <input
