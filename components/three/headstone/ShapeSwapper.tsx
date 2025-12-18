@@ -252,7 +252,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         <SvgHeadstone
           key={visibleUrl}
           url={visibleUrl}
-          depth={isPlaque ? 5 : (headstoneStyle === 'slant' ? slantThickness / 10 : uprightThickness / 10)}
+          depth={isPlaque ? 5 : 20}
           scale={0.01}
           faceTexture={visibleTex}
           sideTexture={visibleTex}
