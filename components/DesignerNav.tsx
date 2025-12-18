@@ -326,46 +326,51 @@ export default function DesignerNav() {
 
                       {/* Base Finish Selection - Only show when editing base */}
                       {editingObject === 'base' && (
-                        <div className="flex items-center justify-center gap-4">
-                          <label className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="radio"
-                              name="baseFinish"
-                              checked={!showBase}
-                              onChange={() => {
-                                setShowBase(false);
-                              }}
-                              className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                            />
-                            <span className="text-sm font-medium text-slate-200">No Base</span>
-                          </label>
-                          <label className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="radio"
-                              name="baseFinish"
-                              checked={baseFinish === 'default' && showBase}
-                              onChange={() => {
-                                setBaseFinish('default');
-                                setShowBase(true);
-                              }}
-                              className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                            />
-                            <span className="text-sm font-medium text-slate-200">Polished</span>
-                          </label>
-                          <label className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="radio"
-                              name="baseFinish"
-                              checked={baseFinish === 'rock-pitch' && showBase}
-                              onChange={() => {
-                                setBaseFinish('rock-pitch');
-                                setShowBase(true);
-                              }}
-                              className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                            />
-                            <span className="text-sm font-medium text-slate-200">Rock Pitch</span>
-                          </label>
-                        </div>
+                        <>
+                          <div className="flex items-center justify-center gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                              <input
+                                type="radio"
+                                name="baseFinish"
+                                checked={!showBase}
+                                onChange={() => {
+                                  setShowBase(false);
+                                }}
+                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
+                              />
+                              <span className="text-sm font-medium text-slate-200">No Base</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                              <input
+                                type="radio"
+                                name="baseFinish"
+                                checked={baseFinish === 'default' && showBase}
+                                onChange={() => {
+                                  setBaseFinish('default');
+                                  setShowBase(true);
+                                }}
+                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
+                              />
+                              <span className="text-sm font-medium text-slate-200">Polished</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                              <input
+                                type="radio"
+                                name="baseFinish"
+                                checked={baseFinish === 'rock-pitch' && showBase}
+                                onChange={() => {
+                                  setBaseFinish('rock-pitch');
+                                  setShowBase(true);
+                                }}
+                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
+                              />
+                              <span className="text-sm font-medium text-slate-200">Rock Pitch</span>
+                            </label>
+                          </div>
+                          
+                          {/* Divider between finish selection and dimensions */}
+                          <div className="border-t border-slate-700/50 -mx-4"></div>
+                        </>
                       )}
 
                       {/* Headstone Style Selection - Only show when editing headstone */}
