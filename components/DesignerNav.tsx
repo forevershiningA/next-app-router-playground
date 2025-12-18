@@ -289,6 +289,27 @@ export default function DesignerNav() {
                   
                   {isSelectSizePage && !selectedMotifId && !selectedAdditionId && (
                     <div className="fs-size-panel mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                      {/* Add Base Checkbox - Above tabs */}
+                      <div className="flex items-center justify-center">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={showBase}
+                            onChange={(e) => {
+                              const isChecked = e.target.checked;
+                              setShowBase(isChecked);
+                              // If unchecking, switch to headstone editing
+                              if (!isChecked && editingObject === 'base') {
+                                setEditingObject('headstone');
+                                setSelected('headstone');
+                              }
+                            }}
+                            className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
+                          />
+                          <span className="text-sm font-medium text-slate-200">Add Base</span>
+                        </label>
+                      </div>
+
                       {/* Headstone/Base Toggle */}
                       <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
                         <button
@@ -325,31 +346,11 @@ export default function DesignerNav() {
                         )}
                       </div>
 
-                      {/* Add Base Checkbox and Headstone Style Radio Buttons */}
-                      <div className="flex items-center justify-between gap-4">
-                        {/* Add Base Checkbox */}
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={showBase}
-                            onChange={(e) => {
-                              const isChecked = e.target.checked;
-                              setShowBase(isChecked);
-                              // If unchecking, switch to headstone editing
-                              if (!isChecked && editingObject === 'base') {
-                                setEditingObject('headstone');
-                                setSelected('headstone');
-                              }
-                            }}
-                            className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
-                          />
-                          <span className="text-sm font-medium text-slate-200">Add Base</span>
-                        </label>
-
-                        {/* Headstone Style Radio Buttons - Only show when editing headstone */}
-                        {editingObject === 'headstone' && (
-                          <div className="flex items-center gap-3">
-                            <label className="flex items-center gap-1.5 cursor-pointer group">
+                      {/* Headstone Style Selection - Only show when editing headstone */}
+                      {editingObject === 'headstone' && (
+                        <>
+                          <div className="flex items-center justify-center gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer group">
                               <input
                                 type="radio"
                                 name="headstoneStyle"
@@ -357,13 +358,13 @@ export default function DesignerNav() {
                                 onChange={() => setHeadstoneStyle('upright')}
                                 className="h-4 w-4 border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
                               />
-                              {/* Upright icon - vertical rectangle */}
-                              <svg className="h-4 w-4 text-slate-400 group-hover:text-slate-200" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <rect x="6" y="2" width="4" height="12" rx="0.5" />
+                              {/* Upright icon - solid vertical rectangle */}
+                              <svg className="h-5 w-5 text-slate-400 group-hover:text-[#D7B356] transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                <rect x="7" y="3" width="6" height="14" rx="1" />
                               </svg>
                               <span className="text-sm font-medium text-slate-200">Upright</span>
                             </label>
-                            <label className="flex items-center gap-1.5 cursor-pointer group">
+                            <label className="flex items-center gap-2 cursor-pointer group">
                               <input
                                 type="radio"
                                 name="headstoneStyle"
@@ -371,21 +372,24 @@ export default function DesignerNav() {
                                 onChange={() => setHeadstoneStyle('slant')}
                                 className="h-4 w-4 border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
                               />
-                              {/* Slant icon - trapezoid */}
-                              <svg className="h-4 w-4 text-slate-400 group-hover:text-slate-200" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M5 14 L11 14 L9 2 L7 2 Z" />
+                              {/* Slant icon - solid trapezoid */}
+                              <svg className="h-5 w-5 text-slate-400 group-hover:text-[#D7B356] transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M6 17 L14 17 L11.5 3 L8.5 3 Z" />
                               </svg>
                               <span className="text-sm font-medium text-slate-200">Slant</span>
                             </label>
                           </div>
-                        )}
-                      </div>
+                          
+                          {/* Divider between style and dimensions */}
+                          <div className="border-t border-slate-700/50"></div>
+                        </>
+                      )}
 
                       {/* Width Slider */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
                           <label className="text-sm font-medium text-slate-200">Width</label>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-0.5">
                             <input
                               type="number"
                               min={minWidth}
@@ -398,7 +402,7 @@ export default function DesignerNav() {
                                   setCurrentWidthMm(val);
                                 }
                               }}
-                              className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
+                              className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1.5 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
                             />
                             <span className="text-sm font-medium text-slate-200">mm</span>
                           </div>
@@ -422,7 +426,7 @@ export default function DesignerNav() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
                           <label className="text-sm font-medium text-slate-200">Height</label>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-0.5">
                             <input
                               type="number"
                               min={minHeight}
@@ -435,7 +439,7 @@ export default function DesignerNav() {
                                   setCurrentHeightMm(val);
                                 }
                               }}
-                              className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
+                              className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1.5 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
                             />
                             <span className="text-sm font-medium text-slate-200">mm</span>
                           </div>
@@ -460,7 +464,7 @@ export default function DesignerNav() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between gap-2">
                             <label className="text-sm font-medium text-slate-200">Thickness</label>
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-0.5">
                               <input
                                 type="number"
                                 min={100}
@@ -477,7 +481,7 @@ export default function DesignerNav() {
                                     }
                                   }
                                 }}
-                                className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
+                                className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1.5 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
                               />
                               <span className="text-sm font-medium text-slate-200">mm</span>
                             </div>
