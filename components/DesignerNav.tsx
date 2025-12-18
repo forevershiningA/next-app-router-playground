@@ -334,8 +334,6 @@ export default function DesignerNav() {
                               checked={!showBase}
                               onChange={() => {
                                 setShowBase(false);
-                                setEditingObject('headstone');
-                                setSelected('headstone');
                               }}
                               className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                             />
