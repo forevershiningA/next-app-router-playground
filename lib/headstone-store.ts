@@ -423,7 +423,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         set({
           widthMm: shape.table.initWidth,
           heightMm: shape.table.initHeight,
-          baseWidthMm: Math.round(shape.table.initWidth * 1.4), // Base is 40% wider
+          baseWidthMm: shape.stand.initWidth, // Load from catalog XML stand element
+          baseHeightMm: shape.stand.initHeight, // Load from catalog XML stand element
           uprightThickness: shape.table.initDepth, // Set thickness from catalog
           slantThickness: shape.table.initDepth, // Set thickness from catalog
         });
