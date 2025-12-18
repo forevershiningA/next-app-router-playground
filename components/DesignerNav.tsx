@@ -385,14 +385,6 @@ export default function DesignerNav() {
                                 onChange={() => setHeadstoneStyle('upright')}
                                 className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                               />
-                              {/* Upright icon - solid vertical rectangle */}
-                              <svg className={`h-5 w-5 transition-colors ${
-                                headstoneStyle === 'upright' 
-                                  ? 'text-[#D7B356]' 
-                                  : 'text-slate-400 group-hover:text-[#D7B356]'
-                              }`} viewBox="0 0 20 20" fill="currentColor">
-                                <rect x="7" y="3" width="6" height="14" rx="1" />
-                              </svg>
                               <span className="text-sm font-medium text-slate-200">Upright</span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer group">
@@ -403,14 +395,6 @@ export default function DesignerNav() {
                                 onChange={() => setHeadstoneStyle('slant')}
                                 className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                               />
-                              {/* Slant icon - solid trapezoid */}
-                              <svg className={`h-5 w-5 transition-colors ${
-                                headstoneStyle === 'slant' 
-                                  ? 'text-[#D7B356]' 
-                                  : 'text-slate-400 group-hover:text-[#D7B356]'
-                              }`} viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M6 17 L14 17 L11.5 3 L8.5 3 Z" />
-                              </svg>
                               <span className="text-sm font-medium text-slate-200">Slant</span>
                             </label>
                           </div>
