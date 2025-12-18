@@ -327,23 +327,25 @@ export default function DesignerNav() {
                         >
                           Headstone
                         </button>
-                        {showBase && (
-                          <button
-                            onClick={() => {
-                              if (editingObject !== 'base') {
-                                setEditingObject('base');
-                                setSelected('base');
-                              }
-                            }}
-                            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                              editingObject === 'base'
-                                ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                            }`}
-                          >
-                            Base
-                          </button>
-                        )}
+                        <button
+                          onClick={() => {
+                            if (showBase && editingObject !== 'base') {
+                              setEditingObject('base');
+                              setSelected('base');
+                            }
+                          }}
+                          disabled={!showBase}
+                          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                            !showBase
+                              ? 'cursor-not-allowed text-slate-600 opacity-50'
+                              : editingObject === 'base'
+                              ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                          }`}
+                          title={!showBase ? "Check 'Add Base' to configure" : ""}
+                        >
+                          Base
+                        </button>
                       </div>
 
                       {/* Headstone Style Selection - Only show when editing headstone */}
@@ -359,7 +361,11 @@ export default function DesignerNav() {
                                 className="h-4 w-4 border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
                               />
                               {/* Upright icon - solid vertical rectangle */}
-                              <svg className="h-5 w-5 text-slate-400 group-hover:text-[#D7B356] transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                              <svg className={`h-5 w-5 transition-colors ${
+                                headstoneStyle === 'upright' 
+                                  ? 'text-[#D7B356]' 
+                                  : 'text-slate-400 group-hover:text-[#D7B356]'
+                              }`} viewBox="0 0 20 20" fill="currentColor">
                                 <rect x="7" y="3" width="6" height="14" rx="1" />
                               </svg>
                               <span className="text-sm font-medium text-slate-200">Upright</span>
@@ -373,7 +379,11 @@ export default function DesignerNav() {
                                 className="h-4 w-4 border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
                               />
                               {/* Slant icon - solid trapezoid */}
-                              <svg className="h-5 w-5 text-slate-400 group-hover:text-[#D7B356] transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                              <svg className={`h-5 w-5 transition-colors ${
+                                headstoneStyle === 'slant' 
+                                  ? 'text-[#D7B356]' 
+                                  : 'text-slate-400 group-hover:text-[#D7B356]'
+                              }`} viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M6 17 L14 17 L11.5 3 L8.5 3 Z" />
                               </svg>
                               <span className="text-sm font-medium text-slate-200">Slant</span>
@@ -381,7 +391,7 @@ export default function DesignerNav() {
                           </div>
                           
                           {/* Divider between style and dimensions */}
-                          <div className="border-t border-slate-700/50"></div>
+                          <div className="border-t border-slate-700/50 -mx-4"></div>
                         </>
                       )}
 
@@ -398,11 +408,21 @@ export default function DesignerNav() {
                               value={currentWidthMm}
                               onChange={(e) => {
                                 const val = Number(e.target.value);
-                                if (val >= minWidth && val <= maxWidth) {
-                                  setCurrentWidthMm(val);
+                                setCurrentWidthMm(val);
+                              }}
+                              onBlur={(e) => {
+                                const val = Number(e.target.value);
+                                if (val < minWidth) {
+                                  setCurrentWidthMm(minWidth);
+                                } else if (val > maxWidth) {
+                                  setCurrentWidthMm(maxWidth);
                                 }
                               }}
-                              className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1.5 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
+                              className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                                currentWidthMm < minWidth || currentWidthMm > maxWidth
+                                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                  : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                              }`}
                             />
                             <span className="text-sm font-medium text-slate-200">mm</span>
                           </div>
@@ -435,11 +455,21 @@ export default function DesignerNav() {
                               value={currentHeightMm}
                               onChange={(e) => {
                                 const val = Number(e.target.value);
-                                if (val >= minHeight && val <= maxHeight) {
-                                  setCurrentHeightMm(val);
+                                setCurrentHeightMm(val);
+                              }}
+                              onBlur={(e) => {
+                                const val = Number(e.target.value);
+                                if (val < minHeight) {
+                                  setCurrentHeightMm(minHeight);
+                                } else if (val > maxHeight) {
+                                  setCurrentHeightMm(maxHeight);
                                 }
                               }}
-                              className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1.5 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
+                              className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                                currentHeightMm < minHeight || currentHeightMm > maxHeight
+                                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                  : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                              }`}
                             />
                             <span className="text-sm font-medium text-slate-200">mm</span>
                           </div>
@@ -473,15 +503,34 @@ export default function DesignerNav() {
                                 value={Math.round(headstoneStyle === 'upright' ? uprightThickness : slantThickness)}
                                 onChange={(e) => {
                                   const val = Number(e.target.value);
-                                  if (val >= 100 && val <= 300) {
+                                  if (headstoneStyle === 'upright') {
+                                    setUprightThickness(val);
+                                  } else {
+                                    setSlantThickness(val);
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  const val = Number(e.target.value);
+                                  if (val < 100) {
                                     if (headstoneStyle === 'upright') {
-                                      setUprightThickness(val);
+                                      setUprightThickness(100);
                                     } else {
-                                      setSlantThickness(val);
+                                      setSlantThickness(100);
+                                    }
+                                  } else if (val > 300) {
+                                    if (headstoneStyle === 'upright') {
+                                      setUprightThickness(300);
+                                    } else {
+                                      setSlantThickness(300);
                                     }
                                   }
                                 }}
-                                className="w-16 rounded border border-slate-600 bg-slate-800 px-2 py-1.5 text-right text-sm text-slate-200 focus:border-[#D7B356] focus:outline-none focus:ring-1 focus:ring-[#D7B356]"
+                                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                                  (headstoneStyle === 'upright' ? uprightThickness : slantThickness) < 100 || 
+                                  (headstoneStyle === 'upright' ? uprightThickness : slantThickness) > 300
+                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                    : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                                }`}
                               />
                               <span className="text-sm font-medium text-slate-200">mm</span>
                             </div>
