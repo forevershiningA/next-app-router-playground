@@ -39,14 +39,14 @@ export default function ShapeSelector({ shapes }: ShapeSelectorProps) {
               title={shape.name}
             >
               {/* Shape Image */}
-              <div className="relative aspect-square overflow-hidden">
+              <div className={`relative aspect-square overflow-hidden transition-all ${
+                isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent hover:border-[#D7B356]'
+              }`}>
                 <Image
                   src={shapeUrl}
                   alt={shape.name}
                   fill
-                  className={`object-contain transition-all ${
-                    isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent hover:border-[#D7B356]'
-                  }`}
+                  className="object-contain"
                   sizes="100px"
                 />
               </div>
