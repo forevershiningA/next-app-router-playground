@@ -466,12 +466,10 @@ export default function DesignerNav() {
                         </div>
                       </div>
 
-                      {/* Height/Thickness Slider - "Thickness" when editing base */}
+                      {/* Height Slider - Shows "Height" for both headstone and base */}
                       <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className="flex items-center justify-between gap-2">
-                          <label className="text-sm font-medium text-slate-200 w-20">
-                            {editingObject === 'base' ? 'Thickness' : 'Height'}
-                          </label>
+                          <label className="text-sm font-medium text-slate-200 w-20">Height</label>
                           <div className="flex items-center gap-0.5 justify-end">
                             <input
                               type="number"
