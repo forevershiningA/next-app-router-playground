@@ -325,6 +325,27 @@ export default function DesignerNav() {
                         )}
                       </div>
 
+                      {/* Add Base Checkbox */}
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={showBase}
+                            onChange={(e) => {
+                              const isChecked = e.target.checked;
+                              setShowBase(isChecked);
+                              // If unchecking, switch to headstone editing
+                              if (!isChecked && editingObject === 'base') {
+                                setEditingObject('headstone');
+                                setSelected('headstone');
+                              }
+                            }}
+                            className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
+                          />
+                          <span className="text-sm font-medium text-slate-200">Add Base</span>
+                        </label>
+                      </div>
+
                       {/* Width Slider */}
                       <div className="space-y-2">
                         <label className="block text-sm font-medium text-slate-200">
@@ -418,32 +439,6 @@ export default function DesignerNav() {
                             {headstoneStyle === 'upright' 
                               ? 'Traditional vertical monument' 
                               : 'Beveled marker at an angle'}
-                          </p>
-                        </div>
-                      )}
-                      
-                      {/* Add Base Checkbox - Only show when editing headstone */}
-                      {editingObject === 'headstone' && (
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={showBase}
-                              onChange={(e) => {
-                                const isChecked = e.target.checked;
-                                setShowBase(isChecked);
-                                // If unchecking, switch to headstone editing
-                                if (!isChecked && editingObject === 'base') {
-                                  setEditingObject('headstone');
-                                  setSelected('headstone');
-                                }
-                              }}
-                              className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
-                            />
-                            <span className="text-sm font-medium text-slate-200">Add Base</span>
-                          </label>
-                          <p className="text-xs text-slate-400 ml-6">
-                            Add a granite base beneath the headstone
                           </p>
                         </div>
                       )}
