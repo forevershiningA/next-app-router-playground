@@ -560,13 +560,15 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       // Translate geometry so:
       // 1. X is centered
       // 2. Bottom (minY) is at Y=0
-      // 3. Z translation: Align back edge with upright headstone back
-      //    Upright back is at -depth/2 after translation
-      //    Slant back is at -baseThickness before translation
-      //    To get slant back to -depth/2: translate by (-baseThickness) - (-depth/2) = depth/2 - baseThickness
-      //    But we want positive translation, so: baseThickness - depth/2
-      //    Actually: translate by (baseThickness - depth/2) so back moves from -baseThickness to -depth/2
-      slantGeometry.translate(-(minX + maxX) / 2, -minY, baseThickness - depth / 2);
+      // 3. Z translation: Keep BACK EDGE aligned with base back edge
+      //    Back edge should be at -depth/2 (matching base back)
+      //    Before translation, back is at -baseThickness
+      //    To move back from -baseThickness to -depth/2: translate by -depth/2 - (-baseThickness) = baseThickness - depth/2
+      //    BUT: We want back edge FIXED at -depth/2 regardless of baseThickness
+      //    So translation should be: -depth/2 - (-baseThickness) = baseThickness - depth/2
+      //    This keeps back at -depth/2 and front extends forward as thickness increases
+      const zTranslation = baseThickness - depth / 2;
+      slantGeometry.translate(-(minX + maxX) / 2, -minY, zTranslation);
       slantGeometry.computeVertexNormals();
       
       // Material groups: 0 = front, 1 = everything else
@@ -684,7 +686,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           worldWidth: worldW,
           worldHeight: worldSlantH // CRITICAL: Report slant height so children fit the slanted surface
         },
-        childWrapperPos: [0, 0, (baseThickness - depth / 2) * scale] as [number, number, number], // Match geometry translation
+        childWrapperPos: [0, 0, zTranslation * scale] as [number, number, number], // Match geometry translation
         childWrapperRotation: wrapperQuaternion // Return THREE.Quaternion object, not array
       };
     }
