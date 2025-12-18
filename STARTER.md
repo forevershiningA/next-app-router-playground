@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-17  
+**Last Updated:** 2025-12-18  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -237,10 +237,10 @@ const TARGET_HEIGHTS = {
   // Dimensions
   widthMm: number;
   heightMm: number;
-  uprightThickness: number;      // Upright headstone thickness (100-300mm)
-  slantThickness: number;        // Slant headstone thickness (100-300mm)
-  baseWidthMm: number;           // Independent base width
-  baseHeightMm: number;          // Independent base height
+  uprightThickness: number;      // Upright headstone thickness (catalog-driven, e.g., 100-300mm)
+  slantThickness: number;        // Slant headstone thickness (catalog-driven, e.g., 100-300mm)
+  baseWidthMm: number;           // Independent base width (loaded from catalog XML)
+  baseHeightMm: number;          // Independent base height (loaded from catalog XML)
   
   // Selections
   selected: 'headstone' | 'base' | null;
@@ -267,12 +267,12 @@ const TARGET_HEIGHTS = {
 ```
 
 **Key Actions:**
-- `setProductId()` - Load product catalog and initialize dimensions from XML
+- `setProductId()` - Load product catalog and initialize dimensions from XML (including base dimensions from stand element)
 - `setShapeUrl()` - Change headstone shape
 - `setMaterialUrl()` - Change texture  
 - `setHeadstoneStyle()` - Toggle between upright/slant
-- `setUprightThickness()` - Adjust upright depth (100-300mm)
-- `setSlantThickness()` - Adjust slant depth (100-300mm)
+- `setUprightThickness()` - Adjust upright depth (catalog-driven min/max, e.g., 50-50mm for Mini Headstone, 100-300mm for Traditional)
+- `setSlantThickness()` - Adjust slant depth (catalog-driven min/max)
 - `setBaseFinish()` - Toggle between polished/rock-pitch
 - `addInscription()` - Add new text
 - `updateInscription()` - Modify existing text
@@ -899,6 +899,83 @@ useEffect(() => {
 
 ## Common Issues & Solutions
 
+### Issue: Headstone/Base Alignment Issues on Init
+**Symptom:** Headstone back edge and base back edge not aligned on initial load for Traditional Engraved Headstone
+
+**Root Cause:**
+- Using variable thickness for depth prop causes misalignment
+- Upright headstone centered at Z=0 with back at `-depth/2`
+- Base positioned with back at `-FIXED_REFERENCE_DEPTH/2 = -10cm`
+- If depth varies (e.g., 15cm for 150mm thickness), backs don't align
+
+**Solution:**
+- Use FIXED depth = 20cm (200mm) for ALL non-plaque headstones
+- depth prop is ALIGNMENT REFERENCE, not visual thickness
+- Visual thickness comes from SVG shape width, not depth prop
+- Result: Upright back at -10cm, Slant back at -10cm, Base back at -10cm ✅
+
+**Commit:** `ac9e065d56`
+
+### Issue: Thickness Slider Showing Wrong Range
+**Symptom:** Mini Headstone shows 100-300mm range but catalog has 50mm thickness, value shows with red validation border
+
+**Root Cause:**
+- Thickness slider hard-coded to `min={100} max={300}`
+- Validation also hard-coded to 100-300mm range
+- Ignored catalog XML `min_depth` and `max_depth` values
+
+**Solution:**
+```typescript
+// Extract min/max from catalog (like width/height already do)
+const minThickness = firstShape?.table?.minDepth ?? 100;
+const maxThickness = firstShape?.table?.maxDepth ?? 300;
+
+// Use variables in slider and validation
+<input type="range" min={minThickness} max={maxThickness} ... />
+<span>{minThickness}mm</span> <span>{maxThickness}mm</span>
+```
+
+**Result:**
+- Mini Headstone: 50-50mm (effectively fixed)
+- Traditional: 100-300mm (adjustable)
+- Any product uses XML-defined range
+- No validation errors for valid catalog values
+
+**Commit:** `6473bde412`
+
+### Issue: Base Dimensions Not Loading from Catalog
+**Symptom:** Mini Headstone base dimensions incorrect on init, not matching XML configuration
+
+**Root Cause:**
+- Base dimensions were hard-coded in store
+- `baseWidthMm: Math.round(shape.table.initWidth * 1.4)` - calculated, not loaded
+- `baseHeightMm` had default 100mm, never loaded from catalog
+- XML `<file type="stand">` element was completely ignored
+
+**Solution:**
+```typescript
+// Load from catalog XML stand element
+set({
+  baseWidthMm: shape.stand.initWidth,    // was: Math.round(shape.table.initWidth * 1.4)
+  baseHeightMm: shape.stand.initHeight,  // was: not set (default 100)
+});
+
+// Update XML for Mini Headstone (catalog-id-22)
+<file type="stand"
+  min_width="280" max_width="280" init_width="280"  // was 200
+  min_height="50" max_height="50" init_height="50"
+  min_depth="100" max_depth="100" init_depth="100"
+/>
+```
+
+**Result:**
+- Mini Headstone base: 280mm × 50mm × 100mm (40% wider than headstone)
+- All dimensions from catalog XML
+- No hard-coded calculations
+- Product-specific configurations supported
+
+**Commit:** `1cfc86068f`
+
 ### Issue: Headstone Disappearing During Material Changes
 **Symptom:** Headstone briefly disappears (flash/blink) when selecting a new material texture
 
@@ -1211,6 +1288,47 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-18 (Evening)**: Catalog XML Integration & UI Polish
+  - **Thickness Slider Fix**: Changed from hard-coded 100-300mm to catalog-driven min/max values
+    - **Root Cause**: Slider always showed 100-300mm range regardless of product type
+    - **Issue Example**: Mini Headstone (catalog-id-22) has thickness configured as 50mm fixed, but UI showed 100-300mm with validation errors
+    - **Solution**: Extract from catalog: `minThickness = firstShape?.table?.minDepth ?? 100`
+    - **Result**: Mini Headstone now shows 50-50mm range (effectively fixed), Traditional shows 100-300mm
+    - Validation now uses catalog values, no more red border errors for valid configurations
+    - Commit: `6473bde412`
+  - **Mini Headstone Catalog Fix**: Matched XML logic for base dimensions (product ID 22)
+    - **Root Cause**: Base dimensions were hard-coded, ignoring XML `<file type="stand">` element
+    - Code calculated `baseWidthMm = table.initWidth * 1.4`, never loaded from catalog
+    - **Solution**: Load dimensions from XML: `baseWidthMm: shape.stand.initWidth`, `baseHeightMm: shape.stand.initHeight`
+    - Updated XML: Stand width 200mm → 280mm (40% wider than headstone)
+    - **Result**: Base dimensions now product-specific, no hard-coded assumptions
+    - Commit: `1cfc86068f`
+  - **Alignment Regression Fix**: Reverted depth prop to fixed 20cm for upright/slant alignment
+    - **Regression**: Previous commit (c53f574646) broke Traditional Headstone alignment
+    - Changed `depth={isPlaque ? 5 : 20}` to use actual thickness, causing misalignment
+    - **Issue**: Upright back at -7.5cm, Base back at -10cm → 2.5cm gap
+    - **Solution**: Revert to fixed depth=20cm for alignment reference (not visual thickness)
+    - **Result**: All headstone backs align at -10cm with base
+    - Commit: `ac9e065d56`
+  - **UI Enhancements**:
+    - Added 2px gold hover border to Select Shape items (matching Select Product)
+    - Fixed hover border using Tailwind `group-hover:` pattern (moved from Image to container div)
+    - Removed `overflow-hidden` that was clipping border visibility
+    - Improved UX consistency across selection interfaces
+    - Commits: `755e0395c8`, `a7ff0cc242`, `510b28edc7`
+  - **Select Size UX Improvements**:
+    - Moved Upright/Slant radio buttons next to Add Base checkbox (horizontal layout)
+    - Removed icons from Upright/Slant buttons for cleaner design
+    - Added Base finish radio buttons (No Base / Polished / Rock Pitch) below Headstone/Base tabs
+    - Base finish only visible in Base tab, horizontal layout matching Headstone style
+    - Changed Base "Thickness" label to "Height" (correct terminology)
+    - Added divider line after Base radio buttons matching Headstone tab
+    - "No Base" option disables sliders/inputs without switching tabs
+    - Commits: Multiple incremental improvements
+  - **Debugging**: Added console.log to headstone onClick to diagnose SelectionBox outline issue
+    - Issue: Clicking headstone doesn't show select box outline
+    - Next step: Test if onClick handler fires or if event is blocked
+    - Commit: `09dbd9c02a`
 - **2025-12-17 (Late Evening)**: Navigation Flow Simplification & Route Cleanup
   - **Removed `/with-scene` Routes**: Deleted entire `/app/with-scene/` directory
     - Simplified navigation flow: `/select-product` → `/select-shape` → `/select-size`
