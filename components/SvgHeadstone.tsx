@@ -560,14 +560,40 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       // Translate geometry so:
       // 1. X is centered
       // 2. Bottom (minY) is at Y=0
-      // 3. Z translation: Keep BACK EDGE aligned with base back edge
-      //    Back edge should be at -depth/2 (matching base back)
-      //    Before translation, back is at -baseThickness
-      //    To move back from -baseThickness to -depth/2: translate by -depth/2 - (-baseThickness) = baseThickness - depth/2
-      //    BUT: We want back edge FIXED at -depth/2 regardless of baseThickness
-      //    So translation should be: -depth/2 - (-baseThickness) = baseThickness - depth/2
-      //    This keeps back at -depth/2 and front extends forward as thickness increases
+      // 3. Z translation: Align back edge with BASE back edge
+      //    
+      //    CRITICAL ISSUE: 'depth' prop is for UPRIGHT headstones (fixed, e.g., 20cm)
+      //    But SLANT thickness varies (100mm to 300mm = 10cm to 30cm)
+      //    We can't use 'depth' for slant alignment!
+      //    
+      //    SOLUTION: Align slant back to SAME position as upright back
+      //    - Upright back is at: -depth/2 (e.g., -10cm)
+      //    - Slant back should ALSO be at: -depth/2 (FIXED, regardless of slant thickness)
+      //    - Current slant back is at: -baseThickness (varies with thickness)
+      //    - Translation needed: -depth/2 - (-baseThickness) = baseThickness - depth/2
+      //    
+      //    When thickness increases from 100mm (10cm) to 300mm (30cm):
+      //    - Back starts at -10cm → -30cm
+      //    - Translation1 = 10 - 10 = 0
+      //    - Translation2 = 30 - 10 = 20
+      //    - Final back position1 = -10 + 0 = -10 ✓
+      //    - Final back position2 = -30 + 20 = -10 ✓ (Still at -10, CORRECT!)
+      //    
+      //    Math is CORRECT! But maybe the issue is the base back position isn't actually at -depth/2?
+      //    Or the depth prop value is wrong?
       const zTranslation = baseThickness - depth / 2;
+      
+      console.log('[SvgHeadstone] SLANT Z-TRANSLATION DEBUG:', {
+        slantThicknessMm: slantThickness,
+        baseThicknessCm: baseThickness,
+        depthPropCm: depth,
+        zTranslation,
+        backBeforeTranslation: -baseThickness,
+        backAfterTranslation: -baseThickness + zTranslation,
+        targetBackPosition: -depth / 2,
+        shouldMatch: Math.abs((-baseThickness + zTranslation) - (-depth / 2)) < 0.001
+      });
+      
       slantGeometry.translate(-(minX + maxX) / 2, -minY, zTranslation);
       slantGeometry.computeVertexNormals();
       
