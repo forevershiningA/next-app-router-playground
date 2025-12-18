@@ -35,12 +35,12 @@ export default function ShapeSelector({ shapes }: ShapeSelectorProps) {
             <button
               key={shape.id}
               onClick={() => handleShapeSelect(shape)}
-              className="relative overflow-hidden cursor-pointer"
+              className="group relative overflow-hidden cursor-pointer"
               title={shape.name}
             >
               {/* Shape Image */}
               <div className={`relative aspect-square overflow-hidden transition-all ${
-                isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent hover:border-[#D7B356]'
+                isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent group-hover:border-[#D7B356]'
               }`}>
                 <Image
                   src={shapeUrl}
