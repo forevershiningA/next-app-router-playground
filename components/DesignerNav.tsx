@@ -372,7 +372,7 @@ export default function DesignerNav() {
                       )}
 
                       {/* Width Slider */}
-                      <div className="space-y-1">
+                      <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className="flex items-center justify-between gap-2">
                           <label className="text-sm font-medium text-slate-200 w-20">Width</label>
                           <div className="flex items-center gap-0.5 justify-end">
@@ -394,6 +394,7 @@ export default function DesignerNav() {
                                   setCurrentWidthMm(maxWidth);
                                 }
                               }}
+                              disabled={editingObject === 'base' && !showBase}
                               className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
                                 currentWidthMm < minWidth || currentWidthMm > maxWidth
                                   ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
@@ -411,6 +412,7 @@ export default function DesignerNav() {
                             step={10}
                             value={currentWidthMm}
                             onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
+                            disabled={editingObject === 'base' && !showBase}
                             className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                           />
                           <div className="flex justify-between text-xs text-slate-500 mt-0.5">
@@ -420,10 +422,12 @@ export default function DesignerNav() {
                         </div>
                       </div>
 
-                      {/* Height Slider */}
-                      <div className="space-y-1">
+                      {/* Height/Thickness Slider - "Thickness" when editing base */}
+                      <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className="flex items-center justify-between gap-2">
-                          <label className="text-sm font-medium text-slate-200 w-20">Height</label>
+                          <label className="text-sm font-medium text-slate-200 w-20">
+                            {editingObject === 'base' ? 'Thickness' : 'Height'}
+                          </label>
                           <div className="flex items-center gap-0.5 justify-end">
                             <input
                               type="number"
@@ -443,6 +447,7 @@ export default function DesignerNav() {
                                   setCurrentHeightMm(maxHeight);
                                 }
                               }}
+                              disabled={editingObject === 'base' && !showBase}
                               className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
                                 currentHeightMm < minHeight || currentHeightMm > maxHeight
                                   ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
@@ -460,6 +465,7 @@ export default function DesignerNav() {
                             step={10}
                             value={currentHeightMm}
                             onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
+                            disabled={editingObject === 'base' && !showBase}
                             className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                           />
                           <div className="flex justify-between text-xs text-slate-500 mt-0.5">
