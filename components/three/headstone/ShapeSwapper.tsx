@@ -269,6 +269,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           meshProps={{
             name: 'headstone',
             onClick: (e) => {
+              console.log('[ShapeSwapper] Headstone clicked!', e);
               e.stopPropagation();
               setSelected('headstone');
               setEditingObject('headstone');
