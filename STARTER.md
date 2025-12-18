@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-14  
+**Last Updated:** 2025-12-17  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -60,8 +60,7 @@ next-dyo/
 │   ├── designs/            # Design gallery pages
 │   ├── inscriptions/       # Inscription selection
 │   ├── products/           # Product landing pages
-│   ├── select-*/           # Step-by-step designer pages
-│   └── with-scene/         # Pages with 3D canvas
+│   └── select-*/           # Step-by-step designer pages
 ├── components/             # React components
 │   ├── three/              # Three.js/R3F components
 │   │   ├── headstone/      # Headstone assembly
@@ -238,6 +237,8 @@ const TARGET_HEIGHTS = {
   // Dimensions
   widthMm: number;
   heightMm: number;
+  uprightThickness: number;      // Upright headstone thickness (100-300mm)
+  slantThickness: number;        // Slant headstone thickness (100-300mm)
   baseWidthMm: number;           // Independent base width
   baseHeightMm: number;          // Independent base height
   
@@ -266,9 +267,11 @@ const TARGET_HEIGHTS = {
 ```
 
 **Key Actions:**
+- `setProductId()` - Load product catalog and initialize dimensions from XML
 - `setShapeUrl()` - Change headstone shape
-- `setMaterialUrl()` - Change texture
+- `setMaterialUrl()` - Change texture  
 - `setHeadstoneStyle()` - Toggle between upright/slant
+- `setUprightThickness()` - Adjust upright depth (100-300mm)
 - `setSlantThickness()` - Adjust slant depth (100-300mm)
 - `setBaseFinish()` - Toggle between polished/rock-pitch
 - `addInscription()` - Add new text
@@ -1208,7 +1211,32 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
-- **2025-12-17**: Material/Shape Thumbnail Simplification & Texture Loading Fix
+- **2025-12-17 (Late Evening)**: Navigation Flow Simplification & Route Cleanup
+  - **Removed `/with-scene` Routes**: Deleted entire `/app/with-scene/` directory
+    - Simplified navigation flow: `/select-product` → `/select-shape` → `/select-size`
+    - Canvas now controlled solely by `ConditionalCanvas.tsx` based on pathname
+    - Removed duplicate route complexity
+  - **Product Selection Flow**: 
+    - `/select-product` (no canvas) → select product → `/select-shape` (no canvas)
+    - `/select-shape` (no canvas) → select shape → `/select-size` (with canvas)
+    - Shape selector only appears in sidebar when canvas is visible (not on standalone `/select-shape` page)
+  - **Thickness Initialization**: Fixed product thickness not being set from XML catalog
+    - `setProductId()` now sets both `uprightThickness` and `slantThickness` from `shape.table.initDepth`
+    - Each product can have different thickness (e.g., Mini Headstones: 50mm)
+    - Before: Always defaulted to 150mm regardless of product
+    - After: Respects `init_depth` from `catalog-id-*.xml` files
+  - **Canvas Visibility Logic** (ConditionalCanvas.tsx):
+    - Hide canvas on: `/`, `/designs`, `/select-product`, `/select-shape`, `/select-additions`, `/check-price`
+    - Show canvas on: `/select-size`, `/inscriptions`, `/select-motifs`, `/select-material`
+  - **Sidebar Behavior** (DesignerNav.tsx):
+    - Shape selector panel only shows when `isCanvasVisible === true`
+    - Removed `/select-shape` from `canvasVisiblePages` array
+    - When canvas hidden, "Select Shape" link navigates to full-page selector
+  - **Thumbnail Improvements**:
+    - Added hover border (2px) matching selected state for product cards
+    - Consistent styling across all selection pages
+  - Commits: Navigation cleanup, thickness initialization
+- **2025-12-17 (Afternoon)**: Material/Shape Thumbnail Simplification & Texture Loading Fix
   - **UI Simplification**: Removed hover effects, marks, color overlays, and drop shadows from thumbnails
     - Added 2px border to selected materials/shapes using Headstone/Base tab color
     - Fixed inconsistent border radius on all thumbnails
