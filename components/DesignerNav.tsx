@@ -73,6 +73,8 @@ export default function DesignerNav() {
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const showBase = useHeadstoneStore((s) => s.showBase);
+  const setShowBase = useHeadstoneStore((s) => s.setShowBase);
 
   // Check if anything has been added to the headstone
   const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;
@@ -304,21 +306,23 @@ export default function DesignerNav() {
                         >
                           Headstone
                         </button>
-                        <button
-                          onClick={() => {
-                            if (editingObject !== 'base') {
-                              setEditingObject('base');
-                              setSelected('base');
-                            }
-                          }}
-                          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                            editingObject === 'base'
-                              ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                          }`}
-                        >
-                          Base
-                        </button>
+                        {showBase && (
+                          <button
+                            onClick={() => {
+                              if (editingObject !== 'base') {
+                                setEditingObject('base');
+                                setSelected('base');
+                              }
+                            }}
+                            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                              editingObject === 'base'
+                                ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                            }`}
+                          >
+                            Base
+                          </button>
+                        )}
                       </div>
 
                       {/* Width Slider */}
@@ -414,6 +418,32 @@ export default function DesignerNav() {
                             {headstoneStyle === 'upright' 
                               ? 'Traditional vertical monument' 
                               : 'Beveled marker at an angle'}
+                          </p>
+                        </div>
+                      )}
+                      
+                      {/* Add Base Checkbox - Only show when editing headstone */}
+                      {editingObject === 'headstone' && (
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={showBase}
+                              onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                setShowBase(isChecked);
+                                // If unchecking, switch to headstone editing
+                                if (!isChecked && editingObject === 'base') {
+                                  setEditingObject('headstone');
+                                  setSelected('headstone');
+                                }
+                              }}
+                              className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
+                            />
+                            <span className="text-sm font-medium text-slate-200">Add Base</span>
+                          </label>
+                          <p className="text-xs text-slate-400 ml-6">
+                            Add a granite base beneath the headstone
                           </p>
                         </div>
                       )}
