@@ -288,28 +288,7 @@ export default function DesignerNav() {
                   </Link>
                   
                   {isSelectSizePage && !selectedMotifId && !selectedAdditionId && (
-                    <div className="fs-size-panel mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
-                      {/* Add Base Checkbox - Above tabs */}
-                      <div className="flex items-center justify-center">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={showBase}
-                            onChange={(e) => {
-                              const isChecked = e.target.checked;
-                              setShowBase(isChecked);
-                              // If unchecking, switch to headstone editing
-                              if (!isChecked && editingObject === 'base') {
-                                setEditingObject('headstone');
-                                setSelected('headstone');
-                              }
-                            }}
-                            className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-[#D7B356] focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-0"
-                          />
-                          <span className="text-sm font-medium text-slate-200">Add Base</span>
-                        </label>
-                      </div>
-
+                    <div className="fs-size-panel mt-3 space-y-5 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
                       {/* Headstone/Base Toggle */}
                       <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
                         <button
@@ -329,20 +308,17 @@ export default function DesignerNav() {
                         </button>
                         <button
                           onClick={() => {
-                            if (showBase && editingObject !== 'base') {
+                            setShowBase(true);
+                            if (editingObject !== 'base') {
                               setEditingObject('base');
                               setSelected('base');
                             }
                           }}
-                          disabled={!showBase}
                           className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                            !showBase
-                              ? 'cursor-not-allowed text-slate-600 opacity-50'
-                              : editingObject === 'base'
+                            editingObject === 'base'
                               ? 'bg-[#D7B356] text-slate-900 shadow-md'
                               : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                           }`}
-                          title={!showBase ? "Check 'Add Base' to configure" : ""}
                         >
                           Base
                         </button>
@@ -396,7 +372,7 @@ export default function DesignerNav() {
                       )}
 
                       {/* Width Slider */}
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         <div className="flex items-center justify-between gap-2">
                           <label className="text-sm font-medium text-slate-200 w-20">Width</label>
                           <div className="flex items-center gap-0.5 justify-end">
@@ -424,26 +400,28 @@ export default function DesignerNav() {
                                   : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                               }`}
                             />
-                            <span className="text-sm font-medium text-slate-200 w-6">mm</span>
+                            <span className="text-sm font-medium text-slate-500 w-6">mm</span>
                           </div>
                         </div>
-                        <input
-                          type="range"
-                          min={minWidth}
-                          max={maxWidth}
-                          step={10}
-                          value={currentWidthMm}
-                          onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
-                          className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
-                        />
-                        <div className="flex justify-between text-xs text-slate-400">
-                          <span>{minWidth}mm</span>
-                          <span>{maxWidth}mm</span>
+                        <div className="relative">
+                          <input
+                            type="range"
+                            min={minWidth}
+                            max={maxWidth}
+                            step={10}
+                            value={currentWidthMm}
+                            onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
+                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          />
+                          <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                            <span>{minWidth}mm</span>
+                            <span>{maxWidth}mm</span>
+                          </div>
                         </div>
                       </div>
 
                       {/* Height Slider */}
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         <div className="flex items-center justify-between gap-2">
                           <label className="text-sm font-medium text-slate-200 w-20">Height</label>
                           <div className="flex items-center gap-0.5 justify-end">
@@ -471,27 +449,29 @@ export default function DesignerNav() {
                                   : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                               }`}
                             />
-                            <span className="text-sm font-medium text-slate-200 w-6">mm</span>
+                            <span className="text-sm font-medium text-slate-500 w-6">mm</span>
                           </div>
                         </div>
-                        <input
-                          type="range"
-                          min={minHeight}
-                          max={maxHeight}
-                          step={10}
-                          value={currentHeightMm}
-                          onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
-                          className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
-                        />
-                        <div className="flex justify-between text-xs text-slate-400">
-                          <span>{minHeight}mm</span>
-                          <span>{maxHeight}mm</span>
+                        <div className="relative">
+                          <input
+                            type="range"
+                            min={minHeight}
+                            max={maxHeight}
+                            step={10}
+                            value={currentHeightMm}
+                            onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
+                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          />
+                          <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                            <span>{minHeight}mm</span>
+                            <span>{maxHeight}mm</span>
+                          </div>
                         </div>
                       </div>
                       
                       {/* Thickness Slider - Show for both upright and slant when editing headstone */}
                       {editingObject === 'headstone' && (
-                        <div className="space-y-2">
+                        <div className="space-y-1">
                           <div className="flex items-center justify-between gap-2">
                             <label className="text-sm font-medium text-slate-200 w-20">Thickness</label>
                             <div className="flex items-center gap-0.5 justify-end">
@@ -532,28 +512,30 @@ export default function DesignerNav() {
                                     : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
                                 }`}
                               />
-                              <span className="text-sm font-medium text-slate-200 w-6">mm</span>
+                              <span className="text-sm font-medium text-slate-500 w-6">mm</span>
                             </div>
                           </div>
-                          <input
-                            type="range"
-                            min={100}
-                            max={300}
-                            step={10}
-                            value={headstoneStyle === 'upright' ? uprightThickness : slantThickness}
-                            onChange={(e) => {
-                              const newValue = Number(e.target.value);
-                              if (headstoneStyle === 'upright') {
-                                setUprightThickness(newValue);
-                              } else {
-                                setSlantThickness(newValue);
-                              }
-                            }}
-                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
-                          />
-                          <div className="flex justify-between text-xs text-slate-400">
-                            <span>100mm</span>
-                            <span>300mm</span>
+                          <div className="relative">
+                            <input
+                              type="range"
+                              min={100}
+                              max={300}
+                              step={10}
+                              value={headstoneStyle === 'upright' ? uprightThickness : slantThickness}
+                              onChange={(e) => {
+                                const newValue = Number(e.target.value);
+                                if (headstoneStyle === 'upright') {
+                                  setUprightThickness(newValue);
+                                } else {
+                                  setSlantThickness(newValue);
+                                }
+                              }}
+                              className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                            />
+                            <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                              <span>100mm</span>
+                              <span>300mm</span>
+                            </div>
                           </div>
                         </div>
                       )}
