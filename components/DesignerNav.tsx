@@ -289,50 +289,6 @@ export default function DesignerNav() {
                   
                   {isSelectSizePage && !selectedMotifId && !selectedAdditionId && (
                     <div className="fs-size-panel mt-3 space-y-5 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
-                      {/* Base Finish Selection - Above tabs */}
-                      <div className="flex items-center justify-center gap-4">
-                        <label className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="baseFinish"
-                            checked={baseFinish === 'default' && showBase}
-                            onChange={() => {
-                              setBaseFinish('default');
-                              setShowBase(true);
-                            }}
-                            className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                          />
-                          <span className="text-sm font-medium text-slate-200">Polished</span>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="baseFinish"
-                            checked={baseFinish === 'rock-pitch' && showBase}
-                            onChange={() => {
-                              setBaseFinish('rock-pitch');
-                              setShowBase(true);
-                            }}
-                            className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                          />
-                          <span className="text-sm font-medium text-slate-200">Rock Pitch</span>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="baseFinish"
-                            checked={!showBase}
-                            onChange={() => {
-                              setShowBase(false);
-                              setEditingObject('headstone');
-                              setSelected('headstone');
-                            }}
-                            className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                          />
-                          <span className="text-sm font-medium text-slate-200">No Base</span>
-                        </label>
-                      </div>
-
                       {/* Headstone/Base Toggle */}
                       <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
                         <button
@@ -367,6 +323,52 @@ export default function DesignerNav() {
                           Base
                         </button>
                       </div>
+
+                      {/* Base Finish Selection - Only show when editing base */}
+                      {editingObject === 'base' && (
+                        <div className="flex items-center justify-center gap-4">
+                          <label className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="radio"
+                              name="baseFinish"
+                              checked={!showBase}
+                              onChange={() => {
+                                setShowBase(false);
+                                setEditingObject('headstone');
+                                setSelected('headstone');
+                              }}
+                              className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
+                            />
+                            <span className="text-sm font-medium text-slate-200">No Base</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="radio"
+                              name="baseFinish"
+                              checked={baseFinish === 'default' && showBase}
+                              onChange={() => {
+                                setBaseFinish('default');
+                                setShowBase(true);
+                              }}
+                              className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
+                            />
+                            <span className="text-sm font-medium text-slate-200">Polished</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="radio"
+                              name="baseFinish"
+                              checked={baseFinish === 'rock-pitch' && showBase}
+                              onChange={() => {
+                                setBaseFinish('rock-pitch');
+                                setShowBase(true);
+                              }}
+                              className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
+                            />
+                            <span className="text-sm font-medium text-slate-200">Rock Pitch</span>
+                          </label>
+                        </div>
+                      )}
 
                       {/* Headstone Style Selection - Only show when editing headstone */}
                       {editingObject === 'headstone' && (
