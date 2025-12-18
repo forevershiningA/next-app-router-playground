@@ -44,8 +44,8 @@ export default function ShapeSelector({ shapes }: ShapeSelectorProps) {
                   src={shapeUrl}
                   alt={shape.name}
                   fill
-                  className={`object-contain ${
-                    isSelected ? 'border-2 border-[#D7B356]' : ''
+                  className={`object-contain transition-all ${
+                    isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent hover:border-[#D7B356]'
                   }`}
                   sizes="100px"
                 />
