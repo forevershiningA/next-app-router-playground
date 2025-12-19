@@ -75,7 +75,7 @@ function ProductNameHeader() {
           <h1 className="text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl mb-4">
             {catalog.product.name}
           </h1>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 shadow-lg hover:shadow-xl hover:shadow-[#cfac6c]/50 transition-all">
             <span className="text-sm font-medium text-slate-200">
               {widthMm} × {heightMm} mm
             </span>
@@ -197,7 +197,7 @@ export default function ThreeScene() {
         </div>
       )}
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#09171E] to-[#291E14] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-amber-950/30 to-yellow-900/20 pointer-events-none" />
       
       {isVisible && (
         <div ref={containerRef} className="relative w-full h-screen flex flex-col items-center justify-center">
@@ -254,7 +254,7 @@ export default function ThreeScene() {
               {/* Left Arrow */}
               <button
                 onClick={rotateLeft}
-                className="absolute left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 cursor-pointer"
+                className="absolute left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-[#cfac6c]/50"
                 aria-label="Rotate left"
               >
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,7 +265,7 @@ export default function ThreeScene() {
               {/* Right Arrow */}
               <button
                 onClick={rotateRight}
-                className="absolute right-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 cursor-pointer"
+                className="absolute right-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-[#cfac6c]/50"
                 aria-label="Rotate right"
               >
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
