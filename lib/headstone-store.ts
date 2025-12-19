@@ -496,8 +496,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Check both the shape URL and code to find the right shape
       const matchingShape = catalog.product.shapes.find(shape => {
         const catalogFileName = shape.name.toLowerCase().replace(/\s+/g, '_') + '.svg';
+        const shapeFileNameNoExt = shapeFileName ? shapeFileName.replace('.svg', '') : '';
         return shapeFileName === catalogFileName || 
-               shape.url?.includes(shapeFileName?.replace('.svg', '')) ||
+               (shape.url && shapeFileNameNoExt && shape.url.includes(shapeFileNameNoExt)) ||
                (shapeFileName === 'oval_horizontal.svg' && shape.code === 'Oval Landscape') ||
                (shapeFileName === 'oval_vertical.svg' && shape.code === 'Oval Portrait') ||
                (shapeFileName === 'circle.svg' && shape.code === 'Circle') ||
