@@ -47,6 +47,7 @@ export default function DesignerNav() {
   
   // Get catalog info
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const isPlaque = catalog?.product.type === 'plaque';
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
@@ -177,6 +178,8 @@ export default function DesignerNav() {
     const qt = catalog.product.basePriceModel.quantityType;
     if (qt === 'Width + Height') {
       baseQuantity = baseWidthMm + baseHeightMm;
+    } else if (qt === 'Width') {
+      baseQuantity = baseWidthMm + baseThickness; // Width + Thickness (depth)
     } else {
       baseQuantity = baseWidthMm * baseHeightMm;
     }
@@ -314,40 +317,51 @@ export default function DesignerNav() {
                   
                   {isSelectSizePage && !selectedMotifId && !selectedAdditionId && (
                     <div className="fs-size-panel mt-3 space-y-5 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
-                      {/* Headstone/Base Toggle */}
-                      <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
-                        <button
-                          onClick={() => {
-                            if (editingObject !== 'headstone') {
-                              setEditingObject('headstone');
-                              setSelected('headstone');
-                            }
-                          }}
-                          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                            editingObject === 'headstone'
-                              ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                          }`}
-                        >
-                          Headstone
-                        </button>
-                        <button
-                          onClick={() => {
-                            setShowBase(true);
-                            if (editingObject !== 'base') {
-                              setEditingObject('base');
-                              setSelected('base');
-                            }
-                          }}
-                          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                            editingObject === 'base'
-                              ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                          }`}
-                        >
-                          Base
-                        </button>
-                      </div>
+                      {/* Plaque Label - Show for plaques instead of toggle */}
+                      {isPlaque && (
+                        <div className="flex justify-center">
+                          <div className="rounded-md px-4 py-2 text-sm font-medium bg-[#D7B356] text-slate-900 shadow-md">
+                            Plaque
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Headstone/Base Toggle - Hide for plaques */}
+                      {!isPlaque && (
+                        <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+                          <button
+                            onClick={() => {
+                              if (editingObject !== 'headstone') {
+                                setEditingObject('headstone');
+                                setSelected('headstone');
+                              }
+                            }}
+                            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                              editingObject === 'headstone'
+                                ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                            }`}
+                          >
+                            Headstone
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowBase(true);
+                              if (editingObject !== 'base') {
+                                setEditingObject('base');
+                                setSelected('base');
+                              }
+                            }}
+                            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                              editingObject === 'base'
+                                ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                            }`}
+                          >
+                            Base
+                          </button>
+                        </div>
+                      )}
 
                       {/* Base Finish Selection - Only show when editing base */}
                       {editingObject === 'base' && (
@@ -410,7 +424,9 @@ export default function DesignerNav() {
                                 onChange={() => setHeadstoneStyle('upright')}
                                 className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                               />
-                              <span className="text-sm font-medium text-slate-200">Upright</span>
+                              <span className="text-sm font-medium text-slate-200">
+                                {isPlaque ? 'No Border' : 'Upright'}
+                              </span>
                             </label>
                             <label className="flex items-center gap-2 cursor-pointer group">
                               <input
@@ -420,7 +436,9 @@ export default function DesignerNav() {
                                 onChange={() => setHeadstoneStyle('slant')}
                                 className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
                               />
-                              <span className="text-sm font-medium text-slate-200">Slant</span>
+                              <span className="text-sm font-medium text-slate-200">
+                                {isPlaque ? 'Border' : 'Slant'}
+                              </span>
                             </label>
                           </div>
                           
@@ -531,16 +549,16 @@ export default function DesignerNav() {
                         </div>
                       </div>
                       
-                      {/* Thickness Slider - Show for both upright and slant when editing headstone */}
-                      {editingObject === 'headstone' && (
+                      {/* Thickness Slider - Show for both upright and slant when editing headstone - Hide for plaques */}
+                      {editingObject === 'headstone' && !isPlaque && (
                         <div className="space-y-1">
                           <div className="flex items-center justify-between gap-2">
                             <label className="text-sm font-medium text-slate-200 w-20">Thickness</label>
                             <div className="flex items-center gap-0.5 justify-end">
                               <input
                                 type="number"
-                                min={100}
-                                max={300}
+                                min={minThickness}
+                                max={maxThickness}
                                 step={10}
                                 value={Math.round(headstoneStyle === 'upright' ? uprightThickness : slantThickness)}
                                 onChange={(e) => {

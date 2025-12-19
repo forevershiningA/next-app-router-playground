@@ -63,11 +63,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
     // Check if this is a Traditional Engraved product (sandblasted effect)
     const productId = useHeadstoneStore((s) => s.productId);
+    const catalog = useHeadstoneStore((s) => s.catalog);
     const product = React.useMemo(() => {
       if (!productId) return null;
       return data.products.find(p => p.id === productId);
     }, [productId]);
     const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
+    const isPlaque = catalog?.product.type === 'plaque';
 
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
@@ -343,8 +345,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           anchorX="center"
           anchorY="middle"
           fontSize={height}
-          outlineWidth={isTraditionalEngraved ? 0 : 0.002 * units}
-          outlineColor={isTraditionalEngraved ? color : "black"}
+          outlineWidth={isTraditionalEngraved || isPlaque ? 0 : 0.002 * units}
+          outlineColor={isTraditionalEngraved || isPlaque ? color : "black"}
           fillOpacity={isTraditionalEngraved ? 1 : 1}
           {...(color.toLowerCase().includes('gold') || color.toLowerCase() === '#d4af37' || color.toLowerCase() === '#ffd700'
             ? { 

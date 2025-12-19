@@ -37,9 +37,18 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const router = useRouter();
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  
+  // Check if current product is a plaque
+  const isPlaque = catalog?.product.type === 'plaque';
 
   const handleShapeSelect = (shape: Shape) => {
-    const shapeUrl = `/shapes/headstones/${shape.image}`;
+    // Plaque shapes (ovals and circle) are in /shapes/masks/, others in /shapes/headstones/
+    const plaqueShapes = ['oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
+    const isPlaqueShape = plaqueShapes.includes(shape.image);
+    const shapeUrl = isPlaqueShape 
+      ? `/shapes/masks/${shape.image}` 
+      : `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);
     router.push('/select-size');
   };
@@ -64,13 +73,19 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     }
   };
 
-  // Remove duplicates by image name and exclude plaque shapes
+  // Filter shapes based on product type
+  // For plaques: ONLY show plaque shapes (landscape, portrait, ovals, circle)
+  // For headstones: EXCLUDE plaque shapes, show all others
   const uniqueShapes = shapes.reduce((acc, shape) => {
-    const excludedShapes = ['landscape.svg', 'portrait.svg', 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
+    const plaqueShapes = ['landscape.svg', 'portrait.svg', 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
     const isDuplicate = acc.some(s => s.image === shape.image);
-    const isExcluded = excludedShapes.includes(shape.image);
+    const isPlaqueShape = plaqueShapes.includes(shape.image);
     
-    if (!isDuplicate && !isExcluded) {
+    // If this is a plaque product, ONLY include plaque shapes
+    // If this is a headstone product, EXCLUDE plaque shapes
+    const shouldInclude = isPlaque ? isPlaqueShape : !isPlaqueShape;
+    
+    if (!isDuplicate && shouldInclude) {
       acc.push(shape);
     }
     return acc;
@@ -196,7 +211,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {filteredShapes.map((shape) => {
-                const shapeUrl = `/shapes/headstones/${shape.image}`;
+                // Plaque shapes (ovals and circle) are in /shapes/masks/, others in /shapes/headstones/
+                const plaqueShapes = ['oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
+                const isPlaqueShape = plaqueShapes.includes(shape.image);
+                const shapeUrl = isPlaqueShape 
+                  ? `/shapes/masks/${shape.image}` 
+                  : `/shapes/headstones/${shape.image}`;
                 const isSelected = currentShapeUrl === shapeUrl;
                 return (
                   <button
@@ -209,7 +229,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                     isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent group-hover:border-[#D7B356]'
                   }`}>
                     <Image
-                      src={`/shapes/headstones/${shape.image}`}
+                      src={shapeUrl}
                       alt={shape.name}
                       width={200}
                       height={200}

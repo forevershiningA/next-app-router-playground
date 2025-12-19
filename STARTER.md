@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-18  
+**Last Updated:** 2025-12-19  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -37,9 +37,15 @@ A Next.js-based 3D headstone designer allowing users to:
 - Save and load designs
 
 ### Product Types
-- **Traditional Engraved Headstones**: Granite/marble with sandblasted and painted text (shadow effect)
-- **Laser Etched Black Granite**: High-detail laser etching (outlined text)
-- **Bronze Plaques**: Metal plaques with decorative borders
+- **Traditional Engraved Headstones**: Granite/marble with sandblasted and painted text (shadow effect, no outline)
+- **Laser Etched Black Granite**: High-detail laser etching (outlined text with 0.002 unit black outline)
+- **Bronze Plaques**: Metal plaques with decorative borders (no outline on inscriptions)
+  - **Rectangle (Landscape)**: 300×200mm
+  - **Rectangle (Portrait)**: 600×600mm
+  - **Square**: 300×300mm
+  - **Oval (Landscape)**: 400×275mm
+  - **Oval (Portrait)**: 275×400mm
+  - **Circle**: 400×400mm
 
 ### Headstone Style Options
 - **Upright**: Traditional vertical headstone (default)
@@ -48,6 +54,19 @@ A Next.js-based 3D headstone designer allowing users to:
 ### Base Finish Options
 - **Polished**: High-gloss polished granite with clearcoat (default)
 - **Rock Pitch**: Hand-chiseled turtle shell pattern with polished flat top (PFT)
+
+### Plaque-Specific Features
+**Plaques** have a simplified UI compared to headstones:
+- **No Base Toggle**: Plaques don't show Headstone/Base tabs (single "Plaque" label)
+- **No Thickness Control**: Fixed 10mm depth (from XML catalog)
+- **Border Options**: 
+  - "No Border" (maps to `headstoneStyle: 'upright'`)
+  - "Border" (maps to `headstoneStyle: 'slant'`)
+- **No Outline**: Inscriptions render without black outline for clean appearance
+- **Shape Sources**:
+  - Rectangles: `/shapes/headstones/landscape.svg`, `portrait.svg`
+  - Ovals & Circle: `/shapes/masks/oval_horizontal.svg`, `oval_vertical.svg`, `circle.svg`
+- **Pricing**: Uses `quantity_type="Width + Height"` from catalog
 
 ---
 
@@ -77,7 +96,9 @@ next-dyo/
 │   ├── motif-pricing.ts    # Motif pricing
 │   └── headstone-constants.ts
 ├── public/
-│   ├── shapes/             # SVG headstone outlines
+│   ├── shapes/             # SVG shape outlines
+│   │   ├── headstones/     # Headstone shapes + rectangle plaques
+│   │   └── masks/          # Plaque oval & circle shapes
 │   ├── textures/           # Material textures (granite, etc.)
 │   ├── motifs/             # SVG decorative motifs
 │   ├── additions/          # GLB 3D models
@@ -139,6 +160,68 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - **Colored fill**
 - No shadow layers
 - Flat appearance
+
+### Bronze Plaques
+**Visual Effect:** Clean metal surface without outlines
+
+**Implementation:**
+- **No outline** on text/motifs (same as Traditional Engraved)
+- Bronze material texture from XML catalog
+- Fixed 10mm depth
+- Simplified UI (no base, no thickness controls)
+
+**Detection:**
+```typescript
+const isPlaque = catalog?.product.type === 'plaque';
+```
+
+---
+
+## Pricing System
+
+### Quantity Type Calculation
+Pricing is based on the `quantity_type` specified in the XML catalog for each product.
+
+**Headstone Pricing:**
+- **Quantity Type**: `"Width + Height"` (perimeter-based)
+- **Formula**: `quantity = widthMm + heightMm`
+- **Model**: `"600.00+1.32($q-600)"` (base price + rate per mm over threshold)
+- **Example**: 600mm wide × 900mm tall = 1500mm quantity
+
+**Base Pricing:**
+- **Quantity Type**: `"Width"` (width + thickness)
+- **Formula**: `quantity = baseWidthMm + baseThickness`
+- **Model**: `"294.00+0.34($q-300)"` (base price + rate per mm over threshold)
+- **Example**: 700mm wide + 250mm thick = 950mm quantity
+- **IMPORTANT**: Base thickness affects price (changes when slider moves)
+
+**Plaque Pricing:**
+- **Quantity Type**: `"Width + Height"` (perimeter-based)
+- **Formula**: `quantity = widthMm + heightMm`
+- **Model**: `"143.00+0.4273($q-160)"` (base price + rate per mm over threshold)
+
+### Price Calculation
+```typescript
+function calculatePrice(priceModel: PriceModel, quantity: number): number {
+  // Find applicable price tier
+  const applicablePrice = priceModel.prices.find(
+    (p) => quantity >= p.startQuantity && quantity <= p.endQuantity
+  );
+  
+  // Parse model formula: "base+rate($q-offset)"
+  const match = model.match(/(\d+(?:\.\d+)?)\+([\d.]+)\(\$q-(\d+)\)/);
+  const base = parseFloat(match[1]);
+  const rate = parseFloat(match[2]);
+  const offset = parseInt(match[3]);
+  
+  // Calculate
+  const adjustedQuantity = Math.max(0, quantity - offset);
+  const price = base + rate * adjustedQuantity;
+  
+  // Apply retail multiplier
+  return price * applicablePrice.retailMultiplier;
+}
+```
 
 ---
 
@@ -1416,6 +1499,70 @@ git log --oneline -10   # Recent commits
   - Wrapper position: `[0, 0, (depth/2) * scale]` matches meshScale[2] (no sCore)
   - frontZ epsilon: `0.0005` (wrapper already at face, no double offset)
   - Production build successful with all inscriptions/motifs properly aligned to slant surface
+- **2025-12-19 (Afternoon)**: Plaque Product Type Support - Complete UI & Rendering (Production-Ready)
+  - **Plaque Shape Filtering**: Added dynamic shape filtering based on product type
+    - Plaques show ONLY plaque shapes (landscape, portrait, oval horizontal, oval portrait, circle)
+    - Headstones show ONLY headstone shapes (excludes plaque shapes)
+    - Filter logic: checks `catalog?.product.type === 'plaque'` and includes/excludes accordingly
+  - **Plaque SVG Path Fix**: Fixed shape loading for oval and circle plaques
+    - Oval & Circle shapes load from `/shapes/masks/` directory
+    - Rectangle shapes (landscape/portrait) load from `/shapes/headstones/` directory
+    - Updated both selection grid thumbnails and actual shape loading paths
+  - **Bronze Plaque XML Shapes**: Added missing oval and circle shapes to catalog-id-5.xml
+    - Oval (Landscape): 400×275mm (init), range 100-560mm width, 60-400mm height
+    - Oval (Portrait): 275×400mm (init), range 100-560mm width, 60-400mm height  
+    - Circle: 400×400mm (init), range 100-560mm width/height
+    - All shapes: 10mm fixed depth, Bronze material texture
+  - **Plaque UI Customization**: Simplified Select Size panel for plaques
+    - Hidden: Headstone/Base toggle, Thickness slider, Base finish options
+    - Added: "Plaque" label (centered, gold background) instead of toggle
+    - Kept: Width and Height sliders only (relevant controls)
+  - **Plaque Style Labels**: Changed radio button labels for plaque context
+    - "Upright" → "No Border" (plain plaque without decorative border)
+    - "Slant" → "Border" (plaque with decorative border)
+    - Backend value (`headstoneStyle`) unchanged for compatibility
+  - **Inscription Outline Control**: Disabled black outlines for plaques
+    - Traditional Engraved: No outline (sandblasted shadow effect)
+    - Laser Etched Headstones: Black outline (0.002 * units)
+    - All Plaques: No outline (clean bronze appearance)
+    - Check: `isTraditionalEngraved || isPlaque ? 0 : 0.002 * units`
+  - Files modified: `ShapeSelectionGrid.tsx`, `catalog-id-5.xml`, `DesignerNav.tsx`, `HeadstoneInscription.tsx`
+  - Commit: TBD
+- **2025-12-19 (Morning)**: Base & Headstone Alignment + Thickness Control Fixes (Production-Ready)
+  - **Price Calculation Fix - Base Quantity**: Fixed base pricing to use catalog quantity type
+    - Base price model uses `quantity_type="Width"` from XML
+    - Changed calculation from `baseWidthMm * baseHeightMm` (area) to `baseWidthMm + baseThickness` (width + depth)
+    - Formula: `model="294.00+0.34($q-300)"` where `$q = baseWidthMm + baseThickness`
+    - Price now updates when base thickness slider changes
+    - Updated in: DesignerNav.tsx, ThreeScene.tsx, MobileHeader.tsx, DesignsTreeNav.tsx
+  - **Base Thickness Initialization**: Fixed default values and clamping
+    - Changed default from 100mm to 250mm (matches catalog init_depth)
+    - Removed hardcoded clamping (100-300mm) from setter
+    - UI now respects catalog min/max values (e.g., 130-400mm for catalog-id-4)
+    - Validation errors fixed (red border no longer shows on init)
+  - **Upright Headstone Thickness Control**: Enabled visual thickness updates
+    - Changed `depth` prop from fixed `20cm` to dynamic `uprightThickness / 10`
+    - Thickness slider now updates visual depth on canvas in real-time
+    - Units: mm in store → cm for SvgHeadstone (divide by 10)
+    - ExtrudeGeometry depth directly uses this value for 3D extrusion
+  - **Base Thickness Control**: Enabled visual thickness updates  
+    - Changed from hardcoded `0.2 * BASE_DEPTH_MULTIPLIER` (300mm) to `baseThickness / 1000`
+    - Thickness slider now updates visual depth on canvas in real-time
+    - Units: mm in store → meters for RoundedBoxGeometry (divide by 1000)
+    - Updated both `baseAPI` calculation and `useFrame` positioning
+  - **Back Edge Alignment - Universal**: All back edges always aligned
+    - **Strategy**: Use `uprightThickness` as universal alignment reference for all components
+    - **Upright back**: `-uprightThickness/2` (varies with slider)
+    - **Slant back**: `-uprightThickness/2` (aligned to upright reference, not slant thickness)
+    - **Base back**: `-uprightThickness/2` (aligned to upright reference, not base thickness)
+    - Formula: `baseZCenter = -(uprightThickness/1000/2) + baseD/2`
+    - Alignment preserved when changing: upright thickness, slant thickness, base thickness, or switching styles
+  - **Thickness Slider Input Validation**: Fixed hardcoded min/max values
+    - Changed from `min={100} max={300}` to `min={minThickness} max={maxThickness}`
+    - Now uses catalog-based values (e.g., Mini Headstone: 50-50mm, Traditional: 80-100mm)
+    - Eliminates conflicts between slider and number input
+  - Files modified: `headstone-store.ts`, `ShapeSwapper.tsx`, `HeadstoneBaseAuto.tsx`, `DesignerNav.tsx`, price display components
+  - Commits: Various throughout the day
 - **2025-12-13**: Slant Headstone Rotation & Positioning Fix (Superseded by 2025-12-14)
   - Implemented quaternion-based rotation for inscriptions/motifs on slant surfaces
   - Fixed double Z-offset bug in upright headstones (text floating at 2x distance)

@@ -97,6 +97,7 @@ export default function DesignsTreeNav() {
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
 
   let quantity = widthMm * heightMm;
@@ -112,6 +113,8 @@ export default function DesignsTreeNav() {
     const qt = catalog.product.basePriceModel.quantityType;
     if (qt === 'Width + Height') {
       baseQuantity = baseWidthMm + baseHeightMm;
+    } else if (qt === 'Width') {
+      baseQuantity = baseWidthMm + baseThickness; // Width + Thickness (depth)
     } else {
       baseQuantity = baseWidthMm * baseHeightMm;
     }

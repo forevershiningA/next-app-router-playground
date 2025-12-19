@@ -546,10 +546,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ baseHeightMm: Math.max(50, Math.min(200, v)) }); // Clamp between 50-200mm
   },
   
-  baseThickness: 100, // Default base thickness 100mm
+  baseThickness: 250, // Default base thickness 250mm (will be overwritten by catalog)
   setBaseThickness(thickness) {
-    const clamped = Math.max(100, Math.min(300, thickness));
-    set({ baseThickness: clamped });
+    // Don't clamp here - let the UI handle validation with catalog min/max
+    set({ baseThickness: thickness });
   },
   
   baseFinish: 'default',

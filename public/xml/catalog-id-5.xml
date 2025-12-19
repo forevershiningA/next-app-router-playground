@@ -40,7 +40,7 @@ description = "Bronze plaques are a recent addition to our range of funerary pro
 			  url_3d="models/tempus/tombstones/tomb_006/stand.m3d"  />
 		<file type="table" 
 			  min_width="100" max_width="560" init_width="300" 
-			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_depth="5" max_depth="5" init_depth="5" 
 			  min_height="60" max_height="400" init_height="200"  
 			  color="textures/phoenix/l/04.webp"
 			  color2="textures/phoenix/l/04.webp"
@@ -92,11 +92,53 @@ description = "Bronze plaques are a recent addition to our range of funerary pro
 		<file type="stand" />
 		<file type="table" 
 			  min_width="100" max_width="400" init_width="300" 
-			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_depth="5" max_depth="5" init_depth="5" 
 			  min_height="100" max_height="400" init_height="300" 
 			  color="src/bronzes/phoenix/l/04.webp" 
 			  color2="src/bronzes/phoenix/l/04.webp" 
 			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+	
+	<shape type="plaque" name="Bronze Plaque" code="Oval Landscape" double="0" stand="0" url="src/img/headstones/base/oval_horizontal.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="560" init_width="400" 
+			  min_depth="5" max_depth="5" init_depth="5" 
+			  min_height="60" max_height="400" init_height="275" 
+			  color="src/bronzes/phoenix/l/04.webp" 
+			  color2="src/bronzes/phoenix/l/04.webp" 
+			  url_3d="src/m3d/headstones24/oval_horizontal.m3d" />
+	</shape>
+	
+	<shape type="plaque" name="Bronze Plaque" code="Oval Portrait" double="0" stand="0" url="src/img/headstones/base/oval_vertical.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="560" init_width="275" 
+			  min_depth="5" max_depth="5" init_depth="5" 
+			  min_height="60" max_height="400" init_height="400" 
+			  color="src/bronzes/phoenix/l/04.webp" 
+			  color2="src/bronzes/phoenix/l/04.webp" 
+			  url_3d="src/m3d/headstones24/oval_vertical.m3d" />
+	</shape>
+	
+	<shape type="plaque" name="Bronze Plaque" code="Circle" double="0" stand="0" url="src/img/headstones/base/circle.png">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="100" max_width="560" init_width="400" 
+			  min_depth="5" max_depth="5" init_depth="5" 
+			  min_height="100" max_height="560" init_height="400" 
+			  color="src/bronzes/phoenix/l/04.webp" 
+			  color2="src/bronzes/phoenix/l/04.webp" 
+			  url_3d="src/m3d/headstones24/circle.m3d" />
 	</shape>
 	
 </shapes>

@@ -43,6 +43,7 @@ function ProductNameHeader() {
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
@@ -65,9 +66,11 @@ function ProductNameHeader() {
     const qt = catalog.product.basePriceModel.quantityType;
     if (qt === 'Width + Height') {
       return baseWidthMm + baseHeightMm;
+    } else if (qt === 'Width') {
+      return baseWidthMm + baseThickness; // Width + Thickness (depth)
     }
     return baseWidthMm * baseHeightMm; // default to area
-  }, [catalog, baseWidthMm, baseHeightMm, showBase]);
+  }, [catalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
   
   // Calculate total price including inscriptions and motifs
   const totalPrice = useMemo(() => {

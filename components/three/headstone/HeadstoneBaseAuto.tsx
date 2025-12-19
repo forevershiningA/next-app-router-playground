@@ -344,6 +344,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const heightMm = useHeadstoneStore((s) => s.heightMm);
     const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
     const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+    const baseThickness = useHeadstoneStore((s) => s.baseThickness);
     const baseFinish = useHeadstoneStore((s) => s.baseFinish);
     const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
     const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
@@ -365,7 +366,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
     const baseAPI: HeadstoneAPI = useMemo(() => {
-      const baseDepth = 0.2 * BASE_DEPTH_MULTIPLIER;
+      const baseDepth = baseThickness / 1000; // Convert mm to meters
       return {
         group: dummyGroupRef as React.RefObject<THREE.Group>,
         mesh: baseRef as React.RefObject<THREE.Mesh>,
@@ -375,7 +376,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         worldWidth: (widthMm / 1000) * BASE_WIDTH_MULTIPLIER,
         worldHeight: height,
       };
-    }, [widthMm, height]);
+    }, [widthMm, height, baseThickness]);
 
     const requestedBaseTex = useMemo(() => {
       const file = baseMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
@@ -410,19 +411,21 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       if (!t || !w || !b) return;
 
       const hsH = heightMm / 1000;
-      // Use actual headstone depth based on style and thickness
-      const headstoneDepth = (headstoneStyle === 'slant' ? slantThickness : uprightThickness) / 1000;
+      // CRITICAL: Base back should align with UPRIGHT thickness reference
+      // Both upright and slant headstones align their backs to -uprightThickness/2
+      // So base should also align to the same position
+      const alignmentDepth = uprightThickness / 1000; // Use upright thickness as alignment reference
       const baseW = baseWidthMm / 1000;
-      const baseD = Math.max(0.2 * BASE_DEPTH_MULTIPLIER, BASE_MIN_DEPTH);
+      const baseD = baseThickness / 1000; // Convert mm to meters
 
       const statueExtension = hasStatue() ? 0.2 : 0;
       const xOffset = statueExtension / 2;
 
-      // FIX: Base position should be FIXED, not dependent on varying headstone thickness
-      // Use a fixed reference depth (0.2m = 200mm standard) instead of actual headstone depth
-      // This ensures base stays in place when slant thickness changes
-      const FIXED_REFERENCE_DEPTH = 0.2; // 200mm standard depth for alignment
-      const baseZCenter = -(FIXED_REFERENCE_DEPTH / 2) + baseD / 2;
+      // CRITICAL: Align base back edge with headstone back edge
+      // Both upright and slant headstones have their backs at: -(uprightThickness / 2 / 1000)
+      // Base back should match, so: baseZCenter - baseD/2 = -(alignmentDepth / 2)
+      // Therefore: baseZCenter = -(alignmentDepth / 2) + baseD / 2
+      const baseZCenter = -(alignmentDepth / 2) + baseD / 2;
 
       const centerW = new THREE.Vector3(
         -xOffset,
