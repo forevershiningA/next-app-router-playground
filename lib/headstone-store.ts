@@ -482,6 +482,43 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   shapeUrl: DEFAULT_SHAPE_URL,
   setShapeUrl(shapeUrl) {
     set({ shapeUrl });
+    
+    // When shape changes, update dimensions from catalog if available
+    const state = get();
+    const catalog = state.catalog;
+    
+    if (catalog && catalog.product.shapes.length > 0) {
+      // Try to find matching shape by comparing URL
+      // Extract shape filename from URL (e.g., "oval_horizontal.svg" from "/shapes/masks/oval_horizontal.svg")
+      const shapeFileName = shapeUrl.split('/').pop();
+      
+      // Find shape in catalog that matches
+      // Check both the shape URL and code to find the right shape
+      const matchingShape = catalog.product.shapes.find(shape => {
+        const catalogFileName = shape.name.toLowerCase().replace(/\s+/g, '_') + '.svg';
+        return shapeFileName === catalogFileName || 
+               shape.url?.includes(shapeFileName?.replace('.svg', '')) ||
+               (shapeFileName === 'oval_horizontal.svg' && shape.code === 'Oval Landscape') ||
+               (shapeFileName === 'oval_vertical.svg' && shape.code === 'Oval Portrait') ||
+               (shapeFileName === 'circle.svg' && shape.code === 'Circle') ||
+               (shapeFileName === 'landscape.svg' && shape.code === 'Landscape') ||
+               (shapeFileName === 'portrait.svg' && shape.code === 'Portrait') ||
+               (shapeFileName === 'square.svg' && shape.code === 'Square');
+      });
+      
+      if (matchingShape) {
+        console.log('Shape changed, loading dimensions:', {
+          shape: matchingShape.code,
+          width: matchingShape.table.initWidth,
+          height: matchingShape.table.initHeight,
+        });
+        
+        set({
+          widthMm: matchingShape.table.initWidth,
+          heightMm: matchingShape.table.initHeight,
+        });
+      }
+    }
   },
 
   borderName: null,
