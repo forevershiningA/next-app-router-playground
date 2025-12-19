@@ -95,6 +95,9 @@ export default function DesignsTreeNav() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const showBase = useHeadstoneStore((s) => s.showBase);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
@@ -103,7 +106,22 @@ export default function DesignsTreeNav() {
       quantity = widthMm + heightMm;
     }
   }
-  const price = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+  
+  let baseQuantity = 0;
+  if (showBase && catalog?.product?.basePriceModel) {
+    const qt = catalog.product.basePriceModel.quantityType;
+    if (qt === 'Width + Height') {
+      baseQuantity = baseWidthMm + baseHeightMm;
+    } else {
+      baseQuantity = baseWidthMm * baseHeightMm;
+    }
+  }
+  
+  const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+  const basePrice = showBase && catalog?.product?.basePriceModel
+    ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+    : 0;
+  const price = headstonePrice + basePrice;
 
   useEffect(() => {
     // Load all designs and organize into tree structure

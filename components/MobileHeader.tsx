@@ -10,7 +10,11 @@ export default function MobileHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
+  const motifCost = useHeadstoneStore((s) => s.motifCost);
   const [isDesktop, setIsDesktop] = useState(false);
   const pathname = usePathname();
   
@@ -39,11 +43,24 @@ export default function MobileHeader() {
     return qty;
   }, [catalog, widthMm, heightMm]);
 
+  const baseQuantity = useMemo(() => {
+    if (!showBase || !catalog?.product?.basePriceModel) return 0;
+    const qt = catalog.product.basePriceModel.quantityType;
+    if (qt === 'Width + Height') {
+      return baseWidthMm + baseHeightMm;
+    }
+    return baseWidthMm * baseHeightMm;
+  }, [catalog, baseWidthMm, baseHeightMm, showBase]);
+
   const price = useMemo(() => {
-    return catalog
-      ? calculatePrice(catalog.product.priceModel, quantity) + inscriptionCost
+    const headstonePrice = catalog
+      ? calculatePrice(catalog.product.priceModel, quantity)
       : 0;
-  }, [catalog, quantity, inscriptionCost]);
+    const basePrice = showBase && catalog?.product?.basePriceModel
+      ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+      : 0;
+    return headstonePrice + basePrice + inscriptionCost + motifCost;
+  }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
 
   // Don't render header on design list pages or until catalog is loaded
   if (isDesignListPage || !catalog) {

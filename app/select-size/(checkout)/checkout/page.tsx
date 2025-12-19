@@ -9,6 +9,11 @@ export default function Page() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const showBase = useHeadstoneStore((s) => s.showBase);
+  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
+  const motifCost = useHeadstoneStore((s) => s.motifCost);
 
   let quantity = widthMm * heightMm; // default to area
   if (catalog) {
@@ -17,11 +22,24 @@ export default function Page() {
       quantity = widthMm + heightMm;
     }
   }
-  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
+  
+  let baseQuantity = 0;
+  if (showBase && catalog?.product?.basePriceModel) {
+    const qt = catalog.product.basePriceModel.quantityType;
+    if (qt === 'Width + Height') {
+      baseQuantity = baseWidthMm + baseHeightMm;
+    } else {
+      baseQuantity = baseWidthMm * baseHeightMm;
+    }
+  }
 
-  const price = catalog
-    ? calculatePrice(catalog.product.priceModel, quantity) + inscriptionCost
+  const headstonePrice = catalog
+    ? calculatePrice(catalog.product.priceModel, quantity)
     : 0;
+  const basePrice = showBase && catalog?.product?.basePriceModel
+    ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+    : 0;
+  const price = headstonePrice + basePrice + inscriptionCost + motifCost;
 
   return (
     <Boundary label="(checkout)/page.tsx" className="flex flex-col gap-9">

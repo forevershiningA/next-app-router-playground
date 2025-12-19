@@ -61,6 +61,7 @@ export interface CatalogData {
     shapes: ShapeData[];
     additions: AdditionData[];
     priceModel: PriceModel;
+    basePriceModel?: PriceModel; // Base/stand price model
   };
 }
 
@@ -319,5 +320,16 @@ export async function parseCatalogXML(
     priceModel = parsePriceModel(priceModelEl);
   }
 
-  return { product: { id, name, type, laser, shapes, additions, priceModel } };
+  // Parse base/stand price model (separate product with type="stand")
+  const standProductEl = xmlDoc.querySelector('product[type="stand"]');
+  let basePriceModel: PriceModel | undefined = undefined;
+  
+  if (standProductEl) {
+    const standPriceModelEl = standProductEl.querySelector('price_model');
+    if (standPriceModelEl) {
+      basePriceModel = parsePriceModel(standPriceModelEl);
+    }
+  }
+
+  return { product: { id, name, type, laser, shapes, additions, priceModel, basePriceModel } };
 }

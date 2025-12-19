@@ -171,7 +171,22 @@ export default function DesignerNav() {
       quantity = widthMm + heightMm;
     }
   }
-  const price = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+  
+  let baseQuantity = 0;
+  if (showBase && catalog?.product?.basePriceModel) {
+    const qt = catalog.product.basePriceModel.quantityType;
+    if (qt === 'Width + Height') {
+      baseQuantity = baseWidthMm + baseHeightMm;
+    } else {
+      baseQuantity = baseWidthMm * baseHeightMm;
+    }
+  }
+  
+  const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+  const basePrice = showBase && catalog?.product?.basePriceModel 
+    ? calculatePrice(catalog.product.basePriceModel, baseQuantity) 
+    : 0;
+  const price = headstonePrice + basePrice;
 
   const handleMenuClick = (slug: string, e: React.MouseEvent) => {
     if (slug === 'check-price') {

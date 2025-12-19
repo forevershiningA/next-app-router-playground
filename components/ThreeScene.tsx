@@ -41,6 +41,9 @@ function ProductNameHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
   
@@ -56,13 +59,26 @@ function ProductNameHeader() {
     return qty;
   }, [catalog, widthMm, heightMm]);
   
+  // Calculate base quantity (usually Area)
+  const baseQuantity = useMemo(() => {
+    if (!showBase || !catalog?.product?.basePriceModel) return 0;
+    const qt = catalog.product.basePriceModel.quantityType;
+    if (qt === 'Width + Height') {
+      return baseWidthMm + baseHeightMm;
+    }
+    return baseWidthMm * baseHeightMm; // default to area
+  }, [catalog, baseWidthMm, baseHeightMm, showBase]);
+  
   // Calculate total price including inscriptions and motifs
   const totalPrice = useMemo(() => {
     const headstonePrice = catalog 
       ? calculatePrice(catalog.product.priceModel, quantity) 
       : 0;
-    return headstonePrice + inscriptionCost + motifCost;
-  }, [catalog, quantity, inscriptionCost, motifCost]);
+    const basePrice = showBase && catalog?.product?.basePriceModel
+      ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+      : 0;
+    return headstonePrice + basePrice + inscriptionCost + motifCost;
+  }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
 
   // Convert mm to inches (1 inch = 25.4 mm) and round up
   const widthInches = useMemo(() => Math.ceil(widthMm / 25.4), [widthMm]);
