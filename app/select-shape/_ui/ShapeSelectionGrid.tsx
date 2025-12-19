@@ -202,18 +202,18 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   <button
                     key={shape.id}
                     onClick={() => handleShapeSelect(shape)}
-                    className="relative overflow-hidden cursor-pointer"
+                    className="group relative overflow-hidden cursor-pointer"
                   >
                   {/* Shape Image */}
-                  <div className="relative aspect-square overflow-hidden mb-4 flex items-center justify-center p-4">
+                  <div className={`relative aspect-square overflow-hidden mb-4 flex items-center justify-center p-4 transition-all ${
+                    isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent group-hover:border-[#D7B356]'
+                  }`}>
                     <Image
                       src={`/shapes/headstones/${shape.image}`}
                       alt={shape.name}
                       width={200}
                       height={200}
-                      className={`object-contain ${
-                        isSelected ? 'border-2 border-[#cfac6c]' : ''
-                      }`}
+                      className="object-contain"
                     />
                   </div>
 
