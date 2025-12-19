@@ -142,6 +142,9 @@ type HeadstoneState = {
   baseHeightMm: number;
   setBaseHeightMm: (v: number) => void;
   
+  baseThickness: number; // Base depth/thickness in mm (100-300mm)
+  setBaseThickness: (thickness: number) => void;
+  
   baseFinish: 'default' | 'rock-pitch';
   setBaseFinish: (finish: 'default' | 'rock-pitch') => void;
 
@@ -425,6 +428,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           heightMm: shape.table.initHeight,
           baseWidthMm: shape.stand.initWidth, // Load from catalog XML stand element
           baseHeightMm: shape.stand.initHeight, // Load from catalog XML stand element
+          baseThickness: shape.stand.initDepth, // Load base thickness from catalog
           uprightThickness: shape.table.initDepth, // Set thickness from catalog
           slantThickness: shape.table.initDepth, // Set thickness from catalog
         });
@@ -534,6 +538,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   baseHeightMm: 100, // Base height is 100mm
   setBaseHeightMm(v) {
     set({ baseHeightMm: Math.max(50, Math.min(200, v)) }); // Clamp between 50-200mm
+  },
+  
+  baseThickness: 100, // Default base thickness 100mm
+  setBaseThickness(thickness) {
+    const clamped = Math.max(100, Math.min(300, thickness));
+    set({ baseThickness: clamped });
   },
   
   baseFinish: 'default',

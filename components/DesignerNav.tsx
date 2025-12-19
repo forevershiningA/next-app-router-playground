@@ -63,6 +63,8 @@ export default function DesignerNav() {
   const setUprightThickness = useHeadstoneStore((s) => s.setUprightThickness);
   const slantThickness = useHeadstoneStore((s) => s.slantThickness);
   const setSlantThickness = useHeadstoneStore((s) => s.setSlantThickness);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const setBaseThickness = useHeadstoneStore((s) => s.setBaseThickness);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
@@ -272,9 +274,13 @@ export default function DesignerNav() {
               const minHeight = editingObject === 'base' ? 50 : (firstShape?.table?.minHeight ?? 40);
               const maxHeight = editingObject === 'base' ? 200 : (firstShape?.table?.maxHeight ?? 1200);
               
-              // Thickness min/max from catalog (for headstone only, base doesn't have thickness slider)
-              const minThickness = firstShape?.table?.minDepth ?? 100;
-              const maxThickness = firstShape?.table?.maxDepth ?? 300;
+              // Thickness min/max from catalog
+              const minThickness = editingObject === 'base' 
+                ? (firstShape?.stand?.minDepth ?? 100)
+                : (firstShape?.table?.minDepth ?? 100);
+              const maxThickness = editingObject === 'base'
+                ? (firstShape?.stand?.maxDepth ?? 300)
+                : (firstShape?.table?.maxDepth ?? 300);
               
               return (
                 <React.Fragment key={item.slug}>
@@ -570,6 +576,60 @@ export default function DesignerNav() {
                                 } else {
                                   setSlantThickness(newValue);
                                 }
+                              }}
+                              className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                            />
+                            <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                              <span>{minThickness}mm</span>
+                              <span>{maxThickness}mm</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Thickness Slider - Show when editing base */}
+                      {editingObject === 'base' && showBase && (
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <label className="text-sm font-medium text-slate-200 w-20">Thickness</label>
+                            <div className="flex items-center gap-0.5 justify-end">
+                              <input
+                                type="number"
+                                min={minThickness}
+                                max={maxThickness}
+                                step={10}
+                                value={Math.round(baseThickness)}
+                                onChange={(e) => {
+                                  const val = Number(e.target.value);
+                                  setBaseThickness(val);
+                                }}
+                                onBlur={(e) => {
+                                  const val = Number(e.target.value);
+                                  if (val < minThickness) {
+                                    setBaseThickness(minThickness);
+                                  } else if (val > maxThickness) {
+                                    setBaseThickness(maxThickness);
+                                  }
+                                }}
+                                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                                  baseThickness < minThickness || baseThickness > maxThickness
+                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                    : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                                }`}
+                              />
+                              <span className="text-sm font-medium text-slate-500 w-6">mm</span>
+                            </div>
+                          </div>
+                          <div className="relative">
+                            <input
+                              type="range"
+                              min={minThickness}
+                              max={maxThickness}
+                              step={10}
+                              value={baseThickness}
+                              onChange={(e) => {
+                                const newValue = Number(e.target.value);
+                                setBaseThickness(newValue);
                               }}
                               className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
                             />
