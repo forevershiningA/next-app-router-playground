@@ -1,5 +1,7 @@
 export interface ShapeData {
   name: string;
+  code?: string;  // Shape code from XML (e.g., "Oval Landscape", "Portrait")
+  url?: string;   // Shape URL from XML
   stand: {
     minDepth: number;
     maxDepth: number;
@@ -244,6 +246,8 @@ export async function parseCatalogXML(
   );
   shapeElements.forEach((shapeEl) => {
     const name = shapeEl.getAttribute('name') || '';
+    const code = shapeEl.getAttribute('code') || undefined;
+    const url = shapeEl.getAttribute('url') || undefined;
     const standEl = shapeEl.querySelector('file[type="stand"]');
     const tableEl = shapeEl.querySelector('file[type="table"]');
 
@@ -274,7 +278,7 @@ export async function parseCatalogXML(
         color: tableEl.getAttribute('color') || undefined,
       };
 
-      shapes.push({ name, stand, table });
+      shapes.push({ name, code, url, stand, table });
     }
   });
 
