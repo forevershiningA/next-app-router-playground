@@ -14,9 +14,10 @@ const nextConfig = {
     routerBFCache: true,
   },
   // Exclude large static assets from serverless functions
+  // NOTE: These files are still publicly accessible, just not bundled with serverless functions
   outputFileTracingExcludes: {
     '*': [
-      'public/ml/**/*',
+      // 'public/ml/**/*',  // REMOVED: Design screenshots need to be accessible
       'public/shapes/**/*',
       'public/additions/**/*',
     ],
@@ -67,6 +68,15 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/ml/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=604800, stale-while-revalidate=2592000', // 1 week cache, 30 day stale
           },
         ],
       },
