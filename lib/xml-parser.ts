@@ -320,14 +320,18 @@ export async function parseCatalogXML(
     priceModel = parsePriceModel(priceModelEl);
   }
 
-  // Parse base/stand price model (separate product with type="stand")
-  const standProductEl = xmlDoc.querySelector('product[type="stand"]');
+  // Parse base/stand price model (separate product with type="stand" or type="base")
+  const standProductEl = xmlDoc.querySelector('product[type="stand"], product[type="base"]');
   let basePriceModel: PriceModel | undefined = undefined;
+  
+  console.log('Parsing catalog XML - found stand/base product:', !!standProductEl);
   
   if (standProductEl) {
     const standPriceModelEl = standProductEl.querySelector('price_model');
+    console.log('Stand/base product has price_model:', !!standPriceModelEl);
     if (standPriceModelEl) {
       basePriceModel = parsePriceModel(standPriceModelEl);
+      console.log('Base price model parsed:', basePriceModel);
     }
   }
 

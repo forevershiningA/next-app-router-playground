@@ -423,6 +423,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       if (catalog.product.shapes.length > 0) {
         const shape = catalog.product.shapes[0];
 
+        console.log('Loading base dimensions from catalog:', {
+          baseWidthMm: shape.stand.initWidth,
+          baseHeightMm: shape.stand.initHeight,
+          baseThickness: shape.stand.initDepth,
+        });
+
         set({
           widthMm: shape.table.initWidth,
           heightMm: shape.table.initHeight,

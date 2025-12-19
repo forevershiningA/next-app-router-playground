@@ -77,6 +77,16 @@ function ProductNameHeader() {
     const basePrice = showBase && catalog?.product?.basePriceModel
       ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
       : 0;
+    
+    console.log('Price calculation:', {
+      showBase,
+      hasBasePriceModel: !!catalog?.product?.basePriceModel,
+      baseQuantity,
+      basePrice,
+      headstonePrice,
+      total: headstonePrice + basePrice + inscriptionCost + motifCost
+    });
+    
     return headstonePrice + basePrice + inscriptionCost + motifCost;
   }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
 
