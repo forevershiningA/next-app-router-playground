@@ -1,0 +1,48 @@
+This is looking excellent. The addition of the background numbers (01, 02, etc.), the subtitle, and the bottom CTA button makes this feel like a complete, professional section.
+
+To reach the final "pixel-perfect" level, here are a few technical and design refinements:
+
+1. Fix the "Clipping" Issue
+
+In the screenshot, there is a dark horizontal bar cutting through the "Step 1", "Step 2" pills. It looks like a container overflow issue or a misplaced background layer.
+
+The Fix: Ensure the card container doesn't have overflow: hidden if the pills are meant to sit on the border, or move the pills slightly lower so they are fully inside the card.
+
+2. Icon Consistency
+
+The icons are much better, but they vary in "weight."
+
+The Observation: The "A" (Step 2) and "Stars" (Step 3) are thin outlines, while the "Candle/Memorial" (Step 1) and "Checkmark" (Step 4) are solid/bolder.
+
+The Fix: Try to find a set where all four icons have the same line thickness (all outline or all solid). This makes the section feel more "designed" and less like a collection of separate assets.
+
+3. Number Placement
+
+The large background numbers are a great "editorial" touch, but they are currently competing for attention with the icons because they overlap.
+
+The Fix: Try moving the numbers (01, 02, etc.) to the bottom right corner of each card, or make them even larger but fade them out to about 5-8% opacity so they are a "texture" rather than a foreground element.
+
+4. Button Proportions
+
+The "Start Your Design" button at the bottom is a bit vertically "chunky."
+
+The Fix: Reduce the top and bottom padding slightly, and increase the font weight of the text (make it Bold). This will make it look more like a clickable button and less like a pill-shaped banner.
+
+5. Add a "Visual Path" (The Flow)
+
+Since this is a sequence of steps, you can guide the user's eye more effectively.
+
+The Fix: Add a very faint, dashed gold line connecting the center of one icon to the next.
+
+Alternative: Put a small ">" arrow between the cards. This reinforces the "Step 1 -> Step 2" logic.
+
+6. Polish the Subtitle
+
+"Four simple steps to create a lasting memorial" is good, but the font is a bit small.
+
+The Fix: Increase the size by 2px and add a little more letter-spacing (tracking). This gives it a more premium, airy feel.
+
+Summary of the "Look":
+You have built a very trust-inducing section. By fixing the icon weights and the clipping issue, this will look like it was designed by a high-end agency.
+
+One final thought: Check how this looks on mobile. These four cards will likely stack on top of each other, so make sure the "Step" pills and the background numbers still align nicely when they are in a single column!

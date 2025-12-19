@@ -43,7 +43,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="[color-scheme:dark]">
       <body
-        className={`overflow-y-scroll bg-black font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`overflow-y-scroll bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ErrorBoundary>
           <RouterBinder /> {/* ← mount once, early */}

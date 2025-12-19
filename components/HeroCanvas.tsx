@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useMemo, useRef } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { 
   OrbitControls, 
   Environment, 
   PerspectiveCamera,
-  ContactShadows
+  ContactShadows,
+  useTexture,
+  Text
 } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -22,22 +24,25 @@ const BASE_EXTRA_WIDTH = 0.5; // 130mm scaled relative to generic units (approx)
 
 // Polished Black Granite with Glory Black texture
 const GraniteMaterial = () => {
-  const texture = useLoader(THREE.TextureLoader, '/textures/forever/l/Glory-Black-2.webp');
+  const texture = useTexture('/textures/forever/l/Glory-Black-2.webp');
   
   // Configure texture
   React.useEffect(() => {
     if (texture) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(2, 2);
+      texture.needsUpdate = true;
     }
   }, [texture]);
   
   return (
-    <meshStandardMaterial
+    <meshPhysicalMaterial
       map={texture}
-      roughness={0.12} // Polished
+      roughness={0.12}
       metalness={0.15}
       envMapIntensity={2.5}
+      clearcoat={1.0}
+      clearcoatRoughness={0.1}
     />
   );
 };
@@ -120,13 +125,18 @@ const Base: React.FC<{ stoneWidth: number }> = ({ stoneWidth }) => {
 
 // --- Scene Setup ---
 
-const SceneContent = () => {
+interface HeroCanvasProps {
+  rotation?: number;
+}
+
+const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Slow rotation animation to showcase 3D
+  // Animate to target rotation smoothly
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.15;
+      // Smooth interpolation to target rotation
+      groupRef.current.rotation.y += (targetRotation - groupRef.current.rotation.y) * 0.1;
     }
   });
 
@@ -138,6 +148,48 @@ const SceneContent = () => {
         thickness={STONE_THICKNESS} 
       />
       <Base stoneWidth={STONE_WIDTH} />
+      
+      {/* Sample Inscription */}
+      <Text
+        position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.58, STONE_THICKNESS / 2 + 0.05]}
+        fontSize={0.12}
+        color="#d4af37"
+        anchorX="center"
+        anchorY="middle"
+        font="/fonts/Garamond.ttf"
+        letterSpacing={0.05}
+        depthOffset={-2}
+        renderOrder={2}
+      >
+        In Loving Memory
+      </Text>
+      <Text
+        position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.48, STONE_THICKNESS / 2 + 0.05]}
+        fontSize={0.16}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        font="/fonts/Garamond.ttf"
+        letterSpacing={0.02}
+        fontWeight="bold"
+        depthOffset={-2}
+        renderOrder={2}
+      >
+        Eleanor Rose
+      </Text>
+      <Text
+        position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.38, STONE_THICKNESS / 2 + 0.05]}
+        fontSize={0.11}
+        color="#d4af37"
+        anchorX="center"
+        anchorY="middle"
+        font="/fonts/Garamond.ttf"
+        letterSpacing={0.02}
+        depthOffset={-2}
+        renderOrder={2}
+      >
+        ☼ 1945  ✟ 2023
+      </Text>
       
       {/* Shadow catcher for realism */}
       <ContactShadows 
@@ -154,7 +206,7 @@ const SceneContent = () => {
 
 // --- Main Component ---
 
-export default function HeroCanvas() {
+export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
   const glRef = React.useRef<any>(null);
 
   // Cleanup WebGL context on unmount
@@ -173,54 +225,55 @@ export default function HeroCanvas() {
 
   return (
     <div style={{ width: '480px', height: '480px', margin: '0 auto' }}>
-      <React.Suspense fallback={
-        <div className="flex items-center justify-center" style={{ width: '480px', height: '480px' }}>
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
-        </div>
-      }>
-        <Canvas 
-          key="hero-canvas"
-          shadows 
-          gl={{ 
-            alpha: true, 
-            preserveDrawingBuffer: false,
-            antialias: true,
-            powerPreference: 'high-performance',
-            stencil: false,
-            depth: true,
-          }} 
-          style={{ background: 'transparent' }}
-          onCreated={({ gl }) => {
-            glRef.current = gl;
-          }}
-        >
+      <Canvas 
+        key="hero-canvas"
+        shadows 
+        gl={{ 
+          alpha: true, 
+          preserveDrawingBuffer: false,
+          antialias: true,
+          powerPreference: 'high-performance',
+          stencil: false,
+          depth: true,
+        }} 
+        style={{ background: 'transparent' }}
+        onCreated={({ gl }) => {
+          glRef.current = gl;
+        }}
+      >
+        <React.Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={[2, 1.5, 3.5]} fov={45} />
           
-          {/* Lighting Setup */}
-          <ambientLight intensity={0.3} />
+          {/* Lighting Setup - Warmer tones with rim light */}
+          <ambientLight intensity={0.4} />
           <spotLight 
             position={[5, 5, 5]} 
             angle={0.5} 
             penumbra={1} 
-            intensity={1} 
-            castShadow 
+            intensity={1.2} 
+            castShadow
+            color="#fff8e7"
           />
-          <pointLight position={[-2, 3, 2]} intensity={0.5} color="#badbff" />
+          <pointLight position={[-2, 3, 2]} intensity={0.6} color="#ffd89b" />
+          <pointLight position={[3, 1, -2]} intensity={0.4} color="#d4af37" />
+          {/* Rim light for beveled edges */}
+          <pointLight position={[-3, 2, -1]} intensity={0.8} color="#ffffff" />
+          <pointLight position={[3, 2, -1]} intensity={0.8} color="#ffffff" />
           
           {/* Environment map creates the reflections on the polished granite */}
           <Environment preset="city" />
 
-          <SceneContent />
+          <SceneContent targetRotation={rotation} />
 
-          <OrbitControls 
+          <OrbitControls
             enablePan={false}
             enableZoom={false}
             autoRotate={false}
             minPolarAngle={0} 
             maxPolarAngle={Math.PI / 2 - 0.05} 
           />
-        </Canvas>
-      </React.Suspense>
+        </React.Suspense>
+      </Canvas>
     </div>
   );
 }

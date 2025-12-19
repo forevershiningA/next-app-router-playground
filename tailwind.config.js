@@ -6,6 +6,12 @@ module.exports = {
     './lib/**/*.{js,ts,jsx,tsx}',
     'node_modules/flowbite/**/*.js',
   ],
-  theme: { extend: {} },
+  theme: { 
+    extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
+    } 
+  },
   plugins: [require('flowbite/plugin')],
 };
