@@ -2862,9 +2862,20 @@ export default function DesignPageClient({
         <div className="bg-white rounded-none my-0 md:my-8">
           {/* Visual Preview Area */}
           <div className="relative flex items-center justify-center">
+            {/* Privacy blur overlay */}
+            <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
+              <div className="bg-white/95 backdrop-blur-sm px-8 py-4 rounded-lg shadow-xl border border-slate-300">
+                <p className="text-slate-700 text-base font-light text-center">
+                  Preview blurred for privacy protection
+                </p>
+                <p className="text-slate-500 text-sm font-light text-center mt-1">
+                  Click "Live" above to see the actual design in the editor
+                </p>
+              </div>
+            </div>
             
             {/* SCENE CONTAINER (Represents the full Workspace) */}
-            <div className="flex flex-col items-center gap-0">
+            <div className="flex flex-col items-center gap-0 blur-[6px]">
               <div
                 ref={svgHostRef}
                 className="relative"

@@ -200,10 +200,16 @@ export default function CategoryPage() {
                     alt={formatDesignTitle(design)}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500 blur-[8px]"
                   />
-                  {/* Subtle overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {/* Privacy overlay with message */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-lg shadow-lg">
+                      <p className="text-slate-700 text-sm font-light text-center">
+                        Preview blurred for privacy
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Card Content */}
