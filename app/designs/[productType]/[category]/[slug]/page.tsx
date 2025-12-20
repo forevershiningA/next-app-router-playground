@@ -27,7 +27,9 @@ function formatSlugForDisplay(slug: string): string {
  */
 async function getDesignShape(designId: string, mlDir: string): Promise<string | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/ml/${mlDir}/saved-designs/json/${designId}.json`);
+    // Use absolute URL for server-side fetches in production
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
+    const response = await fetch(`${baseUrl}/ml/${mlDir}/saved-designs/json/${designId}.json`);
     if (!response.ok) return null;
     
     const data = await response.json();
