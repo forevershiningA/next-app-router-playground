@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-19  
+**Last Updated:** 2025-12-21  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -16,10 +16,11 @@
 8. [Product Types & Rendering](#product-types--rendering)
 9. [Rock Pitch Base Feature](#rock-pitch-base-feature)
 10. [Slant Headstone Feature](#slant-headstone-feature)
-11. [Performance Considerations](#performance-considerations)
-12. [Memory Management](#memory-management)
-13. [Common Issues & Solutions](#common-issues--solutions)
-14. [Development Workflow](#development-workflow)
+11. [Design Gallery & SEO](#design-gallery--seo)
+12. [Performance Considerations](#performance-considerations)
+13. [Memory Management](#memory-management)
+14. [Common Issues & Solutions](#common-issues--solutions)
+15. [Development Workflow](#development-workflow)
 
 ---
 
@@ -76,7 +77,16 @@ A Next.js-based 3D headstone designer allowing users to:
 next-dyo/
 ├── app/                    # Next.js 15 App Router
 │   ├── _internal/          # Internal data (fonts, products, inscriptions)
-│   ├── designs/            # Design gallery pages
+│   ├── designs/            # Design gallery pages (SEO-optimized)
+│   │   ├── [productType]/  # Product pages with metadata
+│   │   │   ├── page.tsx            # Server component with SEO metadata
+│   │   │   ├── ProductPageClient.tsx  # Client component for UI
+│   │   │   └── [category]/         # Category pages
+│   │   │       ├── page.tsx            # Server component with metadata
+│   │   │       ├── CategoryPageClient.tsx  # Client with price display
+│   │   │       └── [slug]/             # Individual design pages
+│   │   │           ├── page.tsx            # Server component with metadata
+│   │   │           └── DesignPageClient.tsx  # Full design viewer
 │   ├── inscriptions/       # Inscription selection
 │   ├── products/           # Product landing pages
 │   └── select-*/           # Step-by-step designer pages
@@ -94,6 +104,8 @@ next-dyo/
 │   ├── headstone-store.ts  # Zustand global state
 │   ├── xml-parser.ts       # Catalog/pricing parser
 │   ├── motif-pricing.ts    # Motif pricing
+│   ├── extract-price.ts    # Price extraction from HTML quotes
+│   ├── saved-designs-data.ts  # Design metadata & indexing
 │   └── headstone-constants.ts
 ├── public/
 │   ├── shapes/             # SVG shape outlines
@@ -102,7 +114,13 @@ next-dyo/
 │   ├── textures/           # Material textures (granite, etc.)
 │   ├── motifs/             # SVG decorative motifs
 │   ├── additions/          # GLB 3D models
-│   └── fonts/              # Custom font files
+│   ├── fonts/              # Custom font files
+│   └── ml/                 # Saved designs & price quotes
+│       └── forevershining/
+│           └── saved-designs/
+│               ├── html/       # Price quote HTML files
+│               ├── json/       # Design data JSON
+│               └── xml/        # Legacy design XML
 └── styles/                 # Global CSS + Tailwind
 ```
 
@@ -859,6 +877,241 @@ apiData: {
 
 ---
 
+## Design Gallery & SEO
+
+### Overview
+The design gallery system (`/designs/*`) provides a three-level hierarchy for browsing saved memorial designs with comprehensive SEO optimization:
+
+```
+/designs/[productType]/[category]/[slug]
+         └─ Traditional  └─ Biblical  └─ curved-gable-may-heavens...
+            Headstone       Memorial
+```
+
+### URL Structure & Metadata
+
+#### Level 1: Product Pages (`/designs/traditional-headstone`)
+**Purpose:** Browse design categories for a specific product type
+
+**SEO Features:**
+- **Dynamic Metadata**: Title, description, keywords based on product + design counts
+- **Canonical URLs**: With language alternates (en-GB, en-US, en-AU)
+- **OpenGraph Tags**: For social media sharing
+- **Product Information Map**: Detailed descriptions for each product type
+
+**Example Metadata:**
+```typescript
+{
+  title: "Traditional Engraved Headstone Designs | Forever Shining",
+  description: "Browse 847 traditional engraved designs across 42 categories. 
+    Timeless granite memorials with sandblasted inscriptions...",
+  keywords: "traditional engraved headstone, memorial designs, granite headstone, 
+    biblical memorial, mother memorial, father memorial..."
+}
+```
+
+**Files:**
+- `app/designs/[productType]/page.tsx` - Server component with metadata generation
+- `app/designs/[productType]/ProductPageClient.tsx` - Client component for UI
+
+**Product Metadata Map:**
+```typescript
+const productMap = {
+  'traditional-headstone': {
+    name: 'Traditional Engraved Headstone',
+    shortName: 'Traditional Engraved',
+    description: 'Timeless granite memorials with sandblasted inscriptions...',
+    type: 'Headstone'
+  },
+  'laser-etched-headstone': { ... },
+  'bronze-plaque': { ... },
+  // etc.
+}
+```
+
+#### Level 2: Category Pages (`/designs/traditional-headstone/biblical-memorial`)
+**Purpose:** Browse individual designs within a category
+
+**SEO Features:**
+- **Dynamic Metadata**: Category + product specific titles/descriptions
+- **Price Display**: Extracts total price from saved HTML quotes
+- **Design Cards**: Grid layout with thumbnails, descriptions, motif badges
+
+**Price Extraction:**
+- Reads from: `/ml/forevershining/saved-designs/html/{designId}-desktop.html`
+- Falls back to: `/ml/forevershining/saved-designs/html/{designId}.html`
+- Displays: "From $X,XXX.XX" under each design card
+- Implementation: `lib/extract-price.ts` utility
+
+**Files:**
+- `app/designs/[productType]/[category]/page.tsx` - Server component with metadata
+- `app/designs/[productType]/[category]/CategoryPageClient.tsx` - Client with price display
+
+**Example Price Display:**
+```tsx
+{designPrices[design.id] ? (
+  <p className="text-lg font-serif text-slate-900">
+    <span className="font-light text-sm text-slate-500">From </span>
+    {designPrices[design.id]}
+  </p>
+) : (
+  <p className="text-xs text-slate-500 font-light">
+    View detailed pricing on design page
+  </p>
+)}
+```
+
+#### Level 3: Design Pages (`/designs/.../curved-gable-may-heavens-eternal...`)
+**Purpose:** View individual design with full 3D preview and price quote
+
+**SEO Features:**
+- **Comprehensive Metadata**: Design-specific titles with shape names
+- **Structured Data**: Product schema, BreadcrumbList, FAQ schema
+- **Price Quote Modal**: Full HTML quote with clickable materials/motifs/shapes
+- **Name Sanitization**: Replaces personal names with generic placeholders for privacy
+
+**Files:**
+- `app/designs/[productType]/[category]/[slug]/page.tsx` - Server component
+- `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` - Full viewer
+
+**Design Viewer Features:**
+- SVG shape rendering with granite texture injection
+- Inscription positioning with coordinate system conversion
+- Motif rendering with size/rotation handling
+- Base rendering (if design includes base)
+- Detailed price quote with expandable sections
+
+### Design Data Storage
+
+**Directory Structure:**
+```
+public/ml/forevershining/saved-designs/
+├── html/
+│   ├── {designId}.html              # Mobile price quote
+│   └── {designId}-desktop.html      # Desktop price quote
+├── json/
+│   └── {designId}.json              # Design configuration data
+├── xml/
+│   └── {designId}.xml               # Legacy design format
+└── screenshots/
+    ├── {designId}.jpg               # Original screenshot
+    └── {designId}_cropped.jpg       # Cropped version
+```
+
+**Design Metadata** (`lib/saved-designs-data.ts`):
+```typescript
+interface SavedDesignMetadata {
+  id: string;                    // Design ID (timestamp)
+  slug: string;                  // SEO-friendly URL slug
+  title: string;                 // Display title
+  category: DesignCategory;      // Category slug
+  productId: string;             // Product ID from catalog
+  productSlug: string;           // Product URL slug
+  productType: 'headstone' | 'plaque';
+  productName: string;           // Full product name
+  shapeName?: string;            // Shape display name
+  preview: string;               // Screenshot URL
+  mlDir: string;                 // ML directory (e.g., 'forevershining')
+  inscriptionCount: number;      // Number of inscriptions
+  hasMotifs: boolean;            // Has motif decorations
+  motifNames: string[];          // Motif display names
+  hasPhoto: boolean;             // Has photo addition
+  hasAdditions: boolean;         // Has 3D additions
+}
+```
+
+### Price Extraction System
+
+**Implementation** (`lib/extract-price.ts`):
+```typescript
+export async function extractTotalPrice(
+  designId: string, 
+  mlDir: string = 'forevershining'
+): Promise<string | null> {
+  // Try desktop HTML first
+  let htmlPath = `/ml/${mlDir}/saved-designs/html/${designId}-desktop.html`;
+  let response = await fetch(htmlPath);
+  
+  // Fall back to mobile HTML
+  if (!response.ok) {
+    htmlPath = `/ml/${mlDir}/saved-designs/html/${designId}.html`;
+    response = await fetch(htmlPath);
+  }
+  
+  if (!response.ok) return null;
+  
+  const htmlText = await response.text();
+  
+  // Extract price from HTML table
+  const totalRegex = /<td[^>]*class="total-title"[^>]*>\s*Total:?\s*<\/td>\s*<td[^>]*>\s*\$?([\d,]+\.?\d*)\s*<\/td>/i;
+  const match = htmlText.match(totalRegex);
+  
+  if (match && match[1]) {
+    return `$${match[1]}`;  // Returns: "$3,791.75"
+  }
+  
+  return null;
+}
+```
+
+**HTML Structure:**
+```html
+<tr class="total-flex">
+  <td class="empty-cell"></td>
+  <td class="empty-cell"></td>
+  <td class="total-title">Total</td>
+  <td>$3791.75</td>
+</tr>
+```
+
+### SEO Best Practices
+
+**Metadata Generation:**
+1. **Unique Titles** - Each page has distinct, descriptive title
+2. **Rich Descriptions** - Include counts, features, materials
+3. **Relevant Keywords** - Product terms + actual category names
+4. **Canonical URLs** - Prevent duplicate content issues
+5. **OpenGraph Tags** - Better social media previews
+6. **Structured Data** - JSON-LD for Google rich results
+
+**URL Structure:**
+- Clean, descriptive slugs (kebab-case)
+- Hierarchical paths matching content structure
+- No unnecessary parameters or IDs in URLs
+
+**Performance:**
+- Server components for metadata (no client-side JS needed)
+- ISR revalidation: 24 hours (86400 seconds)
+- Static generation at build time where possible
+
+### Documentation Files
+
+- **PRICE_DISPLAY_FEATURE.md** - Price extraction implementation details
+- **PRODUCT_PAGE_METADATA.md** - SEO metadata enhancement documentation
+
+### Recent Updates (December 21, 2025)
+
+1. **Price Display Feature**:
+   - Added automatic price extraction from HTML quotes
+   - Display "From $X,XXX.XX" on category pages
+   - Created `extract-price.ts` utility
+   - Updated `CategoryPageClient.tsx` with price state
+
+2. **Product Page Metadata**:
+   - Refactored to server component pattern
+   - Added comprehensive SEO metadata
+   - Created product information map
+   - Added OpenGraph and Twitter cards
+   - Language alternates for international SEO
+
+3. **Design Gallery Architecture**:
+   - Three-level hierarchy with consistent metadata
+   - Client/server component separation
+   - Price quotes integrated throughout
+   - Proper TypeScript types for all design data
+
+---
+
 ## Performance Considerations
 
 ### Texture Optimization
@@ -1499,6 +1752,50 @@ git log --oneline -10   # Recent commits
   - Wrapper position: `[0, 0, (depth/2) * scale]` matches meshScale[2] (no sCore)
   - frontZ epsilon: `0.0005` (wrapper already at face, no double offset)
   - Production build successful with all inscriptions/motifs properly aligned to slant surface
+- **2025-12-21**: Design Gallery SEO & Price Display (Production-Ready)
+  - **Price Display Feature**: Automatic price extraction from saved HTML quotes
+    - Created `lib/extract-price.ts` utility to parse Total price from HTML table structure
+    - Updated `CategoryPageClient.tsx` to fetch and display prices for all designs in category
+    - Shows "From $X,XXX.XX" under each design card on category browse pages
+    - Falls back gracefully: tries `-desktop.html` first, then `.html`, then shows generic message
+    - Regex pattern handles both "Total:" and "Total" labels: `/<td class="total-title">Total:?\s*<\/td><td>\$?([\d,]+\.?\d*)<\/td>/i`
+    - Price HTML location: `/ml/forevershining/saved-designs/html/{designId}-desktop.html`
+  - **Product Page Metadata Enhancement**: Comprehensive SEO optimization for `/designs/[productType]`
+    - Refactored from client component to server component pattern for metadata generation
+    - Created `ProductPageClient.tsx` for client-side UI logic (loading, filtering, category display)
+    - Added product information map with detailed descriptions for all product types:
+      - Traditional Engraved Headstone: "Timeless granite memorials with sandblasted inscriptions..."
+      - Laser-Etched Black Granite: "Photo-realistic laser engraving on polished black granite..."
+      - Bronze Plaque: "Cast bronze memorial plaques...200+ year durability..."
+      - Laser-Etched Plaque: "Compact memorial plaques with precision laser etching..."
+      - Traditional Plaque: "Classic engraved plaques with sandblasted lettering..."
+    - Dynamic metadata generation based on actual design counts and categories
+    - Metadata fields: title, description, keywords, OpenGraph, Twitter cards, canonical URLs
+    - Language alternates for international SEO (en-GB, en-US, en-AU, x-default)
+    - Example: "Traditional Engraved Headstone Designs | Forever Shining" with ~160 char description
+    - Keywords include product terms + top 10 categories from actual designs
+  - **Three-Level Gallery Hierarchy**:
+    - Level 1: `/designs/[productType]` - Product overview with category cards (SEO metadata added)
+    - Level 2: `/designs/[productType]/[category]` - Category browse with price display (price feature added)
+    - Level 3: `/designs/[productType]/[category]/[slug]` - Individual design viewer (already had full quote)
+  - **Architecture Improvements**:
+    - Consistent client/server component separation pattern across all gallery levels
+    - ISR revalidation: 24 hours (86400 seconds) for static generation with updates
+    - Price fetching happens client-side (async) to avoid blocking page render
+    - Metadata generated server-side for optimal SEO and initial page load
+  - **Documentation**: Created comprehensive guides
+    - `PRICE_DISPLAY_FEATURE.md`: Price extraction implementation, testing, performance notes
+    - `PRODUCT_PAGE_METADATA.md`: SEO metadata structure, examples, future enhancements
+  - **Files Created**:
+    - `lib/extract-price.ts`: Reusable price extraction utility
+    - `app/designs/[productType]/ProductPageClient.tsx`: Client component for product page UI
+    - `app/designs/[productType]/[category]/CategoryPageClient.tsx`: Client component with price display
+  - **Files Modified**:
+    - `app/designs/[productType]/page.tsx`: Converted to server component with metadata export
+    - `app/designs/[productType]/[category]/page.tsx`: Minor updates for consistency
+    - `STARTER.md`: Added Design Gallery & SEO section documenting the entire system
+  - **Build Performance**: Clean compilation in ~35 seconds, no TypeScript errors
+  - **Commit**: `b390325e78` - "feat: Add price display and SEO metadata to design gallery pages"
 - **2025-12-19 (Afternoon)**: Plaque Product Type Support - Complete UI & Rendering (Production-Ready)
   - **Plaque Shape Filtering**: Added dynamic shape filtering based on product type
     - Plaques show ONLY plaque shapes (landscape, portrait, oval horizontal, oval portrait, circle)
