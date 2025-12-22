@@ -2262,36 +2262,41 @@ export default function DesignPageClient({
             const baseWidthMm = baseItem.width || baseItem.length || 435;
             const baseHeightMm = baseItem.height || 100;
             
-            // Get actual SVG viewBox dimensions (not hardcoded)
+            // Get ORIGINAL SVG viewBox dimensions (BEFORE adjustments)
+            // The viewBox has already been adjusted by the centering code above
+            // We need to use the ORIGINAL dimensions stored earlier
             const viewBoxAttr = svg.getAttribute('viewBox');
-            let viewBoxX = 0;
-            let viewBoxY = 0;
-            let viewBoxWidth = 400;
-            let viewBoxHeight = 400;
+            const parts = viewBoxAttr?.split(/\s+/).map(parseFloat) || [];
             
-            if (viewBoxAttr) {
-              const parts = viewBoxAttr.split(/\s+/);
-              if (parts.length >= 4) {
-                viewBoxX = parseFloat(parts[0]);
-                viewBoxY = parseFloat(parts[1]);
-                viewBoxWidth = parseFloat(parts[2]);
-                viewBoxHeight = parseFloat(parts[3]);
-              }
-            }
+            // CRITICAL: These are the ADJUSTED values - we need the originals!
+            // The original viewBox was stored as vbX, vbY, vbW, vbH before adjustment
+            // But we don't have access to those variables here...
+            // Instead, we need to calculate based on the ORIGINAL shape dimensions
             
-            // Calculate mm to viewBox scale (viewBox units per mm)
-            const mmToViewBox = viewBoxHeight / headstoneHeightMm;
+            // Use original SVG dimensions from earlier in the code
+            let origViewBoxWidth = originalWidth;  // e.g., 400
+            let origViewBoxHeight = originalHeight; // e.g., 400
+            
+            // Calculate mm to viewBox scale (using ORIGINAL viewBox height)
+            const mmToViewBox = origViewBoxHeight / headstoneHeightMm;
             
             const baseWidthViewBox = baseWidthMm * mmToViewBox;
             const baseHeightViewBox = baseHeightMm * mmToViewBox;
             
-            // EXTEND viewBox to make room for base below headstone
-            const newViewBoxHeight = viewBoxHeight + baseHeightViewBox;
-            svg.setAttribute('viewBox', `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${newViewBoxHeight}`);
+            // Get CURRENT (adjusted) viewBox to extend it
+            const currentParts = viewBoxAttr?.split(/\s+/).map(parseFloat) || [0, 0, origViewBoxWidth, origViewBoxHeight];
+            const currentVbX = currentParts[0] || 0;
+            const currentVbY = currentParts[1] || 0;
+            const currentVbW = currentParts[2] || origViewBoxWidth;
+            const currentVbH = currentParts[3] || origViewBoxHeight;
             
-            // Position: center horizontally, at original bottom (now base starts where headstone ends)
-            const baseX = (viewBoxWidth - baseWidthViewBox) / 2;
-            const baseY = viewBoxHeight; // At the original bottom edge (base extends into new area)
+            // EXTEND current viewBox to make room for base below
+            const newViewBoxHeight = currentVbH + baseHeightViewBox;
+            svg.setAttribute('viewBox', `${currentVbX} ${currentVbY} ${currentVbW} ${newViewBoxHeight}`);
+            
+            // Position: center horizontally, at current bottom (base starts where headstone ends)
+            const baseX = (currentVbW - baseWidthViewBox) / 2;
+            const baseY = currentVbH; // At the current bottom edge (base extends into new area)
             
             // Create base rectangle
             const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -2307,10 +2312,10 @@ export default function DesignPageClient({
             logger.log('✅ Base added to SVG:', {
               baseWidthMm,
               baseHeightMm,
-              originalViewBox: viewBoxAttr,
-              originalViewBoxHeight: viewBoxHeight,
+              originalViewBox: `${origViewBoxWidth} x ${origViewBoxHeight}`,
+              currentViewBox: viewBoxAttr,
+              currentVbH,
               newViewBoxHeight,
-              viewBoxWidth,
               mmToViewBox,
               baseWidthViewBox,
               baseHeightViewBox,
