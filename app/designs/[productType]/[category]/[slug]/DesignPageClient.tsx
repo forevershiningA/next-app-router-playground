@@ -3365,12 +3365,14 @@ export default function DesignPageClient({
 
                   // Always use the fitted canvas bottom as the headstone bottom.
                   // The headstone SVG is rendered full-bleed (absolute inset-0), so its bottom == overlay bottom.
-                  const stoneBot = Math.round(offsetY + overlayH);
+                  const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px
-                  // CORRECT RATIO: How many screen pixels represent 1mm?
-                  // Calculate based on tablet width because it fills 'displayWidth'
-                  const pxPerMm = displayWidth / tabletWidthMm;
+                  // CORRECT PX/MM RATIO:
+                  // uniformScale is screen_pixels / logical_canvas_units.
+                  // (initW / tabletWidthMm) converts logical units back to millimeters.
+                  // This ensures the base scales exactly like the motifs and inscriptions.
+                  const pxPerMm = uniformScale * (initW / tabletWidthMm);
 
                   let baseWidthPx  = Math.round(lengthMm * pxPerMm);
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
@@ -3397,7 +3399,7 @@ export default function DesignPageClient({
                     position: 'absolute',
                     left: 0,
                     top: stoneBot, // starts right where the headstone ends
-                    width: overlayW,
+                    width: displayWidth, // Ensure row spans the container for centering
                     height: baseHeightPx,
                     display: 'flex',
                     justifyContent: 'center',
