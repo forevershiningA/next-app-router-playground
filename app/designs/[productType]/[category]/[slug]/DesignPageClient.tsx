@@ -3368,40 +3368,24 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px
-                  // Base width should be proportional to the displayed headstone width
-                  // Calculate headstone display width first
-                  const headstoneDisplayWidthPx = tabletWidthMm * uniformScale * (initW / tabletWidthMm);
-                  
-                  // Base is lengthMm wide, headstone is tabletWidthMm wide
-                  // Calculate ratio and apply to display width
-                  const baseToHeadstoneRatio = lengthMm / tabletWidthMm;
-                  const baseWidthPx = Math.round(headstoneDisplayWidthPx * baseToHeadstoneRatio);
-                  
-                  // Height can use pxPerMm since it's independent
+                  // Base should span full container width to match original screenshot
+                  // Height calculated from mm for correct thickness
                   const pxPerMm = uniformScale * (initW / tabletWidthMm);
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
 
-                  logger.log('🔍 Base sizing calculation:', {
-                    tabletWidthMm,
-                    lengthMm,
+                  logger.log('🔍 Base sizing:', {
                     heightMm,
-                    headstoneDisplayWidthPx,
-                    baseToHeadstoneRatio,
-                    baseWidthPx,
                     baseHeightPx,
-                    uniformScale,
-                    initW
+                    pxPerMm,
+                    displayWidth,
+                    note: 'Base spans full width to match original screenshot'
                   });
 
                   logger.log('📦 Base dimensions:', {
-                    lengthMm,
                     heightMm,
-                    baseWidthPx,
                     baseHeightPx,
                     stoneBot,
                     displayWidth,
-                    tabletWidthMm,
-                    tabletHeightMm,
                     pxPerMm
                   });
 
@@ -3412,15 +3396,12 @@ export default function DesignPageClient({
                     top: stoneBot,
                     width: displayWidth,
                     height: baseHeightPx,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
                     pointerEvents: 'none',
                     zIndex: 2,
                   };
 
                   const baseStyle: React.CSSProperties = {
-                    width: baseWidthPx,
+                    width: '100%',  // Span full width like original screenshot
                     height: baseHeightPx,
                     backgroundImage: baseTextureData
                       ? `url(${baseTextureData})`
