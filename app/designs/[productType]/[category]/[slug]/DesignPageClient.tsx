@@ -1806,18 +1806,6 @@ export default function DesignPageClient({
       displayWidth = maxContainerWidth;
       displayHeight = initH * scale;
     }
-    
-    // CRITICAL FIX: After viewBox centering, container needs to be taller
-    // The viewBox extends vertically (e.g., from -110 to 400 = 510 total height)
-    // But container was only sized for original initH (873)
-    // Increase height by ~12.4% to accommodate the expanded viewBox
-    displayHeight = displayHeight * 1.124;
-    
-    logger.log('📐 Adjusted displayHeight for viewBox expansion:', {
-      original: Math.round(displayHeight / 1.124),
-      adjusted: Math.round(displayHeight),
-      increase: '12.4%'
-    });
 
     // 4. Calculate Scale
     
