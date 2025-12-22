@@ -3368,21 +3368,30 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px
-                  // CORRECT PX/MM RATIO:
-                  // uniformScale is screen_pixels / logical_canvas_units.
-                  // (initW / tabletWidthMm) converts logical units back to millimeters.
-                  // This ensures the base scales exactly like the motifs and inscriptions.
-                  logger.log('🔍 Base pxPerMm calculation:', {
-                    uniformScale,
-                    initW,
-                    tabletWidthMm,
-                    ratio: initW / tabletWidthMm
-                  });
+                  // Base width should be proportional to the displayed headstone width
+                  // Calculate headstone display width first
+                  const headstoneDisplayWidthPx = tabletWidthMm * uniformScale * (initW / tabletWidthMm);
+                  
+                  // Base is lengthMm wide, headstone is tabletWidthMm wide
+                  // Calculate ratio and apply to display width
+                  const baseToHeadstoneRatio = lengthMm / tabletWidthMm;
+                  const baseWidthPx = Math.round(headstoneDisplayWidthPx * baseToHeadstoneRatio);
+                  
+                  // Height can use pxPerMm since it's independent
                   const pxPerMm = uniformScale * (initW / tabletWidthMm);
-
-                  // Convert mm → px using the same scale as the headstone
-                  const baseWidthPx  = Math.round(lengthMm * pxPerMm);
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
+
+                  logger.log('🔍 Base sizing calculation:', {
+                    tabletWidthMm,
+                    lengthMm,
+                    heightMm,
+                    headstoneDisplayWidthPx,
+                    baseToHeadstoneRatio,
+                    baseWidthPx,
+                    baseHeightPx,
+                    uniformScale,
+                    initW
+                  });
 
                   logger.log('📦 Base dimensions:', {
                     lengthMm,
