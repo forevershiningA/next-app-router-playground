@@ -2123,7 +2123,8 @@ export default function DesignPageClient({
           
           // Set adjusted viewBox with centered alignment
           svg.setAttribute('viewBox', `${adjustedVbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
-          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); // Center-Center to match canvas (0,0) center
+          // Center horizontally (xMid) but align to bottom (YMax) to eliminate gap
+          svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
           
           console.log(`🎯 [VIEWBOX FIX v2] Set adjusted SVG viewBox: ${adjustedVbX.toFixed(2)} ${adjustedVbY.toFixed(2)} ${effectiveVbW.toFixed(2)} ${effectiveVbH.toFixed(2)}`);
           
