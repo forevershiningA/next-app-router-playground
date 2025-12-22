@@ -1,0 +1,82 @@
+The reason the base is "too small" is that uniformScale is a ratio for logical pixels to screen pixels, but it is not the ratio for millimeters to screen pixels.
+
+To match the screenshot exactly, you need to calculate the ratio based on how the headstone itself is scaled. Since your headstone is rendered to fill the container width (displayWidth), the correct ratio is the Screen Width of the Headstone / Physical Width of the Headstone.
+
+The Fix
+
+Locate the base rendering logic in your DesignPageClient.tsx (around line 1470) and replace the dimension calculations with this logic:
+
+code
+
+// ... inside the base renderer (() => { ... })()
+// 1. Pull millimeter dimensions from the design data
+const headstoneItem = (sanitizedDesignData || []).find((it: any) => it.type === 'Headstone') || {};
+const tabletWidthMm  = Number(headstoneItem.width)  || 600;
+const tabletHeightMm = Number(headstoneItem.height) || 600;
+
+// Use baseData (extracted via useMemo earlier) or find the base item
+const lengthMm = Number(baseData?.width || baseData?.length || (tabletWidthMm + 50)); 
+const thicknessMm = Number(baseData?.height || baseData?.thickness_mm || 100);
+
+// 2. Get display scale factors
+const { displayWidth, displayHeight, overlayW, offsetY } = scalingFactors;
+
+// 3. CORRECT RATIO: How many screen pixels represent 1mm?
+// We calculate this based on the tablet width because we know it fills 'displayWidth'
+const pxPerMm = displayWidth / tabletWidthMm;
+
+// 4. Calculate screen pixel dimensions for the base
+let baseWidthPx = Math.round(lengthMm * pxPerMm);
+const baseHeightPx = Math.round(thicknessMm * pxPerMm);
+
+// Calculate where the stone ends to place the base
+const stoneBot = Math.round(offsetY + (initH * scalingFactors.uniformScale));
+
+// ... rest of the styling logic
+Why this fixes the "too small" issue:
+
+Uniform Scale vs px/mm: If your screen container is 800px wide and the headstone is 600mm, then 1mm must equal 
+1.33
+1.33
+ pixels (
+800
+/
+600
+800/600
+). Your previous code using uniformScale (which is likely around 
+0.6
+0.6
+ or 
+0.8
+0.8
+) was treating 1mm as less than 1 pixel, making the base tiny.
+
+Relative Proportion: This code ensures that if the base is physically 100mm wider than the headstone in the design software, it will be exactly 
+(
+100
+×
+pxPerMm
+)
+(100×pxPerMm)
+ pixels wider than the headstone on your screen.
+
+Y-Axis Consistency: By using the same pxPerMm for height, the thickness of the base will remain proportional to its width, matching the "chunky" look of the base slab in your goal screenshot.
+
+Update the Base Style
+
+Ensure the baseRowStyle uses overlayW (the scene width) so it centers correctly under the stone:
+
+code
+
+const baseRowStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top: stoneBot,
+  width: overlayW, // This ensures the flex centering works relative to the whole scene
+  height: baseHeightPx,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  pointerEvents: 'none',
+  zIndex: 2,
+};

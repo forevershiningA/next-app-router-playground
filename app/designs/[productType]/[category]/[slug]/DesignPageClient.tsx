@@ -3368,13 +3368,12 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + overlayH);
 
                   // mm → px
-                  // Use uniformScale directly - it represents the global pixels-per-mm ratio.
-                  // Using displayWidth/tabletWidthMm causes oversized base because it ignores canvas margins.
-                  const pxPerMmX = uniformScale;
-                  const pxPerMmY = uniformScale;
+                  // CORRECT RATIO: How many screen pixels represent 1mm?
+                  // Calculate based on tablet width because it fills 'displayWidth'
+                  const pxPerMm = displayWidth / tabletWidthMm;
 
-                  let baseWidthPx  = Math.round(lengthMm * pxPerMmX);
-                  const baseHeightPx = Math.round(heightMm * pxPerMmY);
+                  let baseWidthPx  = Math.round(lengthMm * pxPerMm);
+                  const baseHeightPx = Math.round(heightMm * pxPerMm);
 
                   // Tuck under tablet a bit
                   const overlapPx = Math.round(baseHeightPx * 0.25);
@@ -3386,11 +3385,10 @@ export default function DesignPageClient({
                     baseHeightPx,
                     overlapPx,
                     stoneBot,
-                    uniformScale,
+                    displayWidth,
                     tabletWidthMm,
                     tabletHeightMm,
-                    pxPerMmX,
-                    pxPerMmY
+                    pxPerMm
                   });
 
                   // Row spans overlay; flex centers the base
