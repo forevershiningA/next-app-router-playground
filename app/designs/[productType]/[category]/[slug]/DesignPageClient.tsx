@@ -3368,8 +3368,9 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px
-                  // Calculate display width of headstone first
-                  const headstoneDisplayWidthPx = displayWidth;
+                  // Calculate actual displayed headstone width
+                  // Headstone canvas is initW units, displayed at uniformScale
+                  const headstoneDisplayWidthPx = initW * uniformScale;
                   
                   // Base should be proportional to headstone based on physical dimensions
                   // Headstone: 335mm, Base: 435mm from JSON
@@ -3384,6 +3385,8 @@ export default function DesignPageClient({
                     tabletWidthMm,
                     lengthMm,
                     heightMm,
+                    initW,
+                    uniformScale,
                     headstoneDisplayWidthPx,
                     baseToHeadstoneRatio,
                     baseWidthPx,
