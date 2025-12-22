@@ -2281,9 +2281,10 @@ export default function DesignPageClient({
             const baseWidthViewBox = baseWidthMm * mmToViewBox;
             const baseHeightViewBox = baseHeightMm * mmToViewBox;
             
-            // Position: center horizontally at bottom of viewBox
+            // Position: center horizontally, at bottom of viewBox
+            // Base should sit ABOVE the bottom edge, not start AT the bottom
             const baseX = (viewBoxWidth - baseWidthViewBox) / 2;
-            const baseY = viewBoxHeight; // At the bottom edge
+            const baseY = viewBoxHeight - baseHeightViewBox; // Top of base, so base extends to viewBoxHeight
             
             // Create base rectangle
             const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
