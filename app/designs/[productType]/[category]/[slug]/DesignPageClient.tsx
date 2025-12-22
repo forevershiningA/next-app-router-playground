@@ -2182,13 +2182,18 @@ export default function DesignPageClient({
           const baseItem = designData?.find((item: any) => item.type === 'Base');
           logger.log('🔍 Base SVG check:', {
             hasBaseItem: !!baseItem,
-            hasBaseTextureData: !!baseTextureData,
             designDataLength: designData?.length,
             baseItem: baseItem ? { width: baseItem.width, height: baseItem.height, length: baseItem.length } : null
           });
           
-          if (baseItem && baseTextureData) {
+          if (baseItem) {
             logger.log('📦 Adding base to SVG:', baseItem);
+            
+            // Get base granite color
+            const baseColor = baseItem.color || baseItem.granitecolor || 18;
+            const baseTexturePath = `/textures/forever/l/Black-Fine-${baseColor}.webp`;
+            
+            logger.log('📦 Base texture path:', baseTexturePath);
             
             // Create base pattern for texture
             const basePattern = doc.createElementNS('http://www.w3.org/2000/svg', 'pattern');
@@ -2198,7 +2203,7 @@ export default function DesignPageClient({
             basePattern.setAttribute('height', '520');
             
             const baseImage = doc.createElementNS('http://www.w3.org/2000/svg', 'image');
-            baseImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', baseTextureData);
+            baseImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', baseTexturePath);
             baseImage.setAttribute('x', '0');
             baseImage.setAttribute('y', '0');
             baseImage.setAttribute('width', '520');
@@ -2265,7 +2270,7 @@ export default function DesignPageClient({
         logger.error('❌ Failed to load SVG:', err);
         setSvgContent(null);
       });
-  }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds, baseTextureData, designData]);
+  }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds, designData]);
 
   // Build top profile for motif snapping
   useEffect(() => {
