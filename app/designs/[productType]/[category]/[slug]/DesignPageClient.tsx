@@ -3368,25 +3368,36 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px
-                  // Base should span full container width to match original screenshot
-                  // Height calculated from mm for correct thickness
+                  // Calculate display width of headstone first
+                  const headstoneDisplayWidthPx = displayWidth;
+                  
+                  // Base should be proportional to headstone based on physical dimensions
+                  // Headstone: 335mm, Base: 435mm from JSON
+                  const baseToHeadstoneRatio = lengthMm / tabletWidthMm;  // 435/335 = 1.3
+                  const baseWidthPx = Math.round(headstoneDisplayWidthPx * baseToHeadstoneRatio);
+                  
+                  // Height from mm
                   const pxPerMm = uniformScale * (initW / tabletWidthMm);
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
 
-                  logger.log('🔍 Base sizing:', {
+                  logger.log('🔍 Base sizing from JSON dimensions:', {
+                    tabletWidthMm,
+                    lengthMm,
                     heightMm,
+                    headstoneDisplayWidthPx,
+                    baseToHeadstoneRatio,
+                    baseWidthPx,
                     baseHeightPx,
-                    pxPerMm,
-                    displayWidth,
-                    note: 'Base spans full width to match original screenshot'
+                    displayWidth
                   });
 
                   logger.log('📦 Base dimensions:', {
+                    lengthMm,
                     heightMm,
+                    baseWidthPx,
                     baseHeightPx,
                     stoneBot,
-                    displayWidth,
-                    pxPerMm
+                    displayWidth
                   });
 
                   // Place and center the base under the headstone
@@ -3396,12 +3407,15 @@ export default function DesignPageClient({
                     top: stoneBot,
                     width: displayWidth,
                     height: baseHeightPx,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
                     pointerEvents: 'none',
                     zIndex: 2,
                   };
 
                   const baseStyle: React.CSSProperties = {
-                    width: '100%',  // Span full width like original screenshot
+                    width: baseWidthPx,
                     height: baseHeightPx,
                     backgroundImage: baseTextureData
                       ? `url(${baseTextureData})`
