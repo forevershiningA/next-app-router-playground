@@ -2874,6 +2874,19 @@ export default function DesignPageClient({
                 }}
               >
               
+              {/* DEBUG: Log container size */}
+              {(() => {
+                logger.log('📐 Headstone container size:', {
+                  displayWidth: scalingFactors.displayWidth,
+                  displayHeight: scalingFactors.displayHeight,
+                  initW: scalingFactors.initW,
+                  initH: scalingFactors.initH,
+                  uniformScale: scalingFactors.uniformScale,
+                  calculated: `${scalingFactors.initW} × ${scalingFactors.initH} @ ${scalingFactors.uniformScale} = ${Math.round(scalingFactors.initW * scalingFactors.uniformScale)} × ${Math.round(scalingFactors.initH * scalingFactors.uniformScale)}`
+                });
+                return null;
+              })()}
+              
               {/* HEADSTONE OBJECT LAYER */}
               {/* Force full-bleed: headstone fills 100% of the container */}
               <div 
