@@ -3353,17 +3353,10 @@ export default function DesignPageClient({
                     /base/i.test(`${it.type} ${it.name ?? ''} ${it.label ?? ''}`)
                   ) || {};
 
-                  // Prefer explicit mm; else add a small overhang (each side)
-                  const lengthMm = [
-                    baseItem.length_mm, baseItem.length, baseItem.width_mm, baseItem.width,
-                    baseItem.size?.length_mm, baseItem.size?.width_mm,
-                  ].map(Number).filter(v => Number.isFinite(v) && v >= 300).sort((a, b) => b - a)[0]
-                    ?? (tabletWidthMm + 2 * 25); // 25mm each side
+                  // Extract base dimensions from JSON (fields are 'width' and 'height')
+                  const lengthMm = baseItem.width || baseItem.length || (tabletWidthMm + 2 * 25); // Fallback: 25mm overhang each side
 
-                  const heightMm = [
-                    baseItem.height_mm, baseItem.height, baseItem.size?.height_mm, baseItem.thickness_mm,
-                  ].map(Number).filter(v => Number.isFinite(v) && v >= 50 && v <= 200)[0]
-                    ?? 90;
+                  const heightMm = baseItem.height || baseItem.thickness_mm || 90; // Fallback: 90mm
 
                   // Overlay (display) scale
                   const { uniformScale, initW, initH, offsetX, offsetY, displayWidth, displayHeight } = scalingFactors;
