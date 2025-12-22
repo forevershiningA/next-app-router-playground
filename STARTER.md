@@ -1820,7 +1820,23 @@ git log --oneline -10   # Recent commits
     - `STARTER.md`: Added Design Gallery & SEO section documenting the entire system
   - **Build Performance**: Clean compilation in ~35 seconds, no TypeScript errors
   - **Commit**: `b390325e78` - "feat: Add price display and SEO metadata to design gallery pages"
-- **2025-12-22**: Design Specs Display & Price Quote Fix (Production-Ready)
+- **2025-12-22 (Evening)**: SVG-Based Base Rendering (In Progress)
+  - **Base Rendering Refactor**: Moved base from separate HTML div to SVG rect element
+    - Base now rendered directly inside headstone SVG as `<rect>` element
+    - Uses same coordinate system and viewBox as headstone
+    - Base texture pattern (`#baseTexture`) created from `texture` field in design JSON
+    - Texture mapping matches headstone logic: `forever2/l/17.jpg` → `/textures/forever/l/Glory-Black-1.webp`
+    - Position: `baseY = originalHeight` (400) where headstone shape ends
+    - Extends viewBox downward: `newVbH = vbH + baseHeightVb`
+    - Scaling: `mmToViewBox = originalHeight / headstoneHeightMm` (e.g., 400 / 500 = 0.8)
+    - **Challenges**: ViewBox centering creates negative Y offset (e.g., `0 -55 400 510`)
+    - Base positioned at original height to avoid white gap below headstone
+    - Eliminates HTML/SVG coordinate system conversion complexity
+    - Removed 122 lines of old HTML base rendering code
+  - **Files Modified**:
+    - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`: SVG base implementation
+  - **Status**: Base rendering works but requires refinement for consistent positioning across all design types
+- **2025-12-22 (Afternoon)**: Design Specs Display & Price Quote Fix (Production-Ready)
   - **Design Specifications Display**: Added dimensions, granite name, and thumbnails to category cards
     - Created `lib/extract-design-specs.ts` utility to extract design specifications from JSON
     - **Dimensions**: Width × Height in mm, rounded up with `Math.ceil()` (e.g., 609.6mm → 610mm)
@@ -1851,6 +1867,35 @@ git log --oneline -10   # Recent commits
     - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`: Fixed mlDir usage for price quotes
     - `STARTER.md`: Updated with latest documentation
   - **Commit**: `934c876fe2` - "Add design specs display and fix price quote loading"
+- **2025-12-22 (Evening)**: SVG-Based Base Rendering Implementation
+  - **Architecture Change**: Moved base from HTML `<div>` to SVG `<rect>` element
+    - Base now part of headstone SVG, not separate positioned div
+    - Shares same coordinate system (viewBox units) as headstone
+    - Eliminates complex pixel-to-mm conversion and positioning calculations
+  - **Texture Mapping**: Base granite texture from design JSON
+    - Extracts texture path from base item: `baseItem.texture` (e.g., `"src/granites/forever2/l/17.jpg"`)
+    - Applies same mapping logic as headstone: numbered textures (`17.jpg` → `Glory-Black-1.webp`)
+    - Creates SVG `<pattern id="baseTexture">` with texture image
+    - Falls back to granite name extraction for named textures
+  - **Coordinate System**: Uses original viewBox dimensions for scaling
+    - Scale factor: `mmToViewBox = originalHeight / headstoneHeightMm` (e.g., 400 / 500 = 0.8)
+    - Base dimensions: `baseWidthVb = baseWidthMm * mmToViewBox`, `baseHeightVb = baseHeightMm * mmToViewBox`
+    - Position: `baseX = (vbW - baseWidthVb) / 2` (centered), `baseY = originalHeight` (at shape bottom)
+  - **ViewBox Extension**: Extends SVG viewBox to make room for base
+    - Reads current/adjusted viewBox (may have negative Y from centering: `0 -55 400 510`)
+    - Extends height: `newVbH = vbH + baseHeightVb`
+    - Base positioned at `originalHeight` (where headstone shape ends), not at adjusted bottom
+    - Prevents base from appearing in white space gap or overlapping headstone
+  - **Code Cleanup**: Removed old HTML-based base rendering
+    - Deleted 122 lines of positioning/scaling calculations
+    - Removed topProfile-based bottom detection
+    - Removed pixel-per-mm conversion logic
+    - Simplified from dual coordinate systems to single SVG system
+  - **Current Status**: Base renders correctly on most designs
+    - Works: Designs with standard viewBox centering
+    - Issue: Some designs show gap between headstone and base due to viewBox variations
+    - Next: Fine-tune base Y position calculation for edge cases
+  - **Commits**: Multiple iterative improvements throughout evening session
 - **2025-12-19 (Afternoon)**: Plaque Product Type Support - Complete UI & Rendering (Production-Ready)
   - **Plaque Shape Filtering**: Added dynamic shape filtering based on product type
     - Plaques show ONLY plaque shapes (landscape, portrait, oval horizontal, oval portrait, circle)
