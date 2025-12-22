@@ -3247,6 +3247,16 @@ export default function DesignPageClient({
                           const deltaCy = deltaOverlay / sy;
                           cyUsed = cy + deltaCy;
                         }
+                      } else if (isTopBand && !topProfile) {
+                        // SAFETY CLAMP: If topProfile missing, prevent motifs from going too high
+                        // Clamp to keep motifs within visible headstone area
+                        // For a 500mm tall headstone, top ~50mm should be safe zone
+                        const safeTopY = -(initH * 0.35); // Don't go higher than 35% above center
+                        const motifTopY = cy - (motifHAuthor / 2);
+                        if (motifTopY < safeTopY) {
+                          cyUsed = safeTopY + (motifHAuthor / 2);
+                          logger.log(`⚠️ Motif ${index} clamped from cy=${cy.toFixed(1)} to cy=${cyUsed.toFixed(1)} (no topProfile)`);
+                        }
                       }
                       
                       // Map from center-origin canvas to overlay pixels
