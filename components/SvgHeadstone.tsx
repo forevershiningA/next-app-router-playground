@@ -963,12 +963,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   // 5. Create Materials (FIX: Return data from useMemo, not JSX)
   const materials = useMemo(() => {
+    // Use darker tint for better granite contrast (especially for black granite)
     const common = {
-      color: new THREE.Color(headstoneStyle === 'slant' ? 0x444444 : 0x888888),
-      roughness: headstoneStyle === 'slant' ? 0.65 : 0.15,
+      color: new THREE.Color(headstoneStyle === 'slant' ? 0x444444 : 0x555555), // Darker: 0x888888 → 0x555555
+      roughness: headstoneStyle === 'slant' ? 0.65 : 0.12, // Lower roughness: 0.15 → 0.12 for more polish
       metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-      envMapIntensity: headstoneStyle === 'slant' ? 1.0 : 1.5,
+      envMapIntensity: headstoneStyle === 'slant' ? 1.0 : 2.0, // Higher reflections: 1.5 → 2.0
     };
     
     // For slant headstones, apply rock pitch normal map to side material
@@ -1002,7 +1003,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         ...common, 
         map: clonedFaceMap,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
+        clearcoatRoughness: 0.05, // Lower clearcoat roughness: 0.1 → 0.05 for mirror-like polish
         polygonOffset: true,
         polygonOffsetFactor: 1,
         polygonOffsetUnits: 1,
@@ -1011,7 +1012,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         ...common, 
         map: clonedSideMap,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
+        clearcoatRoughness: 0.05, // Lower clearcoat roughness: 0.1 → 0.05 for mirror-like polish
         polygonOffset: true,
         polygonOffsetFactor: 1,
         polygonOffsetUnits: 1,
