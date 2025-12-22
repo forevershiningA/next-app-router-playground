@@ -3248,10 +3248,10 @@ export default function DesignPageClient({
                           cyUsed = cy + deltaCy;
                         }
                       } else if (isTopBand && !topProfile) {
-                        // SAFETY CLAMP: If topProfile missing, prevent motifs from going too high
-                        // Clamp to keep motifs within visible headstone area
-                        // For a 500mm tall headstone, top ~50mm should be safe zone
-                        const safeTopY = -(initH * 0.35); // Don't go higher than 35% above center
+                        // SAFETY CLAMP: If topProfile missing, prevent motifs from going TOO high
+                        // But allow them to go quite high for designs with curved tops
+                        // Clamp only at extreme positions (like 50% above center)
+                        const safeTopY = -(initH * 0.50); // Allow up to 50% above center (was 35%)
                         const motifTopY = cy - (motifHAuthor / 2);
                         if (motifTopY < safeTopY) {
                           cyUsed = safeTopY + (motifHAuthor / 2);
