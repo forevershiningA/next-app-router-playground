@@ -2253,7 +2253,7 @@ export default function DesignPageClient({
             basePattern.appendChild(baseImage);
             defs.appendChild(basePattern);
             
-            // Get headstone dimensions from JSON
+            // Get base dimensions from JSON
             const headstoneItem = designData?.find((item: any) => item.type === 'Headstone');
             const headstoneHeightMm = headstoneItem?.height || 500;
             const headstoneWidthMm = headstoneItem?.width || 335;
@@ -2262,13 +2262,21 @@ export default function DesignPageClient({
             const baseWidthMm = baseItem.width || baseItem.length || 435;
             const baseHeightMm = baseItem.height || 100;
             
-            // SVG viewBox is 400x400, but represents the headstone physical dimensions
-            // We need to convert mm to viewBox units
-            const viewBoxWidth = 400;
-            const viewBoxHeight = 400;
+            // Get actual SVG viewBox dimensions (not hardcoded)
+            const viewBoxAttr = svg.getAttribute('viewBox');
+            let viewBoxWidth = 400;
+            let viewBoxHeight = 400;
+            
+            if (viewBoxAttr) {
+              const parts = viewBoxAttr.split(/\s+/);
+              if (parts.length >= 4) {
+                viewBoxWidth = parseFloat(parts[2]);
+                viewBoxHeight = parseFloat(parts[3]);
+              }
+            }
             
             // Calculate mm to viewBox scale (viewBox units per mm)
-            const mmToViewBox = viewBoxHeight / headstoneHeightMm; // 400 / 500 = 0.8
+            const mmToViewBox = viewBoxHeight / headstoneHeightMm;
             
             const baseWidthViewBox = baseWidthMm * mmToViewBox;
             const baseHeightViewBox = baseHeightMm * mmToViewBox;
@@ -2291,6 +2299,7 @@ export default function DesignPageClient({
             logger.log('✅ Base added to SVG:', {
               baseWidthMm,
               baseHeightMm,
+              viewBoxAttr,
               viewBoxWidth,
               viewBoxHeight,
               mmToViewBox,
