@@ -3367,14 +3367,11 @@ export default function DesignPageClient({
                   // The headstone SVG is rendered full-bleed (absolute inset-0), so its bottom == overlay bottom.
                   const stoneBot = Math.round(offsetY + overlayH);
 
-                  // Use displayWidth directly for base width (per review84.txt)
-                  // This ensures the base matches the stone width exactly
-                  const stoneW = displayWidth;
-                  const stoneH = displayHeight;
-
                   // mm → px
-                  const pxPerMmX = stoneW / tabletWidthMm;
-                  const pxPerMmY = stoneH / tabletHeightMm;
+                  // Use uniformScale directly - it represents the global pixels-per-mm ratio.
+                  // Using displayWidth/tabletWidthMm causes oversized base because it ignores canvas margins.
+                  const pxPerMmX = uniformScale;
+                  const pxPerMmY = uniformScale;
 
                   let baseWidthPx  = Math.round(lengthMm * pxPerMmX);
                   const baseHeightPx = Math.round(heightMm * pxPerMmY);
@@ -3389,8 +3386,7 @@ export default function DesignPageClient({
                     baseHeightPx,
                     overlapPx,
                     stoneBot,
-                    stoneW,
-                    stoneH,
+                    uniformScale,
                     tabletWidthMm,
                     tabletHeightMm,
                     pxPerMmX,
