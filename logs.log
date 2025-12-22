@@ -1,0 +1,633 @@
+index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
+    at validateAndParse (index.js:120:15)
+    at esm_compareVersions (index.js:10:16)
+    at gte (index.js:249:10)
+    at k.registerRendererInterface (agent.js:960:24)
+    at registerRendererInterface (index.js:31:11)
+    at index.js:70:5
+    at Map.forEach (<anonymous>)
+    at initBackend (index.js:69:27)
+    at activateBackend (backendManager.js:1:13128)
+    at backendManager.js:1:14182
+    at hook.js:268:34
+    at Array.map (<anonymous>)
+    at Object.emit (hook.js:268:24)
+    at backend.js:33:8
+    at backend.js:19:1
+    at react_devtools_backend_compact.js:1:51014
+    at react_devtools_backend_compact.js:1:51018
+validateAndParse @ index.js:120
+esm_compareVersions @ index.js:10
+gte @ index.js:249
+registerRendererInterface @ agent.js:960
+registerRendererInterface @ index.js:31
+(anonimowa) @ index.js:70
+initBackend @ index.js:69
+activateBackend @ backendManager.js:1
+(anonimowa) @ backendManager.js:1
+(anonimowa) @ hook.js:268
+emit @ hook.js:268
+(anonimowa) @ backend.js:33
+(anonimowa) @ backend.js:19
+(anonimowa) @ react_devtools_backend_compact.js:1
+(anonimowa) @ react_devtools_backend_compact.js:1
+page.tsx:446 An empty string ("") was passed to the href attribute. To fix this, either do not render the element at all or pass null to href instead of an empty string.
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+diffHydratedProperties @ react-dom-client.development.js:23898
+beginWork @ react-dom-client.development.js:12382
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<link>
+SavedDesignPage @ page.tsx:446
+initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
+eval @ react-server-dom-webpack-client.browser.development.js:4122
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+readChunk @ react-server-dom-webpack-client.browser.development.js:1399
+react_stack_bottom_frame @ react-dom-client.development.js:29236
+resolveLazy @ react-dom-client.development.js:6225
+createChild @ react-dom-client.development.js:6543
+reconcileChildrenArray @ react-dom-client.development.js:6862
+reconcileChildFibersImpl @ react-dom-client.development.js:7219
+eval @ react-dom-client.development.js:7336
+reconcileChildren @ react-dom-client.development.js:10028
+updateFunctionComponent @ react-dom-client.development.js:10505
+beginWork @ react-dom-client.development.js:12102
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<SavedDesignPage>
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
+initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
+initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+"use server"
+ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
+createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
+exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
+eval @ app-index.js:130
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1766405410802:160
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+fn @ webpack.js:1
+eval @ app-next-dev.js:14
+eval @ app-bootstrap.js:59
+loadScriptsInSequence @ app-bootstrap.js:24
+appBootstrap @ app-bootstrap.js:53
+eval @ app-next-dev.js:13
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1766405410802:182
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main-app.js?v=1766405410802:1998
+(anonimowa) @ main-app.js?v=1766405410802:1999
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main-app.js?v=1766405410802:9
+page.tsx:447 An empty string ("") was passed to the href attribute. To fix this, either do not render the element at all or pass null to href instead of an empty string.
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+diffHydratedProperties @ react-dom-client.development.js:23898
+beginWork @ react-dom-client.development.js:12382
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<link>
+SavedDesignPage @ page.tsx:447
+initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
+eval @ react-server-dom-webpack-client.browser.development.js:4122
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+readChunk @ react-server-dom-webpack-client.browser.development.js:1399
+react_stack_bottom_frame @ react-dom-client.development.js:29236
+resolveLazy @ react-dom-client.development.js:6225
+createChild @ react-dom-client.development.js:6543
+reconcileChildrenArray @ react-dom-client.development.js:6862
+reconcileChildFibersImpl @ react-dom-client.development.js:7219
+eval @ react-dom-client.development.js:7336
+reconcileChildren @ react-dom-client.development.js:10028
+updateFunctionComponent @ react-dom-client.development.js:10505
+beginWork @ react-dom-client.development.js:12102
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<SavedDesignPage>
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
+initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
+initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+"use server"
+ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
+createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
+exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
+eval @ app-index.js:130
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1766405410802:160
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+fn @ webpack.js:1
+eval @ app-next-dev.js:14
+eval @ app-bootstrap.js:59
+loadScriptsInSequence @ app-bootstrap.js:24
+appBootstrap @ app-bootstrap.js:53
+eval @ app-next-dev.js:13
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1766405410802:182
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main-app.js?v=1766405410802:1998
+(anonimowa) @ main-app.js?v=1766405410802:1999
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main-app.js?v=1766405410802:9
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📏 TRUE authoring frame: {initW: 800, initH: 800, designDpr: 1, usesPhysicalCoords: false, viewportWidth: 1517, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📏 TRUE authoring frame: {initW: 800, initH: 800, designDpr: 1, usesPhysicalCoords: false, viewportWidth: 1517, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base texture: No texture in baseData
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base texture: No texture in baseData
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 SVG useEffect check: {shapeImagePath: false, textureData: false, shapeData: false, screenshotDimensions: false, cropBounds: false, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 ❌ SVG generation skipped - missing dependencies
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 TopProfile effect: {hasSvgContent: false, hasScreenshotDimensions: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 ⚠️ TopProfile: Missing prerequisites
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Full name or multi-word detected: and brother Matthew hasFirstName: true hasSurname: false words: 3
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Full name or multi-word detected: Jennifer Alice Fields hasFirstName: true hasSurname: true words: 3
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Full name or multi-word detected: and brother Matthew hasFirstName: true hasSurname: false words: 3
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Full name or multi-word detected: Jennifer Alice Fields hasFirstName: true hasSurname: true words: 3
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📐 MM-based design detected - using original canvas dimensions from design JSON: {width: 1680, height: 873}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📏 TRUE authoring frame: {initW: 1680, initH: 873, designDpr: 1, usesPhysicalCoords: false, viewportWidth: 1517, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📐 MM-based design detected - using original canvas dimensions from design JSON: {width: 1680, height: 873}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📏 TRUE authoring frame: {initW: 1680, initH: 873, designDpr: 1, usesPhysicalCoords: false, viewportWidth: 1517, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Total motifs in design data: 4
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Motif details: (4) [{…}, {…}, {…}, {…}]
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Total motifs in design data: 4
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 Motif details: (4) [{…}, {…}, {…}, {…}]
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base detection: {designId: '1630558777652', hasDesignData: true, designDataLength: 12, baseItem: {…}, allTypes: 'Headstone, Base, Motif, Motif, Motif, Motif, Inscr…nscription, Inscription, Inscription, Inscription'}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base detection: {designId: '1630558777652', hasDesignData: true, designDataLength: 12, baseItem: {…}, allTypes: 'Headstone, Base, Motif, Motif, Motif, Motif, Inscr…nscription, Inscription, Inscription, Inscription'}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base texture mapped: {savedTexturePath: 'src/granites/forever2/l/17.jpg', result: '/textures/forever/l/Glory-Black-1.webp'}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base texture mapped: {savedTexturePath: 'src/granites/forever2/l/17.jpg', result: '/textures/forever/l/Glory-Black-1.webp'}
+C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignSidebar.tsx:25 DesignSidebar mounted with: {category: 'biblical-memorial', productSlug: 'traditional-headstone', currentDesignId: '1630558777652'}
+C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignSidebar.tsx:29 Category designs found: 343
+C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignSidebar.tsx:36 Filtered designs: 15
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 SVG useEffect check: {shapeImagePath: true, textureData: true, shapeData: true, screenshotDimensions: false, cropBounds: false, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 ❌ SVG generation skipped - missing dependencies
+C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignSidebar.tsx:25 DesignSidebar mounted with: {category: 'biblical-memorial', productSlug: 'traditional-headstone', currentDesignId: '1630558777652'}
+C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignSidebar.tsx:29 Category designs found: 343
+C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignSidebar.tsx:36 Filtered designs: 15
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📸 Screenshot metadata loaded from JSON: {designId: '1630558777652', metadata: {…}, canvas: {…}}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG viewBox loaded for cross_008 : 757 x 999
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG viewBox loaded for 2_147_18 : 487 x 479
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG viewBox loaded for 1_016_22 : 472 x 472
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG viewBox loaded for 2_057_19 : 532 x 443
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📐 MM-based design detected - using original canvas dimensions from design JSON: {width: 1680, height: 873}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📏 TRUE authoring frame: {initW: 1680, initH: 873, designDpr: 1, usesPhysicalCoords: false, viewportWidth: 1517, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📐 MM-based design detected - using original canvas dimensions from design JSON: {width: 1680, height: 873}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📏 TRUE authoring frame: {initW: 1680, initH: 873, designDpr: 1, usesPhysicalCoords: false, viewportWidth: 1517, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: false, svgLength: 0, fallbackToTexture: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: false, svgLength: 0, fallbackToTexture: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 SVG useEffect check: {shapeImagePath: true, textureData: true, shapeData: true, screenshotDimensions: true, cropBounds: true, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 ✅ All dependencies available, fetching SVG from: /shapes/headstones/headstone_20.svg
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 TopProfile effect: {hasSvgContent: false, hasScreenshotDimensions: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 ⚠️ TopProfile: Missing prerequisites
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📥 SVG fetch response: 200 true
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: false, svgLength: 0, fallbackToTexture: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: false, svgLength: 0, fallbackToTexture: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📄 SVG text received, length: 2402
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 SVG element found: true
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📊 Headstone item data: {x: undefined, y: undefined, width: 335, height: 500, allKeys: Array(22)}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG Processing: {canvas: {…}, physical: {…}, display: {…}, upscaleFactor: 1, dpr: 1}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG original dimensions from viewBox: {originalWidth: 400, originalHeight: 400}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG scaling to authoring frame: {original: {…}, authoring: {…}, scale: 2.1825, scaled: {…}}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 SVG to authoring scale: {canvasWidth: 1680, canvasHeight: 873, originalWidth: 400, originalHeight: 400, svgToAuthoringScaleX: 4.2, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2044 🎯 [VIEWBOX FIX v2] Starting viewBox adjustment calculation... 2025-12-22T12:10:14.216Z
+C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2058 🎯 [VIEWBOX FIX v2] Parsed viewBox: {vbX: 0, vbY: 0, vbW: 400, vbH: 400}
+C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2069 🎯 [VIEWBOX FIX v2] Using actual screenshot dimensions: {logical: {…}, actual: {…}, svgAspect: '1.000', containerAspect: '0.784'}
+C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2101 🎯 [VIEWBOX FIX v2] ViewBox calculation: {original: {…}, logicalCanvas: {…}, actualCanvas: {…}, svgAspect: '1.000', containerAspect: '0.784', …}
+C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2115 🎯 [VIEWBOX FIX v2] Set adjusted SVG viewBox: 0 -110.34 400.00 510.34
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 ✅ SVG processed successfully, length: 2659
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 TopProfile effect: {hasSvgContent: true, hasScreenshotDimensions: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔄 Building top profile... {initW: 1680, initH: 873}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:13 ❌ Failed to build top profile: Event {isTrusted: true, type: 'error', target: img, currentTarget: img, eventPhase: 2, …}
+overrideMethod @ hook.js:608
+warn @ C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:13
+DesignPageClient.useEffect @ C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2200
+await in DesignPageClient.useEffect
+DesignPageClient.useEffect @ C:\Users\polcr\Documents\GitHub\next-dyo\app\designs\[productType]\[category]\[slug]\DesignPageClient.tsx:2203
+react_stack_bottom_frame @ react-dom-client.development.js:29214
+runWithFiberInDEV @ react-dom-client.development.js:975
+commitHookEffectListMount @ react-dom-client.development.js:13683
+commitHookPassiveMountEffects @ react-dom-client.development.js:13770
+commitPassiveMountOnFiber @ react-dom-client.development.js:16674
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16868
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16791
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16868
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16791
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16868
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16791
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16868
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16827
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16868
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16791
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16868
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16791
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+"use client"
+SavedDesignPage @ page.tsx:461
+initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
+eval @ react-server-dom-webpack-client.browser.development.js:4122
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+readChunk @ react-server-dom-webpack-client.browser.development.js:1399
+react_stack_bottom_frame @ react-dom-client.development.js:29236
+resolveLazy @ react-dom-client.development.js:6225
+createChild @ react-dom-client.development.js:6543
+reconcileChildrenArray @ react-dom-client.development.js:6862
+reconcileChildFibersImpl @ react-dom-client.development.js:7219
+eval @ react-dom-client.development.js:7336
+reconcileChildren @ react-dom-client.development.js:10028
+beginWork @ react-dom-client.development.js:12503
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<SavedDesignPage>
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+Function.all @ VM17487 <anonymous>:1
+initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
+initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
+initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+"use server"
+ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
+createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
+exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
+eval @ app-index.js:130
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1766405410802:160
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+fn @ webpack.js:1
+eval @ app-next-dev.js:14
+eval @ app-bootstrap.js:59
+loadScriptsInSequence @ app-bootstrap.js:24
+appBootstrap @ app-bootstrap.js:53
+eval @ app-next-dev.js:13
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1766405410802:182
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main-app.js?v=1766405410802:1998
+(anonimowa) @ main-app.js?v=1766405410802:1999
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main-app.js?v=1766405410802:9
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Rendering headstone shape: {shapeName: 'Headstone 20', svgContent: true, svgLength: 2770, fallbackToTexture: false}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 0 - MM sizing: 112mm × 1.746 px/mm = 195.55px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 0/4: Motif (Traditional Engraved) {itemID: 23, src: 'cross_008', rawCoords: {…}, cx: 4, cy: -196, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 1 - MM sizing: 40mm × 1.746 px/mm = 69.84px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 1/4: Motif (Traditional Engraved) {itemID: 24, src: '2_147_18', rawCoords: {…}, cx: 3, cy: -311, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 2 - MM sizing: 163mm × 1.746 px/mm = 284.60px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 2/4: Motif (Traditional Engraved) {itemID: 1, src: '1_016_22', rawCoords: {…}, cx: -107, cy: 203, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🎨 Motif 3 - MM sizing: 41mm × 1.746 px/mm = 71.59px (canvas 873px / 500mm)
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 MOTIF 3/4: Motif (Traditional Engraved) {itemID: 3, src: '2_057_19', rawCoords: {…}, cx: -41, cy: 266, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base render check: {hasBaseData: true, hasTopProfile: false, hasTexture: true, hasScalingFactors: true}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 🔍 Base sizing from JSON dimensions: {tabletWidthMm: 335, lengthMm: 435, heightMm: 100, initW: 1680, uniformScale: 0.4761904761904761, …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\logger.ts:10 📦 Base dimensions: {lengthMm: 435, heightMm: 100, baseWidthPx: 1039, baseHeightPx: 239, stoneBot: 416, …}
