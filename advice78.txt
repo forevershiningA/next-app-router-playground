@@ -1,0 +1,69 @@
+You’re right—the base should span the **entire preview width** (the “screen”), just like in the original screenshot. Right now we size the base from mm (lengthMm → px), so it ends up narrower than the preview container.
+
+### What to change
+
+In **DesignPageClient.tsx**, inside the **“Base (pedestal) — single canonical renderer”** block, replace the mm-derived width with the preview’s display width and let the inner base fill 100%. (This block starts where we log “🔍 Base render check…”.) 
+
+#### Before (current logic)
+
+We compute `pxPerMm`, then:
+
+```ts
+let baseWidthPx  = Math.round(lengthMm * pxPerMm);
+const baseHeightPx = Math.round(heightMm * pxPerMm);
+...
+const baseRowStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top: stoneBot,
+  width: displayWidth,
+  height: baseHeightPx,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  pointerEvents: 'none',
+  zIndex: 2,
+};
+
+const baseStyle: React.CSSProperties = {
+  width: baseWidthPx,
+  height: baseHeightPx,
+  ...
+};
+```
+
+(See the existing code around the `pxPerMm`, `baseWidthPx`, `baseRowStyle`, and `baseStyle` assignments.) 
+
+#### After (make base match screen width)
+
+```ts
+// Keep height from mm so the thickness looks right on screen
+const baseHeightPx = Math.round(heightMm * pxPerMm);
+
+// Span the whole preview width, not the mm length
+const baseRowStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  // tuck slightly under tablet for overlap
+  top: stoneBot - Math.round(baseHeightPx * 0.25),
+  width: displayWidth,      // row spans the full container
+  height: baseHeightPx,
+  pointerEvents: 'none',
+  zIndex: 2,
+};
+
+// Let the base itself fill the row (full screen width)
+const baseStyle: React.CSSProperties = {
+  width: '100%',
+  height: baseHeightPx,
+  // keep your existing background/texture styles here
+};
+```
+
+**Why this works**
+
+* `displayWidth` is the preview container width that we already compute from the screenshot/crop logic. Using it ensures the base exactly matches the “screen” width every time. 
+* We still derive **height** from mm so the pedestal thickness remains correct relative to the design.
+* The small negative top offset keeps the base tucked under the tablet edge (as in the original).
+
+That’s it—the base will now be full-width like the first image.

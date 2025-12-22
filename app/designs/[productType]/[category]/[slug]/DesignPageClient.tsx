@@ -3374,7 +3374,7 @@ export default function DesignPageClient({
                   // This ensures the base scales exactly like the motifs and inscriptions.
                   const pxPerMm = uniformScale * (initW / tabletWidthMm);
 
-                  let baseWidthPx  = Math.round(lengthMm * pxPerMm);
+                  // Keep height from mm so the thickness looks right on screen
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
 
                   // Tuck under tablet a bit
@@ -3383,7 +3383,6 @@ export default function DesignPageClient({
                   logger.log('📦 Base dimensions:', {
                     lengthMm,
                     heightMm,
-                    baseWidthPx,
                     baseHeightPx,
                     overlapPx,
                     stoneBot,
@@ -3393,23 +3392,20 @@ export default function DesignPageClient({
                     pxPerMm
                   });
 
-                  // Row spans overlay; flex centers the base
-                  // Position the base to start exactly where the headstone ends
+                  // Span the whole preview width (matches original screenshot)
                   const baseRowStyle: React.CSSProperties = {
                     position: 'absolute',
                     left: 0,
-                    top: stoneBot, // starts right where the headstone ends
-                    width: displayWidth, // Ensure row spans the container for centering
+                    top: stoneBot - overlapPx, // tuck slightly under tablet for overlap
+                    width: displayWidth, // row spans the full container
                     height: baseHeightPx,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
                     pointerEvents: 'none',
                     zIndex: 2, // below text/motifs (which are 5/10), above background
                   };
 
+                  // Let the base itself fill the row (full screen width)
                   const baseStyle: React.CSSProperties = {
-                    width: baseWidthPx,
+                    width: '100%',
                     height: baseHeightPx,
                     backgroundImage: baseTextureData
                       ? `url(${baseTextureData})`
