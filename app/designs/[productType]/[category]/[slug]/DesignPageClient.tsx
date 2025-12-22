@@ -2178,6 +2178,70 @@ export default function DesignPageClient({
           pattern.appendChild(image);
           defs.appendChild(pattern);
           
+          // ADD BASE TO SVG (if base data exists)
+          const baseItem = designData?.find((item: any) => item.type === 'Base');
+          if (baseItem && baseTextureData) {
+            logger.log('📦 Adding base to SVG:', baseItem);
+            
+            // Create base pattern for texture
+            const basePattern = doc.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+            basePattern.setAttribute('id', 'baseTexture');
+            basePattern.setAttribute('patternUnits', 'userSpaceOnUse');
+            basePattern.setAttribute('width', '520');
+            basePattern.setAttribute('height', '520');
+            
+            const baseImage = doc.createElementNS('http://www.w3.org/2000/svg', 'image');
+            baseImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', baseTextureData);
+            baseImage.setAttribute('x', '0');
+            baseImage.setAttribute('y', '0');
+            baseImage.setAttribute('width', '520');
+            baseImage.setAttribute('height', '520');
+            
+            basePattern.appendChild(baseImage);
+            defs.appendChild(basePattern);
+            
+            // Get headstone dimensions from JSON
+            const headstoneItem = designData?.find((item: any) => item.type === 'Headstone');
+            const headstoneHeightMm = headstoneItem?.height || 500;
+            const headstoneWidthMm = headstoneItem?.width || 335;
+            
+            // Base dimensions from JSON (in mm)
+            const baseWidthMm = baseItem.width || baseItem.length || 435;
+            const baseHeightMm = baseItem.height || 100;
+            
+            // SVG is in canvas units (1680 x 873)
+            // Convert mm to canvas units based on headstone height
+            const mmToCanvas = canvasHeight / headstoneHeightMm; // 873 / 500 = 1.746
+            
+            const baseWidthCanvas = baseWidthMm * mmToCanvas;
+            const baseHeightCanvas = baseHeightMm * mmToCanvas;
+            
+            // Position: center horizontally, at bottom of headstone
+            const baseX = (canvasWidth - baseWidthCanvas) / 2;
+            const baseY = canvasHeight / 2; // Bottom half of canvas
+            
+            // Create base rectangle
+            const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            baseRect.setAttribute('x', baseX.toString());
+            baseRect.setAttribute('y', baseY.toString());
+            baseRect.setAttribute('width', baseWidthCanvas.toString());
+            baseRect.setAttribute('height', baseHeightCanvas.toString());
+            baseRect.setAttribute('fill', 'url(#baseTexture)');
+            
+            // Append base to SVG (after headstone paths)
+            svg.appendChild(baseRect);
+            
+            logger.log('✅ Base added to SVG:', {
+              baseWidthMm,
+              baseHeightMm,
+              baseWidthCanvas,
+              baseHeightCanvas,
+              baseX,
+              baseY,
+              mmToCanvas
+            });
+          }
+          
           // Serialize back to string
           const serializer = new XMLSerializer();
           const processedSvg = serializer.serializeToString(svg);
@@ -2194,7 +2258,7 @@ export default function DesignPageClient({
         logger.error('❌ Failed to load SVG:', err);
         setSvgContent(null);
       });
-  }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds]);
+  }, [shapeImagePath, textureData, shapeData, screenshotDimensions, cropBounds, baseTextureData, designData]);
 
   // Build top profile for motif snapping
   useEffect(() => {
