@@ -1,0 +1,113 @@
+In app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx, I will apply the fixes to the SVG viewBox calculation, the topProfile generation, and the Base positioning to resolve the motif misalignment and gap issues.
+
+Sanitize SVG for topProfile: Strip texture patterns and images to prevent tainted canvas errors.
+
+Center SVG ViewBox: Remove the arbitrary top offset and mathematically center the viewbox to align visual and logical coordinates.
+
+Fix Base Positioning: Revert the hacky base position (displayHeight - 10) to the mathematically correct logical bottom of the headstone (offsetY + height).
+
+code
+Typescript:app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx
+download
+content_copy
+expand_less
+// ... existing code ...
+async function buildTopProfile(svgText: string, initW: number, initH: number) {
+  const vbMatch = svgText.match(/viewBox\s*=\s*"([\d.\s-]+)"/i);
+  const [, vbStr] = vbMatch || [, `0 0 ${initW} ${initH}`];
+  const [ , , vbWStr, vbHStr ] = vbStr.split(/\s+/);
+  const vbW = parseFloat(vbWStr) || initW;
+  const vbH = parseFloat(vbHStr) || initH;
+
+  // FIX: Sanitize SVG to remove external resources/textures that cause "Tainted Canvas" errors
+  // Strip pattern definitions, image tags, and texture fill references
+  const cleanSvg = svgText
+    .replace(/<pattern[\s\S]*?<\/pattern>/g, '') // Remove pattern definitions
+    .replace(/<image[^>]*>/g, '') // Remove image tags
+    .replace(/fill\s*=\s*["']url\(#graniteTexture\)["']/g, 'fill="black"') // Replace texture fills
+    .replace(/style="[^"]*fill:\s*url\(#graniteTexture\)[^"]*"/g, 'style="fill:black"'); // Replace inline style fills
+
+  // Fit like your shape renderer (contain)
+  const scale = Math.min(initW / vbW, initH / vbH);
+  const drawW = vbW * scale;
+  const drawH = vbH * scale;
+  const offX = (initW - drawW) / 2;
+  const offY = (initH - drawH) / 2;
+
+  // Paint the SVG into a canvas (using sanitized SVG)
+  const blob = new Blob([cleanSvg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const img = await new Promise<HTMLImageElement>((res, rej) => {
+    const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url;
+  });
+// ... existing code ...
+          console.log('🎯 [VIEWBOX FIX v2] Using actual screenshot dimensions:', {
+            logical: { width: canvasWidth, height: canvasHeight },
+            actual: { width: actualCanvasWidth, height: actualCanvasHeight },
+            svgAspect: svgAspect.toFixed(3),
+            containerAspect: containerAspect.toFixed(3)
+          });
+          
+          let effectiveVbW = vbW;
+          let effectiveVbH = vbH;
+          let adjustedVbY = vbY;
+          let adjustedVbX = vbX; // Track X adjustments too
+          
+          if (containerAspect > svgAspect) {
+            // Container is wider than SVG
+            // SVG will scale to fit HEIGHT, with horizontal letterboxing
+            // Expand viewBox WIDTH to match container aspect
+            effectiveVbW = vbH * containerAspect;
+            
+            // FIX: Center the content horizontally within the new wider viewBox
+            // Remove arbitrary 27.5% top offset that was pushing content down
+            const widthDiff = effectiveVbW - vbW;
+            adjustedVbX = vbX - (widthDiff / 2);
+            
+            // No vertical adjustment needed - content fills height naturally
+            adjustedVbY = vbY;
+          } else {
+            // Container is taller than SVG
+            // SVG will scale to fit WIDTH, with vertical letterboxing (top/bottom bars)
+            // Expand viewBox HEIGHT to match container aspect
+            effectiveVbH = vbW / containerAspect;
+            
+            // FIX: Center the content vertically within the new taller viewBox
+            // The extra height should be split evenly top and bottom to maintain (0,0) center
+            const heightDiff = effectiveVbH - vbH;
+            adjustedVbY = vbY - (heightDiff / 2);
+          }
+          
+          console.log('🎯 [VIEWBOX FIX v2] ViewBox calculation:', {
+            original: { vbX, vbY, vbW, vbH },
+            logicalCanvas: { width: canvasWidth, height: canvasHeight },
+            actualCanvas: { width: actualCanvasWidth, height: actualCanvasHeight },
+            svgAspect: svgAspect.toFixed(3),
+            containerAspect: containerAspect.toFixed(3),
+            effective: { vbW: effectiveVbW.toFixed(2), vbH: effectiveVbH.toFixed(2) },
+            adjusted: { vbX: adjustedVbX.toFixed(2), vbY: adjustedVbY.toFixed(2) }
+          });
+          
+          // Set adjusted viewBox with centered alignment
+          svg.setAttribute('viewBox', `${adjustedVbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
+          // Center horizontally (xMid) and vertically (YMid) to align with logical canvas center
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          
+          console.log(`🎯 [VIEWBOX FIX v2] Set adjusted SVG viewBox: ${adjustedVbX.toFixed(2)} ${adjustedVbY.toFixed(2)} ${effectiveVbW.toFixed(2)} ${effectiveVbH.toFixed(2)}`);
+          
+          // Just update path fills and remove filters
+          const paths = svg.querySelectorAll('path');
+// ... existing code ...
+                  // Overlay (display) scale
+                  const { uniformScale, initW, initH, offsetX, offsetY, displayWidth, displayHeight } = scalingFactors;
+                  const overlayW = initW * uniformScale;
+                  const overlayH = initH * uniformScale;
+
+                  // Always use the fitted canvas bottom as the headstone bottom.
+                  // Since we now correctly center the SVG (xMidYMid), the bottom of the visual stone
+                  // aligns with the bottom of the logical canvas area mapped to screen pixels.
+                  const stoneBot = Math.round(offsetY + (initH * uniformScale));
+
+                  // mm → px  
+                  // Use the SAME calculation as motifs!
+// ... existing code ...

@@ -2123,8 +2123,8 @@ export default function DesignPageClient({
           
           // Set adjusted viewBox with centered alignment
           svg.setAttribute('viewBox', `${adjustedVbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
-          // Center horizontally (xMid) but align to bottom (YMax) to eliminate gap
-          svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
+          // Center horizontally (xMid) and vertically (YMid) to align with logical canvas center
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
           
           console.log(`🎯 [VIEWBOX FIX v2] Set adjusted SVG viewBox: ${adjustedVbX.toFixed(2)} ${adjustedVbY.toFixed(2)} ${effectiveVbW.toFixed(2)} ${effectiveVbH.toFixed(2)}`);
           
@@ -3391,18 +3391,10 @@ export default function DesignPageClient({
                   const overlayW = initW * uniformScale;
                   const overlayH = initH * uniformScale;
 
-                  // Calculate where the base should start
-                  // The base needs to sit at the visual bottom of the headstone shape
-                  // After viewBox adjustments, the headstone ends before displayHeight
-                  // Move base up to eliminate the white gap visible in SVG
-                  const stoneBot = Math.round(displayHeight - 10); // Subtract gap to overlap slightly
-
-                  logger.log('🔍 Stone bottom calculation:', {
-                    overlayH,
-                    displayHeight,
-                    stoneBot,
-                    gap: 'Moved up 10px to eliminate SVG whitespace'
-                  });
+                  // Always use the fitted canvas bottom as the headstone bottom.
+                  // Since we now correctly center the SVG (xMidYMid), the bottom of the visual stone
+                  // aligns with the bottom of the logical canvas area mapped to screen pixels.
+                  const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px  
                   // Use the SAME calculation as motifs!
