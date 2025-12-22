@@ -2279,13 +2279,18 @@ export default function DesignPageClient({
             const baseWidthVb = baseWidthMm * mmToViewBox;
             const baseHeightVb = baseHeightMm * mmToViewBox;
             
+            // The viewBox may have negative Y offset (e.g., -55 to shift content down)
+            // The headstone shape occupies roughly the ORIGINAL viewBox area
+            // Position base at the ORIGINAL bottom (e.g., Y=400 if original was 400x400)
+            // NOT at the extended/adjusted bottom
+            const baseY = originalHeight; // Original viewBox height (where headstone shape ends)
+            
             // Extend viewBox downward to make room for base
             const newVbH = vbH + baseHeightVb;
             svg.setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${newVbH}`);
             
-            // Position base: centered horizontally, starting at old viewBox bottom
+            // Position base: centered horizontally, at original shape bottom
             const baseX = (vbW - baseWidthVb) / 2;
-            const baseY = vbH; // Start where old viewBox ended
             
             // Create base rectangle
             const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
