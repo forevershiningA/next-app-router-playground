@@ -2262,48 +2262,37 @@ export default function DesignPageClient({
             const baseWidthMm = baseItem.width || baseItem.length || 435;
             const baseHeightMm = baseItem.height || 100;
             
-            // Get ORIGINAL SVG viewBox dimensions (BEFORE adjustments)
-            // The viewBox has already been adjusted by the centering code above
-            // We need to use the ORIGINAL dimensions stored earlier
-            const viewBoxAttr = svg.getAttribute('viewBox');
-            const parts = viewBoxAttr?.split(/\s+/).map(parseFloat) || [];
+            // Add base directly below headstone shape within current viewBox
+            // The base should sit at the BOTTOM of the headstone shape, not the viewBox
             
-            // CRITICAL: These are the ADJUSTED values - we need the originals!
-            // The original viewBox was stored as vbX, vbY, vbW, vbH before adjustment
-            // But we don't have access to those variables here...
-            // Instead, we need to calculate based on the ORIGINAL shape dimensions
+            // Get current viewBox (already adjusted by centering code)
+            const currentViewBoxAttr = svg.getAttribute('viewBox');
+            const vbParts = currentViewBoxAttr?.split(/\s+/).map(parseFloat) || [0, 0, originalWidth, originalHeight];
+            const vbX = vbParts[0] || 0;
+            const vbY = vbParts[1] || 0;
+            const vbW = vbParts[2] || originalWidth;
+            const vbH = vbParts[3] || originalHeight;
             
-            // Use original SVG dimensions from earlier in the code
-            let origViewBoxWidth = originalWidth;  // e.g., 400
-            let origViewBoxHeight = originalHeight; // e.g., 400
+            // Calculate base dimensions in viewBox units
+            // Use ORIGINAL dimensions for scaling (before centering adjustments)
+            const mmToViewBox = originalHeight / headstoneHeightMm;
+            const baseWidthVb = baseWidthMm * mmToViewBox;
+            const baseHeightVb = baseHeightMm * mmToViewBox;
             
-            // Calculate mm to viewBox scale (using ORIGINAL viewBox height)
-            const mmToViewBox = origViewBoxHeight / headstoneHeightMm;
+            // Extend viewBox downward to make room for base
+            const newVbH = vbH + baseHeightVb;
+            svg.setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${newVbH}`);
             
-            const baseWidthViewBox = baseWidthMm * mmToViewBox;
-            const baseHeightViewBox = baseHeightMm * mmToViewBox;
-            
-            // Get CURRENT (adjusted) viewBox to extend it
-            const currentParts = viewBoxAttr?.split(/\s+/).map(parseFloat) || [0, 0, origViewBoxWidth, origViewBoxHeight];
-            const currentVbX = currentParts[0] || 0;
-            const currentVbY = currentParts[1] || 0;
-            const currentVbW = currentParts[2] || origViewBoxWidth;
-            const currentVbH = currentParts[3] || origViewBoxHeight;
-            
-            // EXTEND current viewBox to make room for base below
-            const newViewBoxHeight = currentVbH + baseHeightViewBox;
-            svg.setAttribute('viewBox', `${currentVbX} ${currentVbY} ${currentVbW} ${newViewBoxHeight}`);
-            
-            // Position: center horizontally, at current bottom (base starts where headstone ends)
-            const baseX = (currentVbW - baseWidthViewBox) / 2;
-            const baseY = currentVbH; // At the current bottom edge (base extends into new area)
+            // Position base: centered horizontally, starting at old viewBox bottom
+            const baseX = (vbW - baseWidthVb) / 2;
+            const baseY = vbH; // Start where old viewBox ended
             
             // Create base rectangle
             const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
             baseRect.setAttribute('x', baseX.toString());
             baseRect.setAttribute('y', baseY.toString());
-            baseRect.setAttribute('width', baseWidthViewBox.toString());
-            baseRect.setAttribute('height', baseHeightViewBox.toString());
+            baseRect.setAttribute('width', baseWidthVb.toString());
+            baseRect.setAttribute('height', baseHeightVb.toString());
             baseRect.setAttribute('fill', 'url(#baseTexture)');
             
             // Append base to SVG (after headstone paths)
@@ -2312,13 +2301,12 @@ export default function DesignPageClient({
             logger.log('✅ Base added to SVG:', {
               baseWidthMm,
               baseHeightMm,
-              originalViewBox: `${origViewBoxWidth} x ${origViewBoxHeight}`,
-              currentViewBox: viewBoxAttr,
-              currentVbH,
-              newViewBoxHeight,
+              originalDimensions: `${originalWidth} x ${originalHeight}`,
+              currentViewBox: currentViewBoxAttr,
+              newViewBox: `${vbX} ${vbY} ${vbW} ${newVbH}`,
               mmToViewBox,
-              baseWidthViewBox,
-              baseHeightViewBox,
+              baseWidthVb,
+              baseHeightVb,
               baseX,
               baseY
             });
