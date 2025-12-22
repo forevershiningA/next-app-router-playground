@@ -3391,10 +3391,30 @@ export default function DesignPageClient({
                   const overlayW = initW * uniformScale;
                   const overlayH = initH * uniformScale;
 
-                  // Always use the fitted canvas bottom as the headstone bottom.
-                  // Since we now correctly center the SVG (xMidYMid), the bottom of the visual stone
-                  // aligns with the bottom of the logical canvas area mapped to screen pixels.
-                  const stoneBot = Math.round(offsetY + (initH * uniformScale));
+                  // Calculate the actual bottom of the headstone shape
+                  // If topProfile available, find the max Y value (lowest point)
+                  // Otherwise use the logical canvas bottom
+                  let stoneBot = Math.round(offsetY + overlayH);
+                  
+                  if (topProfile && topProfile.topY) {
+                    // Find the maximum Y value in topProfile (lowest point of headstone)
+                    const maxY = Math.max(...topProfile.topY);
+                    // Scale from authoring to display
+                    const maxYDisplay = Math.round(offsetY + (maxY * uniformScale));
+                    stoneBot = maxYDisplay;
+                    logger.log('🔍 Using topProfile for stone bottom:', {
+                      maxYAuthoring: maxY,
+                      maxYDisplay,
+                      offsetY,
+                      uniformScale
+                    });
+                  } else {
+                    logger.log('🔍 No topProfile, using canvas bottom:', {
+                      offsetY,
+                      overlayH,
+                      stoneBot
+                    });
+                  }
 
                   // mm → px  
                   // Use the SAME calculation as motifs!
