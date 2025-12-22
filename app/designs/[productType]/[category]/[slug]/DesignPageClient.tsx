@@ -1798,24 +1798,6 @@ export default function DesignPageClient({
       displayWidth = maxContainerWidth;
       displayHeight = initH * scale;
     }
-    
-    // CRITICAL FIX: If we have headstone physical dimensions (mm),
-    // calculate display size based on headstone aspect ratio, not canvas
-    const likelyMillimeters = headstoneData?.width && headstoneData.width < 1000;
-    if (likelyMillimeters && headstoneData?.width && headstoneData?.height) {
-      const headstoneAspect = headstoneData.width / headstoneData.height; // 335/500 = 0.67
-      // Make container taller to fit portrait headstone properly
-      // Use full available width, calculate height from aspect ratio
-      displayHeight = displayWidth / headstoneAspect; // 800 / 0.67 = 1194px
-      logger.log('📐 Adjusted container for headstone aspect ratio:', {
-        headstoneWidth: headstoneData.width,
-        headstoneHeight: headstoneData.height,
-        headstoneAspect: headstoneAspect.toFixed(3),
-        displayWidth,
-        displayHeight: Math.round(displayHeight),
-        note: 'Container sized for headstone, not canvas'
-      });
-    }
 
     // 4. Calculate Scale
     
@@ -1823,6 +1805,7 @@ export default function DesignPageClient({
     // (indicates canvas is larger than actual headstone content)
     // NOTE: Skip if width/height are in millimeters (much smaller values)
     const physicalToCanvasRatio = (headstoneData?.width || initW) / initW;
+    const likelyMillimeters = headstoneData?.width && headstoneData.width < 1000; // mm values typically < 1000
     const hasSignificantScaleDiff = !likelyMillimeters && (physicalToCanvasRatio < 0.5 || physicalToCanvasRatio > 1.5);
     
     // Single uniform scale: how does the logical authoring frame map to display?
@@ -2099,10 +2082,10 @@ export default function DesignPageClient({
             // SVG will scale to fit HEIGHT, with horizontal letterboxing
             // Expand viewBox WIDTH to match container aspect
             effectiveVbW = vbH * containerAspect;
-            // When fitting to height, we want to shift content up slightly
-            // to account for any padding/margin in the design
-            // Calculate a small offset (about 7.5% of SVG height works well empirically)
-            const topMarginOffset = vbH * 0.075;
+            // When fitting to height, we want to shift content up MORE
+            // to show motifs at the top that extend beyond the headstone shape
+            // Increase offset to show more top content (was 7.5%, now 27.5%)
+            const topMarginOffset = vbH * 0.275;
             adjustedVbY = vbY - topMarginOffset;
           } else {
             // Container is taller than SVG
