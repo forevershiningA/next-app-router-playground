@@ -3368,35 +3368,26 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px  
-                  // CRITICAL: The headstone SVG displays smaller than overlayW!
-                  // From browser inspector: headstone renders at ~235px for 335mm headstone
-                  // This means: pxPerMm = 235 / 335 = 0.701
-                  
-                  // The issue is overlayW (800px) is the CANVAS width, not the headstone width
-                  // We need to find the actual rendered SVG width
-                  
-                  // Let's use a different approach: calculate from displayHeight
-                  // If displayHeight properly scales the headstone height, use same ratio
-                  const heightRatio = displayHeight / initH;
-                  const actualHeadstoneWidth = tabletWidthMm * heightRatio * (initW / tabletWidthMm);
-                  
-                  // Or simpler: just use uniformScale directly without the initW multiplication
-                  // Because uniformScale already accounts for the canvas→display scaling
-                  const pxPerMm = uniformScale;
+                  // Use the SAME calculation as motifs!
+                  // Motifs use: canvas height / headstone height in mm
+                  // canvas height = initH * uniformScale
+                  const canvasHeightPx = initH * uniformScale;
+                  const pxPerMm = canvasHeightPx / tabletHeightMm;
                   
                   const baseWidthPx = Math.round(lengthMm * pxPerMm);
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
 
-                  logger.log('🔍 Base sizing with uniformScale directly:', {
+                  logger.log('🔍 Base sizing (matching motif formula):', {
+                    initH,
                     uniformScale,
-                    tabletWidthMm,
+                    canvasHeightPx,
+                    tabletHeightMm,
+                    pxPerMm,
                     lengthMm,
                     heightMm,
-                    pxPerMm,
                     baseWidthPx,
                     baseHeightPx,
-                    expectedHeadstoneWidth: Math.round(tabletWidthMm * pxPerMm),
-                    calculation: `${lengthMm}mm * ${pxPerMm.toFixed(3)} px/mm = ${baseWidthPx}px`
+                    calculation: `canvas ${canvasHeightPx}px / ${tabletHeightMm}mm = ${pxPerMm.toFixed(3)} px/mm`
                   });
 
                   logger.log('📦 Base dimensions:', {
