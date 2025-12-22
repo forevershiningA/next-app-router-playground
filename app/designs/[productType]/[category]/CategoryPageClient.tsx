@@ -7,6 +7,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import { extractTotalPrice } from '#/lib/extract-price';
+import { extractDesignSpecs, type DesignSpecs } from '#/lib/extract-design-specs';
 
 /**
  * Format slug for display - convert kebab-case to Title Case
@@ -89,7 +90,7 @@ function formatDesignTitle(design: SavedDesignMetadata): string {
 
 /**
  * Generate varied design descriptions based on shape, product type, and category
- * Returns one of 5 variations to avoid repetition
+ * Returns one of 5 variations to avoid repetition - single sentence format
  */
 function generateDesignDescription(design: SavedDesignMetadata, productSlug: string, categoryTitle: string): string {
   const shapeName = design.shapeName || 'Standard';
@@ -101,15 +102,15 @@ function generateDesignDescription(design: SavedDesignMetadata, productSlug: str
   const variationIndex = designHash % 5;
   
   const variations = [
-    `This ${shapeName} design is a classic ${productType} headstone that suits ${categoryTitle.toLowerCase()} inscriptions. The ${shapeName.toLowerCase()} shape frames a central family name beautifully, with space for meaningful text and decorative motifs. Most families choose Black Granite with a serif family name and a clean, highly legible verse font.`,
+    `A classic ${shapeName} ${productType} headstone ideal for ${categoryTitle.toLowerCase()} inscriptions, featuring elegant proportions and timeless design.`,
     
-    `A timeless ${shapeName} ${productType} headstone ideal for ${categoryTitle.toLowerCase()}. The elegant ${shapeName.toLowerCase()} profile provides ample space for family names, dates, and personal verses. Popular choices include Black Granite with traditional serif fonts for a dignified memorial.`,
+    `This ${shapeName} memorial offers a distinguished ${productType} finish perfect for ${categoryTitle.toLowerCase()} tributes with traditional styling.`,
     
-    `This ${shapeName} ${productType} memorial is perfect for ${categoryTitle.toLowerCase()} tributes. The distinctive ${shapeName.toLowerCase()} silhouette creates a beautiful canvas for inscriptions and symbolic motifs. Customers typically select polished Black Granite paired with clear, readable typography.`,
+    `An elegant ${shapeName} design in ${productType} format, beautifully suited for ${categoryTitle.toLowerCase()} with refined aesthetics.`,
     
-    `An elegant ${shapeName} shape in ${productType} finish, designed specifically for ${categoryTitle.toLowerCase()}. The ${shapeName.toLowerCase()} form offers excellent proportions for central family names with supporting text and decorative elements. Black Granite remains the most requested material for its timeless appearance.`,
+    `This ${shapeName} ${productType} headstone excels at presenting ${categoryTitle.toLowerCase()} inscriptions with graceful symmetry and visual balance.`,
     
-    `This classic ${shapeName} ${productType} headstone excels at presenting ${categoryTitle.toLowerCase()} inscriptions. The graceful ${shapeName.toLowerCase()} outline frames personalized text and motifs with visual balance. Many families opt for Black Granite with serif lettering for a traditional, dignified look.`
+    `A timeless ${shapeName} memorial featuring ${productType} craftsmanship, designed specifically for ${categoryTitle.toLowerCase()} with dignified appeal.`
   ];
   
   return variations[variationIndex];
@@ -125,6 +126,7 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
   const [designs, setDesigns] = useState<SavedDesignMetadata[]>([]);
   const [loading, setLoading] = useState(true);
   const [designPrices, setDesignPrices] = useState<Record<string, string>>({});
+  const [designSpecs, setDesignSpecs] = useState<Record<string, DesignSpecs>>({});
 
   useEffect(() => {
     // Get designs for this category
@@ -154,6 +156,26 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
     
     if (designs.length > 0) {
       fetchPrices();
+    }
+  }, [designs]);
+
+  // Fetch design specs (dimensions and granite) for all designs
+  useEffect(() => {
+    async function fetchSpecs() {
+      const specs: Record<string, DesignSpecs> = {};
+      
+      for (const design of designs) {
+        const designSpec = await extractDesignSpecs(design.id, design.mlDir);
+        if (designSpec) {
+          specs[design.id] = designSpec;
+        }
+      }
+      
+      setDesignSpecs(specs);
+    }
+    
+    if (designs.length > 0) {
+      fetchSpecs();
     }
   }, [designs]);
 
@@ -245,9 +267,33 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
               >
                 {/* Card Content */}
                 <div className="p-6">
-                  <h3 className="font-serif font-light text-xl text-slate-900 mb-3 group-hover:text-slate-700 transition-colors">
+                  <h3 className="font-serif font-light text-xl text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">
                     {formatDesignTitle(design)}
                   </h3>
+                  
+                  {/* Dimensions and Granite with Thumbnail */}
+                  {designSpecs[design.id] && (
+                    <div className="flex items-center gap-2 mb-3">
+                      {designSpecs[design.id].graniteThumb && (
+                        <img 
+                          src={designSpecs[design.id].graniteThumb} 
+                          alt={designSpecs[design.id].graniteName}
+                          className="h-16 rounded object-cover"
+                          onError={(e) => {
+                            // Fallback to path without year/month subdirs
+                            const img = e.currentTarget;
+                            const fallbackPath = `/ml/${design.mlDir}/saved-designs/screenshots/${design.id}_small.jpg`;
+                            if (img.src !== fallbackPath) {
+                              img.src = fallbackPath;
+                            }
+                          }}
+                        />
+                      )}
+                      <p className="text-sm text-slate-600 font-light">
+                        {designSpecs[design.id].width}mm × {designSpecs[design.id].height}mm • {designSpecs[design.id].graniteName}
+                      </p>
+                    </div>
+                  )}
                   
                   {/* Design Description */}
                   <p className="text-slate-600 font-light text-sm mb-4 leading-relaxed">

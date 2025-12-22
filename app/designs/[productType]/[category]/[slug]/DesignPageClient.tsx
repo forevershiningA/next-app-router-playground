@@ -2859,7 +2859,7 @@ export default function DesignPageClient({
 
       {/* Design Preview - Enhanced with shape, texture, and motifs */}
       {designData && screenshotDimensions && (
-        <div className="bg-white rounded-none my-0 md:my-8">
+        <div className="bg-white rounded-none my-0 md:my-8 mb-8 md:mb-12">
           {/* Visual Preview Area */}
           <div className="relative flex items-center justify-center">
             {/* SCENE CONTAINER (Represents the full Workspace) */}
@@ -3502,8 +3502,8 @@ export default function DesignPageClient({
 
       {/* Detailed Price Quote from saved HTML */}
       <div className="px-0 md:px-6">
-      {designId && sanitizedDesignData && (
-        <DetailedPriceQuote designId={designId} designData={sanitizedDesignData} />
+      {designId && sanitizedDesignData && designMetadata && (
+        <DetailedPriceQuote designId={designId} designData={sanitizedDesignData} mlDir={designMetadata.mlDir} />
       )}
       </div>
 
@@ -3553,7 +3553,7 @@ export default function DesignPageClient({
 }
 
 // Component to load and display detailed price quote HTML
-function DetailedPriceQuote({ designId, designData }: { designId: string; designData: any[] }) {
+function DetailedPriceQuote({ designId, designData, mlDir = 'headstonesdesigner' }: { designId: string; designData: any[]; mlDir?: string }) {
   const [priceHtml, setPriceHtml] = useState<string | null>(null);
   const [selectedMaterial, setSelectedMaterial] = useState<{ name: string; image: string } | null>(null);
   const [selectedMotif, setSelectedMotif] = useState<{ name: string; file: string } | null>(null);
@@ -3577,8 +3577,8 @@ function DetailedPriceQuote({ designId, designData }: { designId: string; design
       try {
         // Load different HTML based on mobile/desktop
         const htmlFile = isMobile 
-          ? `/ml/headstonesdesigner/saved-designs/html/${designId}.html`
-          : `/ml/headstonesdesigner/saved-designs/html/${designId}-desktop.html`;
+          ? `/ml/${mlDir}/saved-designs/html/${designId}.html`
+          : `/ml/${mlDir}/saved-designs/html/${designId}-desktop.html`;
         
         const response = await fetch(htmlFile);
         if (response.ok) {
@@ -3588,7 +3588,7 @@ function DetailedPriceQuote({ designId, designData }: { designId: string; design
           const inscriptions = designData.filter((item: any) => item.type === 'Inscription' && item.label);
           
           // Create a mapping of original to sanitized text
-          const originalDesignResponse = await fetch(`/ml/headstonesdesigner/saved-designs/json/${designId}.json`);
+          const originalDesignResponse = await fetch(`/ml/${mlDir}/saved-designs/json/${designId}.json`);
           if (originalDesignResponse.ok) {
             const originalData = await originalDesignResponse.json();
             const originalInscriptions = originalData.filter((item: any) => item.type === 'Inscription' && item.label);
