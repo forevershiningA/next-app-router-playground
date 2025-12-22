@@ -3390,9 +3390,19 @@ export default function DesignPageClient({
                   const overlayW = initW * uniformScale;
                   const overlayH = initH * uniformScale;
 
-                  // Always use the fitted canvas bottom as the headstone bottom.
-                  // The headstone SVG is rendered full-bleed (absolute inset-0), so its bottom == overlay bottom.
-                  const stoneBot = Math.round(offsetY + (initH * uniformScale));
+                  // Calculate headstone bottom position
+                  // After viewBox centering fix, use displayHeight as the actual container bottom
+                  const stoneBot = Math.round(displayHeight);
+
+                  logger.log('🔍 Stone bottom calculation:', {
+                    offsetY,
+                    initH,
+                    uniformScale,
+                    overlayH,
+                    displayHeight,
+                    stoneBot,
+                    note: 'Using displayHeight for bottom position after viewBox centering'
+                  });
 
                   // mm → px  
                   // Use the SAME calculation as motifs!
