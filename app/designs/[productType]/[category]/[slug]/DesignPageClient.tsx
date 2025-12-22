@@ -2180,6 +2180,13 @@ export default function DesignPageClient({
           
           // ADD BASE TO SVG (if base data exists)
           const baseItem = designData?.find((item: any) => item.type === 'Base');
+          logger.log('🔍 Base SVG check:', {
+            hasBaseItem: !!baseItem,
+            hasBaseTextureData: !!baseTextureData,
+            designDataLength: designData?.length,
+            baseItem: baseItem ? { width: baseItem.width, height: baseItem.height, length: baseItem.length } : null
+          });
+          
           if (baseItem && baseTextureData) {
             logger.log('📦 Adding base to SVG:', baseItem);
             
