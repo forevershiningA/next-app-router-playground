@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-21  
+**Last Updated:** 2025-12-22  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -934,12 +934,20 @@ const productMap = {
 
 **SEO Features:**
 - **Dynamic Metadata**: Category + product specific titles/descriptions
+- **Design Specs Display**: Dimensions, granite name, and thumbnails for each design
 - **Price Display**: Extracts total price from saved HTML quotes
-- **Design Cards**: Grid layout with thumbnails, descriptions, motif badges
+- **Design Cards**: Grid layout with specs, descriptions, motif badges
+
+**Design Specifications (`lib/extract-design-specs.ts`):**
+- **Dimensions**: Width × Height in mm, rounded up with `Math.ceil()`
+- **Granite Name**: Mapped from texture ID (e.g., "18" → "Glory Gold Spots")
+- **Thumbnail**: 64px height, loads from year/month path with fallback
+  - Primary: `/ml/{mlDir}/saved-designs/screenshots/{year}/{month}/{designId}_small.jpg`
+  - Fallback: `/ml/{mlDir}/saved-designs/screenshots/{designId}_small.jpg`
 
 **Price Extraction:**
-- Reads from: `/ml/forevershining/saved-designs/html/{designId}-desktop.html`
-- Falls back to: `/ml/forevershining/saved-designs/html/{designId}.html`
+- Reads from: `/ml/{mlDir}/saved-designs/html/{designId}-desktop.html`
+- Falls back to: `/ml/{mlDir}/saved-designs/html/{designId}.html`
 - Displays: "From $X,XXX.XX" under each design card
 - Implementation: `lib/extract-price.ts` utility
 
@@ -969,6 +977,15 @@ const productMap = {
 - **Structured Data**: Product schema, BreadcrumbList, FAQ schema
 - **Price Quote Modal**: Full HTML quote with clickable materials/motifs/shapes
 - **Name Sanitization**: Replaces personal names with generic placeholders for privacy
+- **Dynamic ML Directory**: Uses design's `mlDir` to load resources (supports all directories)
+
+**Price Quote Loading:**
+- **Dynamic Path**: Uses `mlDir` from design metadata (forevershining, headstonesdesigner, bronze-plaque)
+- **Mobile/Desktop**: Loads different HTML based on viewport
+  - Desktop: `/ml/{mlDir}/saved-designs/html/{designId}-desktop.html`
+  - Mobile: `/ml/{mlDir}/saved-designs/html/{designId}.html`
+- **Fallback**: Shows nothing if HTML doesn't exist (returns null)
+- **Implementation**: `DetailedPriceQuote` component in `DesignPageClient.tsx`
 
 **Files:**
 - `app/designs/[productType]/[category]/[slug]/page.tsx` - Server component
@@ -985,7 +1002,7 @@ const productMap = {
 
 **Directory Structure:**
 ```
-public/ml/forevershining/saved-designs/
+public/ml/{mlDir}/saved-designs/
 ├── html/
 │   ├── {designId}.html              # Mobile price quote
 │   └── {designId}-desktop.html      # Desktop price quote
@@ -994,9 +1011,16 @@ public/ml/forevershining/saved-designs/
 ├── xml/
 │   └── {designId}.xml               # Legacy design format
 └── screenshots/
-    ├── {designId}.jpg               # Original screenshot
-    └── {designId}_cropped.jpg       # Cropped version
+    ├── {year}/{month}/              # Year/month subdirectories
+    │   ├── {designId}.jpg           # Full screenshot
+    │   └── {designId}_small.jpg     # Thumbnail (64px height)
+    └── {designId}_small.jpg         # Fallback (no year/month)
 ```
+
+**Supported ML Directories:**
+- `forevershining` - Main design collection
+- `headstonesdesigner` - Secondary collection
+- `bronze-plaque` - Bronze plaque designs
 
 **Design Metadata** (`lib/saved-designs-data.ts`):
 ```typescript
@@ -1010,7 +1034,7 @@ interface SavedDesignMetadata {
   productType: 'headstone' | 'plaque';
   productName: string;           // Full product name
   shapeName?: string;            // Shape display name
-  preview: string;               // Screenshot URL
+  preview: string;               // Screenshot URL (with year/month path)
   mlDir: string;                 // ML directory (e.g., 'forevershining')
   inscriptionCount: number;      // Number of inscriptions
   hasMotifs: boolean;            // Has motif decorations
@@ -1759,7 +1783,7 @@ git log --oneline -10   # Recent commits
     - Shows "From $X,XXX.XX" under each design card on category browse pages
     - Falls back gracefully: tries `-desktop.html` first, then `.html`, then shows generic message
     - Regex pattern handles both "Total:" and "Total" labels: `/<td class="total-title">Total:?\s*<\/td><td>\$?([\d,]+\.?\d*)<\/td>/i`
-    - Price HTML location: `/ml/forevershining/saved-designs/html/{designId}-desktop.html`
+    - Price HTML location: `/ml/{mlDir}/saved-designs/html/{designId}-desktop.html`
   - **Product Page Metadata Enhancement**: Comprehensive SEO optimization for `/designs/[productType]`
     - Refactored from client component to server component pattern for metadata generation
     - Created `ProductPageClient.tsx` for client-side UI logic (loading, filtering, category display)
@@ -1796,6 +1820,37 @@ git log --oneline -10   # Recent commits
     - `STARTER.md`: Added Design Gallery & SEO section documenting the entire system
   - **Build Performance**: Clean compilation in ~35 seconds, no TypeScript errors
   - **Commit**: `b390325e78` - "feat: Add price display and SEO metadata to design gallery pages"
+- **2025-12-22**: Design Specs Display & Price Quote Fix (Production-Ready)
+  - **Design Specifications Display**: Added dimensions, granite name, and thumbnails to category cards
+    - Created `lib/extract-design-specs.ts` utility to extract design specifications from JSON
+    - **Dimensions**: Width × Height in mm, rounded up with `Math.ceil()` (e.g., 609.6mm → 610mm)
+    - **Granite Name**: Mapped from texture ID using GRANITE_MAP (e.g., "18" → "Glory Gold Spots")
+    - **Thumbnail**: 64px height image with year/month directory structure
+      - Primary path: `/ml/{mlDir}/saved-designs/screenshots/{year}/{month}/{designId}_small.jpg`
+      - Fallback path: `/ml/{mlDir}/saved-designs/screenshots/{designId}_small.jpg`
+      - Auto-fallback via `onError` handler if year/month path doesn't exist
+    - Display format: `{width}mm × {height}mm • {graniteName}` with thumbnail
+    - Updated `CategoryPageClient.tsx` to fetch and display specs for all designs
+  - **Price Quote ML Directory Fix**: Fixed missing Price Quote sections on design pages
+    - **Root Cause**: Component hardcoded to `/ml/headstonesdesigner/` but designs use multiple directories
+    - **Solution**: Pass `mlDir` from design metadata to `DetailedPriceQuote` component
+    - Now supports all ML directories: `forevershining`, `headstonesdesigner`, `bronze-plaque`
+    - Updated fetch paths to use dynamic `mlDir` instead of hardcoded directory
+    - Price quotes now display for designs in any ML directory
+  - **Design Description Simplification**: Changed multi-sentence descriptions to single sentences
+    - 5 variations for variety while being concise and readable
+    - Example: "A classic Curved Gable traditional engraved headstone ideal for biblical memorial inscriptions..."
+  - **Headstone Render Spacing**: Added bottom margin to prevent touching next section
+    - Mobile: `mb-8` (32px)
+    - Desktop: `mb-12` (48px)
+    - Prevents headstone render from touching "About This Design" section below
+  - **Files Created**:
+    - `lib/extract-design-specs.ts`: Design specifications extraction utility
+  - **Files Modified**:
+    - `app/designs/[productType]/[category]/CategoryPageClient.tsx`: Added specs display with thumbnail
+    - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`: Fixed mlDir usage for price quotes
+    - `STARTER.md`: Updated with latest documentation
+  - **Commit**: `934c876fe2` - "Add design specs display and fix price quote loading"
 - **2025-12-19 (Afternoon)**: Plaque Product Type Support - Complete UI & Rendering (Production-Ready)
   - **Plaque Shape Filtering**: Added dynamic shape filtering based on product type
     - Plaques show ONLY plaque shapes (landscape, portrait, oval horizontal, oval portrait, circle)
