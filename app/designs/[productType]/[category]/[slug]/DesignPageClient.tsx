@@ -2191,7 +2191,8 @@ export default function DesignPageClient({
             
             // Get base granite color
             const baseColor = baseItem.color || baseItem.granitecolor || 18;
-            const baseTexturePath = `/textures/forever/l/Black-Fine-${baseColor}.webp`;
+            // Match the headstone texture naming pattern
+            const baseTexturePath = `/textures/forever/l/Glory-Black-${baseColor}.webp`;
             
             logger.log('📦 Base texture path:', baseTexturePath);
             
@@ -2221,23 +2222,27 @@ export default function DesignPageClient({
             const baseWidthMm = baseItem.width || baseItem.length || 435;
             const baseHeightMm = baseItem.height || 100;
             
-            // SVG is in canvas units (1680 x 873)
-            // Convert mm to canvas units based on headstone height
-            const mmToCanvas = canvasHeight / headstoneHeightMm; // 873 / 500 = 1.746
+            // SVG viewBox is 400x400, but represents the headstone physical dimensions
+            // We need to convert mm to viewBox units
+            const viewBoxWidth = 400;
+            const viewBoxHeight = 400;
             
-            const baseWidthCanvas = baseWidthMm * mmToCanvas;
-            const baseHeightCanvas = baseHeightMm * mmToCanvas;
+            // Calculate mm to viewBox scale (viewBox units per mm)
+            const mmToViewBox = viewBoxHeight / headstoneHeightMm; // 400 / 500 = 0.8
             
-            // Position: center horizontally, at bottom of headstone
-            const baseX = (canvasWidth - baseWidthCanvas) / 2;
-            const baseY = canvasHeight / 2; // Bottom half of canvas
+            const baseWidthViewBox = baseWidthMm * mmToViewBox;
+            const baseHeightViewBox = baseHeightMm * mmToViewBox;
+            
+            // Position: center horizontally at bottom of viewBox
+            const baseX = (viewBoxWidth - baseWidthViewBox) / 2;
+            const baseY = viewBoxHeight; // At the bottom edge
             
             // Create base rectangle
             const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
             baseRect.setAttribute('x', baseX.toString());
             baseRect.setAttribute('y', baseY.toString());
-            baseRect.setAttribute('width', baseWidthCanvas.toString());
-            baseRect.setAttribute('height', baseHeightCanvas.toString());
+            baseRect.setAttribute('width', baseWidthViewBox.toString());
+            baseRect.setAttribute('height', baseHeightViewBox.toString());
             baseRect.setAttribute('fill', 'url(#baseTexture)');
             
             // Append base to SVG (after headstone paths)
@@ -2246,11 +2251,13 @@ export default function DesignPageClient({
             logger.log('✅ Base added to SVG:', {
               baseWidthMm,
               baseHeightMm,
-              baseWidthCanvas,
-              baseHeightCanvas,
+              viewBoxWidth,
+              viewBoxHeight,
+              mmToViewBox,
+              baseWidthViewBox,
+              baseHeightViewBox,
               baseX,
-              baseY,
-              mmToCanvas
+              baseY
             });
           }
           
