@@ -2189,17 +2189,45 @@ export default function DesignPageClient({
           if (baseItem) {
             logger.log('📦 Adding base to SVG:', baseItem);
             
-            // Get base texture path from JSON
+            // Get base texture path from JSON using same logic as headstone
             // Base has texture field like "src/granites/forever2/l/17.jpg"
-            // Extract the number and build webp path
             let baseTexturePath = '/textures/forever/l/Glory-Black-1.webp'; // default
             
             if (baseItem.texture) {
-              // Extract granite number from path like "src/granites/forever2/l/17.jpg"
-              const match = baseItem.texture.match(/(\d+)\.jpg$/);
-              if (match) {
-                const graniteNum = match[1];
-                baseTexturePath = `/textures/forever/l/Glory-Black-${graniteNum}.webp`;
+              const savedTexturePath = baseItem.texture;
+              
+              // Mapping from old texture paths to new material image filenames (same as headstone)
+              const textureMapping: Record<string, string> = {
+                'forever2/l/17.jpg': 'Glory-Black-1.webp', // Glory Gold Spots
+                'forever2/l/18.jpg': 'Glory-Black-2.webp', // Glory Black
+              };
+              
+              // Try to match the texture path with our mapping
+              let matched = false;
+              for (const [oldPath, newImage] of Object.entries(textureMapping)) {
+                if (savedTexturePath.includes(oldPath)) {
+                  baseTexturePath = `/textures/forever/l/${newImage}`;
+                  matched = true;
+                  break;
+                }
+              }
+              
+              if (!matched) {
+                // Extract the granite name from the filename
+                // Handles formats like: "White-Carrara-600-x-600.jpg", "G633-TILE-900-X-900.jpg", "G633.jpg"
+                const match = savedTexturePath.match(/\/([A-Z][A-Za-z0-9-]+?)(?:-TILE)?-\d+-[xX]-\d+\.jpg$/i);
+                if (match && match[1]) {
+                  const graniteName = match[1];
+                  baseTexturePath = `/textures/forever/l/${graniteName}.webp`;
+                } else {
+                  // Fallback: try to extract any filename and use it
+                  const filename = savedTexturePath.split('/').pop();
+                  if (filename) {
+                    // Remove -TILE-900-X-900 or -600-x-600 suffix if present
+                    const cleanFilename = filename.replace(/(-TILE)?-\d+-[xX]-\d+/i, '').replace(/\.jpg$/i, '.webp');
+                    baseTexturePath = `/textures/forever/l/${cleanFilename}`;
+                  }
+                }
               }
             }
             
