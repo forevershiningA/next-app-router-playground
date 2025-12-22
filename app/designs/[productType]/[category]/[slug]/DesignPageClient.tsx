@@ -3391,18 +3391,17 @@ export default function DesignPageClient({
                   const overlayW = initW * uniformScale;
                   const overlayH = initH * uniformScale;
 
-                  // Calculate headstone bottom position
-                  // After viewBox centering fix, use displayHeight as the actual container bottom
-                  const stoneBot = Math.round(displayHeight);
+                  // Calculate where the base should start
+                  // The base needs to sit at the visual bottom of the headstone shape
+                  // After viewBox adjustments, the headstone ends before displayHeight
+                  // Move base up to eliminate the white gap visible in SVG
+                  const stoneBot = Math.round(displayHeight - 10); // Subtract gap to overlap slightly
 
                   logger.log('🔍 Stone bottom calculation:', {
-                    offsetY,
-                    initH,
-                    uniformScale,
                     overlayH,
                     displayHeight,
                     stoneBot,
-                    note: 'Using displayHeight for bottom position after viewBox centering'
+                    gap: 'Moved up 10px to eliminate SVG whitespace'
                   });
 
                   // mm → px  
