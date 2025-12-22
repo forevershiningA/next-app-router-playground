@@ -2189,25 +2189,23 @@ export default function DesignPageClient({
           if (baseItem) {
             logger.log('📦 Adding base to SVG:', baseItem);
             
-            // Get base granite color ID
-            // Base might have: color, granitecolor, granitecolorid, productid
-            // First try numeric IDs, fallback to parsing from other fields
-            let baseColorId = baseItem.granitecolorid || baseItem.productid;
+            // Get base texture path from JSON
+            // Base has texture field like "src/granites/forever2/l/17.jpg"
+            // Extract the number and build webp path
+            let baseTexturePath = '/textures/forever/l/Glory-Black-1.webp'; // default
             
-            // If we got a hex color instead, use the headstone's granite as fallback
-            if (!baseColorId || typeof baseColorId === 'string' && baseColorId.startsWith('#')) {
-              // Use same granite as headstone
-              const headstoneItem = designData?.find((item: any) => item.type === 'Headstone');
-              baseColorId = headstoneItem?.granitecolorid || headstoneItem?.productid || 1;
+            if (baseItem.texture) {
+              // Extract granite number from path like "src/granites/forever2/l/17.jpg"
+              const match = baseItem.texture.match(/(\d+)\.jpg$/);
+              if (match) {
+                const graniteNum = match[1];
+                baseTexturePath = `/textures/forever/l/Glory-Black-${graniteNum}.webp`;
+              }
             }
             
-            // Match the headstone texture naming pattern
-            const baseTexturePath = `/textures/forever/l/Glory-Black-${baseColorId}.webp`;
-            
             logger.log('📦 Base texture info:', {
-              baseItem,
-              baseColorId,
-              baseTexturePath
+              originalTexture: baseItem.texture,
+              extractedPath: baseTexturePath
             });
             
             // Create base pattern for texture
