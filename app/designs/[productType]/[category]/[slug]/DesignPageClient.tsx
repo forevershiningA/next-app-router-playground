@@ -3368,21 +3368,26 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px
-                  // For now, base spans container width (matching original screenshot behavior)
-                  // TODO: Calculate exact proportional width based on headstone vs canvas ratio
-                  const baseWidthPx = displayWidth;
+                  // Calculate px per mm based on actual display scaling
+                  // The headstone displays within displayWidth, so calculate ratio
+                  const pxPerMm = displayWidth / initW * (initW / tabletWidthMm);
                   
-                  // Height from mm
-                  const pxPerMm = uniformScale * (initW / tabletWidthMm);
-                  const baseHeightPx = Math.round(heightMm * pxPerMm);
+                  // This simplifies to: displayWidth / tabletWidthMm
+                  const actualPxPerMm = displayWidth / tabletWidthMm;
+                  
+                  // Base width from JSON dimensions
+                  const baseWidthPx = Math.round(lengthMm * actualPxPerMm);
+                  const baseHeightPx = Math.round(heightMm * actualPxPerMm);
 
-                  logger.log('🔍 Base sizing:', {
+                  logger.log('🔍 Base sizing with correct px/mm:', {
+                    displayWidth,
+                    tabletWidthMm,
                     lengthMm,
                     heightMm,
-                    displayWidth,
+                    actualPxPerMm,
                     baseWidthPx,
                     baseHeightPx,
-                    pxPerMm
+                    calculation: `${lengthMm}mm * ${actualPxPerMm.toFixed(3)} = ${baseWidthPx}px`
                   });
 
                   logger.log('📦 Base dimensions:', {
@@ -3393,19 +3398,22 @@ export default function DesignPageClient({
                     displayWidth
                   });
 
-                  // Base spans full container width
+                  // Center the base under the headstone
                   const baseRowStyle: React.CSSProperties = {
                     position: 'absolute',
                     left: 0,
                     top: stoneBot,
                     width: displayWidth,
                     height: baseHeightPx,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
                     pointerEvents: 'none',
                     zIndex: 2,
                   };
 
                   const baseStyle: React.CSSProperties = {
-                    width: '100%',
+                    width: baseWidthPx,
                     height: baseHeightPx,
                     backgroundImage: baseTextureData
                       ? `url(${baseTextureData})`
