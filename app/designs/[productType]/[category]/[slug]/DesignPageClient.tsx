@@ -1799,11 +1799,11 @@ export default function DesignPageClient({
       displayHeight = initH * scale;
     }
     
-    // Increase height by 10% to accommodate top motifs better
-    displayHeight = displayHeight * 1.1;
+    // Increase height by 20% total to accommodate top motifs better
+    displayHeight = displayHeight * 1.2;
     
-    logger.log('📐 Increased displayHeight by 10%:', {
-      originalHeight: Math.round(displayHeight / 1.1),
+    logger.log('📐 Increased displayHeight by 20%:', {
+      originalHeight: Math.round(displayHeight / 1.2),
       newHeight: Math.round(displayHeight),
       displayWidth
     });
