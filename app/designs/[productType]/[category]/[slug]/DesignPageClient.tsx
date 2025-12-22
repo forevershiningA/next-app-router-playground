@@ -3372,6 +3372,12 @@ export default function DesignPageClient({
                   // uniformScale is screen_pixels / logical_canvas_units.
                   // (initW / tabletWidthMm) converts logical units back to millimeters.
                   // This ensures the base scales exactly like the motifs and inscriptions.
+                  logger.log('🔍 Base pxPerMm calculation:', {
+                    uniformScale,
+                    initW,
+                    tabletWidthMm,
+                    ratio: initW / tabletWidthMm
+                  });
                   const pxPerMm = uniformScale * (initW / tabletWidthMm);
 
                   // Convert mm → px using the same scale as the headstone
