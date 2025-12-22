@@ -3247,17 +3247,8 @@ export default function DesignPageClient({
                           const deltaCy = deltaOverlay / sy;
                           cyUsed = cy + deltaCy;
                         }
-                      } else if (isTopBand && !topProfile) {
-                        // SAFETY CLAMP: If topProfile missing, prevent motifs from going TOO high
-                        // But allow them to go quite high for designs with curved tops
-                        // Clamp only at extreme positions (like 50% above center)
-                        const safeTopY = -(initH * 0.50); // Allow up to 50% above center (was 35%)
-                        const motifTopY = cy - (motifHAuthor / 2);
-                        if (motifTopY < safeTopY) {
-                          cyUsed = safeTopY + (motifHAuthor / 2);
-                          logger.log(`⚠️ Motif ${index} clamped from cy=${cy.toFixed(1)} to cy=${cyUsed.toFixed(1)} (no topProfile)`);
-                        }
                       }
+                      // No clamp when topProfile missing - use original coordinates from saved design
                       
                       // Map from center-origin canvas to overlay pixels
                       // Only apply headstone ratio for Serpentine (which has dynamic viewBox)
