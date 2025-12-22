@@ -3379,10 +3379,6 @@ export default function DesignPageClient({
                   let baseWidthPx  = Math.round(lengthMm * pxPerMmX);
                   const baseHeightPx = Math.round(heightMm * pxPerMmY);
 
-                  // Never let the base exceed the visible tablet width; add a slight inset
-                  const maxBasePx = Math.round(stoneW * 0.96);
-                  baseWidthPx = Math.min(baseWidthPx, maxBasePx);
-
                   // Tuck under tablet a bit
                   const overlapPx = Math.round(baseHeightPx * 0.25);
 
@@ -3391,7 +3387,6 @@ export default function DesignPageClient({
                     heightMm,
                     baseWidthPx,
                     baseHeightPx,
-                    maxBasePx,
                     overlapPx,
                     stoneBot,
                     stoneW,
