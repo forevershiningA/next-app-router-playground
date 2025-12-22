@@ -2264,12 +2264,16 @@ export default function DesignPageClient({
             
             // Get actual SVG viewBox dimensions (not hardcoded)
             const viewBoxAttr = svg.getAttribute('viewBox');
+            let viewBoxX = 0;
+            let viewBoxY = 0;
             let viewBoxWidth = 400;
             let viewBoxHeight = 400;
             
             if (viewBoxAttr) {
               const parts = viewBoxAttr.split(/\s+/);
               if (parts.length >= 4) {
+                viewBoxX = parseFloat(parts[0]);
+                viewBoxY = parseFloat(parts[1]);
                 viewBoxWidth = parseFloat(parts[2]);
                 viewBoxHeight = parseFloat(parts[3]);
               }
@@ -2281,10 +2285,13 @@ export default function DesignPageClient({
             const baseWidthViewBox = baseWidthMm * mmToViewBox;
             const baseHeightViewBox = baseHeightMm * mmToViewBox;
             
-            // Position: center horizontally, at bottom of viewBox
-            // Base should sit ABOVE the bottom edge, not start AT the bottom
+            // EXTEND viewBox to make room for base below headstone
+            const newViewBoxHeight = viewBoxHeight + baseHeightViewBox;
+            svg.setAttribute('viewBox', `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${newViewBoxHeight}`);
+            
+            // Position: center horizontally, at original bottom (now base starts where headstone ends)
             const baseX = (viewBoxWidth - baseWidthViewBox) / 2;
-            const baseY = viewBoxHeight - baseHeightViewBox; // Top of base, so base extends to viewBoxHeight
+            const baseY = viewBoxHeight; // At the original bottom edge (base extends into new area)
             
             // Create base rectangle
             const baseRect = doc.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -2300,9 +2307,10 @@ export default function DesignPageClient({
             logger.log('✅ Base added to SVG:', {
               baseWidthMm,
               baseHeightMm,
-              viewBoxAttr,
+              originalViewBox: viewBoxAttr,
+              originalViewBoxHeight: viewBoxHeight,
+              newViewBoxHeight,
               viewBoxWidth,
-              viewBoxHeight,
               mmToViewBox,
               baseWidthViewBox,
               baseHeightViewBox,
