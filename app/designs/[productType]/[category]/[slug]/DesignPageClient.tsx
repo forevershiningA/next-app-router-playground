@@ -2189,12 +2189,26 @@ export default function DesignPageClient({
           if (baseItem) {
             logger.log('📦 Adding base to SVG:', baseItem);
             
-            // Get base granite color
-            const baseColor = baseItem.color || baseItem.granitecolor || 18;
-            // Match the headstone texture naming pattern
-            const baseTexturePath = `/textures/forever/l/Glory-Black-${baseColor}.webp`;
+            // Get base granite color ID
+            // Base might have: color, granitecolor, granitecolorid, productid
+            // First try numeric IDs, fallback to parsing from other fields
+            let baseColorId = baseItem.granitecolorid || baseItem.productid;
             
-            logger.log('📦 Base texture path:', baseTexturePath);
+            // If we got a hex color instead, use the headstone's granite as fallback
+            if (!baseColorId || typeof baseColorId === 'string' && baseColorId.startsWith('#')) {
+              // Use same granite as headstone
+              const headstoneItem = designData?.find((item: any) => item.type === 'Headstone');
+              baseColorId = headstoneItem?.granitecolorid || headstoneItem?.productid || 1;
+            }
+            
+            // Match the headstone texture naming pattern
+            const baseTexturePath = `/textures/forever/l/Glory-Black-${baseColorId}.webp`;
+            
+            logger.log('📦 Base texture info:', {
+              baseItem,
+              baseColorId,
+              baseTexturePath
+            });
             
             // Create base pattern for texture
             const basePattern = doc.createElementNS('http://www.w3.org/2000/svg', 'pattern');
