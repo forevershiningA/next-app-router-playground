@@ -3368,38 +3368,34 @@ export default function DesignPageClient({
                   const stoneBot = Math.round(offsetY + (initH * uniformScale));
 
                   // mm → px  
-                  // The headstone SVG renders within overlayW (not displayWidth)
-                  // overlayW = initW * uniformScale = actual canvas display width
-                  // But headstone is only 335mm within the 1680-unit canvas
-                  // So headstone display width = overlayW * (tabletWidthMm / initW in mm)
+                  // CRITICAL: The headstone SVG displays smaller than overlayW!
+                  // From browser inspector: headstone renders at ~235px for 335mm headstone
+                  // This means: pxPerMm = 235 / 335 = 0.701
                   
-                  // First, what's the mm width of the canvas?
-                  // We don't know, but we know the ratio: initW units represents some mm width
-                  // The headstone is 335mm in a 1680-unit canvas
-                  // If we assume the canvas scales proportionally, then:
-                  // headstoneDisplayWidth = overlayW * (335mm / 1680 units) * (1680 units / 335mm)
-                  // This simplifies to just overlayW... that's wrong
+                  // The issue is overlayW (800px) is the CANVAS width, not the headstone width
+                  // We need to find the actual rendered SVG width
                   
-                  // Let me try differently:
-                  // pxPerMm should make 335mm → actual headstone pixel width
-                  // You said headstone is 235px, so: pxPerMm = 235 / 335 = 0.701
-                  // Let's calculate from overlayW
-                  const headstoneDisplayWidth = overlayW; // This is the canvas width, not headstone width!
+                  // Let's use a different approach: calculate from displayHeight
+                  // If displayHeight properly scales the headstone height, use same ratio
+                  const heightRatio = displayHeight / initH;
+                  const actualHeadstoneWidth = tabletWidthMm * heightRatio * (initW / tabletWidthMm);
                   
-                  // Actually use the simple formula: if headstone occupies full overlayW
-                  const pxPerMm = overlayW / tabletWidthMm;
+                  // Or simpler: just use uniformScale directly without the initW multiplication
+                  // Because uniformScale already accounts for the canvas→display scaling
+                  const pxPerMm = uniformScale;
                   
                   const baseWidthPx = Math.round(lengthMm * pxPerMm);
                   const baseHeightPx = Math.round(heightMm * pxPerMm);
 
-                  logger.log('🔍 Base sizing with overlayW:', {
-                    overlayW,
+                  logger.log('🔍 Base sizing with uniformScale directly:', {
+                    uniformScale,
                     tabletWidthMm,
                     lengthMm,
                     heightMm,
                     pxPerMm,
                     baseWidthPx,
                     baseHeightPx,
+                    expectedHeadstoneWidth: Math.round(tabletWidthMm * pxPerMm),
                     calculation: `${lengthMm}mm * ${pxPerMm.toFixed(3)} px/mm = ${baseWidthPx}px`
                   });
 
