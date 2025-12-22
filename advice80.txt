@@ -1,0 +1,180 @@
+Based on the analysis of the provided code and the problem statement, there are two distinct issues contributing to the motif positioning bug:
+
+The SVG ViewBox Misalignment: The code applies an arbitrary vertical offset (topMarginOffset = vbH * 0.275) when calculating the SVG viewBox. This shifts the headstone graphic down visually relative to the canvas center (0,0), while the motifs (calculated from JSON coordinates) remain at their original logical positions. This causes top motifs to appear "floating" or clipped at the top edge because the stone has moved down underneath them.
+
+The topProfile Generation Failure: The buildTopProfile function fails because it attempts to render the SVG containing external texture images (inside <pattern>) into a Blob URL. Browsers block this for security (tainted canvas), causing the error event. Without topProfile, the "snap to curve" logic fails to correct any remaining minor deviations.
+
+Here is the surgical fix for DesignPageClient.tsx.
+
+Fix 1: Sanitize SVG for topProfile Generation
+
+We need to strip the texture image references from the SVG string before creating the Blob. This allows the browser to render the silhouette (black fill) for profile detection without security errors.
+
+Fix 2: Center-Align the SVG ViewBox
+
+We must remove the "magic number" offset (0.275) and instead mathematically center the SVG viewBox within the container. This ensures the visual center matches the logical coordinate center (0,0) used by the motifs.
+
+Code Changes
+
+In app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx:
+
+1. Update buildTopProfile (approx line 125):
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// Build a per-column "top Y" look-up of the rendered headstone
+async function buildTopProfile(svgText: string, initW: number, initH: number) {
+  // ... existing viewBox parsing code ...
+  const vbW = parseFloat(vbWStr) || initW;
+  const vbH = parseFloat(vbHStr) || initH;
+
+  // FIX START: Sanitize SVG to remove external resources/textures that break Blob loading
+  // Replace complex fills with solid black and remove image tags
+  const cleanSvgText = svgText
+    .replace(/<pattern[\s\S]*?<\/pattern>/g, '') // Remove pattern definitions
+    .replace(/fill\s*=\s*["']url\(#.*?\)\s*["']/g, 'fill="black"') // Replace url fills
+    .replace(/style\s*=\s*["'][^"']*?fill:\s*url\(#.*?\)[^"']*?["']/g, 'style="fill:black"') // Replace inline style fills
+    .replace(/<image[^>]*>/g, ''); // Remove image tags to prevent loading errors
+
+  // Fit like your shape renderer (contain)
+  const scale = Math.min(initW / vbW, initH / vbH);
+  // ... continue with existing logic using cleanSvgText ...
+
+  // Paint the SVG into a canvas
+  const blob = new Blob([cleanSvgText], { type: 'image/svg+xml' }); // Use cleanSvgText here
+  // ... rest of function ...
+
+2. Update SVG useEffect ViewBox Logic (approx line 2095):
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// ... inside the svg loading useEffect ...
+          
+          if (containerAspect > svgAspect) {
+            // Container is wider than SVG
+            // SVG will scale to fit HEIGHT, with horizontal letterboxing
+            // Expand viewBox WIDTH to match container aspect
+            effectiveVbW = vbH * containerAspect;
+            
+            // FIX START: Remove arbitrary offset and Center the viewbox
+            // Old Code (Causing desync):
+            // const topMarginOffset = vbH * 0.275;
+            // adjustedVbY = vbY - topMarginOffset;
+            
+            // New Code (Center Alignment):
+            // No vertical adjustment needed when fitting to height (it fills vertically)
+            // But if we want perfect centering if aspects differ slightly due to rounding:
+            adjustedVbY = vbY; 
+            
+            // Actually, we need to center width (X) here if we expanded width
+            const widthDiff = effectiveVbW - vbW;
+            vbX = vbX - (widthDiff / 2);
+            // FIX END
+          } else {
+            // Container is taller than SVG
+            // SVG will scale to fit WIDTH, with vertical letterboxing
+            // Expand viewBox HEIGHT to match container aspect
+            effectiveVbH = vbW / containerAspect;
+            
+            // FIX START: Center vertically
+            // The extra height needs to be split evenly top and bottom to maintain (0,0) center
+            const vbHeightDiff = effectiveVbH - vbH;
+            adjustedVbY = vbY - (vbHeightDiff / 2);
+            // FIX END
+          }
+          
+          // ... logging ...
+          
+          // Set adjusted viewBox
+          svg.setAttribute('viewBox', `${vbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
+          
+          // FIX: Change alignment to Center-Center to match Canvas coordinate system
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); 
+          
+          // ... rest of function ...
+Applied Patch
+
+Here is the full patch content to apply:
+
+code
+TypeScript
+download
+content_copy
+expand_less
+// In DesignPageClient.tsx
+
+// 1. MODIFY buildTopProfile function (around line 125)
+async function buildTopProfile(svgText: string, initW: number, initH: number) {
+  const vbMatch = svgText.match(/viewBox\s*=\s*"([\d.\s-]+)"/i);
+  const [, vbStr] = vbMatch || [, `0 0 ${initW} ${initH}`];
+  const [ , , vbWStr, vbHStr ] = vbStr.split(/\s+/);
+  const vbW = parseFloat(vbWStr) || initW;
+  const vbH = parseFloat(vbHStr) || initH;
+
+  // --- FIX START ---
+  // Strip texture/images to prevent "Tainted Canvas" or loading errors in Blob
+  const cleanSvg = svgText
+    .replace(/<pattern[\s\S]*?<\/pattern>/g, '')
+    .replace(/<image[^>]*>/g, '')
+    .replace(/fill\s*=\s*["']url\(#graniteTexture\)["']/g, 'fill="black"')
+    .replace(/style="[^"]*fill:\s*url\(#graniteTexture\)[^"]*"/g, 'style="fill:black"');
+  // --- FIX END ---
+
+  // Fit like your shape renderer (contain)
+  const scale = Math.min(initW / vbW, initH / vbH);
+  const drawW = vbW * scale;
+  const drawH = vbH * scale;
+  const offX = (initW - drawW) / 2;
+  const offY = (initH - drawH) / 2;
+
+  // Paint the SVG into a canvas
+  const blob = new Blob([cleanSvg], { type: 'image/svg+xml' }); // Use cleanSvg
+  // ... rest of function remains the same
+}
+
+
+// 2. MODIFY the useEffect that loads the SVG (around line 2095)
+// ...
+          let effectiveVbW = vbW;
+          let effectiveVbH = vbH;
+          let adjustedVbY = vbY;
+          let adjustedVbX = vbX; // Add X tracking
+          
+          if (containerAspect > svgAspect) {
+            // Container is wider than SVG: Fit to Height
+            effectiveVbW = vbH * containerAspect;
+            
+            // --- FIX START ---
+            // Center the content horizontally within the new wider viewbox
+            const widthDiff = effectiveVbW - vbW;
+            adjustedVbX = vbX - (widthDiff / 2);
+            
+            // Remove the arbitrary 27.5% top offset which was pushing content down
+            // adjustedVbY = vbY - (vbH * 0.275); // DELETED
+            adjustedVbY = vbY; 
+            // --- FIX END ---
+          } else {
+            // Container is taller than SVG: Fit to Width
+            effectiveVbH = vbW / containerAspect;
+            
+            // --- FIX START ---
+            // Center the content vertically within the new taller viewbox
+            const heightDiff = effectiveVbH - vbH;
+            adjustedVbY = vbY - (heightDiff / 2);
+            // --- FIX END ---
+          }
+          
+          // ... logs ...
+          
+          // Set adjusted viewBox
+          // Use adjustedVbX here
+          svg.setAttribute('viewBox', `${adjustedVbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
+          // Change alignment to Center (Mid) to align with (0,0) canvas center
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+// ...
