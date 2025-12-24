@@ -53,29 +53,31 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header Section */}
-      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
               Select Additions
             </h1>
-            <p className="mt-4 text-lg text-gray-300">
-              Add decorative elements to your memorial
+            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+              Add decorative elements like statues, vases, and applications to enhance your memorial
             </p>
           </div>
         </div>
       </div>
 
       {/* Category Filter */}
-      <div className="border-b border-white/5 bg-gray-900/30">
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-3">
+      <div className="border-b border-white/5 bg-gray-900/30 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
+        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8 relative">
+          <div className="flex flex-wrap gap-3 justify-center">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
                 selectedCategory === 'all'
-                  ? 'bg-white text-slate-900 shadow-lg'
-                  : 'border border-white/20 text-white hover:bg-white/10'
+                  ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
+                  : 'border border-white/20 text-white hover:bg-white/10 hover:border-[#cfac6c]/30'
               }`}
             >
               All Additions
@@ -86,8 +88,8 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
                 onClick={() => setSelectedCategory(category.id)}
                 className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
                   selectedCategory === category.id
-                    ? 'bg-white text-slate-900 shadow-lg'
-                    : 'border border-white/20 text-white hover:bg-white/10'
+                    ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
+                    : 'border border-white/20 text-white hover:bg-white/10 hover:border-[#cfac6c]/30'
                 }`}
               >
                 <span>{category.name}</span>
@@ -112,7 +114,7 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
                 Showing {filteredAdditions.length} addition{filteredAdditions.length !== 1 ? 's' : ''}
               </div>
               {selectedAdditions.length > 0 && (
-                <div className="text-sm text-yellow-500 font-medium">
+                <div className="text-sm text-[#cfac6c] font-medium">
                   {selectedAdditions.length} selected
                 </div>
               )}
@@ -128,56 +130,44 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
                   <button
                     key={addition.id}
                     onClick={() => handleAdditionToggle(addition)}
-                    className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-white/10 ${
+                    className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
                       isSelected
-                        ? 'border-yellow-500/70 bg-gradient-to-br from-yellow-900/30 to-sky-900/30 shadow-lg shadow-yellow-500/20'
-                        : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/60 hover:to-gray-800/60 hover:border-white/30'
+                        ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                        : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                     }`}
                   >
                     {/* Selected Badge */}
                     {isSelected && (
-                      <div className="absolute top-2 right-2 z-10 rounded-full bg-yellow-500 px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
+                      <div className="absolute top-2 right-2 z-10 rounded-full bg-[#cfac6c] px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
                         ✓ Added
                       </div>
                     )}
                     
-                    {/* Addition Image */}
-                    <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 flex items-center justify-center p-4">
-                      <Image
-                        src={imagePath}
-                        alt={addition.name}
-                        width={200}
-                        height={200}
-                        className="object-contain"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                    </div>
-
-                    {/* Addition Info */}
-                    <div>
-                      <h3 className="text-base font-medium text-white text-center line-clamp-2 mb-2">
-                        {addition.name}
-                      </h3>
-                      <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-                        <span>{isSelected ? 'Remove' : 'Add'}</span>
-                        <svg
-                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d={isSelected ? "M6 18L18 6M6 6l12 12" : "M12 4v16m8-8H4"}
-                          />
-                        </svg>
+                    {/* Addition Image - Square aspect ratio */}
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
+                      <div className="absolute inset-0 flex items-center justify-center p-8">
+                        <Image
+                          src={imagePath}
+                          alt={addition.name}
+                          width={200}
+                          height={200}
+                          className="object-contain transition-transform group-hover:scale-105"
+                        />
                       </div>
                     </div>
 
-                    {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
+                    {/* Addition Info - with padding and flexbox */}
+                    <div className="p-4 flex flex-col">
+                      <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-2">
+                        {addition.name}
+                      </h3>
+                      {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
+                      <div className="h-5 mt-auto">
+                        <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          {isSelected ? 'Remove →' : 'Add →'}
+                        </span>
+                      </div>
+                    </div>
                   </button>
                 );
               })}

@@ -402,12 +402,30 @@ const TARGET_HEIGHTS = {
 ```
 
 ### Lighting (Scene.tsx)
-- **Ambient Light**: Base illumination (0.3)
-- **Directional Light**: Main light with shadows (intensity 0.8, position [5, 8, 5])
+- **Ambient Light**: Base illumination (intensity 0.5, white)
+- **Hemisphere Light**: Balanced ground lighting with sky/ground colors
+  - Sky color: `#dbecf8` (matches fog for seamless horizon blending)
+  - Ground color: `#2d4c1e` (darker green to bias toward grass tones)
+  - Intensity: 0.4 (prevents cool blue tint on grass from above)
+- **Spot Light (Key)**: Main light with shadows (intensity 2.5, position [-5, 8, 8])
   - **Critical for rock pitch visibility** - Side lighting reveals normal map depth
-- **Point Light**: Blue-tinted accent light (0.5 intensity, color #badbff)
-- **Environment**: HDRI "city" preset with intensity 1.5
+  - Color: `#fffce6` (slightly warm sun light)
+  - Angle: 0.6, Penumbra: 0.5
+- **Point Lights (Fill)**: Balanced fill lights on both sides
+  - Positions: [5, 2, 5] and [-5, 2, 5]
+  - Intensity: 0.5, Color: white
+  - Provides symmetric lighting to eliminate left/right grass color differences
+- **Spot Lights (Rim)**: Accent lights from back corners
+  - Positions: [-5, 4, -5] and [5, 4, -5]
+  - Intensity: 1.2, Color: white
+  - Highlights edges and adds depth
+- **Point Light (Overhead)**: Soft top fill for even grass illumination
+  - Position: [0, 10, 0]
+  - Intensity: 0.8, Color: white
+- **Environment**: HDRI "forest" preset
+  - Background: false (custom sky used instead)
   - Provides realistic reflections for polished granite surfaces
+  - Note: `intensity` and `rotation` props not supported in current drei version
 
 ---
 
@@ -534,6 +552,111 @@ MeshPhysicalMaterial({
 - **FOV**: 30 degrees
 - **Position**: `[0, 4.8, 10]`
 - **Controls**: OrbitControls (disabled in 2D mode)
+
+---
+
+## 3D Scene Environment & Atmosphere
+
+### Sky System (AtmosphericSky.tsx)
+**Purpose:** Custom shader-based sky dome with clouds for realistic outdoor cemetery atmosphere
+
+**Sky Gradient:**
+- **Zenith Color**: `#3b93ff` (rich sky blue)
+- **Horizon Color**: `#dbecf8` (light blue/white, blends with fog)
+- **Implementation**: Custom fragment shader with smooth gradient
+  - Gradient formula: `t = pow(max(0, (y + 0.15) * 0.8), 0.6)` for natural horizon curve
+  - Subtle dithering to prevent color banding artifacts
+  - BackSide rendering (sky dome viewed from inside)
+
+**Clouds:**
+- **Type**: Procedural volumetric clouds using drei `<Clouds>` component
+- **Cloud 1**: Seed 10, opacity 0.8, position [0, 10, -10]
+- **Cloud 2**: Seed 20, opacity 0.5, position [0, 15, 0]
+- **Movement**: Slow drift (speed 0.1 and 0.05)
+- **Material**: MeshBasicMaterial for performance (white, no lighting)
+
+**Rotation Behavior:**
+- Sky remains **stationary** when arrow buttons rotate headstone/grass
+- Clouds stay fixed in background (realistic - sky doesn't rotate when you walk around monument)
+- Only headstone and grass floor are in the rotating group
+
+### Grass Floor System (Scene.tsx)
+
+**Grass Configuration:**
+- **Color**: `#355c18` (slightly warmer, richer green to counteract blue sky light)
+- **Texture Repeat**: Scale 12 (moderate tiling for natural appearance)
+- **Wrapping**: `MirroredRepeatWrapping` (reduces visible tiling patterns)
+- **Roughness**: 0.9 (matte grass surface)
+- **Normal Scale**: (0.5, 0.5) (subtle bumps, not rocky)
+- **Environment Reflections**: 0 (no sky reflections to avoid blue tint)
+- **Fog**: Enabled (`fog={true}`) - allows natural blending into distant horizon
+
+**Texture Loading:**
+```typescript
+const props = useTexture({
+  map: '/textures/grass_color.jpg',
+  normalMap: '/textures/grass_normal.jpg',
+  roughnessMap: '/textures/grass_roughness.jpg',
+  aoMap: '/textures/grass_ao.jpg',
+});
+```
+
+**Critical Settings to Prevent Blue Tint:**
+- Fog color matches sky horizon (`#dbecf8`)
+- Hemisphere light with grass-biased ground color (`#2d4c1e`)
+- All fill/rim lights are pure white (no blue tints)
+- Grass has `envMapIntensity={0}` (doesn't pick up blue sky reflections)
+
+### Fog System
+
+**Configuration:**
+- **Color**: `#dbecf8` (matches sky horizon for seamless blend)
+- **Range**: Start at 80, end at 160 (units)
+- **Purpose**: Softens distant horizon, creates depth, blends grass into sky
+
+**Key Insight from advice102-107:**
+The blue tint on grass was caused by the combination of:
+1. Blue fog color washing grass at grazing angles
+2. Blue sky zenith reflected via IBL (image-based lighting)
+3. Blue-tinted lights (ambient, fill, rim)
+
+**Solution Applied:**
+- Changed sky from muted grey to vibrant blue (`#3b93ff`)
+- Warmed grass color to counteract blue light (`#355c18`)
+- Matched fog to sky horizon (not greenish-grey)
+- Made all lights neutral/warm (removed blue tints)
+- Added hemisphere light with grass-green ground color
+
+### Click-Capture Plane
+
+**Purpose:** Allows clicking empty space to deselect inscriptions/motifs
+
+**Implementation:**
+- Horizontal plane at ground level (y=0)
+- Rotated -90° on X-axis to lay flat
+- Size: 200×200 units
+- Material: Transparent (opacity 0), DoubleSide
+- **Critical**: Must be horizontal (not vertical) to avoid blocking sky/clouds
+
+**Previous Issue:** 
+Vertical plane at z=-10 created blue rectangle blocking clouds. Fixed by rotating to horizontal ground plane.
+
+### Environment Map
+
+**Current Setup:**
+```typescript
+<Environment
+  preset="forest"
+  background={false}
+/>
+```
+
+**Attempted Optimizations:**
+- Tried `intensity={0.4}` and `rotation` props but not supported in current drei version
+- Scene-level `environmentIntensity` set in Canvas onCreated (see ThreeScene.tsx)
+- Individual materials control reflections via `envMapIntensity` property
+
+**Note:** Environment provides HDRI reflections for polished granite but doesn't affect grass (grass has envMapIntensity=0)
 
 ---
 
@@ -1648,6 +1771,179 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-24 (Evening)**: Homepage Hero Section Enhancements (Production-Ready)
+  - **Hero Section Visual Improvements**:
+    - **Background**: Added blurred tree background with increased blur (12px) and desaturation (85%)
+    - **Dark gradient**: Top → middle gradient (black/60 → black/40 → black/30) for better text readability
+    - **Reduced top padding**: pt-6/8 → pt-3/4 (50% reduction) to maximize canvas space
+    - **SEO & Accessibility**:
+      - Added `role="banner"` to hero container for semantic HTML
+      - Marked background image as decorative with `role="presentation"` and `aria-hidden="true"`
+      - Added descriptive aria-labels to CTA buttons for screen readers
+      - Gradient overlays marked with `aria-hidden="true"`
+  - **Hero Copy Updates**:
+    - **Main heading**: "Design Your Own / Headstones & Memorials" → "Create a Personal Headstone / Design in Real-Time 3D"
+    - **Reduced heading size**: text-4xl/5xl/6xl → text-3xl/4xl/5xl (10-17% smaller for more canvas space)
+    - **New description**: "Create a beautiful, personalized memorial using our free and simple 3D design tool. See your headstone exactly as it will look - before you commit."
+    - **Wider description container**: max-w-xl → max-w-2xl (fits text in 2 lines, not 3)
+    - **Paragraph size**: text-lg → text-base (11% smaller)
+    - **Bottom margin**: mb-3 → mb-2.5 (tighter spacing)
+  - **CTA Button Updates**:
+    - **Primary button**: "Start Designing" → "Start Designing (Free)" to emphasize no-cost entry
+  - **Trust Block Enhancements**:
+    - **Larger stars**: 4×4px → 5×5px (25% bigger)
+    - **Tighter star spacing**: gap-1 → gap-0.5
+    - **Horizontal layout**: Stars and text on same line for stronger impact
+    - **Increased font size**: text-sm → text-base font-medium
+    - **Better color**: text-gray-300 → text-white (stronger contrast)
+    - **Raised positioning**: Added mt-1 to container
+    - **Updated copy**: 
+      - "Trusted by 5,000+ families" on same line as stars
+      - "No credit card required • Free to try" → "No obligation · No credit card required"
+  - **3D Canvas Enhancements**:
+    - **Headstone size**: Increased 13-15% (width 2.0→2.5, height 2.2→2.8, thickness 0.3→0.38)
+    - **Enhanced lighting**:
+      - Ambient: 0.4 → 0.45 intensity
+      - Spotlight: 1.2 → 1.4 intensity
+      - Point lights: 0.6/0.4 → 0.7/0.5 intensity
+      - Rim lights: 0.8 → 1.0 intensity
+      - Added back rim light (0.8 intensity, warm color #e8d5b7)
+    - **Focused vignette**: 
+      - Dark vignette (500px, from-black/60 via-black/30 to-transparent)
+      - Warm spotlight (400px, from-amber-900/25)
+      - Heavy blur (blur-3xl) for soft edges
+    - **Position adjustments**:
+      - Y-position: -1.0 → -1.4 (lowered to prevent top clipping)
+      - Camera height: 1.5 → 1.3 (adjusted for better framing)
+  - **Rotation Controls**:
+    - **Smaller buttons**: 12×12 → 10×10 (48px → 40px)
+    - **Subtler style**: Semi-transparent white with blur instead of bold golden gradient
+    - **Updated styling**: `bg-white/10 backdrop-blur-sm border border-white/20`
+    - **Gentle hover**: `hover:bg-white/20 hover:border-white/40`
+    - **Label added**: "← Rotate to View →" centered below canvas (text-sm text-gray-400)
+    - **Better aria-labels**: "Rotate headstone left/right to view different angles"
+  - **Files Modified**:
+    - `app/_ui/HomeSplash.tsx`: Hero section copy, trust block, background setup
+    - `components/HeroCanvas.tsx`: Headstone size, lighting, positioning
+  - **Production Status**: Hero section optimized for conversion with stronger product presence
+- **2025-12-23 (Late Afternoon/Evening)**: 3D Scene Environment Enhancements (Production-Ready)
+  - **Sky & Atmosphere System**:
+    - Implemented vibrant blue sky with custom shader (zenith: `#3b93ff`, horizon: `#dbecf8`)
+    - Added procedural volumetric clouds (2 layers with different opacity and drift speeds)
+    - Sky remains stationary when rotating headstone/grass (realistic behavior)
+    - Fixed blue rectangle issue: changed click-capture plane from vertical to horizontal ground plane
+  - **Grass Rendering Improvements**:
+    - Optimized grass color to `#355c18` (warmer, richer green to counteract blue sky light)
+    - Fixed blue tint issue via multi-step approach:
+      - Matched fog color to sky horizon (`#dbecf8`)
+      - Added hemisphere light with grass-biased ground color (`#2d4c1e`)
+      - Removed all blue tints from fill/rim lights (pure white)
+      - Set grass `envMapIntensity={0}` to prevent sky reflections
+    - Texture configuration: repeat scale 12, MirroredRepeatWrapping, normal scale (0.5, 0.5)
+    - Enabled fog on grass material for natural horizon blending
+  - **Lighting System Overhaul**:
+    - Ambient light: 0.5 intensity, white
+    - Hemisphere light: sky color matches fog, ground color biases green (intensity 0.4)
+    - Key spotlight: slightly warm sun (`#fffce6`), intensity 2.5, position [-5, 8, 8]
+    - Balanced fill lights: symmetric positions [5,2,5] and [-5,2,5], white, intensity 0.5
+    - Rim spotlights: back corners [-5,4,-5] and [5,4,-5], white, intensity 1.2
+    - Overhead point light: [0,10,0], white, intensity 0.8 for even grass illumination
+  - **Rotation System**:
+    - Left/right arrow buttons now rotate both headstone and grass together
+    - Sky and clouds remain stationary (realistic - sky doesn't rotate when viewing from different angles)
+    - Implemented via wrapping HeadstoneAssembly and GrassFloor in same rotating group
+  - **Environment Map**:
+    - Using "forest" preset for HDRI reflections on polished granite
+    - Attempted to set intensity to 0.4 but `intensity` and `rotation` props not supported in current drei version
+    - Scene-level environmentIntensity set via Canvas onCreated callback
+  - **Critical Bug Fixes**:
+    - Fixed clouds disappearing: removed AtmosphericSky from rotating group
+    - Fixed blue rectangle blocking clouds: repositioned click-capture plane to horizontal ground level
+    - Fixed grass blue tint at different viewing angles: comprehensive lighting/fog/color solution
+  - **Files Modified**:
+    - `components/three/Scene.tsx`: Lighting, fog, grass configuration, rotation group
+    - `components/three/AtmosphericSky.tsx`: Sky gradient colors, cloud opacity
+    - `components/ThreeScene.tsx`: Environment intensity setting in onCreated
+  - **Documentation**: advice97-107 analysis and implementation
+  - **Production Status**: All visual issues resolved, grass stays green from all angles, clouds visible, smooth rotation
+- **2025-12-23 (Afternoon)**: Homepage & Design Tool UI/UX Enhancements (Production-Ready)
+  - **Homepage Redesign**:
+    - Moved header navigation ("Forever Shining - Design online" with links) from top to footer
+    - Reduced hero title "Design Your Own Headstones & Memorials" by 10-15% for better proportion
+    - Optimized hero section spacing to bring 3D headstone visualization above fold (top 40% of viewport visible without scrolling)
+    - Added radial gradient spotlight behind headstone (warm brown to black) for depth and contrast against dark granite
+    - Removed "No credit card required" text initially, then re-added for friction reduction
+    - Added gold star rating (★★★★★) next to "Trusted by 5,000+ families" for instant credibility
+    - Tightened headline line-height and set description max-width to 600px for better readability
+  - **How It Works Section**:
+    - Made all step badges uniform gold color (removed confusing "active state" appearance)
+    - Removed large ghost background numbers (01, 02, 03, 04) for cleaner visual hierarchy
+    - Elevated card contrast with lighter background (#1A1A1A) and subtle gold borders (20-30% opacity)
+    - Changed all icons to gold color with filled style for premium appearance
+    - Enhanced flow arrows to dashed gold lines for better visual guidance
+    - Fixed "Step 2" title wrapping with min-height CSS on all title containers
+    - Balanced description text length (all ~3 lines) for visual consistency
+    - Upgraded arrow connectors to gold chevron icons
+    - Reduced CTA button width by 20-30% for more compact, actionable appearance
+  - **Design Features Section**:
+    - Increased text contrast (description text from dark grey to #E0E0E0 for accessibility)
+    - Strengthened icons with filled style and increased stroke weight
+    - Enhanced card separation with subtle borders and hover states (gold border + lift effect)
+    - Centered card layout (icon top-center, headline below, description centered)
+    - Swapped "Paintbrush" icon for "Layers/Texture" icon on Premium Materials card (better semantic match for stone selection)
+    - Increased subheadline font size and margin-bottom for stronger hierarchy
+    - Added right arrow (→) to "Try the Designer" button for forward motion indicator
+  - **Final CTA Section**:
+    - Added radial gradient spotlight (dark charcoal/gold at 5-10% opacity fading to black)
+    - Changed button text to "Start Designing Now →" with arrow for urgency
+    - Added "Free to use - No signup required to start" text below button for risk reversal
+  - **Footer Redesign**:
+    - Split into two rows: utility row (logo + links) and legal row (copyright + policies)
+    - Row 1: Logo (small) + "Contact Us" on left, "Our Partner Network" links on right
+    - Row 2: "© 2025 Forever Shining - Design online" on left, "Privacy Policy | Terms of Service | Contact Us" on right
+    - Professional layout matching industry standards for trust and compliance
+  - **Select Product Page** (`/select-product`):
+    - Introduced distinct card design with dark charcoal background and subtle border
+    - Added gold hover border with slight lift shadow for tactile feedback
+    - Fixed jagged image heights with enforced fixed height (250px) + `object-fit: cover`
+    - Reserved space for "Customize →" link to prevent layout shift on hover
+    - Left-aligned text inside cards for better readability and visual hierarchy
+    - Left-aligned filter buttons to create strong vertical line with card grid
+    - Anchored "Customize →" link to bottom of cards using flexbox `margin-top: auto`
+  - **Sidebar Navigation**:
+    - Added visual gaps between logical groups (Setup / Design / Finalize) for better scanability
+    - Changed active tab icon and text color to Gold (instead of subtle grey background)
+    - Improved "breathing room" with 20px margins between groups
+  - **Canvas Scene Background**:
+    - Implemented "Golden Horizon" radial gradient (warm amber/brown fading to black)
+    - Added oval ground shadow underneath headstone base with heavy blur (40-50% opacity, 20px blur)
+    - Positioned gradient spotlight at bottom center (ellipse at 50% 90%) for showroom effect
+    - Eliminated harsh horizon line with smooth radial fade (no more "floating disc" appearance)
+  - **Select Size Page** (`/select-size`):
+    - Changed sidebar panel background from cool blue/slate to dark charcoal (#1F1F1F) for warm consistency
+    - Upgraded input fields: moved "mm" unit labels inside boxes, lightened backgrounds (#333333), brightened text
+    - Hidden number input spinners (up/down arrows) since sliders provide control
+    - Modernized radio buttons to button-style segmented control (solid gold selected, dark grey unselected)
+    - Standardized "mm" label placement (outside box, right-aligned) across all three sliders
+    - Enhanced ground shadow and spotlight gradient for proper object grounding
+    - Improved inactive button text contrast (lighter grey #BBBBBB for readability)
+  - **3D Canvas Enhancements**:
+    - Added radial gradient "infinity floor" (warm bronze/coffee fading to black) to eliminate flat background
+    - Positioned ellipse gradient at 50% 80% for low spotlight effect
+    - Implemented ground shadow underneath base (flattened black oval with blur) for realism
+    - Changed selection box outline to solid blue (from dashed) with current opacity
+    - Made Upright/Slant toggle same height as Headstone/Base toggle for visual consistency
+    - Temporarily hidden BoxOutline component for cleaner preview
+  - **Product Title Overlay** (Canvas pages):
+    - Added floating overlay with product name and price at top of canvas
+    - Transparent background with proper z-index layering above canvas
+    - Wider width to fit product name on single line with reduced vertical padding
+    - Horizontal padding preserved for side spacing
+  - **Documentation Updates**:
+    - Comprehensive documentation of all UI/UX changes in STARTER.md
+    - Detailed explanations of design decisions and implementation notes
+  - **Files Modified**: Multiple components across app/ and components/ directories
+  - **Commits**: Incremental improvements throughout the session
 - **2025-12-18 (Evening)**: Catalog XML Integration & UI Polish
   - **Thickness Slider Fix**: Changed from hard-coded 100-300mm to catalog-driven min/max values
     - **Root Cause**: Slider always showed 100-300mm range regardless of product type

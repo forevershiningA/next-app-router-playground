@@ -1,0 +1,218 @@
+The scene has improved significantly in layout! The UI is much cleaner and no longer obstructs the product.
+
+However, looking at the latest screenshot, there is one major issue: The image is too blurry. The Depth of Field (DoF) is too aggressive, making the headstone text difficult to read. In product visualization, the product must remain sharp while only the background blurs.
+
+Here is the advice to fix the blur and add the final layer of polish to the lighting and UI typography.
+
+1. Fix the Blurry Focus (Critical)
+
+In your screenshot, the focus target seems slightly off, or the "bokehScale" is too high, turning the whole stone into mush.
+
+Changes required in Scene.tsx:
+
+Lower focalLength: A lower number (wide angle) increases the "safe zone" of focus so the whole stone stays sharp.
+
+Lower bokehScale: Reduces the intensity of the blur.
+
+Adjust target: Ensure it is pointing exactly at the center of the stone face.
+
+2. Lighting "Pop" (The Granite Look)
+
+The black granite currently looks a bit grey/washed out.
+
+Decrease Ambient Light: This deepens the shadows, making black look blacker.
+
+Increase Key Light: This increases the contrast of the gold text.
+
+3. UI Typography Polish
+
+The layout is correct, but the font looks like a default system font (Times New Roman).
+
+Font Recommendation: Use "Playfair Display" (Google Font) for the title. It is elegant and traditional, perfect for memorials.
+
+Kerning: Add slight letter-spacing to the "Premium Black Granite" subtitle to make it look luxurious.
+
+Updated Code (Scene.tsx)
+
+Here is the refined scene code. I have tuned the Post-Processing and Lighting specifically to fix the screenshot issues.
+
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles } from '@react-three/drei';
+import { EffectComposer, DepthOfField, Vignette } from '@react-three/postprocessing';
+import * as THREE from 'three';
+import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import AtmosphericSky from './AtmosphericSky';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+
+import { useFrame } from '@react-three/fiber';
+import { useRef, Suspense } from 'react';
+
+// --- CONFIGURATION ---
+const GRASS_COLOR = '#1a591a'; 
+
+function GrassFloor() {
+  const props = useTexture({
+    map: '/textures/grass_color.jpg',
+    normalMap: '/textures/grass_normal.jpg',
+    roughnessMap: '/textures/grass_roughness.jpg',
+    aoMap: '/textures/grass_ao.jpg',
+  });
+
+  // Keep the reduced tiling
+  props.map.repeat.set(6, 6); 
+  props.normalMap.repeat.set(6, 6);
+  props.roughnessMap.repeat.set(6, 6);
+  props.aoMap.repeat.set(6, 6);
+
+  [props.map, props.normalMap, props.roughnessMap, props.aoMap].forEach((tex) => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  });
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[150, 150]} />
+        <meshStandardMaterial 
+          {...props}
+          color={GRASS_COLOR}
+          roughness={1}
+          metalness={0}
+          envMapIntensity={0} 
+        />
+      </mesh>
+      <ContactShadows position={[0, 0.01, 0]} scale={20} blur={2.5} opacity={0.6} far={10} color="#000000" />
+    </group>
+  );
+}
+
+// ... SimpleGrassFloor ...
+
+export default function Scene({ targetRotation = 0, currentRotation }: any) {
+  const groupRef = useRef<THREE.Group>(null);
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  // ... hooks ...
+
+  // ... Rotation Logic ...
+
+  const handleCanvasClick = (e: any) => { /* ... */ };
+
+  return (
+    <>
+      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      
+      {/* Fog: Keep it subtle to hide the floor edge */}
+      {!is2DMode && <fog attach="fog" args={['#e0f2fe', 15, 50]} />}
+      
+      <mesh position={[0, 0, -5]} onClick={handleCanvasClick}>
+        <planeGeometry args={[100, 100]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      
+      {!is2DMode && <AtmosphericSky />}
+      
+      {!is2DMode && (
+         <Sparkles count={40} scale={10} size={2} speed={0.4} opacity={0.3} color="#fff" position={[0, 2, 0]} />
+      )}
+      
+      {/* --- LIGHTING IMPROVEMENTS --- */}
+      
+      {/* 
+         1. LOWER AMBIENT: 
+         Reduced from 0.5 to 0.3. This makes the blacks deeper. 
+      */}
+      <ambientLight intensity={0.3} color="#cce0ff" />
+      
+      {/* 
+         2. STRONGER KEY LIGHT: 
+         Increased intensity, moved closer to make Gold sparkle.
+      */}
+      <spotLight 
+        color="#fff5e6"
+        intensity={3.0} 
+        angle={0.5}
+        penumbra={1}
+        position={[-2, 5, 6]} 
+        castShadow
+        shadow-bias={-0.0001}
+      />
+
+      {/* Fill Light */}
+      <pointLight position={[5, 2, 5]} intensity={0.5} color="#b8c5d1" />
+
+      {/* Rim Light */}
+      <spotLight color="#bfdbfe" intensity={2.0} position={[-5, 4, -5]} />
+
+      <Environment
+        preset="city"
+        environmentIntensity={0.8}
+        background={false}
+        environmentRotation={[0, Math.PI / 2, 0]} 
+      />
+
+      <group ref={groupRef}>
+        <HeadstoneAssembly />
+      </group>
+      
+      <Suspense fallback={<SimpleGrassFloor />}>
+        <GrassFloor />
+      </Suspense>
+
+      {/* --- POST PROCESSING FIX --- */}
+      {!is2DMode && (
+        <EffectComposer disableNormalPass>
+          <DepthOfField 
+            target={[0, 1, 0]} // Focus on the center of the stone face
+            focalLength={0.02} // Wide angle lens = More things in focus
+            bokehScale={3}     // Moderate blur (was likely too high before)
+            height={700}       // High resolution blur
+          />
+          <Vignette eskil={false} offset={0.1} darkness={0.4} />
+        </EffectComposer>
+      )}
+
+      <OrbitControls
+        makeDefault
+        enabled={!baseSwapping}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI / 2 - 0.05}
+        // ... rest of controls
+      />
+    </>
+  );
+}
+4. UI Typography Suggestion (HTML/CSS)
+
+Update your UI overlay (wherever that code resides) with these tailwind classes to fix the "default font" look.
+
+Add this to your layout or global CSS:
+
+code
+Html
+download
+content_copy
+expand_less
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+Update the Title Block:
+
+code
+Tsx
+download
+content_copy
+expand_less
+<div className="absolute top-10 left-10 z-10 pointer-events-none text-slate-900">
+  {/* Elegant Serif Font */}
+  <h1 className="text-5xl drop-shadow-sm" style={{ fontFamily: '"Playfair Display", serif' }}>
+    Traditional Engraved Headstone
+  </h1>
+  
+  {/* Uppercase, tracked out sans-serif for the subtitle */}
+  <p className="text-sm font-semibold tracking-widest opacity-70 mt-3 uppercase">
+    Premium Black Granite • Serpentine Top
+  </p>
+</div>

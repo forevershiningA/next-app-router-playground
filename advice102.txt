@@ -1,0 +1,36 @@
+Short answer: it’s your **sky/fog combo** washing the ground with a blue haze when you view the stone from the front.
+
+* You add scene fog with a **pale-blue color**: `'#e0f2fe'` → `<fog attach="fog" args={['#e0f2fe', 25, 70]} />`. That blends distant fragments toward that blue, so the grass between the camera and the horizon shifts blue in the *front* view. 
+* Your custom sky also uses the same blue for the **horizon color** (`uColorBottom: '#e0f2fe'`), reinforcing the tint. 
+* A little extra comes from the environment reflections on the grass (`Environment preset="forest"` + `envMapIntensity={0.15}` on the grass material), which can pick up the blue sky at grazing angles in that front view. 
+
+Why the back looks fine: when you rotate around, you’re mostly looking at **near** ground with less fog blending, and the warm lights dominate—so the grass stays green.
+
+Quick fixes (any one of these will help; combine for best result):
+
+1. Soften or neutralize fog
+
+```tsx
+{/* e.g., neutral grey/very light green and longer range */}
+<fog attach="fog" args={['#dfe6df', 80, 160]} />
+```
+
+or temporarily disable fog just for the grass:
+
+```tsx
+<meshStandardMaterial {...props} fog={false} /* ... */ />
+```
+
+2. Warm the horizon in your sky shader
+   Change `uColorBottom` from `'#e0f2fe'` to a neutral/warmer tone, e.g. `'#dfe6df'` or a subtle greenish haze. 
+
+3. Reduce sky pickup on the grass
+   Lower or zero out env reflections on the grass:
+
+```tsx
+<meshStandardMaterial {...props} envMapIntensity={0.05} /* or 0 */ />
+```
+
+(You already have `metalness={0}`, which is good.) 
+
+Do the fog tweak first—you’ll see the blue cast disappear immediately.

@@ -45,22 +45,23 @@ export default function HeadstoneAssembly() {
       <group ref={assemblyRef} position={[0, baseHeightMeters, 0]}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
+        {/* Elegant Selection Indicators - Viewfinder Corners */}
         <RotatingBoxOutline
-          key={`headstone-outline-${headstoneMaterialUrl}`}
           targetRef={headstoneMeshRef}
           visible={selected === 'headstone'}
-          color="white"
-          pad={0.01}
+          color="#ffffff"
+          pad={0.02}
           through={false}
+          lineLength={0.15}
         />
 
         <RotatingBoxOutline
-          key={`base-outline-${baseMaterialUrl}`}
           targetRef={baseRef}
           visible={selected === 'base'}
-          color="white"
-          pad={0.004}
+          color="#ffffff"
+          pad={0.01}
           through={false}
+          lineLength={0.15}
         />
 
         {selectedInscription && (

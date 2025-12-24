@@ -581,7 +581,7 @@ const additions: Addition[] = [
 
 const demos = [
   {
-    name: 'Design Your Own',
+    name: 'Setup',
     items: [
       {
         slug: 'select-product',
@@ -606,6 +606,11 @@ const demos = [
         description:
           'Traditional Engraved Plaques and Headstones are available in a number of different granites, marbles and sandstone. Our most popular material for this product is Blue Pearl.',
       },
+    ],
+  },
+  {
+    name: 'Design',
+    items: [
       {
         slug: 'inscriptions',
         name: 'Inscriptions',
@@ -613,17 +618,22 @@ const demos = [
           'Inscriptions commemorate the lost family member or friend in an individual way.',
       },
       {
-        slug: 'select-additions',
-        name: 'Select Additions',
-        description:
-          'Additions are three dimensional mouldings highlighted in bronze. They come in a variety of themes in a number of fixed sizes. Emblems help express feelings and ideas that might not be possible with words.',
-      },
-      {
         slug: 'select-motifs',
         name: 'Select Motifs',
         description:
           'Browse and select from 49 categories of decorative motifs to personalize your memorial. Choose from traditional engravings, religious symbols, nature themes, and more.',
       },
+      {
+        slug: 'select-additions',
+        name: 'Select Additions',
+        description:
+          'Additions are three dimensional mouldings highlighted in bronze. They come in a variety of themes in a number of fixed sizes. Emblems help express feelings and ideas that might not be possible with words.',
+      },
+    ],
+  },
+  {
+    name: 'Finalize',
+    items: [
       {
         slug: 'check-price',
         name: 'Check Price',

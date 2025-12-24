@@ -3,7 +3,7 @@ import '#/styles/globals.css';
 import db from '#/lib/db';
 import Byline from '#/ui/byline';
 import { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import ErrorBoundary from '#/components/ErrorBoundary';
 import RouterBinder from '#/components/system/RouterBinder';
 import MobileHeader from '#/components/MobileHeader';
@@ -16,6 +16,11 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+const playfairDisplay = Playfair_Display({
+  variable: '--font-playfair-display',
+  subsets: ['latin'],
+  weight: ['400', '600'],
 });
 
 export const metadata: Metadata = {
@@ -43,7 +48,8 @@ export default async function RootLayout({
   return (
     <html lang="en" className="[color-scheme:dark]">
       <body
-        className={`overflow-y-scroll bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`overflow-y-scroll font-sans ${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} antialiased`}
+        style={{ background: 'transparent' }}
       >
         <ErrorBoundary>
           <RouterBinder /> {/* ← mount once, early */}

@@ -1,0 +1,48 @@
+You are getting closer, but the issue is definitely that hard line where the brown meets the black. It creates a "horizon" that makes the 3D model look like it's floating on a strange platform in space.
+
+In professional product design, you never show a hard corner between the wall and the floor. You want an "Infinity Background" (like a photo studio).
+
+Here is the exact fix to blend that floor seamlessly so it looks premium, not like a video game.
+
+1. The Fix: Use a "Spotlight" Gradient (No Hard Line)
+
+Instead of splitting the screen into "Wall" and "Floor," use a Radial Gradient. This puts a pool of light behind/under the object and fades to black at the edges.
+
+Replace your background CSS with this:
+
+code
+CSS
+download
+content_copy
+expand_less
+background: radial-gradient(
+    circle at 50% 75%,    /* Centers the light low, behind the stone */
+    #332a24 0%,           /* Center: Dark Warm Coffee/Charcoal */
+    #1a1a1a 40%,          /* Middle: Dark Grey */
+    #000000 85%           /* Edge: Pure Black */
+);
+
+Why this works:
+
+Seamless: It removes that ugly horizontal line completely.
+
+Warmth: The #332a24 color provides that non-depressive warmth you want, allowing the grey base to stand out.
+
+Focus: It creates a natural vignette that draws the eye to the center.
+
+2. The Missing Piece: The Shadow
+
+Even with the gradient, the headstone will look like it is floating until you add a shadow.
+
+The Fix: You must render a soft black shadow under the base.
+
+If you can't do real-time shadows: Place a semi-transparent black oval image (.png) with a heavy blur directly underneath the 3D canvas object.
+
+3. Quick UI Cleanup
+
+Hide the Box: That yellow/white wireframe box is still visible. Hide it. It ruins the realism.
+
+Input Fields: You still have the "Width" mm inside the box, but "Height" outside. Move the Width mm outside to match the others.
+
+Verdict:
+Switch to the Radial Gradient code above. It solves the "darkness" problem and the "ugly line" problem at the same time.

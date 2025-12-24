@@ -227,9 +227,9 @@ export default function DesignerNav() {
   const isCheckPricePage = pathname === '/check-price';
 
   return (
-    <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
+    <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410]">
       {/* Header */}
-      <div className="p-4 border-b border-slate-700/50">
+      <div className="p-4 border-b border-[#3A3A3A]/50">
         <Link href="/" className="hover:opacity-80 transition-opacity">
           <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
         </Link>
@@ -237,7 +237,7 @@ export default function DesignerNav() {
 
       {/* Menu Items */}
       <div className="p-4">
-        <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-slate-400 uppercase">
+        <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-gray-400 uppercase">
           Design Tools
         </div>
         <div className="flex flex-col gap-1">
@@ -245,7 +245,7 @@ export default function DesignerNav() {
           {!showCanvas && pathname !== '/' && pathname !== '/select-size' && (
             <button
               onClick={handlePreviewClick}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
             >
               <EyeIcon className="h-5 w-5 flex-shrink-0" />
               <span>3D Preview</span>
@@ -308,7 +308,7 @@ export default function DesignerNav() {
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
@@ -316,11 +316,11 @@ export default function DesignerNav() {
                   </Link>
                   
                   {isSelectSizePage && !selectedMotifId && !selectedAdditionId && (
-                    <div className="fs-size-panel mt-3 space-y-5 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                    <div className="fs-size-panel mt-3 space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                       {/* Plaque Label - Show for plaques instead of toggle */}
                       {isPlaque && (
                         <div className="flex justify-center">
-                          <div className="rounded-md px-4 py-2 text-sm font-medium bg-[#D7B356] text-slate-900 shadow-md">
+                          <div className="rounded-md px-4 py-2 text-sm font-medium bg-[#D7B356] text-gray-900 shadow-md">
                             Plaque
                           </div>
                         </div>
@@ -328,7 +328,7 @@ export default function DesignerNav() {
                       
                       {/* Headstone/Base Toggle - Hide for plaques */}
                       {!isPlaque && (
-                        <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+                        <div className="relative flex gap-1 rounded-full bg-[#0A0A0A] p-1.5 border border-[#3A3A3A]">
                           <button
                             onClick={() => {
                               if (editingObject !== 'headstone') {
@@ -336,10 +336,10 @@ export default function DesignerNav() {
                                 setSelected('headstone');
                               }
                             }}
-                            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                            className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                               editingObject === 'headstone'
-                                ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                                ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                : 'text-gray-400 hover:text-gray-200 hover:bg-[#1A1A1A]'
                             }`}
                           >
                             Headstone
@@ -352,10 +352,10 @@ export default function DesignerNav() {
                                 setSelected('base');
                               }
                             }}
-                            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                            className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                               editingObject === 'base'
-                                ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                                ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                : 'text-gray-400 hover:text-gray-200 hover:bg-[#1A1A1A]'
                             }`}
                           >
                             Base
@@ -366,92 +366,106 @@ export default function DesignerNav() {
                       {/* Base Finish Selection - Only show when editing base */}
                       {editingObject === 'base' && (
                         <>
-                          <div className="flex items-center justify-center gap-4">
-                            <label className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="baseFinish"
-                                checked={!showBase}
-                                onChange={() => {
-                                  setShowBase(false);
-                                }}
-                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                              />
-                              <span className="text-sm font-medium text-slate-200">No Base</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="baseFinish"
-                                checked={baseFinish === 'default' && showBase}
-                                onChange={() => {
-                                  setBaseFinish('default');
-                                  setShowBase(true);
-                                }}
-                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                              />
-                              <span className="text-sm font-medium text-slate-200">Polished</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="baseFinish"
-                                checked={baseFinish === 'rock-pitch' && showBase}
-                                onChange={() => {
-                                  setBaseFinish('rock-pitch');
-                                  setShowBase(true);
-                                }}
-                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                              />
-                              <span className="text-sm font-medium text-slate-200">Rock Pitch</span>
-                            </label>
+                          <div className="flex gap-1.5 rounded-full bg-[#0A0A0A] p-1 border border-[#3A3A3A]">
+                            <button
+                              type="button"
+                              onClick={() => setShowBase(false)}
+                              className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                                !showBase
+                                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                  : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                              }`}
+                            >
+                              No Base
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setBaseFinish('default');
+                                setShowBase(true);
+                              }}
+                              className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                                baseFinish === 'default' && showBase
+                                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                  : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                              }`}
+                            >
+                              Polished
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setBaseFinish('rock-pitch');
+                                setShowBase(true);
+                              }}
+                              className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                                baseFinish === 'rock-pitch' && showBase
+                                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                  : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                              }`}
+                            >
+                              Rock Pitch
+                            </button>
                           </div>
                           
                           {/* Divider between finish selection and dimensions */}
-                          <div className="border-t border-slate-700/50 -mx-4"></div>
+                          <div className="border-t border-[#3A3A3A]/50 -mx-4"></div>
                         </>
                       )}
 
                       {/* Headstone Style Selection - Only show when editing headstone */}
                       {editingObject === 'headstone' && (
                         <>
-                          <div className="flex items-center justify-center gap-4">
-                            <label className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="headstoneStyle"
-                                checked={headstoneStyle === 'upright'}
-                                onChange={() => setHeadstoneStyle('upright')}
-                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                              />
-                              <span className="text-sm font-medium text-slate-200">
-                                {isPlaque ? 'No Border' : 'Upright'}
-                              </span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="headstoneStyle"
-                                checked={headstoneStyle === 'slant'}
-                                onChange={() => setHeadstoneStyle('slant')}
-                                className="h-4 w-4 appearance-none rounded-full border-2 border-slate-600 bg-slate-800 cursor-pointer transition-all checked:border-[#D7B356] checked:bg-slate-800 checked:ring-[3px] checked:ring-[#D7B356] checked:ring-inset focus:outline-none focus:ring-2 focus:ring-[#D7B356] focus:ring-offset-2 focus:ring-offset-slate-900"
-                              />
-                              <span className="text-sm font-medium text-slate-200">
-                                {isPlaque ? 'Border' : 'Slant'}
-                              </span>
-                            </label>
+                          <div className="flex gap-1 rounded-full bg-[#0A0A0A] p-1.5 border border-[#3A3A3A]">
+                            <button
+                              type="button"
+                              onClick={() => setHeadstoneStyle('upright')}
+                              className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                                headstoneStyle === 'upright'
+                                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                  : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                              }`}
+                            >
+                              {isPlaque ? 'No Border' : 'Upright'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setHeadstoneStyle('slant')}
+                              className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                                headstoneStyle === 'slant'
+                                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                                  : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                              }`}
+                            >
+                              {isPlaque ? 'Border' : 'Slant'}
+                            </button>
                           </div>
                           
                           {/* Divider between style and dimensions */}
-                          <div className="border-t border-slate-700/50 -mx-4"></div>
+                          <div className="border-t border-[#3A3A3A]/50 -mx-4"></div>
                         </>
                       )}
 
                       {/* Width Slider */}
                       <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className="flex items-center justify-between gap-2">
-                          <label className="text-sm font-medium text-slate-200 w-20">Width</label>
-                          <div className="flex items-center gap-0.5 justify-end">
+                          <label className="text-sm font-medium text-gray-200 w-20">Width</label>
+                          <div className="flex items-center gap-2 justify-end">
+                            {/* Decrement Button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newVal = Math.max(minWidth, currentWidthMm - 10);
+                                setCurrentWidthMm(newVal);
+                              }}
+                              disabled={editingObject === 'base' && !showBase}
+                              className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              aria-label="Decrease width by 10mm"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                              </svg>
+                            </button>
                             <input
                               type="number"
                               min={minWidth}
@@ -471,17 +485,32 @@ export default function DesignerNav() {
                                 }
                               }}
                               disabled={editingObject === 'base' && !showBase}
-                              className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                              className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
                                 currentWidthMm < minWidth || currentWidthMm > maxWidth
-                                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                  : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                                  : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                               }`}
                             />
-                            <span className="text-sm font-medium text-slate-500 w-6">mm</span>
+                            {/* Increment Button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newVal = Math.min(maxWidth, currentWidthMm + 10);
+                                setCurrentWidthMm(newVal);
+                              }}
+                              disabled={editingObject === 'base' && !showBase}
+                              className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              aria-label="Increase width by 10mm"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                              </svg>
+                            </button>
+                            <span className="text-sm font-medium text-gray-300">mm</span>
                           </div>
                         </div>
                         <div className="relative">
-                          <input
+                            <input
                             type="range"
                             min={minWidth}
                             max={maxWidth}
@@ -489,9 +518,9 @@ export default function DesignerNav() {
                             value={currentWidthMm}
                             onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
                             disabled={editingObject === 'base' && !showBase}
-                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                            className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                           />
-                          <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                          <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
                             <span>{minWidth}mm</span>
                             <span>{maxWidth}mm</span>
                           </div>
@@ -501,8 +530,23 @@ export default function DesignerNav() {
                       {/* Height Slider - Shows "Height" for both headstone and base */}
                       <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className="flex items-center justify-between gap-2">
-                          <label className="text-sm font-medium text-slate-200 w-20">Height</label>
-                          <div className="flex items-center gap-0.5 justify-end">
+                          <label className="text-sm font-medium text-gray-200 w-20">Height</label>
+                          <div className="flex items-center gap-2 justify-end">
+                            {/* Decrement Button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newVal = Math.max(minHeight, currentHeightMm - 10);
+                                setCurrentHeightMm(newVal);
+                              }}
+                              disabled={editingObject === 'base' && !showBase}
+                              className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              aria-label="Decrease height by 10mm"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                              </svg>
+                            </button>
                             <input
                               type="number"
                               min={minHeight}
@@ -522,17 +566,32 @@ export default function DesignerNav() {
                                 }
                               }}
                               disabled={editingObject === 'base' && !showBase}
-                              className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                              className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
                                 currentHeightMm < minHeight || currentHeightMm > maxHeight
-                                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                  : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                                  : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                               }`}
                             />
-                            <span className="text-sm font-medium text-slate-500 w-6">mm</span>
+                            {/* Increment Button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newVal = Math.min(maxHeight, currentHeightMm + 10);
+                                setCurrentHeightMm(newVal);
+                              }}
+                              disabled={editingObject === 'base' && !showBase}
+                              className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              aria-label="Increase height by 10mm"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                              </svg>
+                            </button>
+                            <span className="text-sm font-medium text-gray-300">mm</span>
                           </div>
                         </div>
                         <div className="relative">
-                          <input
+                            <input
                             type="range"
                             min={minHeight}
                             max={maxHeight}
@@ -540,9 +599,9 @@ export default function DesignerNav() {
                             value={currentHeightMm}
                             onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
                             disabled={editingObject === 'base' && !showBase}
-                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                            className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                           />
-                          <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                          <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
                             <span>{minHeight}mm</span>
                             <span>{maxHeight}mm</span>
                           </div>
@@ -553,8 +612,27 @@ export default function DesignerNav() {
                       {editingObject === 'headstone' && !isPlaque && (
                         <div className="space-y-1">
                           <div className="flex items-center justify-between gap-2">
-                            <label className="text-sm font-medium text-slate-200 w-20">Thickness</label>
-                            <div className="flex items-center gap-0.5 justify-end">
+                            <label className="text-sm font-medium text-gray-200 w-20">Thickness</label>
+                            <div className="flex items-center gap-2 justify-end">
+                              {/* Decrement Button */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const currentVal = headstoneStyle === 'upright' ? uprightThickness : slantThickness;
+                                  const newVal = Math.max(minThickness, currentVal - 10);
+                                  if (headstoneStyle === 'upright') {
+                                    setUprightThickness(newVal);
+                                  } else {
+                                    setSlantThickness(newVal);
+                                  }
+                                }}
+                                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                                aria-label="Decrease thickness by 10mm"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                </svg>
+                              </button>
                               <input
                                 type="number"
                                 min={minThickness}
@@ -585,19 +663,36 @@ export default function DesignerNav() {
                                     }
                                   }
                                 }}
-                                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
                                   (headstoneStyle === 'upright' ? uprightThickness : slantThickness) < minThickness || 
                                   (headstoneStyle === 'upright' ? uprightThickness : slantThickness) > maxThickness
-                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                    : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                                    : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                                 }`}
                               />
-                              <span className="text-sm font-medium text-slate-500 w-6">mm</span>
+                              {/* Increment Button */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const currentVal = headstoneStyle === 'upright' ? uprightThickness : slantThickness;
+                                  const newVal = Math.min(maxThickness, currentVal + 10);
+                                  if (headstoneStyle === 'upright') {
+                                    setUprightThickness(newVal);
+                                  } else {
+                                    setSlantThickness(newVal);
+                                  }
+                                }}
+                                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                                aria-label="Increase thickness by 10mm"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                              </button>
+                              <span className="text-sm font-medium text-gray-300">mm</span>
                             </div>
                           </div>
-                          <div className="relative">
-                            <input
-                              type="range"
+                          <div className="relative"><input type="range"
                               min={minThickness}
                               max={maxThickness}
                               step={10}
@@ -610,9 +705,9 @@ export default function DesignerNav() {
                                   setSlantThickness(newValue);
                                 }
                               }}
-                              className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                             />
-                            <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                            <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
                               <span>{minThickness}mm</span>
                               <span>{maxThickness}mm</span>
                             </div>
@@ -624,8 +719,22 @@ export default function DesignerNav() {
                       {editingObject === 'base' && showBase && (
                         <div className="space-y-1">
                           <div className="flex items-center justify-between gap-2">
-                            <label className="text-sm font-medium text-slate-200 w-20">Thickness</label>
-                            <div className="flex items-center gap-0.5 justify-end">
+                            <label className="text-sm font-medium text-gray-200 w-20">Thickness</label>
+                            <div className="flex items-center gap-2 justify-end">
+                              {/* Decrement Button */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newVal = Math.max(minThickness, baseThickness - 10);
+                                  setBaseThickness(newVal);
+                                }}
+                                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                                aria-label="Decrease base thickness by 10mm"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                </svg>
+                              </button>
                               <input
                                 type="number"
                                 min={minThickness}
@@ -644,18 +753,30 @@ export default function DesignerNav() {
                                     setBaseThickness(maxThickness);
                                   }
                                 }}
-                                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-slate-200 bg-slate-800 focus:outline-none focus:ring-1 transition-colors ${
+                                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
                                   baseThickness < minThickness || baseThickness > maxThickness
-                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                    : 'border-slate-600 focus:border-[#D7B356] focus:ring-[#D7B356]'
+                                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                                    : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                                 }`}
                               />
-                              <span className="text-sm font-medium text-slate-500 w-6">mm</span>
+                              {/* Increment Button */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newVal = Math.min(maxThickness, baseThickness + 10);
+                                  setBaseThickness(newVal);
+                                }}
+                                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                                aria-label="Increase base thickness by 10mm"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                              </button>
+                              <span className="text-sm font-medium text-gray-300">mm</span>
                             </div>
                           </div>
-                          <div className="relative">
-                            <input
-                              type="range"
+                          <div className="relative"><input type="range"
                               min={minThickness}
                               max={maxThickness}
                               step={10}
@@ -664,9 +785,9 @@ export default function DesignerNav() {
                                 const newValue = Number(e.target.value);
                                 setBaseThickness(newValue);
                               }}
-                              className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                             />
-                            <div className="flex justify-between text-xs text-slate-500 mt-0.5">
+                            <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
                               <span>{minThickness}mm</span>
                               <span>{maxThickness}mm</span>
                             </div>
@@ -680,7 +801,7 @@ export default function DesignerNav() {
                     <button
                       key="new-design-size"
                       onClick={handleNewDesign}
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                       <span>New Design</span>
@@ -706,7 +827,7 @@ export default function DesignerNav() {
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
@@ -715,7 +836,7 @@ export default function DesignerNav() {
                   
                   {/* Inscription editing panel - shown only when inscription panel is active */}
                   {activePanel === 'inscription' && (
-                    <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                    <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                       <InscriptionEditPanel />
                     </div>
                   )}
@@ -724,7 +845,7 @@ export default function DesignerNav() {
                     <button
                       key="new-design-inscriptions"
                       onClick={handleNewDesign}
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                       <span>New Design</span>
@@ -752,7 +873,7 @@ export default function DesignerNav() {
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
@@ -760,9 +881,9 @@ export default function DesignerNav() {
                   </Link>
                   
                   {selectedAdditionId && activeOffset && activeAddition && activePanel === 'addition' && (
-                    <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                    <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                       <div className="flex items-center justify-between">
-                        <div className="text-sm text-slate-300">
+                        <div className="text-sm text-gray-300">
                           Selected: <span className="font-semibold text-white">{selectedAdditionId}</span>
                         </div>
                         <button
@@ -825,7 +946,7 @@ export default function DesignerNav() {
                               });
                             }
                           }}
-                          className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                         />
                       </div>
 
@@ -847,7 +968,7 @@ export default function DesignerNav() {
                               });
                             }
                           }}
-                          className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                          className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                         />
                       </div>
                     </div>
@@ -857,7 +978,7 @@ export default function DesignerNav() {
                     <button
                       key="new-design-additions"
                       onClick={handleNewDesign}
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                       <span>New Design</span>
@@ -908,7 +1029,7 @@ export default function DesignerNav() {
                     className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
@@ -916,9 +1037,9 @@ export default function DesignerNav() {
                   </Link>
                   
                   {isMotifsExpanded && selectedMotifId && activeOffset && activeMotif && activePanel === 'motif' && (
-                    <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                    <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                       <div className="flex items-center justify-between">
-                        <div className="text-sm text-slate-300">
+                        <div className="text-sm text-gray-300">
                           Selected: <span className="font-semibold text-white">{selectedMotifId}</span>
                         </div>
                         <button
@@ -926,7 +1047,7 @@ export default function DesignerNav() {
                             setSelectedMotifId(null);
                             setIsMotifsExpanded(false);
                           }}
-                          className="text-slate-400 hover:text-white text-sm"
+                          className="text-gray-400 hover:text-white text-sm"
                         >
                           ✕
                         </button>
@@ -966,8 +1087,8 @@ export default function DesignerNav() {
 
                       <div className="space-y-3">
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-slate-200">
-                            Height: {activeOffset.heightMm ?? initHeight} <span className="text-slate-500">mm</span>
+                          <label className="block text-sm font-medium text-gray-200">
+                            Height: {activeOffset.heightMm ?? initHeight} <span className="text-gray-500">mm</span>
                           </label>
                           <input
                             type="range"
@@ -983,13 +1104,13 @@ export default function DesignerNav() {
                                 });
                               }
                             }}
-                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                            className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-slate-200">
-                            Rotation: {Math.round(((activeOffset.rotationZ ?? 0) * 180) / Math.PI)} <span className="text-slate-500">°</span>
+                          <label className="block text-sm font-medium text-gray-200">
+                            Rotation: {Math.round(((activeOffset.rotationZ ?? 0) * 180) / Math.PI)} <span className="text-gray-500">°</span>
                           </label>
                           <input
                             type="range"
@@ -1005,7 +1126,7 @@ export default function DesignerNav() {
                                 });
                               }
                             }}
-                            className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
+                            className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
                           />
                         </div>
 
@@ -1025,7 +1146,7 @@ export default function DesignerNav() {
                                   className="h-5 w-5 border border-white/20 rounded"
                                   style={{ backgroundColor: '#c99d44' }}
                                 />
-                                <span className="text-xs text-slate-200">Gold</span>
+                                <span className="text-xs text-gray-200">Gold</span>
                               </div>
                               <div
                                 className={`flex cursor-pointer flex-col items-center gap-1.5 border p-2 transition-colors rounded-lg ${
@@ -1037,7 +1158,7 @@ export default function DesignerNav() {
                                   className="h-5 w-5 border border-white/20 rounded"
                                   style={{ backgroundColor: '#eeeeee' }}
                                 />
-                                <span className="text-xs text-slate-200">Silver</span>
+                                <span className="text-xs text-gray-200">Silver</span>
                               </div>
                             </div>
                             
@@ -1063,7 +1184,7 @@ export default function DesignerNav() {
                   {showNewDesignAfter && (
                     <button
                       onClick={handleNewDesign}
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                       <span>New Design</span>
@@ -1091,7 +1212,7 @@ export default function DesignerNav() {
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
                           isActive
                             ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                            : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                            : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                         }`}
                       >
                         <Icon className="h-5 w-5 flex-shrink-0" />
@@ -1099,7 +1220,7 @@ export default function DesignerNav() {
                       </button>
                       
                       {isActive && !selectedMotifId && !selectedAdditionId && shapes.length > 0 && (
-                        <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                        <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                           <ShapeSelector shapes={shapes} />
                         </div>
                       )}
@@ -1112,7 +1233,7 @@ export default function DesignerNav() {
                       className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                         isActive 
                           ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                          : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                       }`}
                     >
                       <Icon className="h-5 w-5 flex-shrink-0" />
@@ -1124,7 +1245,7 @@ export default function DesignerNav() {
                     <button
                       key="new-design-shape"
                       onClick={handleNewDesign}
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                       <span>New Design</span>
@@ -1152,7 +1273,7 @@ export default function DesignerNav() {
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
                           isActive
                             ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                            : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                            : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                         }`}
                       >
                         <Icon className="h-5 w-5 flex-shrink-0" />
@@ -1160,7 +1281,7 @@ export default function DesignerNav() {
                       </button>
                       
                       {isActive && !selectedMotifId && !selectedAdditionId && materials.length > 0 && (
-                        <div className="mt-3 space-y-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-xl backdrop-blur-sm">
+                        <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                           <MaterialSelector materials={materials} />
                         </div>
                       )}
@@ -1173,7 +1294,7 @@ export default function DesignerNav() {
                       className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                         isActive 
                           ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                          : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                       }`}
                     >
                       <Icon className="h-5 w-5 flex-shrink-0" />
@@ -1185,7 +1306,7 @@ export default function DesignerNav() {
                     <button
                       key="new-design-material"
                       onClick={handleNewDesign}
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                       <span>New Design</span>
@@ -1203,7 +1324,7 @@ export default function DesignerNav() {
                   className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                     isActive 
                       ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                      : 'text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                      : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                   }`}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -1213,7 +1334,7 @@ export default function DesignerNav() {
                 {showNewDesignAfter && (
                   <button
                     onClick={handleNewDesign}
-                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
                   >
                     <ArrowPathIcon className="h-5 w-5 flex-shrink-0" />
                     <span>New Design</span>

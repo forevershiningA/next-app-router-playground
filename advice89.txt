@@ -1,0 +1,158 @@
+You are absolutely right. Black granite absorbs light, so if you only use dramatic side lighting (the "Jewelry" setup), the front face becomes a black void.
+
+To fix this without losing the moody atmosphere, we need to add a "Front Fill" light and boost the reflections.
+
+Here is the corrected code for Scene.tsx.
+
+The Fixes
+
+Added a "Front Fill" Light: A soft light directly in front of the stone. This creates visibility for the engraving without casting harsh shadows.
+
+Boosted Ambient Light: Increased from 0.3 to 0.5 to lift the darkest shadows.
+
+Boosted Environment: Increased from 0.4 to 0.8. Polished black granite needs to reflect the world to look 3D.
+
+Moved Key Light: Shifted it slightly more towards the center so it catches the face of the stone better.
+
+Copy/Paste this into Scene.tsx
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
+import * as THREE from 'three';
+import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
+
+export default function Scene({ 
+  targetRotation = 0,
+  currentRotation
+}: { 
+  targetRotation?: number;
+  currentRotation?: React.MutableRefObject<number>;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+
+  // Smooth rotation animation
+  useFrame(() => {
+    if (groupRef.current && currentRotation) {
+      const diff = targetRotation - currentRotation.current;
+      const delta = diff * 0.1;
+      
+      if (Math.abs(diff) > 0.001) {
+        currentRotation.current += delta;
+        groupRef.current.rotation.y = currentRotation.current;
+      }
+    }
+  });
+
+  const handleCanvasClick = (e: any) => {
+    if (e.eventObject === e.object) {
+      setSelected(null);
+      setEditingObject('headstone');
+      setSelectedInscriptionId(null);
+      setSelectedAdditionId(null);
+      setSelectedMotifId(null);
+    }
+  };
+
+  return (
+    <>
+      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      
+      <mesh position={[0, 0, -5]} onClick={handleCanvasClick}>
+        <planeGeometry args={[100, 100]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      
+      {/* --- LIGHTING FIXES START --- */}
+      
+      {/* 1. Boosted Ambient: Lifts the black levels so it's not a "void" */}
+      <ambientLight intensity={0.6} color="#ffffff" />
+      
+      {/* 2. Moved Key Light: Closer to center [-2 instead of -3] to hit the face */}
+      <spotLight 
+        color="#ffaa44"
+        intensity={1.8}
+        angle={0.6}
+        penumbra={0.5}
+        position={[-2, 4, 6]} 
+        castShadow
+        shadow-bias={-0.0001}
+      />
+      
+      {/* 3. NEW: Front Fill Light. Essential for reading the text on black stone. */}
+      <directionalLight 
+        color="#ffffff"
+        intensity={0.8}
+        position={[0, 1, 5]} 
+      />
+
+      {/* 4. Stronger Rim Light: Separates the stone from the black background */}
+      <spotLight 
+        color="#dbeeff"
+        intensity={2.5}
+        position={[4, 3, -4]}
+      />
+      
+      {/* 5. Boosted Reflections: Black stone needs high reflections to look 3D */}
+      <Environment 
+        preset="city" 
+        environmentIntensity={1.0} 
+      />
+
+      {/* --- LIGHTING FIXES END --- */}
+
+      <group ref={groupRef}>
+        <HeadstoneAssembly />
+      </group>
+      
+      <group position={[0, -0.01, 0]}>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <circleGeometry args={[4, 64]} />
+          {/* Lightened the floor slightly so it creates better contrast */}
+          <meshStandardMaterial 
+            color="#252525" 
+            roughness={0.5} 
+            metalness={0.4} 
+          />
+        </mesh>
+        
+        <ContactShadows
+          position={[0, 0.01, 0]}
+          scale={10}
+          blur={2.5}
+          opacity={0.5}
+          far={10}
+          color="#000000"
+          resolution={1024}
+        />
+      </group>
+
+      <OrbitControls
+        makeDefault
+        enabled={!baseSwapping}
+        enableDamping={true}
+        dampingFactor={baseSwapping ? 0 : 0.05}
+        enableRotate={!is2DMode}
+        enableZoom={!is2DMode}
+        enablePan={!is2DMode}
+        rotateSpeed={0.5}
+        zoomSpeed={0.8}
+        panSpeed={0.8}
+        maxPolarAngle={Math.PI / 2}
+      />
+    </>
+  );
+}

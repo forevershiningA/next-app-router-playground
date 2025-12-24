@@ -76,8 +76,8 @@ export default function ProductSelectionGrid({ products }: { products: Product[]
       {/* Category Filter */}
       <div className="border-b border-white/5 bg-gray-900/30 relative">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8 relative">
-          <div className="flex flex-wrap justify-center gap-3">
+        <div className="mx-auto max-w-7xl pl-6 pr-6 py-6 lg:pl-8 lg:pr-8 relative">
+          <div className="flex flex-wrap gap-3 -ml-3">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
@@ -125,25 +125,33 @@ export default function ProductSelectionGrid({ products }: { products: Product[]
                   <button
                     key={product.id}
                     onClick={() => handleProductSelect(product)}
-                    className="relative overflow-hidden cursor-pointer"
+                    className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
+                      isSelected
+                        ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                        : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                    }`}
                   >
-                  {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden mb-4">
+                  {/* Product Image - Full width, touching top and sides */}
+                  <div className="relative h-64 overflow-hidden">
                     <Image
                       src={`/webp/products/${product.image}`}
                       alt={product.name}
                       fill
-                      className={`object-cover transition-all ${
-                        isSelected ? 'border-2 border-[#cfac6c]' : 'border-2 border-transparent hover:border-[#cfac6c]'
-                      }`}
+                      className="object-cover transition-transform group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
 
-                  {/* Product Info */}
-                  <div className="p-2 h-12 flex items-center justify-center">
-                    <div className="text-sm text-slate-200 text-center line-clamp-2">
+                  {/* Product Info - with padding and flexbox */}
+                  <div className="p-4 flex flex-col">
+                    <h3 className="text-base font-medium text-white line-clamp-2 mb-2">
                       {product.name}
+                    </h3>
+                    {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
+                    <div className="h-5 mt-auto">
+                      <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Customize →
+                      </span>
                     </div>
                   </div>
                 </button>

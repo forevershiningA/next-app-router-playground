@@ -256,11 +256,11 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
             'lg:block': (showAllSections || !activeSection || isDesignPage) && !activePanel,
           })}
         >
-        <nav className="space-y-6 px-2 pb-4 pt-4 lg:pt-2">
+        <nav className="space-y-8 px-2 pb-4 pt-4 lg:pt-2">
           {items.map((section) => {
             return (
               <div key={section.name}>
-                <div className="mb-2 px-3 font-mono text-sm font-semibold tracking-wide text-gray-600 uppercase flex items-center justify-between">
+                <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-gray-500 uppercase flex items-center justify-between">
                   <div>{section.name}</div>
                   {/* Back to Menu button - show when a section is active (mobile/tablet only) - BUT hide on design pages */}
                   {!showAllSections && activeSection && !isDesignPage && (
@@ -364,10 +364,10 @@ function NavItem({
       onClick={handleClick}
       href={`/${item.slug}`}
       className={clsx(
-        'flex items-center justify-between gap-3 rounded-md px-3 py-2 text-base font-medium hover:text-gray-300',
+        'flex items-center justify-between gap-3 rounded-md px-3 py-2 text-base font-medium transition-colors',
         {
-          'text-gray-400 hover:bg-gray-800': !isActive,
-          'text-white': isActive,
+          'text-gray-300 hover:bg-gray-800 hover:text-white': !isActive,
+          'text-[#cfac6c] bg-[#cfac6c]/10': isActive,
         },
       )}
     >

@@ -1,0 +1,393 @@
+To fix the "Dark Headstone" issue, we need to treat this like a photography studio. Currently, your lights are too high (simulating the sun at noon), which leaves vertical faces in shadow. We will move the lights down to "eye level" (simulating a photographer's softbox).
+
+For the selection indicator, I have created a new ElegantSelection component. Instead of a "CAD Wireframe" cage, it uses "Viewfinder Corners". It looks like a camera focus interface or the transform tool in design software (like Photoshop/Figma). It indicates the volume without obscuring the beautiful stone.
+
+1. New Component: ElegantSelection.tsx
+
+Create this file in your components/three/ folder.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// components/three/ElegantSelection.tsx
+'use client';
+
+import * as React from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+
+type ElegantSelectionProps = {
+  targetRef: React.RefObject<THREE.Object3D> | React.MutableRefObject<THREE.Object3D | null>;
+  visible?: boolean;
+  color?: string;
+  padding?: number; // How far from the object the corners sit
+  lineLength?: number; // Length of the corner arms relative to size (0 to 0.5)
+};
+
+export default function ElegantSelection({
+  targetRef,
+  visible = true,
+  color = '#ffffff', // White looks cleanest
+  padding = 0.02,
+  lineLength = 0.15, // Short, elegant corners
+}: ElegantSelectionProps) {
+  const lineRef = React.useRef<THREE.LineSegments>(null);
+
+  // Re-calculate the corner geometry every frame to handle animation/resizing
+  useFrame(() => {
+    const obj = targetRef.current;
+    const lines = lineRef.current;
+    
+    if (!obj || !lines || !visible) {
+      if (lines) lines.visible = false;
+      return;
+    }
+
+    // 1. Calculate Bounding Box
+    const box = new THREE.Box3();
+    
+    // We want the box of the specific mesh (headstone OR base), not the whole group
+    // If the target is a group, we traverse. If it's a mesh, we use geometry.
+    if (obj.children.length > 0) {
+        box.setFromObject(obj);
+    } else if ((obj as THREE.Mesh).geometry) {
+        (obj as THREE.Mesh).geometry.computeBoundingBox();
+        if ((obj as THREE.Mesh).geometry.boundingBox) {
+            box.copy((obj as THREE.Mesh).geometry.boundingBox!);
+            // Convert local box to world space relative to parent
+            box.applyMatrix4(obj.matrixWorld); 
+            // We need it in the local space of the helper (which is parented to obj parent)
+            // Ideally, we just assume the helper is at world 0,0,0 and we draw world coords.
+            // But usually simple box.setFromObject(obj) works best for visual helpers.
+            box.setFromObject(obj);
+        }
+    } else {
+        box.setFromObject(obj);
+    }
+
+    if (box.isEmpty()) {
+        lines.visible = false;
+        return;
+    }
+
+    lines.visible = true;
+
+    // Expand slightly so it doesn't clip
+    box.expandByScalar(padding);
+
+    const min = box.min;
+    const max = box.max;
+
+    // Calculate dynamic line length based on object size
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const lenX = size.x * lineLength;
+    const lenY = size.y * lineLength;
+    const lenZ = size.z * lineLength;
+
+    // 2. Build the "Viewfinder" Geometry (8 corners, 3 lines per corner)
+    const positions: number[] = [];
+
+    // Helper to push a line segment
+    const pushLine = (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number) => {
+      positions.push(x1, y1, z1, x2, y2, z2);
+    };
+
+    // --- Bottom Corners ---
+    // Front-Left-Bottom
+    pushLine(min.x, min.y, max.z, min.x + lenX, min.y, max.z); // X
+    pushLine(min.x, min.y, max.z, min.x, min.y + lenY, max.z); // Y
+    pushLine(min.x, min.y, max.z, min.x, min.y, max.z - lenZ); // Z
+
+    // Front-Right-Bottom
+    pushLine(max.x, min.y, max.z, max.x - lenX, min.y, max.z);
+    pushLine(max.x, min.y, max.z, max.x, min.y + lenY, max.z);
+    pushLine(max.x, min.y, max.z, max.x, min.y, max.z - lenZ);
+
+    // Back-Left-Bottom
+    pushLine(min.x, min.y, min.z, min.x + lenX, min.y, min.z);
+    pushLine(min.x, min.y, min.z, min.x, min.y + lenY, min.z);
+    pushLine(min.x, min.y, min.z, min.x, min.y, min.z + lenZ);
+
+    // Back-Right-Bottom
+    pushLine(max.x, min.y, min.z, max.x - lenX, min.y, min.z);
+    pushLine(max.x, min.y, min.z, max.x, min.y + lenY, min.z);
+    pushLine(max.x, min.y, min.z, max.x, min.y, min.z + lenZ);
+
+    // --- Top Corners ---
+    // Front-Left-Top
+    pushLine(min.x, max.y, max.z, min.x + lenX, max.y, max.z);
+    pushLine(min.x, max.y, max.z, min.x, max.y - lenY, max.z);
+    pushLine(min.x, max.y, max.z, min.x, max.y, max.z - lenZ);
+
+    // Front-Right-Top
+    pushLine(max.x, max.y, max.z, max.x - lenX, max.y, max.z);
+    pushLine(max.x, max.y, max.z, max.x, max.y - lenY, max.z);
+    pushLine(max.x, max.y, max.z, max.x, max.y, max.z - lenZ);
+
+    // Back-Left-Top
+    pushLine(min.x, max.y, min.z, min.x + lenX, max.y, min.z);
+    pushLine(min.x, max.y, min.z, min.x, max.y - lenY, min.z);
+    pushLine(min.x, max.y, min.z, min.x, max.y, min.z + lenZ);
+
+    // Back-Right-Top
+    pushLine(max.x, max.y, min.z, max.x - lenX, max.y, min.z);
+    pushLine(max.x, max.y, min.z, max.x, max.y - lenY, min.z);
+    pushLine(max.x, max.y, min.z, max.x, max.y, min.z + lenZ);
+
+    // Update geometry
+    lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    lines.geometry.computeBoundingSphere();
+  });
+
+  return (
+    <lineSegments ref={lineRef}>
+      <bufferGeometry />
+      <lineBasicMaterial 
+        color={color} 
+        depthTest={false} // Draw on top of everything
+        opacity={0.8} 
+        transparent 
+        linewidth={1} // Note: WebGL limits line width to 1 on most browsers
+      />
+    </lineSegments>
+  );
+}
+2. Updated Scene.tsx (Lighting Overhaul)
+
+I have drastically lowered the lights.
+
+Sun: Moved to Y=3 (Eye Level). This ensures the vertical stone face gets direct light.
+
+Fill Light: Boosted to 1.5 intensity and aimed straight at the face.
+
+Ambient: Boosted to 1.1.
+
+Ground Color: Made almost white to reflect light upwards onto the stone.
+
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, AdaptiveDpr } from '@react-three/drei';
+import * as THREE from 'three';
+import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import AtmosphericSky from './AtmosphericSky';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useRef, Suspense, useEffect } from 'react';
+
+// --- CONFIGURATION ---
+const GRASS_COLOR = '#ffffff'; 
+const FOG_COLOR = '#e8e8e8';
+
+function GrassFloor() {
+  const gl = useThree((state) => state.gl);
+  
+  const props = useTexture({
+    map: '/textures/grass_color.jpg',
+    normalMap: '/textures/grass_normal.jpg',
+    aoMap: '/textures/grass_ao.jpg',
+  });
+
+  const REPEAT_SCALE = 40;
+
+  useEffect(() => {
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 8);
+
+    [props.map, props.normalMap, props.aoMap].forEach((tex) => {
+      if (tex) {
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = anisotropy;
+        tex.needsUpdate = true;
+      }
+    });
+  }, [props, gl]);
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[150, 150]} />
+        <meshStandardMaterial 
+          map={props.map}
+          normalMap={props.normalMap}
+          aoMap={props.aoMap}
+          color={GRASS_COLOR}
+          roughness={1}
+          normalScale={new THREE.Vector2(0.5, 0.5)}
+          metalness={0}
+          envMapIntensity={0}
+          fog={true}
+        />
+      </mesh>
+      
+      <ContactShadows
+        position={[0, 0.02, 0]}
+        scale={15}
+        blur={2.5}
+        opacity={0.5}
+        far={1.5}
+        color="#001100"
+        resolution={256}
+        frames={1}
+      />
+    </group>
+  );
+}
+
+function SimpleGrassFloor() {
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[150, 150]} />
+        <meshStandardMaterial 
+          color="#355c18"
+          roughness={1}
+          metalness={0}
+          envMapIntensity={0}
+        />
+      </mesh>
+      <ContactShadows position={[0, 0.02, 0]} scale={15} blur={2.5} opacity={0.6} far={1.5} color="#001100" resolution={256} frames={1} />
+    </group>
+  );
+}
+
+export default function Scene({ 
+  targetRotation = 0,
+  currentRotation
+}: { 
+  targetRotation?: number;
+  currentRotation?: React.MutableRefObject<number>;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+
+  useFrame(() => {
+    if (groupRef.current && currentRotation) {
+      const diff = targetRotation - currentRotation.current;
+      const delta = diff * 0.1;
+      
+      if (Math.abs(diff) > 0.001) {
+        currentRotation.current += delta;
+        groupRef.current.rotation.y = currentRotation.current;
+      }
+    }
+  });
+
+  const handleCanvasClick = (e: any) => {
+    if (e.eventObject === e.object) {
+      setSelected(null);
+      setEditingObject('headstone');
+      setSelectedInscriptionId(null);
+      setSelectedAdditionId(null);
+      setSelectedMotifId(null);
+    }
+  };
+
+  return (
+    <>
+      <AdaptiveDpr pixelated />
+
+      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      {!is2DMode && <fog attach="fog" args={[FOG_COLOR, 50, 150]} />}
+      
+      <mesh
+        position={[0, 0, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        onClick={handleCanvasClick}
+      >
+        <planeGeometry args={[200, 200]} />
+        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
+      </mesh>
+      
+      {!is2DMode && (
+         <Sparkles 
+           count={30}
+           scale={12}
+           size={3}
+           speed={0.3}
+           opacity={0.4}
+           color="#fffee0"
+           position={[0, 2, 0]}
+         />
+      )}
+      
+      {/* --- LIGHTING FIXES FOR DARK STONE --- */}
+      
+      {/* 1. High Ambient: Raises the 'minimum' brightness of the stone */}
+      <ambientLight intensity={1.1} color="#ffffff" />
+      
+      {/* 2. Bright Ground Bounce: Reflects light UP into the vertical face */}
+      <hemisphereLight
+        args={['#fff8e7', '#e0e0e0']} // Very light grey bottom
+        intensity={0.7}
+      />
+      
+      {/* 3. Main Sun: Lowered to Eye Level (Y=3) */}
+      <spotLight 
+        color="#fffce6"
+        intensity={2.0}
+        angle={0.6}
+        penumbra={1}
+        position={[-5, 3, 15]} // Lower Y, Closer Z
+        castShadow
+        shadow-bias={-0.0001}
+        shadow-mapSize={[1024, 1024]}
+      />
+
+      {/* 4. Front Blast: A light strictly for the front face */}
+      <directionalLight 
+        position={[0, 0, 10]} 
+        intensity={1.5} 
+        color="#ffffff" 
+      />
+
+      {/* Rim light */}
+      <spotLight color="#ffffff" intensity={2} position={[5, 5, -5]} distance={30} />
+
+      <Environment
+        preset="city"
+        background={false}
+        blur={1.0}
+        resolution={256}
+        environmentIntensity={0.6} // Slightly higher reflections
+      />
+
+      <group ref={groupRef}>
+        <HeadstoneAssembly />
+        <Suspense fallback={<SimpleGrassFloor />}>
+          <GrassFloor />
+        </Suspense>
+      </group>
+      
+      {!is2DMode && <AtmosphericSky />}
+
+      <OrbitControls
+        makeDefault
+        enabled={!baseSwapping}
+        enableDamping={true}
+        dampingFactor={baseSwapping ? 0 : 0.05}
+        enableRotate={!is2DMode}
+        enableZoom={!is2DMode}
+        enablePan={!is2DMode}
+        rotateSpeed={0.5}
+        zoomSpeed={0.8}
+        panSpeed={0.8}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI / 2 - 0.05}
+      />
+    </>
+  );
+}

@@ -1,0 +1,30 @@
+You’re super close—the last culprit is your HDRI.
+
+In `Scene.tsx` the `<Environment>` prop is misspelled:
+
+```tsx
+<Environment
+  preset="forest"
+  environmentIntensity={0.3}  // <-- not a valid prop
+  background={false}
+  environmentRotation={[0, Math.PI / 2, 0]}
+/>
+```
+
+`@react-three/drei` ignores `environmentIntensity`, so the **scene.environment stays at full intensity (1.0)**. That HDRI adds cool skylight/IBL from the forest map, which is why the ground goes bluish in the front view even after you softened the sky and fog. Fix it by using the real prop:
+
+```tsx
+<Environment
+  preset="forest"
+  intensity={0.25}     // correct prop
+  background={false}
+  rotation={[0, Math.PI / 2, 0]}
+/>
+```
+
+If you want to go further:
+
+* Keep the headstone glossy but keep grass neutral: leave `intensity` low (0.2–0.35) and keep the grass material’s `envMapIntensity={0}` (you already do this). 
+* Your sky/fog colors are fine now (`uColorTop: '#5f8f9a'`, `uColorBottom: '#dfe6df'`; fog `'#dfe6df', 80–160`). Those aren’t the source anymore. 
+
+After correcting the prop, the blue wash on the grass should disappear from all angles while preserving nice reflections on the granite.

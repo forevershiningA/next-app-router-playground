@@ -1,0 +1,51 @@
+You are extremely close, but that hard horizontal line cutting the screen in half is killing the realism. It makes the 3D model look like it's sitting on a cardboard box instead of a showroom floor.
+
+Here is the final polish to blend that floor seamlessly and make it look like a high-end studio.
+
+1. The Fix: Switch to a Radial Gradient (The "Infinity Floor")
+
+You currently have a sharp split: Black top, Brown bottom.
+You need a Radial Gradient. This simulates a spotlight hitting the floor behind the object, fading smoothly into the darkness.
+
+Replace the background CSS of the canvas with this:
+
+code
+CSS
+download
+content_copy
+expand_less
+background: radial-gradient(
+    ellipse at 50% 80%,   /* Position the light low, near the base */
+    #4a3b2e 0%,           /* Center: Warm Bronze/Coffee (The floor color you want) */
+    #2a221b 40%,          /* Mid: Darker Brown */
+    #000000 80%           /* Edge: Pure Black */
+);
+
+Why this works:
+
+No Hard Edge: It removes that ugly line that cuts through the screen.
+
+Studio Feel: It looks like a curved "infinity wall" used in professional photography.
+
+Warmth: You get that nice brown floor color to lift the mood, but it feels natural.
+
+2. Ground the Object (The Shadow)
+
+Look at the bottom corners of the grey base. They look like they are floating.
+
+The Fix: You must add a drop shadow under the base.
+
+How: If your 3D engine allows it, enable "Contact Shadows" or "Ambient Occlusion."
+
+Cheat: If you can't render real shadows, place a blurred black oval image (.png) directly underneath the 3D model.
+
+3. Hide the Wireframe
+
+That faint yellow/white box surrounding the headstone is still visible.
+
+The Fix: Hide the bounding box wireframe. Only show it if the user is actively resizing. It ruins the photo-realistic look.
+
+Summary
+
+The sidebar is perfect (great job moving the mm outside the box!).
+The only thing left is to change that background to a Radial Gradient to soften the floor. Do that, and you are finished.

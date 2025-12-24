@@ -71,16 +71,17 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header Section */}
-      <div className="border-b border-gray-800">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
               {selectedCategoryMotif ? getMotifCategoryName(selectedCategoryMotif.name) : 'Select Motifs'}
             </h1>
-            <p className="mt-4 text-lg text-gray-400">
-              {selectedCategoryMotif ? 'Choose a motif to add to your memorial' : 'Add decorative symbols to your memorial'}
+            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+              {selectedCategoryMotif ? 'Choose a motif to add to your memorial' : 'Add decorative symbols and designs to personalize your memorial'}
             </p>
           </div>
         </div>
@@ -88,8 +89,9 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
 
       {/* Category Filter / Back Button */}
       {selectedCategoryMotif ? (
-        <div className="border-b border-gray-800">
-          <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
+        <div className="border-b border-white/5 bg-gray-900/30 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
+          <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8 relative">
             <div className="flex justify-center">
               <button
                 onClick={handleBackToCategories}
@@ -115,38 +117,29 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
                     <button
                       key={motif.id}
                       onClick={() => handleCategoryClick(motif)}
-                      className="group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/60 hover:to-gray-800/60 hover:border-[#cfac6c]/30"
+                      className="group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10"
                     >
-                      {/* Motif Image */}
-                      <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 flex items-center justify-center p-4">
-                        <img
-                          src={motif.img}
-                          alt={getMotifCategoryName(motif.name)}
-                          className="object-contain max-h-full max-w-full"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                      {/* Motif Image - Square aspect ratio */}
+                      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
+                        <div className="absolute inset-0 flex items-center justify-center p-8">
+                          <img
+                            src={motif.img}
+                            alt={getMotifCategoryName(motif.name)}
+                            className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
+                          />
+                        </div>
                       </div>
 
-                      {/* Motif Info */}
-                      <div>
-                        <h3 className="text-base font-medium text-white text-center line-clamp-2 mb-2">
+                      {/* Motif Info - with padding and flexbox */}
+                      <div className="p-4 flex flex-col">
+                        <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-2">
                           {getMotifCategoryName(motif.name)}
                         </h3>
-                        <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-                          <span>Browse</span>
-                          <svg
-                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
+                        {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
+                        <div className="h-5 mt-auto">
+                          <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            Browse →
+                          </span>
                         </div>
                       </div>
                     </button>
@@ -231,49 +224,40 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
                       <button
                         key={index}
                         onClick={() => handleIndividualMotifToggle(motif.path)}
-                        className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
+                        className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
                           isSelected
-                            ? 'border-[#cfac6c]/70 bg-gradient-to-br from-[#cfac6c]/20 to-gray-900/50 shadow-lg shadow-[#cfac6c]/20'
-                            : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/60 hover:to-gray-800/60 hover:border-[#cfac6c]/30'
+                            ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                            : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                         }`}
                       >
                         {/* Selected Badge */}
                         {isSelected && (
                           <div className="absolute top-2 right-2 z-10 rounded-full bg-[#cfac6c] px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
-                            Selected
+                            ✓ Added
                           </div>
                         )}
                         
-                        {/* Motif Image */}
-                        <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 flex items-center justify-center p-4">
-                          <img
-                            src={motif.path}
-                            alt={motif.name}
-                            className="object-contain max-h-full max-w-full"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                        {/* Motif Image - Square aspect ratio */}
+                        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
+                          <div className="absolute inset-0 flex items-center justify-center p-8">
+                            <img
+                              src={motif.path}
+                              alt={motif.name}
+                              className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
+                            />
+                          </div>
                         </div>
 
-                        {/* Motif Info */}
-                        <div>
-                          <h3 className="text-base font-medium text-white text-center line-clamp-2 mb-2">
+                        {/* Motif Info - with padding and flexbox */}
+                        <div className="p-4 flex flex-col">
+                          <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-2">
                             {motif.name}
                           </h3>
-                          <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-                            <span>{isSelected ? 'Selected' : 'Add Motif'}</span>
-                            <svg
-                              className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d={isSelected ? "M5 13l4 4L19 7" : "M9 5l7 7-7 7"}
-                              />
-                            </svg>
+                          {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
+                          <div className="h-5 mt-auto">
+                            <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                              {isSelected ? 'Remove →' : 'Add →'}
+                            </span>
                           </div>
                         </div>
                       </button>

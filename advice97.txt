@@ -1,0 +1,233 @@
+This is a great step forward, but you are right—it still feels a bit "game-like" rather than a premium product configurator.
+
+The main issues in the current screenshot are:
+
+The UI Overlay: The dark card at the bottom is covering the base of the monument. In product design, the "anchor" (where the object hits the ground) is crucial for a sense of weight and reality. Hiding it makes the object feel floaty.
+
+The Grass Tiling: The grid pattern on the grass (repeat.set(16, 16)) is very visible, breaking the immersion.
+
+The Horizon: There is a razor-sharp line where the grass ends and the sky begins. Real photography has a blur or atmospheric fade there.
+
+Flat Lighting: The black granite doesn't look "polished" enough, and the gold text isn't catching the light ("bling") effectively.
+
+Here is the specific advice and code to fix this.
+
+1. UI & Layout Strategy (The "Apple Studio" Look)
+
+Get rid of the heavy background card entirely. It makes the scene feel claustrophobic.
+
+Product Title: Move to the Top Left or Top Center. Use dark text (or white with a subtle shadow) floating directly over the sky.
+
+Price/Specs: Keep the "Pill" shape, but detach it from the title. Place it at the Bottom Center, floating just above the grass.
+
+Result: This frames the headstone between the text, leaving the product itself fully visible from top to bottom.
+
+CSS Concept:
+
+code
+Tsx
+download
+content_copy
+expand_less
+{/* Title Floating Top Left */}
+<div className="absolute top-8 left-8 z-10 pointer-events-none">
+  <h1 className="text-4xl font-serif text-slate-900 drop-shadow-sm">Traditional Engraved Headstone</h1>
+  <p className="text-lg text-slate-700 mt-1">Premium Black Granite • Serpentine Top</p>
+</div>
+
+{/* Price Pill Floating Bottom Center */}
+<div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-auto">
+   <div className="bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center">
+     <span className="opacity-80 text-sm">600 × 600 mm</span>
+     <div className="w-px h-4 bg-white/20"></div>
+     <span className="font-bold text-green-400">$2129.16</span>
+   </div>
+</div>
+2. Scene Realism Code Updates
+
+To fix the "Gamey" look, we need Depth of Field (DOF) and better texture handling.
+
+Prerequisite: You need the post-processing library.
+npm install @react-three/postprocessing
+
+Here is the revised Scene.tsx. I have tuned the lighting and floor specifically to fix your screenshot issues.
+
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles } from '@react-three/drei';
+import { EffectComposer, DepthOfField, Vignette } from '@react-three/postprocessing'; 
+import * as THREE from 'three';
+import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import AtmosphericSky from './AtmosphericSky';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useFrame } from '@react-three/fiber';
+import { useRef, Suspense } from 'react';
+
+// --- CONFIGURATION ---
+// Darkened green slightly for a more "lush" look, less neon
+const GRASS_COLOR = '#1a591a'; 
+
+function GrassFloor() {
+  const props = useTexture({
+    map: '/textures/grass_color.jpg',
+    normalMap: '/textures/grass_normal.jpg',
+    roughnessMap: '/textures/grass_roughness.jpg',
+    aoMap: '/textures/grass_ao.jpg',
+  });
+
+  // FIX: Reduce tiling to hide the grid pattern
+  // 6 or 8 is usually the sweet spot for this scale
+  props.map.repeat.set(6, 6); 
+  props.normalMap.repeat.set(6, 6);
+  props.roughnessMap.repeat.set(6, 6);
+  props.aoMap.repeat.set(6, 6);
+
+  // Apply wrapping to all textures
+  [props.map, props.normalMap, props.roughnessMap, props.aoMap].forEach((tex) => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  });
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        {/* Increase size to push horizon further back */}
+        <planeGeometry args={[150, 150]} />
+        <meshStandardMaterial 
+          {...props}
+          color={GRASS_COLOR}
+          roughness={1}     // Grass isn't shiny
+          metalness={0}
+          envMapIntensity={0} // Grass shouldn't reflect the sky too much
+        />
+      </mesh>
+      
+      {/* Soften the contact shadow */}
+      <ContactShadows
+        position={[0, 0.01, 0]}
+        scale={20}
+        blur={2.5}
+        opacity={0.6}
+        far={10}
+        color="#000000"
+      />
+    </group>
+  );
+}
+
+// ... SimpleGrassFloor ...
+
+export default function Scene({ targetRotation = 0, currentRotation }: any) {
+  const groupRef = useRef<THREE.Group>(null);
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  // ... other hooks ...
+
+  // ... Rotation Logic ...
+
+  const handleCanvasClick = (e: any) => { /* ... */ };
+
+  return (
+    <>
+      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      
+      {/* 
+        FOG: bring start/end closer to hide the hard floor edge.
+        This blends the floor into the sky color.
+      */}
+      {!is2DMode && <fog attach="fog" args={['#e0f2fe', 10, 40]} />}
+      
+      <mesh position={[0, 0, -5]} onClick={handleCanvasClick}>
+        <planeGeometry args={[100, 100]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      
+      {!is2DMode && <AtmosphericSky />}
+      
+      {!is2DMode && (
+         <Sparkles count={40} scale={10} size={2} speed={0.4} opacity={0.3} color="#fff" position={[0, 2, 0]} />
+      )}
+      
+      {/* --- LIGHTING IMPROVEMENTS --- */}
+      
+      <ambientLight intensity={0.5} color="#cce0ff" />
+      
+      {/* Key Light: Adjusted position to hit the front text */}
+      <spotLight 
+        color="#fff5e6"
+        intensity={2.5}
+        angle={0.5}
+        penumbra={1}
+        position={[-3, 6, 8]} // Moved closer to camera/front
+        castShadow
+        shadow-bias={-0.0001}
+      />
+
+      {/* Fill Light: Softens the dark side of the black granite */}
+      <pointLight position={[5, 2, 5]} intensity={0.5} color="#b8c5d1" />
+
+      {/* Rim Light: Highlights the serpentine top edge */}
+      <spotLight color="#bfdbfe" intensity={1.5} position={[-5, 4, -5]} />
+
+      {/* 
+        ENVIRONMENT:
+        Rotating the environment map helps the "city lights" reflection
+        hit the polished front face, making it look like expensive granite.
+      */}
+      <Environment
+        preset="city"
+        environmentIntensity={0.8}
+        background={false}
+        environmentRotation={[0, Math.PI / 2, 0]} 
+      />
+
+      <group ref={groupRef}>
+        <HeadstoneAssembly />
+      </group>
+      
+      <Suspense fallback={<SimpleGrassFloor />}>
+        <GrassFloor />
+      </Suspense>
+
+      {/* 
+        POST PROCESSING: This is the "Expensive Camera" look.
+        It blurs the horizon line and focuses on the stone.
+      */}
+      {!is2DMode && (
+        <EffectComposer disableNormalPass>
+          <DepthOfField 
+            target={[0, 0.8, 0]} // Focus roughly on the text area
+            focalLength={0.03}   // 30mm lens equivalent
+            bokehScale={4}       // Amount of blur
+            height={480}         // Resolution of blur
+          />
+          {/* Vignette draws eye to center */}
+          <Vignette eskil={false} offset={0.1} darkness={0.5} />
+        </EffectComposer>
+      )}
+
+      <OrbitControls
+        makeDefault
+        enabled={!baseSwapping}
+        enableDamping={true}
+        dampingFactor={0.05}
+        minPolarAngle={Math.PI / 3.5} 
+        maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going below ground
+        // ... rest of controls
+      />
+    </>
+  );
+}
+Summary of Changes made to Scene.tsx:
+
+Reduced Grass Tiling: Changed repeat from 16 to 6. This removes the "checkerboard" look.
+
+Added Post-Processing: Added EffectComposer with DepthOfField and Vignette. This blurs the ugly horizon line and makes the text look sharp in contrast.
+
+Adjusted Fog: Tightened the fog (10, 40) to blend the floor into the sky earlier.
+
+Moved Lights: Moved the main spotlight slightly front-left to ensure the gold text catches the light ("specular highlight").
+
+Rotated Environment: environmentRotation={[0, Math.PI / 2, 0]} ensures the HDRI reflections align with the flat face of the stone.

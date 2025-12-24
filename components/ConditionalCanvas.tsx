@@ -36,6 +36,9 @@ export default function ConditionalCanvas() {
   // Hide canvas on select-additions page
   const isSelectAdditionsPage = pathname === '/select-additions';
   
+  // Hide canvas on select-motifs page
+  const isSelectMotifsPage = pathname === '/select-motifs';
+  
   // Hide canvas on check-price page
   const isCheckPricePage = pathname === '/check-price';
   
@@ -45,17 +48,14 @@ export default function ConditionalCanvas() {
   // Show canvas on inscriptions page
   const isInscriptionsPage = pathname === '/inscriptions';
   
-  // Show canvas on select-motifs page
-  const isSelectMotifsPage = pathname === '/select-motifs';
-  
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage && !isSelectMaterialPage) {
+    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectAdditionsPage || isSelectMotifsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage) {
       hideOverlay();
     }
-  }, [pathname, isHomePage, isDesignPage, isSelectProductPage, isSelectShapePage, isSelectMaterialPage, isSelectAdditionsPage, isCheckPricePage, isSelectSizePage, isInscriptionsPage, isSelectMotifsPage, hideOverlay]);
+  }, [pathname, isHomePage, isDesignPage, isSelectProductPage, isSelectShapePage, isSelectMaterialPage, isSelectAdditionsPage, isSelectMotifsPage, isCheckPricePage, isSelectSizePage, isInscriptionsPage, hideOverlay]);
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectAdditionsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMotifsPage && !isSelectMaterialPage) {
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isSelectAdditionsPage || isSelectMotifsPage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage) {
     return null;
   }
 

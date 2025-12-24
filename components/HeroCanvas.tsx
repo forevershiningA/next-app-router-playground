@@ -13,12 +13,12 @@ import {
 import * as THREE from 'three';
 
 // --- Constants ---
-const STONE_WIDTH = 2.0;
-const STONE_HEIGHT = 2.2;
-const STONE_THICKNESS = 0.3;
-const SHOULDER_HEIGHT = 1.8; // Where the curve starts
-const BASE_HEIGHT = 0.4;
-const BASE_EXTRA_WIDTH = 0.5; // 130mm scaled relative to generic units (approx)
+const STONE_WIDTH = 2.3;  // Increased from 2.0 (~15% larger)
+const STONE_HEIGHT = 2.5; // Increased from 2.2 (~13% larger)
+const STONE_THICKNESS = 0.35; // Slightly increased
+const SHOULDER_HEIGHT = 2.05; // Scaled proportionally
+const BASE_HEIGHT = 0.46; // Scaled proportionally
+const BASE_EXTRA_WIDTH = 0.58; // Scaled proportionally
 
 // --- Materials ---
 
@@ -141,66 +141,75 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
   });
 
   return (
-    <group ref={groupRef} position={[0, -1, 0]}>
-      <SerpentineHeadstone 
-        width={STONE_WIDTH} 
-        height={STONE_HEIGHT} 
-        thickness={STONE_THICKNESS} 
-      />
-      <Base stoneWidth={STONE_WIDTH} />
+    <>
+      <group ref={groupRef} position={[0, -1.4, 0]}>
+        <SerpentineHeadstone 
+          width={STONE_WIDTH} 
+          height={STONE_HEIGHT} 
+          thickness={STONE_THICKNESS} 
+        />
+        <Base stoneWidth={STONE_WIDTH} />
+        
+        {/* Sample Inscription */}
+        <Text
+          position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.58, STONE_THICKNESS / 2 + 0.05]}
+          fontSize={0.12}
+          color="#d4af37"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/Garamond.ttf"
+          letterSpacing={0.05}
+          depthOffset={-2}
+          renderOrder={2}
+        >
+          In Loving Memory
+        </Text>
+        <Text
+          position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.48, STONE_THICKNESS / 2 + 0.05]}
+          fontSize={0.16}
+          color="#ffffff"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/Garamond.ttf"
+          letterSpacing={0.02}
+          fontWeight="bold"
+          depthOffset={-2}
+          renderOrder={2}
+        >
+          Eleanor Rose
+        </Text>
+        <Text
+          position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.38, STONE_THICKNESS / 2 + 0.05]}
+          fontSize={0.11}
+          color="#d4af37"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/Garamond.ttf"
+          letterSpacing={0.02}
+          depthOffset={-2}
+          renderOrder={2}
+        >
+          ☼ 1945  ✟ 2023
+        </Text>
+      </group>
       
-      {/* Sample Inscription */}
-      <Text
-        position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.58, STONE_THICKNESS / 2 + 0.05]}
-        fontSize={0.12}
-        color="#d4af37"
-        anchorX="center"
-        anchorY="middle"
-        font="/fonts/Garamond.ttf"
-        letterSpacing={0.05}
-        depthOffset={-2}
-        renderOrder={2}
-      >
-        In Loving Memory
-      </Text>
-      <Text
-        position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.48, STONE_THICKNESS / 2 + 0.05]}
-        fontSize={0.16}
-        color="#ffffff"
-        anchorX="center"
-        anchorY="middle"
-        font="/fonts/Garamond.ttf"
-        letterSpacing={0.02}
-        fontWeight="bold"
-        depthOffset={-2}
-        renderOrder={2}
-      >
-        Eleanor Rose
-      </Text>
-      <Text
-        position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.38, STONE_THICKNESS / 2 + 0.05]}
-        fontSize={0.11}
-        color="#d4af37"
-        anchorX="center"
-        anchorY="middle"
-        font="/fonts/Garamond.ttf"
-        letterSpacing={0.02}
-        depthOffset={-2}
-        renderOrder={2}
-      >
-        ☼ 1945  ✟ 2023
-      </Text>
-      
-      {/* Shadow catcher for realism */}
+      {/* Shadow catcher for realism - outside rotating group */}
       <ContactShadows 
-        opacity={0.6} 
-        scale={10} 
-        blur={2} 
-        far={2} 
-        resolution={256} 
+        position={[0, -1, 0]}
+        opacity={0.8} 
+        scale={12} 
+        blur={1.5} 
+        far={4} 
+        resolution={512} 
         color="#000000" 
       />
-    </group>
+      
+      {/* Ground plane for reflection */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.01, 0]} receiveShadow>
+        <planeGeometry args={[20, 20]} />
+        <shadowMaterial transparent opacity={0.3} />
+      </mesh>
+    </>
   );
 };
 
@@ -242,23 +251,25 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
         }}
       >
         <React.Suspense fallback={null}>
-          <PerspectiveCamera makeDefault position={[2, 1.5, 3.5]} fov={45} />
+          <PerspectiveCamera makeDefault position={[2, 1.3, 3.5]} fov={45} />
           
-          {/* Lighting Setup - Warmer tones with rim light */}
-          <ambientLight intensity={0.4} />
+          {/* Lighting Setup - Enhanced with stronger rim lights for more presence */}
+          <ambientLight intensity={0.45} />
           <spotLight 
             position={[5, 5, 5]} 
             angle={0.5} 
             penumbra={1} 
-            intensity={1.2} 
+            intensity={1.4} 
             castShadow
             color="#fff8e7"
           />
-          <pointLight position={[-2, 3, 2]} intensity={0.6} color="#ffd89b" />
-          <pointLight position={[3, 1, -2]} intensity={0.4} color="#d4af37" />
-          {/* Rim light for beveled edges */}
-          <pointLight position={[-3, 2, -1]} intensity={0.8} color="#ffffff" />
-          <pointLight position={[3, 2, -1]} intensity={0.8} color="#ffffff" />
+          <pointLight position={[-2, 3, 2]} intensity={0.7} color="#ffd89b" />
+          <pointLight position={[3, 1, -2]} intensity={0.5} color="#d4af37" />
+          {/* Enhanced rim lights for better edge definition and presence */}
+          <pointLight position={[-3, 2, -1]} intensity={1.0} color="#ffffff" />
+          <pointLight position={[3, 2, -1]} intensity={1.0} color="#ffffff" />
+          {/* Additional back rim light for depth */}
+          <pointLight position={[0, 3, -3]} intensity={0.8} color="#e8d5b7" />
           
           {/* Environment map creates the reflections on the polished granite */}
           <Environment preset="city" />

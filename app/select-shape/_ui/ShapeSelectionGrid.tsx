@@ -97,25 +97,27 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header Section */}
-      <div className="border-b border-gray-800">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
               Select Your Shape
             </h1>
-            <p className="mt-4 text-lg text-gray-400">
-              Choose the perfect shape for your memorial
+            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+              Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.
             </p>
           </div>
         </div>
       </div>
 
       {/* Category Filter */}
-      <div className="border-b border-gray-800">
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-3">
+      <div className="border-b border-white/5 bg-gray-900/30 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
+        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8 relative">
+          <div className="flex flex-wrap gap-3 justify-center">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
@@ -158,11 +160,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             <div className="mx-auto max-w-2xl">
               <button
                 onClick={handleCustomUpload}
-                className="group relative w-full overflow-hidden rounded-2xl border-2 border-dashed border-gray-700 bg-gray-800 hover:bg-gray-700 p-12 text-center transition-all hover:border-gray-600"
+                className="group relative w-full overflow-hidden rounded-2xl border-2 border-dashed border-white/20 bg-[#1A1A1A] hover:bg-gray-800/50 hover:border-[#cfac6c]/60 p-12 text-center transition-all"
               >
                 <div className="flex flex-col items-center gap-4">
                   <svg
-                    className="h-16 w-16 text-gray-500 group-hover:text-gray-300 transition-colors"
+                    className="h-16 w-16 text-gray-500 group-hover:text-[#cfac6c] transition-colors"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -182,9 +184,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 </div>
               </button>
               
-              <div className="mt-8 rounded-xl bg-gray-800 border border-gray-700 p-6">
+              <div className="mt-8 rounded-2xl bg-[#1A1A1A] border border-white/10 p-6">
                 <h4 className="text-white font-medium mb-3 flex items-center gap-2">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 text-[#cfac6c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   SVG Requirements
@@ -222,50 +224,60 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   <button
                     key={shape.id}
                     onClick={() => handleShapeSelect(shape)}
-                    className="group relative overflow-hidden cursor-pointer"
+                    className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
+                      isSelected
+                        ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                        : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                    }`}
                   >
-                  {/* Shape Image */}
-                  <div className={`relative aspect-square overflow-hidden mb-4 flex items-center justify-center p-4 transition-all ${
-                    isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent group-hover:border-[#D7B356]'
-                  }`}>
-                    <Image
-                      src={shapeUrl}
-                      alt={shape.name}
-                      width={200}
-                      height={200}
-                      className="object-contain"
-                    />
-                  </div>
-
-                  {/* Shape Info */}
-                  <div className="p-2 h-12 flex items-center justify-center">
-                    <div className="text-sm text-slate-200 text-center line-clamp-2">
-                      {shape.name}
+                    {/* Shape Image - Square aspect ratio */}
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
+                      <div className="absolute inset-0 flex items-center justify-center p-8">
+                        <Image
+                          src={shapeUrl}
+                          alt={shape.name}
+                          width={200}
+                          height={200}
+                          className="object-contain transition-transform group-hover:scale-105"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </button>
-              );
-            })}
+
+                    {/* Shape Info - with padding and flexbox */}
+                    <div className="p-4 flex flex-col">
+                      <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-2">
+                        {shape.name}
+                      </h3>
+                      {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
+                      <div className="h-5 mt-auto">
+                        <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          Select →
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </>
         )}
       </div>
 
       {/* Category Info Cards (when category is selected) */}
-      {selectedCategory !== 'all' && (
-        <div className="border-t border-gray-800">
+      {selectedCategory !== 'all' && selectedCategory !== 'custom' && (
+        <div className="border-t border-white/5 bg-gray-900/30">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
             {shapeCategories
               .filter((cat) => cat.id === selectedCategory)
               .map((category) => (
                 <div
                   key={category.id}
-                  className="rounded-2xl border border-gray-700 bg-gray-800 p-8 text-center"
+                  className="rounded-2xl border border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-900/50 p-8 text-center"
                 >
                   <h2 className="text-2xl font-serif font-light text-white mb-2">
                     {category.name}
                   </h2>
-                  <p className="text-gray-400">{category.description}</p>
+                  <p className="text-gray-300">{category.description}</p>
                 </div>
               ))}
           </div>

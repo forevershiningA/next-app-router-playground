@@ -36,7 +36,7 @@ function CameraController() {
   );
 }
 
-// Product Name Header Component
+// Product Name Header Component - Apple Studio Look
 function ProductNameHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
@@ -98,32 +98,28 @@ function ProductNameHeader() {
   const heightInches = useMemo(() => Math.ceil(heightMm / 25.4), [heightMm]);
 
   return (
-    <div className="text-center">
-      {catalog ? (
-        <div>
-          <h1 className="text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl mb-4">
+    <>
+      {/* Title Floating Top Left */}
+      {catalog && (
+        <div className="absolute top-10 left-10 z-10 pointer-events-none">
+          {/* Elegant Serif Font */}
+          <h1 className="text-3xl text-white drop-shadow-md !p-0 !m-0">
             {catalog.product.name}
           </h1>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 shadow-lg hover:shadow-xl hover:shadow-[#cfac6c]/50 transition-all">
-            <span className="text-sm font-medium text-slate-200">
-              {widthMm} × {heightMm} mm
-            </span>
-            <span className="text-white/40">•</span>
-            <span className="text-sm font-medium text-slate-200">
-              {widthInches} × {heightInches} in
-            </span>
-            <span className="text-white/40">•</span>
-            <span className="text-sm font-bold text-white">
-              ${totalPrice.toFixed(2)}
-            </span>
+        </div>
+      )}
+
+      {/* Price Pill Floating Bottom Center */}
+      {catalog && (
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-auto">
+          <div className="bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center">
+            <span className="opacity-80 text-sm">{widthMm} × {heightMm} mm</span>
+            <div className="w-px h-4 bg-white/20"></div>
+            <span className="font-bold text-green-400">${totalPrice.toFixed(2)}</span>
           </div>
         </div>
-      ) : (
-        <h1 className="text-3xl font-sans font-medium tracking-tight text-white sm:text-4xl">
-          3D Designer
-        </h1>
       )}
-    </div>
+    </>
   );
 }
 
@@ -225,15 +221,14 @@ export default function ThreeScene() {
           </div>
         </div>
       )}
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-amber-950/30 to-yellow-900/20 pointer-events-none" />
+
       
       {isVisible && (
-        <div ref={containerRef} className="relative w-full h-screen flex flex-col items-center justify-center">
-          {/* Product Name Above Canvas */}
+        <div ref={containerRef} className="relative w-full h-screen">
+          {/* Product Name Overlay (above canvas) */}
           <ProductNameHeader />
           
-          <Canvas 
+          <Canvas
             key="main-canvas"
             shadows
             dpr={[1, 2]}
@@ -246,8 +241,13 @@ export default function ThreeScene() {
               stencil: false,
               depth: true,
             }}
-            onCreated={({ gl }) => {
+            onCreated={({ gl, scene }) => {
               glRef.current = gl;
+              
+              // Set environment map intensity for the entire scene
+              if (scene.environment) {
+                scene.environmentIntensity = 0.4;
+              }
               
               // Handle WebGL context loss
               contextLostHandler.current = (event: Event) => {

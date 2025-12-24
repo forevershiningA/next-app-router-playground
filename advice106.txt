@@ -1,0 +1,44 @@
+That “frozen” look is just **IBL reflections from the HDRI** hitting your polished base at a grazing angle.
+
+* In your scene you still mount `<Environment preset="forest" background={false} />` with the **default intensity = 1.0**, so the base’s horizontal faces are reflecting a bright, cool-skied HDRI. From the side it reads like ice/water. 
+* Your sky/fog colors are already neutral; they’re not the culprit here. 
+
+### Quick fixes
+
+1. **Lower global IBL** (do this first)
+
+```tsx
+<Environment
+  preset="forest"
+  intensity={0.2}      // 0.15–0.35 is a good range
+  background={false}
+  rotation={[0, Math.PI / 2, 0]}   // optional: rotate to move bright lobes
+/>
+```
+
+
+
+2. **Dial down reflections on the base only** (inside your base material in `HeadstoneAssembly`)
+
+```tsx
+// Base material suggestions
+<meshStandardMaterial
+  roughness={0.75}      // ↑ roughness to blur reflections
+  metalness={0.0}       // granite is dielectric
+  envMapIntensity={0.15}
+/>
+```
+
+(Keep the headstone face a bit shinier if you like, but the base wants softer reflections to avoid the “ice slab” look.)
+
+3. If you still see cool patches, **rotate** the environment a bit more until the bright sky lobe isn’t mirrored on the base top:
+
+```tsx
+<Environment ... rotation={[0, Math.PI, 0]} />
+```
+
+
+
+Optional: if the granite textures look a touch cold after this, you can nudge your key/fill lights a hair warmer (they’re already warm/neutral) or slightly increase the base albedo warmth in its texture tint.
+
+After lowering IBL and softening the base’s reflectivity, that side view will stop reading as “frozen” while your granite still looks convincingly polished.

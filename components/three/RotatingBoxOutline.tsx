@@ -20,11 +20,13 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   renderOrder?: number;
   /** If true, exclude addition models from bounding box calculation */
   excludeAdditions?: boolean;
+  /** Length of corner arms relative to box size (0 to 0.5) */
+  lineLength?: number;
 };
 
 /**
- * Bounding box outline that rotates with the target object.
- * Creates a BoxHelper that's parented to the target object.
+ * Elegant bounding box outline with viewfinder corners that rotates with the target object.
+ * Shows corner brackets instead of full box edges for a cleaner, professional look.
  */
 export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   targetRef,
@@ -34,6 +36,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   through = true,
   renderOrder = 1000,
   excludeAdditions = false,
+  lineLength = 0.15, // 15% of box size
 }: RotatingBoxOutlineProps) {
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
 
@@ -42,13 +45,14 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     const obj = targetRef.current;
     if (!obj) return;
 
-    // Create LineSegments for the box edges
+    // Create LineSegments for the box edges - solid gold
     const geometry = new THREE.BufferGeometry();
     const material = new THREE.LineBasicMaterial({
       color: new THREE.Color(color as any).getHex(),
       depthTest: !through,
       depthWrite: false,
       transparent: true,
+      opacity: 0.8, // Slightly transparent for elegant look
     });
 
     const helper = new THREE.LineSegments(geometry, material);
@@ -134,29 +138,69 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     localBox.getCenter(center);
     localBox.getSize(size);
 
-    // Create 12 edges of the box in local space
+    // Calculate corner arm lengths based on box size
+    const lenX = size.x * lineLength;
+    const lenY = size.y * lineLength;
+    const lenZ = size.z * lineLength;
+
+    // Build the "Viewfinder" Geometry (8 corners, 3 lines per corner = 24 lines)
+    const positions: number[] = [];
+    
+    // Helper to push a line segment
+    const pushLine = (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number) => {
+      positions.push(x1, y1, z1, x2, y2, z2);
+    };
+
     const hx = size.x / 2;
     const hy = size.y / 2;
     const hz = size.z / 2;
+    const cx = center.x;
+    const cy = center.y;
+    const cz = center.z;
 
-    const vertices = new Float32Array([
-      // Bottom face (4 edges)
-      center.x - hx, center.y - hy, center.z - hz,  center.x + hx, center.y - hy, center.z - hz,
-      center.x + hx, center.y - hy, center.z - hz,  center.x + hx, center.y - hy, center.z + hz,
-      center.x + hx, center.y - hy, center.z + hz,  center.x - hx, center.y - hy, center.z + hz,
-      center.x - hx, center.y - hy, center.z + hz,  center.x - hx, center.y - hy, center.z - hz,
-      // Top face (4 edges)
-      center.x - hx, center.y + hy, center.z - hz,  center.x + hx, center.y + hy, center.z - hz,
-      center.x + hx, center.y + hy, center.z - hz,  center.x + hx, center.y + hy, center.z + hz,
-      center.x + hx, center.y + hy, center.z + hz,  center.x - hx, center.y + hy, center.z + hz,
-      center.x - hx, center.y + hy, center.z + hz,  center.x - hx, center.y + hy, center.z - hz,
-      // Vertical edges (4 edges)
-      center.x - hx, center.y - hy, center.z - hz,  center.x - hx, center.y + hy, center.z - hz,
-      center.x + hx, center.y - hy, center.z - hz,  center.x + hx, center.y + hy, center.z - hz,
-      center.x + hx, center.y - hy, center.z + hz,  center.x + hx, center.y + hy, center.z + hz,
-      center.x - hx, center.y - hy, center.z + hz,  center.x - hx, center.y + hy, center.z + hz,
-    ]);
+    // --- Bottom Corners ---
+    // Front-Left-Bottom
+    pushLine(cx - hx, cy - hy, cz + hz, cx - hx + lenX, cy - hy, cz + hz); // X
+    pushLine(cx - hx, cy - hy, cz + hz, cx - hx, cy - hy + lenY, cz + hz); // Y
+    pushLine(cx - hx, cy - hy, cz + hz, cx - hx, cy - hy, cz + hz - lenZ); // Z
 
+    // Front-Right-Bottom
+    pushLine(cx + hx, cy - hy, cz + hz, cx + hx - lenX, cy - hy, cz + hz);
+    pushLine(cx + hx, cy - hy, cz + hz, cx + hx, cy - hy + lenY, cz + hz);
+    pushLine(cx + hx, cy - hy, cz + hz, cx + hx, cy - hy, cz + hz - lenZ);
+
+    // Back-Left-Bottom
+    pushLine(cx - hx, cy - hy, cz - hz, cx - hx + lenX, cy - hy, cz - hz);
+    pushLine(cx - hx, cy - hy, cz - hz, cx - hx, cy - hy + lenY, cz - hz);
+    pushLine(cx - hx, cy - hy, cz - hz, cx - hx, cy - hy, cz - hz + lenZ);
+
+    // Back-Right-Bottom
+    pushLine(cx + hx, cy - hy, cz - hz, cx + hx - lenX, cy - hy, cz - hz);
+    pushLine(cx + hx, cy - hy, cz - hz, cx + hx, cy - hy + lenY, cz - hz);
+    pushLine(cx + hx, cy - hy, cz - hz, cx + hx, cy - hy, cz - hz + lenZ);
+
+    // --- Top Corners ---
+    // Front-Left-Top
+    pushLine(cx - hx, cy + hy, cz + hz, cx - hx + lenX, cy + hy, cz + hz);
+    pushLine(cx - hx, cy + hy, cz + hz, cx - hx, cy + hy - lenY, cz + hz);
+    pushLine(cx - hx, cy + hy, cz + hz, cx - hx, cy + hy, cz + hz - lenZ);
+
+    // Front-Right-Top
+    pushLine(cx + hx, cy + hy, cz + hz, cx + hx - lenX, cy + hy, cz + hz);
+    pushLine(cx + hx, cy + hy, cz + hz, cx + hx, cy + hy - lenY, cz + hz);
+    pushLine(cx + hx, cy + hy, cz + hz, cx + hx, cy + hy, cz + hz - lenZ);
+
+    // Back-Left-Top
+    pushLine(cx - hx, cy + hy, cz - hz, cx - hx + lenX, cy + hy, cz - hz);
+    pushLine(cx - hx, cy + hy, cz - hz, cx - hx, cy + hy - lenY, cz - hz);
+    pushLine(cx - hx, cy + hy, cz - hz, cx - hx, cy + hy, cz - hz + lenZ);
+
+    // Back-Right-Top
+    pushLine(cx + hx, cy + hy, cz - hz, cx + hx - lenX, cy + hy, cz - hz);
+    pushLine(cx + hx, cy + hy, cz - hz, cx + hx, cy + hy - lenY, cz - hz);
+    pushLine(cx + hx, cy + hy, cz - hz, cx + hx, cy + hy, cz - hz + lenZ);
+
+    const vertices = new Float32Array(positions);
     helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     helper.geometry.computeBoundingSphere();
     

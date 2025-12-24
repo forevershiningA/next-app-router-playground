@@ -199,10 +199,10 @@ function BaseMesh({
       map: baseTexture,
       color: 0x888888,
       metalness: 0.0,
-      roughness: 0.15,
-      envMapIntensity: 1.5,
+      roughness: 0.08, // Very low for polished granite sparkle
+      envMapIntensity: 2.0, // Increased for better reflections
       clearcoat: 1.0,
-      clearcoatRoughness: 0.1,
+      clearcoatRoughness: 0.05, // Lower for shinier polish layer
     });
 
     if (finish === 'rock-pitch' && rockNormalCanvas) {
@@ -216,29 +216,31 @@ function BaseMesh({
         tex.needsUpdate = true;
       });
 
-      // Rock Pitch Material Settings - matching slant headstone quality
+      // Rock Pitch Material Settings - upgraded for realistic granite sparkle
       const rockColor = 0x444444; 
       
-      const matShort = new THREE.MeshStandardMaterial({
+      const matShort = new THREE.MeshPhysicalMaterial({
         map: baseTexture,
         normalMap: texShort,
-        // Reduced from 3.0 to match slant headstone
-        normalScale: new THREE.Vector2(1.5, 1.5),
+        normalScale: new THREE.Vector2(2.0, 2.0), // Enhanced for crystalline detail
         color: rockColor,
         metalness: 0.0,
-        // 0.65 = Rough but catches light (Granite Sparkle)
-        roughness: 0.65, 
-        envMapIntensity: 1.0,
+        roughness: 0.08, // Polished granite - very reflective
+        envMapIntensity: 2.0, // Strong environment reflections for sparkle
+        clearcoat: 1.0, // Polish layer on top
+        clearcoatRoughness: 0.05, // Shiny polish
       });
 
-      const matLong = new THREE.MeshStandardMaterial({
+      const matLong = new THREE.MeshPhysicalMaterial({
         map: baseTexture,
         normalMap: texLong,
-        normalScale: new THREE.Vector2(1.5, 1.5),
+        normalScale: new THREE.Vector2(2.0, 2.0), // Enhanced for crystalline detail
         color: rockColor,
         metalness: 0.0,
-        roughness: 0.65,
-        envMapIntensity: 1.0,
+        roughness: 0.08, // Polished granite - very reflective
+        envMapIntensity: 2.0, // Strong environment reflections for sparkle
+        clearcoat: 1.0, // Polish layer on top
+        clearcoatRoughness: 0.05, // Shiny polish
       });
 
       return [

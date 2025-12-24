@@ -1,0 +1,110 @@
+Here’s how I’d tighten this scene so the memorial—not the sky/grass—owns the frame. I’ll point to exact spots in your files and give minimal diffs you can paste.
+
+## What to fix (from the screenshot)
+
+* Grass is still busy + saturated; horizon line cuts the stone; sky is a bit bright near the horizon.
+* Specular streaks on the granite front (look like three vertical bands) ⇒ lights/env are too strong and broad.
+* Title pill overlaps the plinth—UI covers the product.
+* Base feels slightly “floating” in places—contact shadow could be broader/softer.
+
+---
+
+## Surgical code tweaks
+
+### 1) Calm the ground + better anchoring
+
+In **Scene.tsx**:
+
+* Desaturate the grass, reduce tiling, and soften the contact shadow. (You already set repeat to 6 which is good; just finish the tone & shadow.) 
+
+```diff
+-const GRASS_COLOR = '#1a591a';
++const GRASS_COLOR = '#4a4f45'; // neutral, mossy tint
+
+<ContactShadows
+-  scale={20}
+-  blur={2.5}
+-  opacity={0.6}
+-  far={10}
+-  color="#000000"
++  scale={22}
++  blur={3.2}
++  opacity={0.45}
++  far={12}
+ />
+```
+
+### 2) Push the horizon back and dim it
+
+* Fog farther/softer so the horizon doesn’t cut the epitaph line. 
+
+```diff
+- {!is2DMode && <fog attach="fog" args={['#e0f2fe', 15, 50]} />}
++ {!is2DMode && <fog attach="fog" args={['#d6e6f3', 28, 85]} />}
+```
+
+* Make the sky’s horizon match that fog (less bright). In **AtmosphericSky.tsx**: 
+
+```diff
+- uColorTop: { value: new THREE.Color('#005c97') },
+- uColorBottom: { value: new THREE.Color('#e0f2fe') },
++ uColorTop: { value: new THREE.Color('#1e4666') },   // softer zenith
++ uColorBottom: { value: new THREE.Color('#d6e6f3') },// dimmer horizon
+```
+
+### 3) Fix the “vertical band” glare on the face
+
+Your current light stack (ambient 0.3, key spot 3.0, rim 2.0, env “city” 0.8) is hot; the combo creates those bands. So: lower env, lower key, keep a gentle cool rim. 
+
+```diff
+- <ambientLight intensity={0.3} color="#cce0ff" />
++ <ambientLight intensity={0.25} color="#cfe0ff" />
+
+- <spotLight color="#fff5e6" intensity={3.0} angle={0.5} penumbra={1} position={[-2,5,6]} ... />
++ <spotLight color="#ffd8a4" intensity={1.7} angle={0.55} penumbra={0.9} position={[-2.2,4.8,5.5]} castShadow shadow-bias={-0.0001} />
+
+- <spotLight color="#bfdbfe" intensity={2.0} position={[-5,4,-5]} />
++ <spotLight color="#bcd5ff" intensity={0.55} position={[3,2.5,-3]} />
+
+- <Environment preset="city" environmentIntensity={0.8} background={false} environmentRotation={[0, Math.PI/2, 0]} />
++ <Environment preset="studio" environmentIntensity={0.35} background={false} />
+```
+
+Tip: If the base still shows a bright “flash,” raise its material roughness slightly in your headstone materials.
+
+### 4) Lose the daytime sparkles
+
+They read like dust/snow and add noise around the inscription. 
+
+```diff
+- {!is2DMode && (<Sparkles count={40} scale={10} size={2} speed={0.4} opacity={0.3} color="#fff" position={[0,2,0]} />)}
++ {/* Sparkles off in daylight to reduce visual noise */}
+```
+
+### 5) Camera feel (keep horizon below the text)
+
+Slightly narrow the pitch range so the horizon doesn’t creep into the middle. 
+
+```diff
+- minPolarAngle={Math.PI / 3.5}
+- maxPolarAngle={Math.PI / 2 - 0.05}
++ minPolarAngle={Math.PI / 3.3}
++ maxPolarAngle={Math.PI / 2.15}
+```
+
+---
+
+## Small UI nits
+
+* Nudge the title pill up ~10–15% and shrink it ~10% so it never overlays the plinth (design-wise, the product base should remain visible).
+* Add a light vignette (via postprocessing) to center attention on the stone if you want extra focus.
+
+---
+
+## What this yields
+
+* Softer, farther horizon and calmer ground → no line cutting through the memorial; the eye goes straight to the gold text.
+* Controlled highlights (warm key + cool rim, tame env) → rich granite without harsh bands.
+* Grounded base via broader, softer contact shadow.
+
+If you want a one-click “Studio Mode” (no sky/grass; gradient wall + floor) I can give you a tiny toggle that swaps the above for a neutral backdrop while reusing your current scene graph.

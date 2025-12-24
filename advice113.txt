@@ -1,0 +1,258 @@
+The issue is caused by Lighting Physics:
+
+The Base (Horizontal): Faces the Sky. It receives the bright top light and reflects the bright sky.
+
+The Headstone (Vertical): Faces the Horizon/Ground. It receives the darker "ground color" from the hemisphere light and reflects the darker horizon.
+
+The Light Angle: Your main SpotLight is at y=15 (very high up). It is hitting the top of the base directly, but skimming past the face of the headstone, leaving it in shadow.
+
+To fix this, we need to lower the main light to hit the headstone face directly and brighten the ground reflection.
+
+Here is the updated Scene.tsx.
+
+Key Changes:
+
+Lowered Main SpotLight: Moved from y=15 down to y=6 and closer to the center. This acts like a photographer's flash, lighting up the front face.
+
+Brightened Hemisphere Ground: Changed the ground color from Dark Grey (#444444) to Light Grey (#bbbbbb). This fills in the shadows on vertical surfaces.
+
+Added "Face Fill" Light: Added a subtle directional light pointing straight at the stone to ensure the granite texture is visible even in shadows.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// --- START OF FILE Scene.tsx ---
+
+'use client';
+import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, AdaptiveDpr } from '@react-three/drei';
+import * as THREE from 'three';
+import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import AtmosphericSky from './AtmosphericSky';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useRef, Suspense, useEffect } from 'react';
+
+const GRASS_COLOR = '#ffffff'; 
+const FOG_COLOR = '#e8e8e8';
+
+function GrassFloor() {
+  const gl = useThree((state) => state.gl);
+  
+  const props = useTexture({
+    map: '/textures/grass_color.jpg',
+    normalMap: '/textures/grass_normal.jpg',
+    aoMap: '/textures/grass_ao.jpg',
+  });
+
+  const REPEAT_SCALE = 40;
+
+  useEffect(() => {
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 8);
+
+    [props.map, props.normalMap, props.aoMap].forEach((tex) => {
+      if (tex) {
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = anisotropy;
+        tex.needsUpdate = true;
+      }
+    });
+  }, [props, gl]);
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[150, 150]} />
+        <meshStandardMaterial 
+          map={props.map}
+          normalMap={props.normalMap}
+          aoMap={props.aoMap}
+          color={GRASS_COLOR}
+          roughness={1}
+          normalScale={new THREE.Vector2(0.5, 0.5)}
+          metalness={0}
+          envMapIntensity={0}
+          fog={true}
+        />
+      </mesh>
+      
+      <ContactShadows
+        position={[0, 0.02, 0]}
+        scale={15}
+        blur={2.5}
+        opacity={0.6}
+        far={1.5}
+        color="#001100"
+        resolution={256}
+        frames={1}
+      />
+    </group>
+  );
+}
+
+function SimpleGrassFloor() {
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[150, 150]} />
+        <meshStandardMaterial 
+          color="#355c18"
+          roughness={1}
+          metalness={0}
+          envMapIntensity={0}
+        />
+      </mesh>
+      <ContactShadows position={[0, 0.02, 0]} scale={15} blur={2.5} opacity={0.6} far={1.5} color="#001100" resolution={256} frames={1} />
+    </group>
+  );
+}
+
+export default function Scene({ 
+  targetRotation = 0,
+  currentRotation
+}: { 
+  targetRotation?: number;
+  currentRotation?: React.MutableRefObject<number>;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+
+  useFrame(() => {
+    if (groupRef.current && currentRotation) {
+      const diff = targetRotation - currentRotation.current;
+      const delta = diff * 0.1;
+      
+      if (Math.abs(diff) > 0.001) {
+        currentRotation.current += delta;
+        groupRef.current.rotation.y = currentRotation.current;
+      }
+    }
+  });
+
+  const handleCanvasClick = (e: any) => {
+    if (e.eventObject === e.object) {
+      setSelected(null);
+      setEditingObject('headstone');
+      setSelectedInscriptionId(null);
+      setSelectedAdditionId(null);
+      setSelectedMotifId(null);
+    }
+  };
+
+  return (
+    <>
+      <AdaptiveDpr pixelated />
+
+      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      {!is2DMode && <fog attach="fog" args={[FOG_COLOR, 50, 150]} />}
+      
+      <mesh
+        position={[0, 0, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        onClick={handleCanvasClick}
+      >
+        <planeGeometry args={[200, 200]} />
+        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
+      </mesh>
+      
+      {!is2DMode && (
+         <Sparkles 
+           count={30}
+           scale={12}
+           size={3}
+           speed={0.3}
+           opacity={0.4}
+           color="#fffee0"
+           position={[0, 2, 0]}
+         />
+      )}
+      
+      {/* --- LIGHTING --- */}
+      <ambientLight intensity={0.7} color="#ffffff" />
+      
+      {/* 
+        FIX 1: HEMISPHERE LIGHT
+        Brightened the bottom color (ground bounce). 
+        Vertical surfaces (the headstone face) rely on this light.
+        Was: #444444 (Dark Grey) -> Now: #bbbbbb (Light Grey)
+      */}
+      <hemisphereLight
+        args={['#fff8e7', '#bbbbbb']} 
+        intensity={0.6}
+      />
+      
+      {/* 
+        FIX 2: MAIN SPOTLIGHT (The Sun)
+        Lowered position significantly.
+        Was: [..., 15, ...] -> Now: [..., 6, ...]
+        This allows the light to hit the vertical face of the stone, not just the top.
+      */}
+      <spotLight 
+        color="#fffce6"
+        intensity={2.5}
+        angle={0.6}
+        penumbra={1}
+        position={[-8, 6, 12]} // Lower and more frontal
+        castShadow
+        shadow-bias={-0.0001}
+        shadow-mapSize={[1024, 1024]}
+      />
+
+      {/* 
+        FIX 3: FACE FILL LIGHT
+        A soft light pointing directly at the front of the stone.
+        Ensures the "Blue Pearl" texture is visible even if the sun is at an angle.
+      */}
+      <directionalLight 
+        position={[0, 2, 10]} 
+        intensity={0.5} 
+        color="#ffffff" 
+      />
+
+      {/* Rim light (Back Right) */}
+      <spotLight color="#ffffff" intensity={2} position={[5, 5, -5]} distance={30} />
+
+      {/* Environment */}
+      <Environment
+        preset="city"
+        background={false}
+        blur={1.0}
+        resolution={256}
+        environmentIntensity={0.5}
+      />
+
+      <group ref={groupRef}>
+        <HeadstoneAssembly />
+        <Suspense fallback={<SimpleGrassFloor />}>
+          <GrassFloor />
+        </Suspense>
+      </group>
+      
+      {!is2DMode && <AtmosphericSky />}
+
+      <OrbitControls
+        makeDefault
+        enabled={!baseSwapping}
+        enableDamping={true}
+        dampingFactor={baseSwapping ? 0 : 0.05}
+        enableRotate={!is2DMode}
+        enableZoom={!is2DMode}
+        enablePan={!is2DMode}
+        rotateSpeed={0.5}
+        zoomSpeed={0.8}
+        panSpeed={0.8}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI / 2 - 0.05}
+      />
+    </>
+  );
+}

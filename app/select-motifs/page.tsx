@@ -10,13 +10,9 @@ export default function Page() {
   const motifs = data.motifs;
   const pathname = usePathname();
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
-  const catalog = useHeadstoneStore((s) => s.catalog);
 
-  // Show category grid only when:
-  // 1. We're on the /select-motifs page
-  // 2. No motif is selected
-  // 3. Canvas is not visible (catalog is null)
-  const showGrid = pathname === '/select-motifs' && selectedMotifId === null && !catalog;
+  // Show category grid when on the /select-motifs page and no motif is actively being edited
+  const showGrid = pathname === '/select-motifs' && selectedMotifId === null;
 
   return (
     <>
