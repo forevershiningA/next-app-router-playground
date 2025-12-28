@@ -1,0 +1,264 @@
+To fix the layering issue where the Headstone looks like it's pasted over the Base (instead of sitting in or behind it), we need to adjust the Z-index stacking context of the two main containers in the DesignPossibilitiesSection.
+
+Here is the corrected code for the DesignPossibilitiesSection component.
+
+Key Changes Made:
+
+Headstone Wrapper: Changed z-20 to z-10. This moves the headstone lower in the layer stack.
+
+Base Wrapper: Changed z-0 to z-20. This ensures the Base always renders in front of the bottom edge of the Headstone, creating the realistic illusion that the stone is slotted into the base.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// New interactive state-based section component
+function DesignPossibilitiesSection() {
+  const [activeStep, setActiveStep] = useState(1);
+  const [shapeIndex, setShapeIndex] = useState(3); // Start with 'Heart'
+  const [materialIndex, setMaterialIndex] = useState(0);
+
+  const shapes = [
+    { name: 'Serpentine', file: '/shapes/headstones/serpentine.svg' },
+    { name: 'Gable', file: '/shapes/headstones/gable.svg' },
+    { name: 'Half Round', file: '/shapes/headstones/half_round.svg' },
+    { name: 'Heart', file: '/shapes/headstones/headstone_27.svg' },
+  ];
+
+  const materials = [
+    { name: 'Blue Pearl', file: '/textures/forever/l/Blue-Pearl.webp', color: '#1a2a3a' },
+    { name: 'Imperial Red', file: '/textures/forever/l/Imperial-Red.webp', color: '#5c2e2e' },
+    { name: 'Glory Black', file: '/textures/forever/l/Glory-Black-2.webp', color: '#1a1a1a' },
+  ];
+
+  const currentShape = shapes[shapeIndex];
+  const currentMaterial = materials[materialIndex];
+
+  const nextShape = () => {
+    setShapeIndex((prev) => (prev + 1) % shapes.length);
+  };
+
+  const prevShape = () => {
+    setShapeIndex((prev) => (prev - 1 + shapes.length) % shapes.length);
+  };
+
+  const steps = [
+    { id: 1, label: 'Shape', desc: 'Select from 50+ shapes' },
+    { id: 2, label: 'Material', desc: 'Choose from premium granites' },
+    { id: 3, label: 'Personalise', desc: 'Add text, motifs & photos' },
+    { id: 4, label: 'Review', desc: 'Get instant pricing' },
+  ];
+
+  return (
+    <div className="relative py-24 overflow-hidden min-h-[900px]">
+      
+      {/* BACKGROUND: Heavenly Light Theme */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#E6F0F9] via-[#F5F9FC] to-white" />
+      
+      {/* Decorative: Subtle Cloud/Watercolor Blobs */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-100/40 blur-[100px] rounded-full pointer-events-none mix-blend-multiply" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-50/60 blur-[120px] rounded-full pointer-events-none mix-blend-multiply" />
+      
+      {/* Grid: Much fainter for warmer feel */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.015)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none opacity-40" />
+
+      <div className="relative mx-auto max-w-5xl px-6 lg:px-8 flex flex-col items-center">
+
+        {/* Section Header */}
+        <div className="text-center mb-12 z-20">
+          <h2 className="text-4xl font-serif text-[#102A43] mb-3 tracking-tight">
+            Design a Beautiful Tribute
+          </h2>
+          <p className="text-slate-500 text-lg max-w-xl mx-auto font-light">
+            Tap the steps below to customize every detail in our 3D studio.
+          </p>
+        </div>
+
+        {/* --- MAIN INTERACTIVE COMPONENT --- */}
+        <div className="relative w-full max-w-lg perspective-1000 z-10">
+
+          {/* --- NAVIGATION ARROWS (Only for Step 1) --- */}
+          {activeStep === 1 && (
+            <>
+              <button 
+                onClick={prevShape}
+                className="absolute top-[40%] -left-4 sm:-left-20 z-50 p-3 rounded-full bg-white border border-slate-200 text-slate-400 shadow-xl hover:bg-[#1B3B5A] hover:text-white hover:border-[#1B3B5A] hover:scale-110 transition-all duration-300 group"
+                aria-label="Previous Shape"
+              >
+                <ChevronLeftIcon className="w-6 h-6" />
+              </button>
+
+              <button 
+                onClick={nextShape}
+                className="absolute top-[40%] -right-4 sm:-right-20 z-50 p-3 rounded-full bg-white border border-slate-200 text-slate-400 shadow-xl hover:bg-[#1B3B5A] hover:text-white hover:border-[#1B3B5A] hover:scale-110 transition-all duration-300 group"
+                aria-label="Next Shape"
+              >
+                <ChevronRightIcon className="w-6 h-6" />
+              </button>
+            </>
+          )}
+
+          {/* --- HEADSTONE BODY (Updated z-index to be BEHIND the base) --- */}
+          <div className={`relative z-10 mb-8 transition-all duration-700 ease-out ${activeStep === 1 ? 'scale-105 drop-shadow-[0_25px_35px_rgba(0,0,0,0.15)]' : 'scale-100 drop-shadow-[0_15px_25px_rgba(0,0,0,0.1)]'}`}>
+            
+            {/* 1. MASKED GRANITE SHAPE (Dynamic) */}
+            <div 
+              className="relative w-full aspect-[1.15/1] transition-all duration-500 ease-in-out"
+              style={{
+                maskImage: `url('${currentShape.file}')`,
+                maskSize: "contain",
+                maskRepeat: "no-repeat",
+                maskPosition: "bottom center",
+                WebkitMaskImage: `url('${currentShape.file}')`,
+                WebkitMaskSize: "contain",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskPosition: "bottom center",
+              }}
+            >
+               {/* Granite Texture */}
+               <div className="absolute inset-0 bg-[#1a2a3a] transition-colors duration-700" style={{ backgroundColor: currentMaterial.color }}>
+                  <Image 
+                    src={currentMaterial.file}
+                    alt={currentMaterial.name}
+                    fill 
+                    className={`object-cover transition-transform duration-700 ${activeStep === 2 ? 'scale-125' : 'scale-100'}`}
+                  />
+                  {/* Enhanced Gloss for Light Theme */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/10 via-transparent to-white/30 mix-blend-overlay"></div>
+                  <div className="absolute top-0 w-full h-2/3 bg-gradient-to-b from-white/20 to-transparent opacity-60"></div>
+               </div>
+            </div>
+
+            {/* 2. ENGRAVINGS LAYER (Text & Motifs) */}
+            <div className="absolute inset-0 flex flex-col items-center justify-end pb-[8%] text-[#eec170] z-30 pointer-events-none">
+                
+                {/* Top Motifs (Doves) */}
+                <div className={`flex justify-between w-[75%] mb-2 transition-all duration-500 ${activeStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-2'}`}>
+                    {/* Match THOMPSON text color: #f3e1b6 */}
+                    <div className="w-14 h-14 relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]" style={{ filter: 'brightness(0) saturate(100%) invert(90%) sepia(20%) saturate(500%) hue-rotate(350deg) brightness(110%) contrast(95%)' }}>
+                       <Image src="/shapes/motifs/s/dove_002.png" alt="dove" fill className="object-contain" />
+                    </div>
+                    <div className="w-14 h-14 relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] scale-x-[-1]" style={{ filter: 'brightness(0) saturate(100%) invert(90%) sepia(20%) saturate(500%) hue-rotate(350deg) brightness(110%) contrast(95%)' }}>
+                       <Image src="/shapes/motifs/s/dove_002.png" alt="dove" fill className="object-contain" />
+                    </div>
+                </div>
+
+                {/* Name & Epitaph - Enhanced text contrast */}
+                <div className={`text-center mb-5 transition-all duration-500 ${activeStep >= 3 ? 'scale-100 opacity-100' : 'scale-95 opacity-80'}`}>
+                    <h3 className="font-serif text-5xl text-[#f3e1b6] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] mb-1 uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95), inset 0 -1px 2px rgba(0,0,0,0.3)' }}>
+                      {currentShape.name}
+                    </h3>
+                    <p className="font-serif text-base italic text-[#cfac6c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-medium tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                      "In our hearts you live forever"
+                    </p>
+                </div>
+
+                {/* Central Addition (Statue) - Only Visible in Step 3 */}
+                <div className={`relative w-24 h-32 mb-4 transition-all duration-500 ${activeStep === 3 ? 'opacity-100 scale-110' : 'opacity-0 scale-50'}`}>
+                   <Image 
+                     src="/additions/2600/_2600.webp" 
+                     alt="Statue" 
+                     fill 
+                     className="object-contain drop-shadow-xl" 
+                   />
+                </div>
+                
+                {/* Dates - Enhanced readability */}
+                <div className="flex justify-between w-[60%] text-xs font-bold tracking-[0.2em] text-[#eec170]/95" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+                   <span>OCT 14, 1945</span>
+                   <span>JAN 20, 2023</span>
+                </div>
+            </div>
+
+            {/* --- POPUP UI: STEP 3 (Personalise) --- */}
+            <div className={`absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-64 bg-white/80 backdrop-blur-xl border border-white/60 rounded-2xl p-6 text-center shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 ${activeStep === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
+               <div className="text-[#1B3B5A] text-[10px] font-bold uppercase tracking-widest mb-2">Step 3</div>
+               <h4 className="text-slate-900 font-serif text-xl mb-2">Personalise</h4>
+               <p className="text-slate-500 text-xs mb-4 leading-relaxed">
+                 Add names, dates, motifs, & photos.
+               </p>
+               <div className="text-[#1B3B5A] text-xs font-bold hover:underline cursor-pointer">
+                 Explore options →
+               </div>
+            </div>
+
+          </div>
+
+          {/* --- BASE (Updated z-index to be IN FRONT of headstone) --- */}
+          <div 
+             className={`relative left-1/2 -translate-x-1/2 w-[120%] h-28 -mt-14 z-20 transition-all duration-500 ${activeStep === 2 ? 'brightness-110' : 'brightness-90'}`}
+             style={{ filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.25))' }}
+          >
+             <div className="w-full h-full rounded-sm overflow-hidden relative border-t border-white/50 bg-gray-900">
+                
+                {/* Base Texture */}
+                <Image src={currentMaterial.file} alt="Base" fill className="object-cover opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/60"></div>
+                
+                {/* --- POPUP UI: STEP 2 (Material Selector) --- */}
+                <div 
+                  className={`absolute inset-0 flex items-center justify-center gap-4 transition-all duration-500 ${activeStep === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                >
+                    <div className="bg-white/70 backdrop-blur-md p-2 rounded-full border border-white/60 flex gap-3 shadow-xl">
+                        {materials.map((mat, idx) => (
+                           <div 
+                             key={mat.name}
+                             onClick={() => setMaterialIndex(idx)}
+                             className={`w-10 h-10 rounded-full overflow-hidden relative shadow-md cursor-pointer transition-all duration-300 ${
+                               materialIndex === idx 
+                               ? 'border-2 border-[#1B3B5A] scale-110 ring-2 ring-[#1B3B5A]/30' 
+                               : 'border border-white/50 grayscale hover:grayscale-0 hover:scale-105'
+                             }`}
+                             title={mat.name}
+                           >
+                             <Image src={mat.file} fill alt={mat.name} className="object-cover"/>
+                           </div>
+                        ))}
+                    </div>
+                </div>
+             </div>
+          </div>
+
+        </div>
+
+        {/* --- CONTROLS (TABS) --- */}
+        <div className="mt-12 relative z-20">
+          <div className="flex flex-wrap justify-center gap-2 bg-white/60 p-1.5 rounded-full backdrop-blur-md border border-slate-200/60 shadow-sm">
+             {steps.map((step) => (
+                <button
+                    key={step.id}
+                    onClick={() => setActiveStep(step.id)}
+                    className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                        activeStep === step.id 
+                        ? 'bg-[#1B3B5A] text-white shadow-md scale-100 ring-1 ring-white/20' 
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/50 cursor-pointer'
+                    }`}
+                    aria-label={`Go to step ${step.id}: ${step.label}`}
+                >
+                    <span className={`flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold ${activeStep === step.id ? 'bg-white text-[#1B3B5A]' : 'bg-slate-200 text-slate-600'}`}>
+                      {step.id}
+                    </span>
+                    {step.label}
+                </button>
+             ))}
+          </div>
+        </div>
+
+        {/* --- FINAL CTA --- */}
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-20">
+             <Link 
+               href="/select-product" 
+               className="rounded-full bg-[#1B3B5A] px-10 py-4 text-base font-bold text-white shadow-[0_4px_6px_rgba(27,59,90,0.2)] hover:shadow-[0_6px_12px_rgba(27,59,90,0.3)] hover:bg-[#102A43] transition-all hover:-translate-y-0.5"
+             >
+                {activeStep < 4 ? `Next: ${steps[activeStep]?.label || 'Continue'}` : 'Start Designing'}
+             </Link>
+             <Link href="/designs" className="rounded-full border-2 border-[#1B3B5A] bg-white/50 px-10 py-4 text-base font-medium text-[#1B3B5A] hover:bg-white transition-colors hover:border-[#102A43] hover:shadow-sm">
+                Browse Designs
+             </Link>
+        </div>
+        
+      </div>
+    </div>
+  );
+}

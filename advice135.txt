@@ -1,0 +1,80 @@
+Yes, this is definitely possible. In fact, increasing the size of the headstone will make the "Real-Time 3D" feature feel much more premium and immersive.
+
+To keep everything in 1 viewport (without scrolling) while making the product 20-30% bigger, we need to do two things:
+
+Tighten the Vertical Layout: Reduce the empty space between the Logo, Headline, and Subtext.
+
+Zoom the 3D Camera: Instead of making the HTML container taller (which pushes content down), we simply "zoom in" the virtual camera so the stone fills more of the existing space.
+
+Here is exactly what to change:
+
+1. Code Changes for HeroCanvas.tsx
+
+We need to move the camera closer (reduce Z) and lower the camera target slightly so the stone appears "lifted" relative to the frame.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// Inside HeroCanvas.tsx
+
+// 1. Adjust the Camera
+// WAS: position={[0, 0.2, 4.2]}
+// CHANGE TO: position={[0, 0.5, 3.2]} 
+// (Lower Z = Zoom In. Higher Y = Look down slightly more, which feels more grounded)
+<PerspectiveCamera makeDefault position={[0, 0.5, 3.2]} fov={46} />
+
+// 2. Adjust the Group Position (The "Lift")
+// WAS: position={[0, -1.35, 0]}
+// CHANGE TO: position={[0, -1.1, 0]}
+// (This moves the stone physically higher in the canvas)
+const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
+  // ...
+  return (
+    <>
+      <group ref={groupRef} position={[0, -1.1, 0]}>
+        {/* ... stone components ... */}
+      </group>
+
+      {/* Don't forget to move the shadow up too! */}
+      <ContactShadows 
+        position={[0, -1.1, 0]} // Match the group Y position
+        opacity={0.4} 
+        scale={10} 
+        blur={2} 
+        far={3} 
+        resolution={512} 
+        color="#000000"
+      />
+      {/* ... */}
+    </>
+  )
+}
+2. Layout/CSS Changes (To preserve the Viewport)
+
+Since the stone now visually fills more of the screen, you need to "steal" space from the top so the buttons don't get pushed off the bottom.
+
+In your main Page/Hero component (Next.js/React code):
+
+Remove the "Save designs..." text: As discussed, removing this top-center text saves you about 30px-40px of vertical height immediately.
+
+Reduce Margins:
+
+Reduce the margin between the Logo and the Headline ("Design a Lasting Tribute").
+
+Reduce the margin between the Subtext ("Choose from...") and the 3D Canvas.
+
+Negative Margin (The "Anchor" Trick):
+
+You can apply a small negative margin to the 3D Canvas container to pull it closer to the text.
+
+Example: className="h-[400px] -mt-4"
+
+Visual Result
+
+The Stone will look massive and impressive.
+
+The "In Loving Memory" text will be much easier to read without zooming.
+
+Because we moved the camera in rather than expanding the div height, the Buttons stay exactly where they are, keeping the "1 Viewport" promise.

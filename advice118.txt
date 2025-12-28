@@ -1,0 +1,298 @@
+Here is the optimized HeroCanvas.tsx.
+
+Key Improvements Made:
+
+"Golden" Text Upgrade:
+
+Created a reusable <GoldText> component.
+
+Added metalness and roughness properties to the text so it catches the light like real gold leaf.
+
+Added a subtle outlineWidth (black) to sharpen the text edges against the dark stone.
+
+Performance & cleanup:
+
+Removed manual WebGL disposal: React Three Fiber v8 handles context cleanup automatically. Manually forcing context loss (loseContext) is an anti-pattern that causes crashes when navigating between pages.
+
+Added enableDamping to the camera controls. This gives the rotation a "heavy," premium feel (inertia) rather than stopping instantly.
+
+Visual Polish:
+
+Lighting: Adjusted the lighting to have a dedicated "Fill Light" for the text face, ensuring the name is always readable even when the stone rotates.
+
+Shadows: Tuned the ContactShadows to look more like a ground shadow and less like a dark blob.
+
+Material: Added a fallback color to the Granite material so it looks good even before the texture loads.
+
+The Code
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE HeroCanvas.tsx ---
+
+'use client';
+
+import React, { useMemo, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { 
+  OrbitControls, 
+  Environment, 
+  PerspectiveCamera,
+  ContactShadows,
+  useTexture,
+  Text
+} from '@react-three/drei';
+import * as THREE from 'three';
+
+// --- Constants ---
+const STONE_WIDTH = 2.3;
+const STONE_HEIGHT = 2.5;
+const STONE_THICKNESS = 0.35;
+const SHOULDER_HEIGHT = 2.05;
+const BASE_HEIGHT = 0.46;
+const BASE_EXTRA_WIDTH = 0.58;
+
+// --- Materials & Components ---
+
+// 1. Optimized Granite Material
+// Added distinct metalness/roughness to look polished but not plastic
+const GraniteMaterial = () => {
+  // Use suspense-friendly texture loading
+  const texture = useTexture('/textures/forever/l/Glory-Black-2.webp');
+  
+  useMemo(() => {
+    if (texture) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(2, 2);
+      // Anisotropy improves texture sharpness at oblique angles
+      texture.anisotropy = 16; 
+    }
+  }, [texture]);
+  
+  return (
+    <meshStandardMaterial
+      color="#1a1a1a" // Fallback color if texture loads slowly
+      map={texture}
+      roughness={0.08} // Highly polished
+      metalness={0.1}
+      envMapIntensity={1.5}
+    />
+  );
+};
+
+// 2. New "GoldText" Component
+// Creates a metallic gold look with better visibility
+interface GoldTextProps {
+  text: string;
+  position: [number, number, number];
+  fontSize: number;
+  font?: string;
+  fontWeight?: number | string;
+}
+
+const GoldText: React.FC<GoldTextProps> = ({ text, position, fontSize, font, fontWeight = 'normal' }) => {
+  return (
+    <Text
+      position={position}
+      fontSize={fontSize}
+      font={font}
+      anchorX="center"
+      anchorY="middle"
+      letterSpacing={0.02}
+      lineHeight={1.2}
+      fontWeight={fontWeight}
+      // Text quality settings
+      characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{};':,./<>? "
+      outlineWidth={0.004} // Subtle outline makes text pop against dark background
+      outlineColor="#000000"
+      renderOrder={2} // Ensures it renders on top of transparent effects
+    >
+      {text}
+      {/* This material simulates Gold Leaf */}
+      <meshStandardMaterial
+        color="#fcc200"
+        emissive="#d4af37"
+        emissiveIntensity={0.2} // Glows slightly so it's never dark
+        roughness={0.3}
+        metalness={0.8}
+        toneMapped={false} // Prevents colors from looking washed out
+      />
+    </Text>
+  );
+};
+
+// --- Geometry Components ---
+
+const SerpentineHeadstone: React.FC<{ width: number; height: number; thickness: number }> = ({ width, height, thickness }) => {
+  const shape = useMemo(() => {
+    const s = new THREE.Shape();
+    const w2 = width / 2;
+    s.moveTo(-w2, 0);
+    s.lineTo(-w2, SHOULDER_HEIGHT);
+    
+    // Serpentine Curve
+    s.bezierCurveTo(-w2, height, -w2 / 3, height, 0, height * 0.95);
+    s.bezierCurveTo(w2 / 3, height, w2, height, w2, SHOULDER_HEIGHT);
+
+    s.lineTo(w2, 0);
+    s.lineTo(-w2, 0);
+    return s;
+  }, [width, height]);
+
+  const extrudeSettings = useMemo(() => ({
+    depth: thickness,
+    bevelEnabled: true,
+    bevelSegments: 5, // Smoother edges
+    bevelSize: 0.02,
+    bevelThickness: 0.02,
+  }), [thickness]);
+
+  return (
+    <group position={[0, BASE_HEIGHT, 0]}>
+      <mesh position={[0, 0, -thickness / 2]} castShadow receiveShadow>
+        <extrudeGeometry args={[shape, extrudeSettings]} />
+        <GraniteMaterial />
+      </mesh>
+    </group>
+  );
+};
+
+const Base: React.FC<{ stoneWidth: number }> = ({ stoneWidth }) => {
+  const width = stoneWidth + BASE_EXTRA_WIDTH;
+  const depth = STONE_THICKNESS + 0.3;
+
+  return (
+    <mesh position={[0, BASE_HEIGHT / 2, 0]} castShadow receiveShadow>
+      <boxGeometry args={[width, BASE_HEIGHT, depth]} />
+      <GraniteMaterial />
+    </mesh>
+  );
+};
+
+// --- Scene Setup ---
+
+const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const textZ = STONE_THICKNESS / 2 + 0.01; // Just barely off the surface
+
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      // Smooth interpolation for user rotation
+      const step = 0.1;
+      const diff = targetRotation - groupRef.current.rotation.y;
+      
+      // If difference is significant, animate towards it
+      if (Math.abs(diff) > 0.001) {
+        groupRef.current.rotation.y += diff * step;
+      }
+      
+      // Very slow idle drift for life
+      groupRef.current.rotation.y += Math.sin(state.clock.elapsedTime * 0.5) * 0.0005;
+    }
+  });
+
+  return (
+    <>
+      <group ref={groupRef} position={[0, -1.4, 0]}>
+        <SerpentineHeadstone width={STONE_WIDTH} height={STONE_HEIGHT} thickness={STONE_THICKNESS} />
+        <Base stoneWidth={STONE_WIDTH} />
+        
+        {/* Inscriptions using the new GoldText component */}
+        <group position={[0, 0, 0]}>
+          <GoldText
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.60, textZ]}
+            fontSize={0.11}
+            text="In Loving Memory"
+            font="/fonts/Garamond.ttf"
+          />
+          
+          <GoldText
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.50, textZ]}
+            fontSize={0.22} // Larger name
+            text="Eleanor Rose"
+            font="/fonts/Garamond.ttf"
+            fontWeight="bold"
+          />
+          
+          <GoldText
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.40, textZ]}
+            fontSize={0.11}
+            text="☼ 1945   ✟ 2023"
+            font="/fonts/Garamond.ttf"
+          />
+        </group>
+      </group>
+      
+      {/* Improved Shadow */}
+      <ContactShadows 
+        position={[0, -1.39, 0]}
+        opacity={0.6} 
+        scale={10} 
+        blur={2} 
+        far={2} 
+        resolution={256} 
+        color="#000000" 
+      />
+    </>
+  );
+};
+
+// --- Main Component ---
+
+export default function HeroCanvas({ rotation = 0 }: { rotation?: number }) {
+  return (
+    <div style={{ width: '480px', height: '400px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+      <Canvas 
+        shadows 
+        dpr={[1, 2]} // Handle high DPI screens
+        camera={{ position: [2, 1.3, 4.5], fov: 40 }} // Slightly tighter FOV for "Portrait" look
+        gl={{ 
+          alpha: true, 
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.1
+        }} 
+      >
+        <React.Suspense fallback={null}>
+          {/* Lighting Rig */}
+          <ambientLight intensity={0.5} />
+          
+          {/* Key Light (Warm Sun) */}
+          <spotLight 
+            position={[5, 5, 5]} 
+            angle={0.5} 
+            penumbra={1} 
+            intensity={1.5} 
+            castShadow
+            shadow-bias={-0.0001}
+            color="#fff0d0" 
+          />
+          
+          {/* Fill Light (Cool Sky) - keeps shadows from being pitch black */}
+          <pointLight position={[-3, 2, 4]} intensity={0.5} color="#dbeaff" />
+          
+          {/* Rim Light (Separation from background) */}
+          <pointLight position={[-2, 4, -5]} intensity={1} color="#ffffff" />
+          
+          {/* Text Highlight Light - positioned specifically to make gold sparkle */}
+          <pointLight position={[0, 1, 2]} intensity={0.5} color="#ffd700" distance={5} />
+
+          <Environment preset="city" />
+
+          <SceneContent targetRotation={rotation} />
+
+          <OrbitControls
+            enablePan={false}
+            enableZoom={false}
+            minPolarAngle={Math.PI / 4} // Don't let user go too high
+            maxPolarAngle={Math.PI / 2} // Don't let user go below ground
+            enableDamping={true} // IMPORTANT: Adds weight/inertia to rotation
+            dampingFactor={0.05}
+          />
+        </React.Suspense>
+      </Canvas>
+    </div>
+  );
+}

@@ -1,0 +1,272 @@
+This is a great feature addition. It turns the static "concept" into an actual Shape Selector demo.
+
+I have updated the component to include:
+
+State for currentShape: To track which shape is shown.
+
+Navigation Arrows: Visible only when "Step 1: Shape" is active.
+
+Dynamic Masking: The headstone shape changes instantly when you click the arrows.
+
+Shape Name Label: The badge now updates to show the name of the selected shape (e.g., "Serpentine", "Gable").
+
+Here is the updated code:
+
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+
+export default function DesignPossibilities() {
+  // Active Step State
+  const [activeStep, setActiveStep] = useState(1); // Start at Step 1 to show off the arrows immediately
+
+  // Shape Selection State
+  const [shapeIndex, setShapeIndex] = useState(0);
+
+  // Available Shapes (using your real file paths)
+  const shapes = [
+    { name: 'Serpentine', file: '/shapes/headstones/serpentine.svg' },
+    { name: 'Gable', file: '/shapes/headstones/gable.svg' },
+    { name: 'Half Round', file: '/shapes/headstones/half_round.svg' },
+    { name: 'Heart', file: '/shapes/headstones/heart.svg' }, // Assuming this exists based on previous prompt
+    { name: 'Book', file: '/shapes/headstones/book.svg' },   // Assuming this exists based on previous prompt
+  ];
+
+  const currentShape = shapes[shapeIndex];
+
+  // Handlers for Shape Rotation
+  const nextShape = () => {
+    setShapeIndex((prev) => (prev + 1) % shapes.length);
+  };
+
+  const prevShape = () => {
+    setShapeIndex((prev) => (prev - 1 + shapes.length) % shapes.length);
+  };
+
+  const steps = [
+    { id: 1, label: 'Shape', desc: 'Select from 50+ shapes' },
+    { id: 2, label: 'Material', desc: 'Choose from premium granites' },
+    { id: 3, label: 'Personalise', desc: 'Add text, motifs & photos' },
+    { id: 4, label: 'Review', desc: 'Get instant pricing' },
+  ];
+
+  return (
+    <div className="relative border-t border-white/5 bg-[#0a0a0a] py-24 overflow-hidden min-h-[900px]">
+      
+      {/* Background: Engineering Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10" />
+
+      <div className="relative mx-auto max-w-5xl px-6 lg:px-8 flex flex-col items-center">
+
+        {/* Section Header */}
+        <div className="text-center mb-12 z-20">
+          <h2 className="text-3xl font-serif font-light text-white mb-2">
+            How You Design a Memorial
+          </h2>
+          <p className="text-gray-400">
+            Tap the steps below to see how easy it is to customize.
+          </p>
+        </div>
+
+        {/* --- MAIN INTERACTIVE COMPONENT --- */}
+        <div className="relative w-full max-w-lg perspective-1000 z-10">
+
+          {/* DYNAMIC LABEL (Shows Shape Name in Step 1, or generic label otherwise) */}
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-300">
+             <div className={`
+                bg-[#cfac6c] text-black text-xs font-bold px-4 py-1.5 rounded-full shadow-lg border border-[#cfac6c]/50
+                transition-all duration-500 transform
+                ${activeStep === 1 ? 'scale-110' : 'scale-100 opacity-80'}
+             `}>
+                {activeStep === 1 ? currentShape.name : 'Interactive Preview'}
+             </div>
+          </div>
+
+          {/* --- SHAPE NAVIGATION ARROWS (Only visible in Step 1) --- */}
+          {activeStep === 1 && (
+            <>
+              {/* Left Arrow */}
+              <button 
+                onClick={prevShape}
+                className="absolute top-[40%] -left-16 z-50 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-[#cfac6c] hover:text-black hover:scale-110 transition-all duration-300 group"
+                aria-label="Previous Shape"
+              >
+                <ChevronLeftIcon className="w-6 h-6" />
+              </button>
+
+              {/* Right Arrow */}
+              <button 
+                onClick={nextShape}
+                className="absolute top-[40%] -right-16 z-50 p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-[#cfac6c] hover:text-black hover:scale-110 transition-all duration-300 group"
+                aria-label="Next Shape"
+              >
+                <ChevronRightIcon className="w-6 h-6" />
+              </button>
+            </>
+          )}
+
+          {/* --- HEADSTONE BODY --- */}
+          <div className={`relative z-20 transition-all duration-700 ${activeStep === 1 ? 'scale-105 drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]' : 'scale-100'}`}>
+            
+            {/* 1. MASKED GRANITE SHAPE (Dynamic) */}
+            <div 
+              className="relative w-full aspect-[1.15/1] transition-all duration-500 ease-in-out"
+              style={{
+                // DYNAMIC MASK based on currentShape state
+                maskImage: `url('${currentShape.file}')`,
+                maskSize: "contain",
+                maskRepeat: "no-repeat",
+                maskPosition: "bottom center",
+                WebkitMaskImage: `url('${currentShape.file}')`,
+                WebkitMaskSize: "contain",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskPosition: "bottom center",
+              }}
+            >
+               {/* Granite Texture */}
+               <div className="absolute inset-0 bg-[#1a2a3a]">
+                  <Image 
+                    src="/textures/forever/l/Blue-Pearl.webp" 
+                    alt="Blue Pearl Granite" 
+                    fill 
+                    className={`object-cover transition-all duration-700 ${activeStep === 2 ? 'scale-125 brightness-110' : 'scale-100'}`}
+                  />
+                  {/* Gloss Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-white/20 mix-blend-overlay"></div>
+                  {/* Top Shine */}
+                  <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent opacity-50"></div>
+               </div>
+            </div>
+
+            {/* 2. ENGRAVINGS LAYER (Text & Motifs) */}
+            <div className="absolute inset-0 flex flex-col items-center justify-end pb-[8%] text-[#eec170] z-30 pointer-events-none">
+                
+                {/* Top Motifs (Doves) */}
+                <div className={`flex justify-between w-[75%] mb-2 transition-opacity duration-500 ${activeStep === 3 ? 'opacity-100' : 'opacity-60'}`}>
+                    <div className="w-14 h-14 relative grayscale brightness-[2] sepia contrast-125">
+                       <Image src="/shapes/motifs/s/dove_002.png" alt="dove" fill className="object-contain" />
+                    </div>
+                    <div className="w-14 h-14 relative grayscale brightness-[2] sepia contrast-125 scale-x-[-1]">
+                       <Image src="/shapes/motifs/s/dove_002.png" alt="dove" fill className="object-contain" />
+                    </div>
+                </div>
+
+                {/* Name & Epitaph */}
+                <div className={`text-center mb-5 transition-all duration-500 ${activeStep === 3 ? 'scale-105' : 'scale-100'}`}>
+                    <h3 className="font-serif text-5xl text-[#f0d5a0] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] mb-1">
+                      THOMPSON
+                    </h3>
+                    <p className="font-serif text-sm italic text-[#cfac6c]/90">
+                      "In our hearts you live forever"
+                    </p>
+                </div>
+
+                {/* Central Addition (Statue) */}
+                <div className={`relative w-24 h-32 mb-4 transition-all duration-500 ${activeStep === 3 ? 'opacity-100 scale-110 filter drop-shadow-2xl' : 'opacity-0 scale-90'}`}>
+                   {/* Only show statue in step 3 to keep step 1 clean for shape viewing */}
+                   <Image 
+                     src="/additions/_2600.webp" 
+                     alt="Statue" 
+                     fill 
+                     className="object-contain" 
+                   />
+                </div>
+                
+                {/* Dates */}
+                <div className="flex justify-between w-[60%] text-[10px] font-bold tracking-[0.2em] text-[#eec170]/70">
+                   <span>OCT 14, 1945</span>
+                   <span>JAN 20, 2023</span>
+                </div>
+            </div>
+
+            {/* --- POPUP UI: STEP 3 (Personalise) --- */}
+            <div className={`absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-72 bg-[#151515]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center shadow-2xl transition-all duration-500 ${activeStep === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
+               <div className="text-[#cfac6c] text-[10px] font-bold uppercase tracking-widest mb-2">Step 3</div>
+               <h4 className="text-white font-serif text-xl mb-2">Personalise</h4>
+               <p className="text-gray-400 text-xs mb-4 leading-relaxed">
+                 Add names, dates, motifs, photo portraits, or ceramic images to tell their story.
+               </p>
+               <div className="text-[#cfac6c] text-xs font-semibold hover:underline cursor-pointer">
+                 Explore options →
+               </div>
+            </div>
+
+          </div>
+
+          {/* --- BASE --- */}
+          <div 
+             className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-28 translate-y-[85%] z-10 transition-all duration-500 ${activeStep === 2 ? 'brightness-110 z-30' : 'brightness-75'}`}
+          >
+             <div className="w-full h-full rounded-sm overflow-hidden shadow-2xl relative border-t border-white/20 bg-black">
+                {/* Base Texture */}
+                <Image src="/textures/forever/l/Blue-Pearl.webp" alt="Base" fill className="object-cover opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70"></div>
+                
+                {/* --- POPUP UI: STEP 2 (Material) --- */}
+                <div 
+                  className={`absolute inset-0 flex items-center justify-center gap-4 transition-all duration-500 ${activeStep === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                >
+                    <div className="bg-black/80 backdrop-blur-md p-1.5 rounded-full border border-white/20 flex gap-3 shadow-xl">
+                        {/* Active Swatch */}
+                        <div className="w-10 h-10 rounded-full border-2 border-[#cfac6c] overflow-hidden relative shadow-lg cursor-pointer transform scale-110">
+                          <Image src="/textures/forever/l/Blue-Pearl.webp" fill alt="Blue" className="object-cover"/>
+                        </div>
+                        {/* Inactive Swatches */}
+                        <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden relative grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all cursor-pointer">
+                          <Image src="/textures/forever/l/Imperial-Red.webp" fill alt="Red" className="object-cover"/>
+                        </div>
+                        <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden relative grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all cursor-pointer">
+                          <Image src="/textures/forever/l/Glory-Black-2.webp" fill alt="Black" className="object-cover"/>
+                        </div>
+                    </div>
+                </div>
+             </div>
+          </div>
+
+        </div>
+
+        {/* --- CONTROLS (TABS) --- */}
+        <div className="mt-36 relative z-20">
+          <div className="flex flex-wrap justify-center gap-2 bg-white/5 p-2 rounded-full backdrop-blur-sm border border-white/5">
+             {steps.map((step) => (
+                <button
+                    key={step.id}
+                    onClick={() => setActiveStep(step.id)}
+                    className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                        activeStep === step.id 
+                        ? 'bg-[#cfac6c] text-black shadow-lg scale-105' 
+                        : 'text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                    <span className={`flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold ${activeStep === step.id ? 'bg-black text-[#cfac6c]' : 'bg-white/10'}`}>
+                      {step.id}
+                    </span>
+                    {step.label}
+                </button>
+             ))}
+          </div>
+        </div>
+
+        {/* --- FINAL CTA --- */}
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-20">
+             <Link href="/select-product" className="rounded-full bg-[#cfac6c] px-10 py-4 text-base font-bold text-black shadow-[0_0_20px_rgba(207,172,108,0.3)] hover:shadow-[0_0_30px_rgba(207,172,108,0.5)] hover:bg-[#d4af37] transition-all hover:-translate-y-0.5">
+                Start Designing
+             </Link>
+             <Link href="/designs" className="rounded-full border border-white/20 bg-transparent px-10 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors">
+                Browse Designs
+             </Link>
+        </div>
+        
+      </div>
+    </div>
+  );
+}

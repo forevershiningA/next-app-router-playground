@@ -1,0 +1,166 @@
+You are absolutely right—that previous attempt relied too heavily on CSS gradients to "fake" 3D objects, and the result looked muddy and low-quality.
+
+A better approach for a "Design Tool" landing page is to make these cards look like UI Widgets from the actual software. Instead of fake 3D blobs, we should show clean, precise outlines and swatches that simulate the interface users will actually use.
+
+Here is a completely re-coded "Design Possibilities" section.
+
+Key Changes:
+
+"UI Style" Visuals: The cards now look like tool menus (clean lines, high contrast).
+
+Crisp SVG Shapes: I replaced the blurry CSS blobs with sharp SVG outlines of headstones.
+
+Glossy Material Swatches: I created a grid of color swatches with a "shine" overlay to simulate polished granite.
+
+Golden Motifs: The icons are now bright gold and arranged in a floating pattern.
+
+Replace the entire Features Grid block in HomeSplash.tsx with this:
+
+code
+Tsx
+download
+content_copy
+expand_less
+{/* Features Grid - Design Possibilities (UI Interface Style) */}
+<div className="relative border-t border-white/5 bg-[#0a0a0a] py-24 overflow-hidden">
+  
+  {/* Subtle Background Grid to emphasize "Design Tool" feel */}
+  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+  
+  <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-3xl font-serif font-light text-white mb-4">
+        Design Possibilities
+      </h2>
+      <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+        Complete creative control over every detail
+      </p>
+    </div>
+
+    {/* The Bento Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+      
+      {/* Tile 1: SHAPES (Wireframe/Blueprint Look) */}
+      <div className="group md:col-span-2 relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10 flex flex-col h-full justify-between">
+          <div>
+            <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">50+ Shapes</h3>
+            <p className="text-sm text-gray-400 max-w-sm">From traditional serpentine tops to modern hearts, books, and custom cuts.</p>
+          </div>
+          
+          {/* Visual: Clean SVG Outlines */}
+          <div className="flex items-end gap-8 mt-8 justify-start pl-4">
+            {/* Shape 1: Serpentine */}
+            <div className="relative w-24 h-32 transition-transform duration-300 group-hover:-translate-y-2">
+              <svg viewBox="0 0 100 130" className="w-full h-full drop-shadow-2xl">
+                <path d="M10 130 V50 Q10 10 30 10 Q50 25 70 10 Q90 -5 90 50 V130 H10Z" 
+                      fill="#1a1a1a" stroke="currentColor" strokeWidth="2" className="text-gray-600 group-hover:text-[#cfac6c] transition-colors" />
+                {/* Internal shine line */}
+                <path d="M20 120 V50 Q20 20 35 20" fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="2" />
+              </svg>
+            </div>
+            
+            {/* Shape 2: Gothic/Oval */}
+            <div className="relative w-24 h-28 transition-transform duration-300 delay-75 group-hover:-translate-y-2">
+              <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-2xl">
+                <path d="M10 120 V50 Q50 -10 90 50 V120 H10Z" 
+                      fill="#1a1a1a" stroke="currentColor" strokeWidth="2" className="text-gray-600 group-hover:text-[#cfac6c] transition-colors" />
+              </svg>
+            </div>
+            
+            {/* Shape 3: Heart */}
+            <div className="relative w-24 h-24 transition-transform duration-300 delay-100 group-hover:-translate-y-2">
+              <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl">
+                <path d="M10 40 Q10 0 50 25 Q90 0 90 40 L50 90 L10 40Z" 
+                      fill="#1a1a1a" stroke="currentColor" strokeWidth="2" className="text-gray-600 group-hover:text-[#cfac6c] transition-colors" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tile 2: MATERIALS (Swatch Grid) */}
+      <div className="group md:row-span-2 relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10 flex flex-col h-full">
+          <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">Premium Materials</h3>
+          <p className="text-sm text-gray-400 mb-10">Granite, marble, and bronze sourced globally.</p>
+          
+          {/* Visual: Swatch Grid with Gloss Effect */}
+          <div className="grid grid-cols-2 gap-4 place-items-center">
+            {/* Swatch 1: Black */}
+            <div className="w-20 h-20 rounded-full bg-[#111] border border-white/20 relative shadow-xl group-hover:scale-105 transition-transform overflow-hidden">
+               <div className="absolute inset-0 bg-[#080808]"></div>
+               {/* Gloss Reflection */}
+               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/20"></div>
+               <div className="absolute bottom-2 left-0 right-0 text-[10px] text-center text-gray-500 font-medium">Jet Black</div>
+            </div>
+            
+            {/* Swatch 2: Grey */}
+            <div className="w-20 h-20 rounded-full bg-[#333] border border-white/20 relative shadow-xl group-hover:scale-105 transition-transform delay-75 overflow-hidden">
+               <div className="absolute inset-0 bg-[#2a2a2a]"></div>
+               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/30"></div>
+               <div className="absolute bottom-2 left-0 right-0 text-[10px] text-center text-gray-400 font-medium">Grey</div>
+            </div>
+
+             {/* Swatch 3: Red */}
+             <div className="w-20 h-20 rounded-full bg-[#4a1a1a] border border-white/20 relative shadow-xl group-hover:scale-105 transition-transform delay-100 overflow-hidden">
+               <div className="absolute inset-0 bg-[#3a1111]"></div>
+               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/30"></div>
+               <div className="absolute bottom-2 left-0 right-0 text-[10px] text-center text-red-200/50 font-medium">Ruby</div>
+            </div>
+
+            {/* Swatch 4: Blue Pearl */}
+            <div className="w-20 h-20 rounded-full bg-[#1a2a3a] border border-white/20 relative shadow-xl group-hover:scale-105 transition-transform delay-150 overflow-hidden">
+               <div className="absolute inset-0 bg-[#111c26]"></div>
+               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/30"></div>
+               <div className="absolute bottom-2 left-0 right-0 text-[10px] text-center text-blue-200/50 font-medium">Blue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tile 3: TYPOGRAPHY (Clean Preview) */}
+      <div className="group relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10">
+          <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">Custom Text</h3>
+          <p className="text-sm text-gray-400 mb-6">Beautiful fonts in any language.</p>
+          
+          {/* Visual: Type Card */}
+          <div className="bg-black/40 border border-white/5 rounded-xl p-6 text-center shadow-inner group-hover:border-[#cfac6c]/30 transition-colors">
+            <p className="font-serif text-[#cfac6c] text-2xl italic mb-2">In Loving Memory</p>
+            <p className="font-serif text-white font-bold tracking-[0.2em] text-sm uppercase opacity-90">Eleanor Rose</p>
+            <div className="w-8 h-[1px] bg-white/20 mx-auto my-3"></div>
+            <p className="font-sans text-gray-500 text-xs">1945 - 2023</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Tile 4: MOTIFS (Icon Cloud) */}
+      <div className="group relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10">
+          <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">Motifs & Art</h3>
+          <p className="text-sm text-gray-400 mb-4">Religious icons, nature elements, and more.</p>
+          
+          {/* Visual: Floating Icons */}
+          <div className="flex flex-wrap justify-center gap-4 mt-6 opacity-60 group-hover:opacity-100 transition-opacity">
+             <SparklesIcon className="w-8 h-8 text-[#cfac6c]" />
+             <div className="w-8 h-8 rounded-full border border-[#cfac6c] flex items-center justify-center text-[#cfac6c]">✝</div>
+             <svg className="w-8 h-8 text-[#cfac6c]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+             <div className="w-8 h-8 rounded-full border border-[#cfac6c] flex items-center justify-center text-[#cfac6c]">🕊️</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    {/* CTA Button */}
+    <div className="mt-16 text-center">
+      <Link
+        href="/select-product"
+        className="inline-block rounded-full border border-[#cfac6c]/50 bg-[#cfac6c]/10 px-10 py-4 text-lg font-semibold text-[#cfac6c] shadow-lg transition-all hover:bg-[#cfac6c] hover:text-slate-900 hover:shadow-[#cfac6c]/50"
+      >
+        Explore All Features →
+      </Link>
+    </div>
+  </div>
+</div>

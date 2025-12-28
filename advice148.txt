@@ -1,0 +1,218 @@
+This is a brilliant creative direction. Instead of a generic grid, we will transform the "Design Possibilities" section into a giant, interactive "Anatomy of a Headstone".
+
+We will build a large, grey granite monument in the center of the screen. The text and images on the monument will actually be the feature descriptions.
+
+The Family Name becomes the Typography feature.
+
+The Motifs become the Art Library feature.
+
+The Stone Shape represents the Shapes library.
+
+The Base represents the Materials selection.
+
+Here is the code to achieve this Skeuomorphic Design:
+
+code
+Tsx
+download
+content_copy
+expand_less
+import Image from 'next/image';
+import Link from 'next/link';
+
+export default function DesignPossibilities() {
+  return (
+    <div className="relative border-t border-white/5 bg-[#0a0a0a] py-24 overflow-hidden">
+      
+      {/* Background: Blueprint Grid to allow the stone to pop */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10" />
+      <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10" />
+
+      <div className="relative mx-auto max-w-5xl px-6 lg:px-8">
+        
+        {/* Header */}
+        <div className="text-center mb-16 relative z-20">
+          <h2 className="text-3xl font-serif font-light text-white mb-4">
+            The Anatomy of a Memorial
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            Every element of the headstone is yours to customize. <br/>
+            Interact with the monument below to explore the possibilities.
+          </p>
+        </div>
+
+        {/* --- THE HEADSTONE UI --- */}
+        <div className="relative flex flex-col items-center">
+
+          {/* 1. THE STONE BODY (Grey Granite) */}
+          {/* We use a mask or clip-path to create the Serpentine shape, filled with granite texture */}
+          <div className="relative w-full max-w-3xl aspect-[4/3] z-10 group">
+            
+            {/* The Shape Container */}
+            <div className="absolute inset-0 drop-shadow-2xl">
+              {/* Serpentine Shape Mask */}
+              <div 
+                className="w-full h-full bg-[#e5e5e5] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]"
+                style={{
+                  clipPath: "path('M 0 100 V 25 Q 15 25 25 10 Q 50 -10 75 10 Q 85 25 100 25 V 100 H 0 Z')", // Approximate Serpentine curve
+                }}
+              >
+                {/* Granite Texture Background */}
+                <Image 
+                  src="/textures/forever/l/G623.webp" // Using a light grey granite for contrast
+                  alt="Granite Texture"
+                  fill
+                  className="object-cover opacity-90"
+                />
+                
+                {/* Stone Noise/Grain Overlay for realism */}
+                <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
+                
+                {/* --- CONTENT ENGRAVED ON THE STONE --- */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-[#1a1a1a] p-8 md:p-12">
+                  
+                  {/* FEATURE A: MOTIFS (Top) */}
+                  <div className="flex justify-between w-full max-w-lg mb-4 opacity-80 hover:opacity-100 transition-opacity cursor-help group/motifs">
+                    {/* Left Birds */}
+                    <div className="relative w-16 h-16 md:w-20 md:h-20 grayscale transition-transform group-hover/motifs:-translate-x-2">
+                       <Image src="/shapes/motifs/s/dove_002.png" alt="Dove" fill className="object-contain" />
+                    </div>
+                    {/* Center Decoration */}
+                    <div className="flex flex-col items-center gap-1">
+                       <span className="font-serif text-sm font-bold tracking-widest uppercase border-b border-black/20 pb-1">Motifs</span>
+                       <span className="text-[10px] font-sans text-center max-w-[150px] leading-tight opacity-0 group-hover/motifs:opacity-100 transition-opacity">
+                         Add religious icons, flowers, animals, and emblems.
+                       </span>
+                    </div>
+                    {/* Right Birds */}
+                    <div className="relative w-16 h-16 md:w-20 md:h-20 grayscale scale-x-[-1] transition-transform group-hover/motifs:translate-x-2">
+                       <Image src="/shapes/motifs/s/dove_002.png" alt="Dove" fill className="object-contain" />
+                    </div>
+                  </div>
+
+                  {/* FEATURE B: TYPOGRAPHY (Center Name) */}
+                  <div className="text-center mb-2 group/text cursor-text relative">
+                    {/* "Engraved" text effect using text-shadows */}
+                    <h3 
+                      className="font-serif text-5xl md:text-7xl tracking-widest text-[#2a2a2a] mb-2 transition-all group-hover/text:text-black"
+                      style={{ textShadow: '2px 2px 4px rgba(255,255,255,0.7), -1px -1px 1px rgba(0,0,0,0.2)' }}
+                    >
+                      TYPOGRAPHY
+                    </h3>
+                    <p className="font-serif text-lg md:text-xl italic text-[#444]">
+                      "Choose fonts that speak from the heart"
+                    </p>
+                    
+                    {/* Tooltip on Hover */}
+                    <div className="absolute -right-32 top-1/2 -translate-y-1/2 bg-black/80 text-white text-xs p-3 rounded-lg opacity-0 group-hover/text:opacity-100 transition-opacity w-28 backdrop-blur-md">
+                      Customize names, dates, and verses in any language.
+                    </div>
+                  </div>
+
+                  {/* FEATURE C: CENTRAL ART (Statue/Image) */}
+                  <div className="relative w-24 h-48 md:w-32 md:h-64 my-4 group/art cursor-pointer grayscale hover:grayscale-0 transition-all duration-500">
+                     {/* Using the Madonna Statue as an example */}
+                     <Image 
+                       src="/additions/_2600.webp" 
+                       alt="Madonna" 
+                       fill 
+                       className="object-contain drop-shadow-xl"
+                     />
+                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full pt-2 text-center opacity-0 group-hover/art:opacity-100 transition-opacity w-48">
+                        <span className="text-xs font-bold uppercase tracking-widest bg-white/80 px-2 py-1 rounded shadow-sm">Additions & Photos</span>
+                     </div>
+                  </div>
+
+                  {/* FEATURE D: DATES (Bottom) */}
+                  <div className="flex justify-between w-full max-w-md px-8 font-serif font-bold text-[#333] opacity-70">
+                     <div className="text-center">
+                        <p className="text-xs">BORN</p>
+                        <p>SELECT DATE</p>
+                     </div>
+                     <div className="text-center">
+                        <p className="text-xs">PASSED</p>
+                        <p>SELECT DATE</p>
+                     </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            
+            {/* Shape Label (Floating outside) */}
+            <div className="absolute top-10 -left-4 md:-left-24 bg-[#cfac6c] text-black text-xs font-bold px-3 py-1 rounded shadow-lg transform -rotate-12 z-20">
+              50+ Shapes
+            </div>
+          </div>
+
+          {/* 2. THE BASE (Dark Granite) */}
+          <div className="relative w-[110%] md:w-[120%] h-32 md:h-40 -mt-4 z-0">
+             {/* Base Shape */}
+             <div className="absolute inset-0 bg-[#111] shadow-2xl rounded-sm overflow-hidden border-t border-white/10">
+                <Image 
+                  src="/textures/forever/l/Glory-Black-2.webp" // Dark base
+                  alt="Base Granite"
+                  fill
+                  className="object-cover brightness-75"
+                />
+                
+                {/* MATERIALS SELECTOR UI (Overlaid on base) */}
+                <div className="absolute inset-0 flex items-center justify-center gap-6 md:gap-12">
+                   
+                   {/* Left Text */}
+                   <div className="text-right hidden md:block">
+                      <p className="text-[#cfac6c] font-serif text-lg">Premium Materials</p>
+                      <p className="text-gray-400 text-xs">Granite, Marble, Bronze</p>
+                   </div>
+
+                   {/* Swatches */}
+                   <div className="flex gap-4 p-3 bg-black/40 backdrop-blur-md rounded-xl border border-white/10">
+                      
+                      {/* Swatch 1 (Current) */}
+                      <div className="w-12 h-12 rounded-full border-2 border-[#cfac6c] relative shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                         <Image src="/textures/forever/l/G623.webp" alt="Grey" fill className="object-cover rounded-full" />
+                      </div>
+                      
+                      {/* Swatch 2 */}
+                      <div className="w-12 h-12 rounded-full border-2 border-transparent hover:border-white/50 relative shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                         <Image src="/textures/forever/l/Blue-Pearl.webp" alt="Blue" fill className="object-cover rounded-full" />
+                      </div>
+
+                      {/* Swatch 3 */}
+                      <div className="w-12 h-12 rounded-full border-2 border-transparent hover:border-white/50 relative shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                         <Image src="/textures/forever/l/Imperial-Red.webp" alt="Red" fill className="object-cover rounded-full" />
+                      </div>
+
+                       {/* Swatch 4 */}
+                      <div className="w-12 h-12 rounded-full border-2 border-transparent hover:border-white/50 relative shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                         <Image src="/textures/forever/l/Glory-Black-2.webp" alt="Black" fill className="object-cover rounded-full" />
+                      </div>
+                   </div>
+
+                   {/* Right Text */}
+                   <div className="text-left hidden md:block">
+                      <p className="text-white font-serif text-lg">Solid Base</p>
+                      <p className="text-gray-400 text-xs">Matching or contrasting</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+
+        </div>
+
+        {/* CTA */}
+        <div className="mt-20 text-center relative z-20">
+          <Link
+            href="/select-product"
+            className="inline-block rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-12 py-4 text-lg font-bold text-slate-900 shadow-[0_0_20px_rgba(207,172,108,0.3)] transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(207,172,108,0.5)]"
+          >
+            Design Your Own Now
+          </Link>
+          <p className="mt-4 text-sm text-gray-500">Start from a template or create from scratch</p>
+        </div>
+
+      </div>
+    </div>
+  );
+}

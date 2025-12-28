@@ -27,6 +27,12 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   }
   
   if (isDesignerRoute) {
+    // On homepage, hide the sidebar completely
+    if (pathname === '/') {
+      return null;
+    }
+    
+    // On other designer pages, show full sidebar
     return (
       <div className="hidden md:block fixed top-0 left-0 z-10 flex h-full flex-col border-r border-gray-800" style={{ width: '400px' }}>
         <DesignerNav />

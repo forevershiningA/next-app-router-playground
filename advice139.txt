@@ -1,0 +1,26 @@
+The Final Polish: "Rim Lighting"
+The only remaining visual issue is that the black stone is blending into the dark blue background. It looks a little flat.
+To make the 3D really "pop" and look professional, you should add a Rim Light (a light from behind). This will create a thin white outline along the edges of the stone, separating it from the background.
+Here is the code to add that light in HeroCanvas.tsx:
+code
+Tsx
+{/* Inside the <Canvas> component in HeroCanvas.tsx */}
+
+<ambientLight intensity={0.5} />
+
+{/* 1. NEW: Rim Light (Backlight) - Separates stone from background */}
+<spotLight 
+  position={[-5, 5, -5]} // Behind and to the left
+  angle={0.5}
+  intensity={3} // High intensity to catch the edge
+  color="#ffffff" 
+  castShadow={false}
+/>
+
+{/* Existing Key Light */}
+<spotLight 
+  position={[8, 8, 8]} 
+  // ... existing props ...
+/>
+What this will do:
+It will catch the bevels and curves on the left/top edge of the headstone, creating a crisp highlight that defines the shape against the dark sky.

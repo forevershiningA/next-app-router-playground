@@ -1,0 +1,65 @@
+Based on the screenshot provided, here is a breakdown of design changes and improvements, categorized by User Experience (UX), Visual Design (UI), and Emotional Tone.
+
+1. User Experience & Flow (UX)
+
+Conflicting Call-to-Actions (CTAs):
+
+The Problem: You have a progress bar at the bottom indicating the user is already on Step 1 ("Shape"), but the large gold button says "Start Designing." This is confusing. Is the user currently designing, or do they need to click the button to begin?
+
+The Fix: If the user is currently selecting a shape (indicated by the arrows), the main button should say "Next: Material" or "Continue" to move them to Step 2.
+
+The "1 Issue" Tab:
+
+The Problem: The red "1 Issue" pill in the bottom left corner is jarring. Red signals danger or error. In the context of grieving/memorials, this creates unnecessary anxiety.
+
+The Fix: If this is a support chat, change the color to a neutral blue or green and label it "Support." If it is a design validation warning (e.g., "Text is too long"), place the warning contextually near the text field, not in a floating footer.
+
+Arrow Navigation vs. Steps:
+
+The Problem: The left/right arrows clearly change the shape of the stone. However, it isn't immediately obvious if the user can click the "2 Material" pill to jump ahead, or if they must use the main CTA button.
+
+The Fix: Ensure the numbered steps at the bottom are clickable (if allowed) and show a hover state to indicate interactivity.
+
+2. Visual Design & Legibility
+
+Text Contrast on Stone:
+
+The Problem: The gold text ("THOMPSON" and dates) gets slightly lost against the speckled "Blue Pearl" granite texture.
+
+The Fix: Add a very subtle, tight drop shadow or an "engraved" inner-shadow effect to the text on the 3D model. This mimics real engraving and improves readability. The quote ("In our hearts...") is also quite small and difficult to read.
+
+Background Grid:
+
+The Problem: The blue grid background looks very technical, like CAD software or a math notebook. While it implies precision, it feels "cold" and clinical for a tribute site.
+
+The Fix: Consider a softer background. A subtle, warm gradient or a very faint, organic texture would feel more premium and comforting. If the grid is necessary for scale, make the lines much fainter (lower opacity).
+
+"Half Round" Label:
+
+The Problem: The gold label at the top is floating awkwardly and is quite small.
+
+The Fix: Move the shape name closer to the stone or integrate it into the UI below the stone (e.g., "Selected Shape: Half Round").
+
+3. Aesthetics & Realism
+
+Shadows:
+
+The Problem: The black shadow underneath the headstone base is very sharp and rectangular. It looks like the stone is floating in a void rather than sitting on a surface.
+
+The Fix: Soften the edges of the shadow (blur it) and lower the opacity to ground the object more realistically.
+
+UI Polish:
+
+The Problem: The "Start Designing" button and the "1 Shape" active pill use the exact same color.
+
+The Fix: Differentiate them slightly. The "Next/Start" button is the primary action and should stand out the most. The step indicator can be a more muted tone of that color.
+
+Summary of Quick Wins:
+
+Change button text from "Start Designing" to "Next Step".
+
+Soften the background grid to make it feel less clinical.
+
+Increase contrast on the headstone text so it is easier to read.
+
+Hide or rename the red "1 Issue" badge.

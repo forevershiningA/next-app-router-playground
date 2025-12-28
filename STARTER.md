@@ -1771,6 +1771,113 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2025-12-27 (Late Afternoon)**: Homepage Hero Section & Design Tool UI Refinements (Production-Ready)
+  - **Homepage Hero Section Improvements**:
+    - **Headline Hierarchy Rebalanced**: Swapped sizing between "Create a Personal Memorial" and "Design in Real-Time 3D"
+      - Main headline now emphasizes emotional benefit (memorial) over technology feature
+      - Better aligns with selling a tribute rather than software capabilities
+    - **Empathetic Subtext**: Updated description to add warmth and reassurance
+      - New copy: "Design a lasting tribute from the comfort of your home. Visualize every detail with peace of mind before you decide."
+      - Emphasizes comfort, peace of mind, and no-pressure decision making
+    - **Tagline Above Headline**: Added "Save designs. Share with family." above h1
+      - Small text (text-sm) in light grey for subtle reinforcement
+      - Communicates key features without overwhelming primary message
+    - **CTA Button Refinement**: Changed "Start Designing (Free)" to "Start Your Free Design"
+      - More natural language flow, integrates "free" smoothly
+      - Eliminates clunky parenthetical notation
+    - **Button Style Consistency**: Standardized button styles across entire page
+      - Header "Start Designing": Filled gold button (primary action)
+      - Header "Browse Designs": Outlined gold button (secondary action)
+      - Hero "Start Your Free Design": Filled gold button (primary CTA)
+      - Hero "Browse Designs": Filled dark button (secondary option)
+      - Consistent color hierarchy: Gold = primary, Dark/Outlined = secondary
+    - **Trust Badge Repositioning**: Removed "Save designs. Share with family." from floating header position
+      - Alternative placement as trust badge under CTA button (commented out for now)
+      - Can be added back as small reassurance text near primary button
+  - **3D Canvas Interactivity Enhancements**:
+    - **Auto-Rotation**: Implemented gentle automatic rotation for 3D headstone
+      - Rotation speed: 0.15 radians per second (slow, elegant)
+      - Pauses on user interaction (drag/arrow controls)
+      - Resumes after 2 seconds of inactivity
+      - Demonstrates real-time 3D capabilities prominently
+    - **Shadow Improvements**: Fixed ground shadow to rotate with headstone
+      - Shadow properly synchronized with headstone rotation on all controls
+      - Visible oval shadow positioned below base for realistic grounding
+      - Opacity and blur adjusted for subtle but clear depth indication
+    - **OrbitControls**: Re-enabled rotation controls after previous disable
+      - Users can freely drag to rotate headstone with mouse/touch
+      - Auto-rotation pauses during manual interaction
+  - **Select Product Page (`/select-product`) Improvements**:
+    - **Sidebar Optimization**: Disabled/greyed out steps 3-10 until product is selected
+      - Reduces cognitive load on initial view
+      - Shows full workflow without overwhelming user
+      - Steps unlock progressively as user advances through design process
+      - Visual indication (opacity, cursor) shows which steps are currently accessible
+  - **Design Tool Homepage Section Enhancements**:
+    - **Section Title Update**: Changed "Design Possibilities" to more specific product-focused language
+      - Updated to reflect that tool supports Headstones, Plaques, Urns, and Monuments
+      - Better clarity on product range without seeing entire catalog first
+    - **Heavenly Blue Theme**: Implemented soft, peaceful color scheme for Design Possibilities section
+      - Background: Pale sky blue gradient with cloud texture overlay
+      - Accent color: Soft gold (matching overall site theme)
+      - Text: White with subtle blue shadows for readability
+      - Overall atmosphere: Peaceful, reverent, appropriate for memorial context
+  - **Files Modified**:
+    - `app/_ui/HomeSplash.tsx`: Headline hierarchy, empathetic copy, button consistency, tagline
+    - `components/HeroCanvas.tsx`: Auto-rotation implementation, shadow synchronization
+    - `components/three/Scene.tsx`: OrbitControls re-enablement
+    - `app/select-product/page.tsx`: Sidebar step disabling logic
+    - `app/_ui/DesignPossibilities.tsx`: Heavenly blue theme, updated section content
+  - **Documentation**: Implementation based on advice132-158
+  - **Production Status**: All visual and UX improvements deployed, better conversion optimization
+
+- **2025-12-26 (Evening)**: 3D Scene Atmospheric & Viewport Optimizations (Production-Ready)
+  - **Homepage Hero Section - Mobile Optimizations**:
+    - **Canvas Height**: Changed from fixed pixels to viewport-based `h-[35vh] min-h-[280px] max-h-[450px]`
+    - **Full Viewport Layout**: Hero uses `min-h-screen flex flex-col justify-center` for vertical centering
+    - **Tightened Spacing**: Headlines `mb-3 sm:mb-4`, Description `mb-4 sm:mb-6`, Canvas `mb-6 sm:mb-8`
+    - **Smaller Logo**: Reduced from `w-48 sm:w-64 md:w-80` to `w-40 sm:w-56 md:w-72` for space
+    - **Responsive Padding**: `pt-20 pb-8 sm:pt-24` to maximize vertical space while clearing header
+    - **Full-Width CTAs on Mobile**: Buttons use `w-full sm:w-auto` for better mobile UX
+    - **Text Wrapping Fix**: "Real-Time 3D" stays on one line with non-breaking hyphen `&#8209;` and `&nbsp;`
+    - **Font Size Reduction**: Second headline `text-[1.75rem] sm:text-5xl` (reduced on mobile)
+    - **Header CTA Update**: Changed "Contact Us" to "Start Designing" with `/select-product` link
+    - **Result**: All content fits "above the fold" on laptop screens (1366x768) without scrolling
+  - **3D Scene Background System - Gradient Sky**:
+    - **Removed Post-Processing**: Eliminated `EffectComposer` and `DepthOfField` (causing text blur artifacts)
+    - **Simple Gradient Background**: Custom shader sphere with `#5ca0e5` sky → `#dcebf5` horizon (pale blue)
+    - **Seamless Horizon**: Fog color matches gradient bottom for invisible grass-to-sky transition
+    - **Extended World**: Floor `200x200` → `400x400`, sky sphere `scale={[100,100,100]}` → `[200,200,200]`
+    - **Deeper Fog**: Start `20` → `25`, End `100` → `150` for more expansive outdoor feel
+    - **Position Adjustments**: Sky sphere lowered to `position={[0, -20, 0]}` for better horizon perspective
+    - **Gradient Transition**: `smoothstep(0.45, 1.0, vUv.y)` keeps horizon solid pale blue (0-45%) before fading to sky
+    - **Increased Texture Repeat**: Grass texture `40` → `60` to maintain detail on larger floor
+  - **Why Removed Depth of Field**:
+    - Screen-space DoF creates halos and artifacts around sharp edges
+    - Accidentally blurs critical text (inscriptions) even with focal length tuning
+    - Heavy on mobile GPUs with no performance benefit
+    - Atmospheric fog achieves depth separation without blur artifacts
+    - Product configurator requires 100% sharp text for readability
+  - **Atmospheric Color Improvements**:
+    - **Fog Color**: Changed from grey `#e8e8e8` to pale atmospheric blue `#dcebf5`
+    - **Sky Gradient**: Top `#4A90E2` (original) → `#5ca0e5` (richer blue) then back to `#4A90E2`
+    - **Horizon Blending**: Bottom matches fog perfectly for seamless grass → fog → sky transition
+    - **No "White Wall"**: Natural pale blue atmosphere replaces harsh grey cutoff
+    - **Realistic Distance**: Extended fog end (150 units) creates deep outdoor environment
+  - **Benefits**:
+    - ✅ 100% sharp headstone and inscriptions (no blur halos)
+    - ✅ Better mobile performance (no post-processing overhead)
+    - ✅ Clean depth separation via fog (no artifacts)
+    - ✅ Seamless horizon transition (grass fades into matching sky color)
+    - ✅ Natural outdoor atmosphere (pale blue tones)
+    - ✅ Larger world scale (400x400 floor, 200 unit sky sphere)
+    - ✅ Deeper fog range (25-150 units) for realistic distance
+    - ✅ All hero content fits above fold on laptops (1366x768)
+  - **Files Modified**:
+    - `components/three/Scene.tsx`: Removed DoF, added GradientBackground, updated fog settings, expanded floor/sky
+    - `app/_ui/HomeSplash.tsx`: Viewport-based layout, tightened spacing, responsive optimizations
+  - **Documentation**: advice121-131 implementation (fog-only approach, atmospheric colors, world scale)
+  - **Production Status**: Clean rendering, sharp text, natural atmosphere, fits above fold on typical screens
 - **2025-12-24 (Evening)**: Homepage Hero Section Enhancements (Production-Ready)
   - **Hero Section Visual Improvements**:
     - **Background**: Added blurred tree background with increased blur (12px) and desaturation (85%)

@@ -11,6 +11,9 @@ export default function MainContent({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
   
+  // Check if we're on homepage
+  const isHomepage = pathname === '/';
+  
   // Check if we're on any /designs route
   const isDesignsRoute = pathname?.startsWith('/designs');
   
@@ -28,7 +31,7 @@ export default function MainContent({
   }, []);
 
   return (
-    <div className={!isDesignsRoute && isSidebarOpen ? 'lg:pl-[400px]' : ''}>
+    <div className={!isDesignsRoute && !isHomepage && isSidebarOpen ? 'lg:pl-[400px]' : ''}>
       {children}
     </div>
   );

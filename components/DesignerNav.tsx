@@ -1316,20 +1316,34 @@ export default function DesignerNav() {
               );
             }
             
+            // Determine if step should be disabled (steps 3-10 need a product selected)
+            const needsProduct = index >= 2; // Steps from index 2 onwards (Select Material, Select Size, etc.)
+            const isDisabled = needsProduct && !catalog;
+            
             return (
               <React.Fragment key={item.slug}>
-                <Link
-                  href={`/${item.slug}`}
-                  onClick={(e) => handleMenuClick(item.slug, e)}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                    isActive 
-                      ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                      : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                  }`}
-                >
-                  <Icon className="h-5 w-5 flex-shrink-0" />
-                  <span>{item.name}</span>
-                </Link>
+                {isDisabled ? (
+                  <div
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light opacity-40 cursor-not-allowed border border-white/5"
+                    title="Please select a product first"
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0 text-gray-500" />
+                    <span className="text-gray-500">{item.name}</span>
+                  </div>
+                ) : (
+                  <Link
+                    href={`/${item.slug}`}
+                    onClick={(e) => handleMenuClick(item.slug, e)}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                      isActive 
+                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span>{item.name}</span>
+                  </Link>
+                )}
                 
                 {showNewDesignAfter && (
                   <button

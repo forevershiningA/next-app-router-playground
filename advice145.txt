@@ -1,0 +1,203 @@
+This is excellent news. Having access to the actual assets (Shapes, Motifs, Textures) completely changes the approach. We no longer need to "fake" the visuals with CSS. We can display the actual product components.
+
+Since I cannot see the exact filenames in your folders, I will use logical placeholder names (e.g., serpentine.svg, angel.svg, ruby-red.webp). You will need to update the src props in the code below to match the exact filenames you have in your public folder.
+
+Here is the updated Design Possibilities section. It replaces the CSS approximations with next/image components to render your real assets.
+
+Key Changes:
+
+Shapes Card: Now uses <Image /> with invert filter (assuming your SVGs are black lines) to show crisp, real headstone outlines.
+
+Materials Card: Now uses the real granite textures from your folder, masked into glossy circles.
+
+Motifs Card: Now displays real motif SVGs.
+
+Additions: I integrated "Additions" (like vases) into the Motifs card to show the range of accessories.
+
+Replace the Features Grid section in HomeSplash.tsx with this:
+
+code
+Tsx
+download
+content_copy
+expand_less
+{/* Features Grid - Design Possibilities (Real Assets) */}
+<div className="relative border-t border-white/5 bg-[#0a0a0a] py-24 overflow-hidden">
+  
+  {/* Engineering Grid Background */}
+  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+  
+  <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-3xl font-serif font-light text-white mb-4">
+        Design Possibilities
+      </h2>
+      <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+        Complete creative control with our massive library of shapes and materials
+      </p>
+    </div>
+
+    {/* The Bento Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+      
+      {/* Tile 1: SHAPES (Using Real SVGs) */}
+      <div className="group md:col-span-2 relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10 flex flex-col h-full justify-between">
+          <div>
+            <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">50+ Shapes</h3>
+            <p className="text-sm text-gray-400 max-w-sm">
+              From traditional serpentine tops to modern hearts, books, and custom cuts.
+            </p>
+          </div>
+          
+          {/* Visual: Real Shape SVGs */}
+          {/* NOTE: Update filenames to match your public/shapes/headstones/ folder */}
+          <div className="flex items-end gap-6 mt-8 justify-start pl-2 overflow-visible">
+            
+            {/* Shape 1 */}
+            <div className="relative w-28 h-36 opacity-60 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-300">
+               {/* 'brightness-0 invert' turns black SVGs to white */}
+               <Image 
+                 src="/shapes/headstones/serpentine.svg" 
+                 alt="Serpentine Headstone"
+                 fill
+                 className="object-contain brightness-0 invert drop-shadow-2xl"
+               />
+            </div>
+            
+            {/* Shape 2 */}
+            <div className="relative w-28 h-32 opacity-60 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-300 delay-75">
+               <Image 
+                 src="/shapes/headstones/heart.svg" 
+                 alt="Heart Headstone"
+                 fill
+                 className="object-contain brightness-0 invert drop-shadow-2xl"
+               />
+            </div>
+
+            {/* Shape 3 */}
+            <div className="relative w-28 h-28 opacity-60 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-300 delay-100">
+               <Image 
+                 src="/shapes/headstones/book.svg" 
+                 alt="Book Headstone"
+                 fill
+                 className="object-contain brightness-0 invert drop-shadow-2xl"
+               />
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Tile 2: MATERIALS (Using Real Textures) */}
+      <div className="group md:row-span-2 relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10 flex flex-col h-full">
+          <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">Premium Materials</h3>
+          <p className="text-sm text-gray-400 mb-10">Granite, marble, and bronze sourced globally.</p>
+          
+          {/* Visual: Swatch Grid */}
+          <div className="grid grid-cols-2 gap-6 place-items-center mt-auto mb-auto">
+            
+            {/* Texture 1: Black */}
+            <div className="relative w-24 h-24 rounded-full border-2 border-white/10 shadow-xl group-hover:scale-110 transition-transform duration-300">
+               <div className="absolute inset-0 rounded-full overflow-hidden">
+                 <Image src="/textures/forever/l/Glory-Black-2.webp" alt="Black Granite" fill className="object-cover" />
+               </div>
+               {/* Gloss Overlay */}
+               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-black/60 via-transparent to-white/30 pointer-events-none"></div>
+               <div className="absolute -bottom-6 w-full text-center text-xs text-gray-400">Jet Black</div>
+            </div>
+            
+            {/* Texture 2: Grey (Update filename) */}
+            <div className="relative w-24 h-24 rounded-full border-2 border-white/10 shadow-xl group-hover:scale-110 transition-transform duration-300 delay-75">
+               <div className="absolute inset-0 rounded-full overflow-hidden">
+                 {/* Placeholder: Update to your actual grey texture */}
+                 <Image src="/textures/forever/l/Grey-Granite.webp" alt="Grey Granite" fill className="object-cover" />
+               </div>
+               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-black/60 via-transparent to-white/30 pointer-events-none"></div>
+               <div className="absolute -bottom-6 w-full text-center text-xs text-gray-400">Light Grey</div>
+            </div>
+
+            {/* Texture 3: Red (Update filename) */}
+            <div className="relative w-24 h-24 rounded-full border-2 border-white/10 shadow-xl group-hover:scale-110 transition-transform duration-300 delay-100">
+               <div className="absolute inset-0 rounded-full overflow-hidden">
+                 <Image src="/textures/forever/l/Ruby-Red.webp" alt="Ruby Red" fill className="object-cover" />
+               </div>
+               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-black/60 via-transparent to-white/30 pointer-events-none"></div>
+               <div className="absolute -bottom-6 w-full text-center text-xs text-gray-400">Imperial Red</div>
+            </div>
+
+            {/* Texture 4: Blue (Update filename) */}
+            <div className="relative w-24 h-24 rounded-full border-2 border-white/10 shadow-xl group-hover:scale-110 transition-transform duration-300 delay-150">
+               <div className="absolute inset-0 rounded-full overflow-hidden">
+                 <Image src="/textures/forever/l/Blue-Pearl.webp" alt="Blue Pearl" fill className="object-cover" />
+               </div>
+               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-black/60 via-transparent to-white/30 pointer-events-none"></div>
+               <div className="absolute -bottom-6 w-full text-center text-xs text-gray-400">Blue Pearl</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Tile 3: TYPOGRAPHY (Interactive Preview) */}
+      <div className="group relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10">
+          <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">Custom Text</h3>
+          <p className="text-sm text-gray-400 mb-6">Beautiful fonts in any language.</p>
+          
+          <div className="bg-black/60 border border-white/10 rounded-xl p-6 text-center shadow-inner relative overflow-hidden">
+             {/* Engraving Effect */}
+            <p className="font-serif text-[#cfac6c] text-2xl italic mb-2 drop-shadow-sm">In Loving Memory</p>
+            <p className="font-serif text-white/90 font-bold tracking-[0.2em] text-sm uppercase">Eleanor Rose</p>
+            <div className="w-12 h-[1px] bg-white/20 mx-auto my-3"></div>
+            <p className="font-sans text-gray-500 text-xs">1945 - 2023</p>
+            
+            {/* Subtle shine animation on hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tile 4: MOTIFS & ADDITIONS (Real SVGs) */}
+      <div className="group relative overflow-hidden rounded-3xl bg-[#111] border border-white/10 p-8 transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/5">
+        <div className="relative z-10">
+          <h3 className="text-xl font-serif font-medium text-white mb-2 group-hover:text-[#cfac6c] transition-colors">Motifs & Accessories</h3>
+          <p className="text-sm text-gray-400 mb-4">Religious icons, nature elements, vases, and statues.</p>
+          
+          {/* Visual: Floating SVGs */}
+          {/* NOTE: Update filenames to match public/shapes/motifs/ and public/additions/ */}
+          <div className="flex flex-wrap justify-center gap-6 mt-6">
+             
+             {/* Motif 1: Cross */}
+             <div className="relative w-12 h-12 opacity-70 group-hover:opacity-100 group-hover:-translate-y-1 transition-all">
+                <Image src="/shapes/motifs/cross.svg" alt="Cross" fill className="object-contain brightness-0 invert" />
+             </div>
+             
+             {/* Motif 2: Rose */}
+             <div className="relative w-12 h-12 opacity-70 group-hover:opacity-100 group-hover:-translate-y-1 transition-all delay-75">
+                <Image src="/shapes/motifs/rose.svg" alt="Rose" fill className="object-contain brightness-0 invert" />
+             </div>
+
+             {/* Addition 1: Vase */}
+             <div className="relative w-10 h-14 opacity-70 group-hover:opacity-100 group-hover:-translate-y-1 transition-all delay-100">
+                <Image src="/additions/vase-classic.png" alt="Vase" fill className="object-contain brightness-0 invert" />
+             </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    {/* CTA Button */}
+    <div className="mt-16 text-center">
+      <Link
+        href="/select-product"
+        className="inline-block rounded-full border border-[#cfac6c]/50 bg-[#cfac6c]/10 px-10 py-4 text-lg font-semibold text-[#cfac6c] shadow-lg transition-all hover:bg-[#cfac6c] hover:text-slate-900 hover:shadow-[#cfac6c]/50"
+      >
+        Explore All Features →
+      </Link>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,594 @@
+The visual refinements focus on adding depth, realism, and a premium material feel to the interactive section.
+
+Changes applied:
+
+Gold Leaf Typography: The "HEART" text now uses a bg-clip-text with a 3-stop metallic gradient (Light Gold → Classic Gold → Dark Bronze) and a specific drop-shadow filter to separate it from the stone.
+
+Polished Stone Effect: Added a diagonal specular highlight overlay (rotate-45) to the granite texture to simulate a polished, reflective surface.
+
+Base Volume: Added a gradient at the bottom edge of the base to simulate a rounded/beveled edge, giving it physical weight rather than looking like a flat rectangle.
+
+Jewel-like UI: The material selection bubbles now have a glossy overlay to look like polished stones or glass buttons.
+
+Here is the complete updated file:
+
+code
+Tsx
+download
+content_copy
+expand_less
+'use client';
+
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/24/solid';
+
+// Dynamic loader for the Hero 3D Canvas
+const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="mx-auto flex items-center justify-center w-full h-[35vh] min-h-[280px] max-h-[450px]">
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
+    </div>
+  ),
+});
+
+export default function HomeSplash() {
+  const router = useRouter();
+  const [showCanvas, setShowCanvas] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isInViewport, setIsInViewport] = useState(true);
+
+  // Only show canvas when on home page
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCanvas(true);
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+      setShowCanvas(false);
+    };
+  }, []);
+
+  // Viewport visibility detection
+  useEffect(() => {
+    const heroSection = document.querySelector('[role="banner"]');
+    if (!heroSection) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    );
+
+    observer.observe(heroSection);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const rotateLeft = () => {
+    setRotation((prev) => prev + Math.PI / 4);
+  };
+
+  const rotateRight = () => {
+    setRotation((prev) => prev - Math.PI / 4);
+  };
+
+  return (
+    <div className="min-h-screen" style={{ background: 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}>
+      
+      {/* Hero Section - Full Viewport Layout */}
+      <div className="relative min-h-screen flex flex-col overflow-hidden" role="banner">
+        
+        {/* Responsive Header */}
+        <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+          <div className="w-40 sm:w-56 md:w-72 transition-all mx-auto md:mx-0">
+            <Image 
+              src="/ico/forever-transparent-logo.png" 
+              alt="Forever Shining - Design Online" 
+              width={320}
+              height={100}
+              className="w-full h-auto drop-shadow-md"
+              priority
+            />
+          </div>
+
+          <nav className="hidden md:flex items-center gap-6">
+            <Link 
+              href="/designs" 
+              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors"
+            >
+              Browse Designs
+            </Link>
+            <Link 
+              href="/select-product" 
+              className="rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-5 py-2 text-sm font-semibold text-slate-900 shadow-md transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#cfac6c]/30 hover:from-[#d4af37] hover:to-[#cfac6c]"
+            >
+              Start Designing
+            </Link>
+          </nav>
+        </header>
+      
+        {/* Background Layers */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          style={{ 
+            backgroundImage: 'url(/backgrounds/tree-2916763_1920.webp)',
+            filter: 'blur(12px) saturate(1)',
+            transform: 'scale(1.1)'
+          }}
+          role="presentation"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/10" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60" aria-hidden="true" style={{ background: 'radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.6) 100%)' }} />
+        
+        {/* Main Content */}
+        <div className="relative z-10 flex flex-col justify-center flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 sm:pt-24">
+          <div className="text-center">
+            
+            <h1 className="text-3xl font-playfair-display tracking-tight text-white sm:text-5xl mb-2 sm:mb-3 leading-tight drop-shadow-2xl">
+              <span className="block font-semibold text-[2rem] sm:text-5xl">Design a Lasting Tribute</span>
+              <span className="block font-light text-xl sm:text-3xl mt-1 text-gray-200">Create Your Memorial in Real&#8209;Time&nbsp;3D</span>
+            </h1>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-gray-300 leading-relaxed mb-3 sm:mb-4">
+              Choose from Headstones, Plaques, Urns, or Full Monuments.<br className="hidden sm:block"/>
+              Design exactly what you envision with peace of mind before you decide.
+            </p>
+            
+            {/* 3D Canvas */}
+            <div className="w-full h-[50vh] sm:h-[55vh] min-h-[400px] flex items-center justify-center relative -mt-4 -mb-16 sm:-mb-24 z-0 pointer-events-none">
+              
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-[70vh] h-[70vh] bg-gradient-radial from-black/70 via-black/35 to-transparent rounded-full blur-3xl"></div>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-[45vh] h-[45vh] bg-gradient-radial from-amber-900/30 via-amber-950/15 to-transparent rounded-full blur-2xl"></div>
+              </div>
+              <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-[35vh] h-[10vh] bg-black/50 rounded-full pointer-events-none" style={{ filter: 'blur(25px)' }}></div>
+              
+              <div className="w-full h-full pointer-events-auto">
+              {showCanvas && isInViewport ? (
+                <>
+                  <HeroCanvas rotation={rotation} />
+                  <button 
+                    onClick={rotateLeft}
+                    className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg"
+                    aria-label="Rotate headstone left"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={rotateRight}
+                    className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg"
+                    aria-label="Rotate headstone right"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              ) : (
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white mx-auto mt-[20vh]" />
+              )}
+              </div>
+            </div>
+            
+            {/* CTAs */}
+            <div className="flex flex-col items-center gap-3 relative z-20">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                <Link
+                  href="/select-product"
+                  className="w-full sm:w-auto text-center group rounded-full bg-gradient-to-br from-[#d4af37] via-[#cfac6c] to-[#b89a5a] px-10 py-4 text-base font-semibold tracking-wide text-slate-900 shadow-2xl transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(207,172,108,0.6)] hover:from-[#e6c24d] hover:to-[#d4af37]"
+                  style={{ letterSpacing: '0.05em' }}
+                >
+                  Start Your Free Design
+                </Link>
+                <Link
+                  href="/designs"
+                  className="w-full sm:w-auto text-center rounded-full border-2 border-white/40 bg-black/60 backdrop-blur-md px-10 py-4 text-base font-semibold text-white shadow-2xl transition-all hover:bg-black/70 hover:border-white/60 hover:shadow-white/30"
+                  style={{ letterSpacing: '0.03em' }}
+                >
+                  Browse Designs →
+                </Link>
+              </div>
+              
+              <div className="flex items-center gap-2 text-sm text-gray-300 mt-2">
+                <svg className="w-4 h-4 text-[#cfac6c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                </svg>
+                <span>Save designs • Share with family</span>
+              </div>
+              
+              <div className="flex flex-col items-center gap-1 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-0.5 text-[#d4af37]">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-sm font-medium text-white">
+                    Trusted by 5,000+ families
+                  </p>
+                </div>
+                <p className="text-xs text-gray-400">
+                  No obligation · No credit card required
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="relative border-t border-white/5 bg-[#0a0a0a] py-24">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-[#cfac6c]/15 blur-[100px] rounded-full pointer-events-none" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-serif font-light text-white mb-4">
+              How It Works
+            </h2>
+            <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+              Four simple steps to create a lasting memorial
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 relative">
+            {[
+              { id: 1, title: 'Choose Product', desc: 'Select from headstones, plaques, monuments, or urns.' },
+              { id: 2, title: 'Customize Design', desc: 'Select shape, material, and size. Add personal inscriptions.' },
+              { id: 3, title: 'Add Details', desc: 'Enhance your memorial with motifs and decorative elements.' },
+              { id: 4, title: 'Get Pricing', desc: 'View instant pricing and submit your design for production.' }
+            ].map((item) => (
+              <div key={item.id} className="group relative flex flex-col items-center p-8 rounded-2xl bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300 hover:-translate-y-2 hover:border-[#cfac6c]/50 hover:shadow-lg hover:shadow-[#cfac6c]/5">
+                <div className="absolute top-2 right-6 text-[6rem] font-serif font-bold text-[#cfac6c]/10 select-none pointer-events-none group-hover:text-[#cfac6c]/20 transition-colors">
+                  {item.id}
+                </div>
+                <h3 className="text-xl font-serif font-medium text-white mb-3 relative z-10">{item.title}</h3>
+                <p className="text-sm text-center text-gray-300 leading-relaxed relative z-10 group-hover:text-white transition-colors">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-16 text-center">
+            <Link
+              href="/select-product"
+              className="inline-block rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] border-t border-white/40 px-10 py-4 text-lg font-semibold text-slate-900 shadow-xl transition-all hover:scale-105 hover:shadow-[#cfac6c]/30"
+            >
+              Start Your Design
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* How You Design a Memorial - REFINED INTERACTIVE SECTION */}
+      <DesignPossibilitiesSection />
+
+      {/* CTA Section */}
+      <div className="relative border-t border-[#cfac6c]/20 bg-gradient-to-r from-[#cfac6c]/10 to-[#cfac6c]/5 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-[#cfac6c]/10 via-amber-950/5 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+        <div className="relative mx-auto max-w-7xl px-6 py-24 text-center lg:px-8">
+          <h2 className="text-3xl font-serif font-light text-white mb-6">
+            Ready to Create Your Memorial?
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-gray-300 mb-10">
+            Start designing in minutes with our easy-to-use online tool.
+          </p>
+          <Link
+            href="/select-product"
+            className="inline-block rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-10 py-5 text-lg font-semibold text-slate-900 shadow-2xl transition-all hover:scale-105 hover:shadow-[#cfac6c]/30"
+          >
+            Start Designing Now →
+          </Link>
+        </div>
+      </div>
+      
+      {/* Footer Navigation */}
+      <footer className="relative bg-black/30 backdrop-blur-sm">
+        <div className="border-t border-white/10">
+          <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center">
+                <span className="text-xl font-serif font-light text-white">Forever Shining - Design online</span>
+              </div>
+              <div className="text-center md:text-right">
+                <p className="text-xs text-gray-400 mb-2">Our Partner Network:</p>
+                <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 md:gap-6 text-sm">
+                  <a href="https://www.bronze-plaque.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">Bronze-Plaque.com</a>
+                  <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">HeadstonesDesigner.com</a>
+                  <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">ForeverShining.com.au</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/5 bg-black/40">
+          <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+              <p>© 2025 Forever Shining. All rights reserved.</p>
+              <div className="flex items-center gap-4">
+                <a href="#privacy" className="hover:text-gray-300">Privacy Policy</a>
+                <span className="text-gray-600">|</span>
+                <a href="#terms" className="hover:text-gray-300">Terms of Service</a>
+                <span className="text-gray-600">|</span>
+                <a href="#contact" className="hover:text-gray-300">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+// --- REFINED INTERACTIVE SECTION COMPONENT ---
+function DesignPossibilitiesSection() {
+  const [activeStep, setActiveStep] = useState(1);
+  const [shapeIndex, setShapeIndex] = useState(3); // Start with 'Heart' to match screenshot logic
+  const [materialIndex, setMaterialIndex] = useState(0);
+
+  const shapes = [
+    { name: 'Serpentine', file: '/shapes/headstones/serpentine.svg' },
+    { name: 'Gable', file: '/shapes/headstones/gable.svg' },
+    { name: 'Half Round', file: '/shapes/headstones/half_round.svg' },
+    { name: 'Heart', file: '/shapes/headstones/headstone_27.svg' },
+  ];
+
+  const materials = [
+    { name: 'Blue Pearl', file: '/textures/forever/l/Blue-Pearl.webp', color: '#1a2a3a' },
+    { name: 'Imperial Red', file: '/textures/forever/l/Imperial-Red.webp', color: '#5c2e2e' },
+    { name: 'Glory Black', file: '/textures/forever/l/Glory-Black-2.webp', color: '#1a1a1a' },
+  ];
+
+  const currentShape = shapes[shapeIndex];
+  const currentMaterial = materials[materialIndex];
+
+  const nextShape = () => {
+    setShapeIndex((prev) => (prev + 1) % shapes.length);
+  };
+
+  const prevShape = () => {
+    setShapeIndex((prev) => (prev - 1 + shapes.length) % shapes.length);
+  };
+
+  const steps = [
+    { id: 1, label: 'Shape' },
+    { id: 2, label: 'Material' },
+    { id: 3, label: 'Personalise' },
+    { id: 4, label: 'Review' },
+  ];
+
+  return (
+    <div
+      className="relative py-24 overflow-hidden min-h-[900px] bg-[#1a140f]"
+      style={{ background: 'radial-gradient(circle at 50% 40%, #2f251d 0%, #120b05 60%)' }}
+    >
+      {/* Decorative grid + glow */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none opacity-20" />
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#120b05] to-transparent z-10" />
+
+      <div className="relative mx-auto max-w-5xl px-6 lg:px-8 flex flex-col items-center">
+        {/* Section Header */}
+        <div className="text-center mb-14 z-20">
+          <h2 className="text-4xl md:text-5xl font-serif text-[#F9F4E8] mb-4 tracking-tight leading-tight">
+            Design a Beautiful Tribute
+          </h2>
+          <p className="text-white/60 text-lg max-w-xl mx-auto font-light leading-relaxed">
+            Tap the steps below to customize every detail in our 3D studio.
+          </p>
+        </div>
+
+        {/* Main interactive display */}
+        <div className="relative w-full max-w-lg perspective-1000 z-10 mb-12">
+          {activeStep === 1 && (
+            <>
+              <button
+                onClick={prevShape}
+                className="absolute top-[40%] -left-4 sm:-left-20 z-50 p-3 rounded-full bg-white/5 border border-white/10 text-white/60 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:text-white hover:scale-110"
+                aria-label="Previous Shape"
+              >
+                <ChevronLeftIcon className="w-6 h-6" />
+              </button>
+
+              <button
+                onClick={nextShape}
+                className="absolute top-[40%] -right-4 sm:-right-20 z-50 p-3 rounded-full bg-white/5 border border-white/10 text-white/60 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:text-white hover:scale-110"
+                aria-label="Next Shape"
+              >
+                <ChevronRightIcon className="w-6 h-6" />
+              </button>
+            </>
+          )}
+
+          <div className={`relative z-10 mb-8 transition-all duration-700 ease-out ${activeStep === 1 ? 'scale-105 drop-shadow-2xl' : 'scale-100 drop-shadow-xl'}`}>
+            <div
+              className="relative w-full aspect-[1.15/1] transition-all duration-500 ease-in-out"
+              style={{
+                maskImage: `url('${currentShape.file}')`,
+                maskSize: 'contain',
+                maskRepeat: 'no-repeat',
+                maskPosition: 'bottom center',
+                WebkitMaskImage: `url('${currentShape.file}')`,
+                WebkitMaskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'bottom center',
+              }}
+            >
+              <div className="absolute inset-0 bg-[#1a2a3a] transition-colors duration-700" style={{ backgroundColor: currentMaterial.color }}>
+                <Image
+                  src={currentMaterial.file}
+                  alt={currentMaterial.name}
+                  fill
+                  className={`object-cover transition-transform duration-700 ${activeStep === 2 ? 'scale-125' : 'scale-100'}`}
+                />
+                {/* Granite "Polish" Sheen - Diagonal reflection */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-white/20 mix-blend-overlay" />
+                <div className="absolute -inset-[100%] bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-45 transform pointer-events-none" />
+              </div>
+            </div>
+
+            <div className="absolute inset-0 flex flex-col items-center justify-end pb-[8%] z-30 pointer-events-none">
+              <div className={`flex justify-between w-[75%] mb-2 transition-all duration-500 ${activeStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-2'}`}>
+                <div className="w-14 h-14 relative">
+                  <Image
+                    src="/shapes/motifs/s/dove_002.png"
+                    alt="dove"
+                    fill
+                    className="object-contain"
+                    style={{
+                      // Metallic gold filter
+                      filter:
+                        'brightness(0) saturate(100%) invert(83%) sepia(21%) saturate(1074%) hue-rotate(357deg) brightness(102%) contrast(105%) drop-shadow(0 1px 1px rgba(0,0,0,0.8))',
+                    }}
+                  />
+                </div>
+                <div className="w-14 h-14 relative scale-x-[-1]">
+                  <Image
+                    src="/shapes/motifs/s/dove_002.png"
+                    alt="dove"
+                    fill
+                    className="object-contain"
+                    style={{
+                      filter:
+                        'brightness(0) saturate(100%) invert(83%) sepia(21%) saturate(1074%) hue-rotate(357deg) brightness(102%) contrast(105%) drop-shadow(0 1px 1px rgba(0,0,0,0.8))',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className={`text-center mb-5 transition-all duration-500 ${activeStep >= 3 ? 'scale-100 opacity-100' : 'scale-95 opacity-90'}`}>
+                {/* Premium Gold Gradient Text - Real Gold Leaf Effect */}
+                <h3
+                  className="font-serif text-5xl text-transparent bg-clip-text bg-gradient-to-b from-[#f8e3b6] via-[#d4af37] to-[#8a6e2f] mb-1 uppercase tracking-widest"
+                  style={{ 
+                      // Subtle drop shadow behind the clipped text to ensure legibility
+                      filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.8))'
+                  }}
+                >
+                  {currentShape.name}
+                </h3>
+                <p className="font-serif text-base italic text-[#D4B675] font-light tracking-wider" style={{ textShadow: '0px 1px 1px rgba(0,0,0,0.8)' }}>
+                  "In our hearts you live forever"
+                </p>
+              </div>
+
+              <div className={`relative w-24 h-32 mb-4 transition-all duration-500 ${activeStep === 3 ? 'opacity-100 scale-110' : 'opacity-0 scale-50'}`}>
+                <Image src="/additions/2600/_2600.webp" alt="Statue" fill className="object-contain drop-shadow-2xl" />
+              </div>
+
+              <div
+                className="flex justify-between w-[60%] text-xs font-bold tracking-[0.25em] text-[#D4B675] opacity-90"
+                style={{ textShadow: '0px 1px 2px rgba(0,0,0,0.8)' }}
+              >
+                <span>OCT 14, 1945</span>
+                <span>JAN 20, 2023</span>
+              </div>
+            </div>
+
+            <div
+              className={`absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-64 bg-white/90 backdrop-blur-xl rounded-xl p-5 text-center shadow-2xl transition-all duration-500 border border-white/50 ${activeStep === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}
+            >
+              <p className="text-[#5c4033] font-serif text-lg mb-1">Personalize Tribute</p>
+              <p className="text-gray-600 text-xs">Add photos, vases, or custom inscriptions.</p>
+            </div>
+          </div>
+
+          {/* Base Section with improved volume */}
+          <div className="relative left-1/2 -translate-x-1/2 w-[120%] h-28 -mt-14 z-20 transition-all duration-500">
+            <div className="w-full h-full rounded-sm overflow-hidden relative border-t border-white/20 bg-gray-900 shadow-[0_25px_50px_rgba(0,0,0,0.6)]">
+              <Image src={currentMaterial.file} alt="Base" fill className="object-cover opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/70" />
+              {/* Bottom shadow lip to simulate thickness */}
+              <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+
+              <div className={`absolute inset-0 flex items-center justify-center gap-4 transition-all duration-500 ${activeStep === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                <div className="bg-black/40 backdrop-blur-md p-2 rounded-full border border-white/10 flex gap-3 shadow-2xl">
+                  {materials.map((mat, idx) => (
+                    <div
+                      key={mat.name}
+                      onClick={() => setMaterialIndex(idx)}
+                      className={`w-10 h-10 rounded-full overflow-hidden relative cursor-pointer transition-all duration-300 shadow-lg ${
+                        materialIndex === idx
+                          ? 'border-2 border-[#d4af37] scale-110 ring-2 ring-[#d4af37]/20 z-10'
+                          : 'border border-white/30 hover:scale-105'
+                      }`}
+                      title={mat.name}
+                    >
+                      <Image src={mat.file} fill alt={mat.name} className="object-cover" />
+                      {/* Glassy reflection on bubbles */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/30 pointer-events-none" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Darker, softer ground shadow */}
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[90%] h-8 bg-black/80 blur-xl rounded-full" />
+          </div>
+        </div>
+
+        {/* Stepper */}
+        <div className="mt-8 relative z-20">
+          <div className="flex flex-wrap justify-center items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 backdrop-blur-md shadow-2xl">
+            {steps.map((step) => {
+              const isActive = activeStep === step.id;
+              return (
+                <button
+                  key={step.id}
+                  onClick={() => setActiveStep(step.id)}
+                  className={`relative px-6 py-3 rounded-full text-xs tracking-widest uppercase font-semibold transition-all duration-300 flex flex-col items-center ${
+                    isActive ? 'text-white' : 'text-white/40 hover:text-white/70'
+                  }`}
+                >
+                  <span>{step.label}</span>
+                  <span
+                    className={`mt-1.5 w-1 h-1 rounded-full transition-all duration-300 ${
+                      isActive ? 'bg-[#d4af37] shadow-[0_0_8px_#d4af37] opacity-100 scale-100' : 'bg-transparent opacity-0 scale-0'
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Action buttons - Boosted gradient saturation */}
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-20">
+          <Link
+            href="/select-product"
+            className="rounded-full bg-gradient-to-r from-[#D4AF37] to-[#A67C00] border border-[#d4af37]/30 px-10 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-lg transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(197,160,89,0.3)] hover:brightness-110"
+          >
+            {activeStep < 4 ? 'Next' : 'Start Designing'}
+          </Link>
+          <Link
+            href="/designs"
+            className="rounded-full border border-white/20 bg-transparent px-10 py-3.5 text-sm font-bold tracking-wider text-white/80 hover:bg-white/5 hover:text-white hover:border-white/40 transition-all"
+          >
+            Browse Designs
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

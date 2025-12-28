@@ -1,0 +1,55 @@
+To make the design look non-trivial (sophisticated, polished, and professional) without increasing the complexity (adding confusing features or clutter), you need to focus on Visual Fidelity and Atmosphere.
+
+Currently, the design looks a bit "flat" and digital. A tombstone is a physical, heavy, tactile object, but the current representation feels like a 2D sticker floating on a screen.
+
+Here are specific, actionable design improvements to elevate the look:
+
+1. Improve Material Realism (The Stone)
+
+The biggest issue right now is that the stone looks like a repeating 2D texture pattern masked into a shape.
+
+Edge Lighting/Beveling: Real granite has thickness. Add a highlight on the top left edge and a shadow on the bottom right edge of the shape to simulate depth. This makes it look like a slab, not a sheet of paper.
+
+Specular Highlights: Polished granite is reflective. Add a subtle, soft white gradient overlay (at low opacity) across the top curve to simulate light hitting a polished surface.
+
+Grounding: The stone is currently "floating." Add a realistic contact shadow at the base where the two stones meet. It needs to look heavy.
+
+2. Elevate the Typography "Engraving" Effect
+
+The text currently looks like it is printed on top of the stone. To look expensive and real, it needs to look carved into the stone.
+
+The "Incised" Look: Instead of a simple gold color, use CSS or image processing to add an inner shadow to the top-left of the letters and a tiny highlight on the bottom-right edges of the letters. This creates the optical illusion that the letters are cut into the rock.
+
+Gold Leaf Texture: If the text is meant to be gold, apply a subtle metallic gradient or texture to the text fill, rather than a solid flat yellow/tan color.
+
+3. Upgrade the Ornamentation
+
+The Doves: The yellow dove icons look like generic clipart. Replace these with high-fidelity assets. They should look like either sandblasted engravings (lighter grey/white with inner texture) or bronze/gold attachments. They need to match the perspective and lighting of the stone.
+
+4. Atmosphere and Background
+
+The plain blue gradient is functional but sterile. A "tribute" implies emotion.
+
+Environmental Context: Instead of a void, place the stone on a subtle "floor" or abstract grass plane. It doesn't need to be photo-realistic, but a horizon line helps orientation.
+
+Lighting: Use a "Spotlight" or "Vignette" effect. Darken the corners of the screen slightly and keep the center bright. This draws the eye immediately to the product and adds drama.
+
+Softer Background: Consider a very subtle, noise-based texture for the background (like high-quality paper or canvas) to remove the "digital" feel of the smooth gradient.
+
+5. UI Element Polish
+
+The buttons and steppers are very standard "Bootstrap" style.
+
+Typography: The font for "Thompson" is good, but the UI fonts (Next: Material, Browse Designs) are a bit utilitarian. Switch the headings ("Design a Beautiful Tribute") to a high-end serif font (like Playfair Display or Merriweather) to match the solemnity of the product.
+
+Carousel Arrows: The arrows in the white circles break the immersion. Move them further out, or make them subtle chevrons that appear on hover, so they don't visually compete with the stone.
+
+Button Styling: The "Next: Material" button is a heavy dark block. Consider making it slightly more elegant—perhaps a slightly taller button with wider letter spacing (kerning) and a more subtle drop shadow.
+
+Summary Example
+
+Current: "Here is a picture of a stone."
+
+Goal: "Here is a heavy, polished granite monument sitting in a serene space."
+
+Quick Win: If you only do one thing, work on the Text Engraving Effect. Making the name look truly carved into the stone will immediately double the perceived quality of the design.

@@ -1,9 +1,23 @@
+To achieve the "portrait mode" effect where the grass behind the headstone blurs out quickly, we need to add Post-Processing with a Depth of Field (DoF) effect.
+
+I have updated Scene.tsx to include EffectComposer and DepthOfField. I also pulled the Fog in closer so the visual fade coincides with the blur, creating a smoother transition.
+
+Prerequisite: Ensure you have the post-processing library installed:
+npm install @react-three/postprocessing
+
+Here is the updated code:
+
+code
+Tsx
+download
+content_copy
+expand_less
 'use client';
 import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, AdaptiveDpr } from '@react-three/drei';
-// REMOVED: EffectComposer & DepthOfField (Causing artifacts)
+import { EffectComposer, DepthOfField } from '@react-three/postprocessing'; // 1. Import Post Processing
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
-// Removed AtmosphericSky import
+import AtmosphericSky from './AtmosphericSky';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 import { useFrame, useThree } from '@react-three/fiber';
@@ -11,77 +25,27 @@ import { useRef, Suspense, useEffect } from 'react';
 
 // --- CONFIGURATION ---
 const GRASS_COLOR = '#5a7f3c'; 
-
-// UPDATED: Pale atmospheric blue (matches the horizon, not white)
-const FOG_COLOR = '#dcebf5';
-
-// --- COMPONENTS ---
-
-// New: Custom Gradient Sky Sphere
-// Replaces the realistic atmosphere with a stylized gradient background
-const GradientBackground = () => {
-  return (
-    <mesh scale={[100, 100, 100]} position={[0, -10, 0]} renderOrder={-1}>
-      <sphereGeometry args={[1, 64, 64]} />
-      <shaderMaterial
-        side={THREE.BackSide}
-        depthWrite={false} // Draw behind everything
-        uniforms={{
-          colorTop: { value: new THREE.Color('#5ca0e5') }, // Richer Sky Blue
-          colorBottom: { value: new THREE.Color(FOG_COLOR) }, // Matches Fog perfectly
-        }}
-        vertexShader={`
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `}
-        fragmentShader={`
-          uniform vec3 colorTop;
-          uniform vec3 colorBottom;
-          varying vec2 vUv;
-          void main() {
-            // Gradient Logic:
-            // 0.0 - 0.45: Solid Horizon Color (Fog Color)
-            // 0.45 - 1.0: Fades to Sky Blue
-            // This ensures the point where grass meets sky is invisible
-            float h = smoothstep(0.45, 1.0, vUv.y);
-            gl_FragColor = vec4(mix(colorBottom, colorTop, h), 1.0);
-          }
-        `}
-      />
-    </mesh>
-  );
-};
+const FOG_COLOR = '#e8e8e8';
 
 function GrassFloor() {
   const gl = useThree((state) => state.gl);
   
-  // Load grass textures from local public folder
-  // REMOVED: roughnessMap (was causing "wet/blue" reflective look)
   const props = useTexture({
     map: '/textures/grass_color.jpg',
     normalMap: '/textures/grass_normal.jpg',
     aoMap: '/textures/grass_ao.jpg',
   });
 
-  // --- TEXTURE FIXES ---
-  // UPDATED: Reduced to 40 for better performance while maintaining quality
   const REPEAT_SCALE = 40;
 
   useEffect(() => {
-    // OPTIMIZATION: Cap anisotropy at 8 instead of max (16)
-    // Going to 16 is expensive and rarely noticeable on grass
     const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 8);
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
-        tex.wrapS = tex.wrapT = THREE.RepeatWrapping; // Changed from Mirrored for organic textures
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping; 
         tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
         tex.colorSpace = THREE.SRGBColorSpace;
-        
-        // CRITICAL: Anisotropy fixes blur when looking at ground from an angle
         tex.anisotropy = anisotropy;
         tex.needsUpdate = true;
       }
@@ -101,13 +65,10 @@ function GrassFloor() {
           normalScale={new THREE.Vector2(0.5, 0.5)}
           metalness={0}
           envMapIntensity={0}
-          // Important: Floor accepts fog to fade into distance
           fog={true}
         />
       </mesh>
       
-      {/* Contact Shadow: Anchors the headstone */}
-      {/* OPTIMIZATION: Reduced resolution and set frames={1} to bake shadow once */}
       <ContactShadows
         position={[0, 0.02, 0]}
         scale={15}
@@ -160,7 +121,7 @@ export default function Scene({
   useFrame(() => {
     if (groupRef.current && currentRotation) {
       const diff = targetRotation - currentRotation.current;
-      const delta = diff * 0.1; // Lerp factor (adjust for speed)
+      const delta = diff * 0.1; 
       
       if (Math.abs(diff) > 0.001) {
         currentRotation.current += delta;
@@ -170,7 +131,6 @@ export default function Scene({
   });
 
   const handleCanvasClick = (e: any) => {
-    // Only deselect if clicking on empty space (not on any 3D object)
     if (e.eventObject === e.object) {
       setSelected(null);
       setEditingObject('headstone');
@@ -182,18 +142,16 @@ export default function Scene({
 
   return (
     <>
-      {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
       <AdaptiveDpr pixelated />
 
       {is2DMode && <color attach="background" args={['#CFE8FC']} />}
       
       {/* 
-        UPDATED FOG SETTINGS:
-        Color: #dcebf5 (Pale Blue)
-        Start: 20 (Keeps the headstone area perfectly clear)
-        End: 100 (Gradual fade into the distance, no hard cutoff)
+        2. UPDATED FOG: 
+        Pulled start distance closer (20 -> 15) and end distance closer (150 -> 60).
+        This hides the hard edge of the plane and blends with the blur effect.
       */}
-      {!is2DMode && <fog attach="fog" args={[FOG_COLOR, 20, 100]} />}
+      {!is2DMode && <fog attach="fog" args={[FOG_COLOR, 15, 60]} />}
       
       <mesh
         position={[0, 0, 0]}
@@ -204,7 +162,6 @@ export default function Scene({
         <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
       </mesh>
       
-      {/* Dust particles */}
       {!is2DMode && (
          <Sparkles 
            count={30}
@@ -217,29 +174,13 @@ export default function Scene({
          />
       )}
       
-      {/* --- LIGHTING (Studio Setup) --- */}
-      
-      {/* 
-         1. AMBIENT: High intensity (1.0).
-         This ensures the dark granite is visible everywhere, with NO highlights. 
-      */}
       <ambientLight intensity={1.0} color="#ffffff" />
       
-      {/* 
-         2. HEMISPHERE: Strong bounce.
-         Reflects light from the "ground" up onto the vertical face.
-      */}
       <hemisphereLight
         args={['#fff8e7', '#dcdcdc']}
         intensity={0.8}
       />
       
-      {/* 
-         3. KEY LIGHT (Sun):
-         Moved Higher (Y=12) and Left (X=-10).
-         This moves the specular reflection ("The Glow") to the top-left corner,
-         keeping the main text area clear.
-      */}
       <spotLight 
         color="#fffce6"
         intensity={1.8}
@@ -251,22 +192,8 @@ export default function Scene({
         shadow-mapSize={[1024, 1024]}
       />
 
-      {/* 
-         REMOVED: DirectionalLight (Face Fill).
-         This was causing the "Big Light Glow" in the center.
-         We rely on Ambient+Hemisphere for fill now.
-      */}
-
-      {/* Rim light (Back Right) - Separates stone from background */}
       <spotLight color="#ffffff" intensity={2} position={[5, 5, -5]} distance={30} />
 
-      {/* 
-        ENVIRONMENT:
-        City preset with max blur (1.0) creates abstract light/dark patches.
-        resolution={256} saves download and processing (we blur it anyway).
-        environmentIntensity={0.5} provides balanced reflections.
-        Blocked from grass via envMapIntensity={0}
-      */}
       <Environment
         preset="city"
         background={false}
@@ -278,15 +205,29 @@ export default function Scene({
       <group ref={groupRef}>
         <HeadstoneAssembly />
         
-        {/* TEXTURED FLOOR with fallback for slow connections */}
         <Suspense fallback={<SimpleGrassFloor />}>
           <GrassFloor />
         </Suspense>
       </group>
       
-      {!is2DMode && <GradientBackground />}
+      {!is2DMode && <AtmosphericSky />}
 
-      {/* REMOVED EffectComposer/DepthOfField to restore sharpness */}
+      {/* 
+        3. ADDED DEPTH OF FIELD
+        Only enabled in 3D mode. 
+        target={[0, 1.5, 0]}: Keeps the inscription area perfectly sharp.
+        bokehScale={8}: Controls how "creamy" the blur is. Increase for more blur.
+      */}
+      {!is2DMode && (
+        <EffectComposer disableNormalPass>
+          <DepthOfField 
+            target={[0, 1.5, 0]} // Focus point (Center of headstone face)
+            focalLength={0.02}   // Lens focal length (Simulates wide lens)
+            bokehScale={8}       // Blur intensity
+            height={700}         // Resolution quality
+          />
+        </EffectComposer>
+      )}
 
       <OrbitControls
         makeDefault
@@ -300,7 +241,7 @@ export default function Scene({
         zoomSpeed={0.8}
         panSpeed={0.8}
         minPolarAngle={Math.PI / 3.5}
-        maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going below ground
+        maxPolarAngle={Math.PI / 2 - 0.05} 
       />
     </>
   );

@@ -1,0 +1,68 @@
+It seems the camera is still physically positioned too close to the object for the height of your canvas container, causing the top and bottom to clip outside the frame.
+
+To fix this, we need to move the camera back significantly (increase Z) to capture the full height of the monument, and slightly adjust the vertical positioning to ensure it stays grounded behind the buttons.
+
+Here are the specific adjustments for HeroCanvas.tsx.
+
+Code Changes in HeroCanvas.tsx
+
+We are changing the camera Z position from 4.0 to 5.5. This gives the scene much more "breathing room" and guarantees the headstone fits within the viewport height.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// ... imports
+
+// --- Scene Setup ---
+
+const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
+  // ... refs and logic ...
+
+  return (
+    <>
+      {/* 1. POSITION ADJUSTMENT: Keep vertical position low to overlap buttons */}
+      <group ref={groupRef} position={[0, -1.2, 0]}>
+        <SerpentineHeadstone width={STONE_WIDTH} height={STONE_HEIGHT} thickness={STONE_THICKNESS} />
+        <Base stoneWidth={STONE_WIDTH} />
+        {/* ... text group ... */}
+      </group>
+      
+      {/* 2. SHADOW ADJUSTMENT: Match the group Y position */}
+      <ContactShadows 
+        position={[0, -1.2, 0]}
+        opacity={0.5} 
+        scale={12} 
+        blur={2.5} 
+        far={4} 
+        resolution={512} 
+        color="#000000"
+      />
+      {/* ... controls ... */}
+    </>
+  );
+};
+
+// --- Main Component ---
+
+export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
+  return (
+    <div style={{ width: '100%', height: '100%', margin: '0 auto' }}>
+      <Canvas
+        // ... canvas props ...
+      >
+        <React.Suspense fallback={null}>
+          {/* 3. CAMERA FIX: Move Z from 4.0 -> 5.5 to zoom out and fit the whole object */}
+          <PerspectiveCamera 
+            makeDefault 
+            position={[0, 0.4, 5.5]} 
+            fov={40} 
+          />
+          
+          {/* ... lights and environment ... */}
+Why this fixes it:
+
+position={[0, 0.4, 5.5]}: Moving the camera back by 1.5 units scales the headstone down visually, bringing the clipped top and bottom edges back safely inside the canvas frame.
+
+group position={[0, -1.2, 0]}: We lower the object slightly (-1.15 -> -1.2) to compensate for the perspective change, keeping the base tucked nicely behind the "Start Designing" buttons.
