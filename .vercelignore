@@ -8,9 +8,13 @@
 !readme.md
 
 # Legacy/unused
-# ml/ - COMMENTED OUT: ml/ directory contains required saved-designs JSON and images
 legacy/
 docs/
+
+# ML models - massive files not needed for serverless functions (4.8 GB)
+public/ml/forevershining/
+public/ml/headstonesdesigner/
+public/ml/bronze-plaque/
 
 # Logs and temp files
 *.log
