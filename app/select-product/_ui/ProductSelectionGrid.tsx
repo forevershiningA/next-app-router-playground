@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
+import type { ProductPriceRange } from '#/lib/types/pricing';
 
 type ProductCategory = {
   id: string;
@@ -12,6 +13,35 @@ type ProductCategory = {
   description: string;
   icon: string;
 };
+
+const priceFormatterCache = new Map<string, Intl.NumberFormat>();
+
+function formatPrice(value: number, currency: string) {
+  if (!Number.isFinite(value)) {
+    return '—';
+  }
+
+  const cacheKey = currency || 'AUD';
+  let formatter = priceFormatterCache.get(cacheKey);
+  if (!formatter) {
+    try {
+      formatter = new Intl.NumberFormat('en-AU', {
+        style: 'currency',
+        currency: cacheKey || 'AUD',
+        maximumFractionDigits: 0,
+      });
+    } catch {
+      formatter = new Intl.NumberFormat('en-AU', {
+        style: 'currency',
+        currency: 'AUD',
+        maximumFractionDigits: 0,
+      });
+    }
+    priceFormatterCache.set(cacheKey, formatter);
+  }
+
+  return formatter.format(Math.max(0, Math.round(value)));
+}
 
 const productCategories: ProductCategory[] = [
   {
@@ -40,7 +70,13 @@ const productCategories: ProductCategory[] = [
   },
 ];
 
-export default function ProductSelectionGrid({ products }: { products: Product[] }) {
+type ProductGridProps = {
+  products: Product[];
+  priceMap: Record<string, ProductPriceRange | undefined>;
+  descriptionMap: Record<string, string | undefined>;
+};
+
+export default function ProductSelectionGrid({ products, priceMap, descriptionMap }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const router = useRouter();
   const setProductId = useHeadstoneStore((s) => s.setProductId);
@@ -121,6 +157,8 @@ export default function ProductSelectionGrid({ products }: { products: Product[]
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredProducts.map((product) => {
                 const isSelected = currentProductId === product.id;
+                const priceRange = priceMap[product.id];
+                const description = descriptionMap[product.id] ?? 'Fully customizable memorial with premium materials and finishes.';
                 return (
                   <button
                     key={product.id}
@@ -143,14 +181,54 @@ export default function ProductSelectionGrid({ products }: { products: Product[]
                   </div>
 
                   {/* Product Info - with padding and flexbox */}
-                  <div className="p-4 flex flex-col">
-                    <h3 className="text-base font-medium text-white line-clamp-2 mb-2">
+                  <div className="p-4 flex flex-col gap-3 h-full">
+                    <h3 className="text-base font-medium text-white line-clamp-2">
                       {product.name}
                     </h3>
-                    {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
-                    <div className="h-5 mt-auto">
-                      <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        Customize →
+
+                    <p className="text-sm text-gray-300 line-clamp-2 min-h-[3.5rem]">
+                      {description}
+                    </p>
+
+                    {priceRange ? (
+                      <div className="space-y-0.5 text-left">
+                        <p className="text-xs uppercase tracking-wide text-gray-500">
+                          Starting at
+                        </p>
+                        <p className="text-lg font-semibold text-white">
+                          {formatPrice(priceRange.minPrice, priceRange.currency)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Max size up to {formatPrice(priceRange.maxPrice, priceRange.currency)}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-400">
+                        Configure options to view pricing
+                      </p>
+                    )}
+
+                    <div className="mt-auto">
+                      <span
+                        className={`inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#cfac6c] px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                          isSelected
+                            ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/30'
+                            : 'text-[#cfac6c] bg-transparent group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30'
+                        }`}
+                      >
+                        <span>Customize this design</span>
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="M12 5l7 7-7 7" />
+                        </svg>
                       </span>
                     </div>
                   </div>

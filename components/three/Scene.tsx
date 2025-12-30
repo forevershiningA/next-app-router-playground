@@ -73,7 +73,7 @@ function GrassFloor() {
   useEffect(() => {
     // OPTIMIZATION: Cap anisotropy at 8 instead of max (16)
     // Going to 16 is expensive and rarely noticeable on grass
-    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 8);
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 2);
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
@@ -268,11 +268,11 @@ export default function Scene({
         Blocked from grass via envMapIntensity={0}
       */}
       <Environment
-        preset="city"
+        preset="forest"
         background={false}
         blur={1.0}
         resolution={256}
-        environmentIntensity={0.6}
+        environmentIntensity={0.05}
       />
 
       <group ref={groupRef}>

@@ -114,6 +114,7 @@ function AdditionModelInner({
   // These must come after other hooks but before conditional returns
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
+  const dragDeltaRef = React.useRef<{ x: number; y: number } | null>(null);
 
   // Create scene
   const scene = React.useMemo(() => {
@@ -169,59 +170,137 @@ function AdditionModelInner({
     return sz;
   }, [scene, id]);
 
-  // Drag handler - must be defined before effects
-  const placeFromClientXY = React.useCallback((clientX: number, clientY: number) => {
-    if (!headstone?.mesh?.current || !gl?.domElement) return;
-    
-    const canvas = gl.domElement;
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-    
-    raycaster.setFromCamera(mouse, camera);
-    
-    // For statues, raycast against the base instead of the headstone
-    let targetMesh: THREE.Mesh;
-    if (addition.type === 'statue' || addition.type === 'vase') {
-      // Find the base mesh in the scene
-      const baseMesh = threeScene.getObjectByName('base') as THREE.Mesh;
-      if (!baseMesh) return;
-      targetMesh = baseMesh;
+  // Compute headstone bounds and default offsets early so helper hooks can use them
+  const stone = headstone?.mesh?.current as THREE.Mesh | null;
+  const bbox = React.useMemo(() => {
+    if (!stone) return null;
+    if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
+    return stone.geometry.boundingBox?.clone() ?? null;
+  }, [stone]);
+
+  const defaultOffset = React.useMemo(() => {
+    if (!bbox) return { xPos: 0, yPos: 0, scale: 1, rotationZ: 0 };
+    const centerX = (bbox.min.x + bbox.max.x) / 2;
+    const centerY = (bbox.min.y + bbox.max.y) / 2;
+    const inset = 0.01;
+    const spanY = bbox.max.y - bbox.min.y;
+    const minX = bbox.min.x + inset;
+    const maxX = bbox.max.x - inset;
+    const minY = bbox.min.y + inset + 0.04 * spanY;
+    const maxY = bbox.max.y - inset;
+
+    let defaultX = 0;
+    let defaultY = 0;
+    const posConfig = DEFAULT_POSITIONS[addition.type as keyof typeof DEFAULT_POSITIONS] || DEFAULT_POSITIONS.application;
+
+    if (addition.type === 'statue') {
+      defaultX = minX + posConfig.xOffset - centerX;
+      defaultY = minY + posConfig.yOffset - centerY;
+    } else if (addition.type === 'vase') {
+      defaultX = maxX + posConfig.xOffset - centerX;
+      defaultY = minY + posConfig.yOffset - centerY;
     } else {
-      targetMesh = headstone.mesh.current as THREE.Mesh;
+      defaultX = posConfig.xOffset;
+      defaultY = posConfig.yOffset;
     }
-    
-    const intersects = raycaster.intersectObject(targetMesh, false);
-    
-    if (intersects.length > 0) {
+
+    return {
+      xPos: defaultX,
+      yPos: defaultY,
+      scale: 1,
+      rotationZ: 0,
+    };
+  }, [bbox, addition.type]);
+
+  const offset = additionOffsets[id] ?? defaultOffset;
+
+  const computeInteractionPoint = React.useCallback(
+    (clientX: number, clientY: number) => {
+      const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
+      if (!headstoneMesh || !gl?.domElement) return null;
+
+      const canvas = gl.domElement;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      let targetMesh: THREE.Mesh | null = headstoneMesh;
+      if (addition.type === 'statue' || addition.type === 'vase') {
+        const baseMesh = threeScene.getObjectByName('base') as THREE.Mesh | null;
+        if (baseMesh) {
+          targetMesh = baseMesh;
+        }
+      }
+      if (!targetMesh) return null;
+
+      const intersects = raycaster.intersectObject(targetMesh, false);
+      if (!intersects.length) return null;
+
       const point = intersects[0].point;
       const localPt = targetMesh.worldToLocal(point.clone());
-      
-      // Apply bounds checking
+
       if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
-      const bbox = targetMesh.geometry.boundingBox!;
+      const targetBBox = targetMesh.geometry.boundingBox!;
       const inset = 0.01;
-      const spanY = bbox.max.y - bbox.min.y;
-      const minX = bbox.min.x + inset;
-      const maxX = bbox.max.x - inset;
-      const minY = bbox.min.y + inset + 0.04 * spanY;
-      const maxY = bbox.max.y - inset;
-      
-      localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
-      localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
-      
-      // Calculate center position (like inscriptions)
-      const centerX = (bbox.min.x + bbox.max.x) / 2;
-      const centerY = (bbox.min.y + bbox.max.y) / 2;
-      
-      // Store as OFFSET from center, but NEGATE Y to match old Y-down saved format
+      const spanY = targetBBox.max.y - targetBBox.min.y;
+      const minX = targetBBox.min.x + inset;
+      const maxX = targetBBox.max.x - inset;
+      const minY = targetBBox.min.y + inset + 0.04 * spanY;
+      const maxY = targetBBox.max.y - inset;
+
+      const clamped = new THREE.Vector3(
+        Math.max(minX, Math.min(maxX, localPt.x)),
+        Math.max(minY, Math.min(maxY, localPt.y)),
+        localPt.z
+      );
+
+      const centerX = (targetBBox.min.x + targetBBox.max.x) / 2;
+      const centerY = (targetBBox.min.y + targetBBox.max.y) / 2;
+
+      return { clamped, centerX, centerY, minX, maxX, minY, maxY, targetMesh };
+    },
+    [headstone, gl, mouse, raycaster, camera, addition.type, threeScene]
+  );
+
+  // Drag handler - must be defined before effects
+  const placeFromClientXY = React.useCallback(
+    (clientX: number, clientY: number) => {
+      const data = computeInteractionPoint(clientX, clientY);
+      if (!data) return;
+
+      let { clamped, centerX, centerY, minX, maxX, minY, maxY, targetMesh } = data;
+
+      if (dragDeltaRef.current) {
+        clamped = clamped.clone();
+        clamped.x -= dragDeltaRef.current.x;
+        clamped.y -= dragDeltaRef.current.y;
+        clamped.x = Math.max(minX, Math.min(maxX, clamped.x));
+        clamped.y = Math.max(minY, Math.min(maxY, clamped.y));
+      }
+
+      const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
+      if (!headstoneMesh) return;
+
+      const convertToHeadstone = (vec: THREE.Vector3) => {
+        const worldPoint = targetMesh.localToWorld(vec.clone());
+        return headstoneMesh.worldToLocal(worldPoint.clone());
+      };
+
+      const headstonePoint = convertToHeadstone(clamped);
+      const headstoneCenterPoint = convertToHeadstone(
+        new THREE.Vector3(centerX, centerY, clamped.z)
+      );
+
       setAdditionOffset(id, {
         ...offset,
-        xPos: localPt.x - centerX,
-        yPos: -(localPt.y - centerY),  // Negate to convert Y-up to Y-down format
+        xPos: headstonePoint.x - headstoneCenterPoint.x,
+        yPos: -(headstonePoint.y - headstoneCenterPoint.y),
       });
-    }
-  }, [headstone, gl, camera, raycaster, mouse, id, additionOffsets, setAdditionOffset, addition.type, threeScene]);
+    },
+    [computeInteractionPoint, headstone, id, offset, setAdditionOffset]
+  );
 
   const handleClick = React.useCallback((e: any) => {
     e.stopPropagation();
@@ -233,11 +312,42 @@ function AdditionModelInner({
     window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'addition' } }));
   }, [id, setSelectedAdditionId, setActivePanel]);
 
-  const handlePointerDown = React.useCallback((e: any) => {
-    e.stopPropagation();
-    // Note: Selection happens on click, this just prepares for drag
-    setDragging(true);
-  }, []);
+  const handlePointerDown = React.useCallback(
+    (e: any) => {
+      e.stopPropagation();
+      setDragging(true);
+
+      const clientX = e.clientX ?? e?.nativeEvent?.clientX;
+      const clientY = e.clientY ?? e?.nativeEvent?.clientY;
+      if (typeof clientX === 'number' && typeof clientY === 'number') {
+        const data = computeInteractionPoint(clientX, clientY);
+        if (data && bbox) {
+          const { clamped, targetMesh } = data;
+          const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
+          if (headstoneMesh) {
+            const headCenterX = (bbox.min.x + bbox.max.x) / 2;
+            const headCenterY = (bbox.min.y + bbox.max.y) / 2;
+            const currentHeadstonePoint = new THREE.Vector3(
+              headCenterX + offset.xPos,
+              headCenterY - offset.yPos,
+              clamped.z
+            );
+            const worldPoint = headstoneMesh.localToWorld(currentHeadstonePoint.clone());
+            const currentTargetPoint = targetMesh.worldToLocal(worldPoint.clone());
+            dragDeltaRef.current = {
+              x: clamped.x - currentTargetPoint.x,
+              y: clamped.y - currentTargetPoint.y,
+            };
+          } else {
+            dragDeltaRef.current = null;
+          }
+        } else {
+          dragDeltaRef.current = null;
+        }
+      }
+    },
+    [computeInteractionPoint, headstone, offset, bbox]
+  );
 
   const handlePointerOver = React.useCallback(() => {
     if (document.body) {
@@ -307,6 +417,7 @@ function AdditionModelInner({
     const onUp = (e: PointerEvent) => {
       e.preventDefault();
       setDragging(false);
+      dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
     };
@@ -319,6 +430,7 @@ function AdditionModelInner({
     return () => {
       canvas.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
+      dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
     };
@@ -326,49 +438,13 @@ function AdditionModelInner({
 
   // ✅ guard: if headstone API isn't ready yet, don't render anything
   // This must come AFTER all hooks
-  const stone = headstone?.mesh?.current as THREE.Mesh | null;
-  if (!headstone || !stone || !scene) {
+  if (!headstone || !stone || !scene || !bbox) {
     return null;
   }
 
-  // bbox in HEADSTONE LOCAL SPACE
-  if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
-  const bbox = stone.geometry.boundingBox!.clone();
-  
-  // Calculate center (like inscriptions and motifs)
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
 
-  const inset = 0.01;
-  const spanY = bbox.max.y - bbox.min.y;
-  const minX = bbox.min.x + inset;
-  const maxX = bbox.max.x - inset;
-  const minY = bbox.min.y + inset + 0.04 * spanY;
-  const maxY = bbox.max.y - inset;
-
-  // Different default positions based on type (as OFFSETS from center)
-  let defaultX = 0, defaultY = 0;
-  const posConfig = DEFAULT_POSITIONS[addition.type as keyof typeof DEFAULT_POSITIONS] || DEFAULT_POSITIONS.application;
-  
-  if (addition.type === 'statue') {
-    defaultX = minX + posConfig.xOffset - centerX;
-    defaultY = minY + posConfig.yOffset - centerY;
-  } else if (addition.type === 'vase') {
-    defaultX = maxX + posConfig.xOffset - centerX;
-    defaultY = minY + posConfig.yOffset - centerY;
-  } else {
-    defaultX = posConfig.xOffset;
-    defaultY = posConfig.yOffset;
-  }
-
-  const defaultOffset = {
-    xPos: defaultX,
-    yPos: defaultY,
-    scale: 1,
-    rotationZ: 0,
-  };
-
-  const offset = additionOffsets[id] ?? defaultOffset;
 
   // scale: target sizes in headstone units (1 unit = 10mm)
   const targetH = TARGET_HEIGHTS[addition.type as keyof typeof TARGET_HEIGHTS] || TARGET_HEIGHTS.application;

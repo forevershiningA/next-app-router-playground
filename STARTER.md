@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-22  
+**Last Updated:** 2025-12-29  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -1770,6 +1770,18 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2025-12-29 (Afternoon)**: Addition Drag UX & AdditionModel Stability (Production-Ready)
+  - Reworked `AdditionModel` dragging to use shared `computeInteractionPoint()` data plus a stored pointer delta, eliminating the "jump" that occurred when the pointer-down location didn’t match the model’s saved offset.
+  - Removed the previous `setPointerCapture` approach (which was triggering context loss in some browsers) and now keep OrbitControls disabled only while dragging, restoring them and clearing helper refs on pointer-up/cleanup.
+  - Refactored AdditionModel’s bounding-box/default-offset logic to run before helper hooks and removed duplicate declarations (e.g., `offset`, `stone`), fixing the `Cannot access 'offset' before initialization` runtime error and the `Identifier ... has already been declared` build failures recorded in `logs.log`.
+
+- **2025-12-28 (Morning)**: Homepage Studio Flow Refresh (Production-Ready)
+  - Unified the "How It Works" and "Design a Beautiful Tribute" sections with matching gradients, typography, and gold accent system, plus embedded the new `/backgrounds/dyo.webp` preview right after the guidance copy to visually tie the guided flow to the live studio.
+  - Rebuilt the Shape/Material/Personalize steps for seniors: circular selectors now share a single visual language, Glory Black granite loads first by default, each step always shows the chosen shape name with the granite label underneath, and the Personalize stage now reveals dove/date motifs (hidden until selected) while removing dense helper text.
+  - Updated the Personalize carousel to use motif categories sourced from `_data.ts`, removed caption text under motif thumbnails, color-matched loaded motifs to the dove treatment, and replaced the old "Check Price" stage with "Design Your Own" (while also dropping the redundant Browse Designs button in that panel).
+  - Softened copy throughout the flow (no more "Avg. Build Time"), added friendlier trust metrics, and slightly reworked the hero/header so the header no longer uses `bg-black/30 backdrop-blur-2xl border-white/5`, keeping the overall experience warm and less technical.
+  - Blurred the "Ready When You Are" background image for readability, refreshed the CTA bullets, and ensured the final section tone matches the rest of the page for a cohesive memorial-focused narrative.
 
 - **2025-12-27 (Late Afternoon)**: Homepage Hero Section & Design Tool UI Refinements (Production-Ready)
   - **Homepage Hero Section Improvements**:

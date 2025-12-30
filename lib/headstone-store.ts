@@ -20,6 +20,11 @@ import {
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.webp';
 
+const isDesktopViewport = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth >= 1024;
+};
+
 /* clamps */
 const MIN_HEADSTONE_DIM = 300;
 const MAX_HEADSTONE_DIM = 1200;
@@ -870,10 +875,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedMotifId: null, // Deselect any motif
         selected: null, // Deselect headstone/base
       });
-      // Navigate to select-additions page
+      // Navigate to select-additions page only when we're in mobile/compact layout
       const { navTo } = get();
-      if (navTo) {
-        navTo('/select-additions');
+      if (navTo && !isDesktopViewport()) {
+        const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+        if (currentPath !== '/select-additions') {
+          navTo('/select-additions');
+        }
       }
     }
   },
@@ -929,10 +937,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedAdditionId: null, // Deselect any addition
         selected: null, // Deselect headstone/base
       });
-      // Navigate to select-motifs page
+      // Navigate to select-motifs page only on mobile to keep canvas visible on desktop
       const { navTo } = get();
-      if (navTo) {
-        navTo('/select-motifs');
+      if (navTo && !isDesktopViewport()) {
+        const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+        if (currentPath !== '/select-motifs') {
+          navTo('/select-motifs');
+        }
       }
     }
   },

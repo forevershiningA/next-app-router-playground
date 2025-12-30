@@ -1,28 +1,40 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { data } from '#/app/_internal/_data';
 import MotifSelectionGrid from './_ui/MotifSelectionGrid';
-import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function Page() {
   const motifs = data.motifs;
   const pathname = usePathname();
-  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth >= 1024;
+  });
 
-  // Show category grid when on the /select-motifs page and no motif is actively being edited
-  const showGrid = pathname === '/select-motifs' && selectedMotifId === null;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Only show the grid on mobile/tablet where the sidebar is hidden
+  const showGrid = pathname === '/select-motifs' && !isDesktop;
+
+  if (!showGrid) {
+    return null;
+  }
 
   return (
-    <>
-      {showGrid && (
-        <Suspense fallback={null}>
-          <MotifSelectionGrid 
-            motifs={motifs}
-          />
-        </Suspense>
-      )}
-    </>
+    <Suspense fallback={null}>
+      <MotifSelectionGrid 
+        motifs={motifs}
+      />
+    </Suspense>
   );
 }

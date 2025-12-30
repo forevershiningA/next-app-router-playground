@@ -25,6 +25,7 @@ import { data } from '#/app/_internal/_data';
 import InscriptionEditPanel from './InscriptionEditPanel';
 import MaterialSelector from './MaterialSelector';
 import ShapeSelector from './ShapeSelector';
+import AdditionSelector from './AdditionSelector';
 
 // Menu items with icons
 const menuItems = [
@@ -111,12 +112,15 @@ export default function DesignerNav() {
   const shapes = React.useMemo(() => {
     return data.shapes || [];
   }, []);
+  const additionsList = React.useMemo(() => {
+    return data.additions || [];
+  }, []);
   
   // Show Select Size panel when on select-size page
   const isSelectSizePage = pathname === '/select-size';
   
   // Determine if canvas is visible (on pages with 3D scene)
-  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material'];
+  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-additions'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   
   // Auto-scroll to section when it becomes active
@@ -867,18 +871,45 @@ export default function DesignerNav() {
               
               return (
                 <React.Fragment key={item.slug}>
-                  <Link
-                    href={`/${item.slug}`}
-                    data-section={item.slug}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                      isActive 
-                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                    }`}
-                  >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
-                    <span>{item.name}</span>
-                  </Link>
+                  {isCanvasVisible ? (
+                    <>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (pathname !== '/select-additions') {
+                            router.push('/select-additions');
+                          }
+                        }}
+                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
+                          isActive 
+                            ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                            : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span>{item.name}</span>
+                      </button>
+                      
+                      {isActive && additionsList.length > 0 && (
+                        <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                          <AdditionSelector additions={additionsList} />
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href={`/${item.slug}`}
+                      data-section={item.slug}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                        isActive 
+                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
                   
                   {selectedAdditionId && activeOffset && activeAddition && activePanel === 'addition' && (
                     <div className="mt-3 space-y-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">

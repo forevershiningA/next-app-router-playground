@@ -28,9 +28,9 @@ const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
 });
 
 const heroMetrics = [
-  { value: '12 min', label: 'Typical design session' },
+  { value: '40', label: 'Headstones shapes' },
   { value: '5,284', label: 'Families supported' },
-  { value: '300+', label: 'Artful touches available' },
+  { value: '5000+', label: 'Artful touches available' },
 ];
 
 const MOTIF_CATEGORY_PICKS = ['RELIGIOUS', 'BIRDS', 'FLOWER_INSERTS', 'HEARTS'] as const;
@@ -134,9 +134,9 @@ export default function HomeSplash() {
   ];
 
   const howItWorksHighlights = [
-    { label: 'Live 3D preview included', icon: EyeIcon },
-    { label: 'Instant proof & quote', icon: DocumentTextIcon },
-    { label: 'Save & share anytime', icon: BookmarkIcon },
+    { label: '3D preview', icon: EyeIcon },
+    { label: 'Instant Price', icon: DocumentTextIcon },
+    { label: 'Save & Share', icon: BookmarkIcon },
   ];
 
   const ctaHighlights = [
@@ -158,15 +158,15 @@ export default function HomeSplash() {
   ];
 
   const heroHighlights = [
-    'Live collaborative studio',
-    'Instant proof & pricing',
-    'Support from memorial designers',
+    { primary: 'Save, edit & share', secondary: 'Your design' },
+    { primary: 'Instant proof', secondary: '& pricing' },
+    { primary: 'Support from', secondary: 'designers' },
   ];
 
   const tributeStats = [
     { label: 'Families we’ve guided', value: '5,284', detail: 'Each memorial cared for personally' },
-    { label: 'Typical design session', value: 'About 12 min', detail: 'Take all the time you need' },
-    { label: 'Meaningful accents ready', value: '300+', detail: 'Motifs, fonts & finishes to choose from' },
+    { label: 'Headstones shapes', value: '40', detail: 'Slant and Rock Pitch option' },
+    { label: 'Meaningful accents ready', value: '5000+', detail: 'Motifs, fonts & finishes to choose from' },
   ];
 
   const tributeFlowChips = [
@@ -233,10 +233,6 @@ export default function HomeSplash() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(212,175,55,0.25),transparent_55%)] opacity-70" aria-hidden="true" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:140px_140px] opacity-20 mix-blend-screen" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
-        {/* Vignette Effect - Darkens corners to focus on center */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/70" aria-hidden="true" style={{ background: 'radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.7) 100%)' }} />
-        <div className="absolute -top-32 right-0 w-[26rem] h-[26rem] bg-[#d4af37]/40 blur-[200px] opacity-60" aria-hidden="true" />
-        <div className="absolute -bottom-20 left-[-10%] w-[30rem] h-[30rem] bg-[#513826]/60 blur-[180px] opacity-50" aria-hidden="true" />
         
         {/* Main Content - Flex Grow to Center Vertically */}
         <div className="relative z-10 flex flex-col justify-center flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 sm:pt-24">
@@ -252,17 +248,6 @@ export default function HomeSplash() {
               Design exactly what you envision with peace of mind before you decide.
             </p>
 
-            <div className="mx-auto max-w-3xl flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4 mb-6">
-              {heroHighlights.map((item) => (
-                <div
-                  key={item}
-                  className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 shadow-[0_15px_35px_rgba(0,0,0,0.35)] backdrop-blur-md"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-            
             {/* 3D Canvas - TALLER container with overlap layout */}
             <div className="w-full h-[50vh] sm:h-[55vh] min-h-[400px] flex items-center justify-center relative -mt-4 -mb-16 sm:-mb-24 z-0 pointer-events-none">
               
@@ -347,14 +332,6 @@ export default function HomeSplash() {
                 </p>
               </div>
 
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
-                {heroMetrics.map((metric) => (
-                  <div key={metric.label} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-5 text-center shadow-[0_20px_45px_rgba(0,0,0,0.35)]">
-                    <p className="text-3xl font-serif text-white">{metric.value}</p>
-                    <p className="text-[10px] uppercase tracking-[0.4em] text-white/60 mt-2">{metric.label}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
           </div>
@@ -396,7 +373,7 @@ export default function HomeSplash() {
 
                 <div className="absolute top-5 left-5 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md px-4 py-3 text-left shadow-lg">
                   <p className="text-[10px] uppercase tracking-[0.4em] text-white/60">Currently editing</p>
-                  <p className="text-lg font-semibold text-white">Classic Aria</p>
+                  <p className="text-lg font-semibold text-white">Select Size</p>
                   <p className="text-[11px] text-white/70">Shape • Material • Personalize</p>
                 </div>
 
@@ -408,7 +385,6 @@ export default function HomeSplash() {
 
                 <div className="absolute bottom-4 left-4 right-4 flex flex-col gap-2 text-white/80 text-xs uppercase tracking-[0.3em]">
                   <div className="flex items-center justify-between">
-                    <span>Live 3D Studio</span>
                     <span>Real-Time Updates</span>
                   </div>
                   <div className="h-1 rounded-full bg-white/20 overflow-hidden">

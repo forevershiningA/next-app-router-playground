@@ -161,11 +161,17 @@ export default function ThreeScene() {
           gl.domElement.removeEventListener('webglcontextrestored', contextRestoredHandler.current);
         }
         
-        // Dispose of the WebGL context properly
-        gl.dispose?.();
-        const loseContext = gl.getContext()?.getExtension('WEBGL_lose_context');
-        if (loseContext) {
-          loseContext.loseContext();
+        const ctx = gl.getContext?.();
+        const supportsLoseContext = ctx?.getSupportedExtensions?.()?.includes('WEBGL_lose_context');
+        if (supportsLoseContext) {
+          gl.dispose?.();
+          const loseContext = ctx?.getExtension('WEBGL_lose_context');
+          loseContext?.loseContext();
+        } else {
+          // Fallback cleanup without forcing context loss
+          gl.setAnimationLoop?.(null);
+          gl.renderLists?.dispose?.();
+          gl.forceContextLoss = undefined as any;
         }
       }
     };
