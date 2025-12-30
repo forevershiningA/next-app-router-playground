@@ -141,13 +141,38 @@ export async function fetchAndParseInscriptionDetails(
   inscriptionId: string,
 ): Promise<InscriptionDetails | undefined> {
   try {
-    const response = await fetch('/xml/au_EN/inscriptions.xml');
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    let xmlText: string | null = null;
+
+    if (typeof window === 'undefined') {
+      const [{ readFile }, { join }] = await Promise.all([
+        import('fs/promises'),
+        import('path'),
+      ]);
+      const xmlPath = join(process.cwd(), 'public', 'xml', 'au_EN', 'inscriptions.xml');
+      xmlText = await readFile(xmlPath, 'utf-8');
+
+      if (typeof (globalThis as any).DOMParser === 'undefined') {
+        const { DOMParser } = await import('@xmldom/xmldom');
+        (globalThis as any).DOMParser = DOMParser;
+      }
+
+      const css = (globalThis as any).CSS ?? {};
+      if (typeof css.escape !== 'function') {
+        css.escape = (value: string) =>
+          String(value).replace(/[^a-zA-Z0-9_\-]/g, (char) => `\\${char}`);
+      }
+      (globalThis as any).CSS = css;
+    } else {
+      const response = await fetch('/xml/au_EN/inscriptions.xml');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      xmlText = await response.text();
     }
-    
-    const xmlText = await response.text();
+
+    if (!xmlText) {
+      throw new Error('Failed to load inscriptions XML');
+    }
     
     // Validate XML content for security
     if (xmlText.includes('<!ENTITY')) {
