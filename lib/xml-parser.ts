@@ -68,6 +68,7 @@ export interface CatalogData {
 }
 
 const isDev = process.env.NODE_ENV !== 'production';
+const catalogCache = new Map<string, CatalogData>();
 const inscriptionDetailsCache = new Map<string, InscriptionDetails | null>();
 let inscriptionsXmlPromise: Promise<string> | null = null;
 let serverDomSupportPromise: Promise<void> | null = null;
@@ -289,6 +290,11 @@ export async function parseCatalogXML(
   xmlText: string,
   productId: string,
 ): Promise<CatalogData> {
+  const cached = catalogCache.get(productId);
+  if (cached) {
+    return cached;
+  }
+
   // Validate XML content for security
   if (xmlText.includes('<!ENTITY')) {
     throw new Error('Invalid XML: External entities are not allowed');
@@ -419,5 +425,7 @@ export async function parseCatalogXML(
     }
   }
 
-  return { product: { id, name, type, laser, shapes, additions, priceModel, basePriceModel } };
+  const catalogData = { product: { id, name, type, laser, shapes, additions, priceModel, basePriceModel } };
+  catalogCache.set(productId, catalogData);
+  return catalogData;
 }

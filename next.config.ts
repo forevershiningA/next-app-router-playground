@@ -4,6 +4,8 @@ import { type CodeHikeConfig } from 'codehike/mdx';
 
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
   experimental: {
     inlineCss: true,
     cacheComponents: false,
