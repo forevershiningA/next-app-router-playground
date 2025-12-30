@@ -67,6 +67,84 @@ export interface CatalogData {
   };
 }
 
+const isDev = process.env.NODE_ENV !== 'production';
+const inscriptionDetailsCache = new Map<string, InscriptionDetails | null>();
+let inscriptionsXmlPromise: Promise<string> | null = null;
+let serverDomSupportPromise: Promise<void> | null = null;
+
+async function ensureServerDomSupport() {
+  if (typeof window !== 'undefined') {
+    return;
+  }
+
+  if (!serverDomSupportPromise) {
+    serverDomSupportPromise = import('@xmldom/xmldom').then(({ DOMParser }) => {
+      if (typeof (globalThis as any).DOMParser === 'undefined') {
+        (globalThis as any).DOMParser = DOMParser;
+      }
+
+      const css = (globalThis as any).CSS ?? {};
+      if (typeof css.escape !== 'function') {
+        css.escape = (value: string) =>
+          String(value).replace(/[^a-zA-Z0-9_\-]/g, (char) => `\\${char}`);
+      }
+      (globalThis as any).CSS = css;
+    });
+  }
+
+  await serverDomSupportPromise;
+}
+
+async function loadInscriptionsXml() {
+  if (!inscriptionsXmlPromise) {
+    inscriptionsXmlPromise = (async () => {
+      if (typeof window === 'undefined') {
+        const [{ readFile }, pathModule] = await Promise.all([
+          import('fs/promises'),
+          import('path'),
+        ]);
+        const xmlPath = pathModule.join(
+          process.cwd(),
+          'public',
+          'xml',
+          'au_EN',
+          'inscriptions.xml',
+        );
+        return readFile(xmlPath, 'utf-8');
+      }
+
+      const response = await fetch('/xml/au_EN/inscriptions.xml');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.text();
+    })();
+  }
+
+  try {
+    return await inscriptionsXmlPromise;
+  } catch (error) {
+    inscriptionsXmlPromise = null;
+    throw error;
+  }
+}
+
+function getInscriptionFallback(): InscriptionDetails {
+  return {
+    priceModel: {
+      id: '',
+      code: '',
+      name: '',
+      quantityType: 'Height',
+      currency: 'USD',
+      prices: [],
+    },
+    minHeight: 5,
+    maxHeight: 1200,
+    initHeight: 30,
+  };
+}
+
 export function calculatePrice(
   priceModel: PriceModel,
   quantity: number,
@@ -140,40 +218,18 @@ export interface InscriptionDetails {
 export async function fetchAndParseInscriptionDetails(
   inscriptionId: string,
 ): Promise<InscriptionDetails | undefined> {
+  if (inscriptionDetailsCache.has(inscriptionId)) {
+    return inscriptionDetailsCache.get(inscriptionId) ?? undefined;
+  }
+
   try {
-    let xmlText: string | null = null;
-
-    if (typeof window === 'undefined') {
-      const [{ readFile }, { join }] = await Promise.all([
-        import('fs/promises'),
-        import('path'),
-      ]);
-      const xmlPath = join(process.cwd(), 'public', 'xml', 'au_EN', 'inscriptions.xml');
-      xmlText = await readFile(xmlPath, 'utf-8');
-
-      if (typeof (globalThis as any).DOMParser === 'undefined') {
-        const { DOMParser } = await import('@xmldom/xmldom');
-        (globalThis as any).DOMParser = DOMParser;
-      }
-
-      const css = (globalThis as any).CSS ?? {};
-      if (typeof css.escape !== 'function') {
-        css.escape = (value: string) =>
-          String(value).replace(/[^a-zA-Z0-9_\-]/g, (char) => `\\${char}`);
-      }
-      (globalThis as any).CSS = css;
-    } else {
-      const response = await fetch('/xml/au_EN/inscriptions.xml');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      xmlText = await response.text();
-    }
-
+    const xmlText = await loadInscriptionsXml();
     if (!xmlText) {
       throw new Error('Failed to load inscriptions XML');
     }
-    
+
+    await ensureServerDomSupport();
+
     // Validate XML content for security
     if (xmlText.includes('<!ENTITY')) {
       throw new Error('Invalid XML: External entities are not allowed');
@@ -193,12 +249,14 @@ export async function fetchAndParseInscriptionDetails(
     );
     if (!productElement) {
       console.warn(`No inscription product found with id: ${inscriptionId}`);
+      inscriptionDetailsCache.set(inscriptionId, null);
       return undefined;
     }
 
     const priceModelEl = productElement.querySelector('price_model');
     if (!priceModelEl) {
       console.warn(`No price model found for inscription: ${inscriptionId}`);
+      inscriptionDetailsCache.set(inscriptionId, null);
       return undefined;
     }
 
@@ -216,23 +274,14 @@ export async function fetchAndParseInscriptionDetails(
       10,
     );
 
-    return { priceModel, minHeight, maxHeight, initHeight };
+    const details: InscriptionDetails = { priceModel, minHeight, maxHeight, initHeight };
+    inscriptionDetailsCache.set(inscriptionId, details);
+    return details;
   } catch (error) {
     console.error('Failed to fetch or parse inscriptions XML:', error);
-    // Return sensible defaults instead of undefined
-    return {
-      priceModel: {
-        id: '',
-        code: '',
-        name: '',
-        quantityType: 'Height',
-        currency: 'USD',
-        prices: [],
-      },
-      minHeight: 5,
-      maxHeight: 1200,
-      initHeight: 30,
-    };
+    const fallback = getInscriptionFallback();
+    inscriptionDetailsCache.set(inscriptionId, fallback);
+    return fallback;
   }
 }
 
@@ -353,14 +402,20 @@ export async function parseCatalogXML(
   const standProductEl = xmlDoc.querySelector('product[type="stand"], product[type="base"]');
   let basePriceModel: PriceModel | undefined = undefined;
   
-  console.log('Parsing catalog XML - found stand/base product:', !!standProductEl);
+  if (isDev) {
+    console.log('Parsing catalog XML - found stand/base product:', !!standProductEl);
+  }
   
   if (standProductEl) {
     const standPriceModelEl = standProductEl.querySelector('price_model');
-    console.log('Stand/base product has price_model:', !!standPriceModelEl);
+    if (isDev) {
+      console.log('Stand/base product has price_model:', !!standPriceModelEl);
+    }
     if (standPriceModelEl) {
       basePriceModel = parsePriceModel(standPriceModelEl);
-      console.log('Base price model parsed:', basePriceModel);
+      if (isDev) {
+        console.log('Base price model parsed:', basePriceModel);
+      }
     }
   }
 
