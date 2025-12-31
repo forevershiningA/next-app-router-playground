@@ -262,19 +262,12 @@ export default function Scene({
       <spotLight color="#ffffff" intensity={2} position={[5, 5, -5]} distance={30} />
 
       {/* 
-        ENVIRONMENT:
-        City preset with max blur (1.0) creates abstract light/dark patches.
-        resolution={256} saves download and processing (we blur it anyway).
-        environmentIntensity={0.5} provides balanced reflections.
-        Blocked from grass via envMapIntensity={0}
+        ENVIRONMENT: Removed to fix Vercel build timeout
+        The forest HDRI preset was causing build to hang (downloads large file)
+        Ambient + Hemisphere + Spot lights provide sufficient lighting
       */}
-      <Environment
-        preset="forest"
-        background={false}
-        blur={1.0}
-        resolution={256}
-        environmentIntensity={0.05}
-      />
+      
+      <Environment files="/hdri/night_4k.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
 
       <group ref={groupRef}>
         <HeadstoneAssembly />
