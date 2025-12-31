@@ -196,7 +196,7 @@ export default function HomeSplash() {
               alt="Forever Shining - Design Online" 
               width={320}
               height={100}
-              className="w-full h-auto drop-shadow-md"
+              className="w-full h-auto drop-shadow-sm"
               priority
             />
           </div>
@@ -223,7 +223,7 @@ export default function HomeSplash() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
             backgroundImage: 'url(/backgrounds/tree-2916763_1920.webp)',
-            filter: 'blur(12px) saturate(1)',
+            filter: 'blur(4px) saturate(1) brightness(0.75)',
             transform: 'scale(1.1)'
           }}
           role="presentation"
@@ -239,11 +239,11 @@ export default function HomeSplash() {
           <div className="text-center">
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
-            <h1 className="text-3xl font-playfair-display tracking-tight text-white sm:text-5xl mb-2 sm:mb-3 leading-tight drop-shadow-2xl">
-              <span className="block font-semibold text-[2rem] sm:text-5xl">Design a Lasting Tribute</span>
-              <span className="block font-light text-xl sm:text-3xl mt-1 text-gray-200">Create Your Memorial in Real&#8209;Time&nbsp;3D</span>
+            <h1 className="text-3xl font-playfair-display tracking-tight text-white sm:text-5xl mb-2 sm:mb-3 leading-tight">
+              <span className="block font-semibold drop-shadow-sm text-[2rem] sm:text-5xl">Design a Lasting Tribute</span>
+              <span className="block font-light drop-shadow-sm text-xl sm:text-3xl mt-4 text-gray-200">Visualize a beautiful tribute to your loved one in real-time 3D</span>
             </h1>
-            <p className="mx-auto max-w-2xl text-sm sm:text-base text-gray-300 leading-relaxed mb-3 sm:mb-4">
+            <p className="text-lg drop-shadow-sm text-gray-400">
               Choose from Headstones, Plaques, Urns, or Full Monuments.<br className="hidden sm:block"/>
               Design exactly what you envision with peace of mind before you decide.
             </p>

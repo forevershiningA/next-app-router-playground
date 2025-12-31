@@ -244,11 +244,11 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
       
       {/* Enhanced Ground Shadow - More realistic weight and depth */}
       <ContactShadows 
-        position={[0, -1.19, 0]}
-        opacity={0.65}
-        scale={14}
+        position={[0, -1.4, 0]}
+        opacity={1}
+        scale={16}
         blur={2.8}
-        far={4.5}
+        far={2.5}
         resolution={1024}
         color="#000000"
       />
@@ -307,13 +307,34 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
             castShadow={false}
           />
 
-          {/* Rim Light (Backlight) - Separates stone from background with edge highlights */}
+          {/* --- RIM LIGHTS (The "Halo" Effect) --- */}
+          {/* Left Back Rim - Cool Blue */}
           <spotLight 
-            position={[-5, 5, -5]}
-            angle={0.5}
-            intensity={2.5}
+            position={[-5, 5, -5]} 
+            angle={0.5} 
+            intensity={6} 
             color="#a0c0ff" 
-            castShadow={false}
+            castShadow={false} 
+          />
+
+          {/* Right Back Rim - Cool Blue (Balances the shape) */}
+          <spotLight 
+            position={[5, 5, -5]} 
+            angle={0.5} 
+            intensity={6} 
+            color="#a0c0ff" 
+            castShadow={false} 
+          />
+
+          {/* --- KEY LIGHT (The Main Front Light) --- */}
+          {/* Front Right - Warm/White (Illuminates the Gold Text) */}
+          <spotLight 
+            position={[3, 5, 5]} 
+            angle={0.5} 
+            penumbra={1} 
+            intensity={4} 
+            color="#ffffff" 
+            castShadow={true} 
           />
 
           {/* Main Key Light - Positioned to create depth and dimension */}
