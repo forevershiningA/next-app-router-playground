@@ -267,7 +267,7 @@ export default function Scene({
         Ambient + Hemisphere + Spot lights provide sufficient lighting
       */}
       
-      <Environment files="/hdri/night_4k.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
+      <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
 
       <group ref={groupRef}>
         <HeadstoneAssembly />
