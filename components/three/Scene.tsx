@@ -14,6 +14,7 @@ const GRASS_COLOR = '#5a7f3c';
 
 // UPDATED: Pale atmospheric blue (matches the horizon, not white)
 const FOG_COLOR = '#dcebf5';
+const FOG_COLOR_2 = '#A8C9E6'
 
 // --- COMPONENTS ---
 
@@ -73,7 +74,7 @@ function GrassFloor() {
   useEffect(() => {
     // OPTIMIZATION: Cap anisotropy at 8 instead of max (16)
     // Going to 16 is expensive and rarely noticeable on grass
-    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 2);
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
@@ -185,7 +186,7 @@ export default function Scene({
       {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
       <AdaptiveDpr pixelated />
 
-      {is2DMode && <color attach="background" args={['#CFE8FC']} />}
+      {!is2DMode && <color attach="background" args={['#A8C9E6']} />}
       
       {/* 
         UPDATED FOG SETTINGS:
@@ -193,7 +194,7 @@ export default function Scene({
         Start: 20 (Keeps the headstone area perfectly clear)
         End: 100 (Gradual fade into the distance, no hard cutoff)
       */}
-      {!is2DMode && <fog attach="fog" args={[FOG_COLOR, 20, 100]} />}
+      {!is2DMode && <fog attach="fog" args={[FOG_COLOR_2, 1, 4]} />}
       
       <mesh
         position={[0, 0, 0]}
