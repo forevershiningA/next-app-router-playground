@@ -131,6 +131,11 @@ export default function DesignerNav() {
   // Close full-screen panel and return to menu
   const closeFullscreenPanel = () => {
     setActiveFullscreenPanel(null);
+    // Navigate away from the panel route to show menu
+    if (pathname === '/select-size' || pathname === '/inscriptions' || 
+        pathname === '/select-additions' || pathname === '/select-motifs') {
+      router.push('/select-product'); // Go back to product selection or home
+    }
   };
   
   // Auto-expand current route's section and collapse others
@@ -143,6 +148,23 @@ export default function DesignerNav() {
           [key]: key === activeSection
         }), {} as Record<string, boolean>)
       }));
+    }
+  }, [pathname]);
+  
+  // Auto-open full-screen panel based on current route
+  useEffect(() => {
+    const routeToPanel: Record<string, string> = {
+      '/select-size': 'select-size',
+      '/inscriptions': 'inscriptions',
+      '/select-additions': 'select-additions',
+      '/select-motifs': 'select-motifs',
+    };
+    
+    const panelSlug = routeToPanel[pathname];
+    if (panelSlug) {
+      setActiveFullscreenPanel(panelSlug);
+    } else {
+      setActiveFullscreenPanel(null);
     }
   }, [pathname]);
   
@@ -264,7 +286,7 @@ export default function DesignerNav() {
     
     if (fullscreenPanels.includes(slug)) {
       e.preventDefault();
-      openFullscreenPanel(slug);
+      router.push(`/${slug}`); // Navigate to the route (useEffect will handle panel opening)
     } else if (slug === 'check-price') {
       e.preventDefault();
       router.push('/check-price');
@@ -393,16 +415,9 @@ export default function DesignerNav() {
 
   return (
     <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410]">
-      {/* Header */}
-      <div className="p-4 border-b border-[#3A3A3A]/50">
-        <Link href="/" className="hover:opacity-80 transition-opacity">
-          <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
-        </Link>
-      </div>
-
       {/* Full-Screen Panel Overlay */}
-      {activeFullscreenPanel && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] z-50 flex flex-col">
+      {activeFullscreenPanel ? (
+        <div className="flex flex-col h-full">
           {/* Panel Header */}
           <div className="p-4 border-b border-[#3A3A3A]/50">
             <button
@@ -440,11 +455,17 @@ export default function DesignerNav() {
             )}
           </div>
         </div>
-      )}
+      ) : (
+        <>
+          {/* Header */}
+          <div className="p-4 border-b border-[#3A3A3A]/50">
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
+            </Link>
+          </div>
 
-      {/* Menu Items (hidden when full-screen panel is active) */}
-      {!activeFullscreenPanel && (
-        <div className="p-4">
+          {/* Menu Items */}
+          <div className="p-4">
         {/* Sticky Context Header */}
         <div className="sticky top-0 z-10 bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] pb-3 mb-3 border-b border-white/10">
           <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Currently Editing:</div>
@@ -1650,6 +1671,7 @@ export default function DesignerNav() {
           <span>Browse Designs</span>
         </Link>
       </div>
+        </>
       )}
     </nav>
   );
