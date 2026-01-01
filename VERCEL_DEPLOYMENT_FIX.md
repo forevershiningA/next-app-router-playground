@@ -31,9 +31,39 @@ This prevented Vercel from deploying:
 
 ---
 
-## Solution: Selective Deployment
+## Solution: Two-Step Approach
 
-Deploy only essential files by excluding full-size screenshots:
+We need to control files at **two different levels**:
+
+### 1. **Vercel Deployment** (.vercelignore)
+Controls which files are uploaded to Vercel's CDN.
+
+### 2. **Serverless Function Bundling** (next.config.ts)
+Controls which files are bundled into serverless functions.
+
+### The Fix
+
+#### .vercelignore (Deploy only essential files)
+```gitignore
+# Exclude full-size screenshots (keep only _small.jpg thumbnails)
+public/ml/**/screenshots/**/*.jpg
+!public/ml/**/screenshots/**/*_small.jpg
+```
+
+**Result:** Only thumbnails are deployed (~760 MB total)
+
+#### next.config.ts (Exclude from function bundles)
+```typescript
+outputFileTracingExcludes: {
+  '*': [
+    'public/ml/**/*',     // Don't bundle ANY ml files in functions
+    'public/shapes/**/*',
+    'public/additions/**/*',
+  ],
+}
+```
+
+**Result:** Functions stay under 300 MB limit (ml files served as static assets)
 
 ### File Size Breakdown
 | File Type | Count | Size | Deploy? |
@@ -58,6 +88,23 @@ public/ml/**/screenshots/**/*.jpg
 1. First pattern: Ignore ALL .jpg files in screenshots directories
 2. Second pattern: Exception - keep files ending in `_small.jpg`
 3. Result: Only thumbnail files are deployed
+
+### Updated next.config.ts
+
+```typescript
+outputFileTracingExcludes: {
+  '*': [
+    'public/ml/**/*',     // Don't bundle in serverless functions
+    'public/shapes/**/*',
+    'public/additions/**/*',
+  ],
+}
+```
+
+**How it works:**
+- Excludes ALL `/ml/` files from serverless function bundles
+- Files are still publicly accessible (deployed via .vercelignore rules)
+- Keeps function size under 300 MB limit
 
 ---
 
@@ -141,10 +188,21 @@ function generateThumbnailPath(designId: string, mlDir: string): string {
 
 ## Why This Works
 
-1. **Thumbnails are 64px height** - perfect for category grid cards
-2. **Fallback system** - tries year/month path first, then falls back to root
-3. **No full-size screenshots needed** - design viewer uses SVG rendering (not raster images)
-4. **Vercel .gitignore syntax** - supports `!` negation patterns
+1. **Two-level control:**
+   - `.vercelignore` controls CDN uploads (excludes full-size JPGs)
+   - `outputFileTracingExcludes` prevents function bundling (keeps functions under 300 MB)
+
+2. **Static assets remain accessible:**
+   - Files deployed via `.vercelignore` are served from Vercel's CDN
+   - No need to bundle them in serverless functions
+   
+3. **Thumbnails are 64px height** - perfect for category grid cards
+
+4. **Fallback system** - tries year/month path first, then falls back to root
+
+5. **No full-size screenshots needed** - design viewer uses SVG rendering (not raster images)
+
+6. **Vercel .gitignore syntax** - supports `!` negation patterns
 
 ---
 

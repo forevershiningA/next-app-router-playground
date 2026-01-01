@@ -19,7 +19,7 @@ const nextConfig = {
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
   outputFileTracingExcludes: {
     '*': [
-      // 'public/ml/**/*',  // REMOVED: Design screenshots need to be accessible
+      'public/ml/**/*',     // Exclude from function bundles (still publicly accessible via .vercelignore rules)
       'public/shapes/**/*',
       'public/additions/**/*',
     ],
