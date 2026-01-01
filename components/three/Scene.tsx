@@ -61,15 +61,23 @@ function GrassFloor() {
   
   // Load grass textures from local public folder
   // REMOVED: roughnessMap (was causing "wet/blue" reflective look)
+  /*
   const props = useTexture({
-    map: '/textures/grass_color.jpg',
-    normalMap: '/textures/grass_normal.jpg',
-    aoMap: '/textures/grass_ao.jpg',
+    map: '/textures/three/leaves/brown_mud_leaves_01_diff_1k.webp',
+    normalMap: '/textures/three/leaves/brown_mud_leaves_01_nor_gl_1k.webp',
+    aoMap: '/textures/three/leaves/brown_mud_leaves_01_arm_1k.webp',
+  });
+  */
+
+  const props = useTexture({
+    map: '/textures/three/grass/grass_color.webp',
+    normalMap: '/textures/three/grass/grass_normal.webp',
+    aoMap: '/textures/three/grass/grass_ao.webp',
   });
 
   // --- TEXTURE FIXES ---
   // UPDATED: Reduced to 40 for better performance while maintaining quality
-  const REPEAT_SCALE = 40;
+  const REPEAT_SCALE = 80;
 
   useEffect(() => {
     // OPTIMIZATION: Cap anisotropy at 8 instead of max (16)
