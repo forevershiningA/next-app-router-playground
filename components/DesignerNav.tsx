@@ -131,11 +131,8 @@ export default function DesignerNav() {
   // Close full-screen panel and return to menu
   const closeFullscreenPanel = () => {
     setActiveFullscreenPanel(null);
-    // Navigate away from the panel route to show menu
-    if (pathname === '/select-size' || pathname === '/inscriptions' || 
-        pathname === '/select-additions' || pathname === '/select-motifs') {
-      router.push('/select-product'); // Go back to product selection or home
-    }
+    // Don't navigate - just hide panel and show menu
+    // URL stays the same (e.g., stays on /select-size)
   };
   
   // Auto-expand current route's section and collapse others
@@ -152,6 +149,8 @@ export default function DesignerNav() {
   }, [pathname]);
   
   // Auto-open full-screen panel based on current route
+  // DISABLED: Panel should only open when menu item is clicked, not automatically on route
+  /*
   useEffect(() => {
     const routeToPanel: Record<string, string> = {
       '/select-size': 'select-size',
@@ -167,6 +166,7 @@ export default function DesignerNav() {
       setActiveFullscreenPanel(null);
     }
   }, [pathname]);
+  */
   
   // State for Select Size expansion (keep for backward compatibility)
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
@@ -286,7 +286,7 @@ export default function DesignerNav() {
     
     if (fullscreenPanels.includes(slug)) {
       e.preventDefault();
-      router.push(`/${slug}`); // Navigate to the route (useEffect will handle panel opening)
+      openFullscreenPanel(slug); // Open panel without changing URL
     } else if (slug === 'check-price') {
       e.preventDefault();
       router.push('/check-price');
