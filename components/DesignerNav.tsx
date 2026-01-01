@@ -112,12 +112,25 @@ export default function DesignerNav() {
     'select-motifs': false,
   });
   
+  // Full-screen panel state - when set, hides menu and shows panel
+  const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<string | null>(null);
+  
   // Toggle a section's expansion
   const toggleSection = (slug: string) => {
     setExpandedSections(prev => ({
       ...prev,
       [slug]: !prev[slug]
     }));
+  };
+  
+  // Open full-screen panel
+  const openFullscreenPanel = (slug: string) => {
+    setActiveFullscreenPanel(slug);
+  };
+  
+  // Close full-screen panel and return to menu
+  const closeFullscreenPanel = () => {
+    setActiveFullscreenPanel(null);
   };
   
   // Auto-expand current route's section and collapse others
@@ -246,16 +259,15 @@ export default function DesignerNav() {
   const price = headstonePrice + basePrice;
 
   const handleMenuClick = (slug: string, e: React.MouseEvent) => {
-    if (slug === 'check-price') {
+    // Sections that should open in full-screen panel
+    const fullscreenPanels = ['select-size', 'inscriptions', 'select-additions', 'select-motifs'];
+    
+    if (fullscreenPanels.includes(slug)) {
+      e.preventDefault();
+      openFullscreenPanel(slug);
+    } else if (slug === 'check-price') {
       e.preventDefault();
       router.push('/check-price');
-    } else if (slug === 'select-size') {
-      e.preventDefault();
-      const newExpandedState = !isSizeExpanded;
-      setIsSizeExpanded(newExpandedState);
-      if (newExpandedState) {
-        setActivePanel(null);
-      }
     }
   };
 
@@ -304,6 +316,81 @@ export default function DesignerNav() {
     return null;
   };
 
+  // Render Select Size panel content
+  const renderSelectSizePanel = () => {
+    const firstShape = catalog?.product?.shapes?.[0];
+    const currentWidthMm = editingObject === 'base' ? baseWidthMm : widthMm;
+    const currentHeightMm = editingObject === 'base' ? baseHeightMm : heightMm;
+    const setCurrentWidthMm = editingObject === 'base' ? setBaseWidthMm : setWidthMm;
+    const setCurrentHeightMm = editingObject === 'base' ? setBaseHeightMm : setHeightMm;
+    
+    const minWidth = editingObject === 'base' ? widthMm : (firstShape?.table?.minWidth ?? 40);
+    const maxWidth = editingObject === 'base' ? 2000 : (firstShape?.table?.maxWidth ?? 1200);
+    const minHeight = editingObject === 'base' ? 50 : (firstShape?.table?.minHeight ?? 40);
+    const maxHeight = editingObject === 'base' ? 200 : (firstShape?.table?.maxHeight ?? 1200);
+    
+    const minThickness = editingObject === 'base' 
+      ? (firstShape?.stand?.minDepth ?? 100)
+      : (firstShape?.table?.minDepth ?? 100);
+    const maxThickness = editingObject === 'base'
+      ? (firstShape?.stand?.maxDepth ?? 300)
+      : (firstShape?.table?.maxDepth ?? 300);
+
+    return (
+      <div className="space-y-5">
+        {/* Plaque Label or Headstone/Base Toggle */}
+        {isPlaque ? (
+          <div className="flex justify-center">
+            <div className="rounded-md px-4 py-2 text-sm font-medium bg-[#D7B356] text-gray-900 shadow-md">
+              Plaque
+            </div>
+          </div>
+        ) : (
+          <div className="relative flex gap-1 rounded-full bg-[#0A0A0A] p-1.5 border border-[#3A3A3A]">
+            <button
+              onClick={() => {
+                if (editingObject !== 'headstone') {
+                  setEditingObject('headstone');
+                  setSelected('headstone');
+                }
+              }}
+              className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                editingObject === 'headstone'
+                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-[#1A1A1A]'
+              }`}
+            >
+              Headstone
+            </button>
+            <button
+              onClick={() => {
+                setShowBase(true);
+                if (editingObject !== 'base') {
+                  setEditingObject('base');
+                  setSelected('base');
+                }
+              }}
+              className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                editingObject === 'base'
+                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-[#1A1A1A]'
+              }`}
+            >
+              Base
+            </button>
+          </div>
+        )}
+
+        {/* Size Controls will continue here... */}
+        <div className="text-gray-400 text-sm">
+          Width: {currentWidthMm}mm, Height: {currentHeightMm}mm
+          <br />
+          (Full size controls to be added)
+        </div>
+      </div>
+    );
+  };
+
   return (
     <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410]">
       {/* Header */}
@@ -313,8 +400,51 @@ export default function DesignerNav() {
         </Link>
       </div>
 
-      {/* Menu Items */}
-      <div className="p-4">
+      {/* Full-Screen Panel Overlay */}
+      {activeFullscreenPanel && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] z-50 flex flex-col">
+          {/* Panel Header */}
+          <div className="p-4 border-b border-[#3A3A3A]/50">
+            <button
+              onClick={closeFullscreenPanel}
+              className="flex items-center gap-2 text-gray-200 hover:text-white transition-colors mb-3"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span className="text-sm font-medium">Back to Menu</span>
+            </button>
+            <h2 className="text-xl font-light text-white">
+              {menuItems.find(item => item.slug === activeFullscreenPanel)?.name}
+            </h2>
+          </div>
+          
+          {/* Panel Content */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {/* Render content based on activeFullscreenPanel */}
+            {activeFullscreenPanel === 'select-size' && renderSelectSizePanel()}
+            {activeFullscreenPanel === 'inscriptions' && (
+              <div className="space-y-6">
+                <InscriptionEditPanel />
+              </div>
+            )}
+            {activeFullscreenPanel === 'select-additions' && (
+              <div className="space-y-6">
+                <AdditionSelector additions={additionsList} />
+              </div>
+            )}
+            {activeFullscreenPanel === 'select-motifs' && (
+              <div className="space-y-6">
+                <p className="text-gray-400 text-sm">Select Motifs panel content</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Menu Items (hidden when full-screen panel is active) */}
+      {!activeFullscreenPanel && (
+        <div className="p-4">
         {/* Sticky Context Header */}
         <div className="sticky top-0 z-10 bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] pb-3 mb-3 border-b border-white/10">
           <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Currently Editing:</div>
@@ -1520,6 +1650,7 @@ export default function DesignerNav() {
           <span>Browse Designs</span>
         </Link>
       </div>
+      )}
     </nav>
   );
 }
