@@ -27,17 +27,35 @@ import MaterialSelector from './MaterialSelector';
 import ShapeSelector from './ShapeSelector';
 import AdditionSelector from './AdditionSelector';
 
-// Menu items with icons
-const menuItems = [
-  { slug: 'select-product', name: 'Select Product', icon: CubeIcon },
-  { slug: 'select-shape', name: 'Select Shape', icon: Squares2X2Icon },
-  { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
-  { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
-  { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
-  { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
-  { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
-  { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
+// Menu items grouped by workflow stage
+const menuGroups = [
+  {
+    label: 'Setup',
+    items: [
+      { slug: 'select-product', name: 'Select Product', icon: CubeIcon },
+      { slug: 'select-shape', name: 'Select Shape', icon: Squares2X2Icon },
+      { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
+      { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
+    ]
+  },
+  {
+    label: 'Design',
+    items: [
+      { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
+      { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
+      { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
+    ]
+  },
+  {
+    label: 'Finalize',
+    items: [
+      { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
+    ]
+  }
 ];
+
+// Flatten for compatibility with existing code
+const menuItems = menuGroups.flatMap(group => group.items);
 
 export default function DesignerNav() {
   const pathname = usePathname();
@@ -79,15 +97,47 @@ export default function DesignerNav() {
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const setShowBase = useHeadstoneStore((s) => s.setShowBase);
+  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
 
   // Check if anything has been added to the headstone
   const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;
   
-  // State for Select Size expansion
+  // Unified expansion state for all sections (replaces individual states)
+  const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({
+    'select-size': false,
+    'select-shape': false,
+    'select-material': false,
+    'inscriptions': false,
+    'select-additions': false,
+    'select-motifs': false,
+  });
+  
+  // Toggle a section's expansion
+  const toggleSection = (slug: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [slug]: !prev[slug]
+    }));
+  };
+  
+  // Auto-expand current route's section and collapse others
+  useEffect(() => {
+    const activeSection = pathname.replace('/', '');
+    if (activeSection && expandedSections.hasOwnProperty(activeSection)) {
+      setExpandedSections(prev => ({
+        ...Object.keys(prev).reduce((acc, key) => ({
+          ...acc,
+          [key]: key === activeSection
+        }), {} as Record<string, boolean>)
+      }));
+    }
+  }, [pathname]);
+  
+  // State for Select Size expansion (keep for backward compatibility)
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   
-  // State for Select Motifs expansion
+  // State for Select Motifs expansion (keep for backward compatibility)
   const [isMotifsExpanded, setIsMotifsExpanded] = React.useState(false);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
@@ -230,6 +280,30 @@ export default function DesignerNav() {
   const isHomePage = pathname === '/';
   const isCheckPricePage = pathname === '/check-price';
 
+  // Helper function to determine status of menu items
+  const getItemStatus = (slug: string): 'incomplete' | 'complete' | 'available' => {
+    const productId = useHeadstoneStore.getState().productId;
+    const shapeUrl = useHeadstoneStore.getState().shapeUrl;
+    const materialUrl = useHeadstoneStore.getState().materialUrl;
+    
+    if (slug === 'select-product' && !productId) return 'incomplete';
+    if (slug === 'select-shape' && !shapeUrl) return 'incomplete';
+    if (slug === 'select-material' && !materialUrl) return 'incomplete';
+    if (slug === 'select-size' && (widthMm > 0 && heightMm > 0)) return 'complete';
+    if (slug === 'inscriptions' && inscriptions.length > 0) return 'complete';
+    if (slug === 'select-additions' && selectedAdditions.length > 0) return 'complete';
+    if (slug === 'select-motifs' && selectedMotifs.length > 0) return 'complete';
+    return 'available';
+  };
+
+  // Helper function to get count badge for sections with items
+  const getItemCount = (slug: string): number | null => {
+    if (slug === 'inscriptions') return inscriptions.length || null;
+    if (slug === 'select-additions') return selectedAdditions.length || null;
+    if (slug === 'select-motifs') return selectedMotifs.length || null;
+    return null;
+  };
+
   return (
     <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410]">
       {/* Header */}
@@ -241,24 +315,47 @@ export default function DesignerNav() {
 
       {/* Menu Items */}
       <div className="p-4">
-        <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-gray-400 uppercase">
-          Design Tools
+        {/* Sticky Context Header */}
+        <div className="sticky top-0 z-10 bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] pb-3 mb-3 border-b border-white/10">
+          <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Currently Editing:</div>
+          <div className="text-sm font-medium text-white">
+            {editingObject === 'base' ? '🔲 Base' : '🪦 Headstone'}
+          </div>
         </div>
-        <div className="flex flex-col gap-1">
-          {/* 3D Preview Button - Hide when canvas is already visible or on select-size page */}
-          {!showCanvas && pathname !== '/' && pathname !== '/select-size' && (
-            <button
-              onClick={handlePreviewClick}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
-            >
-              <EyeIcon className="h-5 w-5 flex-shrink-0" />
-              <span>3D Preview</span>
-            </button>
-          )}
-          
-          {menuItems.map((item, index) => {
-            const Icon = item.icon;
-            const isActive = pathname === `/${item.slug}`;
+
+        {/* 3D Preview Button */}
+        {!showCanvas && pathname !== '/' && pathname !== '/select-size' && (
+          <button
+            onClick={handlePreviewClick}
+            className="w-full flex items-center gap-3 rounded-lg px-4 py-3 mb-4 text-base font-light transition-all text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20 cursor-pointer"
+          >
+            <EyeIcon className="h-5 w-5 flex-shrink-0" />
+            <span>3D Preview</span>
+          </button>
+        )}
+
+        {/* Grouped Menu Navigation */}
+        <div className="flex flex-col gap-6">
+          {menuGroups.map((group, groupIndex) => (
+            <div key={group.label}>
+              {/* Group Label */}
+              <div className="px-3 mb-2 text-xs font-semibold tracking-wider text-amber-400/70 uppercase">
+                {group.label}
+              </div>
+              
+              {/* Group Items */}
+              <div className="flex flex-col gap-1">
+                {group.items.map((item, index) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === `/${item.slug}`;
+                  const itemStatus = getItemStatus(item.slug);
+                  const itemCount = getItemCount(item.slug);
+                  
+                  // Status-based styling
+                  const statusClasses = 
+                    itemStatus === 'complete' ? 'border-green-500/30 text-green-400' :
+                    itemStatus === 'incomplete' ? 'border-amber-500/30 text-amber-400' :
+                    'border-white/10 text-gray-200';
             
             // Hide "Select Material" for laser etched products
             if (item.slug === 'select-material' && catalog?.product?.laser === '1') {
@@ -1365,14 +1462,30 @@ export default function DesignerNav() {
                   <Link
                     href={`/${item.slug}`}
                     onClick={(e) => handleMenuClick(item.slug, e)}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                    className={`flex items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
-                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        ? `text-white bg-white/15 shadow-lg border backdrop-blur-sm ${statusClasses}` 
+                        : `hover:bg-white/10 border hover:border-white/20 ${statusClasses}`
                     }`}
                   >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
-                    <span>{item.name}</span>
+                    <div className="flex items-center gap-3">
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                    </div>
+                    
+                    {/* Count Badge */}
+                    {itemCount && itemCount > 0 && (
+                      <span className="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full text-xs font-medium">
+                        {itemCount}
+                      </span>
+                    )}
+                    
+                    {/* Expandable Indicator */}
+                    {(item.slug === 'inscriptions' || item.slug === 'select-additions' || item.slug === 'select-motifs') && itemCount && itemCount > 0 && (
+                      expandedSections[item.slug] ? 
+                        <ChevronUpIcon className="h-4 w-4 flex-shrink-0" /> : 
+                        <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
+                    )}
                   </Link>
                 )}
                 
@@ -1388,16 +1501,24 @@ export default function DesignerNav() {
               </React.Fragment>
             );
           })}
-          
-          {/* Browse Designs CTA */}
-          <Link
-            href="/designs"
-            className="flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all mt-2 text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
-          >
-            <SparklesIcon className="h-5 w-5 flex-shrink-0" />
-            <span>Browse Designs</span>
-          </Link>
+              </div>
+              
+              {/* Group Divider (not after last group) */}
+              {groupIndex < menuGroups.length - 1 && (
+                <div className="mt-4 mb-2 border-t border-white/10" />
+              )}
+            </div>
+          ))}
         </div>
+          
+        {/* Browse Designs CTA */}
+        <Link
+          href="/designs"
+          className="flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all mt-4 text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
+        >
+          <SparklesIcon className="h-5 w-5 flex-shrink-0" />
+          <span>Browse Designs</span>
+        </Link>
       </div>
     </nav>
   );
