@@ -11,10 +11,13 @@
 legacy/
 docs/
 
-# ML models - massive files not needed for serverless functions (4.8 GB)
-public/ml/forevershining/
-public/ml/headstonesdesigner/
-public/ml/bronze-plaque/
+# ML directory optimization: Deploy only required files
+# Keep: JSON (122MB), HTML (153MB), XML (175MB), small thumbnails
+# Exclude: Full-size JPG screenshots (7.3GB) - use _small.jpg instead
+
+# Exclude full-size screenshots (keep only _small.jpg thumbnails)
+public/ml/**/screenshots/**/*.jpg
+!public/ml/**/screenshots/**/*_small.jpg
 
 # Logs and temp files
 *.log
