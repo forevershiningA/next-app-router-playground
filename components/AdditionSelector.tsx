@@ -74,7 +74,7 @@ export default function AdditionSelector({ additions }: Props) {
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-2 max-h-[420px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="grid grid-cols-2 gap-2 overflow-y-auto pr-2 custom-scrollbar">
         {filteredAdditions.map((addition) => {
           const isSelected = selectedAdditions.includes(addition.id);
           const dirName = addition.file?.split('/')?.[0] || '';

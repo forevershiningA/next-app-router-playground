@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2025-12-29  
+**Last Updated:** 2026-01-01  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -10,17 +10,18 @@
 2. [Architecture](#architecture)
 3. [Key Directories](#key-directories)
 4. [Core Components](#core-components)
-5. [State Management](#state-management)
-6. [3D Rendering Pipeline](#3d-rendering-pipeline)
-7. [Coordinate System](#coordinate-system)
-8. [Product Types & Rendering](#product-types--rendering)
-9. [Rock Pitch Base Feature](#rock-pitch-base-feature)
-10. [Slant Headstone Feature](#slant-headstone-feature)
-11. [Design Gallery & SEO](#design-gallery--seo)
-12. [Performance Considerations](#performance-considerations)
-13. [Memory Management](#memory-management)
-14. [Common Issues & Solutions](#common-issues--solutions)
-15. [Development Workflow](#development-workflow)
+5. [Sidebar Navigation & Full-Screen Panels](#sidebar-navigation--full-screen-panels)
+6. [State Management](#state-management)
+7. [3D Rendering Pipeline](#3d-rendering-pipeline)
+8. [Coordinate System](#coordinate-system)
+9. [Product Types & Rendering](#product-types--rendering)
+10. [Rock Pitch Base Feature](#rock-pitch-base-feature)
+11. [Slant Headstone Feature](#slant-headstone-feature)
+12. [Design Gallery & SEO](#design-gallery--seo)
+13. [Performance Considerations](#performance-considerations)
+14. [Memory Management](#memory-management)
+15. [Common Issues & Solutions](#common-issues--solutions)
+16. [Development Workflow](#development-workflow)
 
 ---
 
@@ -314,6 +315,42 @@ const TARGET_HEIGHTS = {
 - Rotation handle (top center)
 - Minimal Z-offset (0.01mm) to stay flush with surface
 - Elderly-friendly (simple, visible)
+
+---
+
+## Sidebar Navigation & Full-Screen Panels
+
+### Overview
+The designer sidebar now doubles as a modal-style workspace: clicking any "deep" section (Select Size, Shape, Material, Inscriptions, Additions, Motifs) hides the grouped menu and opens a full-height overlay with a warm gradient background, "Guided Step" label, and a prominent **Back&nbsp;to&nbsp;Menu** pill button. This keeps seniors focused on one task at a time, mirrors the calm tone used across the site, and prevents menu scroll fatigue on smaller displays. The overlay is powered by `activeFullscreenPanel`/`dismissedPanelSlug` state inside `components/DesignerNav.tsx`, and it preserves the current URL instead of using modals or query params.
+
+### Panels Covered
+- **Select Size** – Shares the exact sliders/toggles documented earlier, but now consumes the entire sidebar height for effortless scrolling.
+- **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars.
+- **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
+- **Select Additions** – Provides a split experience: if an addition is selected, the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise a dashed guidance card appears above the catalog.
+- **Select Motifs** – Mirrors the additions flow but also surfaces price estimates (non-laser products) plus curated gold/silver buttons and the full color palette.
+
+### Layout & UX Notes
+- The header button uses non-breaking spaces so "Back to Menu" never wraps (we no longer need a fixed 147px width).
+- Each panel runs inside `flex flex-col h-full -> flex-1 overflow-y-auto` stacks, giving ScrollViews predictably smooth momentum on tablets.
+- Warm gold gradients, thin borders, and serif-friendly spacing match the memorial brand guidelines called out in SIDEBAR_IMPROVEMENTS.md.
+
+### Context-Aware Editing
+- Canvas selections still set `activePanel` (`'addition'`, `'motif'`, `'inscription'`), and the fullscreen overlays simply respect that state so users can tweak a piece the moment they click it in 3D.
+- Addition and motif panels hide their detail cards when nothing is selected, reducing confusion and reinforcing the "select first, then adjust" mental model.
+- Material and shape selectors keep the headstone/base toggle in view so seniors always know which part they are updating.
+
+### Implementation Highlights
+- `fullscreenPanelSlugs` defines which menu items should open over the nav; the click handler prevents default navigation, opens the overlay, then routes if needed (so `/select-size` stays synced with Canvas requirements).
+- Closing the overlay sets `dismissedPanelSlug` so re-opening the page doesn’t auto-trigger the panel unless the user explicitly clicks again.
+- See `FULLSCREEN_PANEL_SYSTEM.md` for wireframes, state diagrams, and future enhancement ideas (e.g., ESC shortcuts, slide animations).
+
+### Testing Checklist
+1. Click each fullscreen section → menu hides, overlay appears.
+2. Press **Back to Menu** → overlay closes instantly, menu restores without navigation.
+3. Select additions/motifs on the headstone → detail card appears with sliders and duplicate/delete buttons.
+4. Scroll shape/material grids on small laptops → lists fill the column with a single scrollbar.
+5. Switch between headstone/base toggles inside material/size panels → selection state stays synced with the canvas.
 
 ---
 
@@ -1770,6 +1807,12 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-01 (Evening)**: DesignerNav Full-Screen Panels & Detail Editors (Production-Ready)
+  - Expanded the `activeFullscreenPanel` overlay to cover Select Size, Shape, Material, Inscriptions, Additions, and Motifs so the grouped menu hides while seniors work inside a single "Guided Step" view with a non-breaking **Back to Menu** pill.
+  - Rebuilt each selector to live inside full-height `flex-1 overflow-hidden` containers (Shape/Material grids, addition/motif catalogs, inscription editor), removing the old `max-h-*` clamps so the scroll experience matches the viewport on laptops and tablets.
+  - Addition and motif panels now surface context-aware cards when an item is selected—showing duplicate/delete actions, size/height sliders, rotation dials, motif pricing, and gilding/color presets—while empty states gently prompt users to pick something on the memorial first.
+  - Closing a panel no longer navigates; it records `dismissedPanelSlug`, clears `activePanel` for inscriptions, and allows users to re-open only when they explicitly click the menu again (all flows captured in `FULLSCREEN_PANEL_SYSTEM.md`).
 
 - **2025-12-29 (Afternoon)**: Addition Drag UX & AdditionModel Stability (Production-Ready)
   - Reworked `AdditionModel` dragging to use shared `computeInteractionPoint()` data plus a stored pointer delta, eliminating the "jump" that occurred when the pointer-down location didn’t match the model’s saved offset.

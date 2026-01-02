@@ -1,0 +1,428 @@
+Here is the updated component.
+
+To achieve a visible "glow" without heavy post-processing (Bloom), I have applied three specific techniques in this update:
+
+Geometric Expansion: The "glow" lines are now calculated on a slightly larger bounding box than the solid lines. This creates a physical "halo" gap around the object.
+
+Pulsing Animation: The opacity of the glow lines breathes (pulses) using a sine wave in useFrame.
+
+Additive Blending: This ensures that where the lines overlap (or sit against dark backgrounds), they appear to emit light.
+
+code
+Tsx
+download
+content_copy
+expand_less
+// components/three/RotatingBoxOutline.tsx
+'use client';
+
+import * as React from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+
+type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
+  /** Object whose bounds should be outlined */
+  targetRef: React.RefObject<T> | React.MutableRefObject<T | null>;
+  /** Toggle outline visibility */
+  visible?: boolean;
+  /** Outline color */
+  color?: string | number;
+  /** Expand the box slightly to avoid z-fighting */
+  pad?: number;
+  /** If true, draw through objects (no depth test) */
+  through?: boolean;
+  /** Render order for the helper */
+  renderOrder?: number;
+  /** If true, exclude addition models from bounding box calculation */
+  excludeAdditions?: boolean;
+  /** Length of corner arms relative to box size (0 to 0.5) */
+  lineLength?: number;
+  /** Enable glow effect along corner brackets */
+  glow?: boolean;
+  /** Glow line base opacity */
+  glowOpacity?: number;
+  /** Speed of the breathing animation (0 to disable) */
+  glowPulseSpeed?: number;
+  /** How far the glow line sits from the main line (simulates thickness/halo) */
+  glowExpand?: number;
+};
+
+/**
+ * Elegant bounding box outline with viewfinder corners that rotates with the target object.
+ * Shows corner brackets instead of full box edges for a cleaner, professional look.
+ * Includes a breathing glow effect.
+ */
+export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Object3D>({
+  targetRef,
+  visible = true,
+  color = 'white',
+  pad = 0.004,
+  through = true,
+  renderOrder = 1000,
+  excludeAdditions = false,
+  lineLength = 0.15, // 15% of box size
+  glow = true,
+  glowOpacity = 0.5,
+  glowPulseSpeed = 2.5, // Speed of the pulsing
+  glowExpand = 0.015, // Distance of the "halo" from the main line
+}: RotatingBoxOutlineProps) {
+  const helperRef = React.useRef<THREE.LineSegments | null>(null);
+  const glowLineRef = React.useRef<THREE.LineSegments | null>(null);
+
+  // Create the helper geometry and material
+  React.useEffect(() => {
+    const obj = targetRef.current;
+    if (!obj) return;
+
+    // 1. Solid Inner Line
+    const geometry = new THREE.BufferGeometry();
+    const material = new THREE.LineBasicMaterial({
+      color: new THREE.Color(color as any).getHex(),
+      depthTest: !through,
+      depthWrite: false,
+      transparent: true,
+      opacity: 0.9,
+    });
+
+    const helper = new THREE.LineSegments(geometry, material);
+    helper.renderOrder = renderOrder;
+    helperRef.current = helper;
+
+    // 2. Outer Glow Line (Halo)
+    if (obj.parent) {
+      obj.parent.add(helper);
+      if (glow) {
+        const glowGeometry = new THREE.BufferGeometry();
+        const glowMaterial = new THREE.LineBasicMaterial({
+          color: new THREE.Color(color as any),
+          depthTest: false, // Glow always visible
+          depthWrite: false,
+          transparent: true,
+          opacity: glowOpacity,
+          blending: THREE.AdditiveBlending, // Makes colors add up for a "light" effect
+        });
+        const glowHelper = new THREE.LineSegments(glowGeometry, glowMaterial);
+        glowHelper.renderOrder = renderOrder - 1; // Render behind the sharp line
+        glowLineRef.current = glowHelper;
+        obj.parent.add(glowHelper);
+      }
+    }
+
+    return () => {
+      // Cleanup
+      if (helperRef.current) {
+        helperRef.current.parent?.remove(helperRef.current);
+        helperRef.current.geometry.dispose();
+        (helperRef.current.material as THREE.Material)?.dispose();
+        helperRef.current = null;
+      }
+      if (glowLineRef.current) {
+        glowLineRef.current.parent?.remove(glowLineRef.current);
+        glowLineRef.current.geometry.dispose();
+        (glowLineRef.current.material as THREE.Material)?.dispose();
+        glowLineRef.current = null;
+      }
+    };
+  }, [targetRef, color, through, renderOrder, glow, glowOpacity]);
+
+  // Update glow color when prop changes
+  React.useEffect(() => {
+    if (glowLineRef.current) {
+      (glowLineRef.current.material as THREE.LineBasicMaterial).color.set(color as any);
+    }
+    if (helperRef.current) {
+      (helperRef.current.material as THREE.LineBasicMaterial).color.set(color as any);
+    }
+  }, [color]);
+
+  // Update the helper every frame
+  useFrame((state) => {
+    const obj = targetRef.current;
+    const helper = helperRef.current;
+    const glowLines = glowLineRef.current;
+    
+    if (!obj || !helper || !visible) {
+      if (helper) helper.visible = false;
+      if (glowLines) glowLines.visible = false;
+      return;
+    }
+
+    // --- 1. Pulsing Animation ---
+    if (glow && glowLines && glowPulseSpeed > 0) {
+      // Sine wave between glowOpacity/2 and glowOpacity
+      const pulse = (Math.sin(state.clock.elapsedTime * glowPulseSpeed) + 1) * 0.5; // 0 to 1
+      const minOpacity = glowOpacity * 0.3;
+      const currentOpacity = minOpacity + (pulse * (glowOpacity - minOpacity));
+      (glowLines.material as THREE.LineBasicMaterial).opacity = currentOpacity;
+    }
+
+    // --- 2. Bounding Box Calculation ---
+    const localBox = new THREE.Box3();
+    
+    if (excludeAdditions) {
+      obj.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.geometry) {
+          const parentName = child.parent?.name || '';
+          const childName = child.name || '';
+          
+          const isAddition = parentName.startsWith('addition-') || childName.startsWith('addition-');
+          const isText = child.geometry.type === 'TextGeometry' || 
+                        childName.includes('text') || 
+                        parentName.includes('text') ||
+                        child.userData?.isText;
+          
+          if (!isAddition && !isText) {
+            child.geometry.computeBoundingBox();
+            if (child.geometry.boundingBox) {
+              const childBox = child.geometry.boundingBox.clone();
+              localBox.union(childBox);
+            }
+          }
+        }
+      });
+    } else if (obj instanceof THREE.Mesh && obj.geometry) {
+      obj.geometry.computeBoundingBox();
+      if (obj.geometry.boundingBox) {
+        localBox.copy(obj.geometry.boundingBox);
+      }
+    } else {
+      const worldBox = new THREE.Box3().setFromObject(obj);
+      const inverseMatrix = obj.matrixWorld.clone().invert();
+      const min = worldBox.min.clone().applyMatrix4(inverseMatrix);
+      const max = worldBox.max.clone().applyMatrix4(inverseMatrix);
+      localBox.set(min, max);
+    }
+
+    if (localBox.isEmpty()) {
+      helper.visible = false;
+      if (glowLines) glowLines.visible = false;
+      return;
+    }
+
+    // Expand by padding for the main line
+    const paddedBox = localBox.clone().expandByScalar(pad);
+
+    // Get center and size in local space
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+    paddedBox.getCenter(center);
+    paddedBox.getSize(size);
+
+    // Calculate corner arm lengths based on box size
+    const lenX = size.x * lineLength;
+    const lenY = size.y * lineLength;
+    const lenZ = size.z * lineLength;
+
+    // --- 3. Geometry Generation ---
+    const positions: number[] = [];
+    const glowPositions: number[] = [];
+    
+    // Half sizes for Main Box
+    const hx = size.x / 2;
+    const hy = size.y / 2;
+    const hz = size.z / 2;
+
+    // Half sizes for Glow Box (Expanded)
+    const ghx = hx + glowExpand;
+    const ghy = hy + glowExpand;
+    const ghz = hz + glowExpand;
+    
+    // Adjust glow arm lengths slightly to match proportion
+    const glenX = lenX + glowExpand;
+    const glenY = lenY + glowExpand;
+    const glenZ = lenZ + glowExpand;
+
+    const cx = center.x;
+    const cy = center.y;
+    const cz = center.z;
+
+    // Helper to push a line segment for both Main and Glow
+    const buildCorner = (
+      // Main coords
+      mx: number, my: number, mz: number, 
+      mx2: number, my2: number, mz2: number,
+      // Glow coords
+      gx: number, gy: number, gz: number, 
+      gx2: number, gy2: number, gz2: number
+    ) => {
+      // Push Solid Line
+      positions.push(mx, my, mz, mx2, my2, mz2);
+      // Push Glow Line (offset)
+      if (glow) {
+        glowPositions.push(gx, gy, gz, gx2, gy2, gz2);
+      }
+    };
+
+    // --- Bottom Corners ---
+    
+    // Front-Left-Bottom
+    // X-arm
+    buildCorner(
+      cx - hx, cy - hy, cz + hz, cx - hx + lenX, cy - hy, cz + hz,
+      cx - ghx, cy - ghy, cz + ghz, cx - ghx + glenX, cy - ghy, cz + ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx - hx, cy - hy, cz + hz, cx - hx, cy - hy + lenY, cz + hz,
+      cx - ghx, cy - ghy, cz + ghz, cx - ghx, cy - ghy + glenY, cz + ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx - hx, cy - hy, cz + hz, cx - hx, cy - hy, cz + hz - lenZ,
+      cx - ghx, cy - ghy, cz + ghz, cx - ghx, cy - ghy, cz + ghz - glenZ
+    );
+
+    // Front-Right-Bottom
+    // X-arm (negative direction)
+    buildCorner(
+      cx + hx, cy - hy, cz + hz, cx + hx - lenX, cy - hy, cz + hz,
+      cx + ghx, cy - ghy, cz + ghz, cx + ghx - glenX, cy - ghy, cz + ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx + hx, cy - hy, cz + hz, cx + hx, cy - hy + lenY, cz + hz,
+      cx + ghx, cy - ghy, cz + ghz, cx + ghx, cy - ghy + glenY, cz + ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx + hx, cy - hy, cz + hz, cx + hx, cy - hy, cz + hz - lenZ,
+      cx + ghx, cy - ghy, cz + ghz, cx + ghx, cy - ghy, cz + ghz - glenZ
+    );
+
+    // Back-Left-Bottom
+    // X-arm
+    buildCorner(
+      cx - hx, cy - hy, cz - hz, cx - hx + lenX, cy - hy, cz - hz,
+      cx - ghx, cy - ghy, cz - ghz, cx - ghx + glenX, cy - ghy, cz - ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx - hx, cy - hy, cz - hz, cx - hx, cy - hy + lenY, cz - hz,
+      cx - ghx, cy - ghy, cz - ghz, cx - ghx, cy - ghy + glenY, cz - ghz
+    );
+    // Z-arm (positive direction)
+    buildCorner(
+      cx - hx, cy - hy, cz - hz, cx - hx, cy - hy, cz - hz + lenZ,
+      cx - ghx, cy - ghy, cz - ghz, cx - ghx, cy - ghy, cz - ghz + glenZ
+    );
+
+    // Back-Right-Bottom
+    // X-arm
+    buildCorner(
+      cx + hx, cy - hy, cz - hz, cx + hx - lenX, cy - hy, cz - hz,
+      cx + ghx, cy - ghy, cz - ghz, cx + ghx - glenX, cy - ghy, cz - ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx + hx, cy - hy, cz - hz, cx + hx, cy - hy + lenY, cz - hz,
+      cx + ghx, cy - ghy, cz - ghz, cx + ghx, cy - ghy + glenY, cz - ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx + hx, cy - hy, cz - hz, cx + hx, cy - hy, cz - hz + lenZ,
+      cx + ghx, cy - ghy, cz - ghz, cx + ghx, cy - ghy, cz - ghz + glenZ
+    );
+
+    // --- Top Corners ---
+
+    // Front-Left-Top
+    // X-arm
+    buildCorner(
+      cx - hx, cy + hy, cz + hz, cx - hx + lenX, cy + hy, cz + hz,
+      cx - ghx, cy + ghy, cz + ghz, cx - ghx + glenX, cy + ghy, cz + ghz
+    );
+    // Y-arm (negative direction)
+    buildCorner(
+      cx - hx, cy + hy, cz + hz, cx - hx, cy + hy - lenY, cz + hz,
+      cx - ghx, cy + ghy, cz + ghz, cx - ghx, cy + ghy - glenY, cz + ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx - hx, cy + hy, cz + hz, cx - hx, cy + hy, cz + hz - lenZ,
+      cx - ghx, cy + ghy, cz + ghz, cx - ghx, cy + ghy, cz + ghz - glenZ
+    );
+
+    // Front-Right-Top
+    // X-arm
+    buildCorner(
+      cx + hx, cy + hy, cz + hz, cx + hx - lenX, cy + hy, cz + hz,
+      cx + ghx, cy + ghy, cz + ghz, cx + ghx - glenX, cy + ghy, cz + ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx + hx, cy + hy, cz + hz, cx + hx, cy + hy - lenY, cz + hz,
+      cx + ghx, cy + ghy, cz + ghz, cx + ghx, cy + ghy - glenY, cz + ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx + hx, cy + hy, cz + hz, cx + hx, cy + hy, cz + hz - lenZ,
+      cx + ghx, cy + ghy, cz + ghz, cx + ghx, cy + ghy, cz + ghz - glenZ
+    );
+
+    // Back-Left-Top
+    // X-arm
+    buildCorner(
+      cx - hx, cy + hy, cz - hz, cx - hx + lenX, cy + hy, cz - hz,
+      cx - ghx, cy + ghy, cz - ghz, cx - ghx + glenX, cy + ghy, cz - ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx - hx, cy + hy, cz - hz, cx - hx, cy + hy - lenY, cz - hz,
+      cx - ghx, cy + ghy, cz - ghz, cx - ghx, cy + ghy - glenY, cz - ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx - hx, cy + hy, cz - hz, cx - hx, cy + hy, cz - hz + lenZ,
+      cx - ghx, cy + ghy, cz - ghz, cx - ghx, cy + ghy, cz - ghz + glenZ
+    );
+
+    // Back-Right-Top
+    // X-arm
+    buildCorner(
+      cx + hx, cy + hy, cz - hz, cx + hx - lenX, cy + hy, cz - hz,
+      cx + ghx, cy + ghy, cz - ghz, cx + ghx - glenX, cy + ghy, cz - ghz
+    );
+    // Y-arm
+    buildCorner(
+      cx + hx, cy + hy, cz - hz, cx + hx, cy + hy - lenY, cz - hz,
+      cx + ghx, cy + ghy, cz - ghz, cx + ghx, cy + ghy - glenY, cz - ghz
+    );
+    // Z-arm
+    buildCorner(
+      cx + hx, cy + hy, cz - hz, cx + hx, cy + hy, cz - hz + lenZ,
+      cx + ghx, cy + ghy, cz - ghz, cx + ghx, cy + ghy, cz - ghz + glenZ
+    );
+
+    // Update Main Helper
+    const vertices = new Float32Array(positions);
+    helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    helper.geometry.computeBoundingSphere();
+    
+    // Sync transforms
+    helper.position.copy(obj.position);
+    helper.rotation.copy(obj.rotation);
+    helper.scale.copy(obj.scale);
+    helper.updateMatrixWorld();
+    helper.visible = true;
+
+    // Update Glow Helper
+    if (glow && glowLines) {
+      if (!glowPositions.length) {
+        glowLines.visible = false;
+      } else {
+        const glowVertices = new Float32Array(glowPositions);
+        glowLines.geometry.setAttribute('position', new THREE.BufferAttribute(glowVertices, 3));
+        glowLines.geometry.computeBoundingSphere();
+        glowLines.position.copy(helper.position);
+        glowLines.rotation.copy(helper.rotation);
+        glowLines.scale.copy(helper.scale);
+        glowLines.updateMatrixWorld();
+        glowLines.visible = true;
+      }
+    } else if (glowLines) {
+      glowLines.visible = false;
+    }
+  });
+
+  return null;
+}

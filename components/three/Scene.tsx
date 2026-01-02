@@ -3,6 +3,7 @@ import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, Adapt
 // REMOVED: EffectComposer & DepthOfField (Causing artifacts)
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
+import SunRays from './SunRays';
 // Removed AtmosphericSky import
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
@@ -213,6 +214,8 @@ export default function Scene({
         <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
       </mesh>
       
+      {!is2DMode && <SunRays />}
+
       {/* Dust particles */}
       {!is2DMode && (
          <Sparkles 

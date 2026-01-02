@@ -26,7 +26,7 @@ export default function ShapeSelector({ shapes }: ShapeSelectorProps) {
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="grid grid-cols-3 gap-2 overflow-y-auto pr-2 custom-scrollbar">
         {shapes.map((shape) => {
           const shapeUrl = `/shapes/headstones/${shape.image}`;
           const isSelected = currentShapeUrl === shapeUrl;

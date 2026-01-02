@@ -89,7 +89,7 @@ export default function MaterialSelector({ materials }: MaterialSelectorProps) {
         </button>
       </div>
       
-      <div className="grid grid-cols-3 gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="grid grid-cols-3 gap-2 overflow-y-auto pr-2 custom-scrollbar">
         {materials.map((material) => {
           const materialUrl = `/textures/forever/l/${material.image}`;
           const isSelected = currentMaterialUrl === materialUrl;

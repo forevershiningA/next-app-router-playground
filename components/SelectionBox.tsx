@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useThree, useFrame } from '@react-three/fiber';
-import { Html, Line } from '@react-three/drei';
+import { Line } from '@react-three/drei';
 
 type Props = {
   /** Unique ID for the selected object */
@@ -66,8 +66,14 @@ export default function SelectionBox({
   const handleThickness = fixedHandleSize * 0.15;  // 15% of handle size for depth
   const handleZOffset = 0.02; // Move handles further forward in Z
   
-  const outlineColor = 0x2196F3; // Blue (Material Design Blue 500)
-  const handleColor = 0x2196F3; // Blue - same as outline
+  const usesSubtleOutline =
+    objectType === 'inscription' ||
+    objectType === 'motif' ||
+    (objectType === 'addition' && additionType === 'application');
+  const shouldShowHandles = !usesSubtleOutline;
+  const outlineColor = usesSubtleOutline ? 0xf8f5ee : 0x2196F3;
+  const outlineLineWidth = usesSubtleOutline ? 1.5 : 3;
+  const handleColor = shouldShowHandles ? 0x2196F3 : outlineColor;
 
   // Calculate handle positions - ensure minimum spacing (MUST be before useEffect)
   const minHalfWidth = Math.max(bounds.width / 2, fixedHandleSize * 1.5);
@@ -91,19 +97,34 @@ export default function SelectionBox({
     pointerId: 0,
   });
 
-  // Create box outline points
-  const outlinePoints = React.useMemo(() => {
+  // Create outline segments (viewfinder-style for flat selections)
+  const outlineSegments = React.useMemo(() => {
     const w = minHalfWidth;
     const h = minHalfHeight;
-    const points = [
-      new THREE.Vector3(-w, -h, 0),
-      new THREE.Vector3(w, -h, 0),
-      new THREE.Vector3(w, h, 0),
-      new THREE.Vector3(-w, h, 0),
-      new THREE.Vector3(-w, -h, 0),
+
+    if (w === 0 || h === 0) return [];
+
+    if (usesSubtleOutline) {
+      const arm = Math.min(Math.min(w, h) * 0.4, Math.min(w, h));
+      return [
+        [new THREE.Vector3(-w, -h, 0), new THREE.Vector3(-w + arm, -h, 0)],
+        [new THREE.Vector3(-w, -h, 0), new THREE.Vector3(-w, -h + arm, 0)],
+        [new THREE.Vector3(w, -h, 0), new THREE.Vector3(w - arm, -h, 0)],
+        [new THREE.Vector3(w, -h, 0), new THREE.Vector3(w, -h + arm, 0)],
+        [new THREE.Vector3(w, h, 0), new THREE.Vector3(w - arm, h, 0)],
+        [new THREE.Vector3(w, h, 0), new THREE.Vector3(w, h - arm, 0)],
+        [new THREE.Vector3(-w, h, 0), new THREE.Vector3(-w + arm, h, 0)],
+        [new THREE.Vector3(-w, h, 0), new THREE.Vector3(-w, h - arm, 0)],
+      ];
+    }
+
+    return [
+      [new THREE.Vector3(-w, -h, 0), new THREE.Vector3(w, -h, 0)],
+      [new THREE.Vector3(w, -h, 0), new THREE.Vector3(w, h, 0)],
+      [new THREE.Vector3(w, h, 0), new THREE.Vector3(-w, h, 0)],
+      [new THREE.Vector3(-w, h, 0), new THREE.Vector3(-w, -h, 0)],
     ];
-    return points;
-  }, [minHalfWidth, minHalfHeight]);
+  }, [minHalfWidth, minHalfHeight, usesSubtleOutline]);
 
   // Handle pointer down on handles
   const handlePointerDown = React.useCallback(
@@ -339,8 +360,8 @@ export default function SelectionBox({
   }, [isDragging, dragHandle, gl, onUpdate, controls, objectType]);
 
   // Refs for non-interactive elements
-  const outlineRef = React.useRef<any>(null);
   const groupRef = React.useRef<THREE.Group>(null);
+  const disableRaycast = React.useCallback((..._args: any[]) => {}, []);
 
   // Cleanup timeout on unmount
   React.useEffect(() => {
@@ -349,13 +370,6 @@ export default function SelectionBox({
         clearTimeout(preventClickTimeoutRef.current);
       }
     };
-  }, []);
-
-  // Disable raycasting on outline
-  React.useEffect(() => {
-    if (outlineRef.current) {
-      outlineRef.current.raycast = () => {};
-    }
   }, []);
 
   const [isVisible, setIsVisible] = React.useState(true);
@@ -388,178 +402,164 @@ export default function SelectionBox({
   return (
     <group ref={groupRef} position={position} rotation={[0, 0, rotation]}>
       {/* Box outline */}
-      <Line
-        ref={outlineRef}
-        points={outlinePoints}
-        color={outlineColor}
-        lineWidth={3}
-        renderOrder={1001}
-        depthWrite={false}
-        depthTest={false}
-        visible={true}
-      />
-      
-      {/* Backup outline using thin boxes */}
-      {outlinePoints.map((point, i) => {
-        if (i === outlinePoints.length - 1) return null;
-        const nextPoint = outlinePoints[i + 1];
-        const midX = (point.x + nextPoint.x) / 2;
-        const midY = (point.y + nextPoint.y) / 2;
-        const length = point.distanceTo(nextPoint);
-        const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x);
-        
-        return (
+      {outlineSegments.map((segment, index) => (
+        <Line
+          key={`outline-segment-${index}`}
+          points={segment}
+          color={outlineColor}
+          lineWidth={outlineLineWidth}
+          renderOrder={1001}
+          depthWrite={false}
+          depthTest={false}
+          transparent
+          opacity={0.9}
+          raycast={disableRaycast}
+        />
+      ))}
+
+      {shouldShowHandles && (
+        <>
+          {/* Corner Handles - Top-Left */}
           <mesh
-            key={`outline-${i}`}
-            position={[midX, midY, handleZOffset + 0.001]}
-            rotation={[0, 0, angle]}
+            position={[-minHalfWidth, minHalfHeight, handleZOffset]}
             renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => handlePointerDown(e, 'topLeft')}
+            onPointerEnter={() => handlePointerEnter('topLeft')}
+            onPointerLeave={handlePointerLeave}
           >
-            <boxGeometry args={[length, handleThickness, handleThickness]} />
-            <meshBasicMaterial color={outlineColor} depthWrite={false} depthTest={false} />
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
           </mesh>
-        );
-      })}
 
-      {/* Corner Handles - Top-Left */}
-      <mesh
-        position={[-minHalfWidth, minHalfHeight, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => handlePointerDown(e, 'topLeft')}
-        onPointerEnter={() => handlePointerEnter('topLeft')}
-        onPointerLeave={handlePointerLeave}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Top-Right */}
+          <mesh
+            position={[minHalfWidth, minHalfHeight, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => handlePointerDown(e, 'topRight')}
+            onPointerEnter={() => handlePointerEnter('topRight')}
+            onPointerLeave={handlePointerLeave}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
 
-      {/* Top-Right */}
-      <mesh
-        position={[minHalfWidth, minHalfHeight, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => handlePointerDown(e, 'topRight')}
-        onPointerEnter={() => handlePointerEnter('topRight')}
-        onPointerLeave={handlePointerLeave}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Bottom-Left */}
+          <mesh
+            position={[-minHalfWidth, -minHalfHeight, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => handlePointerDown(e, 'bottomLeft')}
+            onPointerEnter={() => handlePointerEnter('bottomLeft')}
+            onPointerLeave={handlePointerLeave}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
 
-      {/* Bottom-Left */}
-      <mesh
-        position={[-minHalfWidth, -minHalfHeight, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => handlePointerDown(e, 'bottomLeft')}
-        onPointerEnter={() => handlePointerEnter('bottomLeft')}
-        onPointerLeave={handlePointerLeave}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Bottom-Right */}
+          <mesh
+            position={[minHalfWidth, -minHalfHeight, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => handlePointerDown(e, 'bottomRight')}
+            onPointerEnter={() => handlePointerEnter('bottomRight')}
+            onPointerLeave={handlePointerLeave}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
 
-      {/* Bottom-Right */}
-      <mesh
-        position={[minHalfWidth, -minHalfHeight, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => handlePointerDown(e, 'bottomRight')}
-        onPointerEnter={() => handlePointerEnter('bottomRight')}
-        onPointerLeave={handlePointerLeave}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Edge Handles - Top Center */}
+          <mesh
+            position={[0, minHalfHeight, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
 
-      {/* Edge Handles - Top Center */}
-      <mesh
-        position={[0, minHalfHeight, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Edge Handles - Bottom Center */}
+          <mesh
+            position={[0, -minHalfHeight, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
 
-      {/* Edge Handles - Bottom Center */}
-      <mesh
-        position={[0, -minHalfHeight, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Edge Handles - Left Center */}
+          <mesh
+            position={[-minHalfWidth, 0, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
 
-      {/* Edge Handles - Left Center */}
-      <mesh
-        position={[-minHalfWidth, 0, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
-
-      {/* Edge Handles - Right Center */}
-      <mesh
-        position={[minHalfWidth, 0, handleZOffset]}
-        renderOrder={1002}
-        visible={true}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
-        <meshBasicMaterial 
-          color={handleColor} 
-          transparent={false}
-          depthWrite={false}
-          depthTest={false}
-        />
-      </mesh>
+          {/* Edge Handles - Right Center */}
+          <mesh
+            position={[minHalfWidth, 0, handleZOffset]}
+            renderOrder={1002}
+            visible={true}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
+            <meshBasicMaterial
+              color={handleColor}
+              transparent={false}
+              depthWrite={false}
+              depthTest={false}
+            />
+          </mesh>
+        </>
+      )}
     </group>
   );
 }
