@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-02  
+**Last Updated:** 2026-01-03  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -576,18 +576,23 @@ MeshPhysicalMaterial({
 
 ## 3D Scene Environment & Atmosphere
 
-### Gradient Sky & Volumetric Accents (`Scene.tsx` + `SunRays.tsx`)
-**Purpose:** Replace the heavy AtmosphericSky/Clouds stack with a lightweight gradient dome plus a localized sunburst that can be art-directed per scene.
+### Gradient Sky & Volumetric Accents (`Scene.tsx` + `SunRays.tsx` + `AtmosphericSky.tsx`)
+**Purpose:** Keep the lightweight gradient dome for guaranteed horizon control while layering back art-directed volumetric clouds and a localized sunburst.
 
 **GradientBackground:**
 - Big sphere (`scale={[100, 100, 100]}`) rendered with a simple shader that keeps the lower 45% locked to fog color `#dcebf5` before easing into richer blue `#5ca0e5`.
 - Positioned slightly below the world origin (`y = -10`) so the horizon line always sits behind the headstone base.
 - Renders with `depthWrite={false}` and `renderOrder={-1}` so nothing clips against it.
 
+**Volumetric Clouds:**
+- `AtmosphericSky` now renders only the Drei `<Clouds>` layer (`showDome={false}`) so the gradient dome stays active while clouds float in front of it.
+- Custom `MeshStandardMaterial` props (opaque white, emissive tint, disabled depthWrite/test) keep the clouds bright even against the sunburst.
+- Five staggered cloud banks (different seeds/bounds) span `[ -12…+10 ]` on X and heights 9–13.5 to fill the horizon without obscuring the memorial.
+
 **SunRays overlay:**
-- Custom shader plane (`components/three/SunRays.tsx`) sitting at `[0, 1.5, -10]`, rotated slightly upward so rays bloom behind the stone instead of through it.
-- Uses additive blending plus separate inner (`#fff8dc`) and outer (`#f2cf95`) colors with tunable opacity (default 0.65) to keep the glow soft.
-- Ray pattern computed in shader via `cos(angle * 10.0)` with a cubic falloff so only the four main quadrants glow.
+- Custom shader plane (`components/three/SunRays.tsx`) now sits at `[0, 4, -6]`, scaled to `[20, 9, 1]`, and `renderOrder={10}` so the animated rays glow **above** the cloud layer.
+- Uses additive blending plus inner (`#fff8dc`) and outer (`#f2cf95`) colors with tunable opacity (0.65) and faster time-based pulsing for a shimmering sunrise effect.
+- Ray density increased (`cos(angle * 14.0)`) so there are more individual beams, but each beam still eases off via cubic falloff to stay soft.
 
 **Sparkle Dust:**
 - Drei `<Sparkles>` adds ~30 slow-moving particles around `[0, 2, 0]` for a subtle floating-dust effect. Opacity 0.4 and warm color tie into the gold UI accents.
@@ -596,6 +601,7 @@ MeshPhysicalMaterial({
 
 **Grass Configuration:**
 - **Color**: `#5a7f3c` (warmer green tuned to the new blue fog).
+- **Plane Size**: `105×105` world units (down from 120) so more of the horizon and sun rays stay visible on ultrawide screens.
 - **Texture Repeat**: `80×80` for long shots without clear tiling.
 - **Wrapping**: `RepeatWrapping` to keep seams invisible with the larger repeat count.
 - **Normal Scale**: `(0.5, 0.5)` for gentle bumps; `roughness={1}` keeps it matte.
