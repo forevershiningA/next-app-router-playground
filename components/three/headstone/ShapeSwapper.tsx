@@ -159,6 +159,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setSelectedMotifId = useHeadstoneStore(
     (s) => s.setSelectedMotifId,
   );
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
   const openSizePanel = useHeadstoneStore((s) => s.openSizePanel);
@@ -276,8 +277,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
               setSelectedInscriptionId(null);
               setSelectedAdditionId(null); // Close addition panel
               setSelectedMotifId(null); // Close motif panel
-              // Disabled: Don't open size panel when clicking headstone
-              // openSizePanel?.();
+              setActivePanel(null); // Clear active panel state
+              // Trigger close fullscreen panel (same as "Back to Menu" button)
+              window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
             },
           }}
         >
@@ -311,6 +313,14 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                         // Navigate to inscriptions if not already there
                         if (pathname !== '/inscriptions') {
                           router.push('/inscriptions');
+                        }
+
+                        if (typeof window !== 'undefined') {
+                          window.dispatchEvent(
+                            new CustomEvent('openFullscreenPanel', {
+                              detail: { panel: 'inscriptions' },
+                            }),
+                          );
                         }
                       }}
                       color={line.color}

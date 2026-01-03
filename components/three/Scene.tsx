@@ -4,7 +4,7 @@ import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, Adapt
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
 import SunRays from './SunRays';
-// Removed AtmosphericSky import
+import AtmosphericSky from './AtmosphericSky';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 import { useFrame, useThree } from '@react-three/fiber';
@@ -15,7 +15,7 @@ const GRASS_COLOR = '#5a7f3c';
 
 // UPDATED: Pale atmospheric blue (matches the horizon, not white)
 const FOG_COLOR = '#dcebf5';
-const FOG_COLOR_2 = '#A8C9E6'
+const FOG_COLOR_2 = '#ADCCE7'
 
 // --- COMPONENTS ---
 
@@ -101,7 +101,7 @@ function GrassFloor() {
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[150, 150]} />
+        <planeGeometry args={[105, 105]} />
         <meshStandardMaterial 
           map={props.map}
           normalMap={props.normalMap}
@@ -137,7 +137,7 @@ function SimpleGrassFloor() {
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[150, 150]} />
+        <planeGeometry args={[105, 105]} />
         <meshStandardMaterial 
           color="#355c18"
           roughness={1}
@@ -289,6 +289,11 @@ export default function Scene({
         </Suspense>
       </group>
       
+      {!is2DMode && (
+        <Suspense fallback={null}>
+          <AtmosphericSky showDome={false} />
+        </Suspense>
+      )}
       {!is2DMode && <GradientBackground />}
 
       {/* REMOVED EffectComposer/DepthOfField to restore sharpness */}

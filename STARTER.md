@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-01  
+**Last Updated:** 2026-01-02  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -437,32 +437,14 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
   <Scene />
 </Canvas>
 ```
+- `Scene` mounts `<AdaptiveDpr pixelated />`, so whenever the user rotates/zooms the memorial the renderer temporarily lowers DPR for smoother interaction, then restores full resolution when idle.
 
 ### Lighting (Scene.tsx)
-- **Ambient Light**: Base illumination (intensity 0.5, white)
-- **Hemisphere Light**: Balanced ground lighting with sky/ground colors
-  - Sky color: `#dbecf8` (matches fog for seamless horizon blending)
-  - Ground color: `#2d4c1e` (darker green to bias toward grass tones)
-  - Intensity: 0.4 (prevents cool blue tint on grass from above)
-- **Spot Light (Key)**: Main light with shadows (intensity 2.5, position [-5, 8, 8])
-  - **Critical for rock pitch visibility** - Side lighting reveals normal map depth
-  - Color: `#fffce6` (slightly warm sun light)
-  - Angle: 0.6, Penumbra: 0.5
-- **Point Lights (Fill)**: Balanced fill lights on both sides
-  - Positions: [5, 2, 5] and [-5, 2, 5]
-  - Intensity: 0.5, Color: white
-  - Provides symmetric lighting to eliminate left/right grass color differences
-- **Spot Lights (Rim)**: Accent lights from back corners
-  - Positions: [-5, 4, -5] and [5, 4, -5]
-  - Intensity: 1.2, Color: white
-  - Highlights edges and adds depth
-- **Point Light (Overhead)**: Soft top fill for even grass illumination
-  - Position: [0, 10, 0]
-  - Intensity: 0.8, Color: white
-- **Environment**: HDRI "forest" preset
-  - Background: false (custom sky used instead)
-  - Provides realistic reflections for polished granite surfaces
-  - Note: `intensity` and `rotation` props not supported in current drei version
+- **Ambient Light**: Intensity `1.0` white fill so dark granite never disappears on tablets.
+- **Hemisphere Light**: Sky `#fff8e7`, ground `#dcdcdc`, intensity `0.8` for warm upward bounce without adding blue.
+- **Key Spot**: Warm sun (`#fffce6`) at `[-10, 12, 12]`, intensity `1.8`, angle `0.6`, penumbra `1`, casts the only dynamic shadow (ContactShadows handle ground contact).
+- **Rim Spot**: Cool-white (`#ffffff`) at `[5, 5, -5]`, intensity `2`, distance `30` – adds a gentle outline between stone and background without overpowering inscriptions.
+- **Environment**: Local HDRI (`/hdri/spring.hdr`) described below provides subtle reflections; no additional fill point lights are needed now that Ambient+Hemisphere are higher.
 
 ---
 
@@ -594,106 +576,75 @@ MeshPhysicalMaterial({
 
 ## 3D Scene Environment & Atmosphere
 
-### Sky System (AtmosphericSky.tsx)
-**Purpose:** Custom shader-based sky dome with clouds for realistic outdoor cemetery atmosphere
+### Gradient Sky & Volumetric Accents (`Scene.tsx` + `SunRays.tsx`)
+**Purpose:** Replace the heavy AtmosphericSky/Clouds stack with a lightweight gradient dome plus a localized sunburst that can be art-directed per scene.
 
-**Sky Gradient:**
-- **Zenith Color**: `#3b93ff` (rich sky blue)
-- **Horizon Color**: `#dbecf8` (light blue/white, blends with fog)
-- **Implementation**: Custom fragment shader with smooth gradient
-  - Gradient formula: `t = pow(max(0, (y + 0.15) * 0.8), 0.6)` for natural horizon curve
-  - Subtle dithering to prevent color banding artifacts
-  - BackSide rendering (sky dome viewed from inside)
+**GradientBackground:**
+- Big sphere (`scale={[100, 100, 100]}`) rendered with a simple shader that keeps the lower 45% locked to fog color `#dcebf5` before easing into richer blue `#5ca0e5`.
+- Positioned slightly below the world origin (`y = -10`) so the horizon line always sits behind the headstone base.
+- Renders with `depthWrite={false}` and `renderOrder={-1}` so nothing clips against it.
 
-**Clouds:**
-- **Type**: Procedural volumetric clouds using drei `<Clouds>` component
-- **Cloud 1**: Seed 10, opacity 0.8, position [0, 10, -10]
-- **Cloud 2**: Seed 20, opacity 0.5, position [0, 15, 0]
-- **Movement**: Slow drift (speed 0.1 and 0.05)
-- **Material**: MeshBasicMaterial for performance (white, no lighting)
+**SunRays overlay:**
+- Custom shader plane (`components/three/SunRays.tsx`) sitting at `[0, 1.5, -10]`, rotated slightly upward so rays bloom behind the stone instead of through it.
+- Uses additive blending plus separate inner (`#fff8dc`) and outer (`#f2cf95`) colors with tunable opacity (default 0.65) to keep the glow soft.
+- Ray pattern computed in shader via `cos(angle * 10.0)` with a cubic falloff so only the four main quadrants glow.
 
-**Rotation Behavior:**
-- Sky remains **stationary** when arrow buttons rotate headstone/grass
-- Clouds stay fixed in background (realistic - sky doesn't rotate when you walk around monument)
-- Only headstone and grass floor are in the rotating group
+**Sparkle Dust:**
+- Drei `<Sparkles>` adds ~30 slow-moving particles around `[0, 2, 0]` for a subtle floating-dust effect. Opacity 0.4 and warm color tie into the gold UI accents.
 
-### Grass Floor System (Scene.tsx)
+### Grass Floor System (`Scene.tsx`)
 
 **Grass Configuration:**
-- **Color**: `#355c18` (slightly warmer, richer green to counteract blue sky light)
-- **Texture Repeat**: Scale 12 (moderate tiling for natural appearance)
-- **Wrapping**: `MirroredRepeatWrapping` (reduces visible tiling patterns)
-- **Roughness**: 0.9 (matte grass surface)
-- **Normal Scale**: (0.5, 0.5) (subtle bumps, not rocky)
-- **Environment Reflections**: 0 (no sky reflections to avoid blue tint)
-- **Fog**: Enabled (`fog={true}`) - allows natural blending into distant horizon
+- **Color**: `#5a7f3c` (warmer green tuned to the new blue fog).
+- **Texture Repeat**: `80×80` for long shots without clear tiling.
+- **Wrapping**: `RepeatWrapping` to keep seams invisible with the larger repeat count.
+- **Normal Scale**: `(0.5, 0.5)` for gentle bumps; `roughness={1}` keeps it matte.
+- **Maps Loaded**: color, normal, AO (no dedicated roughness map anymore).
+- **Fog**: Still enabled on the material so it fades into the gradient horizon.
 
-**Texture Loading:**
+**Texture Loading Snippet:**
 ```typescript
 const props = useTexture({
-  map: '/textures/grass_color.jpg',
-  normalMap: '/textures/grass_normal.jpg',
-  roughnessMap: '/textures/grass_roughness.jpg',
-  aoMap: '/textures/grass_ao.jpg',
+  map: '/textures/three/grass/grass_color.webp',
+  normalMap: '/textures/three/grass/grass_normal.webp',
+  aoMap: '/textures/three/grass/grass_ao.webp',
 });
 ```
+- All textures switch to `THREE.RepeatWrapping`, share the same repeat, and clamp anisotropy to `Math.min(maxAnisotropy, 16)`.
 
-**Critical Settings to Prevent Blue Tint:**
-- Fog color matches sky horizon (`#dbecf8`)
-- Hemisphere light with grass-biased ground color (`#2d4c1e`)
-- All fill/rim lights are pure white (no blue tints)
-- Grass has `envMapIntensity={0}` (doesn't pick up blue sky reflections)
+**Grounding:**
+- `ContactShadows` now bake in one frame (`frames={1}`) with `resolution={256}` so OrbitControls interactions stay smooth while keeping an anchored shadow oval under the base.
 
 ### Fog System
 
 **Configuration:**
-- **Color**: `#dbecf8` (matches sky horizon for seamless blend)
-- **Range**: Start at 80, end at 160 (units)
-- **Purpose**: Softens distant horizon, creates depth, blends grass into sky
-
-**Key Insight from advice102-107:**
-The blue tint on grass was caused by the combination of:
-1. Blue fog color washing grass at grazing angles
-2. Blue sky zenith reflected via IBL (image-based lighting)
-3. Blue-tinted lights (ambient, fill, rim)
-
-**Solution Applied:**
-- Changed sky from muted grey to vibrant blue (`#3b93ff`)
-- Warmed grass color to counteract blue light (`#355c18`)
-- Matched fog to sky horizon (not greenish-grey)
-- Made all lights neutral/warm (removed blue tints)
-- Added hemisphere light with grass-green ground color
+- **Color**: `#A8C9E6` (matches the new background color assigned via `<color attach="background" />`).
+- **Range**: Start `1`, end `4` world units because the scene uses millimeter-scaled meshes — the short range keeps the fade tight to the subject.
+- **Backplate Color:** Even though fog is short-range, the GradientBackground bottom color remains `#dcebf5`, so distant pixels still match.
 
 ### Click-Capture Plane
 
-**Purpose:** Allows clicking empty space to deselect inscriptions/motifs
+**Purpose:** Allows clicking empty space to deselect inscriptions/motifs.
 
 **Implementation:**
-- Horizontal plane at ground level (y=0)
-- Rotated -90° on X-axis to lay flat
-- Size: 200×200 units
-- Material: Transparent (opacity 0), DoubleSide
-- **Critical**: Must be horizontal (not vertical) to avoid blocking sky/clouds
-
-**Previous Issue:** 
-Vertical plane at z=-10 created blue rectangle blocking clouds. Fixed by rotating to horizontal ground plane.
+- Horizontal plane at world origin (`planeGeometry[200, 200]`) rotated -90° on X.
+- Transparent `meshBasicMaterial` with `opacity={0}` and `DoubleSide` so it never blocks the sunburst.
+- Still critical to keep it horizontal; any tilt intrudes on the gradient + ray stack.
 
 ### Environment Map
 
 **Current Setup:**
-```typescript
+```tsx
 <Environment
-  preset="forest"
+  files="/hdri/spring.hdr"
   background={false}
+  blur={1.0}
+  resolution={256}
+  environmentIntensity={0.5}
 />
 ```
-
-**Attempted Optimizations:**
-- Tried `intensity={0.4}` and `rotation` props but not supported in current drei version
-- Scene-level `environmentIntensity` set in Canvas onCreated (see ThreeScene.tsx)
-- Individual materials control reflections via `envMapIntensity` property
-
-**Note:** Environment provides HDRI reflections for polished granite but doesn't affect grass (grass has envMapIntensity=0)
+- Swapped from the remote `preset="forest"` to a local HDRI to avoid Vercel build stalls.
+- Materials still tune their own `envMapIntensity` (grass stays at 0 to prevent blue spill) while the granite benefits from the warmer reflections.
 
 ---
 
@@ -1807,6 +1758,12 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-02 (Afternoon)**: Sun Ray Backdrop & Studio Lighting Refresh (Production-Ready)
+  - Replaced the AtmosphericSky/Clouds stack with an in-scene `GradientBackground` shader plus the new `components/three/SunRays.tsx` additive plane so the glow now sits just behind the headstone instead of shining through it.
+  - Raised the main spotlight to `[-10, 12, 12]`, increased Ambient/Hemisphere fill, and removed the extra point lights so inscriptions stay readable without the earlier "giant solar lamp" flare.
+  - Updated the grass system to the `/textures/three/grass/*.webp` set, bumped repeats to 80×80, switched to `RepeatWrapping`, and baked contact shadows once for steadier OrbitControls performance.
+  - Enabled `<AdaptiveDpr pixelated />` plus warme colored sparkles to maintain 60 FPS during rotation while preserving the soft atmospheric vignette when idle.
 
 - **2026-01-01 (Evening)**: DesignerNav Full-Screen Panels & Detail Editors (Production-Ready)
   - Expanded the `activeFullscreenPanel` overlay to cover Select Size, Shape, Material, Inscriptions, Additions, and Motifs so the grouped menu hides while seniors work inside a single "Guided Step" view with a non-breaking **Back to Menu** pill.

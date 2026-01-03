@@ -513,6 +513,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                     setSelectedAdditionId(null);
                     setSelectedInscriptionId(line.id);
                     setActivePanel('inscription');
+                    // Open inscriptions fullscreen panel
+                    window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'inscriptions' } }));
                   }}
                   color={line.color}
                   lift={0.002}

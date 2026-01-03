@@ -173,8 +173,8 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
       setSelectedMotifId(id);
       setActivePanel('motif');
       
-      // Don't navigate away - keep canvas visible and show motif panel
-      window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'motif' } }));
+      // Open motifs fullscreen panel
+      window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-motifs' } }));
     },
     [id, setSelectedMotifId, setActivePanel]
   );

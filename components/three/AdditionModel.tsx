@@ -308,8 +308,8 @@ function AdditionModelInner({
     setSelectedAdditionId(id);
     setActivePanel('addition');
     
-    // Don't navigate away - keep canvas visible and show addition panel
-    window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug: 'addition' } }));
+    // Open additions fullscreen panel
+    window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-additions' } }));
   }, [id, setSelectedAdditionId, setActivePanel]);
 
   const handlePointerDown = React.useCallback(

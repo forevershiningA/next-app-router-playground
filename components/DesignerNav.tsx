@@ -113,6 +113,19 @@ export default function DesignerNav() {
   const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<string | null>(null);
   const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<string | null>(null);
 
+
+  // Listen for open panel events from canvas (e.g., inscription/motif/addition click)
+  useEffect(() => {
+    const handleOpenPanel = (e: Event) => {
+      const customEvent = e as CustomEvent<{ panel: string }>;
+      const panelSlug = customEvent.detail.panel;
+      setActiveFullscreenPanel(panelSlug);
+      setDismissedPanelSlug(null);
+    };
+    window.addEventListener('openFullscreenPanel', handleOpenPanel);
+    return () => window.removeEventListener('openFullscreenPanel', handleOpenPanel);
+  }, []);
+
   // Close fullscreen panel if user navigates away from its route
   useEffect(() => {
     const currentSlug = pathname.replace('/', '');
@@ -126,7 +139,10 @@ export default function DesignerNav() {
       }
     } else {
       if (activeFullscreenPanel) {
-        if (activeFullscreenPanel === 'inscriptions') {
+        // Clear activePanel when leaving any content editing panel
+        if (activeFullscreenPanel === 'inscriptions' || 
+            activeFullscreenPanel === 'select-additions' || 
+            activeFullscreenPanel === 'select-motifs') {
           setActivePanel(null);
         }
         setActiveFullscreenPanel(null);
@@ -155,17 +171,38 @@ export default function DesignerNav() {
   };
   
   // Close full-screen panel and return to menu
-  const closeFullscreenPanel = () => {
+  const closeFullscreenPanel = React.useCallback(() => {
+    const currentSlug = pathname.replace('/', '') || null;
     if (activeFullscreenPanel) {
-      setDismissedPanelSlug(activeFullscreenPanel);
-      if (activeFullscreenPanel === 'inscriptions') {
+      // Clear activePanel for all panel types
+      if (
+        activeFullscreenPanel === 'inscriptions' ||
+        activeFullscreenPanel === 'select-additions' ||
+        activeFullscreenPanel === 'select-motifs'
+      ) {
         setActivePanel(null);
       }
+    }
+    const slugToDismiss = currentSlug || activeFullscreenPanel;
+    if (slugToDismiss) {
+      setDismissedPanelSlug(slugToDismiss);
     }
     setActiveFullscreenPanel(null);
     // Don't navigate - just hide panel and show menu
     // URL stays the same (e.g., stays on /select-size)
-  };
+  }, [activeFullscreenPanel, pathname, setActivePanel, setDismissedPanelSlug]);
+
+  const closePanelHandlerRef = React.useRef(closeFullscreenPanel);
+  closePanelHandlerRef.current = closeFullscreenPanel;
+
+  // Listen for close panel events from canvas (e.g., headstone click)
+  useEffect(() => {
+    const handleClosePanel = () => {
+      closePanelHandlerRef.current();
+    };
+    window.addEventListener('closeFullscreenPanel', handleClosePanel);
+    return () => window.removeEventListener('closeFullscreenPanel', handleClosePanel);
+  }, []);
   
   // Auto-expand current route's section and collapse others
   useEffect(() => {
@@ -238,31 +275,6 @@ export default function DesignerNav() {
   // Determine if canvas is visible (on pages with 3D scene)
   const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-additions'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
-  
-  // Auto-scroll to section when it becomes active
-  useEffect(() => {
-    if (navRef.current) {
-      const sections = ['select-size', 'inscriptions', 'select-additions', 'select-motifs'];
-      const currentSection = sections.find(section => pathname === `/${section}`);
-      
-      if (currentSection) {
-        setTimeout(() => {
-          const element = navRef.current?.querySelector(`[data-section="${currentSection}"]`);
-          if (element && navRef.current) {
-            const navRect = navRef.current.getBoundingClientRect();
-            const elementRect = element.getBoundingClientRect();
-            const scrollTop = navRef.current.scrollTop;
-            const targetScroll = scrollTop + elementRect.top - navRect.top - (navRect.height / 2) + (elementRect.height / 2);
-            
-            navRef.current.scrollTo({
-              top: targetScroll,
-              behavior: 'smooth'
-            });
-          }
-        }, 100);
-      }
-    }
-  }, [pathname, activePanel]);
   
   const renderSelectAdditionsPanel = () => {
     const activeAdditionOffset = selectedAdditionId
