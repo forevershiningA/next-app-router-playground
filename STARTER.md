@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-03  
+**Last Updated:** 2026-01-04  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -334,6 +334,8 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - The header button uses non-breaking spaces so "Back to Menu" never wraps (we no longer need a fixed 147px width).
 - Each panel runs inside `flex flex-col h-full -> flex-1 overflow-y-auto` stacks, giving ScrollViews predictably smooth momentum on tablets.
 - Warm gold gradients, thin borders, and serif-friendly spacing match the memorial brand guidelines called out in SIDEBAR_IMPROVEMENTS.md.
+- **Desktop header (Jan 2026)**: The fixed sidebar header now renders only the Forever Shining logotype; catalog-dependent "Current Product" copy, price, and dimensions were removed from desktop to keep the chrome calm, but the mobile drawer still surfaces that contextual info for smaller screens.
+- **Mobile drawer (Jan 2026)**: On screens under 768px the hamburger opens the same DesignerNav content as a left-edge sheet (80% viewport width) while keeping the canvas visible. The drawer hides the "Back to Menu"/"Guided Step" chrome and relies on the hamburger toggle plus a translucent backdrop that closes on tap. Desktop retains the persistent sidebar.
 
 ### Context-Aware Editing
 - Canvas selections still set `activePanel` (`'addition'`, `'motif'`, `'inscription'`), and the fullscreen overlays simply respect that state so users can tweak a piece the moment they click it in 3D.
@@ -1764,6 +1766,16 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-04 (Afternoon)**: Homepage Section Flow & Sidebar Header Simplification (Production-Ready)
+  - Reordered the homepage narrative so the "Create a Tribute Worthy of Their Memory" CTA now immediately follows "Design a Lasting Tribute from the Comfort of Home", positioning the emotional testimonial before the interactive studio walkthrough.
+  - Moved the "Start Customizing This Design" CTA button to sit directly beneath the headstone preview inside the Design Possibilities section, ensuring the primary action stays visually tied to the 3D render.
+  - Stripped the desktop DesignerNav header down to just the Forever Shining logo (no product/price copy); the mobile drawer still shows the contextual product block for small screens.
+
+- **2026-01-03 (Evening)**: Mobile Drawer & Hamburger Behavior Refresh (Production-Ready)
+  - Moved the hamburger-triggered designer menu to a consistent left-edge sheet on sub-768px screens (`ConditionalNav.tsx`). The drawer occupies ~80% of the viewport width, slides over a translucent backdrop, and keeps the 3D scene visible behind it.
+  - Simplified `DesignerNav` for mobile by hiding the Back to Menu/Guided Step chrome inside fullscreen panels; the hamburger is now the only affordance needed for opening/closing the menu on phones.
+  - Updated the documentation and layout styles so the mobile drawer shares the same content stack as desktop while reusing the fullscreen panel infrastructure.
 
 - **2026-01-02 (Afternoon)**: Sun Ray Backdrop & Studio Lighting Refresh (Production-Ready)
   - Replaced the AtmosphericSky/Clouds stack with an in-scene `GradientBackground` shader plus the new `components/three/SunRays.tsx` additive plane so the glow now sits just behind the headstone instead of shining through it.

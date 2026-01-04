@@ -613,6 +613,9 @@ export default function DesignerNav() {
     ? calculatePrice(catalog.product.basePriceModel, baseQuantity) 
     : 0;
   const price = headstonePrice + basePrice;
+  const formattedPrice = price > 0 ? price.toFixed(2) : null;
+  const productTitle = catalog?.product.name ?? 'Design Your Own Headstone';
+  const dimensionLabel = widthMm > 0 && heightMm > 0 ? `${widthMm} × ${heightMm} mm` : 'Select dimensions';
 
   const handleMenuClick = (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
@@ -1149,13 +1152,16 @@ export default function DesignerNav() {
   };
 
   return (
-    <nav ref={navRef} className="overflow-y-auto h-full bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410]">
+    <nav
+      ref={navRef}
+      className="flex h-full flex-col bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white overflow-hidden"
+    >
       {/* Full-Screen Panel Overlay */}
       {activeFullscreenPanel ? (
         <div className="flex flex-col h-full">
-          {/* Panel Header */}
-          <div className="border-b border-white/10 bg-[#1b1511] px-5 py-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          {/* Panel Header - desktop only */}
+          <div className="hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <button
                 onClick={closeFullscreenPanel}
                 className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
@@ -1167,7 +1173,7 @@ export default function DesignerNav() {
                 </span>
                 <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
               </button>
-              <div className="text-left sm:text-right">
+              <div className="text-left md:text-right">
                 <p className="text-xs uppercase tracking-[0.35em] text-white/50">Guided Step</p>
                 <h2 className="mt-1 text-2xl font-semibold text-white">{menuItems.find(item => item.slug === activeFullscreenPanel)?.name}</h2>
                 <div className="mt-3 h-px w-24 bg-white/20" />
@@ -1200,19 +1206,31 @@ export default function DesignerNav() {
         </div>
       ) : (
         <>
-          {/* Header */}
-          <div className="">
+          {/* Desktop Header */}
+          <div className="hidden items-center justify-between border-b border-white/10 px-6 md:flex">
             <Link href="/" className="hover:opacity-80 transition-opacity">
               <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" />
             </Link>
           </div>
 
+          {/* Mobile Header */}
+          <div className="md:hidden border-b border-white/5 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)]">
+            <p className="text-[10px] uppercase tracking-[0.45em] text-white/50">Guided Studio</p>
+            <div className="mt-2">
+              <h2 className="text-2xl font-semibold text-white">{productTitle}</h2>
+              <p className="text-sm text-white/70">{dimensionLabel}</p>
+              {formattedPrice && (
+                <p className="mt-1 text-lg font-mono text-[#d7b356]">${formattedPrice}</p>
+              )}
+            </div>
+          </div>
+
           {/* Menu Items */}
-          <div className="p-4">
+          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 md:space-y-0 md:p-4 md:overflow-visible">
 
         {/* Primary/Secondary CTAs */}
         {(hasCustomizations || (!showCanvas && pathname !== '/' && pathname !== '/select-size')) && (
-          <div className="mb-5 flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row">
             {hasCustomizations && (
               <button
                 onClick={handleNewDesign}
@@ -1426,7 +1444,7 @@ export default function DesignerNav() {
         {/* Browse Designs CTA */}
         <Link
           href="/designs"
-          className="flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all mt-4 text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
+          className="flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
         >
           <SparklesIcon className="h-5 w-5 flex-shrink-0" />
           <span>Browse Designs</span>
