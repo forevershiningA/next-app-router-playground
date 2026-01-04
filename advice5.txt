@@ -1,0 +1,70 @@
+This is a fantastic transformation. The layout is now balanced, the copywriting is empathetic ("Comfort of Home" is perfect), and the cognitive load is drastically reduced. It feels professional, trustworthy, and respectful.
+
+To take this from "Good" to "World-Class," here are the final polish adjustments, focusing mostly on the visual quality of the image and subtle spacing.
+
+1. The Image Needs "Cinematic" Polish
+
+The layout is great, but the image itself still looks like a "screenshot of software" rather than a "photo of a memory."
+
+Remove the UI Artifacts:
+
+The Left Sidebar: You can still see the edge of the menu buttons (Base, Slant, etc.) on the far left of the image. Crop this out. The image should only show the grass and the stone.
+
+The Wireframes: The text on the stone has white "bounding boxes" around it (the selection lines). In your marketing image, these should be hidden. You want to show the finished look, not the editing mode.
+
+The Floating Text: The label "Traditional Engraved Headstone" is floating in the sky. Remove it.
+
+Improve the Angle/Lighting:
+
+Currently, the stone is a bit dark. In your 3D software, rotate the light source (sun) so it hits the front of the black stone, making the gold lettering sparkle.
+
+Drop Shadow: Ensure there is a soft shadow under the stone so it doesn't look like it's floating on the background image.
+
+2. Connect the "Phases" Visually
+
+The three cards (Phase 1, 2, 3) are sitting next to each other, but they feel like separate islands. You want to imply a journey.
+
+The Fix: Add a subtle visual connector.
+
+Option A: Add a small, faint arrow icon between the cards (
+→
+→
+).
+
+Option B: Add a subtle horizontal line running behind the "Phase 1 / Phase 2" text labels to connect them.
+
+Card Height: Ensure all three cards are exactly the same height. Currently, Phase 3 looks slightly shorter because it has less text. You can fix this by adding a min-height in CSS or forcing them to stretch to fill the container.
+
+3. Contrast on the "Feature Bar"
+
+The row of three long horizontal buttons below the main section ("See every change...", "Transparent pricing...", "Save drafts...") is getting lost. They are very dark grey on a black background.
+
+The Fix:
+
+Lighten the Border: Give these boxes a very thin, low-opacity white or gold border (e.g., 1px solid rgba(255,255,255,0.15)).
+
+Icon Color: Make the icons (the eye, the document, the bookmark) slightly brighter gold so they act as visual anchors.
+
+4. Typography Tweaks
+
+The "Orphan" Sentence: The sentence "Design at your own pace. Save drafts..." is currently floating below the cards.
+
+Move it: This text is actually redundant because "Save drafts" is mentioned in Phase 3 and in the bar below. You can safely delete this sentence to clean up the layout. Less text is more powerful here.
+
+Line Length: The sub-headline ("Guided steps keep you focused...") is a bit wide.
+
+Tweak: Add a right-margin to this paragraph (e.g., max-width: 90% or max-width: 600px) so it doesn't stretch too close to the image. This improves readability.
+
+Summary Checklist for the Developer/Designer
+
+Crop image: Remove UI sidebar, bounding boxes, and floating labels.
+
+Lighting: Brighten the stone face in the render.
+
+Card Alignment: Ensure Phase 1, 2, and 3 cards are equal height.
+
+Borders: Add subtle borders to the "Feature Bar" buttons for better visibility.
+
+Cleanup: Delete the redundant sentence below the Phase cards.
+
+You are 95% of the way there. Just cleaning up that main image to look like a "photo" rather than a "screenshot" will make this look like a top-tier brand.

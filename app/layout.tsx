@@ -54,6 +54,7 @@ export default async function RootLayout({
         <ErrorBoundary>
           <RouterBinder /> {/* ← mount once, early */}
           <MaterialsLoader materials={materials} />
+          <MobileHeader />
           <ConditionalNav items={demos} />
           <MainContent>
             <ConditionalCanvas />

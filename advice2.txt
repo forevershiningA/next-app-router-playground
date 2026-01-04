@@ -1,0 +1,304 @@
+Based on the screenshot provided, this UI represents a Product Configurator Sidebar (specifically for a mobile view).
+
+The "best" way to implement this focuses on three key areas: Responsive Layout (Off-Canvas Menu), Form UI Patterns (Compound Inputs), and Cross-Browser Styling (Range Sliders).
+
+Here is a breakdown of the implementation strategy using HTML, CSS, and vanilla JavaScript.
+
+1. The Structure (HTML)
+
+The semantic structure should separate the "Sticky Header" (if that stays visible) from the "Scrollable Content."
+
+code
+Html
+play_circle
+download
+content_copy
+expand_less
+<div class="mobile-configurator-drawer">
+  
+  <!-- 1. Sticky Header (Optional, based on if the black bar is part of the menu) -->
+  <header class="drawer-header">
+     <div class="hamburger-menu">☰</div>
+     <div class="title-group">
+        <h3>Traditional Engraved Headstone</h3>
+        <span>600 x 600 mm</span>
+        <span class="price">($2296.07)</span>
+     </div>
+  </header>
+
+  <!-- 2. Scrollable Content Area -->
+  <div class="drawer-content">
+    <h2>Select Size</h2>
+
+    <!-- 3. Segmented Toggles -->
+    <div class="control-group">
+      <div class="segmented-control">
+        <input type="radio" name="part" id="headstone" checked>
+        <label for="headstone">Headstone</label>
+        <input type="radio" name="part" id="base">
+        <label for="base">Base</label>
+        <div class="highlight-bg"></div>
+      </div>
+
+      <div class="segmented-control mt-2">
+        <input type="radio" name="angle" id="upright" checked>
+        <label for="upright">Upright</label>
+        <input type="radio" name="angle" id="slant">
+        <label for="slant">Slant</label>
+        <div class="highlight-bg"></div>
+      </div>
+    </div>
+
+    <!-- 4. Dimension Input Block (Repeated for Width, Height, Thickness) -->
+    <div class="dimension-control">
+      <div class="input-row">
+        <label>Width</label>
+        <div class="stepper-input">
+          <button class="btn-minus">−</button>
+          <input type="number" value="600">
+          <button class="btn-plus">+</button>
+        </div>
+        <span class="unit">mm</span>
+      </div>
+      <!-- Custom Range Slider -->
+      <div class="slider-container">
+        <input type="range" min="300" max="1200" value="600" class="gold-slider">
+        <div class="slider-labels">
+          <span>300mm</span>
+          <span>1200mm</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Repeat dimension-control for Height and Thickness -->
+
+  </div>
+  
+  <!-- Floating Action Button (bottom left) -->
+  <button class="fab-icon">N</button>
+</div>
+2. The Styling (CSS)
+
+The visual "secret sauce" here is the dark theme variables and the custom styling for the range slider, which is notoriously difficult to style consistently across browsers.
+
+code
+CSS
+download
+content_copy
+expand_less
+:root {
+  --bg-dark: #2b221a; /* Dark brown background */
+  --bg-black: #000000;
+  --accent-gold: #ecc063; /* The gold color */
+  --text-white: #ffffff;
+  --text-muted: #888;
+  --input-bg: #4a4a4a;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #333; /* Placeholder for main site */
+}
+
+/* Main Drawer Container */
+.mobile-configurator-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 85%; /* Mobile width standard */
+  max-width: 400px;
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  /* Smooth slide animation setup */
+  transform: translateX(0); 
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Header */
+.drawer-header {
+  background-color: var(--bg-black);
+  padding: 15px;
+  border-bottom: 1px solid #333;
+}
+
+/* Scrollable Content */
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Segmented Control (The Pills) */
+.segmented-control {
+  display: flex;
+  background-color: #111;
+  border-radius: 25px;
+  padding: 4px;
+  position: relative;
+  border: 1px solid #333;
+}
+
+.segmented-control input {
+  display: none;
+}
+
+.segmented-control label {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  z-index: 2;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ccc;
+  transition: color 0.3s;
+}
+
+.segmented-control input:checked + label {
+  color: #000;
+}
+
+/* The sliding gold background pill */
+.segmented-control input:checked + label {
+    background-color: var(--accent-gold);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(236, 192, 99, 0.4);
+}
+
+/* Inputs & Steppers */
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stepper-input {
+  display: flex;
+  background: var(--input-bg);
+  border-radius: 5px;
+}
+
+.stepper-input button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.stepper-input input {
+  background: none;
+  border: none;
+  color: white;
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+  -moz-appearance: textfield; /* Hides standard spinner */
+}
+
+/* Custom Range Slider Styling */
+.gold-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  outline: none;
+}
+
+.gold-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  border: 2px solid #5a4625; /* Darker ring inside */
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+.dimension-control {
+    margin-bottom: 30px;
+}
+3. Key Implementation Details (UX & Logic)
+A. Handling "Synced" Inputs
+
+In this UI, the number input (e.g., "600") and the slider are connected. You need a bidirectional data binding.
+
+Logic Pattern (JavaScript):
+
+When the Slider moves -> Update the Number Input.
+
+When the Plus/Minus buttons are clicked -> Update the Number Input AND the Slider.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Example Logic for one control group
+const slider = document.querySelector('.gold-slider');
+const numberInput = document.querySelector('input[type="number"]');
+const btnPlus = document.querySelector('.btn-plus');
+const btnMinus = document.querySelector('.btn-minus');
+
+// Sync Slider to Input
+slider.addEventListener('input', (e) => {
+  numberInput.value = e.target.value;
+});
+
+// Sync Input to Slider
+numberInput.addEventListener('input', (e) => {
+  slider.value = e.target.value;
+});
+
+// Button Logic
+btnPlus.addEventListener('click', () => {
+  let val = parseInt(numberInput.value);
+  if(val < parseInt(slider.max)) {
+     val += 10; // Increment step
+     numberInput.value = val;
+     slider.value = val;
+  }
+});
+B. The "Drawer" Behavior
+
+On mobile, screen real estate is precious.
+
+Overlay: The menu should float over the main website content (which is blurred or darkened in the background).
+
+Scroll: Notice the scrollbar in the screenshot. Ensure the .drawer-content has overflow-y: auto. This ensures that if the phone is in landscape mode (short height), the user can still reach the bottom buttons.
+
+C. Touch Targets
+
+Since this is mobile:
+
+Make the + and - buttons at least 44x44px in tappable area (even if the visual icon is smaller).
+
+The Slider thumb needs to be large enough to grab with a thumb.
+
+4. Framework Specifics
+
+If you are using a framework, here are the specific components you should look for to achieve this look quickly:
+
+React / Tailwind: Use Headless UI for the Switch/Toggle logic and standard Tailwind utility classes for the layout.
+
+Material UI (MUI): This looks very similar to a customized MUI Drawer component combined with MUI Slider and ToggleButtonGroup.
+
+Vuetify: Use the v-navigation-drawer component.

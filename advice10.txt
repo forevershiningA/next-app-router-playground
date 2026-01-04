@@ -1,0 +1,61 @@
+This is a huge improvement in usability and clarity. The changes to the text ("Inscriptions & Art," "Review & Save") and the CTA ("Start Customizing This Design") make the user flow much more logical.
+
+However, visually, the center of the screen is still a "black hole." Because the background is dark and the product is a dark silhouette, there is zero depth.
+
+Here are the final 4 steps to make this look like a premium tool:
+
+1. Turn on the Lights (Crucial)
+
+The headstone currently looks like a flat 2D vector shape. It needs to look like a 3D object.
+
+The Fix: Your 3D render needs lighting.
+
+Add a "specular highlight" (a reflection of light) along the top curved edge of the heart.
+
+Add a subtle gradient to the face of the stone. Real polished black granite reflects the sky/environment; it is never 100% solid matte black.
+
+Why: Without reflections, the user can't tell if it's stone, plastic, or paper.
+
+2. Make the Text Look "Engraved"
+
+The text "In our hearts you live forever" looks like yellow text floating on top of the image.
+
+The Fix: Apply an "Inner Shadow" or "Bevel" effect to the text in the image.
+
+The Detail: In real life, gold lettering on headstones is carved into the stone. It has depth. If you simulate that depth (even slightly), the quality of the preview skyrockets.
+
+3. Remove Redundant Labels
+
+You currently have labels identifying the product in two places around the image:
+
+Top Left: "Studio Preview... Heart Shape... Glory Black Granite"
+
+Bottom Overlay: "Style: Heart... Material: Glory Black"
+
+The Fix: Delete the top row entirely.
+
+Remove the "Studio Preview" label and the pill buttons at the top left.
+
+Keep the clean, dark labels at the bottom ("Style: Heart | Material: Glory Black"). They look much more modern and integrated.
+
+Result: This clears up the header space and puts all the focus on the product.
+
+4. Adjust the "Step" Visuals
+
+On the right menu, Step 01 has a gold icon, but Steps 02, 03, and 04 have dark grey icons.
+
+The Issue: The grey icons look disabled (unclickable).
+
+The Fix: Even if Step 01 is "Active," make the icons for 02-04 a lighter grey or a thin gold outline. You want the user to know they can click ahead to see materials if they want to.
+
+Summary Checklist
+
+Render: Add light reflections to the heart shape so it looks 3D.
+
+Text: Add inner shadow to the quote so it looks engraved.
+
+Cleanup: Delete the top-left labels (redundant).
+
+Menu: Brighten the inactive icons (Steps 2-4) so they don't look broken.
+
+Once you add that lighting to the stone, this section is done. It's functionally perfect now; it just needs that visual "pop."

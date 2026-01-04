@@ -72,7 +72,7 @@ export default function MobileHeader() {
 
   return (
     <header 
-      className="fixed top-0 right-0 z-[9999] block border-b border-gray-800 bg-black p-4 transition-[left] duration-300"
+      className="fixed top-0 right-0 z-[9999] block border-b border-gray-800 bg-black p-4 transition-[left] duration-300 lg:hidden"
       style={{ left: isDesktop ? '400px' : '0' }}
     >
       <div className="flex items-center gap-4">
@@ -87,7 +87,7 @@ export default function MobileHeader() {
         >
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
-        <h1 className="text-xl font-semibold text-white">
+        <h1 className="text-xl font-semibold text-white !p-0 !m-0">
           {catalog.product.name} - {widthMm} x {heightMm} mm ($
           {price.toFixed(2)})
         </h1>

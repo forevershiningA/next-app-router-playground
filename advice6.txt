@@ -1,0 +1,66 @@
+This layout is structurally excellent. You have successfully moved from a cluttered "dashboard" look to a clean, narrative-driven "journey." The balance between the text on the left and the image on the right is perfect for a landing page.
+
+However, the visual execution still has a few "rough edges" that make it feel like software rather than a premium experience.
+
+Here are the final 4 steps to polish this to perfection:
+
+1. The "Screenshot" Issue (Critical Fix)
+
+The image on the right currently looks like a raw screenshot of a tool in "Edit Mode." It breaks the emotional immersion.
+
+Remove the Selection Brackets: You see those white corners/brackets around the text and the stone? Those are UI elements showing what is "selected." In a marketing image, these must be hidden. The user wants to see the finished tribute, not the wireframe.
+
+Remove the Floating Label: The text box floating in the sky ("Traditional Engraved Headstone") looks like a software tooltip. Hide it.
+
+Crop the Left Edge: On the far left of the image, there is a dark vertical strip showing buttons like "Base" and "Stand." Crop the image slightly to cut this out.
+
+The Goal: The image should look like a photograph of a headstone in a park, not a screenshot of a computer screen.
+
+2. Fix the "Uneven Cards"
+
+Look at your three Phase cards (1, 2, and 3).
+
+The Issue: Phase 3 ("Gather family input") is shorter than Phase 1 and 2 because it has less text. This creates an uneven, jagged bottom line.
+
+The Fix: Force all three cards to be the same height (use CSS flex-grow or min-height). This creates a solid, confident horizontal line that feels more organized.
+
+3. Differentiate the Bottom Rows
+
+You currently have two rows of dark boxes stacked at the bottom:
+
+The Feature Row (Eye, Document, Bookmark icons)
+
+The Stats Row (5,284 families, etc.)
+
+Because they are both "dark grey boxes on black," they blend together into a "wall of boxes."
+
+The Fix: Make the Feature Row (Middle row) invisible or different.
+
+Option A: Remove the background color from the middle row completely. Just leave the Gold Icon + Text floating on the black background. This separates it from the Stats row below.
+
+Option B: Make the icons much larger and center the text, getting rid of the borders entirely.
+
+4. Connect the Journey
+
+The three Phase cards stand alone. To emphasize the "Journey" aspect:
+
+Add Arrows: Place a small, subtle arrow icon (
+→
+→
+) in the space between the cards.
+
+Visual Logic: This tells the user's eye: "Do this 
+→
+→
+ Then this 
+→
+→
+ Then this."
+
+Summary of Changes
+
+Clean the Image: Hide UI brackets, floating labels, and sidebar menus.
+
+Align Cards: Make Phase 1, 2, and 3 equal height.
+
+Simplify Bottom Rows: Remove the background borders from the middle row (Features) so they don't compete with the bottom row (Stats).

@@ -1,0 +1,53 @@
+This is getting very close to a professional finish. The lighting on the top of the heart helps it feel 3D, and the layout is much cleaner without the top-left clutter.
+
+However, there is one major visual glitch and two subtle polish details remaining that prevent this from looking "real."
+
+1. Fix the "Black Box" at the Bottom (Critical)
+
+Look at the bottom of the heart stone. There is a large, solid black rectangle obscuring the bottom of the image. It looks like a mistake or a masking error.
+
+The Issue: It cuts the heart shape off unnaturally. Headstones don't just "end" in a straight line; they usually sit on a rectangular stone base (a plinth).
+
+The Fix:
+
+Show the Base: If possible, your 3D render should include the rectangular base that the heart sits on. This "grounds" the object.
+
+Remove the Mask: If you don't have a base, remove that hard horizontal black line. Let the heart shape fade out softly at the bottom, or show the full shape.
+
+2. Add "Texture" (Not Just Gradient)
+
+The lighting you added (the shine on top) is a great start, but currently, the stone looks like smooth plastic because it is a solid color.
+
+The Fix: Granite has "grain" or speckles.
+
+How to fake it: Overlay a very subtle "noise" or "grain" texture on the heart shape. It shouldn't be just grey; it should be "Glory Black Granite" (which has tiny flecks). This micro-texture signals "Premium Stone" to the brain.
+
+3. Clean Up the "Pill" Labels
+
+The two labels at the bottom of the stone (Style: Heart and Material: Glory Black) are floating awkwardly above that black box.
+
+The Fix: Merge them or simplify them.
+
+Current: [ STYLE: HEART ] [ MATERIAL: GLORY BLACK ]
+
+Better: "Heart Shape • Glory Black Granite"
+
+Placement: Place this text simply and cleanly below the stone image (in the space where the black box currently is), rather than overlapping the image.
+
+4. Typography Hierarchy
+
+The text "In our hearts you live forever" is very large. In design, smaller is often more elegant.
+
+The Fix: Reduce the size of the quote by about 20%. Give it more breathing room inside the heart. This makes it look precious rather than crowded.
+
+Summary of Final Polish
+
+Remove the black rectangle obscuring the bottom of the stone.
+
+Add a rectangular base to the stone render so it feels grounded.
+
+Add subtle grain/texture to the grey surface so it looks like rock, not plastic.
+
+Shrink the gold text slightly for elegance.
+
+Once you fix that bottom "cutoff" issue, this section is ready to ship.

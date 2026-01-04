@@ -113,8 +113,13 @@ function ProductNameHeader() {
 
       {/* Price Pill Floating Bottom Center */}
       {catalog && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-auto">
-          <div className="bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center">
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-auto w-[75vw] sm:w-auto"
+        >
+          <div
+            className="bg-black/80 backdrop-blur-md text-white py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center justify-between w-full"
+            style={{ paddingLeft: '1.25rem', paddingRight: '1.725rem' }}
+          >
             <span className="opacity-80 text-sm">{widthMm} × {heightMm} mm</span>
             <div className="w-px h-4 bg-white/20"></div>
             <span className="font-bold text-green-400">${totalPrice.toFixed(2)}</span>
