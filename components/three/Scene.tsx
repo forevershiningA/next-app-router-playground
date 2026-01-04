@@ -165,6 +165,11 @@ export default function Scene({
   const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+  const viewportWidth = useThree((state) => state.size.width);
+  const isMobileViewport = viewportWidth < 1024;
+  const fogSettings = isMobileViewport
+    ? { near: 9, far: 24 }
+    : { near: 1, far: 4 };
 
   // Smooth rotation animation
   useFrame(() => {
@@ -199,11 +204,10 @@ export default function Scene({
       
       {/* 
         UPDATED FOG SETTINGS:
-        Color: #dcebf5 (Pale Blue)
-        Start: 20 (Keeps the headstone area perfectly clear)
-        End: 100 (Gradual fade into the distance, no hard cutoff)
+        Desktop keeps a tight falloff (1 → 4) while mobile/tablet pushes the fog farther out (9 → 24)
+        so the headstone stays clear when viewed on smaller screens.
       */}
-      {!is2DMode && <fog attach="fog" args={[FOG_COLOR_2, 1, 4]} />}
+      {!is2DMode && <fog attach="fog" args={[FOG_COLOR_2, fogSettings.near, fogSettings.far]} />}
       
       <mesh
         position={[0, 0, 0]}

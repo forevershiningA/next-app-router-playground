@@ -275,6 +275,9 @@ export default function DesignerNav() {
   // Determine if canvas is visible (on pages with 3D scene)
   const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-additions'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
+  const suppressSelectShapePanel =
+    activeFullscreenPanel === 'select-shape' && pathname === '/select-shape' && !isCanvasVisible;
+  const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel && !suppressSelectShapePanel);
   
   const renderSelectAdditionsPanel = () => {
     const activeAdditionOffset = selectedAdditionId
@@ -1157,7 +1160,7 @@ export default function DesignerNav() {
       className="flex h-full flex-col bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white overflow-hidden"
     >
       {/* Full-Screen Panel Overlay */}
-      {activeFullscreenPanel ? (
+      {shouldShowFullscreenPanel ? (
         <div className="flex flex-col h-full">
           {/* Panel Header - desktop only */}
           <div className="hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
@@ -1215,13 +1218,11 @@ export default function DesignerNav() {
 
           {/* Mobile Header */}
           <div className="md:hidden border-b border-white/5 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)]">
-            <p className="text-[10px] uppercase tracking-[0.45em] text-white/50">Guided Studio</p>
-            <div className="mt-2">
-              <h2 className="text-2xl font-semibold text-white">{productTitle}</h2>
-              <p className="text-sm text-white/70">{dimensionLabel}</p>
-              {formattedPrice && (
-                <p className="mt-1 text-lg font-mono text-[#d7b356]">${formattedPrice}</p>
-              )}
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-[10px] uppercase tracking-[0.45em] text-white/50">Guided Studio</p>
+              <Link href="/" className="hover:opacity-80 transition-opacity">
+                <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="h-8 w-auto" />
+              </Link>
             </div>
           </div>
 
@@ -1230,7 +1231,7 @@ export default function DesignerNav() {
 
         {/* Primary/Secondary CTAs */}
         {(hasCustomizations || (!showCanvas && pathname !== '/' && pathname !== '/select-size')) && (
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row mb-5">
             {hasCustomizations && (
               <button
                 onClick={handleNewDesign}

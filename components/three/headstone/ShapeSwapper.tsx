@@ -173,6 +173,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque';
+  const isSelectSizeRoute = pathname === '/select-size';
 
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
@@ -198,9 +199,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   // Re-introduce visibleTex state to decouple loading from display
   const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
   const [fitTick, setFitTick] = React.useState(0);
-  const [isPending, startTransition] = React.useTransition();
 
   const shapeSwapping = requestedUrl !== visibleUrl;
+  const isPending = false;
 
   // Handle Texture Updates via Transition
   // This allows SvgHeadstone to suspend (load texture) without hiding the existing content
@@ -210,11 +211,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         // If shape is also swapping, update immediately (loader will cover it)
         setVisibleTex(requestedTex);
       } else {
-        // If only texture is swapping, use transition to prevent "blink"
-        startTransition(() => {
-          setVisibleTex(requestedTex);
-          invalidate();
-        });
+        // If only texture is swapping, update and invalidate to prevent "blink"
+        setVisibleTex(requestedTex);
+        invalidate();
       }
     }
   }, [requestedTex, visibleTex, shapeSwapping, invalidate]);
@@ -279,7 +278,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
               setSelectedMotifId(null); // Close motif panel
               setActivePanel(null); // Clear active panel state
               // Trigger close fullscreen panel (same as "Back to Menu" button)
-              window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
+              if (!isSelectSizeRoute) {
+                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
+              }
             },
           }}
         >
@@ -406,7 +407,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
       {/* Loader used for Shape Swapping or Font Loading only */}
       {/* Show a subtle indicator when texture is transitioning */}
-      <InlineCanvasLoader show={shapeSwapping || fontLoading || isPending} />
+      <InlineCanvasLoader show={shapeSwapping || fontLoading} />
     </>
   );
 }

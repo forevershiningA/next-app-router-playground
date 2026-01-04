@@ -103,7 +103,7 @@ function ProductNameHeader() {
     <>
       {/* Title Floating Top Left */}
       {catalog && (
-        <div className="absolute top-10 left-10 z-10 pointer-events-none">
+        <div className="absolute top-10 left-10 z-10 pointer-events-none hidden lg:block">
           {/* Elegant Serif Font */}
           <h1 className="text-3xl text-white drop-shadow-sm !p-0 !m-0">
             {catalog.product.name}
