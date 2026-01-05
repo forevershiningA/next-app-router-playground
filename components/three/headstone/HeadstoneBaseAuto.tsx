@@ -41,6 +41,7 @@ function PreloadTexture({
   url: string;
   onReady?: () => void;
 }) {
+  useTexture.preload(url);
   useTexture(url);
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
@@ -381,9 +382,16 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     }, [widthMm, height, baseThickness]);
 
     const requestedBaseTex = useMemo(() => {
-      const file = baseMaterialUrl?.split('/').pop() ?? DEFAULT_TEX;
-      const webp = file.replace(/\.jpg$/i, '.webp');
-      return TEX_BASE + webp;
+      if (!baseMaterialUrl) {
+        return `${TEX_BASE}${DEFAULT_TEX}`;
+      }
+      if (baseMaterialUrl.startsWith('http')) {
+        return baseMaterialUrl;
+      }
+      if (baseMaterialUrl.startsWith('/')) {
+        return baseMaterialUrl;
+      }
+      return `/${baseMaterialUrl.replace(/^\/+/, '')}`;
     }, [baseMaterialUrl]);
 
     const [visibleBaseTex, setVisibleBaseTex] = React.useState(requestedBaseTex);

@@ -20,6 +20,13 @@ import {
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.webp';
 
+const normalizeTextureUrl = (url?: string | null) => {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/')) return url;
+  return `/${url.replace(/^\/+/g, '')}`;
+};
+
 const isDesktopViewport = () => {
   if (typeof window === 'undefined') return false;
   return window.innerWidth >= 1024;
@@ -534,23 +541,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setMaterialUrl(materialUrl) {
-    // Convert .jpg to .webp for all texture files
-    const convertedUrl = materialUrl.replace(/\.jpg$/i, '.webp');
-    set({ materialUrl: convertedUrl });
+    const normalized = normalizeTextureUrl(materialUrl) ?? `${TEX_BASE}${DEFAULT_TEX}`;
+    set({ materialUrl: normalized });
   },
 
   headstoneMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setHeadstoneMaterialUrl(url) {
-    // Convert .jpg to .webp for all texture files
-    const convertedUrl = url.replace(/\.jpg$/i, '.webp');
-    set({ headstoneMaterialUrl: convertedUrl });
+    const normalized = normalizeTextureUrl(url) ?? `${TEX_BASE}${DEFAULT_TEX}`;
+    set({ headstoneMaterialUrl: normalized });
   },
 
   baseMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setBaseMaterialUrl(url) {
-    // Convert .jpg to .webp for all texture files
-    const convertedUrl = url.replace(/\.jpg$/i, '.webp');
-    set({ baseMaterialUrl: convertedUrl, baseSwapping: true });
+    const normalized = normalizeTextureUrl(url) ?? `${TEX_BASE}${DEFAULT_TEX}`;
+    set({ baseMaterialUrl: normalized, baseSwapping: true });
   },
 
   baseSwapping: false,

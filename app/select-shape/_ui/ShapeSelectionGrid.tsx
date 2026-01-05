@@ -116,8 +116,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       {/* Category Filter */}
       <div className="border-b border-white/5 bg-gray-900/30 relative">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8 relative">
-          <div className="flex flex-wrap gap-3 justify-center">
+        <div className="mx-auto max-w-7xl pl-6 pr-6 py-6 lg:pl-8 lg:pr-8 relative">
+          <div className="flex flex-wrap gap-3 -ml-3">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${

@@ -1,3 +1,18 @@
+To fix the issue where the Headstone texture causes a Suspense fallback (flicker/disappearance) during a texture swap, we need to ensure the texture remains in the Three.js cache during the brief moment between the PreloadTexture component unmounting and the SvgHeadstone component updating its props.
+
+By default, @react-three/drei's useTexture may mark the texture for disposal when the component that requested it unmounts. Since PreloadTexture unmounts exactly when SvgHeadstone needs the texture, a race condition occurs causing a cache miss and subsequent Suspense.
+
+We can fix this by explicitly calling useTexture.preload(url) inside the PreloadTexture component. This registers the texture in the global loader cache, preventing it from being disposed immediately when the preloader unmounts.
+
+Here is the corrected file content:
+
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE ShapeSwapper.tsx ---
+
 'use client';
 
 import * as React from 'react';
@@ -71,8 +86,11 @@ function PreloadTexture({
   url: string;
   onReady?: () => void;
 }) {
+  // Explicitly preload into global cache to prevent disposal when this component unmounts
   useTexture.preload(url);
+  // Suspend until loaded
   useTexture(url);
+
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
@@ -175,8 +193,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque';
   const isSelectSizeRoute = pathname === '/select-size';
-  const isSelectMaterialRoute = pathname === '/select-material';
-  const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;
 
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
@@ -215,13 +231,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
   // Handle Texture Updates via Transition
   // When shape is swapping we can update immediately (full-screen loader visible)
-  // For material changes, also update immediately to avoid suspense delays
+  // Otherwise we wait for the new texture to preload before swapping (see PreloadTexture below)
   React.useEffect(() => {
-    if ((shapeSwapping || isMaterialChange) && requestedTex !== visibleTex) {
+    if (shapeSwapping && requestedTex !== visibleTex) {
       setVisibleTex(requestedTex);
       invalidate();
     }
-  }, [requestedTex, visibleTex, shapeSwapping, isMaterialChange, invalidate]);
+  }, [requestedTex, visibleTex, shapeSwapping, invalidate]);
 
   // Trigger fit when switching view modes and assets are ready
   React.useEffect(() => {
@@ -254,43 +270,41 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   return (
     <>
       <group ref={tabletRef}>
-        <React.Suspense fallback={null}>
-          <SvgHeadstone
-            key={visibleUrl}
-            url={visibleUrl}
-            depth={isPlaque ? 5 : uprightThickness / 10}
-            scale={0.01}
-            faceTexture={visibleTex}
-            sideTexture={visibleTex}
-            tileSize={0.35}
-            sideTileSize={0.35}
-            topTileSize={0.35}
-            targetHeight={heightM}
-            targetWidth={widthM}
-            preserveTop
-            showEdges={false}
-            headstoneStyle={headstoneStyle}
-            slantThickness={slantThickness}
-            selectedAdditions={selectedAdditions}
-            meshProps={{
-              name: 'headstone',
-              onClick: (e) => {
-                console.log('[ShapeSwapper] Headstone clicked!', e);
-                e.stopPropagation();
-                setSelected('headstone');
-                setEditingObject('headstone');
-                setSelectedInscriptionId(null);
-                setSelectedAdditionId(null); // Close addition panel
-                setSelectedMotifId(null); // Close motif panel
-                setActivePanel(null); // Clear active panel state
-                // Trigger close fullscreen panel (same as "Back to Menu" button)
-                // But keep panel open on select-size and select-material pages
-                if (!shouldKeepPanelOpen) {
-                  window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-                }
-              },
-            }}
-          >
+        <SvgHeadstone
+          key={visibleUrl}
+          url={visibleUrl}
+          depth={isPlaque ? 5 : uprightThickness / 10}
+          scale={0.01}
+          faceTexture={visibleTex}
+          sideTexture={visibleTex}
+          tileSize={0.35}
+          sideTileSize={0.35}
+          topTileSize={0.35}
+          targetHeight={heightM}
+          targetWidth={widthM}
+          preserveTop
+          showEdges={false}
+          headstoneStyle={headstoneStyle}
+          slantThickness={slantThickness}
+          selectedAdditions={selectedAdditions}
+          meshProps={{
+            name: 'headstone',
+            onClick: (e) => {
+              console.log('[ShapeSwapper] Headstone clicked!', e);
+              e.stopPropagation();
+              setSelected('headstone');
+              setEditingObject('headstone');
+              setSelectedInscriptionId(null);
+              setSelectedAdditionId(null); // Close addition panel
+              setSelectedMotifId(null); // Close motif panel
+              setActivePanel(null); // Clear active panel state
+              // Trigger close fullscreen panel (same as "Back to Menu" button)
+              if (!isSelectSizeRoute) {
+                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
+              }
+            },
+          }}
+        >
           {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
             // Safe ref assignment using useLayoutEffect to avoid render phase side-effects
             React.useLayoutEffect(() => {
@@ -388,7 +402,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             );
           }}
         </SvgHeadstone>
-        </React.Suspense>
 
         <AutoFit
           target={tabletRef}
@@ -400,7 +413,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         />
       </group>
 
-      {!shapeSwapping && !isMaterialChange && requestedTex !== visibleTex && (
+      {!shapeSwapping && requestedTex !== visibleTex && (
         <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
@@ -437,4 +450,3 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     </>
   );
 }
-

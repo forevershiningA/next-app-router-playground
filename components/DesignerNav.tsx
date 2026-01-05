@@ -23,6 +23,7 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
 import InscriptionEditPanel from './InscriptionEditPanel';
+import SegmentedControl from './ui/SegmentedControl';
 import MaterialSelector from './MaterialSelector';
 import ShapeSelector from './ShapeSelector';
 import AdditionSelector from './AdditionSelector';
@@ -710,39 +711,20 @@ export default function DesignerNav() {
             </div>
           </div>
         ) : (
-          <div className="relative flex gap-1 rounded-full bg-[#0A0A0A] p-1.5 border border-[#3A3A3A]">
-            <button
-              onClick={() => {
-                if (editingObject !== 'headstone') {
-                  setEditingObject('headstone');
-                  setSelected('headstone');
-                }
-              }}
-              className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                editingObject === 'headstone'
-                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-[#1A1A1A]'
-              }`}
-            >
-              Headstone
-            </button>
-            <button
-              onClick={() => {
+          <SegmentedControl
+            value={editingObject}
+            onChange={(value) => {
+              setEditingObject(value as 'headstone' | 'base');
+              setSelected(value as 'headstone' | 'base');
+              if (value === 'base') {
                 setShowBase(true);
-                if (editingObject !== 'base') {
-                  setEditingObject('base');
-                  setSelected('base');
-                }
-              }}
-              className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                editingObject === 'base'
-                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-[#1A1A1A]'
-              }`}
-            >
-              Base
-            </button>
-          </div>
+              }
+            }}
+            options={[
+              { label: 'Headstone', value: 'headstone' },
+              { label: 'Base', value: 'base' },
+            ]}
+          />
         )}
 
         {editingObject === 'base' && (
@@ -794,30 +776,14 @@ export default function DesignerNav() {
 
         {editingObject === 'headstone' && (
           <>
-            <div className="flex gap-1 rounded-full bg-[#0A0A0A] p-1.5 border border-[#3A3A3A]">
-              <button
-                type="button"
-                onClick={() => setHeadstoneStyle('upright')}
-                className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                  headstoneStyle === 'upright'
-                    ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
-                }`}
-              >
-                {isPlaque ? 'No Border' : 'Upright'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setHeadstoneStyle('slant')}
-                className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                  headstoneStyle === 'slant'
-                    ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
-                }`}
-              >
-                {isPlaque ? 'Border' : 'Slant'}
-              </button>
-            </div>
+            <SegmentedControl
+              value={headstoneStyle}
+              onChange={(value) => setHeadstoneStyle(value as 'upright' | 'slant')}
+              options={[
+                { label: isPlaque ? 'No Border' : 'Upright', value: 'upright' },
+                { label: isPlaque ? 'Border' : 'Slant', value: 'slant' },
+              ]}
+            />
             <div className="border-t border-[#3A3A3A]/50 -mx-4"></div>
           </>
         )}

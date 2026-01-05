@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import SegmentedControl from './ui/SegmentedControl';
 
 type Material = {
   id: string;
@@ -56,37 +57,18 @@ export default function MaterialSelector({ materials }: MaterialSelectorProps) {
   return (
     <div className="space-y-3">
       {/* Headstone/Base Toggle */}
-      <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
-        <button
-          onClick={() => {
-            if (editingObject !== 'headstone') {
-              setEditingObject('headstone');
-              setSelected('headstone');
-            }
+      <div className="mb-4">
+        <SegmentedControl
+          value={editingObject}
+          onChange={(value) => {
+            setEditingObject(value as 'headstone' | 'base');
+            setSelected(value as 'headstone' | 'base');
           }}
-          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-            editingObject === 'headstone'
-              ? 'bg-[#D7B356] text-slate-900 shadow-md'
-              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-          }`}
-        >
-          Headstone
-        </button>
-        <button
-          onClick={() => {
-            if (editingObject !== 'base') {
-              setEditingObject('base');
-              setSelected('base');
-            }
-          }}
-          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-            editingObject === 'base'
-              ? 'bg-[#D7B356] text-slate-900 shadow-md'
-              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-          }`}
-        >
-          Base
-        </button>
+          options={[
+            { label: 'Headstone', value: 'headstone' },
+            { label: 'Base', value: 'base' },
+          ]}
+        />
       </div>
       
       <div className="grid grid-cols-3 gap-2 overflow-y-auto pr-2 custom-scrollbar">

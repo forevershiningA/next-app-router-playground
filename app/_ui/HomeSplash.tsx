@@ -217,7 +217,7 @@ export default function HomeSplash() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
             backgroundImage: 'url(/backgrounds/tree-2916763_1920.webp)',
-            filter: 'blur(4px) saturate(1) brightness(0.85)',
+            filter: 'blur(8px) saturate(1) brightness(0.85)',
             transform: 'scale(1.1)'
           }}
           role="presentation"
@@ -252,7 +252,7 @@ export default function HomeSplash() {
                   Trusted by 5,000+ families
                 </p>
               </div>
-              <p className="text-xs text-gray-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              <p className="text-xs text-gray-400 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 Save designs • Share with family • No obligation · No credit card required<br/>
                 Choose from: Headstones • Plaques • Urns • Full Monuments<br/>
                 Design exactly what you envision.
@@ -529,12 +529,12 @@ export default function HomeSplash() {
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Get in Touch</p>
               <div className="mt-4 space-y-3 text-sm text-white/80">
-                <a href="tel:+611300851345" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors">1300 851 345</a>
+                <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors">(+1) 647 388 0931</a>
                 <p className="text-white/70">
-                  <a href="mailto:support@forevershining.com.au" className="hover:text-[#f3d48f] transition-colors">support@forevershining.com.au</a>
+                  <a href="mailto:support@forevershining.com.au" className="hover:text-[#f3d48f] transition-colors">admin@bronze-plaque.com</a>
                 </p>
                 <p className="text-white/70 leading-relaxed">
-                  7 Baldwin Street<br />Kewdale, WA 6105<br />Australia
+                  1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
                 </p>
               </div>
             </div>
@@ -611,25 +611,11 @@ function DesignPossibilitiesSection() {
       stage: 3,
     },
     {
-      slug: 'select-additions',
-      label: 'Select Additions',
-      copy: 'Layer vases, photo plaques, keepsakes, and bronze accents.',
-      icon: PlusCircleIcon,
-      stage: 3,
-    },
-    {
       slug: 'select-motifs',
       label: 'Select Motifs',
       copy: 'Accent the stone with symbols, portraits, and custom artwork.',
       icon: SparklesIcon,
       stage: 3,
-    },
-    {
-      slug: 'check-price',
-      label: 'Transparent Pricing',
-      copy: 'Review totals, export a quote, and share with family before ordering.',
-      icon: CurrencyDollarIcon,
-      stage: 4,
     },
   ];
 
@@ -717,15 +703,13 @@ function DesignPossibilitiesSection() {
                       <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/15 mix-blend-overlay" />
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_15%,rgba(255,255,255,0.55),transparent_55%)] opacity-80 mix-blend-screen pointer-events-none" />
                       <div className="absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-white/60 via-transparent to-transparent opacity-90 mix-blend-screen pointer-events-none" />
-                      <div className="absolute inset-x-0 top-[12%] h-[1px] bg-gradient-to-r from-transparent via-white/90 to-transparent opacity-95" />
-                      <div className="absolute inset-x-0 top-[18%] h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-80" />
                       <div className="absolute inset-0 opacity-35 mix-blend-soft-light" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px)', backgroundSize: '4px 4px' }} />
                       <div className="absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: 'linear-gradient(120deg, rgba(255,255,255,0.25) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.15) 100%)' }} />
                     </div>
                   </div>
 
-                  <div className="absolute inset-0 flex flex-col justify-between py-8 z-30 pointer-events-none">
-                    <div className={`flex justify-between px-10 mb-6 transition-all duration-500 ${activeStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+                  <div className="absolute inset-0 flex flex-col gap-4 py-6 z-30 pointer-events-none">
+                    <div className={`flex justify-between px-10 mb-4 transition-all duration-500 ${activeStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
                       <div className="w-14 h-14 relative">
                         <Image
                           src="/shapes/motifs/s/dove_002.png"
@@ -752,10 +736,10 @@ function DesignPossibilitiesSection() {
                       </div>
                     </div>
 
-                    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+                    <div className="flex-1 flex flex-col items-center justify-start px-8 text-center gap-3" style={{ marginTop: '-10%' }}>
                       {currentMotif && (
-                        <div className={`mb-4 transition-all duration-500 ${activeStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                          <div className="relative w-16 h-16 mx-auto">
+                        <div className={`transition-all duration-500 ${activeStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                          <div className="relative w-16 h-16 mx-auto -translate-y-1">
                             <Image
                               src={currentMotif.file}
                               alt={currentMotif.name}
@@ -773,10 +757,10 @@ function DesignPossibilitiesSection() {
                         className="font-serif text-2xl md:text-[1.9rem] text-transparent bg-clip-text bg-gradient-to-b from-[#f8e3b6] via-[#d4af37] to-[#8a6e2f] italic tracking-wide"
                         style={{ textShadow: '-1px -1px 2px rgba(0,0,0,0.85), 1px 1px 2px rgba(255,255,255,0.2), 0px 2px 4px rgba(0,0,0,0.9)' }}
                       >
-                        "In our hearts you live forever"
+                        In our hearts you live forever
                       </p>
                       <div
-                        className={`mt-4 flex justify-between w-full max-w-[340px] text-[11px] font-semibold tracking-[0.35em] text-[#D4B675] transition-all duration-500 ${activeStep >= 3 ? 'opacity-90 translate-y-0' : 'opacity-0 translate-y-2'}`}
+                        className={`mt-auto pt-4 flex justify-between w-full max-w-[340px] text-[11px] font-semibold tracking-[0.35em] text-[#D4B675] transition-all duration-500 ${activeStep >= 3 ? 'opacity-90 translate-y-0' : 'opacity-0 translate-y-2'}`}
                         style={{ textShadow: '0px 1px 2px rgba(0,0,0,0.8)' }}
                       >
                         <span>OCT 14, 1945</span>
