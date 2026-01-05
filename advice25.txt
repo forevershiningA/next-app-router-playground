@@ -1,0 +1,61 @@
+Based on the latest image, you have successfully removed the "gloomy" vibe, but we still have a "Cliff Edge" problem. The green grass cuts off sharply against the orange sky, breaking the illusion of an infinite world. This happens because the floor plane is too small for the camera's view distance.
+
+Here are the 3 steps to fix the horizon and polish the colors for a professional result.
+
+1. The "Infinite World" Fix (Crucial)
+
+Instead of trying to tweak the fog perfectly to hide the edge of a small floor, the easiest fix is to just make the floor huge.
+
+In Scene.tsx inside the GrassFloor function:
+Change the plane geometry size from 105 to 1000. This costs almost zero performance but ensures the edge of the world is far beyond what the camera can see.
+
+code
+
+// OLD
+// <planeGeometry args={[105, 105]} />
+
+// NEW (Make it huge)
+<planeGeometry args={[1000, 1000]} />
+
+Then, update the Texture Repeat:
+Since the floor is now huge, we need to increase the repeat count so the grass doesn't look like a giant blurry blob.
+
+code
+
+// Inside GrassFloor component
+// Since we increased size by ~10x, increase repeat scale to match
+const REPEAT_SCALE = 150;
+2. The Seamless Blend (Fog)
+
+Now that the floor is huge, we need the Fog to blend the distant grass into the sky color so they become one.
+
+In Scene.tsx:
+Ensure your Fog Color matches your Horizon Color exactly, and set the far distance so the grass fades out gently.
+
+code
+
+// 1. Define the shared color (Soft Peach/Gold)
+const HORIZON_COLOR = '#e3cba5'; 
+
+// 2. Set the Fog
+// near: 20 (Keeps the headstone and immediate area crisp)
+// far: 100 (Fades out comfortably in the distance)
+{!is2DMode && <fog attach="fog" args={[HORIZON_COLOR, 20, 100]} />}
+3. Color Harmony (Fixing the "Mars" look)
+
+The current background is a bit too dark/brown (#a0522d ish), while the grass is bright green. This high contrast looks unnatural.
+
+In your GradientBackground component:
+Use a softer, pastel palette. This will make the gold lettering on the headstone pop more, rather than competing with the background.
+
+code
+
+uniforms={{
+  // A soft, calming blue for the upper sky
+  colorTop: { value: new THREE.Color('#8FABD6') }, 
+  // A warm, dusty gold for the bottom (Must match HORIZON_COLOR above)
+  colorBottom: { value: new THREE.Color('#e3cba5') }, 
+}}
+Summary of Results
+
+By increasing the floor size to 1000, the sharp line will vanish immediately. By matching the Fog and Background colors to a softer #e3cba5, the scene will look like a peaceful, sunlit meadow that goes on forever, keeping the focus entirely on the memorial.

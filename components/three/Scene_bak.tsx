@@ -1,5 +1,5 @@
 'use client';
-import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, AdaptiveDpr } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, useTexture } from '@react-three/drei';
 // REMOVED: EffectComposer & DepthOfField (Causing artifacts)
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
@@ -13,14 +13,13 @@ import { useRef, Suspense, useEffect } from 'react';
 // --- CONFIGURATION ---
 const GRASS_COLOR = '#5a7f3c'; 
 
-// UPDATED: Pale atmospheric blue (matches the horizon, not white)
-const FOG_COLOR = '#dcebf5';
-const FOG_COLOR_2 = '#ADCCE7'
+// UPDATED: Soft peach/gold horizon color for peaceful, sunlit meadow
+const HORIZON_COLOR = '#e3cba5'; // Soft Peach/Gold - creates seamless infinite field
 
 // --- COMPONENTS ---
 
 // New: Custom Gradient Sky Sphere
-// Replaces the realistic atmosphere with a stylized gradient background
+// Golden Hour gradient with seamless horizon blend
 const GradientBackground = () => {
   return (
     <mesh scale={[100, 100, 100]} position={[0, -10, 0]} renderOrder={-1}>
@@ -29,8 +28,8 @@ const GradientBackground = () => {
         side={THREE.BackSide}
         depthWrite={false} // Draw behind everything
         uniforms={{
-          colorTop: { value: new THREE.Color('#5ca0e5') }, // Richer Sky Blue
-          colorBottom: { value: new THREE.Color(FOG_COLOR) }, // Matches Fog perfectly
+          colorTop: { value: new THREE.Color('#8FABD6') }, // Soft, calming blue
+          colorBottom: { value: new THREE.Color(HORIZON_COLOR) }, // Warm, dusty gold - matches fog
         }}
         vertexShader={`
           varying vec2 vUv;
@@ -45,9 +44,9 @@ const GradientBackground = () => {
           varying vec2 vUv;
           void main() {
             // Gradient Logic:
-            // 0.0 - 0.45: Solid Horizon Color (Fog Color)
-            // 0.45 - 1.0: Fades to Sky Blue
-            // This ensures the point where grass meets sky is invisible
+            // 0.0 - 0.45: Solid Horizon Color (Soft Peach/Gold)
+            // 0.45 - 1.0: Fades to Soft Calming Blue
+            // Seamless blend - peaceful sunlit meadow
             float h = smoothstep(0.45, 1.0, vUv.y);
             gl_FragColor = vec4(mix(colorBottom, colorTop, h), 1.0);
           }
@@ -60,39 +59,31 @@ const GradientBackground = () => {
 function GrassFloor() {
   const gl = useThree((state) => state.gl);
   
-  // Load grass textures from local public folder
-  // REMOVED: roughnessMap (was causing "wet/blue" reflective look)
-  /*
-  const props = useTexture({
-    map: '/textures/three/leaves/brown_mud_leaves_01_diff_1k.webp',
-    normalMap: '/textures/three/leaves/brown_mud_leaves_01_nor_gl_1k.webp',
-    aoMap: '/textures/three/leaves/brown_mud_leaves_01_arm_1k.webp',
-  });
-  */
-
   const props = useTexture({
     map: '/textures/three/grass/grass_color.webp',
     normalMap: '/textures/three/grass/grass_normal.webp',
     aoMap: '/textures/three/grass/grass_ao.webp',
   });
 
-  // --- TEXTURE FIXES ---
-  // UPDATED: Reduced to 40 for better performance while maintaining quality
-  const REPEAT_SCALE = 80;
+  // --- CONFIGURATION ---
+  const FLOOR_SIZE = 1000; // Massive floor - fog hides corners at 90 units
+  // CRITICAL: High repeat (300) makes texture tiny and sharp - no pixelation
+  const REPEAT_COUNT = 300; 
 
   useEffect(() => {
-    // OPTIMIZATION: Cap anisotropy at 8 instead of max (16)
-    // Going to 16 is expensive and rarely noticeable on grass
-    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
+    const maxAnisotropy = gl.capabilities.getMaxAnisotropy();
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
-        tex.wrapS = tex.wrapT = THREE.RepeatWrapping; // Changed from Mirrored for organic textures
-        tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(REPEAT_COUNT, REPEAT_COUNT);
         tex.colorSpace = THREE.SRGBColorSpace;
         
-        // CRITICAL: Anisotropy fixes blur when looking at ground from an angle
-        tex.anisotropy = anisotropy;
+        // Ensure filters are set for maximum sharpness
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        
+        tex.anisotropy = maxAnisotropy;
         tex.needsUpdate = true;
       }
     });
@@ -101,29 +92,38 @@ function GrassFloor() {
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[105, 105]} />
+        {/* PlaneGeometry for perfect texture tiling (no UV warping like Circle) */}
+        <planeGeometry args={[FLOOR_SIZE, FLOOR_SIZE]} />
         <meshStandardMaterial 
           map={props.map}
           normalMap={props.normalMap}
           aoMap={props.aoMap}
           color={GRASS_COLOR}
-          roughness={1}
-          normalScale={new THREE.Vector2(0.5, 0.5)}
+          roughness={1} // High roughness prevents "wet" look
           metalness={0}
+          normalScale={new THREE.Vector2(0.8, 0.8)}
           envMapIntensity={0}
-          // Important: Floor accepts fog to fade into distance
           fog={true}
         />
       </mesh>
       
-      {/* Contact Shadow: Anchors the headstone */}
-      {/* OPTIMIZATION: Reduced resolution and set frames={1} to bake shadow once */}
-      <ContactShadows
-        position={[0, 0.02, 0]}
-        scale={15}
-        blur={2.5}
-        opacity={0.5}
-        far={1.5}
+      {/* Contact Shadows: Anchor the headstone */}
+      <ContactShadows 
+        position={[0, 0.02, 0]} 
+        scale={8} 
+        blur={2} 
+        opacity={0.7} 
+        far={0.25} 
+        color="#000000" 
+        resolution={256} 
+        frames={1} 
+      />
+      <ContactShadows 
+        position={[0, 0.02, 0]} 
+        scale={15} 
+        blur={2.5} 
+        opacity={0.5} 
+        far={1.5} 
         color="#001100"
         resolution={256}
         frames={1}
@@ -137,15 +137,35 @@ function SimpleGrassFloor() {
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[105, 105]} />
+        <planeGeometry args={[1000, 1000]} />
         <meshStandardMaterial 
           color="#355c18"
           roughness={1}
           metalness={0}
           envMapIntensity={0}
+          fog={true}
         />
       </mesh>
-      <ContactShadows position={[0, 0.02, 0]} scale={15} blur={2.5} opacity={0.6} far={1.5} color="#001100" resolution={256} frames={1} />
+      <ContactShadows 
+        position={[0, 0.02, 0]} 
+        scale={8} 
+        blur={2} 
+        opacity={0.7} 
+        far={0.25} 
+        color="#000000" 
+        resolution={256} 
+        frames={1} 
+      />
+      <ContactShadows 
+        position={[0, 0.02, 0]} 
+        scale={15} 
+        blur={2.5} 
+        opacity={0.5} 
+        far={1.5} 
+        color="#001100" 
+        resolution={256} 
+        frames={1} 
+      />
     </group>
   );
 }
@@ -167,9 +187,15 @@ export default function Scene({
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
+  
+  // UPDATED: Optimized fog for 500-radius circular floor
+  // Floor extends to 500 units, fog reaches 100% at 90 units
+  // This ensures world fades to solid color long before floor edge
+  // near: 20 keeps headstone and immediate area crisp
+  // far: 90 creates seamless infinite meadow (5x before floor edge at 500)
   const fogSettings = isMobileViewport
-    ? { near: 9, far: 24 }
-    : { near: 5, far: 24 };
+    ? { near: 20, far: 90 }
+    : { near: 20, far: 90 };
 
   // Smooth rotation animation
   useFrame(() => {
@@ -197,17 +223,19 @@ export default function Scene({
 
   return (
     <>
-      {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
-      <AdaptiveDpr pixelated />
+      {/* REMOVED: AdaptiveDpr - was causing pixelation by lowering resolution
+          Scene now always renders at full quality for crisp grass textures */}
 
       {!is2DMode && <color attach="background" args={['#A8C9E6']} />}
       
       {/* 
-        UPDATED FOG SETTINGS:
-        Desktop keeps a tight falloff (1 → 4) while mobile/tablet pushes the fog farther out (9 → 24)
-        so the headstone stays clear when viewed on smaller screens.
+        PERFECT FOG SETTINGS:
+        Circular floor radius: 500 units
+        Fog far: 90 units (5.5x before edge)
+        Result: World fades to horizon color long before geometry ends
+        No sharp edges ever visible - truly infinite field
       */}
-      {!is2DMode && <fog attach="fog" args={[FOG_COLOR_2, fogSettings.near, fogSettings.far]} />}
+      {!is2DMode && <fog attach="fog" args={[HORIZON_COLOR, fogSettings.near, fogSettings.far]} />}
       
       <mesh
         position={[0, 0, 0]}
@@ -220,26 +248,17 @@ export default function Scene({
       
       {!is2DMode && <SunRays />}
 
-      {/* Dust particles */}
-      {!is2DMode && (
-         <Sparkles 
-           count={30}
-           scale={12}
-           size={3}
-           speed={0.3}
-           opacity={0.4}
-           color="#fffee0"
-           position={[0, 2, 0]}
-         />
-      )}
+      {/* REMOVED: Sparkles (dust particles) for cleaner, professional look.
+          Floating particles can look like visual noise or glitches in a product configurator. */}
       
       {/* --- LIGHTING (Studio Setup) --- */}
       
       {/* 
-         1. AMBIENT: High intensity (1.0).
-         This ensures the dark granite is visible everywhere, with NO highlights. 
+         1. AMBIENT: Lowered to 0.3 to create depth and shadows.
+         This allows crevices to be dark and makes the stone look 3D instead of flat.
+         Higher ambient (1.0) was making everything look like a 2D sticker.
       */}
-      <ambientLight intensity={1.0} color="#ffffff" />
+      <ambientLight intensity={0.3} color="#ffffff" />
       
       {/* 
          2. HEMISPHERE: Strong bounce.
@@ -252,13 +271,12 @@ export default function Scene({
       
       {/* 
          3. KEY LIGHT (Sun):
-         Moved Higher (Y=12) and Left (X=-10).
-         This moves the specular reflection ("The Glow") to the top-left corner,
-         keeping the main text area clear.
+         Warmer sun color (#fff5d1) and increased intensity (2.5).
+         Moved Higher (Y=12) and Left (X=-10) to keep specular glow away from text.
       */}
       <spotLight 
-        color="#fffce6"
-        intensity={1.8}
+        color="#fff5d1"
+        intensity={2.5}
         angle={0.6}
         penumbra={1}
         position={[-10, 12, 12]}
@@ -277,12 +295,11 @@ export default function Scene({
       <spotLight color="#ffffff" intensity={2} position={[5, 5, -5]} distance={30} />
 
       {/* 
-        ENVIRONMENT: Removed to fix Vercel build timeout
-        The forest HDRI preset was causing build to hang (downloads large file)
-        Ambient + Hemisphere + Spot lights provide sufficient lighting
+        ENVIRONMENT: Increased intensity to 0.8 for better reflections on polished stone.
+        This makes the gold engraving pop and the granite look more realistic.
       */}
       
-      <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
+      <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.8} />
 
       <group ref={groupRef}>
         <HeadstoneAssembly />

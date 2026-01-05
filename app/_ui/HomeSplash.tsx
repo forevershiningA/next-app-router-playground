@@ -119,7 +119,7 @@ export default function HomeSplash() {
       title: 'The Foundation',
       summary: 'Choose a memorial style',
       description:
-        'Select the memorial type, silhouette, stone, and balanced proportions so the design feels stable and dignified before you personalize.',
+        'Select from 40+ shapes and premium stone materials. Each choice reflects in real-time 3D.',
     },
     {
       key: 'tribute',
@@ -127,7 +127,7 @@ export default function HomeSplash() {
       title: 'The Tribute',
       summary: 'Personalize their story',
       description:
-        'Write inscriptions, add motifs, and place vases or keepsakes—each change appears instantly in 3D.',
+        'Add inscriptions, meaningful motifs, and decorative accents—watch each change appear instantly.',
     },
     {
       key: 'review',
@@ -135,7 +135,7 @@ export default function HomeSplash() {
       title: 'Review & Share',
       summary: 'Gather family input',
       description:
-        'Preview transparent pricing, save drafts, and invite family feedback before you approve anything.',
+        'View transparent pricing, save your work, and easily share with family before finalizing.',
     },
   ];
 
@@ -171,7 +171,7 @@ export default function HomeSplash() {
 
   const tributeStats = [
     { label: 'Families we’ve guided', value: '5,284', detail: 'Each memorial cared for personally' },
-    { label: 'Headstones shapes', value: '40', detail: 'Slant and Rock Pitch option' },
+    { label: 'Headstone shapes', value: '40', detail: 'Classic & modern styles available' },
     { label: 'Meaningful accents ready', value: '5000+', detail: 'Motifs, fonts & finishes to choose from' },
   ];
 
@@ -339,15 +339,25 @@ export default function HomeSplash() {
             <h2 className="text-4xl md:text-5xl font-serif text-white mb-4 leading-tight">
               Design a Lasting Tribute from the Comfort of Home
             </h2>
-            <p className="text-lg text-white/80 max-w-xl lg:max-w-lg mx-auto lg:mx-0">
+            <p className="text-lg text-white/90 max-w-xl lg:max-w-lg mx-auto lg:mx-0 leading-relaxed">
               Guided steps keep you focused while the 3D studio mirrors every change in real time.
               No downloads, no pressure—just clarity before you commit.
             </p>
 
-            <div className="mt-8 w-full max-w-2xl mx-auto lg:mx-0">
+            {/* Primary CTA Button */}
+            <div className="mt-6 flex justify-center lg:justify-start">
+              <Link
+                href="/select-product"
+                className="rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] border border-[#f3c049]/40 px-8 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-[0_20px_35px_rgba(240,178,31,0.35)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(240,178,31,0.55)]"
+              >
+                Start Designing Now
+              </Link>
+            </div>
+
+            <div className="mt-10 w-full max-w-2xl mx-auto lg:mx-0">
               <div className="relative hidden sm:block pointer-events-none">
-                <div className="absolute inset-x-6 top-1/2 h-px bg-white/10" />
-                <div className="absolute inset-x-10 top-1/2 -translate-y-1/2 text-white/30 text-lg flex justify-between max-w-[calc(100%-80px)] mx-auto">
+                <div className="absolute inset-x-6 top-1/2 h-px bg-[#d4af37]/20" />
+                <div className="absolute inset-x-10 top-1/2 -translate-y-1/2 text-[#d4af37]/60 text-lg flex justify-between max-w-[calc(100%-80px)] mx-auto">
                   <span>→</span>
                   <span>→</span>
                 </div>
@@ -358,9 +368,9 @@ export default function HomeSplash() {
                     key={phase.key}
                     className="rounded-2xl border border-[#3A3A3A] bg-[#1B130C]/85 px-4 py-5 text-left shadow-[0_15px_35px_rgba(0,0,0,0.45)] h-full min-h-[190px] flex flex-col"
                   >
-                    <p className="text-[10px] uppercase tracking-[0.45em] text-white/50">{phase.eyebrow}</p>
+                    <p className="text-[10px] uppercase tracking-[0.45em] text-white/60">{phase.eyebrow}</p>
                     <p className="text-lg font-serif text-white mt-2">{phase.summary}</p>
-                    <p className="text-xs text-white/80 mt-1 leading-relaxed flex-1">{phase.description}</p>
+                    <p className="text-sm text-white/90 mt-2 leading-relaxed flex-1">{phase.description}</p>
                   </div>
                 ))}
               </div>
@@ -407,10 +417,13 @@ export default function HomeSplash() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {tributeStats.map(({ label, value, detail }) => (
-              <div key={label} className="rounded-3xl border border-[#4a3b2e] bg-[#1F1A15]/90 p-5 shadow-[0_20px_45px_rgba(0,0,0,0.35)]">
-                <p className="text-[11px] uppercase tracking-[0.5em] text-[#d4af37]/80">{label}</p>
-                <p className="text-3xl font-serif text-white mt-2">{value}</p>
-                <p className="text-xs text-white/80 mt-1">{detail}</p>
+              <div 
+                key={label} 
+                className="rounded-2xl border border-[#d4af37]/70 bg-[#1f130c]/90 p-6 shadow-[0_20px_45px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-[#d4af37] hover:shadow-[0_25px_50px_rgba(212,175,55,0.15)]"
+              >
+                <p className="text-[10px] uppercase tracking-[0.4em] text-white/85 mb-2">{label}</p>
+                <p className="text-3xl font-serif text-white mt-1">{value}</p>
+                <p className="text-[13px] text-white/70 mt-2 leading-snug">{detail}</p>
               </div>
             ))}
           </div>

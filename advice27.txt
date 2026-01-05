@@ -1,0 +1,115 @@
+The "pixelated" look is coming from two specific lines in your code. One is a performance setting that deliberately lowers quality, and the other is a geometry mapping issue.
+
+Here are the 3 changes needed to fix the pixelation and get crisp, high-definition grass.
+
+1. The Main Culprit: Remove AdaptiveDpr
+
+In your component, you have this line:
+
+code
+TypeScript
+download
+content_copy
+expand_less
+<AdaptiveDpr pixelated />
+
+What this does: It tells the browser "If the frame rate drops, lower the resolution and make it look pixelated (Minecraft style) to save battery."
+The Fix: Remove this line entirely. We want the scene to always look sharp, even if it uses a bit more GPU.
+
+2. Geometry Switch: Circle vs. Plane
+
+You switched to circleGeometry to hide corners. However, circleGeometry often messes up texture mapping (UVs) when repeating textures, causing stretching or warping that looks like pixelation.
+The Fix: Switch back to planeGeometry but make it massive (1000). Because your Fog ends at 90, you will never see the corners of the square, so a Circle is not necessary.
+
+3. Texture Density
+
+Your floor is huge (500 units), but REPEAT_COUNT is only 120. This stretches the grass image too much, making it blurry/blocky.
+The Fix: Increase the repeats significantly so the grass blades look tiny and sharp.
+
+Updated Code for Scene.tsx
+
+Here is the corrected GrassFloor component and the Scene return statement.
+
+1. Replace the GrassFloor function:
+code
+TypeScript
+download
+content_copy
+expand_less
+function GrassFloor() {
+  const gl = useThree((state) => state.gl);
+  
+  const props = useTexture({
+    map: '/textures/three/grass/grass_color.webp',
+    normalMap: '/textures/three/grass/grass_normal.webp',
+    aoMap: '/textures/three/grass/grass_ao.webp',
+  });
+
+  // --- CONFIGURATION ---
+  const FLOOR_SIZE = 1000; // Massive floor
+  // Increase repeats to 300. This makes the texture much smaller and sharper.
+  const REPEAT_COUNT = 300; 
+
+  useEffect(() => {
+    const maxAnisotropy = gl.capabilities.getMaxAnisotropy();
+
+    [props.map, props.normalMap, props.aoMap].forEach((tex) => {
+      if (tex) {
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(REPEAT_COUNT, REPEAT_COUNT);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        
+        // Ensure filters are set for sharpness
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        
+        tex.anisotropy = maxAnisotropy;
+        tex.needsUpdate = true;
+      }
+    });
+  }, [props, gl]);
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        {/* Switch back to PlaneGeometry for perfect texture tiling */}
+        <planeGeometry args={[FLOOR_SIZE, FLOOR_SIZE]} />
+        <meshStandardMaterial 
+          map={props.map}
+          normalMap={props.normalMap}
+          aoMap={props.aoMap}
+          color={GRASS_COLOR}
+          roughness={1} // High roughness prevents "wet" look
+          metalness={0}
+          normalScale={new THREE.Vector2(0.8, 0.8)}
+          envMapIntensity={0}
+          fog={true}
+        />
+      </mesh>
+      
+      {/* Contact Shadows remain the same */}
+      <ContactShadows position={[0, 0.02, 0]} scale={8} blur={2} opacity={0.7} far={0.25} color="#000000" resolution={256} frames={1} />
+      <ContactShadows position={[0, 0.02, 0]} scale={15} blur={2.5} opacity={0.5} far={1.5} color="#001100" resolution={256} frames={1} />
+    </group>
+  );
+}
+2. Update the Scene Return Statement:
+
+Remove the <AdaptiveDpr /> line at the top of the return.
+
+code
+TypeScript
+download
+content_copy
+expand_less
+return (
+    <>
+      {/* 1. REMOVED AdaptiveDpr completely to force high resolution */}
+      
+      {!is2DMode && <color attach="background" args={['#A8C9E6']} />}
+      
+      {/* 2. FOG: Keep these exact settings. 
+          Far=90 hides the world long before the 1000-unit plane ends. */}
+      {!is2DMode && <fog attach="fog" args={[HORIZON_COLOR, fogSettings.near, fogSettings.far]} />}
+      
+      {/* ... rest of your code ... */}

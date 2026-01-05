@@ -49,7 +49,7 @@ export default function SunRays() {
     () => ({
       uInnerColor: { value: new THREE.Color('#fff8dc') },
       uOuterColor: { value: new THREE.Color('#f2cf95') },
-      uOpacity: { value: 0.65 },
+      uOpacity: { value: 0.35 }, // Reduced from 0.65 for softer, less intense rays
       uTime: { value: 0 },
     }),
     []

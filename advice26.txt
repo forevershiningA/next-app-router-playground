@@ -1,0 +1,109 @@
+The pixelation is happening for two reasons:
+
+Texture Stretching: The texture is being stretched over too large of an area, making the pixels visible.
+
+Anisotropy: When you look at a floor at a shallow angle (like in your camera view), textures get blurry unless "Anisotropic Filtering" is turned up to the max.
+
+Here is the code to fix the pixelation and finally solve the sharp horizon line.
+
+1. Update GrassFloor (Fixes Pixelation & Horizon)
+
+We need to make the floor huge but also repeat the texture more often so it stays crisp. We also need to force the renderer to keep the texture sharp at angles.
+
+Replace your entire GrassFloor function with this:
+
+code
+
+function GrassFloor() {
+  const gl = useThree((state) => state.gl);
+  
+  // Load textures
+  const props = useTexture({
+    map: '/textures/three/grass/grass_color.webp',
+    normalMap: '/textures/three/grass/grass_normal.webp',
+    aoMap: '/textures/three/grass/grass_ao.webp',
+  });
+
+  // --- CONFIGURATION ---
+  const FLOOR_SIZE = 500; // Huge floor to hit the horizon
+  const REPEAT_COUNT = 120; // High repeat to keep grass blades small and crisp
+
+  useEffect(() => {
+    // 1. MAX ANISOTROPY: This fixes the blurry/smudged look at oblique angles
+    const maxAnisotropy = gl.capabilities.getMaxAnisotropy();
+
+    [props.map, props.normalMap, props.aoMap].forEach((tex) => {
+      if (tex) {
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(REPEAT_COUNT, REPEAT_COUNT);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        
+        // CRITICAL: Maximize this value to remove blur
+        tex.anisotropy = maxAnisotropy; 
+        tex.needsUpdate = true;
+      }
+    });
+  }, [props, gl]);
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        {/* Use CircleGeometry instead of Plane to avoid visible corners in the distance */}
+        <circleGeometry args={[FLOOR_SIZE, 64]} />
+        <meshStandardMaterial 
+          map={props.map}
+          normalMap={props.normalMap}
+          aoMap={props.aoMap}
+          color={'#5a7f3c'} // Match your grass color
+          roughness={1}
+          metalness={0}
+          normalScale={new THREE.Vector2(1, 1)} // Increase bumpiness
+          envMapIntensity={0}
+        />
+      </mesh>
+      
+      {/* Contact Shadow stays small and centered */}
+      <ContactShadows
+        position={[0, 0.02, 0]}
+        scale={8}
+        blur={2}
+        opacity={0.7}
+        far={0.25}
+        color="#000000"
+      />
+    </group>
+  );
+}
+2. Update Fog Settings (Hides the Edge)
+
+The sharp line in the background exists because the floor ends (or the camera stops seeing it) before the fog becomes fully opaque.
+
+In Scene.tsx, update your Fog and Camera settings:
+
+code
+
+// 1. Define the Color (Matches your sky bottom)
+const FOG_COLOR = '#e3cba5'; // or whatever your sky bottom color is
+
+// 2. Setup the Fog
+// Near: 20 (Keeps headstone clear)
+// Far: 90 (Must be MUCH smaller than the FLOOR_SIZE of 500)
+// This ensures the world fades to solid color long before the geometry ends.
+{!is2DMode && <fog attach="fog" args={[FOG_COLOR, 20, 90]} />}
+3. Check Camera Clipping (Important)
+
+If your camera has a short far clipping plane, it will cut off the world regardless of how big the floor is.
+
+In Scene.tsx inside <OrbitControls /> or your default camera setup:
+
+By default, Drei's OrbitControls uses the default camera. If you are defining a camera elsewhere (like in <Canvas camera={{ far: 1000 }} ... >), ensure the far value is at least 1000.
+
+If you haven't set up the Canvas camera manually, Three.js usually defaults to far: 1000, so you should be safe.
+
+Summary of Fixes
+
+tex.anisotropy = maxAnisotropy: This tells the GPU to calculate pixels carefully when the floor is tilted away from the camera. This fixes the blur.
+
+REPEAT_COUNT = 120: This ensures the texture resolution is high enough (approx 4 texture tiles per meter).
+
+FLOOR_SIZE = 500 vs FOG FAR = 90: The floor extends 5x further than the fog visibility. This guarantees you will never see the sharp edge of the world again.
