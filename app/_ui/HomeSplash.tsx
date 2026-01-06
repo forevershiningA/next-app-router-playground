@@ -381,7 +381,7 @@ export default function HomeSplash() {
 
           <div className="flex-1 w-full lg:max-w-xl mx-auto lg:mx-0">
             <div className="relative rounded-[36px] border border-white/10 bg-black/30 p-2 shadow-[0_45px_80px_rgba(0,0,0,0.55)]">
-              <div className="relative w-full h-60 sm:h-72 lg:h-[22rem] overflow-hidden rounded-[30px]">
+              <div className="relative w-full min-h-[500px] lg:min-h-[600px] overflow-hidden rounded-[30px]">
                 <Image
                   src="/backgrounds/dyo.webp"
                   alt="3D memorial preview"
@@ -389,13 +389,13 @@ export default function HomeSplash() {
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, 50vw"
                   priority
-                  style={{ objectPosition: '60% center' }}
+                  style={{ objectPosition: 'center center' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/20 to-black/45" />
               </div>
             </div>
             <p className="mt-4 text-center text-sm text-white/70">
-              As you design, the 3D studio updates instantly.
+              As you design, the 3D studio updates instantly
             </p>
           </div>
         </div>
@@ -544,7 +544,7 @@ export default function HomeSplash() {
               <div className="mt-4 space-y-3 text-sm text-white/80">
                 <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors">(+1) 647 388 0931</a>
                 <p className="text-white/70">
-                  <a href="mailto:support@forevershining.com.au" className="hover:text-[#f3d48f] transition-colors">admin@bronze-plaque.com</a>
+                  <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors">admin@bronze-plaque.com</a>
                 </p>
                 <p className="text-white/70 leading-relaxed">
                   1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
@@ -571,7 +571,7 @@ export default function HomeSplash() {
               <span>•</span>
               <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white">HeadstonesDesigner.com</a>
               <span>•</span>
-              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white">ForeverShining.com.au</a>
+              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Forever Shining Australia</a>
             </div>
             <div className="flex items-center gap-3 text-white/55">
               <span className="tracking-widest">VISA</span>
