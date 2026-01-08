@@ -53,7 +53,7 @@ const menuGroups = [
 
 // Flatten for compatibility with existing code
 const menuItems = menuGroups.flatMap(group => group.items);
-const fullscreenPanelSlugs = new Set(['select-size', 'select-shape', 'select-material', 'inscriptions', 'select-additions', 'select-motifs']);
+const fullscreenPanelSlugs = new Set(['select-size', 'select-material', 'inscriptions', 'select-additions', 'select-motifs']);
 
 export default function DesignerNav() {
   const pathname = usePathname();
@@ -1302,12 +1302,53 @@ export default function DesignerNav() {
               );
             }
             
+            // Special handling for Select Shape - inline picker only when canvas is visible
+            if (item.slug === 'select-shape') {
+              const showInlineShapeSelector = isCanvasVisible;
+              return (
+                <React.Fragment key={item.slug}>
+                  {showInlineShapeSelector ? (
+                    <>
+                      <div
+                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light border transition-all ${
+                          isActive
+                            ? 'text-white bg-white/15 shadow-lg border-white/30 backdrop-blur-sm'
+                            : 'text-gray-200 border-white/10'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span>{item.name}</span>
+                      </div>
+                      <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-280px)] overflow-hidden">
+                        <div className="h-full overflow-y-auto pr-1">
+                          <ShapeSelector shapes={shapes} />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      href={`/${item.slug}`}
+                      data-section={item.slug}
+                      onClick={(e) => handleMenuClick(item.slug, e)}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                        isActive
+                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm'
+                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
+                </React.Fragment>
+              );
+            }
+
             // Special handling for Select Material - show material selector in sidebar when canvas is visible
             if (item.slug === 'select-material') {
               return (
                 <React.Fragment key={item.slug}>
                   {isCanvasVisible ? (
-                    // Show material selector in sidebar when canvas is visible, with click handler to navigate
                     <>
                       <button
                         onClick={(e) => {

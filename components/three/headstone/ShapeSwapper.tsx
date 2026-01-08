@@ -169,7 +169,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
-  const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -195,12 +194,27 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     return `/${headstoneMaterialUrl.replace(/^\/+/, '')}`;
   }, [headstoneMaterialUrl]);
 
-  const [visibleUrl, setVisibleUrl] = React.useState<string>(requestedUrl);
+  const [visibleUrl, setVisibleUrl] = React.useState<string | null>(null);
   // Re-introduce visibleTex state to decouple loading from display
-  const [visibleTex, setVisibleTex] = React.useState<string>(requestedTex);
+  const [visibleTex, setVisibleTex] = React.useState<string | null>(null);
   const pendingTextureSwap = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Ensure we always have an initial visible asset so the scene never renders empty
+  React.useEffect(() => {
+    if (!visibleUrl && requestedUrl) {
+      setVisibleUrl(requestedUrl);
+    }
+  }, [visibleUrl, requestedUrl]);
+
+  React.useEffect(() => {
+    if (!visibleTex && requestedTex) {
+      setVisibleTex(requestedTex);
+    }
+  }, [visibleTex, requestedTex]);
   const [fitTick, setFitTick] = React.useState(0);
 
+  const resolvedUrl = visibleUrl ?? requestedUrl;
+  const resolvedTex = visibleTex ?? requestedTex;
   const shapeSwapping = requestedUrl !== visibleUrl;
   const isPending = false;
 
@@ -212,6 +226,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
       }
     };
   }, []);
+
+  const textureTransitioning = requestedTex !== visibleTex;
+
+  React.useEffect(() => {
+    const shouldLoad = shapeSwapping || textureTransitioning || fontLoading;
+    setLoading(shouldLoad);
+  }, [shapeSwapping, textureTransitioning, fontLoading, setLoading]);
 
   // Handle Texture Updates via Transition
   // When shape is swapping we can update immediately (full-screen loader visible)
@@ -246,22 +267,18 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     return () => cancelAnimationFrame(id);
   }, []);
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, [setLoading]);
 
   return (
     <>
       <group ref={tabletRef}>
         <React.Suspense fallback={null}>
           <SvgHeadstone
-            key={visibleUrl}
-            url={visibleUrl}
+            key={resolvedUrl}
+            url={resolvedUrl}
             depth={isPlaque ? 5 : uprightThickness / 10}
             scale={0.01}
-            faceTexture={visibleTex}
-            sideTexture={visibleTex}
+            faceTexture={resolvedTex}
+            sideTexture={resolvedTex}
             tileSize={0.35}
             sideTileSize={0.35}
             topTileSize={0.35}
@@ -400,7 +417,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         />
       </group>
 
-      {!shapeSwapping && !isMaterialChange && requestedTex !== visibleTex && (
+      {!shapeSwapping && !isMaterialChange && textureTransitioning && (
         <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
@@ -418,7 +435,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         </React.Suspense>
       )}
 
-      {requestedUrl !== visibleUrl && (
+      {shapeSwapping && (
         <React.Suspense fallback={null}>
           <PreloadShape
             url={requestedUrl}
@@ -433,7 +450,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
       {/* Loader used for Shape Swapping or Font Loading only */}
       {/* Show a subtle indicator when texture is transitioning */}
-      <InlineCanvasLoader show={shapeSwapping || fontLoading} />
+      <InlineCanvasLoader show={shapeSwapping || fontLoading || textureTransitioning} />
     </>
   );
 }

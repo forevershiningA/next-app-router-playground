@@ -1,0 +1,41 @@
+To resolve the issue where sunrays are visible while the headstone is still loading (or transitioning), we need to ensure that the SunRays component shares the same Suspense boundary as the HeadstoneAssembly.
+
+Currently, the HeadstoneAssembly likely suspends while loading geometry/textures. Because SunRays was outside of any suspense boundary (or in a parent one that didn't hide it), it rendered immediately while the headstone showed a fallback or nothing.
+
+By wrapping both SunRays and the group containing HeadstoneAssembly in a <Suspense fallback={null}>, we ensure that if the headstone is loading, the entire content of that block (including the sunrays) remains hidden until the stone is ready.
+
+code
+Typescript:Scene.tsx
+
+// ... existing code ...
+      <mesh
+        position={[0, 0, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        onClick={handleCanvasClick}
+      >
+        <planeGeometry args={[200, 200]} />
+        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
+      </mesh>
+      
+      {/* 
+        Wrap SunRays and Headstone in a shared Suspense.
+        This ensures SunRays do not appear until the Headstone is fully loaded.
+      */}
+      <Suspense fallback={null}>
+        {!is2DMode && !loading && !baseSwapping && <SunRays />}
+
+        <group ref={groupRef}>
+          <HeadstoneAssembly />
+          
+          {/* TEXTURED FLOOR with fallback for slow connections */}
+          <Suspense fallback={<SimpleGrassFloor />}>
+            <GrassFloor />
+          </Suspense>
+        </group>
+      </Suspense>
+
+      {/* Dust particles */}
+      {!is2DMode && (
+         <Sparkles 
+           count={30}
+// ... existing code ...

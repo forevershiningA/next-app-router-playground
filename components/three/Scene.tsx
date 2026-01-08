@@ -152,14 +152,19 @@ function SimpleGrassFloor() {
 
 export default function Scene({ 
   targetRotation = 0,
-  currentRotation
+  currentRotation,
+  onReady
 }: { 
   targetRotation?: number;
   currentRotation?: React.MutableRefObject<number>;
+  onReady?: () => void;
 }) {
   const groupRef = useRef<THREE.Group>(null);
+  const readySignaledRef = useRef(false);
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const loading = useHeadstoneStore((s) => s.loading);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
@@ -170,6 +175,39 @@ export default function Scene({
   const fogSettings = isMobileViewport
     ? { near: 9, far: 24 }
     : { near: 5, far: 24 };
+
+  // Call onReady after the scene finishes loading/swapping
+  useEffect(() => {
+    if (loading || baseSwapping) {
+      readySignaledRef.current = false;
+      return;
+    }
+
+    if (readySignaledRef.current) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      readySignaledRef.current = true;
+      onReady?.();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [loading, baseSwapping, onReady]);
+
+  // Reset camera when scene becomes ready
+  const { camera, controls } = useThree();
+  useEffect(() => {
+    if (!camera || !controls) return;
+    
+    console.log('🎬 Scene ready, resetting camera');
+    camera.position.set(0, 4.2, 10);
+    camera.lookAt(0, 3.8, 0);
+    camera.updateProjectionMatrix();
+    
+    (controls as any).target.set(0, 3.8, 0);
+    (controls as any).update();
+  }, [camera, controls]);
 
   // Smooth rotation animation
   useFrame(() => {
@@ -218,18 +256,33 @@ export default function Scene({
         <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
       </mesh>
       
-      {!is2DMode && <SunRays />}
+      {/* Keep SunRays gated independently so scene geometry doesn't disappear during swaps */}
+      {!is2DMode && (
+        <Suspense fallback={null}>
+          {!loading && !baseSwapping && <SunRays />}
+        </Suspense>
+      )}
+
+      <group ref={groupRef}>
+        {/* Headstone content manages its own suspense boundaries internally */}
+        <HeadstoneAssembly />
+        
+        {/* TEXTURED FLOOR with fallback for slow connections */}
+        <Suspense fallback={<SimpleGrassFloor />}>
+          <GrassFloor />
+        </Suspense>
+      </group>
 
       {/* Dust particles */}
       {!is2DMode && (
-         <Sparkles 
+         <Sparkles
            count={30}
            scale={12}
            size={3}
            speed={0.3}
            opacity={0.4}
            color="#fffee0"
-           position={[0, 2, 0]}
+           position={[0, 1, 0]}
          />
       )}
       
@@ -239,7 +292,7 @@ export default function Scene({
          1. AMBIENT: High intensity (1.0).
          This ensures the dark granite is visible everywhere, with NO highlights. 
       */}
-      <ambientLight intensity={1.0} color="#ffffff" />
+      <ambientLight intensity={0.6} color="#ffffff" />
       
       {/* 
          2. HEMISPHERE: Strong bounce.
@@ -258,7 +311,7 @@ export default function Scene({
       */}
       <spotLight 
         color="#fffce6"
-        intensity={1.8}
+        intensity={2.5}
         angle={0.6}
         penumbra={1}
         position={[-10, 12, 12]}
@@ -283,15 +336,6 @@ export default function Scene({
       */}
       
       <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
-
-      <group ref={groupRef}>
-        <HeadstoneAssembly />
-        
-        {/* TEXTURED FLOOR with fallback for slow connections */}
-        <Suspense fallback={<SimpleGrassFloor />}>
-          <GrassFloor />
-        </Suspense>
-      </group>
       
       {!is2DMode && (
         <Suspense fallback={null}>
@@ -304,9 +348,9 @@ export default function Scene({
 
       <OrbitControls
         makeDefault
-        enabled={!baseSwapping}
+        enabled={!baseSwapping && !loading}
         enableDamping={true}
-        dampingFactor={baseSwapping ? 0 : 0.05}
+        dampingFactor={baseSwapping || loading ? 0 : 0.05}
         enableRotate={!is2DMode}
         enableZoom={!is2DMode}
         enablePan={!is2DMode}
@@ -315,6 +359,7 @@ export default function Scene({
         panSpeed={0.8}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going below ground
+        target={[0, 3.8, 0]}
       />
     </>
   );

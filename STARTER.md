@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-04  
+**Last Updated:** 2026-01-06  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -426,20 +426,42 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 ## 3D Rendering Pipeline
 
 ### Scene Setup (ThreeScene.tsx)
-```typescript
-<Canvas
-  shadows="soft"
-  dpr={[1, 2]}
-  gl={{
-    antialias: true,
-    toneMapping: THREE.ACESFilmicToneMapping,
-    toneMappingExposure: 1.0
-  }}
->
-  <Scene />
-</Canvas>
+```tsx
+<div className={`w-full h-full transition-opacity duration-500 ${sceneReady ? 'opacity-100' : 'opacity-0'}`}>
+  <Canvas
+    key="main-canvas"
+    shadows
+    dpr={[1, 2]}
+    gl={{
+      alpha: true,
+      preserveDrawingBuffer: false,
+      antialias: true,
+      powerPreference: 'high-performance',
+      failIfMajorPerformanceCaveat: false,
+      stencil: false,
+      depth: true,
+    }}
+    camera={{
+      position: [0, 4.2, CAMERA_3D_POSITION_Z],
+      fov: CAMERA_FOV,
+      near: CAMERA_NEAR,
+      far: CAMERA_FAR,
+    }}
+  >
+    <Suspense fallback={null}>
+      <Scene
+        targetRotation={targetRotation}
+        currentRotation={currentRotation}
+        onReady={() => setSceneReady(true)}
+      />
+      <CameraController />
+    </Suspense>
+  </Canvas>
+</div>
 ```
-- `Scene` mounts `<AdaptiveDpr pixelated />`, so whenever the user rotates/zooms the memorial the renderer temporarily lowers DPR for smoother interaction, then restores full resolution when idle.
+- A dedicated `sceneReady` flag now gates the entire `<Canvas>` behind a CSS opacity transition so `/select-size` regains its original fade-in. The flag resets whenever the shape/material changes **and** when `/select-size` mounts, ensuring the marketing handoff (“canvas should always fade in fresh on the size step”) stays true even when the user revisits the page with cached assets.
+- `CameraController` was rewritten as a hook-based helper that taps directly into `useThree()`. It force-resets both the R3F camera and OrbitControls whenever the shape or material URL changes, so we no longer rely on a declarative `<PerspectiveCamera />` tree that the App Router might recycle between transitions.
+- `Scene` still mounts `<AdaptiveDpr pixelated />`, so whenever the user rotates/zooms the memorial the renderer temporarily lowers DPR for smoother interaction, then restores full resolution when idle.
 
 ### Lighting (Scene.tsx)
 - **Ambient Light**: Intensity `1.0` white fill so dark granite never disappears on tablets.
@@ -595,6 +617,7 @@ MeshPhysicalMaterial({
 - Custom shader plane (`components/three/SunRays.tsx`) now sits at `[0, 4, -6]`, scaled to `[20, 9, 1]`, and `renderOrder={10}` so the animated rays glow **above** the cloud layer.
 - Uses additive blending plus inner (`#fff8dc`) and outer (`#f2cf95`) colors with tunable opacity (0.65) and faster time-based pulsing for a shimmering sunrise effect.
 - Ray density increased (`cos(angle * 14.0)`) so there are more individual beams, but each beam still eases off via cubic falloff to stay soft.
+- Rendering is wrapped inside the same `<Suspense>` block as `HeadstoneAssembly` and additionally gated by `!is2DMode && !loading && !baseSwapping`, so the rays no longer appear on their own while the stone geometry or base swap is still loading.
 
 **Sparkle Dust:**
 - Drei `<Sparkles>` adds ~30 slow-moving particles around `[0, 2, 0]` for a subtle floating-dust effect. Opacity 0.4 and warm color tie into the gold UI accents.
@@ -1463,41 +1486,61 @@ set({
 - When new texture URL passed as prop, component suspends and React hides it during Suspense boundary
 - Original approach passed `requestedTex` directly, causing component to suspend immediately
 
-**Solution** (React 18 `useTransition`):
-```typescript
+**Solution (Jan 6, 2026):** Manual preload staging + shared loader flag.
+```tsx
 // ShapeSwapper.tsx
-const [visibleTex, setVisibleTex] = useState(requestedTex);
-const [isPending, startTransition] = useTransition();
+const [visibleUrl, setVisibleUrl] = useState<string | null>(null);
+const [visibleTex, setVisibleTex] = useState<string | null>(null);
+const resolvedUrl = visibleUrl ?? requestedUrl;
+const resolvedTex = visibleTex ?? requestedTex;
+const textureTransitioning = requestedTex !== visibleTex;
+const shapeSwapping = requestedUrl !== visibleUrl;
 
-// When material changes, use transition to keep old texture visible
 useEffect(() => {
-  if (requestedTex !== visibleTex) {
-    if (shapeSwapping) {
-      setVisibleTex(requestedTex); // Immediate during shape swap (loader covers)
-    } else {
-      startTransition(() => {
-        setVisibleTex(requestedTex); // Transition keeps old visible until new loads
-        invalidate();
-      });
-    }
-  }
-}, [requestedTex, visibleTex, shapeSwapping]);
+  const shouldLoad = shapeSwapping || textureTransitioning || fontLoading;
+  setLoading(shouldLoad);
+}, [shapeSwapping, textureTransitioning, fontLoading, setLoading]);
 
-// Pass visibleTex (not requestedTex) to SvgHeadstone
+{!shapeSwapping && !isMaterialChange && textureTransitioning && (
+  <Suspense fallback={null}>
+    <PreloadTexture
+      url={requestedTex}
+      onReady={() => {
+        setVisibleTex(requestedTex);
+        invalidate();
+      }}
+    />
+  </Suspense>
+)}
+
+{shapeSwapping && (
+  <Suspense fallback={null}>
+    <PreloadShape
+      url={requestedUrl}
+      onReady={() => {
+        setVisibleUrl(requestedUrl);
+        requestAnimationFrame(() => setFitTick((n) => n + 1));
+        invalidate();
+      }}
+    />
+  </Suspense>
+)}
+
 <SvgHeadstone
-  key={visibleUrl}
-  faceTexture={visibleTex}  // Currently visible texture
-  sideTexture={visibleTex}
+  key={resolvedUrl}
+  url={resolvedUrl}
+  faceTexture={resolvedTex}
+  sideTexture={resolvedTex}
 />
 ```
 
 **Key Points**:
-- `startTransition` tells React to keep showing old content while new loads
-- `isPending` state shows loading indicator without hiding headstone
-- No manual preloading needed - React handles it automatically
-- Component only remounts when shape changes (not texture)
+- Assets now start as `null`, so the first paint waits for the preload callbacks before drawing anything (no more “floating sunrays + loader” while the stone is absent).
+- Manual `PreloadShape` / `PreloadTexture` gates keep the previous mesh/texture visible until the new resource resolves, matching the “never flash empty canvas” requirement without relying on `useTransition`.
+- A single `setLoading()` call powers both the global overlay and the inline canvas spinner (`shapeSwapping || fontLoading || textureTransitioning`), which also hides SunRays/background chrome until the headstone is truly ready.
+- Component still remounts only when the SVG URL changes; material swaps hot-swap the texture while keeping the same mesh instance alive, so inscriptions/additions never lose focus.
 
-**Commits**: `88a06c5270`
+**Commits**: `88a06c5270`, `3c9d7b47c1`
 
 ### Issue: Designer UI Showing on Design Gallery Pages
 **Symptom:** Product header (e.g., "Traditional Engraved Headstone 600x600mm $1434.94") visible on `/designs` routes
@@ -2128,21 +2171,21 @@ git log --oneline -10   # Recent commits
     - Canvas now controlled solely by `ConditionalCanvas.tsx` based on pathname
     - Removed duplicate route complexity
   - **Product Selection Flow**: 
-    - `/select-product` (no canvas) → select product → `/select-shape` (no canvas)
-    - `/select-shape` (no canvas) → select shape → `/select-size` (with canvas)
-    - Shape selector only appears in sidebar when canvas is visible (not on standalone `/select-shape` page)
+    - `/select-product` (no canvas) → select product → `/select-shape` (also no canvas, dedicated grid)
+    - `/select-shape` shows the shape gallery in the main content area; `/select-size` and beyond re-enable the canvas
+    - When the canvas is visible (size/material/etc.), the sidebar mirrors the Select Shape grid for quick swaps
   - **Thickness Initialization**: Fixed product thickness not being set from XML catalog
     - `setProductId()` now sets both `uprightThickness` and `slantThickness` from `shape.table.initDepth`
     - Each product can have different thickness (e.g., Mini Headstones: 50mm)
     - Before: Always defaulted to 150mm regardless of product
     - After: Respects `init_depth` from `catalog-id-*.xml` files
   - **Canvas Visibility Logic** (ConditionalCanvas.tsx):
-    - Hide canvas on: `/`, `/designs`, `/select-product`, `/select-shape`, `/select-additions`, `/check-price`
-    - Show canvas on: `/select-size`, `/inscriptions`, `/select-motifs`, `/select-material`
+    - Hide canvas on: `/`, `/designs`, `/select-product`, `/select-shape`, `/check-price`
+    - Show canvas on: `/select-size`, `/inscriptions`, `/select-motifs`, `/select-material`, `/select-additions`
   - **Sidebar Behavior** (DesignerNav.tsx):
-    - Shape selector panel only shows when `isCanvasVisible === true`
-    - Removed `/select-shape` from `canvasVisiblePages` array
-    - When canvas hidden, "Select Shape" link navigates to full-page selector
+    - Shape selector panel renders only when `isCanvasVisible === true` (size/material/etc.), mirroring the main gallery for quick swaps
+    - `/select-shape` itself continues to use the standalone gallery without the canvas
+    - When canvas is hidden, "Select Shape" simply navigates to the dedicated page
   - **Thumbnail Improvements**:
     - Added hover border (2px) matching selected state for product cards
     - Consistent styling across all selection pages

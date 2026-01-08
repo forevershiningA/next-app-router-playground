@@ -53,7 +53,20 @@ export default function ConditionalCanvas() {
     if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage) {
       hideOverlay();
     }
-  }, [pathname, isHomePage, isDesignPage, isSelectProductPage, isSelectShapePage, isSelectMaterialPage, isSelectAdditionsPage, isSelectMotifsPage, isCheckPricePage, isSelectSizePage, isInscriptionsPage, hideOverlay]);
+  }, [
+    pathname,
+    isHomePage,
+    isDesignPage,
+    isSelectProductPage,
+    isSelectShapePage,
+    isSelectMaterialPage,
+    isSelectAdditionsPage,
+    isSelectMotifsPage,
+    isCheckPricePage,
+    isSelectSizePage,
+    isInscriptionsPage,
+    hideOverlay,
+  ]);
   
   if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage) {
     return null;

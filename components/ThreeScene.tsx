@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useThree } from '@react-three/fiber';
-import { Suspense, useEffect, useState, useRef, useMemo } from 'react';
+import { Suspense, useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
@@ -15,25 +15,35 @@ import {
 } from '#/lib/headstone-constants';
 
 function CameraController() {
-  const { controls } = useThree();
+  const { controls, camera } = useThree();
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const materialUrl = useHeadstoneStore((s) => s.materialUrl);
 
+  // Force reset camera whenever shape or material changes
   useEffect(() => {
-    if (!controls) return;
+    if (!controls || !camera) return;
     
-    // Set camera target
+    console.log('🎥 Camera reset triggered - Shape:', shapeUrl);
+    
+    // Force reset camera position
+    camera.position.set(0, 4.2, CAMERA_3D_POSITION_Z);
+    camera.lookAt(0, 3.8, 0);
+    camera.updateProjectionMatrix();
+    
+    // Force reset orbit controls
+    if ((controls as any).reset) {
+      console.log('🔄 Calling controls.reset()');
+      (controls as any).reset();
+    }
     (controls as any).target.set(0, 3.8, 0);
     (controls as any).update();
-  }, [controls]);
+    
+    console.log('📍 Camera position:', camera.position.toArray());
+    console.log('🎯 Controls target:', (controls as any).target.toArray());
+    
+  }, [controls, camera, shapeUrl, materialUrl]);
 
-  return (
-    <PerspectiveCamera
-      makeDefault
-      position={[0, 4.2, CAMERA_3D_POSITION_Z]}
-      fov={CAMERA_FOV}
-      near={CAMERA_NEAR}
-      far={CAMERA_FAR}
-    />
-  );
+  return null;
 }
 
 // Product Name Header Component - Apple Studio Look
@@ -138,13 +148,33 @@ export default function ThreeScene() {
   
   const [isVisible, setIsVisible] = useState(true);
   const [showLoader, setShowLoader] = useState(false);
+  const [sceneReady, setSceneReady] = useState(false);
+  const [shouldAnimateFade, setShouldAnimateFade] = useState(true);
   const [targetRotation, setTargetRotation] = useState(0);
   const currentRotation = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const hasInitiallyLoaded = useRef(false);
   const glRef = useRef<any>(null);
+  const handleSceneReady = useCallback(() => {
+    setSceneReady(true);
+    setShouldAnimateFade(false);
+  }, []);
   const contextLostHandler = useRef<any>(null);
   const contextRestoredHandler = useRef<any>(null);
+  const previousPathRef = useRef<string | null>(null);
+
+
+  // Force a fresh fade when landing on /select-size, even if assets didn't change
+  useEffect(() => {
+    const previousPath = previousPathRef.current;
+
+    if (pathname === '/select-size' && previousPath !== '/select-size') {
+      setShouldAnimateFade(true);
+      setSceneReady(false);
+    }
+
+    previousPathRef.current = pathname ?? null;
+  }, [pathname]);
 
   const rotateLeft = () => {
     setTargetRotation(prev => prev - Math.PI / 6); // -30 degrees
@@ -241,54 +271,62 @@ export default function ThreeScene() {
           {/* Product Name Overlay (above canvas) */}
           <ProductNameHeader />
           
-          <Canvas
-            key="main-canvas"
-            shadows
-            dpr={[1, 2]}
-            gl={{ 
-              alpha: true,
-              preserveDrawingBuffer: false,
-              antialias: true,
-              powerPreference: 'high-performance',
-              failIfMajorPerformanceCaveat: false,
-              stencil: false,
-              depth: true,
-            }}
-            onCreated={({ gl, scene }) => {
-              glRef.current = gl;
-              
-              // Set environment map intensity for the entire scene
-              if (scene.environment) {
-                scene.environmentIntensity = 0.4;
-              }
-              
-              // Handle WebGL context loss
-              contextLostHandler.current = (event: Event) => {
-                event.preventDefault();
-                console.warn('WebGL context lost, attempting to restore...');
-              };
-              
-              contextRestoredHandler.current = () => {
-                console.log('WebGL context restored');
-                // Force a re-render
-                window.dispatchEvent(new Event('resize'));
-              };
-              
-              gl.domElement.addEventListener('webglcontextlost', contextLostHandler.current);
-              gl.domElement.addEventListener('webglcontextrestored', contextRestoredHandler.current);
-            }}
-            camera={{ position: [0, 0, 10] }}
-            style={{ background: 'transparent', width: '100%', height: '100%' }}
-            className={isDesignsPage ? 'canvas-with-border' : ''}
-          >
-            <Suspense fallback={null}>
-              <Scene 
-                targetRotation={targetRotation} 
-                currentRotation={currentRotation}
-              />
-              <CameraController />
-            </Suspense>
-          </Canvas>
+          <div className={`w-full h-full transition-opacity duration-500 ${sceneReady ? 'opacity-100' : 'opacity-0'}`}>
+            <Canvas
+              key="main-canvas"
+              shadows
+              dpr={[1, 2]}
+              gl={{ 
+                alpha: true,
+                preserveDrawingBuffer: false,
+                antialias: true,
+                powerPreference: 'high-performance',
+                failIfMajorPerformanceCaveat: false,
+                stencil: false,
+                depth: true,
+              }}
+              onCreated={({ gl, scene }) => {
+                glRef.current = gl;
+                
+                // Set environment map intensity for the entire scene
+                if (scene.environment) {
+                  scene.environmentIntensity = 0.4;
+                }
+                
+                // Handle WebGL context loss
+                contextLostHandler.current = (event: Event) => {
+                  event.preventDefault();
+                  console.warn('WebGL context lost, attempting to restore...');
+                };
+                
+                contextRestoredHandler.current = () => {
+                  console.log('WebGL context restored');
+                  // Force a re-render
+                  window.dispatchEvent(new Event('resize'));
+                };
+                
+                gl.domElement.addEventListener('webglcontextlost', contextLostHandler.current);
+                gl.domElement.addEventListener('webglcontextrestored', contextRestoredHandler.current);
+              }}
+              camera={{ 
+                position: [0, 4.2, CAMERA_3D_POSITION_Z],
+                fov: CAMERA_FOV,
+                near: CAMERA_NEAR,
+                far: CAMERA_FAR
+              }}
+              style={{ background: 'transparent', width: '100%', height: '100%' }}
+              className={isDesignsPage ? 'canvas-with-border' : ''}
+            >
+              <Suspense fallback={null}>
+                <Scene 
+                  targetRotation={targetRotation} 
+                  currentRotation={currentRotation}
+                  onReady={handleSceneReady}
+                />
+                <CameraController />
+              </Suspense>
+            </Canvas>
+          </div>
 
           {/* Rotation Controls */}
           {!is2DMode && (

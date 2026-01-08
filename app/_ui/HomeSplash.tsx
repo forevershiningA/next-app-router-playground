@@ -235,7 +235,7 @@ export default function HomeSplash() {
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
             <h1 className="text-3xl font-playfair-display tracking-tight text-white sm:text-5xl mb-2 sm:mb-3 leading-tight">
               <span className="block font-semibold drop-shadow-sm text-[2rem] sm:text-5xl">Create the Perfect Tribute</span>
-              <span className="block font-light drop-shadow-sm text-xl sm:text-3xl mt-4 text-gray-200">See a beautiful tribute to your loved one in real-time 3D</span>
+              <span className="block font-light drop-shadow-sm text-xl sm:text-3xl mt-4 text-gray-200">Design a beautiful tribute in real-time 3D - save, share, and order when ready.</span>
             </h1>
             
             {/* Trust Signals */}
@@ -248,11 +248,11 @@ export default function HomeSplash() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-sm font-medium text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+                <p className="text-md font-medium text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                   Trusted by 5,000+ families
                 </p>
               </div>
-              <p className="text-xs text-gray-400 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              <p className="text-sm text-gray-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 Save designs • Share with family • No obligation · No credit card required<br/>
                 Choose from: Headstones • Plaques • Urns • Full Monuments<br/>
                 Design exactly what you envision.

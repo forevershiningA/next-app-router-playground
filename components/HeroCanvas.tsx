@@ -105,37 +105,42 @@ const HeartHeadstone: React.FC<HeadstoneProps> = ({ width, height, thickness }) 
     // Stand dimensions
     const baseW = 0.35; 
     const footH = 0.05; 
+    
+    // Width Multiplier: 
+    // Increased from 1.0 to 1.12 to push the sides out, making the top wider
+    const wMult = 1.12; 
+    const wideX = w2 * wMult;
 
     // Start at bottom-left of the foot
     s.moveTo(-baseW, 0);
     s.lineTo(-baseW, footH);
 
     // Left Side of Heart (Bottom to Wide Side)
+    // Adjusted control points to flare out wider
     s.bezierCurveTo(
       -w2 * 0.8, h * 0.15, 
-      -w2,       h * 0.5,  
-      -w2,       h * 0.65  
+      -wideX,    h * 0.5,  // Pushed out
+      -wideX,    h * 0.65  // Pushed out
     );
 
     // Left Side Top Lobe -> Center Dip
-    // Modified: Raised the end point (dip) and adjusted control points
-    // to make the center intersection "smaller" and tighter.
+    // Adjusted control points to support the wider top
     s.bezierCurveTo(
-      -w2,        h * 0.98, // CP1: Slightly higher outer shoulder
-      -w2 * 0.30, h * 1.05, // CP2: Lobe peak
-      0,          h * 0.87  // End: Center dip (Raised from 0.82 to 0.87 to make the V smaller)
+      -wideX,     h * 0.98, // CP1: Stays wide
+      -w2 * 0.45, h * 1.05, // CP2: Shifted outward (from 0.3 to 0.45) for fuller lobes
+      0,          h * 0.87  // End: Sharp center dip
     );
 
-    // Right Side Top Lobe -> Wide Side
+    // Right Side Top Lobe -> Wide Side (Mirrored)
     s.bezierCurveTo(
-      w2 * 0.30,  h * 1.05,
-      w2,         h * 0.98,
-      w2,         h * 0.65
+      w2 * 0.45,  h * 1.05,
+      wideX,      h * 0.98,
+      wideX,      h * 0.65
     );
 
     // Right Side (Wide Side to Bottom)
     s.bezierCurveTo(
-      w2,        h * 0.5,
+      wideX,     h * 0.5,
       w2 * 0.8,  h * 0.15,
       baseW,     footH
     );
@@ -342,7 +347,7 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
           <spotLight 
             position={[8, 8, 8]}
             angle={0.5}
-            penumbra={1}
+            penumbra={1} 
             intensity={1.5}
             castShadow
             shadow-bias={-0.0001}
