@@ -16,8 +16,14 @@ docs/
 # Exclude: Full-size JPG screenshots (7.3GB) - use _small.jpg instead
 
 # Exclude full-size screenshots (keep only _small.jpg thumbnails)
+public/ml/**/screenshots/*.jpg
 public/ml/**/screenshots/**/*.jpg
+public/ml/**/screenshots/*.JPG
+public/ml/**/screenshots/**/*.JPG
+!public/ml/**/screenshots/*_small.jpg
 !public/ml/**/screenshots/**/*_small.jpg
+!public/ml/**/screenshots/*_small.JPG
+!public/ml/**/screenshots/**/*_small.JPG
 
 # Logs and temp files
 *.log
