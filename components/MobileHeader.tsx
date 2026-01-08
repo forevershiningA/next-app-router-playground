@@ -22,6 +22,14 @@ export default function MobileHeader() {
   // Check if we're on a design list page (product or category level)
   const segments = pathname?.split('/').filter(s => s) || [];
   const isDesignListPage = pathname?.startsWith('/designs') && segments.length >= 1;
+  const canvasVisiblePages = new Set([
+    '/select-size',
+    '/inscriptions',
+    '/select-motifs',
+    '/select-material',
+    '/select-additions',
+  ]);
+  const isCanvasVisible = pathname ? canvasVisiblePages.has(pathname) : false;
 
   // Detect desktop for header positioning
   useEffect(() => {
@@ -65,8 +73,8 @@ export default function MobileHeader() {
     return headstonePrice + basePrice + inscriptionCost + motifCost;
   }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
 
-  // Don't render header on design list pages or until catalog is loaded
-  if (isDesignListPage || !catalog) {
+  // Don't render header on design list pages, when catalog isn't ready, or when canvas is hidden
+  if (isDesignListPage || !catalog || !isCanvasVisible) {
     return null;
   }
 

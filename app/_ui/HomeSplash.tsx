@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import { data } from '#/app/_internal/_data';
 import {
   CubeIcon,
@@ -63,11 +63,165 @@ const fallbackMotifOptions = [
   { name: 'Floral', file: '/shapes/motifs/s/flower rose_03.png' },
 ];
 
+const HASH_MODAL_CONTENT = {
+  contact: {
+    eyebrow: 'Personal Support',
+    title: 'Talk with a Designer',
+    description: 'Our memorial specialists are available every day to guide you through sizing, materials, and wording.',
+    bullets: [
+      'Call us at (+1) 647 388 0931 between 9am and 7pm EST.',
+      'Email admin@bronze-plaque.com for a written response within one business day.',
+      'Book a complimentary screen-share to co-design live with your family.'
+    ],
+    links: [
+      { label: 'Call Now', href: 'tel:+16473880931' },
+      { label: 'Email Support', href: 'mailto:admin@bronze-plaque.com' }
+    ]
+  },
+  headstones: {
+    eyebrow: 'Memorial Types',
+    title: 'Custom Headstones',
+    description: 'Preview upright, serpentine, and slant silhouettes in real-time 3D, complete with bases and vases.',
+    bullets: [
+      'Mix 40+ shapes with granite or bronze finishes.',
+      'Dial in exact width, height, and depth in millimetres.',
+      'Export proofs to share with family before you approve production.'
+    ]
+  },
+  plaques: {
+    eyebrow: 'Memorial Types',
+    title: 'Garden & Wall Plaques',
+    description: 'Design bronze or granite plaques for gardens, walls, mausoleums, or cremation memorials.',
+    bullets: [
+      'Choose from beveled, book, and scroll layouts.',
+      'Add photo etchings, emblems, or raised bronze letters.',
+      'Generate instant pricing for single or companion layouts.'
+    ]
+  },
+  urns: {
+    eyebrow: 'Memorial Types',
+    title: 'Urns & Keepsakes',
+    description: 'Coordinate urn colors, engravings, and motif placement with the rest of your memorial design.',
+    bullets: [
+      'Preview indoor and outdoor safe finishes.',
+      'Add inscriptions, dates, and iconography in seconds.',
+      'Match granite, marble, or metal textures to an existing monument.'
+    ]
+  },
+  monuments: {
+    eyebrow: 'Memorial Types',
+    title: 'Full Monument Sets',
+    description: 'Plan coordinated uprights, kerbs, covers, and accessories for family estates.',
+    bullets: [
+      'Combine bases, tablets, vases, statues, and lighting.',
+      'Model custom sizes for council or cemetery guidelines.',
+      'Share 3D walkthroughs with extended family for quick approvals.'
+    ]
+  },
+  pets: {
+    eyebrow: 'Memorial Types',
+    title: 'Pet Memorials',
+    description: 'Create heartfelt garden markers, plaques, and urns that celebrate beloved companions.',
+    bullets: [
+      'Pick playful motifs—paw prints, hearts, and florals.',
+      'Upload photos for laser or sandblast etching.',
+      'Order lightweight plaques that ship anywhere in North America.'
+    ]
+  },
+  'how-it-works': {
+    eyebrow: 'Guided Flow',
+    title: 'How the Studio Works',
+    description: 'A three-phase workflow keeps your family in sync from inspiration to final approval.',
+    bullets: [
+      'Phase 1: Choose product, shape, and material with real-time previews.',
+      'Phase 2: Personalize inscriptions, motifs, and additions with live pricing.',
+      'Phase 3: Share proofs, lock pricing, and hand off to production when ready.'
+    ]
+  },
+  pricing: {
+    eyebrow: 'Transparency',
+    title: 'Pricing Guide',
+    description: 'See every component—headstone, base, inscriptions, motifs, freight—before you place an order.',
+    bullets: [
+      'Live calculator updates as you change dimensions or finishes.',
+      'Optional services (installation, foundation, shipping) itemized clearly.',
+      'Download quotes or send a secure payment link when the family approves.'
+    ]
+  },
+  materials: {
+    eyebrow: 'Material Library',
+    title: 'Granite, Bronze & More',
+    description: 'Browse calibrated swatches for Glory Black, Blue Pearl, Bahama Blue, bronze finishes, and ceramic photos.',
+    bullets: [
+      'Compare polished, honed, rock-pitched, and steeled textures.',
+      'Preview weathering and contrast for each inscription style.',
+      'Lock preferred materials to keep future edits on-brand.'
+    ]
+  },
+  faq: {
+    eyebrow: 'Common Questions',
+    title: 'Frequently Asked Questions',
+    description: 'Get instant answers about shipping, cemetery approvals, photo requirements, and payment schedules.',
+    bullets: [
+      'Understand proofing timelines and how many revisions are included.',
+      'Learn how we handle cemetery permits and installation coordination.',
+      'See engraving, etching, and ceramic photo care instructions.'
+    ]
+  },
+  privacy: {
+    eyebrow: 'Policy Snapshot',
+    title: 'Privacy Practices',
+    description: 'We only store the information needed to save your designs and process approved orders.',
+    bullets: [
+      'Design files stay encrypted at rest and are deleted on request.',
+      'Payment data is handled by PCI-compliant processors; we never store card numbers.',
+      'You can export or purge personal data by emailing admin@bronze-plaque.com.'
+    ],
+    links: [{ label: 'Request Full Policy', href: 'mailto:admin@bronze-plaque.com?subject=Privacy%20Policy%20Request' }]
+  },
+  terms: {
+    eyebrow: 'Policy Snapshot',
+    title: 'Terms of Service',
+    description: 'Review the expectations around artwork approval, payment milestones, and cancellation windows.',
+    bullets: [
+      'Orders enter production only after you sign off on the final proof.',
+      '50% deposits are refundable until materials are cut; after that we credit future work.',
+      'Manufacturing timelines average 6–10 weeks, depending on material availability.'
+    ],
+    links: [{ label: 'Request Full Terms', href: 'mailto:admin@bronze-plaque.com?subject=Terms%20of%20Service%20Request' }]
+  },
+  sitemap: {
+    eyebrow: 'Navigation',
+    title: 'Site Overview',
+    description: 'Jump directly to the most visited flows in the studio experience.',
+    bullets: [
+      'Select Product → Shape → Material → Size → Personalize → Check Price.',
+      'Saved Designs: resume drafts from any device in seconds.',
+      'Support Center: chat, schedule a call, or download buyer guides.'
+    ],
+    links: [
+      { label: 'Start Designing', href: '/select-product' },
+      { label: 'Resume a Saved Design', href: '/designs' }
+    ]
+  }
+} as const;
+
+type HashModalKey = keyof typeof HASH_MODAL_CONTENT;
+
 export default function HomeSplash() {
   const router = useRouter();
   const [showCanvas, setShowCanvas] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [isInViewport, setIsInViewport] = useState(true);
+  const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
+
+  const handleHashLink = (slug: HashModalKey) => (event: MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setActiveModal(slug);
+  };
+
+  const closeModal = () => setActiveModal(null);
+  const activeModalContent = activeModal ? HASH_MODAL_CONTENT[activeModal] : null;
 
   // Only show canvas when on home page
   useEffect(() => {
@@ -104,6 +258,17 @@ export default function HomeSplash() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!activeModal) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveModal(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModal]);
+
   const rotateLeft = () => {
     setRotation((prev) => prev + Math.PI / 4);
   };
@@ -115,7 +280,7 @@ export default function HomeSplash() {
   const compassionPhases = [
     {
       key: 'foundation',
-      eyebrow: 'Phase 1',
+      eyebrow: 'Step 1',
       title: 'The Foundation',
       summary: 'Choose a memorial style',
       description:
@@ -123,7 +288,7 @@ export default function HomeSplash() {
     },
     {
       key: 'tribute',
-      eyebrow: 'Phase 2',
+      eyebrow: 'Step 2',
       title: 'The Tribute',
       summary: 'Personalize their story',
       description:
@@ -131,7 +296,7 @@ export default function HomeSplash() {
     },
     {
       key: 'review',
-      eyebrow: 'Phase 3',
+      eyebrow: 'Step 3',
       title: 'Review & Share',
       summary: 'Gather family input',
       description:
@@ -184,7 +349,7 @@ export default function HomeSplash() {
         {/* Responsive Header - Absolute top */}
         <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
           {/* Logo - Responsive width, centered on mobile */}
-          <div className="w-40 sm:w-56 md:w-72 transition-all mx-auto md:mx-0">
+          <div className="w-52 sm:w-56 md:w-72 transition-all mx-auto md:mx-0">
             <Image 
               src="/ico/forever-transparent-logo.png" 
               alt="Forever Shining - Design Online" 
@@ -229,7 +394,7 @@ export default function HomeSplash() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
         
         {/* Main Content - Flex Grow to Center Vertically */}
-        <div className="relative z-10 flex flex-col justify-center flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pt-24">
+        <div className="relative z-10 flex flex-col justify-center flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[129px] sm:pt-24">
           <div className="text-center">
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
@@ -254,8 +419,8 @@ export default function HomeSplash() {
               </div>
               <p className="text-sm text-gray-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 Save designs • Share with family • No obligation · No credit card required<br/>
-                Choose from: Headstones • Plaques • Urns • Full Monuments<br/>
-                Design exactly what you envision.
+                Headstones • Plaques • Urns • Full Monuments<br/>
+                Design exactly what you need.
               </p>
             </div>
             
@@ -405,12 +570,14 @@ export default function HomeSplash() {
             {howItWorksHighlights.map(({ label, icon: HighlightIcon }) => (
               <div
                 key={label}
-                className="flex items-center gap-3 px-2 text-white/85"
+                className="flex items-center gap-3 px-2 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.65)]"
               >
                 <div className="w-12 h-12 rounded-2xl bg-[#20150e]/80 border border-[#f3d48f]/40 flex items-center justify-center text-[#f7dca3]">
                   <HighlightIcon className="w-5 h-5" />
                 </div>
-                <p className="text-sm font-medium leading-snug">{label}</p>
+                <p className="text-sm font-semibold leading-snug text-white">
+                  {label}
+                </p>
               </div>
             ))}
           </div>
@@ -421,9 +588,9 @@ export default function HomeSplash() {
                 key={label} 
                 className="rounded-2xl border border-[#d4af37]/70 bg-[#1f130c]/90 p-6 shadow-[0_20px_45px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-[#d4af37] hover:shadow-[0_25px_50px_rgba(212,175,55,0.15)]"
               >
-                <p className="text-[10px] uppercase tracking-[0.4em] text-white/85 mb-2">{label}</p>
-                <p className="text-3xl font-serif text-white mt-1">{value}</p>
-                <p className="text-[13px] text-white/70 mt-2 leading-snug">{detail}</p>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.55)] mb-2">{label}</p>
+                <p className="text-3xl font-serif text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] mt-1">{value}</p>
+                <p className="text-[13px] text-white/95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] mt-2 leading-snug">{detail}</p>
               </div>
             ))}
           </div>
@@ -467,6 +634,9 @@ export default function HomeSplash() {
               </Link>
               <Link
                 href="#contact"
+                onClick={handleHashLink('contact')}
+                role="button"
+                aria-haspopup="dialog"
                 className="w-full sm:w-auto rounded-full border border-white/40 px-10 py-4 text-base font-semibold text-white/90 hover:border-white hover:text-white transition-colors text-center"
               >
                 Request a Designer's Help
@@ -520,22 +690,22 @@ export default function HomeSplash() {
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Memorials</p>
               <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li><a href="#headstones" className="hover:text-white transition-colors">Headstones</a></li>
-                <li><a href="#plaques" className="hover:text-white transition-colors">Plaques</a></li>
-                <li><a href="#urns" className="hover:text-white transition-colors">Urns</a></li>
-                <li><a href="#monuments" className="hover:text-white transition-colors">Full Monuments</a></li>
-                <li><a href="#pets" className="hover:text-white transition-colors">Pet Memorials</a></li>
+                <li><a href="#headstones" onClick={handleHashLink('headstones')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Headstones</a></li>
+                <li><a href="#plaques" onClick={handleHashLink('plaques')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Plaques</a></li>
+                <li><a href="#urns" onClick={handleHashLink('urns')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Urns</a></li>
+                <li><a href="#monuments" onClick={handleHashLink('monuments')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Full Monuments</a></li>
+                <li><a href="#pets" onClick={handleHashLink('pets')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Pet Memorials</a></li>
               </ul>
             </div>
 
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Help & Guides</p>
               <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li><a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing Guide</a></li>
-                <li><a href="#materials" className="hover:text-white transition-colors">Material Guide</a></li>
-                <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#contact" className="hover:text-white transition-colors">Contact Us</a></li>
+                <li><a href="#how-it-works" onClick={handleHashLink('how-it-works')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">How it Works</a></li>
+                <li><a href="#pricing" onClick={handleHashLink('pricing')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Pricing Guide</a></li>
+                <li><a href="#materials" onClick={handleHashLink('materials')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Material Guide</a></li>
+                <li><a href="#faq" onClick={handleHashLink('faq')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">FAQ</a></li>
+                <li><a href="#contact" onClick={handleHashLink('contact')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Contact Us</a></li>
               </ul>
             </div>
 
@@ -556,11 +726,11 @@ export default function HomeSplash() {
           <div className="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
             <p>© 2025 Forever Shining. All rights reserved.</p>
             <div className="flex items-center gap-4 text-white/70 text-sm">
-              <a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Privacy Policy</a>
               <span className="text-white/40">|</span>
-              <a href="#terms" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#terms" onClick={handleHashLink('terms')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Terms of Service</a>
               <span className="text-white/40">|</span>
-              <a href="#sitemap" className="hover:text-white transition-colors">Sitemap</a>
+              <a href="#sitemap" onClick={handleHashLink('sitemap')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Sitemap</a>
             </div>
           </div>
 
@@ -581,6 +751,66 @@ export default function HomeSplash() {
           </div>
         </div>
       </footer>
+
+      {activeModalContent && (
+        <div
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="hash-modal-title"
+          onClick={closeModal}
+        >
+          <div
+            className="relative w-full max-w-lg rounded-3xl border border-[#d4af37]/40 bg-[#0b0805]/95 p-6 text-white shadow-[0_35px_80px_rgba(0,0,0,0.65)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={closeModal}
+              className="absolute right-4 top-4 rounded-full border border-white/20 p-1 text-white/70 hover:text-white hover:border-white transition-colors"
+              aria-label="Close dialog"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l8 8M14 6l-8 8" />
+              </svg>
+            </button>
+            {activeModalContent.eyebrow && (
+              <p className="text-[11px] uppercase tracking-[0.5em] text-[#d4af37]/70 mb-3">
+                {activeModalContent.eyebrow}
+              </p>
+            )}
+            <h3 id="hash-modal-title" className="text-2xl font-serif text-white">
+              {activeModalContent.title}
+            </h3>
+            <p className="mt-3 text-sm text-white/80 leading-relaxed">
+              {activeModalContent.description}
+            </p>
+            {activeModalContent.bullets && (
+              <ul className="mt-5 space-y-3 text-sm text-white/85">
+                {activeModalContent.bullets.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {activeModalContent.links && (
+              <div className="mt-6 flex flex-wrap gap-3">
+                {activeModalContent.links.map((link) => (
+                  <a
+                    key={link.href + link.label}
+                    href={link.href}
+                    className="rounded-full border border-[#d4af37]/60 px-4 py-2 text-sm font-semibold text-white hover:bg-[#d4af37]/15 transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
