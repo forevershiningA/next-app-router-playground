@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-06  
+**Last Updated:** 2026-01-08  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -336,6 +336,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - Warm gold gradients, thin borders, and serif-friendly spacing match the memorial brand guidelines called out in SIDEBAR_IMPROVEMENTS.md.
 - **Desktop header (Jan 2026)**: The fixed sidebar header now renders only the Forever Shining logotype; catalog-dependent "Current Product" copy, price, and dimensions were removed from desktop to keep the chrome calm, but the mobile drawer still surfaces that contextual info for smaller screens.
 - **Mobile drawer (Jan 2026)**: On screens under 768px the hamburger opens the same DesignerNav content as a left-edge sheet (80% viewport width) while keeping the canvas visible. The drawer hides the "Back to Menu"/"Guided Step" chrome and relies on the hamburger toggle plus a translucent backdrop that closes on tap. Desktop retains the persistent sidebar.
+- **Mobile header visibility (Jan 2026)**: `MobileHeader` now renders only on routes where the canvas is present (`/select-size`, `/inscriptions`, `/select-material`, `/select-additions`, `/select-motifs`). Homepage/marketing surfaces skip the header entirely so the larger hero logo and hamburger never overlap when the canvas is hidden.
 
 ### Context-Aware Editing
 - Canvas selections still set `activePanel` (`'addition'`, `'motif'`, `'inscription'`), and the fullscreen overlays simply respect that state so users can tweak a piece the moment they click it in 3D.
@@ -1809,6 +1810,12 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-08 (Afternoon)**: Homepage Mobile Layout & Legal Modals (Production-Ready)
+  - `MobileHeader` now checks the current route against the canvas-visible pages set so the hamburger/top bar stay hidden on the Home/Design gallery routes; this prevents the enlarged hero logo from overlapping the header on phones (see `MobileHeader.tsx`).
+  - Updated `HomeSplash.tsx` hero spacing (`pt-[129px]`) and logo container (`w-52`) so content clears the header while matching the mobile comp in `screen.png`.
+  - Boosted highlight/stat copy legibility by swapping muted tailwind opacities (`text-white/70`) for full-white text plus subtle drop shadows on the "See every change…" row and the 5,284/40/5000+ metric cards.
+  - Hash-link anchors (`#privacy`, `#terms`, `#sitemap`, `#contact`, category jump links, etc.) now open an accessible modal powered by `HASH_MODAL_CONTENT`, giving lightweight legal/contact summaries instead of jumping the page.
 
 - **2026-01-04 (Afternoon)**: Homepage Section Flow & Sidebar Header Simplification (Production-Ready)
   - Reordered the homepage narrative so the "Create a Tribute Worthy of Their Memory" CTA now immediately follows "Design a Lasting Tribute from the Comfort of Home", positioning the emotional testimonial before the interactive studio walkthrough.

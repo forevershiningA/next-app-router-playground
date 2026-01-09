@@ -14,9 +14,10 @@ type Material = {
 
 type MaterialSelectorProps = {
   materials: Material[];
+  disableInternalScroll?: boolean;
 };
 
-export default function MaterialSelector({ materials }: MaterialSelectorProps) {
+export default function MaterialSelector({ materials, disableInternalScroll = false }: MaterialSelectorProps) {
   const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
@@ -71,7 +72,9 @@ export default function MaterialSelector({ materials }: MaterialSelectorProps) {
         />
       </div>
       
-      <div className="grid grid-cols-3 gap-2 overflow-y-auto pr-2 custom-scrollbar">
+      <div
+        className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
+      >
         {materials.map((material) => {
           const materialUrl = `/textures/forever/l/${material.image}`;
           const isSelected = currentMaterialUrl === materialUrl;

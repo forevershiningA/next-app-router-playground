@@ -13,9 +13,9 @@ import {
 import * as THREE from 'three';
 
 // --- Constants ---
-const STONE_WIDTH = 2.4; 
-const STONE_HEIGHT = 2.4; 
-const STONE_THICKNESS = 0.35;
+const STONE_WIDTH = 2.55; 
+const STONE_HEIGHT = 2.55; 
+const STONE_THICKNESS = 0.44;
 const BASE_HEIGHT = 0.46;
 const BASE_EXTRA_WIDTH = 0.58;
 const BEVEL_SIZE = 0.02;

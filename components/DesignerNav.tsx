@@ -1321,7 +1321,7 @@ export default function DesignerNav() {
                       </div>
                       <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-280px)] overflow-hidden">
                         <div className="h-full overflow-y-auto pr-1">
-                          <ShapeSelector shapes={shapes} />
+                          <ShapeSelector shapes={shapes} disableInternalScroll />
                         </div>
                       </div>
                     </>
@@ -1371,7 +1371,7 @@ export default function DesignerNav() {
                       {isActive && !selectedMotifId && !selectedAdditionId && materials.length > 0 && (
                         <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-280px)] overflow-hidden">
                           <div className="h-full overflow-y-auto pr-1">
-                            <MaterialSelector materials={materials} />
+                            <MaterialSelector materials={materials} disableInternalScroll />
                           </div>
                         </div>
                       )}
