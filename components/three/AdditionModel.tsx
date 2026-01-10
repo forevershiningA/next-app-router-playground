@@ -115,6 +115,8 @@ function AdditionModelInner({
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
   const dragDeltaRef = React.useRef<{ x: number; y: number } | null>(null);
+  const applicationDragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
+  const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
 
   // Create scene
   const scene = React.useMemo(() => {
@@ -236,10 +238,19 @@ function AdditionModelInner({
       if (!targetMesh) return null;
 
       const intersects = raycaster.intersectObject(targetMesh, false);
-      if (!intersects.length) return null;
+      let localPt: THREE.Vector3 | null = null;
 
-      const point = intersects[0].point;
-      const localPt = targetMesh.worldToLocal(point.clone());
+      if (intersects.length > 0) {
+        localPt = targetMesh.worldToLocal(intersects[0].point.clone());
+      } else if (addition.type === 'application') {
+        applicationDragPlane.normal.set(0, 0, 1);
+        applicationDragPlane.constant = -(headstone.frontZ ?? 0);
+        if (raycaster.ray.intersectPlane(applicationDragPlane, fallbackIntersection)) {
+          localPt = targetMesh.worldToLocal(fallbackIntersection.clone());
+        }
+      }
+
+      if (!localPt) return null;
 
       if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
       const targetBBox = targetMesh.geometry.boundingBox!;
@@ -261,7 +272,7 @@ function AdditionModelInner({
 
       return { clamped, centerX, centerY, minX, maxX, minY, maxY, targetMesh };
     },
-    [headstone, gl, mouse, raycaster, camera, addition.type, threeScene]
+    [headstone, gl, mouse, raycaster, camera, addition.type, threeScene, applicationDragPlane, fallbackIntersection]
   );
 
   // Drag handler - must be defined before effects
@@ -405,9 +416,7 @@ function AdditionModelInner({
   }, [scene, colorMap, id]);
 
   React.useEffect(() => {
-    if (!dragging) return;
-    const canvas = gl?.domElement;
-    if (!canvas) return;
+    if (!dragging || !gl?.domElement) return;
 
     const onMove = (e: PointerEvent) => {
       e.preventDefault();
@@ -420,15 +429,17 @@ function AdditionModelInner({
       dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
     };
 
     if (controls) (controls as any).enabled = false;
-    canvas.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp, { once: true });
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
     document.body.style.cursor = 'grabbing';
 
     return () => {
-      canvas.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
       dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;

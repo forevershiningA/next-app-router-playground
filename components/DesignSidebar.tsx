@@ -22,18 +22,14 @@ export default function DesignSidebar({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('DesignSidebar mounted with:', { category, productSlug, currentDesignId });
-    
     // Get all designs in this category
     const categoryDesigns = getDesignsByCategory(category);
-    console.log('Category designs found:', categoryDesigns.length);
     
     // Filter by product slug and exclude current design
     const filtered = categoryDesigns
       .filter(d => d.productSlug === productSlug && d.id !== currentDesignId)
       .slice(0, maxItems);
     
-    console.log('Filtered designs:', filtered.length);
     setDesigns(filtered);
     setLoading(false);
   }, [category, productSlug, currentDesignId, maxItems]);

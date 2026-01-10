@@ -7,6 +7,14 @@ import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
+
+const CANVAS_ROUTES = new Set([
+  '/select-size',
+  '/inscriptions',
+  '/select-material',
+  '/select-additions',
+  '/select-motifs',
+]);
 import {
   CAMERA_3D_POSITION_Z,
   CAMERA_FOV,
@@ -16,32 +24,23 @@ import {
 
 function CameraController() {
   const { controls, camera } = useThree();
-  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
-  const materialUrl = useHeadstoneStore((s) => s.materialUrl);
+  const hasInitialized = useRef(false);
 
-  // Force reset camera whenever shape or material changes
   useEffect(() => {
-    if (!controls || !camera) return;
-    
-    console.log('🎥 Camera reset triggered - Shape:', shapeUrl);
-    
-    // Force reset camera position
+    if (!controls || !camera || hasInitialized.current) return;
+
     camera.position.set(0, 4.2, CAMERA_3D_POSITION_Z);
     camera.lookAt(0, 3.8, 0);
     camera.updateProjectionMatrix();
-    
-    // Force reset orbit controls
+
     if ((controls as any).reset) {
-      console.log('🔄 Calling controls.reset()');
       (controls as any).reset();
     }
     (controls as any).target.set(0, 3.8, 0);
     (controls as any).update();
-    
-    console.log('📍 Camera position:', camera.position.toArray());
-    console.log('🎯 Controls target:', (controls as any).target.toArray());
-    
-  }, [controls, camera, shapeUrl, materialUrl]);
+
+    hasInitialized.current = true;
+  }, [controls, camera]);
 
   return null;
 }
@@ -91,17 +90,6 @@ function ProductNameHeader() {
       ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
       : 0;
     
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Price calculation:', {
-        showBase,
-        hasBasePriceModel: !!catalog?.product?.basePriceModel,
-        baseQuantity,
-        basePrice,
-        headstonePrice,
-        total: headstonePrice + basePrice + inscriptionCost + motifCost
-      });
-    }
-    
     return headstonePrice + basePrice + inscriptionCost + motifCost;
   }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
 
@@ -143,6 +131,7 @@ function ProductNameHeader() {
 export default function ThreeScene() {
   const is2DMode = useHeadstoneStore ((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const pathname = usePathname();
   const isDesignsPage = pathname?.startsWith('/designs/');
   
@@ -164,11 +153,12 @@ export default function ThreeScene() {
   const previousPathRef = useRef<string | null>(null);
 
 
-  // Force a fresh fade when landing on /select-size, even if assets didn't change
+  // Force a fresh fade when landing on /select-size from non-canvas routes
   useEffect(() => {
     const previousPath = previousPathRef.current;
+    const cameFromCanvasRoute = previousPath ? CANVAS_ROUTES.has(previousPath) : false;
 
-    if (pathname === '/select-size' && previousPath !== '/select-size') {
+    if (pathname === '/select-size' && previousPath !== '/select-size' && !cameFromCanvasRoute) {
       setShouldAnimateFade(true);
       setSceneReady(false);
     }
@@ -183,6 +173,11 @@ export default function ThreeScene() {
   const rotateRight = () => {
     setTargetRotation(prev => prev + Math.PI / 6); // +30 degrees
   };
+
+  useEffect(() => {
+    currentRotation.current = 0;
+    setTargetRotation(0);
+  }, [shapeUrl]);
 
   // Cleanup WebGL context on unmount
   useEffect(() => {
@@ -300,7 +295,6 @@ export default function ThreeScene() {
                 };
                 
                 contextRestoredHandler.current = () => {
-                  console.log('WebGL context restored');
                   // Force a re-render
                   window.dispatchEvent(new Event('resize'));
                 };

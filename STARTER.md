@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-08  
+**Last Updated:** 2026-01-09  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -288,6 +288,7 @@ onPointerDown → capture pointer → drag with raycasting → update position
 - Y-flipped scale for correct orientation
 - Positioned relative to headstone center
 - Product-aware rendering (Traditional vs Laser)
+- **Smooth drag plane fallback** keeps motifs attached to the headstone even when the pointer briefly leaves the mesh (raycasts fall back to a Z-aligned plane and pointer-move tracking listens on `window`).
 
 ### 4. **AdditionModel.tsx**
 **Purpose:** GLB 3D model loader (statues, vases, applications)  
@@ -297,6 +298,7 @@ onPointerDown → capture pointer → drag with raycasting → update position
 - **Flattened Z-scale** for applications (0.1x depth)
 - Click to select (no navigation, keeps canvas visible)
 - Positioned in mm coordinate system
+- **Shared drag smoothing** mirrors the motif logic: statues/vases stick to the base mesh, applications fall back to the headstone plane, and pointer tracking moves to `window` so fast drags never jump.
 
 **Target Heights:**
 ```typescript
@@ -461,6 +463,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 </div>
 ```
 - A dedicated `sceneReady` flag now gates the entire `<Canvas>` behind a CSS opacity transition so `/select-size` regains its original fade-in. The flag resets whenever the shape/material changes **and** when `/select-size` mounts, ensuring the marketing handoff (“canvas should always fade in fresh on the size step”) stays true even when the user revisits the page with cached assets.
+- To avoid unnecessary flashes, the fade sequence only retriggers when the user comes to `/select-size` from a non-canvas route (e.g., `select-product` or marketing pages); hopping between designer steps that already show the canvas keeps the preview visible instantly.
 - `CameraController` was rewritten as a hook-based helper that taps directly into `useThree()`. It force-resets both the R3F camera and OrbitControls whenever the shape or material URL changes, so we no longer rely on a declarative `<PerspectiveCamera />` tree that the App Router might recycle between transitions.
 - `Scene` still mounts `<AdaptiveDpr pixelated />`, so whenever the user rotates/zooms the memorial the renderer temporarily lowers DPR for smoother interaction, then restores full resolution when idle.
 
@@ -1811,6 +1814,11 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2026-01-09 (Morning)**: Motif/Addition Drag Smoothing & Canvas Fade Logic (Production-Ready)
+  - Motif and addition drags now keep raycasts alive even if the pointer briefly exits the mesh: both models listen for pointer movements on `window`, store the initial offset, and fall back to a headstone-aligned plane so fast horizontal sweeps stay perfectly smooth.
+  - Application additions inherit the same fallback plane logic, while statues/vases continue to target the base mesh — the shared helper eliminated the "jump to cursor" bug reported while moving motifs across the headstone.
+  - ThreeScene’s fade-in no longer replays when "Back to Menu" → "Select Size" is clicked while the canvas is already mounted; the transition only resets when entering `/select-size` from a non-canvas route, keeping the preview responsive during step-to-step navigation.
+  - Documentation updated to reflect the new drag behavior and fade rules.
 - **2026-01-08 (Afternoon)**: Homepage Mobile Layout & Legal Modals (Production-Ready)
   - `MobileHeader` now checks the current route against the canvas-visible pages set so the hamburger/top bar stay hidden on the Home/Design gallery routes; this prevents the enlarged hero logo from overlapping the header on phones (see `MobileHeader.tsx`).
   - Updated `HomeSplash.tsx` hero spacing (`pt-[129px]`) and logo container (`w-52`) so content clears the header while matching the mobile comp in `screen.png`.

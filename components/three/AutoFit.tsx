@@ -84,14 +84,6 @@ export default function AutoFit({
     const dX = sphere.radius / Math.tan(hFov / 2);
     const dist = Math.max(dX, dY) * Math.max(1, margin) + pad;
     
-    console.log('AutoFit camera calculation:', {
-      margin,
-      pad,
-      sphereRadius: sphere.radius,
-      calculatedDist: dist,
-      boxSize: boxSize.toArray(),
-    });
-
     const dir = new THREE.Vector3(0, 0, 1); // Front view
     dir.normalize();
 

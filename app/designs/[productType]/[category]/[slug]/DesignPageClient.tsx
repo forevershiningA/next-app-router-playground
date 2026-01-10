@@ -2049,8 +2049,6 @@ export default function DesignPageClient({
           // The container aspect ratio may differ from SVG aspect ratio
           // We need to adjust the viewBox to compensate
           
-          console.log('🎯 [VIEWBOX FIX v2] Starting viewBox adjustment calculation...', new Date().toISOString());
-          
           // Parse original viewBox
           let vbX = 0, vbY = 0, vbW = originalWidth, vbH = originalHeight;
           if (viewBoxAttr) {
@@ -2063,8 +2061,6 @@ export default function DesignPageClient({
             }
           }
           
-          console.log('🎯 [VIEWBOX FIX v2] Parsed viewBox:', { vbX, vbY, vbW, vbH });
-          
           // Calculate the effective viewBox that would fill the container
           // while maintaining the SVG's aspect ratio
           // IMPORTANT: Use PHYSICAL screenshot dimensions (1066×1078), not logical canvas (707×476)
@@ -2073,13 +2069,6 @@ export default function DesignPageClient({
           
           const svgAspect = vbW / vbH;
           const containerAspect = actualCanvasWidth / actualCanvasHeight;
-          
-          console.log('🎯 [VIEWBOX FIX v2] Using actual screenshot dimensions:', {
-            logical: { width: canvasWidth, height: canvasHeight },
-            actual: { width: actualCanvasWidth, height: actualCanvasHeight },
-            svgAspect: svgAspect.toFixed(3),
-            containerAspect: containerAspect.toFixed(3)
-          });
           
           let effectiveVbW = vbW;
           let effectiveVbH = vbH;
@@ -2111,22 +2100,10 @@ export default function DesignPageClient({
             adjustedVbY = vbY - (heightDiff / 2);
           }
           
-          console.log('🎯 [VIEWBOX FIX v2] ViewBox calculation:', {
-            original: { vbX, vbY, vbW, vbH },
-            logicalCanvas: { width: canvasWidth, height: canvasHeight },
-            actualCanvas: { width: actualCanvasWidth, height: actualCanvasHeight },
-            svgAspect: svgAspect.toFixed(3),
-            containerAspect: containerAspect.toFixed(3),
-            effective: { vbW: effectiveVbW.toFixed(2), vbH: effectiveVbH.toFixed(2) },
-            adjusted: { vbX: adjustedVbX.toFixed(2), vbY: adjustedVbY.toFixed(2) }
-          });
-          
           // Set adjusted viewBox with centered alignment
           svg.setAttribute('viewBox', `${adjustedVbX} ${adjustedVbY} ${effectiveVbW} ${effectiveVbH}`);
           // Center horizontally (xMid) and vertically (YMid) to align with logical canvas center
           svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-          
-          console.log(`🎯 [VIEWBOX FIX v2] Set adjusted SVG viewBox: ${adjustedVbX.toFixed(2)} ${adjustedVbY.toFixed(2)} ${effectiveVbW.toFixed(2)} ${effectiveVbH.toFixed(2)}`);
           
           // Just update path fills and remove filters
           const paths = svg.querySelectorAll('path');

@@ -7,7 +7,7 @@ import SunRays from './SunRays';
 import AtmosphericSky from './AtmosphericSky';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { useRef, Suspense, useEffect } from 'react';
 
 // --- CONFIGURATION ---
@@ -200,7 +200,6 @@ export default function Scene({
   useEffect(() => {
     if (!camera || !controls) return;
     
-    console.log('🎬 Scene ready, resetting camera');
     camera.position.set(0, 4.2, 10);
     camera.lookAt(0, 3.8, 0);
     camera.updateProjectionMatrix();
@@ -222,7 +221,14 @@ export default function Scene({
     }
   });
 
-  const handleCanvasClick = (e: any) => {
+  const DRAG_DESELECT_THRESHOLD = 4;
+
+  const handleCanvasClick = (e: ThreeEvent<PointerEvent>) => {
+    // Ignore drag gestures (OrbitControls rotation/pan)
+    if (e.delta > DRAG_DESELECT_THRESHOLD) {
+      return;
+    }
+
     // Only deselect if clicking on empty space (not on any 3D object)
     if (e.eventObject === e.object) {
       setSelected(null);

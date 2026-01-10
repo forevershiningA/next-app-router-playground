@@ -319,8 +319,45 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       return null;
     }
 
-    const base = shapes[0];
-    const { minX, maxX, minY, maxY, dx, dy } = shapeBounds(base);
+    const shapesWithBounds = shapes.map((shape) => ({ shape, bounds: shapeBounds(shape) }));
+    const primary = shapesWithBounds.reduce((best, entry) => {
+      if (!best) return entry;
+      const bestArea = best.bounds.dx * best.bounds.dy;
+      const area = entry.bounds.dx * entry.bounds.dy;
+      return area > bestArea ? entry : best;
+    }, null as { shape: THREE.Shape; bounds: ReturnType<typeof shapeBounds> } | null);
+
+    if (!primary) {
+      return null;
+    }
+
+    const cloneSolid = (shape: THREE.Shape) => {
+      const cloned = shape.clone();
+      cloned.holes = [];
+      return cloned;
+    };
+
+    const holeShapeEntries = shapesWithBounds.flatMap(({ shape }) => {
+      if (!shape.holes?.length) return [];
+      return shape.holes.map((holePath) => {
+        const pts = holePath.getPoints(64).map((pt) =>
+          pt instanceof THREE.Vector2 ? pt.clone() : new THREE.Vector2(pt.x, pt.y)
+        );
+        const holeShape = new THREE.Shape(pts);
+        holeShape.autoClose = true;
+        holeShape.holes = [];
+        return { shape: holeShape, isRelief: true };
+      });
+    });
+
+    const base = cloneSolid(primary.shape);
+    const { minX, maxX, minY, maxY, dx, dy } = primary.bounds;
+    const otherSolidShapes = shapesWithBounds
+      .filter((entry) => entry.shape !== primary.shape)
+      .map((entry) => ({ shape: cloneSolid(entry.shape), isRelief: false }));
+
+    const additionalShapes = [...otherSolidShapes, ...holeShapeEntries];
+
     const widthW = dx * Math.abs(scale);
     const heightW = dy * Math.abs(scale);
     const wantW = targetWidth ?? widthW;
@@ -331,7 +368,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
     const bottomTarget_SV = minY + targetH_SV;
 
-    return { base, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV };
+    return { base, additionalShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV };
   }, [svgData, scale, targetWidth, targetHeight, preserveTop]);
 
   // 3a. Calculate outline (now at top level)
@@ -409,7 +446,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       };
     }
 
-    const { base, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
+    const { base, additionalShapes, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
 
     // FOR SLANT: Create trapezoidal prism geometry
     if (headstoneStyle === 'slant') {
@@ -419,12 +456,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       // The slantThickness parameter is now in mm (100-200mm)
       const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js units
       const topThickness = baseThickness * 0.2; // 20% ratio for top (standard cemetery slant)
-      
-      console.log('[SvgHeadstone] SLANT MODE:', {
-        slantThicknessMm: slantThickness,
-        baseThicknessCm: baseThickness,
-        topThicknessCm: topThickness,
-      });
       
       // Calculate how far back the top-front edge starts
       const frontTopZOffset = baseThickness - topThickness;
@@ -583,17 +614,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       //    Or the depth prop value is wrong?
       const zTranslation = baseThickness - depth / 2;
       
-      console.log('[SvgHeadstone] SLANT Z-TRANSLATION DEBUG:', {
-        slantThicknessMm: slantThickness,
-        baseThicknessCm: baseThickness,
-        depthPropCm: depth,
-        zTranslation,
-        backBeforeTranslation: -baseThickness,
-        backAfterTranslation: -baseThickness + zTranslation,
-        targetBackPosition: -depth / 2,
-        shouldMatch: Math.abs((-baseThickness + zTranslation) - (-depth / 2)) < 0.001
-      });
-      
       slantGeometry.translate(-(minX + maxX) / 2, -minY, zTranslation);
       slantGeometry.computeVertexNormals();
       
@@ -751,6 +771,24 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       pos.needsUpdate = true;
     }
 
+    const reliefDepth = Math.max(0.001, Math.min(depth - 0.001, Math.max(0.5, depth * 0.2)));
+    const reliefOffset = depth - reliefDepth - 0.0005;
+
+    additionalShapes.forEach(({ shape, isRelief }) => {
+      const settings = { ...extrudeSettings };
+      let extraGeom: THREE.ExtrudeGeometry;
+
+      if (isRelief) {
+        settings.depth = reliefDepth;
+        extraGeom = new THREE.ExtrudeGeometry(shape, settings);
+        extraGeom.translate(0, 0, Math.max(0, reliefOffset));
+      } else {
+        extraGeom = new THREE.ExtrudeGeometry(shape, settings);
+      }
+
+      geoms.push(extraGeom);
+    });
+
     // Merge geometries if needed
     let merged: THREE.BufferGeometry;
     if (geoms.length > 1) {
@@ -793,6 +831,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     
     // Recompute normals for correct lighting
     merged.computeVertexNormals();
+
+    // FINAL ALIGNMENT: ensure headstone always rests on the ground plane (Y = 0)
+    merged.computeBoundingBox();
+    const finalBB = merged.boundingBox;
+    if (finalBB && Math.abs(finalBB.min.y) > 1e-5) {
+      merged.translate(0, -finalBB.min.y, 0);
+    }
 
     // =========================================================
     // MATERIAL GROUPS

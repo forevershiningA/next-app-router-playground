@@ -38,7 +38,6 @@ export function BronzeBorder({
     setLoading(true);
     loadBorder(borderName)
       .then((data) => {
-        console.log(`✅ Border loaded: ${borderName}`, data);
         setBorderData(data);
       })
       .catch((error) => {

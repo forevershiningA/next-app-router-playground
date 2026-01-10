@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useRef } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { 
   OrbitControls, 
   Environment, 
@@ -11,6 +11,7 @@ import {
   Text
 } from '@react-three/drei';
 import * as THREE from 'three';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
 // --- Constants ---
 const STONE_WIDTH = 2.55; 
@@ -85,6 +86,55 @@ const GoldText: React.FC<GoldTextProps> = ({ text, position, fontSize, font, fon
         envMapIntensity={1.8}
       />
     </Text>
+  );
+};
+
+interface GoldMotifProps {
+  position: [number, number, number];
+  rotation?: [number, number, number];
+  scale?: number | [number, number, number];
+}
+
+const GoldMotif: React.FC<GoldMotifProps> = ({ position, rotation = [0, 0, 0], scale = 1 }) => {
+  const svgData = useLoader(SVGLoader, '/shapes/motifs/2_116_01.svg');
+
+  const geometry = useMemo(() => {
+    if (!svgData?.paths?.length) return null;
+    const shapes = svgData.paths.flatMap((path) => path.toShapes(true));
+    if (!shapes.length) return null;
+    const geom = new THREE.ShapeGeometry(shapes);
+    geom.center();
+    return geom;
+  }, [svgData]);
+
+  React.useEffect(() => {
+    return () => {
+      geometry?.dispose();
+    };
+  }, [geometry]);
+
+  const material = React.useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#d4af37',
+        emissive: '#b8860b',
+        emissiveIntensity: 0.35,
+        roughness: 0.2,
+        metalness: 0.9,
+        toneMapped: false,
+        envMapIntensity: 1.5,
+      }),
+    []
+  );
+
+  React.useEffect(() => () => material.dispose(), [material]);
+
+  if (!geometry) return null;
+
+  return (
+    <group position={position} rotation={rotation} scale={scale}>
+      <mesh geometry={geometry} material={material} renderOrder={9} />
+    </group>
   );
 };
 
@@ -257,6 +307,29 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
             text="☼ 1945   ✟ 2023"
             font="/fonts/Garamond.ttf"
           />
+
+          <group
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.55, -textZ]}
+            rotation={[0, Math.PI, 0]}
+          >
+            <GoldText
+              position={[0, 0.25, 0]}
+              fontSize={0.16}
+              text="“The Lord is my shepherd.”"
+              font="/fonts/Garamond.ttf"
+            />
+            <GoldText
+              position={[0, 0.11, 0]}
+              fontSize={0.12}
+              text="Psalm 23:1"
+              font="/fonts/Garamond.ttf"
+            />
+            <GoldMotif
+              position={[0, -0.46, 0]}
+              rotation={[0, 0, Math.PI]}
+              scale={0.002}
+            />
+          </group>
         </group>
       </group>
       

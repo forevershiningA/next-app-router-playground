@@ -39,6 +39,15 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
+  const baseOffsetDefaults = React.useMemo(() => ({
+    xPos: 0,
+    yPos: 0,
+    scale: 1,
+    rotationZ: 0,
+    heightMm: 100,
+  }), []);
+  const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
+  const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
 
   // Load SVG
   const svgData = useLoader(SVGLoader, svgPath);
@@ -133,9 +142,20 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
       const targetMesh = headstone.mesh.current as THREE.Mesh;
       const intersects = raycaster.intersectObject(targetMesh, false);
 
+      let worldPoint: THREE.Vector3 | null = null;
+
       if (intersects.length > 0) {
-        const point = intersects[0].point;
-        const localPt = targetMesh.worldToLocal(point.clone());
+        worldPoint = intersects[0].point.clone();
+      } else {
+        dragPlane.normal.set(0, 0, 1);
+        dragPlane.constant = -(headstone.frontZ ?? 0);
+        if (raycaster.ray.intersectPlane(dragPlane, fallbackIntersection)) {
+          worldPoint = fallbackIntersection.clone();
+        }
+      }
+
+      if (worldPoint) {
+        const localPt = targetMesh.worldToLocal(worldPoint);
 
         // Apply bounds checking
         if (!targetMesh.geometry.boundingBox)
@@ -157,13 +177,13 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         
         // Store as OFFSET from center, but NEGATE Y to match old Y-down saved format
         setMotifOffset(id, {
-          ...offset,
+          ...(motifOffsets[id] ?? baseOffsetDefaults),
           xPos: localPt.x - centerX,
           yPos: -(localPt.y - centerY),  // Negate to convert Y-up to Y-down format
         });
       }
     },
-    [headstone, gl, camera, raycaster, mouse, id, motifOffsets, setMotifOffset]
+    [headstone, gl, camera, raycaster, mouse, id, motifOffsets, setMotifOffset, baseOffsetDefaults, dragPlane, fallbackIntersection]
   );
 
   const handleClick = React.useCallback(
@@ -202,8 +222,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
 
   React.useEffect(() => {
     if (!dragging) return;
-    const canvas = gl?.domElement;
-    if (!canvas) return;
+    if (!gl?.domElement) return;
 
     const onMove = (e: PointerEvent) => {
       e.preventDefault();
@@ -218,12 +237,13 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
     };
 
     if (controls) (controls as any).enabled = false;
-    canvas.addEventListener('pointermove', onMove);
+    window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp, { once: true });
     document.body.style.cursor = 'grabbing';
 
     return () => {
-      canvas.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
     };
   }, [dragging, gl, controls, placeFromClientXY]);
 

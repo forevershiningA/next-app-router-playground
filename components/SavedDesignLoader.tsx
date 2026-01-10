@@ -46,15 +46,10 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
         setLoading(true);
         setError(null);
 
-        console.log('📡 Fetching design:', designId);
         const url = `/ml/${mlDir}/saved-designs/json/${designId}.json`;
-        console.log('🔗 URL:', url);
 
         // Fetch the saved design JSON
         const response = await fetch(url);
-        
-        console.log('📥 Response status:', response.status);
-        console.log('📥 Response ok:', response.ok);
         
         if (!response.ok) {
           if (response.status === 404) {
@@ -64,16 +59,10 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
         }
 
         const data = await response.json();
-        console.log('✅ Design data loaded:', {
-          length: data?.length,
-          firstItem: data?.[0],
-          types: data?.map((item: any) => item.type).filter((v: any, i: number, a: any[]) => a.indexOf(v) === i)
-        });
         
         setDesign(data);
         
         if (onLoad) {
-          console.log('🔄 Calling onLoad callback');
           onLoad(data);
         }
       } catch (err) {
@@ -87,7 +76,6 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
     }
 
     if (designId) {
-      console.log('🚀 Starting design load for ID:', designId);
       loadDesign();
     } else {
       console.warn('⚠️ No design ID provided');

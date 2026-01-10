@@ -75,28 +75,22 @@ export function DYOEditorWithSavedDesigns() {
         rotation: logo.rotation
       });
     }
-
-    console.log('Saved design loaded successfully!');
   }
 
   // Mock functions - replace with your actual DYO API
   async function setProduct(config: any) {
-    console.log('Setting product:', config);
     // Your product selection logic
   }
 
   async function addInscription(config: any) {
-    console.log('Adding inscription:', config);
     // Your inscription add logic
   }
 
   async function addPhoto(config: any) {
-    console.log('Adding photo:', config);
     // Your photo add logic
   }
 
   async function addLogo(config: any) {
-    console.log('Adding logo:', config);
     // Your logo add logic
   }
 

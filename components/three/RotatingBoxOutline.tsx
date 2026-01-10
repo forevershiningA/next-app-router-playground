@@ -40,31 +40,41 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 }: RotatingBoxOutlineProps) {
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
 
-  // Create the helper geometry and material
+  // Create the helper geometry and material (wait until target is ready)
   React.useEffect(() => {
-    const obj = targetRef.current;
-    if (!obj) return;
+    let rafId: number | null = null;
 
-    // Create LineSegments for the box edges - solid gold
-    const geometry = new THREE.BufferGeometry();
-    const material = new THREE.LineBasicMaterial({
-      color: new THREE.Color(color as any).getHex(),
-      depthTest: !through,
-      depthWrite: false,
-      transparent: true,
-      opacity: 0.8, // Slightly transparent for elegant look
-    });
+    const attachHelper = () => {
+      const obj = targetRef.current;
+      if (!obj) {
+        rafId = requestAnimationFrame(attachHelper);
+        return;
+      }
 
-    const helper = new THREE.LineSegments(geometry, material);
-    helper.renderOrder = renderOrder;
-    helperRef.current = helper;
+      const geometry = new THREE.BufferGeometry();
+      const material = new THREE.LineBasicMaterial({
+        color: new THREE.Color(color as any).getHex(),
+        depthTest: !through,
+        depthWrite: false,
+        transparent: true,
+        opacity: 0.8,
+      });
 
-    // Add to scene via the object's parent
-    if (obj.parent) {
-      obj.parent.add(helper);
-    }
+      const helper = new THREE.LineSegments(geometry, material);
+      helper.renderOrder = renderOrder;
+      helperRef.current = helper;
+
+      if (obj.parent) {
+        obj.parent.add(helper);
+      }
+    };
+
+    attachHelper();
 
     return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
       if (helperRef.current) {
         helperRef.current.parent?.remove(helperRef.current);
         helperRef.current.geometry.dispose();

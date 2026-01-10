@@ -71,8 +71,6 @@ export default function InscriptionBoxSelection({
   const handleColor = 0xffffff; // Always white - no hover effect
   const rotateColor = 0x404040; // Dark grey - no hover effect
 
-  console.log('[InscriptionBoxSelection] Bounds:', bounds, 'Fixed handle size:', fixedHandleSize, 'Units/m:', unitsPerMeter);
-
   // Create box outline points
   const outlinePoints = React.useMemo(() => {
     const w = bounds.width / 2;
@@ -91,7 +89,6 @@ export default function InscriptionBoxSelection({
   const handlePointerDown = React.useCallback(
     (e: any, handleType: HandleType) => {
       e.stopPropagation();
-      console.log('[InscriptionBoxSelection] Handle clicked:', handleType, 'Controls:', controls);
       
       // Capture pointer to this element to prevent events going to headstone
       if (e.target && e.target.setPointerCapture) {
@@ -121,11 +118,9 @@ export default function InscriptionBoxSelection({
       // BLOCK orbit controls - try multiple methods
       if (controls) {
         (controls as any).enabled = false;
-        console.log('[InscriptionBoxSelection] Disabled controls via controls object');
       }
       if ((gl.domElement as any).orbitControls) {
         (gl.domElement as any).orbitControls.enabled = false;
-        console.log('[InscriptionBoxSelection] Disabled controls via domElement');
       }
       
       const cursorMap: Record<HandleType, string> = {
@@ -250,7 +245,7 @@ export default function InscriptionBoxSelection({
         try {
           dragStartRef.current.target.releasePointerCapture(dragStartRef.current.pointerId);
         } catch (err) {
-          console.log('[InscriptionBoxSelection] Could not release pointer capture:', err);
+          // Ignore release errors
         }
       }
       

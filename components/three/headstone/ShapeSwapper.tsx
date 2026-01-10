@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useThree, useLoader } from '@react-three/fiber';
-import { Html, useTexture } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
 import AutoFit from '../AutoFit';
@@ -78,51 +78,6 @@ function PreloadTexture({
     return () => cancelAnimationFrame(id);
   }, [onReady]);
   return null;
-}
-
-function InlineCanvasLoader({ show }: { show: boolean }) {
-  const [mounted, setMounted] = React.useState(show);
-  const [visible, setVisible] = React.useState(show);
-  const portalRef = React.useRef<HTMLElement | null>(null);
-
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      portalRef.current = document.getElementById('scene-root');
-    }
-  }, []);
-
-  React.useEffect(() => {
-    if (show) {
-      setMounted(true);
-      const id = requestAnimationFrame(() => setVisible(true));
-      return () => cancelAnimationFrame(id);
-    } else {
-      setVisible(false);
-      const t = setTimeout(() => setMounted(false), 200);
-      return () => clearTimeout(t);
-    }
-  }, [show]);
-
-  if (!mounted) return null;
-
-  return (
-    <Html
-      fullscreen
-      transform={false}
-      portal={portalRef as React.RefObject<HTMLElement>}
-      zIndexRange={[1000, 0]}
-    >
-      <div
-        className="pointer-events-none fixed inset-0 flex items-center justify-center transition-opacity duration-200"
-        style={{ opacity: visible ? 1 : 0 }}
-      >
-        <div className="flex flex-col items-center gap-4 text-white drop-shadow">
-          <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
-          <div className="font-mono text-sm opacity-90">Loading assets…</div>
-        </div>
-      </div>
-    </Html>
-  );
 }
 
 /* ----------------------------------- props ---------------------------------- */
@@ -218,6 +173,24 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const shapeSwapping = requestedUrl !== visibleUrl;
   const isPending = false;
 
+  const builtinPedestalShapes = React.useMemo(
+    () => new Set(['headstone_3.svg', 'headstone_5.svg']),
+    []
+  );
+  const currentShapeSlug = React.useMemo(() => {
+    if (!resolvedUrl) return null;
+    const parts = resolvedUrl.split('/');
+    return parts[parts.length - 1]?.toLowerCase() ?? null;
+  }, [resolvedUrl]);
+  const isFixedHeadstoneAsset = React.useMemo(() => {
+    if (!currentShapeSlug) return false;
+    if (builtinPedestalShapes.has(currentShapeSlug)) return true;
+    return currentShapeSlug.includes('headstone_');
+  }, [currentShapeSlug, builtinPedestalShapes]);
+  const preserveTopForShape = !isFixedHeadstoneAsset;
+  const targetHeightForShape = heightM;
+  const targetWidthForShape = widthM;
+
   React.useEffect(() => {
     return () => {
       if (pendingTextureSwap.current) {
@@ -282,9 +255,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             tileSize={0.35}
             sideTileSize={0.35}
             topTileSize={0.35}
-            targetHeight={heightM}
-            targetWidth={widthM}
-            preserveTop
+            targetHeight={targetHeightForShape}
+            targetWidth={targetWidthForShape}
+            preserveTop={preserveTopForShape}
             showEdges={false}
             headstoneStyle={headstoneStyle}
             slantThickness={slantThickness}
@@ -292,7 +265,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             meshProps={{
               name: 'headstone',
               onClick: (e) => {
-                console.log('[ShapeSwapper] Headstone clicked!', e);
                 e.stopPropagation();
                 setSelected('headstone');
                 setEditingObject('headstone');
@@ -447,10 +419,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           />
         </React.Suspense>
       )}
-
-      {/* Loader used for Shape Swapping or Font Loading only */}
-      {/* Show a subtle indicator when texture is transitioning */}
-      <InlineCanvasLoader show={shapeSwapping || fontLoading || textureTransitioning} />
     </>
   );
 }
