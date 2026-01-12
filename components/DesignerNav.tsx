@@ -64,6 +64,7 @@ export default function DesignerNav() {
   
   // Get catalog info
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   const isPlaque = catalog?.product.type === 'plaque';
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
@@ -127,33 +128,6 @@ export default function DesignerNav() {
     return () => window.removeEventListener('openFullscreenPanel', handleOpenPanel);
   }, []);
 
-  // Close fullscreen panel if user navigates away from its route
-  useEffect(() => {
-    const currentSlug = pathname.replace('/', '');
-    if (fullscreenPanelSlugs.has(currentSlug)) {
-      if (!activeFullscreenPanel && dismissedPanelSlug !== currentSlug) {
-        if (currentSlug === 'inscriptions') {
-          setActivePanel('inscription');
-        }
-        setDismissedPanelSlug(null);
-        setActiveFullscreenPanel(currentSlug);
-      }
-    } else {
-      if (activeFullscreenPanel) {
-        // Clear activePanel when leaving any content editing panel
-        if (activeFullscreenPanel === 'inscriptions' || 
-            activeFullscreenPanel === 'select-additions' || 
-            activeFullscreenPanel === 'select-motifs') {
-          setActivePanel(null);
-        }
-        setActiveFullscreenPanel(null);
-      }
-      if (dismissedPanelSlug) {
-        setDismissedPanelSlug(null);
-      }
-    }
-  }, [pathname, activeFullscreenPanel, dismissedPanelSlug]);
-  
   // Toggle a section's expansion
   const toggleSection = (slug: string) => {
     setExpandedSections(prev => ({
@@ -277,6 +251,56 @@ export default function DesignerNav() {
   const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-additions'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
+  
+  // Close fullscreen panel if user navigates away from its route or when canvas is hidden
+  useEffect(() => {
+    if (!isCanvasVisible) {
+      if (activeFullscreenPanel) {
+        if (
+          activeFullscreenPanel === 'inscriptions' ||
+          activeFullscreenPanel === 'select-additions' ||
+          activeFullscreenPanel === 'select-motifs'
+        ) {
+          setActivePanel(null);
+        }
+        setActiveFullscreenPanel(null);
+      }
+      return;
+    }
+
+    const currentSlug = pathname.replace('/', '');
+    if (fullscreenPanelSlugs.has(currentSlug)) {
+      if (!activeFullscreenPanel && dismissedPanelSlug !== currentSlug) {
+        if (currentSlug === 'inscriptions') {
+          setActivePanel('inscription');
+        }
+        setDismissedPanelSlug(null);
+        setActiveFullscreenPanel(currentSlug);
+      }
+    } else {
+      if (activeFullscreenPanel) {
+        if (
+          activeFullscreenPanel === 'inscriptions' ||
+          activeFullscreenPanel === 'select-additions' ||
+          activeFullscreenPanel === 'select-motifs'
+        ) {
+          setActivePanel(null);
+        }
+        setActiveFullscreenPanel(null);
+      }
+      if (dismissedPanelSlug) {
+        setDismissedPanelSlug(null);
+      }
+    }
+  }, [
+    pathname,
+    isCanvasVisible,
+    activeFullscreenPanel,
+    dismissedPanelSlug,
+    setActivePanel,
+    setActiveFullscreenPanel,
+    setDismissedPanelSlug,
+  ]);
   
   const renderSelectAdditionsPanel = () => {
     const activeAdditionOffset = selectedAdditionId
@@ -616,7 +640,16 @@ export default function DesignerNav() {
     : 0;
   const price = headstonePrice + basePrice;
   const formattedPrice = price > 0 ? price.toFixed(2) : null;
-  const productTitle = catalog?.product.name ?? 'Design Your Own Headstone';
+  const productTitle = React.useMemo(() => {
+    // Safety check: Only use catalog name if it matches the selected product ID
+    if (catalog?.product?.name && catalog.product.id === productId) {
+      return catalog.product.name;
+    }
+    if (!productId) {
+      return 'Design Your Own Headstone';
+    }
+    return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
+  }, [catalog, productId]);
   const dimensionLabel = widthMm > 0 && heightMm > 0 ? `${widthMm} × ${heightMm} mm` : 'Select dimensions';
 
   const handleMenuClick = (slug: string, e: React.MouseEvent) => {
@@ -1246,7 +1279,7 @@ export default function DesignerNav() {
                   const isRouteActive = pathname === `/${item.slug}`;
                   const isPanelActive = activeFullscreenPanel === item.slug;
                   const isActive = isRouteActive || isPanelActive;
-                  const highlightActive = fullscreenPanelSlugs.has(item.slug) ? isPanelActive : isActive;
+                  const highlightActive = fullscreenPanelSlugs.has(item.slug) ? (isPanelActive || isRouteActive) : isActive;
                   const itemStatus = getItemStatus(item.slug);
                   const itemCount = getItemCount(item.slug);
                   

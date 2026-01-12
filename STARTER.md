@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-09  
+**Last Updated:** 2026-01-11  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -251,7 +251,7 @@ function calculatePrice(priceModel: PriceModel, quantity: number): number {
 **Key Features:**
 - Loads SVG outline, extrudes to 3D
 - Applies texture mapping (face/side/top)
-- Auto-scales to target dimensions
+- Auto-scales to target dimensions, but preserves fixed-scale silhouettes for any SVG named `headstone_*` so sculpted shapes (guitar, wolf, seahorse, etc.) keep their surrounding surface/outline.
 - Provides API for child positioning
 
 **API Exposed:**
@@ -334,6 +334,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 
 ### Layout & UX Notes
 - The header button uses non-breaking spaces so "Back to Menu" never wraps (we no longer need a fixed 147px width).
+- When the canvas is visible (select-size/material/etc.), clicking **Select Shape** now exclusively opens this fullscreen sidebar panel so the main column continues to host the Canvas instead of swapping in the gallery.
 - Each panel runs inside `flex flex-col h-full -> flex-1 overflow-y-auto` stacks, giving ScrollViews predictably smooth momentum on tablets.
 - Warm gold gradients, thin borders, and serif-friendly spacing match the memorial brand guidelines called out in SIDEBAR_IMPROVEMENTS.md.
 - **Desktop header (Jan 2026)**: The fixed sidebar header now renders only the Forever Shining logotype; catalog-dependent "Current Product" copy, price, and dimensions were removed from desktop to keep the chrome calm, but the mobile drawer still surfaces that contextual info for smaller screens.
@@ -423,6 +424,8 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - `addAddition()` - Add 3D model
 - `calculateInscriptionCost()` - Pricing
 - `loadDesignFromXML()` - Import saved design
+
+**Catalog-driven dimension rails (Jan 2026):** `setProductId()` now records the active shape’s min/max width, height, base, and thickness limits straight from the catalog XML. Every slider/input (including base width/height and upright/slant thickness) clamps against those live bounds, so compact products such as the Laser-etched Black Granite Mini Headstone (id 22) retain their exact 200 mm × 300 mm × 50 mm proportions on the canvas while still allowing larger monuments to use their broader ranges.
 
 ---
 
@@ -1813,6 +1816,17 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-11 (Morning)**: Catalog Dimension Rails & Canvas Product Sync (Production-Ready)
+  - `headstone-store.ts` now captures each catalog shape’s min/max width, height, base size, and thickness values when `setProductId()` runs, exposing them to every dimension slider/input. Mini headstones (e.g., product 22) finally respect their 200 mm × 300 mm × 50 mm footprint instead of being clamped to the old 300 mm defaults, and large monuments still inherit their broader ranges automatically.
+  - Width/height/base/thickness setters clamp against those catalog-driven bounds rather than hardcoded 100–300 mm ranges, eliminating the red validation states that previously appeared when products shipped with smaller specs.
+  - Canvas/UI headers fall back to the selected `productId` when the catalog data hasn’t finished loading, so `/select-size`, `/select-shape`, and the ThreeScene overlay all show the correct product name immediately after selection, even while XML fetches are in flight.
+
+- **2026-01-10 (Afternoon)**: Hero Inscription, Shape Panels, and Fixed-Scale Headstones (Production-Ready)
+  - Homepage HeroCanvas now renders the Psalm 23:1 quote on the backside inscription with a two-line layout (“The Lord is my shepherd.” / “Psalm 23:1”), larger typography, and centered second line; the 2_116_01 motif sits just below it with corrected orientation, scale, and lower anchor so neither element overlaps.
+  - Loader duplication was removed so only the centered spinner appears, and Select Shape strictly opens inside the left sidebar fullscreen panel (Back to Menu button included) whenever the canvas is visible—no more inline menu rendering or main-column takeovers.
+  - SvgHeadstone treats any SVG whose filename starts with `headstone_` as a fixed-size silhouette + surface combo: the outer headstone surface remains visible around the carved figure (guitar, wolf, seahorse, etc.), the white inset outline stays intact for laser guidance, and no automatic cropping clips the special geometry.
+  - Headstone selection indicators now mirror the Base indicator styling, plaque-only shapes (IDs 67–71) are filtered out of the headstone gallery, and guitar-style assets display their full surface instead of sinking below the base.
 
 - **2026-01-09 (Morning)**: Motif/Addition Drag Smoothing & Canvas Fade Logic (Production-Ready)
   - Motif and addition drags now keep raycasts alive even if the pointer briefly exits the mesh: both models listen for pointer movements on `window`, store the initial offset, and fall back to a headstone-aligned plane so fast horizontal sweeps stay perfectly smooth.

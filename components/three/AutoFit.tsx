@@ -8,6 +8,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type Props = {
   target: React.RefObject<THREE.Object3D>; // tablet/upright ONLY (no base/ground)
+  anchor?: React.RefObject<THREE.Object3D>; // optional reference used to clamp camera target (pure headstone mesh)
   margin?: number; // >=1, extra room from exact fit
   duration?: number; // seconds for the move animation
   pad?: number; // extra distance in front (scene units)
@@ -18,6 +19,7 @@ type Props = {
 
 export default function AutoFit({
   target,
+  anchor,
   margin = 0.5,
   duration = 0.25,
   pad = 0,
@@ -59,6 +61,19 @@ export default function AutoFit({
 
     const boxSize = new THREE.Vector3();
     box.getSize(boxSize);
+
+    let anchorCenterY: number | null = null;
+    let anchorHeight: number | null = null;
+    if (anchor?.current) {
+      anchor.current.updateWorldMatrix(true, true);
+      const anchorBox = new THREE.Box3().setFromObject(anchor.current);
+      if (!anchorBox.isEmpty()) {
+        const anchorCenter = anchorBox.getCenter(new THREE.Vector3());
+        const anchorSize = anchorBox.getSize(new THREE.Vector3());
+        anchorCenterY = anchorCenter.y;
+        anchorHeight = anchorSize.y;
+      }
+    }
     
     // Calculate proportional offset based on object height and whether base is shown
     // For plaques (no base), center more precisely without accounting for ground
@@ -76,6 +91,13 @@ export default function AutoFit({
     // Offset the target downward so camera shows more of the top
     const toTgt = sphere.center.clone();
     toTgt.y -= verticalOffset; // Dynamic offset based on object size and type
+
+    if (anchorCenterY !== null && anchorHeight !== null) {
+      const maxTargetY = anchorCenterY + anchorHeight * 0.12;
+      const downwardRatio = showBase ? 0.45 : 0.3;
+      const minTargetY = anchorCenterY - anchorHeight * downwardRatio;
+      toTgt.y = THREE.MathUtils.clamp(toTgt.y, minTargetY, maxTargetY);
+    }
 
     const vFov = THREE.MathUtils.degToRad(camera.fov);
     const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
@@ -108,7 +130,7 @@ export default function AutoFit({
     camera.far = far;
     camera.updateProjectionMatrix();
     invalidate();
-  }, [target, camera, size.width, size.height, margin, pad, controls, trigger, heightMm, widthMm, showBase]);
+  }, [target, anchor, camera, size.width, size.height, margin, pad, controls, trigger, heightMm, widthMm, showBase]);
 
   return null;
 }

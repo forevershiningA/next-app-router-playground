@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Shape } from '#/lib/db';
+import { data } from '#/app/_internal/_data';
 
 type ShapeCategory = {
   id: string;
@@ -38,9 +39,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   
   // Check if current product is a plaque
   const isPlaque = catalog?.product.type === 'plaque';
+  const fallbackProduct = data.products.find((p) => p.id === productId);
+  const productName = catalog?.product?.name ?? fallbackProduct?.name;
 
   const handleShapeSelect = (shape: Shape) => {
     // Plaque shapes (ovals and circle) are in /shapes/masks/, others in /shapes/headstones/
@@ -106,6 +110,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
               Select Your Shape
             </h1>
+            {productName && (
+              <p className="mt-3 text-base font-medium uppercase tracking-[0.3em] text-[#cfac6c]">
+                {productName}
+              </p>
+            )}
             <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
               Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.
             </p>

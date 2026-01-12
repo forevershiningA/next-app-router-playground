@@ -7,6 +7,7 @@ import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
+import { data } from '#/app/_internal/_data';
 
 interface DesignTreeNode {
   productType: string;
@@ -93,6 +94,7 @@ export default function DesignsTreeNav() {
   
   // Get catalog info
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
@@ -125,6 +127,11 @@ export default function DesignsTreeNav() {
     ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
     : 0;
   const price = headstonePrice + basePrice;
+  
+  // Safe product name with ID check
+  const displayProductName = catalog?.product?.name && catalog.product.id === productId
+    ? catalog.product.name
+    : (productId ? data.products.find((p) => p.id === productId)?.name : undefined) ?? 'Design Your Own Headstone';
 
   useEffect(() => {
     // Load all designs and organize into tree structure
@@ -230,7 +237,7 @@ export default function DesignsTreeNav() {
       {catalog && !pathname?.startsWith('/designs') && (
         <div className="border-b border-slate-700/50 bg-black/20 backdrop-blur-sm p-4">
           <h1 className="text-lg font-semibold text-white">
-            {catalog.product.name}
+            {displayProductName}
             <br />
             <span className="text-slate-300">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
           </h1>

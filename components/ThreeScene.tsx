@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
+import { data } from '#/app/_internal/_data';
 
 const CANVAS_ROUTES = new Set([
   '/select-size',
@@ -48,6 +49,7 @@ function CameraController() {
 // Product Name Header Component - Apple Studio Look
 function ProductNameHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
@@ -56,6 +58,26 @@ function ProductNameHeader() {
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
+  
+  const displayProductName = useMemo(() => {
+    console.log('[ThreeScene] Product name calc:', {
+      catalogName: catalog?.product?.name,
+      catalogId: catalog?.product?.id,
+      productId,
+      fallbackName: data.products.find((p) => p.id === productId)?.name
+    });
+    
+    // Safety check: Only use catalog name if it matches the selected product ID
+    if (catalog?.product?.name && catalog.product.id === productId) {
+      return catalog.product.name;
+    }
+    
+    // Fall back to static product list
+    if (!productId) {
+      return 'Design Your Own Headstone';
+    }
+    return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
+  }, [catalog, productId]);
   
   // Calculate quantity based on catalog's quantity type
   const quantity = useMemo(() => {
@@ -100,11 +122,11 @@ function ProductNameHeader() {
   return (
     <>
       {/* Title Floating Top Left */}
-      {catalog && (
+      {displayProductName && (
         <div className="absolute top-10 left-10 z-10 pointer-events-none hidden lg:block">
           {/* Elegant Serif Font */}
           <h1 className="text-3xl text-white drop-shadow-sm !p-0 !m-0">
-            {catalog.product.name}
+            {displayProductName}
           </h1>
         </div>
       )}

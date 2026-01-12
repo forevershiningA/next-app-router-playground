@@ -112,7 +112,7 @@ function GrassFloor() {
           metalness={0}
           envMapIntensity={0}
           // Important: Floor accepts fog to fade into distance
-          fog={true}
+          fog={false}
         />
       </mesh>
       
@@ -174,7 +174,7 @@ export default function Scene({
   const isMobileViewport = viewportWidth < 1024;
   const fogSettings = isMobileViewport
     ? { near: 9, far: 24 }
-    : { near: 5, far: 24 };
+    : { near: 9, far: 48 };
 
   // Call onReady after the scene finishes loading/swapping
   useEffect(() => {

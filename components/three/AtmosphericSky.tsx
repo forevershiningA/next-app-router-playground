@@ -10,7 +10,7 @@ const SkyMaterial = {
     uColorTop: { value: new THREE.Color('#3b93ff') },    
     // UPDATED: Light White/Blue for horizon (blends with fog)
     uColorBottom: { value: new THREE.Color('#dbecf8') }, 
-    uSunPosition: { value: new THREE.Vector3(10, 20, 10) },
+    uSunPosition: { value: new THREE.Vector3(10, 30, 10) },
   },
   vertexShader: `
     varying vec3 vWorldPosition;
@@ -51,7 +51,7 @@ type AtmosphericSkyProps = {
   showDome?: boolean;
 };
 
-export default function AtmosphericSky({ showDome = true }: AtmosphericSkyProps) {
+export default function AtmosphericSky({ showDome = false }: AtmosphericSkyProps) {
   return (
     <group>
       {/* The Sky Dome */}
@@ -94,7 +94,7 @@ export default function AtmosphericSky({ showDome = true }: AtmosphericSkyProps)
           volume={11} 
           color="#ffffff"
           opacity={0.92} 
-          position={[0, 9, -8]} 
+          position={[0, 11, -8]} 
           speed={0.12} 
         />
         <Cloud 
@@ -124,7 +124,7 @@ export default function AtmosphericSky({ showDome = true }: AtmosphericSkyProps)
           volume={9} 
           color="#ffffff" 
           opacity={0.58} 
-          position={[4, 10, 8]} 
+          position={[4, 10.5, 8]} 
           speed={0.11} 
         />
         <Cloud 

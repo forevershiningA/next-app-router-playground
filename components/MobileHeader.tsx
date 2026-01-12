@@ -5,9 +5,11 @@ import { calculatePrice } from '#/lib/xml-parser';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import { useMemo, useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { data } from '#/app/_internal/_data';
 
 export default function MobileHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
@@ -72,6 +74,18 @@ export default function MobileHeader() {
       : 0;
     return headstonePrice + basePrice + inscriptionCost + motifCost;
   }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
+  
+  const displayProductName = useMemo(() => {
+    // Safety check: Only use catalog name if it matches the selected product ID
+    if (catalog?.product?.name && catalog.product.id === productId) {
+      return catalog.product.name;
+    }
+    // Fall back to static product list
+    if (!productId) {
+      return 'Design Your Own Headstone';
+    }
+    return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
+  }, [catalog, productId]);
 
   // Don't render header on design list pages, when catalog isn't ready, or when canvas is hidden
   if (isDesignListPage || !catalog || !isCanvasVisible) {
@@ -96,7 +110,7 @@ export default function MobileHeader() {
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
         <h1 className="text-xl font-semibold text-white !p-0 !m-0">
-          {catalog.product.name} - {widthMm} x {heightMm} mm ($
+          {displayProductName} - {widthMm} x {heightMm} mm ($
           {price.toFixed(2)})
         </h1>
       </div>

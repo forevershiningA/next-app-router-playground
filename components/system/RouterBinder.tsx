@@ -15,6 +15,7 @@ export default function RouterBinder() {
   const pathname = usePathname();
   const setNavTo = useHeadstoneStore((s) => s.setNavTo);
   const setProductId = useHeadstoneStore((s) => s.setProductId);
+  const currentProductId = useHeadstoneStore((s) => s.productId);
   const setInscriptions = useHeadstoneStore((s) => s.setInscriptions);
   const setInscriptionHeightLimits = useHeadstoneStore(
     (s) => s.setInscriptionHeightLimits,
@@ -28,29 +29,26 @@ export default function RouterBinder() {
     );
   }, [router, setNavTo]);
 
-  // Set product ID based on URL - run immediately on mount
+  // Set product ID based on URL - only when no product has been selected yet
   useEffect(() => {
+    if (currentProductId) {
+      return;
+    }
 
-    
     // Get pathname from window if usePathname hasn't loaded yet
     const currentPath = pathname || (typeof window !== 'undefined' ? window.location.pathname : null);
     
     if (!currentPath) {
-
       return;
     }
     
     // Skip setting product if we're on a design page - it will be set by the design loader
     if (currentPath.startsWith('/designs/')) {
-
       return;
     }
     
     // Check if URL contains a product category or product slug
     let productId = '124'; // Default headstone
-    
-
-
     
     // Try to match /select-product/[section]/[category] first
     let match = currentPath.match(/\/select-product\/[^/]+\/([^/]+)/);
@@ -63,20 +61,15 @@ export default function RouterBinder() {
     if (match) {
       const slug = match[1];
       
-
-      
       // First try to find by category slug
       const category = data.categories.find(c => c.slug === slug);
       if (category) {
-
         const product = data.products.find(p => p.category === category.id);
         if (product) {
           productId = product.id;
-
         }
       } else {
         // Try to find by product name converted to slug
-
         const product = data.products.find(p => {
           const productSlug = p.name.toLowerCase().replace(/\s+/g, '-');
           return productSlug === slug;
@@ -84,19 +77,12 @@ export default function RouterBinder() {
         
         if (product) {
           productId = product.id;
-
-        } else {
-
         }
       }
-    } else {
-
     }
     
-
     setProductId(productId);
-    // Only run once on mount
-  }, []); // Empty deps to run only on mount
+  }, [pathname, currentProductId, setProductId]);
 
   useEffect(() => {
     // Load inscriptions XML for init size

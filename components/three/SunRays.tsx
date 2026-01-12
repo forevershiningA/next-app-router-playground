@@ -64,7 +64,7 @@ export default function SunRays() {
   });
 
   return (
-    <group position={[0, 4, -6]}>
+    <group position={[0, 3.5, -6]}>
       <mesh rotation={[-0.05, 0.15, 0]} scale={[20, 9, 1]} renderOrder={10}>
         <planeGeometry args={[1, 1, 1, 1]} />
         <shaderMaterial

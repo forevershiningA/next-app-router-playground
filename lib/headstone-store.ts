@@ -38,6 +38,9 @@ const MAX_HEADSTONE_DIM = 1200;
 const clampHeadstoneDim = (v: number) =>
   Math.min(MAX_HEADSTONE_DIM, Math.max(MIN_HEADSTONE_DIM, Math.round(v)));
 
+const clampBaseHeight = (v: number) => Math.max(50, Math.min(200, Math.round(v)));
+const clampThickness = (v: number) => Math.max(40, Math.min(300, Math.round(v)));
+
 const MIN_INSCRIPTION_SIZE_MM = 5;
 const MAX_INSCRIPTION_SIZE_MM = 1200;
 const clampInscriptionSize = (v: number) =>
@@ -101,6 +104,17 @@ type HeadstoneState = {
 
   materials: Material[];
   setMaterials: (materials: Material[]) => void;
+
+  minWidthMm: number;
+  maxWidthMm: number;
+  minHeightMm: number;
+  maxHeightMm: number;
+  minBaseWidthMm: number;
+  maxBaseWidthMm: number;
+  minBaseHeightMm: number;
+  maxBaseHeightMm: number;
+  minThicknessMm: number;
+  maxThicknessMm: number;
 
   selectedAdditions: string[];
   addAddition: (id: string) => void;
@@ -270,6 +284,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ materials });
   },
 
+  minWidthMm: MIN_HEADSTONE_DIM,
+  maxWidthMm: MAX_HEADSTONE_DIM,
+  minHeightMm: MIN_HEADSTONE_DIM,
+  maxHeightMm: MAX_HEADSTONE_DIM,
+  minBaseWidthMm: MIN_HEADSTONE_DIM,
+  maxBaseWidthMm: MAX_HEADSTONE_DIM,
+  minBaseHeightMm: 50,
+  maxBaseHeightMm: 200,
+  minThicknessMm: 40,
+  maxThicknessMm: 300,
+
   // Sample template: Beautiful headstone with angel and cross (all with colorMap textures)
   selectedAdditions: [
     'B2127',  // Cross (bottom right) - has colorMap
@@ -378,16 +403,37 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setProductId: async (id) => {
 
     console.trace('[Store] setProductId call stack');
+
+    // Immediately capture the user's selection so downstream effects know a
+    // product has been chosen even while the catalog XML is loading.
+    // CRITICAL: Clear the old catalog to prevent showing stale data
+    set({ productId: id, catalog: null });
+
     try {
 
       const response = await fetch(`/xml/catalog-id-${id}.xml`);
       const xmlText = await response.text();
       const catalog = await parseCatalogXML(xmlText, id);
 
-      set({ catalog, productId: id });
+      if (get().productId !== id) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('[Store] Ignoring stale catalog response for product', id);
+        }
+        return;
+      }
 
-      const isPlaque = catalog.product.type === 'plaque';
-      const showBase = catalog.product.type === 'headstone';
+      set({ catalog, productId: id });
+      
+      console.log('[Store] Catalog set for product', id, ':', {
+        catalogName: catalog.product.name,
+        catalogId: catalog.product.id,
+        catalogType: catalog.product.type
+      });
+
+      const productType = catalog.product.type;
+      const isPlaque = productType === 'plaque';
+      const isHeadstoneLike = productType === 'headstone' || productType === 'mini-headstone';
+      const showBase = isHeadstoneLike || productType === 'monument';
       const showInscriptionColor = catalog.product.laser !== '1';
       set({ showBase, showInscriptionColor });
       if (isPlaque) {
@@ -434,21 +480,47 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
       if (catalog.product.shapes.length > 0) {
         const shape = catalog.product.shapes[0];
+        const currentState = get();
 
-        console.log('Loading base dimensions from catalog:', {
-          baseWidthMm: shape.stand.initWidth,
-          baseHeightMm: shape.stand.initHeight,
-          baseThickness: shape.stand.initDepth,
-        });
+        const widthMin = shape.table.minWidth || MIN_HEADSTONE_DIM;
+        const widthMax = shape.table.maxWidth || MAX_HEADSTONE_DIM;
+        const heightMin = shape.table.minHeight || MIN_HEADSTONE_DIM;
+        const heightMax = shape.table.maxHeight || MAX_HEADSTONE_DIM;
+        const baseWidthMin = shape.stand.minWidth || widthMin;
+        const baseWidthMax = shape.stand.maxWidth || Math.max(baseWidthMin, MAX_HEADSTONE_DIM * 1.5);
+        const baseHeightMin = shape.stand.minHeight || 50;
+        const baseHeightMax = shape.stand.maxHeight || 200;
+        const thicknessMin = Math.min(shape.table.minDepth || 40, shape.stand.minDepth || 40);
+        const thicknessMax = Math.max(shape.table.maxDepth || 300, shape.stand.maxDepth || 300);
 
         set({
-          widthMm: shape.table.initWidth,
-          heightMm: shape.table.initHeight,
-          baseWidthMm: shape.stand.initWidth, // Load from catalog XML stand element
-          baseHeightMm: shape.stand.initHeight, // Load from catalog XML stand element
-          baseThickness: shape.stand.initDepth, // Load base thickness from catalog
-          uprightThickness: shape.table.initDepth, // Set thickness from catalog
-          slantThickness: shape.table.initDepth, // Set thickness from catalog
+          minWidthMm: widthMin,
+          maxWidthMm: Math.max(widthMin, widthMax),
+          minHeightMm: heightMin,
+          maxHeightMm: Math.max(heightMin, heightMax),
+          minBaseWidthMm: Math.max(widthMin, baseWidthMin),
+          maxBaseWidthMm: Math.max(baseWidthMin, baseWidthMax),
+          minBaseHeightMm: baseHeightMin,
+          maxBaseHeightMm: Math.max(baseHeightMin, baseHeightMax),
+          minThicknessMm: Math.max(10, thicknessMin),
+          maxThicknessMm: Math.max(thicknessMin, thicknessMax),
+        });
+
+        const clampedWidth = Math.max(widthMin, Math.min(Math.max(widthMin, widthMax), shape.table.initWidth || currentState.widthMm));
+        const clampedHeight = Math.max(heightMin, Math.min(Math.max(heightMin, heightMax), shape.table.initHeight || currentState.heightMm));
+        const clampedStandWidth = Math.max(clampedWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand.initWidth || currentState.baseWidthMm));
+        const clampedStandHeight = Math.max(baseHeightMin, Math.min(Math.max(baseHeightMin, baseHeightMax), shape.stand.initHeight || currentState.baseHeightMm));
+        const clampedStandDepth = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.stand.initDepth || currentState.baseThickness));
+        const clampedTabletThickness = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.table.initDepth || currentState.uprightThickness));
+
+        set({
+          widthMm: clampedWidth,
+          heightMm: clampedHeight,
+          baseWidthMm: clampedStandWidth,
+          baseHeightMm: clampedStandHeight,
+          baseThickness: clampedStandDepth,
+          uprightThickness: clampedTabletThickness,
+          slantThickness: clampedTabletThickness,
         });
 
         if (shape.table.color) {
@@ -562,41 +634,45 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   widthMm: 900,
   setWidthMm(v) {
-
-    const newWidth = clampHeadstoneDim(v);
-    set({ widthMm: newWidth });
+    const { minWidthMm, maxWidthMm } = get();
+    const clamped = Math.max(minWidthMm, Math.min(maxWidthMm, Math.round(v)));
+    set({ widthMm: clamped });
     
     // Ensure base width is at least as wide as headstone
     const state = get();
-    if (state.baseWidthMm < newWidth) {
-      set({ baseWidthMm: newWidth });
+    if (state.baseWidthMm < clamped) {
+      set({ baseWidthMm: clamped });
     }
   },
 
   heightMm: 900,
   setHeightMm(v) {
-
-    set({ heightMm: clampHeadstoneDim(v) });
+    const { minHeightMm, maxHeightMm } = get();
+    const clamped = Math.max(minHeightMm, Math.min(maxHeightMm, Math.round(v)));
+    set({ heightMm: clamped });
   },
   
   baseWidthMm: 1260, // Default: 900 * 1.4
   setBaseWidthMm(v) {
     const state = get();
-    // Base width cannot be smaller than headstone width
-    const minBaseWidth = state.widthMm;
-    const clampedWidth = Math.max(minBaseWidth, clampHeadstoneDim(v));
+    const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
+    const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
+    const clampedWidth = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
     set({ baseWidthMm: clampedWidth });
   },
   
   baseHeightMm: 100, // Base height is 100mm
   setBaseHeightMm(v) {
-    set({ baseHeightMm: Math.max(50, Math.min(200, v)) }); // Clamp between 50-200mm
+    const { minBaseHeightMm, maxBaseHeightMm } = get();
+    const clamped = Math.max(minBaseHeightMm, Math.min(maxBaseHeightMm, Math.round(v)));
+    set({ baseHeightMm: clamped });
   },
   
   baseThickness: 250, // Default base thickness 250mm (will be overwritten by catalog)
   setBaseThickness(thickness) {
-    // Don't clamp here - let the UI handle validation with catalog min/max
-    set({ baseThickness: thickness });
+    const { minThicknessMm, maxThicknessMm } = get();
+    const clamped = Math.max(minThicknessMm, Math.min(maxThicknessMm, Math.round(thickness)));
+    set({ baseThickness: clamped });
   },
   
   baseFinish: 'default',
@@ -611,13 +687,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   uprightThickness: 150, // Default 150mm thickness
   setUprightThickness(thickness) {
-    const clamped = Math.max(100, Math.min(300, thickness));
+    const { minThicknessMm, maxThicknessMm } = get();
+    const clamped = Math.max(minThicknessMm, Math.min(maxThicknessMm, Math.round(thickness)));
     set({ uprightThickness: clamped });
   },
 
   slantThickness: 150, // Default 150mm thickness
   setSlantThickness(thickness) {
-    const clamped = Math.max(100, Math.min(300, thickness));
+    const { minThicknessMm, maxThicknessMm } = get();
+    const clamped = Math.max(minThicknessMm, Math.min(maxThicknessMm, Math.round(thickness)));
     set({ slantThickness: clamped });
   },
 
