@@ -333,7 +333,7 @@ function BaseMesh({
 }
 
 const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
-  ({ headstoneObject, wrapper, onClick, height = 0.1, name }, ref) => {
+  ({ headstoneObject: _headstoneObject, wrapper: _wrapper, onClick, height = 0.1, name }, ref) => {
     const baseRef = useRef<THREE.Mesh>(null);
     useImperativeHandle(ref, () => baseRef.current!);
 
@@ -407,7 +407,6 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const hasTx = useRef(false);
     const targetPos = useRef(new THREE.Vector3());
     const targetScale = useRef(new THREE.Vector3(1, height, 1));
-    const invMatrix = useRef(new THREE.Matrix4());
     const [baseDimensions, setBaseDimensions] = React.useState({
       width: 1,
       height: height,
@@ -415,10 +414,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     });
 
     useFrame(() => {
-      const t = headstoneObject.current;
-      const w = wrapper.current;
       const b = baseRef.current;
-      if (!t || !w || !b) return;
+      if (!b) return;
 
       const hsH = heightMm / 1000;
       // CRITICAL: Base back should align with UPRIGHT thickness reference
@@ -437,17 +434,11 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       // Therefore: baseZCenter = -(alignmentDepth / 2) + baseD / 2
       const baseZCenter = -(alignmentDepth / 2) + baseD / 2;
 
-      const centerW = new THREE.Vector3(
+      targetPos.current.set(
         -xOffset,
-        baseHeightMeters * 0.5 + EPSILON,
+        -baseHeightMeters * 0.5 + EPSILON,
         baseZCenter
       );
-
-      w.updateWorldMatrix(true, false);
-      invMatrix.current.copy(w.matrixWorld).invert();
-      const posLocal = centerW.applyMatrix4(invMatrix.current);
-
-      targetPos.current.copy(posLocal);
       targetScale.current.set(baseW, baseHeightMeters, baseD);
 
       if (

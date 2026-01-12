@@ -239,6 +239,8 @@ export default function Scene({
     }
   };
 
+  const showSunRays = !is2DMode && !loading && !baseSwapping;
+
   return (
     <>
       {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
@@ -262,14 +264,14 @@ export default function Scene({
         <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
       </mesh>
       
-      {/* Keep SunRays gated independently so scene geometry doesn't disappear during swaps */}
-      {!is2DMode && (
-        <Suspense fallback={null}>
-          {!loading && !baseSwapping && <SunRays />}
-        </Suspense>
-      )}
-
       <group ref={groupRef}>
+        {/* Keep SunRays gated independently so scene geometry doesn't disappear during swaps */}
+        {showSunRays && (
+          <Suspense fallback={null}>
+            <SunRays />
+          </Suspense>
+        )}
+
         {/* Headstone content manages its own suspense boundaries internally */}
         <HeadstoneAssembly />
         
