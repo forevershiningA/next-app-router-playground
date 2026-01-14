@@ -355,7 +355,7 @@ export default function HomeSplash() {
               alt="Forever Shining - Design Online" 
               width={320}
               height={100}
-              className="w-full h-auto drop-shadow-sm"
+              className="w-full h-auto"
               priority
             />
           </div>
@@ -382,7 +382,7 @@ export default function HomeSplash() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
             backgroundImage: 'url(/backgrounds/tree-2916763_1920.webp)',
-            filter: 'blur(8px) saturate(1.4) brightness(0.9)',
+            filter: 'blur(16px) saturate(1.4) brightness(0.9)',
             transform: 'scale(1.1)'
           }}
           role="presentation"
@@ -399,8 +399,16 @@ export default function HomeSplash() {
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
             <h1 className="text-3xl font-playfair-display tracking-tight text-white sm:text-5xl mb-2 sm:mb-3 leading-tight">
-              <span className="block font-semibold drop-shadow-sm text-[2rem] sm:text-5xl">Create the Perfect Tribute</span>
-              <span className="block font-light drop-shadow-sm text-xl sm:text-3xl mt-4 text-gray-200">Design a beautiful tribute in real-time 3D - save, share, and order when ready.</span>
+              <span
+                className="inline-block text-shadow-hero font-semibold text-[2rem] sm:text-5xl mx-auto"
+              >
+                Create the Perfect Tribute
+              </span>
+              <span
+                className="block font-light text-shadow-hero text-xl sm:text-3xl mt-4 text-gray-200"
+              >
+                Design a beautiful tribute in real-time 3D - save, share, and order when ready.
+              </span>
             </h1>
             
             {/* Trust Signals */}
@@ -413,11 +421,11 @@ export default function HomeSplash() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-md font-medium text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+                <p className="text-md font-medium text-white">
                   Trusted by 5,000+ families
                 </p>
               </div>
-              <p className="text-sm text-gray-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              <p className="text-sm text-gray-300 text-shadow-hero">
                 Save designs • Share with family • No obligation · No credit card required<br/>
                 Headstones • Plaques • Urns • Full Monuments<br/>
                 Design exactly what you need.
@@ -556,7 +564,7 @@ export default function HomeSplash() {
                   priority
                   style={{ objectPosition: 'center center' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/20 to-black/45" />
+                <div className="absolute inset-0" />
               </div>
             </div>
             <p className="mt-4 text-center text-sm text-white/70">
@@ -570,7 +578,7 @@ export default function HomeSplash() {
             {howItWorksHighlights.map(({ label, icon: HighlightIcon }) => (
               <div
                 key={label}
-                className="flex items-center gap-3 px-2 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.65)]"
+                className="flex items-center gap-3 px-2 text-white"
               >
                 <div className="w-12 h-12 rounded-2xl bg-[#20150e]/80 border border-[#f3d48f]/40 flex items-center justify-center text-[#f7dca3]">
                   <HighlightIcon className="w-5 h-5" />
@@ -588,9 +596,9 @@ export default function HomeSplash() {
                 key={label} 
                 className="rounded-2xl border border-[#d4af37]/70 bg-[#1f130c]/90 p-6 shadow-[0_20px_45px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-[#d4af37] hover:shadow-[0_25px_50px_rgba(212,175,55,0.15)]"
               >
-                <p className="text-[10px] uppercase tracking-[0.4em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.55)] mb-2">{label}</p>
-                <p className="text-3xl font-serif text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] mt-1">{value}</p>
-                <p className="text-[13px] text-white/95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] mt-2 leading-snug">{detail}</p>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-white mb-2">{label}</p>
+                <p className="text-3xl font-serif text-white mt-1">{value}</p>
+                <p className="text-[13px] text-white/95 mt-2 leading-snug">{detail}</p>
               </div>
             ))}
           </div>

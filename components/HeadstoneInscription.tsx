@@ -83,8 +83,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const mouse = React.useMemo(() => new THREE.Vector2(), []);
 
     const units = headstone.unitsPerMeter;
-    // Keep text on surface for both types (0.5mm offset prevents z-fighting)
-    const liftLocal = 0.5;
+    // Keep text on surface for both types (lean 0.05mm offset prevents z-fighting)
+    const liftLocal = 0.05;
 
     // initial Y based on approx height
     const initialYLocal = React.useMemo(() => {

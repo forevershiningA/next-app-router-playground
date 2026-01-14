@@ -32,7 +32,7 @@ const TARGET_HEIGHTS = {
   application: 100, // 100mm
 };
 
-const APPLICATION_Z_OFFSET = 0.002; // Small offset from headstone surface (2mm)
+const APPLICATION_Z_OFFSET = 0.05; // 0.05mm offset keeps applications flush without z-fighting
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -477,8 +477,8 @@ function AdditionModelInner({
     // Statues and vases sit on the base
     zPosition = headstone.frontZ;
   } else if (addition.type === 'application') {
-    // Position application on headstone surface (same as motifs use frontZ + 0.5)
-    zPosition = headstone.frontZ + 0.5;
+    // Position application on headstone surface with minimal offset to avoid z-fighting
+    zPosition = headstone.frontZ + APPLICATION_Z_OFFSET;
   }
 
   const isSelected = selectedAdditionId === id;

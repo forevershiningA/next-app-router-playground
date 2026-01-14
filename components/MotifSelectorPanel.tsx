@@ -102,7 +102,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                       <img
                         src={category.img ?? '/ico/forever-transparent-logo.png'}
                         alt={getMotifCategoryName(category.name)}
-                        className="max-h-full max-w-full object-contain"
+                        className="max-h-full max-w-full object-contain filter brightness-0 invert"
                         loading="lazy"
                       />
                     </div>
@@ -166,7 +166,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                           <img
                             src={motif.path}
                             alt={motif.name}
-                            className="max-h-full max-w-full object-contain"
+                            className="max-h-full max-w-full object-contain filter brightness-0 invert"
                             loading="lazy"
                           />
                         </div>

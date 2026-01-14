@@ -258,7 +258,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
-  const centerZ = headstone.frontZ + 0.5;
+  const centerZ = headstone.frontZ + 0.05;
 
   const inset = 0.01;
   const spanY = bbox.max.y - bbox.min.y;

@@ -139,9 +139,9 @@ All positioning uses millimeters as the base unit in the bounding box coordinate
 
 ### Z-Positioning (Depth)
 - **Headstone surface**: `headstone.frontZ` (front face of stone)
-- **Inscriptions**: `frontZ + 0.5mm` (prevents z-fighting)
-- **Motifs**: `frontZ + 0.5mm`
-- **Additions (applications)**: `frontZ + 0.5mm`
+- **Inscriptions**: `frontZ + 0.05mm` (prevents z-fighting while keeping flush)
+- **Motifs**: `frontZ + 0.05mm`
+- **Additions (applications)**: `frontZ + 0.05mm`
 - **Additions (statues/vases)**: `frontZ` (on base)
 
 ### Scaling
@@ -1816,6 +1816,11 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-12 (Afternoon)**: SunRays Sync, Base Alignment, and Surface Offsets (Production-Ready)
+  - `components/three/Scene.tsx` now mounts `SunRays` inside the rotating scene group and gates it with a shared `showSunRays` flag, so the glow rotates with the left/right arrows and stays hidden during material swaps or canvas loading.
+  - `HeadstoneBaseAuto.tsx` positions the base entirely in wrapper-local space (centered at `-baseHeight/2`) instead of solving world coordinates, keeping the stone perfectly seated on the base even after OrbitControls spins.
+  - Inscriptions, motifs, and application-style additions now ride just **0.05 mm** off the granite by tightening their `frontZ` lifts, eliminating the visible black gap at edge-on angles while still preventing z-fighting; the Z-positioning guide above has been updated accordingly.
 
 - **2026-01-11 (Morning)**: Catalog Dimension Rails & Canvas Product Sync (Production-Ready)
   - `headstone-store.ts` now captures each catalog shape’s min/max width, height, base size, and thickness values when `setProductId()` runs, exposing them to every dimension slider/input. Mini headstones (e.g., product 22) finally respect their 200 mm × 300 mm × 50 mm footprint instead of being clamped to the old 300 mm defaults, and large monuments still inherit their broader ranges automatically.

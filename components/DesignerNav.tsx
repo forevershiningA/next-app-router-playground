@@ -114,6 +114,9 @@ export default function DesignerNav() {
   // Full-screen panel state - when set, hides menu and shows panel
   const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<string | null>(null);
   const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<string | null>(null);
+  const [panelSource, setPanelSource] = React.useState<'menu' | 'canvas' | null>(null);
+  const activeFullscreenPanelRef = React.useRef<string | null>(null);
+  activeFullscreenPanelRef.current = activeFullscreenPanel;
 
 
   // Listen for open panel events from canvas (e.g., inscription/motif/addition click)
@@ -123,6 +126,16 @@ export default function DesignerNav() {
       const panelSlug = customEvent.detail.panel;
       setActiveFullscreenPanel(panelSlug);
       setDismissedPanelSlug(null);
+      setPanelSource((prev) => {
+        if (
+          panelSlug === 'select-additions' &&
+          prev === 'menu' &&
+          activeFullscreenPanelRef.current === 'select-additions'
+        ) {
+          return prev;
+        }
+        return 'canvas';
+      });
     };
     window.addEventListener('openFullscreenPanel', handleOpenPanel);
     return () => window.removeEventListener('openFullscreenPanel', handleOpenPanel);
@@ -139,6 +152,7 @@ export default function DesignerNav() {
   // Open full-screen panel
   const openFullscreenPanel = (slug: string) => {
     setDismissedPanelSlug(null);
+    setPanelSource('menu');
     if (slug === 'inscriptions') {
       setActivePanel('inscription');
     }
@@ -163,6 +177,7 @@ export default function DesignerNav() {
       setDismissedPanelSlug(slugToDismiss);
     }
     setActiveFullscreenPanel(null);
+    setPanelSource(null);
     // Don't navigate - just hide panel and show menu
     // URL stays the same (e.g., stays on /select-size)
   }, [activeFullscreenPanel, pathname, setActivePanel, setDismissedPanelSlug]);
@@ -264,6 +279,7 @@ export default function DesignerNav() {
           setActivePanel(null);
         }
         setActiveFullscreenPanel(null);
+        setPanelSource(null);
       }
       return;
     }
@@ -275,6 +291,7 @@ export default function DesignerNav() {
           setActivePanel('inscription');
         }
         setDismissedPanelSlug(null);
+        setPanelSource('menu');
         setActiveFullscreenPanel(currentSlug);
       }
     } else {
@@ -287,6 +304,7 @@ export default function DesignerNav() {
           setActivePanel(null);
         }
         setActiveFullscreenPanel(null);
+        setPanelSource(null);
       }
       if (dismissedPanelSlug) {
         setDismissedPanelSlug(null);
@@ -300,6 +318,7 @@ export default function DesignerNav() {
     setActivePanel,
     setActiveFullscreenPanel,
     setDismissedPanelSlug,
+    setPanelSource,
   ]);
   
   const renderSelectAdditionsPanel = () => {
@@ -313,6 +332,8 @@ export default function DesignerNav() {
       : null;
     const hasActiveAddition = !!selectedAdditionId && !!activeAdditionOffset && activePanel === 'addition';
     const additionRotation = ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
+    const showAdditionCatalog =
+      panelSource === 'menu' || (panelSource === null && isSelectAdditionsPage);
     
     return (
       <div className="flex h-full flex-col gap-4">
@@ -409,11 +430,13 @@ export default function DesignerNav() {
           </div>
         )}
         
-        <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
-          <div className="h-full overflow-y-auto pr-1">
-            <AdditionSelector additions={additionsList} />
+        {showAdditionCatalog && (
+          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+            <div className="h-full overflow-y-auto pr-1">
+              <AdditionSelector additions={additionsList} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   };
