@@ -421,7 +421,7 @@ export default function HomeSplash() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-md font-medium text-white">
+                <p className="text-md font-medium text-white text-shadow-hero">
                   Trusted by 5,000+ families
                 </p>
               </div>

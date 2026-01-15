@@ -1,38 +1,485 @@
-hot-reloader-pages.js:103 Wyczyszczono konsolę
-hook.js:608 ./components/DesignerNav.tsx
-Error:   × Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-     ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignerNav.tsx:562:1]
- 559 │           <div className="rounded-2xl border border-dashed border-white/15 bg-[#1F1F1F]/60 p-6 text-sm text-gray-300 shadow-inner">
- 560 │             Select a motif on the memorial to adjust its properties, or browse the motif library below to add a new engraving.
- 561 │           </div>
- 562 │         )}
-     ·          ▲
- 563 │ 
- 564 │         <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
- 564 │           <MotifSelectorPanel motifs={motifCategories} />
-     ╰────
-  × Expected '</', got ';'
-     ╭─[C:\Users\polcr\Documents\GitHub\next-dyo\components\DesignerNav.tsx:568:1]
- 565 │           <MotifSelectorPanel motifs={motifCategories} />
- 566 │         </div>
- 567 │       </div>
- 568 │     );
-     ·      ─
- 569 │   };
- 570 │ 
- 570 │   // Sync canvas selection with editingObject on select-size page
-     ╰────
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./components/DesignerNav.tsx
-./components/ConditionalNav.tsx
+index.js:120 Uncaught Error: Invalid argument not valid semver ('' received)
+    at validateAndParse (index.js:120:15)
+    at esm_compareVersions (index.js:10:16)
+    at gte (index.js:249:10)
+    at k.registerRendererInterface (agent.js:960:24)
+    at registerRendererInterface (index.js:31:11)
+    at index.js:70:5
+    at Map.forEach (<anonymous>)
+    at initBackend (index.js:69:27)
+    at activateBackend (backendManager.js:1:13128)
+    at backendManager.js:1:14182
+    at hook.js:268:34
+    at Array.map (<anonymous>)
+    at Object.emit (hook.js:268:24)
+    at backend.js:33:8
+    at backend.js:19:1
+    at react_devtools_backend_compact.js:1:51014
+    at react_devtools_backend_compact.js:1:51018
+validateAndParse @ index.js:120
+esm_compareVersions @ index.js:10
+gte @ index.js:249
+registerRendererInterface @ agent.js:960
+registerRendererInterface @ index.js:31
+(anonimowa) @ index.js:70
+initBackend @ index.js:69
+activateBackend @ backendManager.js:1
+(anonimowa) @ backendManager.js:1
+(anonimowa) @ hook.js:268
+emit @ hook.js:268
+(anonimowa) @ backend.js:33
+(anonimowa) @ backend.js:19
+(anonimowa) @ react_devtools_backend_compact.js:1
+(anonimowa) @ react_devtools_backend_compact.js:1
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:405 [Store] setProductId call stack
 overrideMethod @ hook.js:608
-nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
-handleErrors @ hot-reloader-pages.js:164
-processMessage @ hot-reloader-pages.js:228
-eval @ hot-reloader-pages.js:72
-handleMessage @ websocket.js:69
-index.js:1631 {file: {…}}
+setProductId @ C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:405
+RouterBinder.useEffect @ C:\Users\polcr\Documents\GitHub\next-dyo\components\system\RouterBinder.tsx:84
+react_stack_bottom_frame @ react-dom-client.development.js:29214
+runWithFiberInDEV @ react-dom-client.development.js:975
+commitHookEffectListMount @ react-dom-client.development.js:13683
+commitHookPassiveMountEffects @ react-dom-client.development.js:13770
+commitPassiveMountOnFiber @ react-dom-client.development.js:16674
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16694
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16666
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16936
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:16620
+commitPassiveMountOnFiber @ react-dom-client.development.js:16709
+flushPassiveEffects @ react-dom-client.development.js:20504
+eval @ react-dom-client.development.js:19715
+performWorkUntilDeadline @ scheduler.development.js:36
+"use client"
+RootLayout @ layout.tsx:55
+initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
+eval @ react-server-dom-webpack-client.browser.development.js:4122
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+readChunk @ react-server-dom-webpack-client.browser.development.js:1399
+react_stack_bottom_frame @ react-dom-client.development.js:29236
+resolveLazy @ react-dom-client.development.js:6225
+createChild @ react-dom-client.development.js:6543
+reconcileChildrenArray @ react-dom-client.development.js:6862
+reconcileChildFibersImpl @ react-dom-client.development.js:7219
+eval @ react-dom-client.development.js:7336
+reconcileChildren @ react-dom-client.development.js:10028
+beginWork @ react-dom-client.development.js:12503
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<RootLayout>
+initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
+initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
+initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+"use server"
+ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
+createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
+exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
+eval @ app-index.js:130
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1768413824108:160
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+fn @ webpack.js:1
+eval @ app-next-dev.js:14
+eval @ app-bootstrap.js:59
+loadScriptsInSequence @ app-bootstrap.js:24
+appBootstrap @ app-bootstrap.js:53
+eval @ app-next-dev.js:13
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1768413824108:182
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main-app.js?v=1768413824108:1998
+(anonimowa) @ main-app.js?v=1768413824108:1999
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main-app.js?v=1768413824108:9
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\xml-parser.ts:412 Parsing catalog XML - found stand/base product: true
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\xml-parser.ts:418 Stand/base product has price_model: true
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\xml-parser.ts:423 Base price model parsed: {id: '', code: 'H-TABLE', name: '*', quantityType: 'Width', currency: 'Dollars', …}
+C:\Users\polcr\Documents\GitHub\next-dyo\lib\headstone-store.ts:427 [Store] Catalog set for product 124 : {catalogName: 'Traditional Engraved Headstone', catalogId: '124', catalogType: 'headstone'}
+C:\Users\polcr\Documents\GitHub\next-dyo\app\_ui\HomeSplash.tsx:419 A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>
+            <SegmentViewNode type="page" pagePath="page.tsx">
+              <SegmentTrieNode>
+              <Page>
+                <HomeSplash>
+                  <div className="min-h-screen" style={{...}}>
+                    <div className="relative m..." role="banner">
+                      <header>
+                      <div>
+                      <div>
+                      <div>
+                      <div>
+                      <div>
+                      <div className="relative z...">
+                        <div className="text-center">
+                          <h1>
+                          <div className="flex flex-...">
+                            <div className="flex items...">
+                              <div className="flex items...">
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                              ...
+                            ...
+                          ...
+                    ...
+            ...
+          ...
+
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+eval @ react-dom-client.development.js:5533
+runWithFiberInDEV @ react-dom-client.development.js:975
+emitPendingHydrationWarnings @ react-dom-client.development.js:5532
+completeWork @ react-dom-client.development.js:13216
+runWithFiberInDEV @ react-dom-client.development.js:975
+completeUnitOfWork @ react-dom-client.development.js:19564
+performUnitOfWork @ react-dom-client.development.js:19445
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<svg>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:326
+eval @ C:\Users\polcr\Documents\GitHub\next-dyo\app\_ui\HomeSplash.tsx:419
+HomeSplash @ C:\Users\polcr\Documents\GitHub\next-dyo\app\_ui\HomeSplash.tsx:418
+react_stack_bottom_frame @ react-dom-client.development.js:29129
+renderWithHooksAgain @ react-dom-client.development.js:8009
+renderWithHooks @ react-dom-client.development.js:7921
+updateFunctionComponent @ react-dom-client.development.js:10489
+beginWork @ react-dom-client.development.js:12102
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+"use client"
+Page @ page.tsx:10
+initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
+eval @ react-server-dom-webpack-client.browser.development.js:4122
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2109
+parseModelString @ react-server-dom-webpack-client.browser.development.js:2475
+eval @ react-server-dom-webpack-client.browser.development.js:4052
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1571
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3955
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+<Page>
+Function.all @ VM49923 <anonymous>:1
+initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
+initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
+initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+"use server"
+ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
+createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
+exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
+eval @ app-index.js:130
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1768413824108:160
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+fn @ webpack.js:1
+eval @ app-next-dev.js:14
+eval @ app-bootstrap.js:59
+loadScriptsInSequence @ app-bootstrap.js:24
+appBootstrap @ app-bootstrap.js:53
+eval @ app-next-dev.js:13
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1768413824108:182
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main-app.js?v=1768413824108:1998
+(anonimowa) @ main-app.js?v=1768413824108:1999
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main-app.js?v=1768413824108:9
+C:\Users\polcr\Documents\GitHub\next-dyo\app\_ui\HomeSplash.tsx:419 A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>
+            <SegmentViewNode type="page" pagePath="page.tsx">
+              <SegmentTrieNode>
+              <Page>
+                <HomeSplash>
+                  <div className="min-h-screen" style={{...}}>
+                    <div className="relative m..." role="banner">
+                      <header>
+                      <div>
+                      <div>
+                      <div>
+                      <div>
+                      <div>
+                      <div className="relative z...">
+                        <div className="text-center">
+                          <h1>
+                          <div className="flex flex-...">
+                            <div className="flex items...">
+                              <div className="flex items...">
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                                <svg
++                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current text-shadow-hero"
+-                                 className="w-4 h-4 sm:w-5 sm:h-5 fill-current"
+                                  viewBox="0 0 24 24"
+                                >
+                              ...
+                            ...
+                          ...
+                    ...
+            ...
+          ...
+
+overrideMethod @ hook.js:608
+error @ intercept-console-error.js:57
+eval @ react-dom-client.development.js:5533
+runWithFiberInDEV @ react-dom-client.development.js:975
+emitPendingHydrationWarnings @ react-dom-client.development.js:5532
+completeWork @ react-dom-client.development.js:13216
+runWithFiberInDEV @ react-dom-client.development.js:975
+completeUnitOfWork @ react-dom-client.development.js:19564
+performUnitOfWork @ react-dom-client.development.js:19445
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+<svg>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:326
+eval @ C:\Users\polcr\Documents\GitHub\next-dyo\app\_ui\HomeSplash.tsx:419
+HomeSplash @ C:\Users\polcr\Documents\GitHub\next-dyo\app\_ui\HomeSplash.tsx:418
+react_stack_bottom_frame @ react-dom-client.development.js:29129
+renderWithHooksAgain @ react-dom-client.development.js:8009
+renderWithHooks @ react-dom-client.development.js:7921
+updateFunctionComponent @ react-dom-client.development.js:10489
+beginWork @ react-dom-client.development.js:12102
+runWithFiberInDEV @ react-dom-client.development.js:975
+performUnitOfWork @ react-dom-client.development.js:19428
+workLoopConcurrentByScheduler @ react-dom-client.development.js:19422
+renderRootConcurrent @ react-dom-client.development.js:19404
+performWorkOnRoot @ react-dom-client.development.js:18321
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:21073
+performWorkUntilDeadline @ scheduler.development.js:36
+"use client"
+Page @ page.tsx:10
+initializeElement @ react-server-dom-webpack-client.browser.development.js:1816
+eval @ react-server-dom-webpack-client.browser.development.js:4122
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+getOutlinedModel @ react-server-dom-webpack-client.browser.development.js:2109
+parseModelString @ react-server-dom-webpack-client.browser.development.js:2475
+eval @ react-server-dom-webpack-client.browser.development.js:4052
+initializeModelChunk @ react-server-dom-webpack-client.browser.development.js:1718
+resolveModelChunk @ react-server-dom-webpack-client.browser.development.js:1571
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3955
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+<Page>
+Function.all @ VM49923 <anonymous>:1
+initializeFakeTask @ react-server-dom-webpack-client.browser.development.js:3016
+initializeDebugInfo @ react-server-dom-webpack-client.browser.development.js:3041
+initializeDebugChunk @ react-server-dom-webpack-client.browser.development.js:1663
+processFullStringRow @ react-server-dom-webpack-client.browser.development.js:3889
+processFullBinaryRow @ react-server-dom-webpack-client.browser.development.js:3805
+processBinaryChunk @ react-server-dom-webpack-client.browser.development.js:4025
+progress @ react-server-dom-webpack-client.browser.development.js:4289
+"use server"
+ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2525
+createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:4150
+exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:4547
+eval @ app-index.js:130
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1768413824108:160
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+fn @ webpack.js:1
+eval @ app-next-dev.js:14
+eval @ app-bootstrap.js:59
+loadScriptsInSequence @ app-bootstrap.js:24
+appBootstrap @ app-bootstrap.js:53
+eval @ app-next-dev.js:13
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1768413824108:182
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main-app.js?v=1768413824108:1998
+(anonimowa) @ main-app.js?v=1768413824108:1999
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main-app.js?v=1768413824108:9
+hook.js:608 Image with src "/shapes/motifs/s/dove_002.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+overrideMethod @ hook.js:608
+warnOnce @ warn-once.js:16
+eval @ image-component.js:89
+Promise.then
+handleLoading @ image-component.js:36
+onLoad @ image-component.js:191
+executeDispatch @ react-dom-client.development.js:21260
+runWithFiberInDEV @ react-dom-client.development.js:975
+processDispatchQueue @ react-dom-client.development.js:21310
+eval @ react-dom-client.development.js:21909
+batchedUpdates$1 @ react-dom-client.development.js:3318
+dispatchEventForPluginEventSystem @ react-dom-client.development.js:21464
+dispatchEvent @ react-dom-client.development.js:26786
+hook.js:608 Image with src "/shapes/motifs/s/angel_001.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+overrideMethod @ hook.js:608
+warnOnce @ warn-once.js:16
+eval @ image-component.js:89
+Promise.then
+handleLoading @ image-component.js:36
+onLoad @ image-component.js:191
+executeDispatch @ react-dom-client.development.js:21260
+runWithFiberInDEV @ react-dom-client.development.js:975
+processDispatchQueue @ react-dom-client.development.js:21310
+eval @ react-dom-client.development.js:21909
+batchedUpdates$1 @ react-dom-client.development.js:3318
+dispatchEventForPluginEventSystem @ react-dom-client.development.js:21464
+dispatchEvent @ react-dom-client.development.js:26786
+hook.js:608 Image with src "/textures/forever/l/Glory-Black-2.webp" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+overrideMethod @ hook.js:608
+warnOnce @ warn-once.js:16
+eval @ image-component.js:89
+Promise.then
+handleLoading @ image-component.js:36
+onLoad @ image-component.js:191
+executeDispatch @ react-dom-client.development.js:21260
+runWithFiberInDEV @ react-dom-client.development.js:975
+processDispatchQueue @ react-dom-client.development.js:21310
+eval @ react-dom-client.development.js:21909
+batchedUpdates$1 @ react-dom-client.development.js:3318
+dispatchEventForPluginEventSystem @ react-dom-client.development.js:21464
+dispatchEvent @ react-dom-client.development.js:26786
+three.module.js:16282 THREE.WebGLRenderer: Context Lost.
+three.module.js:16282 THREE.WebGLRenderer: Context Lost.

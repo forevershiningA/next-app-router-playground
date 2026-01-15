@@ -76,17 +76,11 @@ export default function AutoFit({
     }
     
     // Calculate proportional offset based on object height and whether base is shown
-    // For plaques (no base), center more precisely without accounting for ground
-    // For headstones with base, offset to account for header
-    let verticalOffset;
-    if (!showBase) {
-      // Plaque: minimal offset, just center it
-      verticalOffset = 0;
-    } else {
-      // Headstone with base: use proportional offset for header
-      const heightRatio = boxSize.y > 1 ? 0.10 : 0.15;
-      verticalOffset = boxSize.y * heightRatio;
-    }
+    // Even without a base we still nudge the target downward slightly so low-profile pieces (plaques)
+    // sit comfortably in frame instead of hugging the bottom edge.
+    const tallHeadstoneRatio = boxSize.y > 1 ? 0.10 : 0.15;
+    const lowProfileRatio = boxSize.y > 0.4 ? 0.08 : 0.12;
+    const verticalOffset = (showBase ? tallHeadstoneRatio : lowProfileRatio) * boxSize.y;
     
     // Offset the target downward so camera shows more of the top
     const toTgt = sphere.center.clone();
