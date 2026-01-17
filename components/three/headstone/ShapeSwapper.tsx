@@ -96,6 +96,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const borderName = useHeadstoneStore((s) => s.borderName);
+  const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
@@ -127,7 +128,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
-  const isPlaque = catalog?.product.type === 'plaque';
+  const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
+  const bronzeBorderColor = '#FFB65A';
   const isSelectSizeRoute = pathname === '/select-size';
   const isSelectMaterialRoute = pathname === '/select-material';
   const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;
@@ -154,18 +156,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const [visibleTex, setVisibleTex] = React.useState<string | null>(null);
   const pendingTextureSwap = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Ensure we always have an initial visible asset so the scene never renders empty
-  React.useEffect(() => {
-    if (!visibleUrl && requestedUrl) {
-      setVisibleUrl(requestedUrl);
-    }
-  }, [visibleUrl, requestedUrl]);
-
-  React.useEffect(() => {
-    if (!visibleTex && requestedTex) {
-      setVisibleTex(requestedTex);
-    }
-  }, [visibleTex, requestedTex]);
   const [fitTick, setFitTick] = React.useState(0);
 
   const resolvedUrl = visibleUrl ?? requestedUrl;
@@ -190,6 +180,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const preserveTopForShape = !isFixedHeadstoneAsset;
   const targetHeightForShape = heightM;
   const targetWidthForShape = widthM;
+  const headstoneDepth = isPlaque ? 0.5 : uprightThickness / 10;
+
+  React.useEffect(() => {
+    if (isPlaque && !borderName) {
+      setBorderName('Border 1');
+    }
+  }, [isPlaque, borderName, setBorderName]);
 
   React.useEffect(() => {
     return () => {
@@ -248,7 +245,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           <SvgHeadstone
             key={resolvedUrl}
             url={resolvedUrl}
-            depth={isPlaque ? 5 : uprightThickness / 10}
+            depth={headstoneDepth}
             scale={0.01}
             faceTexture={resolvedTex}
             sideTexture={resolvedTex}
@@ -365,10 +362,12 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                   <React.Suspense fallback={null}>
                     <BronzeBorder
                       borderName={borderName}
-                      plaqueWidth={widthM * 100}
-                      plaqueHeight={heightM * 100}
-                      color={headstoneMaterialUrl?.includes('phoenix') ? '#c99d44' : '#c99d44'}
-                      depth={5}
+                      plaqueWidth={api.worldWidth}
+                      plaqueHeight={api.worldHeight}
+                      unitsPerMeter={api.unitsPerMeter}
+                      frontZ={api.frontZ}
+                      color={bronzeBorderColor}
+                      depth={headstoneDepth}
                     />
                   </React.Suspense>
                 </ErrorBoundary>

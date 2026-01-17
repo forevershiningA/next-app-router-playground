@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
+import { bronzes } from '#/app/_internal/_data';
 
 type Material = {
   id: string;
@@ -27,6 +28,24 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const isPlaque = catalog?.product.type === 'plaque';
+  const isBronzePlaque = productId === '5';
+
+  // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
+  const displayMaterials = useMemo(() => {
+    if (isBronzePlaque) {
+      // Convert bronzes to Material format
+      return bronzes.map(b => ({
+        id: b.id,
+        name: b.name,
+        image: b.image,
+        category: 'bronze'
+      }));
+    }
+    return materials;
+  }, [isBronzePlaque, materials]);
 
   // Ensure canvas selection matches editingObject when component mounts
   useEffect(() => {
@@ -35,48 +54,63 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     }
   }, [editingObject, selected, setSelected]);
 
+  useEffect(() => {
+    if (isPlaque && editingObject !== 'headstone') {
+      setEditingObject('headstone');
+      setSelected('headstone');
+    }
+  }, [editingObject, isPlaque, setEditingObject, setSelected]);
+
   // Determine current material URL based on what's being edited
   const currentMaterialUrl = editingObject === 'base' ? currentBaseMaterialUrl : currentHeadstoneMaterialUrl;
 
   const handleMaterialSelect = (material: Material) => {
-    const materialUrl = `/textures/forever/l/${material.image}`;
+    // Use phoenix textures for Bronze Plaque, forever textures for others
+    const materialUrl = isBronzePlaque 
+      ? `/textures/phoenix/l/${material.image}`
+      : `/textures/forever/l/${material.image}`;
     setIsMaterialChange(true);
     
-    // Apply material to headstone or base depending on what's being edited
-    if (editingObject === 'base') {
+    const targetObject = isPlaque ? 'headstone' : editingObject;
+
+    if (targetObject === 'base') {
       setBaseMaterialUrl(materialUrl);
     } else {
       setHeadstoneMaterialUrl(materialUrl);
     }
-    
-    // Ensure selection is maintained after material change
-    setSelected(editingObject);
+
+    setSelected(targetObject);
+    setEditingObject(targetObject);
     
     setTimeout(() => setIsMaterialChange(false), 100);
   };
 
   return (
     <div className="space-y-3">
-      {/* Headstone/Base Toggle */}
-      <div className="mb-4">
-        <SegmentedControl
-          value={editingObject}
-          onChange={(value) => {
-            setEditingObject(value as 'headstone' | 'base');
-            setSelected(value as 'headstone' | 'base');
-          }}
-          options={[
-            { label: 'Headstone', value: 'headstone' },
-            { label: 'Base', value: 'base' },
-          ]}
-        />
-      </div>
+      {!isPlaque && (
+        <div className="mb-4">
+          <SegmentedControl
+            value={editingObject}
+            onChange={(value) => {
+              setEditingObject(value as 'headstone' | 'base');
+              setSelected(value as 'headstone' | 'base');
+            }}
+            options={[
+              { label: 'Headstone', value: 'headstone' },
+              { label: 'Base', value: 'base' },
+            ]}
+          />
+        </div>
+      )}
       
       <div
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
-        {materials.map((material) => {
-          const materialUrl = `/textures/forever/l/${material.image}`;
+        {displayMaterials.map((material) => {
+          // Use phoenix textures for Bronze Plaque, forever textures for others
+          const materialUrl = isBronzePlaque
+            ? `/textures/phoenix/l/${material.image}`
+            : `/textures/forever/l/${material.image}`;
           const isSelected = currentMaterialUrl === materialUrl;
           
           return (

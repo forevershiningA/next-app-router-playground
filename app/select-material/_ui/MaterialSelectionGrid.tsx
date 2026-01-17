@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Material } from '#/lib/db';
+import { bronzes } from '#/app/_internal/_data';
 
 type MaterialCategory = {
   id: string;
@@ -40,7 +41,29 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
   const currentMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const selected = useHeadstoneStore((s) => s.selected);
+  const setSelectedPart = useHeadstoneStore((s) => s.setSelected);
+  const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const storeMaterials = useHeadstoneStore((s) => s.materials);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const productId = useHeadstoneStore((s) => s.productId);
+
+  const isPlaque = catalog?.product.type === 'plaque';
+  const isBronzePlaque = productId === '5';
+  
+  // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
+  const displayMaterials = useMemo(() => {
+    if (isBronzePlaque) {
+      // Convert bronzes to Material format
+      return bronzes.map(b => ({
+        id: b.id,
+        name: b.name,
+        image: b.image,
+        category: 'bronze'
+      }));
+    }
+    return storeMaterials.length > 0 ? storeMaterials : materials;
+  }, [isBronzePlaque, storeMaterials, materials]);
 
   // Check if user has already selected shape (canvas should be visible)
   // If shape is selected, the sidebar MaterialSelector will be shown instead
@@ -52,21 +75,29 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   }
 
   const handleMaterialSelect = (material: Material) => {
-    const materialUrl = `/textures/forever/l/${material.image}`;
+    // Use phoenix textures for Bronze Plaque, forever textures for others
+    const materialUrl = isBronzePlaque
+      ? `/textures/phoenix/l/${material.image}`
+      : `/textures/forever/l/${material.image}`;
     setIsMaterialChange(true);
-    // Apply material to headstone or base depending on what's selected
-    if (selected === 'base') {
+    const targetSelection = isPlaque ? 'headstone' : selected ?? 'headstone';
+
+    if (targetSelection === 'base') {
       setBaseMaterialUrl(materialUrl);
     } else {
       setHeadstoneMaterialUrl(materialUrl);
     }
+    setSelectedPart(targetSelection);
+    setEditingObject(targetSelection);
+
     setTimeout(() => setIsMaterialChange(false), 100);
     // Navigate to select-size to show 3D preview with the new material
     router.push('/select-size');
   };
 
-  const filteredMaterials = materials.filter((material) => {
-    const matchesCategory = selectedCategory === 'all' || material.category === selectedCategory;
+  const filteredMaterials = displayMaterials.filter((material) => {
+    const matchesCategory =
+      selectedCategory === 'all' || material.category === selectedCategory;
     return matchesCategory;
   });
 
@@ -132,7 +163,14 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {filteredMaterials.map((material) => {
-                const materialUrl = `/textures/forever/l/${material.image}`;
+                // Use phoenix textures for Bronze Plaque, forever textures for others
+                const materialUrl = isBronzePlaque
+                  ? `/textures/phoenix/l/${material.image}`
+                  : `/textures/forever/l/${material.image}`;
+                // Use phoenix thumbnails for Bronze Plaque display
+                const thumbnailUrl = isBronzePlaque
+                  ? `/textures/phoenix/m/${material.image}`
+                  : `/textures/forever/l/${material.image}`;
                 const isSelected = currentMaterialUrl === materialUrl;
                 return (
                   <button
@@ -153,7 +191,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                   {/* Material Image */}
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 ring-1 ring-white/10">
                     <Image
-                      src={`/textures/forever/l/${material.image}`}
+                      src={thumbnailUrl}
                       alt={material.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

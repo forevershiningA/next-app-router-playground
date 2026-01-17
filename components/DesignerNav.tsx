@@ -16,6 +16,7 @@ import {
   EyeIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  RectangleStackIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
@@ -26,6 +27,7 @@ import InscriptionEditPanel from './InscriptionEditPanel';
 import SegmentedControl from './ui/SegmentedControl';
 import MaterialSelector from './MaterialSelector';
 import ShapeSelector from './ShapeSelector';
+import BorderSelector from './BorderSelector';
 import AdditionSelector from './AdditionSelector';
 import MotifSelectorPanel from './MotifSelectorPanel';
 
@@ -36,6 +38,7 @@ const menuGroups = [
     items: [
       { slug: 'select-product', name: 'Select Product', icon: CubeIcon },
       { slug: 'select-shape', name: 'Select Shape', icon: Squares2X2Icon },
+      { slug: 'select-border', name: 'Select Border', icon: RectangleStackIcon, requiresBorder: true },
       { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
       { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
     ],
@@ -53,7 +56,7 @@ const menuGroups = [
 
 // Flatten for compatibility with existing code
 const menuItems = menuGroups.flatMap(group => group.items);
-const fullscreenPanelSlugs = new Set(['select-size', 'select-shape', 'select-material', 'inscriptions', 'select-additions', 'select-motifs']);
+const fullscreenPanelSlugs = new Set(['select-size', 'select-shape', 'select-material', 'select-border', 'inscriptions', 'select-additions', 'select-motifs']);
 
 export default function DesignerNav() {
   const pathname = usePathname();
@@ -66,6 +69,7 @@ export default function DesignerNav() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const isPlaque = catalog?.product.type === 'plaque';
+  const hasBorder = catalog?.product?.border === '1';
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
@@ -263,7 +267,7 @@ export default function DesignerNav() {
   const isSelectSizePage = pathname === '/select-size';
   
   // Determine if canvas is visible (on pages with 3D scene)
-  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-additions'];
+  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-border', '/select-additions'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
   
@@ -1219,6 +1223,15 @@ export default function DesignerNav() {
                 <MaterialSelector materials={materials} />
               </div>
             )}
+            {activeFullscreenPanel === 'select-border' && (
+              <div className="space-y-6">
+                <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-280px)] overflow-hidden">
+                  <div className="h-full overflow-y-auto pr-1">
+                    <BorderSelector disableInternalScroll />
+                  </div>
+                </div>
+              </div>
+            )}
             {activeFullscreenPanel === 'inscriptions' && (
               <div className="space-y-6">
                 <InscriptionEditPanel />
@@ -1317,6 +1330,11 @@ export default function DesignerNav() {
               return null;
             }
             
+            // Hide "Select Border" for products without border support
+            if (item.slug === 'select-border' && !hasBorder) {
+              return null;
+            }
+            
             // Hide "Select Additions" for laser etched products
             if (item.slug === 'select-additions' && catalog?.product?.laser === '1') {
               return null;
@@ -1356,6 +1374,56 @@ export default function DesignerNav() {
               );
             }
             
+
+            // Special handling for Select Border - show border selector in sidebar when canvas is visible
+            if (item.slug === 'select-border') {
+              return (
+                <React.Fragment key={item.slug}>
+                  {isCanvasVisible ? (
+                    <>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Navigate to select-border page to keep canvas visible and show border selector
+                          if (pathname !== '/select-border') {
+                            router.push('/select-border');
+                          }
+                        }}
+                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
+                          isActive
+                            ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                            : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span>{item.name}</span>
+                      </button>
+                      
+                      {isActive && !selectedMotifId && !selectedAdditionId && (
+                        <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                          <BorderSelector />
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    // Show link when canvas is not visible (first-time selection)
+                    <Link
+                      href={`/${item.slug}`}
+                      data-section={item.slug}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                        isActive 
+                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
+                  
+                </React.Fragment>
+              );
+            }
 
             // Special handling for Select Material - show material selector in sidebar when canvas is visible
             if (item.slug === 'select-material') {

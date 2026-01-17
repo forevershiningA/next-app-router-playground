@@ -432,10 +432,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
       const productType = catalog.product.type;
       const isPlaque = productType === 'plaque';
-      const isHeadstoneLike = productType === 'headstone' || productType === 'mini-headstone';
+      const isHeadstoneLike =
+        productType === 'headstone' || productType === 'mini-headstone';
       const showBase = isHeadstoneLike || productType === 'monument';
       const showInscriptionColor = catalog.product.laser !== '1';
       set({ showBase, showInscriptionColor });
+
+      const isBronzePlaqueProduct = catalog.product.id === '5';
+      const materialOptions = isBronzePlaqueProduct
+        ? data.bronzes.map(({ id, name, image, category }) => ({
+            id,
+            name,
+            image,
+            category,
+          }))
+        : data.materials.map((material) => ({ ...material }));
+      set({ materials: materialOptions });
       if (isPlaque) {
         set({ shapeUrl: '/shapes/headstones/square.svg' });
       }

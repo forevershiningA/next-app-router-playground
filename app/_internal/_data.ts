@@ -374,6 +374,8 @@ const bronzes: Color[] = [
   { id: 'b15', name: 'White', image: '15.webp', hex: '#ffffff', category: 'bronze' },
 ];
 
+export { bronzes };
+
 export type Border = {
   id: string;
   name: string;

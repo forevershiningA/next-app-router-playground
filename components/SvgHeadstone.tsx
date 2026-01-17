@@ -1008,17 +1008,19 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   // 5. Create Materials (FIX: Return data from useMemo, not JSX)
   const materials = useMemo(() => {
-    // Polished granite settings - very reflective with crystalline sparkle
+    const isSlant = headstoneStyle === 'slant';
+
+    // Polished granite settings - keep plaques lighter without blowing out highlights
     const common = {
-      color: new THREE.Color(headstoneStyle === 'slant' ? 0x444444 : 0x555555),
-      roughness: headstoneStyle === 'slant' ? 0.08 : 0.08, // Very low for polished granite sparkle (was 0.65/0.12)
+      color: new THREE.Color(isSlant ? 0x444444 : 0xdcdcdc),
+      roughness: isSlant ? 0.08 : 0.18,
       metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-      envMapIntensity: headstoneStyle === 'slant' ? 2.0 : 2.5, // Strong reflections for sparkle (was 1.0/2.0)
+      envMapIntensity: isSlant ? 2.0 : 1.85,
     };
     
     // For slant headstones, apply rock pitch normal map to side material
-    if (headstoneStyle === 'slant' && rockNormalTexture) {
+    if (isSlant && rockNormalTexture) {
       return [
         new THREE.MeshPhysicalMaterial({ 
           ...common, 
@@ -1048,7 +1050,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         ...common, 
         map: clonedFaceMap,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.05, // Mirror-like polish for granite sparkle
+        clearcoatRoughness: 0.1,
         polygonOffset: true,
         polygonOffsetFactor: 1,
         polygonOffsetUnits: 1,
@@ -1057,7 +1059,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         ...common, 
         map: clonedSideMap,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.05, // Mirror-like polish for granite sparkle
+        clearcoatRoughness: 0.1,
         polygonOffset: true,
         polygonOffsetFactor: 1,
         polygonOffsetUnits: 1,

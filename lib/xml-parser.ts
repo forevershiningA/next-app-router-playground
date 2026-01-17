@@ -60,6 +60,7 @@ export interface CatalogData {
     name: string;
     type: string;
     laser: string;
+    border?: string;
     shapes: ShapeData[];
     additions: AdditionData[];
     priceModel: PriceModel;
@@ -318,6 +319,7 @@ export async function parseCatalogXML(
   const name = productElement.getAttribute('name') || '';
   const type = productElement.getAttribute('type') || '';
   const laser = productElement.getAttribute('laser') || '0';
+  const border = productElement.getAttribute('border') || '0';
 
   // Parse shapes
   const shapes: ShapeData[] = [];
@@ -425,7 +427,7 @@ export async function parseCatalogXML(
     }
   }
 
-  const catalogData = { product: { id, name, type, laser, shapes, additions, priceModel, basePriceModel } };
+  const catalogData = { product: { id, name, type, laser, border, shapes, additions, priceModel, basePriceModel } };
   catalogCache.set(productId, catalogData);
   return catalogData;
 }
