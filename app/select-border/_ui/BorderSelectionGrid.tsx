@@ -24,7 +24,9 @@ export default function BorderSelectionGrid() {
   const currentBorderName = useHeadstoneStore((s) => s.borderName);
 
   const handleBorderSelect = (border: typeof borders[0]) => {
-    setBorderName(border.id === 'no-border' ? null : border.name);
+    const nameToSet = border.id === 'no-border' ? null : border.name;
+    console.log('Border selected:', { id: border.id, name: border.name, setting: nameToSet });
+    setBorderName(nameToSet);
     // Stay on the same page when selecting from sidebar
     // router.push('/');
   };

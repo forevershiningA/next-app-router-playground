@@ -182,11 +182,12 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const targetWidthForShape = widthM;
   const headstoneDepth = isPlaque ? 0.5 : uprightThickness / 10;
 
-  React.useEffect(() => {
-    if (isPlaque && !borderName) {
-      setBorderName('Border 1');
-    }
-  }, [isPlaque, borderName, setBorderName]);
+  // Removed auto-initialization - let users choose "No Border" if they want
+  // React.useEffect(() => {
+  //   if (isPlaque && !borderName) {
+  //     setBorderName('Border 1');
+  //   }
+  // }, [isPlaque, borderName, setBorderName]);
 
   React.useEffect(() => {
     return () => {

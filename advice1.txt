@@ -1,428 +1,826 @@
-Here is the updated component.
-
-To achieve a visible "glow" without heavy post-processing (Bloom), I have applied three specific techniques in this update:
-
-Geometric Expansion: The "glow" lines are now calculated on a slightly larger bounding box than the solid lines. This creates a physical "halo" gap around the object.
-
-Pulsing Animation: The opacity of the glow lines breathes (pulses) using a sine wave in useFrame.
-
-Additive Blending: This ensures that where the lines overlap (or sit against dark backgrounds), they appear to emit light.
-
-code
-Tsx
-download
-content_copy
-expand_less
-// components/three/RotatingBoxOutline.tsx
-'use client';
-
-import * as React from 'react';
-import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
-
-type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
-  /** Object whose bounds should be outlined */
-  targetRef: React.RefObject<T> | React.MutableRefObject<T | null>;
-  /** Toggle outline visibility */
-  visible?: boolean;
-  /** Outline color */
-  color?: string | number;
-  /** Expand the box slightly to avoid z-fighting */
-  pad?: number;
-  /** If true, draw through objects (no depth test) */
-  through?: boolean;
-  /** Render order for the helper */
-  renderOrder?: number;
-  /** If true, exclude addition models from bounding box calculation */
-  excludeAdditions?: boolean;
-  /** Length of corner arms relative to box size (0 to 0.5) */
-  lineLength?: number;
-  /** Enable glow effect along corner brackets */
-  glow?: boolean;
-  /** Glow line base opacity */
-  glowOpacity?: number;
-  /** Speed of the breathing animation (0 to disable) */
-  glowPulseSpeed?: number;
-  /** How far the glow line sits from the main line (simulates thickness/halo) */
-  glowExpand?: number;
-};
+--- START OF FILE BronzeBorder.tsx ---
 
 /**
- * Elegant bounding box outline with viewfinder corners that rotates with the target object.
- * Shows corner brackets instead of full box edges for a cleaner, professional look.
- * Includes a breathing glow effect.
+ * Bronze Plaque Border Component
+ * Renders decorative 3D borders using extruded SVG geometry at plaque scale
  */
-export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Object3D>({
-  targetRef,
-  visible = true,
-  color = 'white',
-  pad = 0.004,
-  through = true,
-  renderOrder = 1000,
-  excludeAdditions = false,
-  lineLength = 0.15, // 15% of box size
-  glow = true,
-  glowOpacity = 0.5,
-  glowPulseSpeed = 2.5, // Speed of the pulsing
-  glowExpand = 0.015, // Distance of the "halo" from the main line
-}: RotatingBoxOutlineProps) {
-  const helperRef = React.useRef<THREE.LineSegments | null>(null);
-  const glowLineRef = React.useRef<THREE.LineSegments | null>(null);
 
-  // Create the helper geometry and material
-  React.useEffect(() => {
-    const obj = targetRef.current;
-    if (!obj) return;
+'use client';
 
-    // 1. Solid Inner Line
-    const geometry = new THREE.BufferGeometry();
-    const material = new THREE.LineBasicMaterial({
-      color: new THREE.Color(color as any).getHex(),
-      depthTest: !through,
-      depthWrite: false,
-      transparent: true,
-      opacity: 0.9,
-    });
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { SVGLoader, type SVGResult } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-    const helper = new THREE.LineSegments(geometry, material);
-    helper.renderOrder = renderOrder;
-    helperRef.current = helper;
+interface BronzeBorderProps {
+  borderName: string | null;
+  plaqueWidth: number;
+  plaqueHeight: number;
+  unitsPerMeter: number;
+  frontZ: number;
+  color: string;
+  depth: number;
+}
 
-    // 2. Outer Glow Line (Halo)
-    if (obj.parent) {
-      obj.parent.add(helper);
-      if (glow) {
-        const glowGeometry = new THREE.BufferGeometry();
-        const glowMaterial = new THREE.LineBasicMaterial({
-          color: new THREE.Color(color as any),
-          depthTest: false, // Glow always visible
-          depthWrite: false,
-          transparent: true,
-          opacity: glowOpacity,
-          blending: THREE.AdditiveBlending, // Makes colors add up for a "light" effect
-        });
-        const glowHelper = new THREE.LineSegments(glowGeometry, glowMaterial);
-        glowHelper.renderOrder = renderOrder - 1; // Render behind the sharp line
-        glowLineRef.current = glowHelper;
-        obj.parent.add(glowHelper);
+interface BorderResources {
+  geometries: THREE.BufferGeometry[];
+  material?: THREE.Material;
+}
+
+const BORDER_SLUG_ALIASES: Record<string, string> = {
+  bar: 'border1',
+  square: 'border2',
+  solidoutline: 'border3',
+  solid: 'border4',
+  notch: 'border5',
+  scallop: 'border6',
+  roundoutline: 'border7',
+  floral: 'border8',
+  decorative: 'border9',
+  squareangular: 'border10',
+};
+
+
+const BORDER_SCALE = 1.3; // Enlarge decorative border by 30%
+const BORDER_THICKNESS_SCALE = 1.5; // Border thickness increased to 150%
+const BORDER_RELIEF_SCALE = 0.33; // Border relief depth reduced to 33%
+
+interface BronzeTextures {
+  map: THREE.CanvasTexture;
+  roughnessMap: THREE.CanvasTexture;
+}
+
+function normalizeGeometry(geometry: THREE.BufferGeometry) {
+  let geom = geometry;
+  if (geom.index) {
+    const nonIndexed = geom.toNonIndexed();
+    geom.dispose();
+    geom = nonIndexed;
+  }
+
+  if (!geom.getAttribute('normal')) {
+    geom.computeVertexNormals();
+  }
+
+  if (!geom.getAttribute('uv')) {
+    const position = geom.getAttribute('position') as THREE.BufferAttribute;
+    const uvs = new Float32Array(position.count * 2);
+    geom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+  }
+
+  geom.computeBoundingBox();
+  return geom;
+}
+
+/**
+ * Trims vertices that extend too far in X or Y directions.
+ * Used to convert "Full Frame" SVGs with long rails into "Corner" pieces.
+ * 300 is chosen because standard corners are ~100px, while rails extend to 1200px.
+ */
+function trimLongRails(geometry: THREE.BufferGeometry, cutoff: number = 300): THREE.BufferGeometry {
+  const nonIndexed = geometry.index ? geometry.toNonIndexed() : geometry;
+  const posAttribute = nonIndexed.getAttribute('position');
+  const uvAttribute = nonIndexed.getAttribute('uv');
+  
+  const newPositions: number[] = [];
+  const newUVs: number[] = [];
+  
+  for (let i = 0; i < posAttribute.count; i += 3) {
+    // Check triangle vertices
+    const x1 = posAttribute.getX(i);
+    const y1 = posAttribute.getY(i);
+    const x2 = posAttribute.getX(i + 1);
+    const y2 = posAttribute.getY(i + 1);
+    const x3 = posAttribute.getX(i + 2);
+    const y3 = posAttribute.getY(i + 2);
+
+    // If any part of the triangle is inside the cutoff box, keep it.
+    // Logic: If ALL vertices are beyond cutoff in X, discard.
+    // If ALL vertices are beyond cutoff in Y, discard.
+    // SVG coordinates: +X is right, +Y is usually down.
+    
+    const minX = Math.min(x1, x2, x3);
+    const minY = Math.min(y1, y2, y3);
+    
+    if (minX < cutoff && minY < cutoff) {
+      // Keep vertex 1
+      newPositions.push(x1, y1, posAttribute.getZ(i));
+      // Keep vertex 2
+      newPositions.push(x2, y2, posAttribute.getZ(i + 1));
+      // Keep vertex 3
+      newPositions.push(x3, y3, posAttribute.getZ(i + 2));
+
+      if (uvAttribute) {
+        newUVs.push(uvAttribute.getX(i), uvAttribute.getY(i));
+        newUVs.push(uvAttribute.getX(i + 1), uvAttribute.getY(i + 1));
+        newUVs.push(uvAttribute.getX(i + 2), uvAttribute.getY(i + 2));
       }
     }
+  }
+
+  const trimmedGeom = new THREE.BufferGeometry();
+  trimmedGeom.setAttribute('position', new THREE.Float32BufferAttribute(newPositions, 3));
+  if (newUVs.length > 0) {
+    trimmedGeom.setAttribute('uv', new THREE.Float32BufferAttribute(newUVs, 2));
+  }
+  trimmedGeom.computeVertexNormals();
+  trimmedGeom.computeBoundingBox();
+  
+  // Clean up the temporary non-indexed copy if we made one
+  if (geometry.index) nonIndexed.dispose();
+  
+  return trimmedGeom;
+}
+
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+
+function shiftLuminance(hex: string, delta: number) {
+  const color = new THREE.Color(hex);
+  const hsl = { h: 0, s: 0, l: 0 };
+  color.getHSL(hsl);
+  const next = new THREE.Color();
+  next.setHSL(hsl.h, clamp01(hsl.s + delta * 0.15), clamp01(hsl.l + delta));
+  return `#${next.getHexString()}`;
+}
+
+function createBronzeTextures(baseHex: string): BronzeTextures | null {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  const mapCanvas = document.createElement('canvas');
+  mapCanvas.width = mapCanvas.height = 512;
+  const mapCtx = mapCanvas.getContext('2d');
+  if (!mapCtx) return null;
+
+  const gradient = mapCtx.createLinearGradient(0, 0, 0, mapCanvas.height);
+  gradient.addColorStop(0, shiftLuminance(baseHex, 0.2));
+  gradient.addColorStop(0.45, shiftLuminance(baseHex, 0.08));
+  gradient.addColorStop(0.6, baseHex);
+  gradient.addColorStop(1, shiftLuminance(baseHex, -0.2));
+  mapCtx.fillStyle = gradient;
+  mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+
+  mapCtx.globalAlpha = 0.08;
+  mapCtx.strokeStyle = 'rgba(255,255,255,0.6)';
+  for (let y = 0; y < mapCanvas.height; y += 2) {
+    mapCtx.beginPath();
+    const jitter = Math.random() * 1.5;
+    mapCtx.moveTo(0, y + jitter);
+    mapCtx.lineTo(mapCanvas.width, y + Math.random() * 1.5);
+    mapCtx.stroke();
+  }
+  mapCtx.globalAlpha = 0.12;
+  mapCtx.strokeStyle = 'rgba(0,0,0,0.4)';
+  for (let y = 1; y < mapCanvas.height; y += 3) {
+    mapCtx.beginPath();
+    mapCtx.moveTo(0, y + Math.random());
+    mapCtx.lineTo(mapCanvas.width, y + Math.random());
+    mapCtx.stroke();
+  }
+
+  const mapTexture = new THREE.CanvasTexture(mapCanvas);
+  mapTexture.wrapS = mapTexture.wrapT = THREE.RepeatWrapping;
+  mapTexture.anisotropy = 8;
+  mapTexture.needsUpdate = true;
+
+  const roughCanvas = document.createElement('canvas');
+  roughCanvas.width = roughCanvas.height = 256;
+  const roughCtx = roughCanvas.getContext('2d');
+  if (!roughCtx) {
+    return {
+      map: mapTexture,
+      roughnessMap: mapTexture.clone() as THREE.CanvasTexture,
+    };
+  }
+  const roughData = roughCtx.createImageData(roughCanvas.width, roughCanvas.height);
+  for (let i = 0; i < roughData.data.length; i += 4) {
+    const shade = 130 + Math.random() * 90;
+    roughData.data[i] = roughData.data[i + 1] = roughData.data[i + 2] = shade;
+    roughData.data[i + 3] = 255;
+  }
+  roughCtx.putImageData(roughData, 0, 0);
+  const roughnessMap = new THREE.CanvasTexture(roughCanvas);
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.anisotropy = 4;
+  roughnessMap.needsUpdate = true;
+
+  return { map: mapTexture, roughnessMap };
+}
+
+export function BronzeBorder({
+  borderName,
+  plaqueWidth,
+  plaqueHeight,
+  unitsPerMeter,
+  frontZ,
+  color,
+  depth,
+}: BronzeBorderProps) {
+  const unitScale = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
+  const localWidth = Math.max(1e-3, Math.abs(plaqueWidth) * unitScale);
+  const localHeight = Math.max(1e-3, Math.abs(plaqueHeight) * unitScale);
+
+  const normalizedName = borderName?.toLowerCase() ?? '';
+  const effectiveName = normalizedName.includes('no border') ? null : borderName;
+  const slug = effectiveName ? toBorderSlug(effectiveName) : null;
+  const resolvedSlug = slug ? `${slug}a` : null;
+  const shouldRender = Boolean(resolvedSlug && localWidth > 0 && localHeight > 0);
+
+  const bronzeTextures = React.useMemo(() => createBronzeTextures(color), [color]);
+
+  useEffect(() => {
+    return () => {
+      bronzeTextures?.map.dispose();
+      bronzeTextures?.roughnessMap.dispose();
+    };
+  }, [bronzeTextures]);
+
+  const [svgData, setSvgData] = useState<SVGResult | null>(null);
+  const [borderGroup, setBorderGroup] = useState<THREE.Group | null>(null);
+
+  const resourcesRef = useRef<BorderResources | null>(null);
+  const svgCacheRef = useRef<Record<string, SVGResult>>({});
+
+  const disposeResources = useCallback(() => {
+    if (!resourcesRef.current) return;
+    resourcesRef.current.geometries.forEach((geom) => geom.dispose());
+    resourcesRef.current.material?.dispose();
+    resourcesRef.current = null;
+  }, []);
+
+  useEffect(() => disposeResources, [disposeResources]);
+
+  useEffect(() => {
+    if (!resolvedSlug) {
+      setSvgData(null);
+      return;
+    }
+
+    if (svgCacheRef.current[resolvedSlug]) {
+      setSvgData(svgCacheRef.current[resolvedSlug]);
+      return;
+    }
+
+    let cancelled = false;
+    const loader = new SVGLoader();
+
+    loader.load(
+      `/shapes/borders/${resolvedSlug}.svg`,
+      (data) => {
+        if (cancelled) return;
+        svgCacheRef.current[resolvedSlug] = data;
+        setSvgData(data);
+      },
+      undefined,
+      (error) => {
+        if (cancelled) return;
+        console.warn(`Failed to load border SVG ${resolvedSlug}`, error);
+        setSvgData(null);
+      },
+    );
 
     return () => {
-      // Cleanup
-      if (helperRef.current) {
-        helperRef.current.parent?.remove(helperRef.current);
-        helperRef.current.geometry.dispose();
-        (helperRef.current.material as THREE.Material)?.dispose();
-        helperRef.current = null;
-      }
-      if (glowLineRef.current) {
-        glowLineRef.current.parent?.remove(glowLineRef.current);
-        glowLineRef.current.geometry.dispose();
-        (glowLineRef.current.material as THREE.Material)?.dispose();
-        glowLineRef.current = null;
-      }
+      cancelled = true;
     };
-  }, [targetRef, color, through, renderOrder, glow, glowOpacity]);
+  }, [resolvedSlug]);
 
-  // Update glow color when prop changes
-  React.useEffect(() => {
-    if (glowLineRef.current) {
-      (glowLineRef.current.material as THREE.LineBasicMaterial).color.set(color as any);
-    }
-    if (helperRef.current) {
-      (helperRef.current.material as THREE.LineBasicMaterial).color.set(color as any);
-    }
-  }, [color]);
-
-  // Update the helper every frame
-  useFrame((state) => {
-    const obj = targetRef.current;
-    const helper = helperRef.current;
-    const glowLines = glowLineRef.current;
-    
-    if (!obj || !helper || !visible) {
-      if (helper) helper.visible = false;
-      if (glowLines) glowLines.visible = false;
+  useEffect(() => {
+    if (!shouldRender || !svgData) {
+      disposeResources();
+      setBorderGroup(null);
       return;
     }
 
-    // --- 1. Pulsing Animation ---
-    if (glow && glowLines && glowPulseSpeed > 0) {
-      // Sine wave between glowOpacity/2 and glowOpacity
-      const pulse = (Math.sin(state.clock.elapsedTime * glowPulseSpeed) + 1) * 0.5; // 0 to 1
-      const minOpacity = glowOpacity * 0.3;
-      const currentOpacity = minOpacity + (pulse * (glowOpacity - minOpacity));
-      (glowLines.material as THREE.LineBasicMaterial).opacity = currentOpacity;
-    }
+    const built = buildBorderGroup(svgData, {
+      plaqueWidth: localWidth,
+      plaqueHeight: localHeight,
+      depth,
+      color,
+      frontZ,
+      textures: bronzeTextures ?? undefined,
+      // Force disable integrated rails to rely on procedural rail generation
+      // This is necessary because we are trimming the SVG geometry to remove overlaps
+      integratedRails: false, 
+    });
 
-    // --- 2. Bounding Box Calculation ---
-    const localBox = new THREE.Box3();
-    
-    if (excludeAdditions) {
-      obj.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.geometry) {
-          const parentName = child.parent?.name || '';
-          const childName = child.name || '';
-          
-          const isAddition = parentName.startsWith('addition-') || childName.startsWith('addition-');
-          const isText = child.geometry.type === 'TextGeometry' || 
-                        childName.includes('text') || 
-                        parentName.includes('text') ||
-                        child.userData?.isText;
-          
-          if (!isAddition && !isText) {
-            child.geometry.computeBoundingBox();
-            if (child.geometry.boundingBox) {
-              const childBox = child.geometry.boundingBox.clone();
-              localBox.union(childBox);
-            }
-          }
-        }
-      });
-    } else if (obj instanceof THREE.Mesh && obj.geometry) {
-      obj.geometry.computeBoundingBox();
-      if (obj.geometry.boundingBox) {
-        localBox.copy(obj.geometry.boundingBox);
-      }
-    } else {
-      const worldBox = new THREE.Box3().setFromObject(obj);
-      const inverseMatrix = obj.matrixWorld.clone().invert();
-      const min = worldBox.min.clone().applyMatrix4(inverseMatrix);
-      const max = worldBox.max.clone().applyMatrix4(inverseMatrix);
-      localBox.set(min, max);
-    }
-
-    if (localBox.isEmpty()) {
-      helper.visible = false;
-      if (glowLines) glowLines.visible = false;
+    if (!built) {
+      disposeResources();
+      setBorderGroup(null);
       return;
     }
 
-    // Expand by padding for the main line
-    const paddedBox = localBox.clone().expandByScalar(pad);
-
-    // Get center and size in local space
-    const center = new THREE.Vector3();
-    const size = new THREE.Vector3();
-    paddedBox.getCenter(center);
-    paddedBox.getSize(size);
-
-    // Calculate corner arm lengths based on box size
-    const lenX = size.x * lineLength;
-    const lenY = size.y * lineLength;
-    const lenZ = size.z * lineLength;
-
-    // --- 3. Geometry Generation ---
-    const positions: number[] = [];
-    const glowPositions: number[] = [];
-    
-    // Half sizes for Main Box
-    const hx = size.x / 2;
-    const hy = size.y / 2;
-    const hz = size.z / 2;
-
-    // Half sizes for Glow Box (Expanded)
-    const ghx = hx + glowExpand;
-    const ghy = hy + glowExpand;
-    const ghz = hz + glowExpand;
-    
-    // Adjust glow arm lengths slightly to match proportion
-    const glenX = lenX + glowExpand;
-    const glenY = lenY + glowExpand;
-    const glenZ = lenZ + glowExpand;
-
-    const cx = center.x;
-    const cy = center.y;
-    const cz = center.z;
-
-    // Helper to push a line segment for both Main and Glow
-    const buildCorner = (
-      // Main coords
-      mx: number, my: number, mz: number, 
-      mx2: number, my2: number, mz2: number,
-      // Glow coords
-      gx: number, gy: number, gz: number, 
-      gx2: number, gy2: number, gz2: number
-    ) => {
-      // Push Solid Line
-      positions.push(mx, my, mz, mx2, my2, mz2);
-      // Push Glow Line (offset)
-      if (glow) {
-        glowPositions.push(gx, gy, gz, gx2, gy2, gz2);
-      }
+    disposeResources();
+    resourcesRef.current = {
+      geometries: built.geometries,
+      material: built.material,
     };
+    setBorderGroup(built.group);
+  }, [svgData, shouldRender, localWidth, localHeight, depth, color, frontZ, bronzeTextures, disposeResources]);
 
-    // --- Bottom Corners ---
-    
-    // Front-Left-Bottom
-    // X-arm
-    buildCorner(
-      cx - hx, cy - hy, cz + hz, cx - hx + lenX, cy - hy, cz + hz,
-      cx - ghx, cy - ghy, cz + ghz, cx - ghx + glenX, cy - ghy, cz + ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx - hx, cy - hy, cz + hz, cx - hx, cy - hy + lenY, cz + hz,
-      cx - ghx, cy - ghy, cz + ghz, cx - ghx, cy - ghy + glenY, cz + ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx - hx, cy - hy, cz + hz, cx - hx, cy - hy, cz + hz - lenZ,
-      cx - ghx, cy - ghy, cz + ghz, cx - ghx, cy - ghy, cz + ghz - glenZ
-    );
+  if (!borderGroup) {
+    return null;
+  }
 
-    // Front-Right-Bottom
-    // X-arm (negative direction)
-    buildCorner(
-      cx + hx, cy - hy, cz + hz, cx + hx - lenX, cy - hy, cz + hz,
-      cx + ghx, cy - ghy, cz + ghz, cx + ghx - glenX, cy - ghy, cz + ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx + hx, cy - hy, cz + hz, cx + hx, cy - hy + lenY, cz + hz,
-      cx + ghx, cy - ghy, cz + ghz, cx + ghx, cy - ghy + glenY, cz + ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx + hx, cy - hy, cz + hz, cx + hx, cy - hy, cz + hz - lenZ,
-      cx + ghx, cy - ghy, cz + ghz, cx + ghx, cy - ghy, cz + ghz - glenZ
-    );
+  return <primitive object={borderGroup} />;
+}
 
-    // Back-Left-Bottom
-    // X-arm
-    buildCorner(
-      cx - hx, cy - hy, cz - hz, cx - hx + lenX, cy - hy, cz - hz,
-      cx - ghx, cy - ghy, cz - ghz, cx - ghx + glenX, cy - ghy, cz - ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx - hx, cy - hy, cz - hz, cx - hx, cy - hy + lenY, cz - hz,
-      cx - ghx, cy - ghy, cz - ghz, cx - ghx, cy - ghy + glenY, cz - ghz
-    );
-    // Z-arm (positive direction)
-    buildCorner(
-      cx - hx, cy - hy, cz - hz, cx - hx, cy - hy, cz - hz + lenZ,
-      cx - ghx, cy - ghy, cz - ghz, cx - ghx, cy - ghy, cz - ghz + glenZ
-    );
+function toBorderSlug(name: string) {
+  const normalized = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const alias = BORDER_SLUG_ALIASES[normalized];
+  if (alias) {
+    return alias;
+  }
+  const match = name.match(/\d+/);
+  if (match) {
+    return `border${match[0]}`;
+  }
+  return normalized || 'border1';
+}
 
-    // Back-Right-Bottom
-    // X-arm
-    buildCorner(
-      cx + hx, cy - hy, cz - hz, cx + hx - lenX, cy - hy, cz - hz,
-      cx + ghx, cy - ghy, cz - ghz, cx + ghx - glenX, cy - ghy, cz - ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx + hx, cy - hy, cz - hz, cx + hx, cy - hy + lenY, cz - hz,
-      cx + ghx, cy - ghy, cz - ghz, cx + ghx, cy - ghy + glenY, cz - ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx + hx, cy - hy, cz - hz, cx + hx, cy - hy, cz - hz + lenZ,
-      cx + ghx, cy - ghy, cz - ghz, cx + ghx, cy - ghy, cz - ghz + glenZ
-    );
+function buildBorderGroup(
+  data: SVGResult,
+  params: {
+    plaqueWidth: number;
+    plaqueHeight: number;
+    depth: number;
+    color: string;
+    frontZ: number;
+    textures?: BronzeTextures;
+    integratedRails?: boolean;
+  },
+): {
+  group: THREE.Group;
+  geometries: THREE.BufferGeometry[];
+  material: THREE.MeshStandardMaterial;
+} | null {
+  const { plaqueWidth, plaqueHeight, depth, color, frontZ, textures, integratedRails = false } = params;
+  const width = Math.max(1e-3, Math.abs(plaqueWidth));
+  const height = Math.max(1e-3, Math.abs(plaqueHeight));
 
-    // --- Top Corners ---
+  const reliefDepthBase = Math.max(0.001, Math.min(width, height) * 0.003);
+  const reliefDepth = reliefDepthBase * BORDER_RELIEF_SCALE;
+  const extrudeSettings = {
+    depth: reliefDepth,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: reliefDepth * 0.35,
+    bevelThickness: reliefDepth * 0.35,
+    steps: 1,
+    curveSegments: 24,
+  } satisfies THREE.ExtrudeGeometryOptions;
 
-    // Front-Left-Top
-    // X-arm
-    buildCorner(
-      cx - hx, cy + hy, cz + hz, cx - hx + lenX, cy + hy, cz + hz,
-      cx - ghx, cy + ghy, cz + ghz, cx - ghx + glenX, cy + ghy, cz + ghz
-    );
-    // Y-arm (negative direction)
-    buildCorner(
-      cx - hx, cy + hy, cz + hz, cx - hx, cy + hy - lenY, cz + hz,
-      cx - ghx, cy + ghy, cz + ghz, cx - ghx, cy + ghy - glenY, cz + ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx - hx, cy + hy, cz + hz, cx - hx, cy + hy, cz + hz - lenZ,
-      cx - ghx, cy + ghy, cz + ghz, cx - ghx, cy + ghy, cz + ghz - glenZ
-    );
+  const tempGeometries: THREE.BufferGeometry[] = [];
 
-    // Front-Right-Top
-    // X-arm
-    buildCorner(
-      cx + hx, cy + hy, cz + hz, cx + hx - lenX, cy + hy, cz + hz,
-      cx + ghx, cy + ghy, cz + ghz, cx + ghx - glenX, cy + ghy, cz + ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx + hx, cy + hy, cz + hz, cx + hx, cy + hy - lenY, cz + hz,
-      cx + ghx, cy + ghy, cz + ghz, cx + ghx, cy + ghy - glenY, cz + ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx + hx, cy + hy, cz + hz, cx + hx, cy + hy, cz + hz - lenZ,
-      cx + ghx, cy + ghy, cz + ghz, cx + ghx, cy + ghy, cz + ghz - glenZ
-    );
-
-    // Back-Left-Top
-    // X-arm
-    buildCorner(
-      cx - hx, cy + hy, cz - hz, cx - hx + lenX, cy + hy, cz - hz,
-      cx - ghx, cy + ghy, cz - ghz, cx - ghx + glenX, cy + ghy, cz - ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx - hx, cy + hy, cz - hz, cx - hx, cy + hy - lenY, cz - hz,
-      cx - ghx, cy + ghy, cz - ghz, cx - ghx, cy + ghy - glenY, cz - ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx - hx, cy + hy, cz - hz, cx - hx, cy + hy, cz - hz + lenZ,
-      cx - ghx, cy + ghy, cz - ghz, cx - ghx, cy + ghy, cz - ghz + glenZ
-    );
-
-    // Back-Right-Top
-    // X-arm
-    buildCorner(
-      cx + hx, cy + hy, cz - hz, cx + hx - lenX, cy + hy, cz - hz,
-      cx + ghx, cy + ghy, cz - ghz, cx + ghx - glenX, cy + ghy, cz - ghz
-    );
-    // Y-arm
-    buildCorner(
-      cx + hx, cy + hy, cz - hz, cx + hx, cy + hy - lenY, cz - hz,
-      cx + ghx, cy + ghy, cz - ghz, cx + ghx, cy + ghy - glenY, cz - ghz
-    );
-    // Z-arm
-    buildCorner(
-      cx + hx, cy + hy, cz - hz, cx + hx, cy + hy, cz - hz + lenZ,
-      cx + ghx, cy + ghy, cz - ghz, cx + ghx, cy + ghy, cz - ghz + glenZ
-    );
-
-    // Update Main Helper
-    const vertices = new Float32Array(positions);
-    helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    helper.geometry.computeBoundingSphere();
-    
-    // Sync transforms
-    helper.position.copy(obj.position);
-    helper.rotation.copy(obj.rotation);
-    helper.scale.copy(obj.scale);
-    helper.updateMatrixWorld();
-    helper.visible = true;
-
-    // Update Glow Helper
-    if (glow && glowLines) {
-      if (!glowPositions.length) {
-        glowLines.visible = false;
-      } else {
-        const glowVertices = new Float32Array(glowPositions);
-        glowLines.geometry.setAttribute('position', new THREE.BufferAttribute(glowVertices, 3));
-        glowLines.geometry.computeBoundingSphere();
-        glowLines.position.copy(helper.position);
-        glowLines.rotation.copy(helper.rotation);
-        glowLines.scale.copy(helper.scale);
-        glowLines.updateMatrixWorld();
-        glowLines.visible = true;
-      }
-    } else if (glowLines) {
-      glowLines.visible = false;
+  for (const path of data.paths) {
+    const shapes = SVGLoader.createShapes(path);
+    for (const shape of shapes) {
+      if (!shape.curves.length) continue;
+      const raw = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      
+      // FIX: Trim long rails from the SVG to prevent overlap glitches
+      // This converts "Full Frame" SVGs into "Corner" geometry
+      const trimmed = trimLongRails(raw, 300); // 300 is a safe cutoff for corners vs 1200 rails
+      
+      const geom = normalizeGeometry(trimmed);
+      raw.dispose(); // Dispose original
+      
+      tempGeometries.push(geom);
     }
+  }
+
+  if (!tempGeometries.length || tempGeometries.some((geom) => !geom.getAttribute('position'))) {
+    tempGeometries.forEach((geom) => geom.dispose());
+    return null;
+  }
+
+  const merged = mergeGeometries(tempGeometries, false);
+  if (!merged) {
+    tempGeometries.forEach((geom) => geom.dispose());
+    return null;
+  }
+
+  merged.computeBoundingBox();
+  const centeredBounds = merged.boundingBox;
+  if (!centeredBounds) {
+    merged.dispose();
+    tempGeometries.forEach((geom) => geom.dispose());
+    return null;
+  }
+
+  const originalWidth = Math.max(1e-3, centeredBounds.max.x - centeredBounds.min.x);
+  const originalHeight = Math.max(1e-3, centeredBounds.max.y - centeredBounds.min.y);
+  const centerX = (centeredBounds.min.x + centeredBounds.max.x) / 2;
+  const centerY = (centeredBounds.min.y + centeredBounds.max.y) / 2;
+
+  merged.translate(-centerX, -centerY, 0);
+
+  // Calculate line thickness first so we can match corner size to it
+  const edgeThicknessBase = Math.max(0.01, Math.min(width, height) * 0.02 * BORDER_SCALE);
+  const edgeThickness = edgeThicknessBase * BORDER_THICKNESS_SCALE;
+  const lineThickness = edgeThickness * 0.4;
+  const lineGap = lineThickness * 0.6;
+
+  // Scale logic
+  // Since we trimmed the geometry, 'originalWidth' is now small (approx corner size).
+  // We use the non-integrated logic to maintain correct visual proportions for the corner.
+  if (integratedRails) {
+    const uniformScale = Math.min(width / originalWidth, height / originalHeight);
+    merged.scale(uniformScale, uniformScale, 1);
+  } else {
+    // Standard corner scaling logic based on plaque size and thickness
+    const targetCornerSpan = Math.max(lineThickness * 6, Math.min(width, height) * 0.25);
+    const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.7;
+    merged.scale(baseScale, baseScale, 1);
+  }
+  merged.computeVertexNormals();
+  merged.computeBoundingBox();
+  const scaledBounds = merged.boundingBox!;
+  const cornerSpanX = scaledBounds.max.x - scaledBounds.min.x;
+  const cornerSpanY = scaledBounds.max.y - scaledBounds.min.y;
+
+  const textureRepeatX = Math.max(1, width / 120);
+  const textureRepeatY = Math.max(1, height / 120);
+
+  const material = new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color(color),
+    metalness: 0.95,
+    roughness: 0.28,
+    envMapIntensity: 1.5,
+    clearcoat: 0.7,
+    clearcoatRoughness: 0.18,
+    side: THREE.DoubleSide,
   });
 
-  return null;
+  if (textures?.map) {
+    textures.map.repeat.set(textureRepeatX, textureRepeatY);
+    textures.map.needsUpdate = true;
+    material.map = textures.map;
+  }
+
+  if (textures?.roughnessMap) {
+    textures.roughnessMap.repeat.set(textureRepeatX, textureRepeatY);
+    textures.roughnessMap.needsUpdate = true;
+    material.roughnessMap = textures.roughnessMap;
+  }
+
+  let topEdgeStartX: number | null = null;
+  let topEdgeEndX: number | null = null;
+  let bottomEdgeStartX: number | null = null;
+  let bottomEdgeEndX: number | null = null;
+  let topInnerEdgeY: number | null = null;
+  let bottomInnerEdgeY: number | null = null;
+  let leftEdgeTopInnerY: number | null = null;
+  let leftEdgeBottomInnerY: number | null = null;
+  let rightEdgeTopInnerY: number | null = null;
+  let rightEdgeBottomInnerY: number | null = null;
+  let leftInnerEdgeX: number | null = null;
+  let rightInnerEdgeX: number | null = null;
+
+  const group = new THREE.Group();
+  const resourceGeometries: THREE.BufferGeometry[] = [];
+  const SURFACE_Z = frontZ + 0.0001;
+  const borderParts: THREE.BufferGeometry[] = [];
+  const lineAnchors = {
+    top: null as [number, number] | null,
+    bottom: null as [number, number] | null,
+    left: null as [number, number] | null,
+    right: null as [number, number] | null,
+  };
+
+  const axisTolerance = Math.max(width, height) * 0.0005;
+
+  const extractUniqueAxisValues = (geom: THREE.BufferGeometry, axis: 'x' | 'y') => {
+    const attr = geom.getAttribute('position') as THREE.BufferAttribute;
+    const values: number[] = [];
+    for (let i = 0; i < attr.count; i += 1) {
+      values.push(axis === 'x' ? attr.getX(i) : attr.getY(i));
+    }
+    values.sort((a, b) => a - b);
+    const uniques: number[] = [];
+    for (const value of values) {
+      if (!uniques.length || Math.abs(uniques[uniques.length - 1] - value) > axisTolerance) {
+        uniques.push(value);
+      }
+    }
+    return uniques;
+  };
+
+  const captureAnchors = (
+    geom: THREE.BufferGeometry,
+    alignX: 'left' | 'right',
+    alignY: 'top' | 'bottom',
+  ) => {
+    const toPair = (values: number[], reverse = false): [number, number] | null => {
+      if (!values.length) {
+        return null;
+      }
+      const list = reverse ? [...values].reverse() : values;
+      if (list.length === 1) {
+        return [list[0], list[0]];
+      }
+      return [list[0], list[1]];
+    };
+
+    const yValues = extractUniqueAxisValues(geom, 'y');
+    if (alignY === 'top' && !lineAnchors.top) {
+      const anchors = toPair(yValues.slice(-2), true);
+      if (anchors) {
+        lineAnchors.top = anchors;
+      }
+    }
+    if (alignY === 'bottom' && !lineAnchors.bottom) {
+      const anchors = toPair(yValues.slice(0, 2));
+      if (anchors) {
+        lineAnchors.bottom = anchors;
+      }
+    }
+
+    const xValues = extractUniqueAxisValues(geom, 'x');
+    if (alignX === 'left' && !lineAnchors.left) {
+      const anchors = toPair(xValues.slice(0, 2));
+      if (anchors) {
+        lineAnchors.left = anchors;
+      }
+    }
+    if (alignX === 'right' && !lineAnchors.right) {
+      const anchors = toPair(xValues.slice(-2), true);
+      if (anchors) {
+        lineAnchors.right = anchors;
+      }
+    }
+  };
+
+  const createCornerMesh = (
+    source: THREE.BufferGeometry,
+    alignX: 'left' | 'right',
+    alignY: 'top' | 'bottom',
+  ) => {
+    const geom = source.clone();
+    
+    // Flip geometry for correct corner orientation
+    const flipX = alignX === 'right';
+    const flipY = alignY === 'top';
+    
+    if (flipX) geom.scale(-1, 1, 1);
+    if (flipY) geom.scale(1, -1, 1);
+    
+    const geomNonIndexed = geom.index ? geom.toNonIndexed() : geom;
+    if (geom.index && geomNonIndexed !== geom) {
+      geom.dispose();
+    }
+    
+    geomNonIndexed.computeVertexNormals();
+    geomNonIndexed.computeBoundingBox();
+    const bounds = geomNonIndexed.boundingBox!;
+    const posX =
+      alignX === 'left'
+        ? -width / 2 - bounds.min.x
+        : width / 2 - bounds.max.x;
+    const posY =
+      alignY === 'top'
+        ? height - bounds.max.y
+        : 0 - bounds.min.y;
+    const worldMinX = posX + bounds.min.x;
+    const worldMaxX = posX + bounds.max.x;
+    const worldMinY = posY + bounds.min.y;
+    const worldMaxY = posY + bounds.max.y;
+    geomNonIndexed.translate(posX, posY, SURFACE_Z);
+
+    captureAnchors(geomNonIndexed, alignX, alignY);
+    borderParts.push(geomNonIndexed);
+
+    if (alignY === 'top') {
+      const innerY = worldMinY;
+      topInnerEdgeY = topInnerEdgeY == null ? innerY : Math.min(topInnerEdgeY, innerY);
+      if (alignX === 'left') {
+        topEdgeStartX = worldMaxX;
+        leftEdgeTopInnerY =
+          leftEdgeTopInnerY == null ? innerY : Math.min(leftEdgeTopInnerY, innerY);
+        leftInnerEdgeX = leftInnerEdgeX == null ? worldMaxX : Math.max(leftInnerEdgeX, worldMaxX);
+      } else {
+        topEdgeEndX = worldMinX;
+        rightEdgeTopInnerY =
+          rightEdgeTopInnerY == null ? innerY : Math.min(rightEdgeTopInnerY, innerY);
+        rightInnerEdgeX = rightInnerEdgeX == null ? worldMinX : Math.min(rightInnerEdgeX, worldMinX);
+      }
+    } else {
+      const innerY = worldMaxY;
+      bottomInnerEdgeY = bottomInnerEdgeY == null ? innerY : Math.max(bottomInnerEdgeY, innerY);
+      if (alignX === 'left') {
+        bottomEdgeStartX = worldMaxX;
+        leftEdgeBottomInnerY =
+          leftEdgeBottomInnerY == null ? innerY : Math.max(leftEdgeBottomInnerY, innerY);
+        leftInnerEdgeX = leftInnerEdgeX == null ? worldMaxX : Math.max(leftInnerEdgeX, worldMaxX);
+      } else {
+        bottomEdgeEndX = worldMinX;
+        rightEdgeBottomInnerY =
+          rightEdgeBottomInnerY == null ? innerY : Math.max(rightEdgeBottomInnerY, innerY);
+        rightInnerEdgeX = rightInnerEdgeX == null ? worldMinX : Math.min(rightInnerEdgeX, worldMinX);
+      }
+    }
+
+  };
+
+  createCornerMesh(merged, 'left', 'top');
+  createCornerMesh(merged, 'right', 'top');
+  createCornerMesh(merged, 'left', 'bottom');
+  createCornerMesh(merged, 'right', 'bottom');
+
+  const fallbackTopStartX = -width / 2 + cornerSpanX;
+  const fallbackTopEndX = width / 2 - cornerSpanX;
+  const fallbackBottomStartX = fallbackTopStartX;
+  const fallbackBottomEndX = fallbackTopEndX;
+  const fallbackTopInnerY = height - cornerSpanY;
+  const fallbackBottomInnerY = cornerSpanY;
+  const fallbackLeftTopInnerY = fallbackTopInnerY;
+  const fallbackLeftBottomInnerY = fallbackBottomInnerY;
+  const fallbackRightTopInnerY = fallbackTopInnerY;
+  const fallbackRightBottomInnerY = fallbackBottomInnerY;
+  const fallbackLeftInnerX = -width / 2 + cornerSpanX;
+  const fallbackRightInnerX = width / 2 - cornerSpanX;
+
+  const clampEdgeXValue = (value: number | null) => {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+    return Math.min(width / 2, Math.max(-width / 2, value));
+  };
+
+  const clampEdgeYValue = (value: number | null) => {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+    return Math.min(height, Math.max(0, value));
+  };
+
+
+  const sortedFallbackTop: readonly [number, number] = [
+    Math.min(fallbackTopStartX, fallbackTopEndX),
+    Math.max(fallbackTopStartX, fallbackTopEndX),
+  ];
+  const sortedFallbackBottom: readonly [number, number] = [
+    Math.min(fallbackBottomStartX, fallbackBottomEndX),
+    Math.max(fallbackBottomStartX, fallbackBottomEndX),
+  ];
+
+  const resolveSpan = (
+    start: number | null,
+    end: number | null,
+    fallback: readonly [number, number],
+  ): readonly [number, number] => {
+    if (start == null || end == null) {
+      return fallback;
+    }
+    const left = Math.min(start, end);
+    const right = Math.max(start, end);
+    if (!Number.isFinite(left) || !Number.isFinite(right) || right - left < lineThickness * 1.25) {
+      return fallback;
+    }
+    return [left, right] as const;
+  };
+
+  const [topStartX, topEndX] = resolveSpan(
+    clampEdgeXValue(topEdgeStartX),
+    clampEdgeXValue(topEdgeEndX),
+    sortedFallbackTop,
+  );
+  const [bottomStartX, bottomEndX] = resolveSpan(
+    clampEdgeXValue(bottomEdgeStartX),
+    clampEdgeXValue(bottomEdgeEndX),
+    sortedFallbackBottom,
+  );
+
+  const resolvedTopInnerY = clampEdgeYValue(topInnerEdgeY) ?? fallbackTopInnerY;
+  const resolvedBottomInnerY = clampEdgeYValue(bottomInnerEdgeY) ?? fallbackBottomInnerY;
+  const leftTopY = clampEdgeYValue(leftEdgeTopInnerY) ?? fallbackLeftTopInnerY;
+  const leftBottomY = clampEdgeYValue(leftEdgeBottomInnerY) ?? fallbackLeftBottomInnerY;
+  const rightTopY = clampEdgeYValue(rightEdgeTopInnerY) ?? fallbackRightTopInnerY;
+  const rightBottomY = clampEdgeYValue(rightEdgeBottomInnerY) ?? fallbackRightBottomInnerY;
+  const resolvedLeftInnerX = clampEdgeXValue(leftInnerEdgeX) ?? fallbackLeftInnerX;
+  const resolvedRightInnerX = clampEdgeXValue(rightInnerEdgeX) ?? fallbackRightInnerX;
+
+  const clampSpan = (value: number) => Math.max(lineThickness * 2, Math.max(0.001, value));
+
+  const topSpan = clampSpan(topEndX - topStartX);
+  const bottomSpan = clampSpan(bottomEndX - bottomStartX);
+  const sortedLeftTopY = Math.max(leftTopY, leftBottomY);
+  const sortedLeftBottomY = Math.min(leftTopY, leftBottomY);
+  const sortedRightTopY = Math.max(rightTopY, rightBottomY);
+  const sortedRightBottomY = Math.min(rightTopY, rightBottomY);
+  const leftSpan = clampSpan(sortedLeftTopY - sortedLeftBottomY);
+  const rightSpan = clampSpan(sortedRightTopY - sortedRightBottomY);
+
+  const topCenterX = (topStartX + topEndX) / 2;
+  const bottomCenterX = (bottomStartX + bottomEndX) / 2;
+  const leftCenterY = (sortedLeftTopY + sortedLeftBottomY) / 2;
+  const rightCenterY = (sortedRightTopY + sortedRightBottomY) / 2;
+
+  const addEdgeBar = (geom: THREE.BufferGeometry, x: number, y: number) => {
+    const part = geom.clone().toNonIndexed();
+    part.translate(x, y, SURFACE_Z);
+    borderParts.push(part);
+  };
+
+  if (!integratedRails) {
+    const clampY = (value: number) => Math.min(height, Math.max(0, value));
+    const clampX = (value: number) => Math.min(width / 2, Math.max(-width / 2, value));
+
+    const topLineY = clampY(resolvedTopInnerY);
+    const bottomLineY = clampY(resolvedBottomInnerY);
+    const leftLineX = clampX(resolvedLeftInnerX);
+    const rightLineX = clampX(resolvedRightInnerX);
+
+    const resolveAnchors = (
+      anchors: [number, number] | null,
+      fallbackOuter: number,
+      fallbackInner: number,
+    ): [number, number] => {
+      if (anchors) {
+        return anchors;
+      }
+      return [fallbackOuter, fallbackInner];
+    };
+
+    const [topOuterCenterY, topInnerCenterY] = resolveAnchors(
+      lineAnchors.top,
+      clampY(topLineY + lineThickness / 2),
+      clampY(topLineY + lineThickness / 2 - (lineThickness + lineGap)),
+    );
+    const [bottomOuterCenterY, bottomInnerCenterY] = resolveAnchors(
+      lineAnchors.bottom,
+      clampY(bottomLineY - lineThickness / 2),
+      clampY(bottomLineY - lineThickness / 2 + (lineThickness + lineGap)),
+    );
+    const [leftOuterCenterX, leftInnerCenterX] = resolveAnchors(
+      lineAnchors.left,
+      clampX(leftLineX - lineThickness / 2),
+      clampX(leftLineX - lineThickness / 2 + (lineThickness + lineGap)),
+    );
+    const [rightOuterCenterX, rightInnerCenterX] = resolveAnchors(
+      lineAnchors.right,
+      clampX(rightLineX + lineThickness / 2),
+      clampX(rightLineX + lineThickness / 2 - (lineThickness + lineGap)),
+    );
+
+    const createDecorativeRails = (
+      length: number,
+      orientation: 'horizontal' | 'vertical'
+    ): THREE.BufferGeometry[] => {
+      const rails: THREE.BufferGeometry[] = [];
+      
+      const outerLine = orientation === 'horizontal' ?
+        new THREE.BoxGeometry(length, lineThickness, reliefDepth) :
+        new THREE.BoxGeometry(lineThickness, length, reliefDepth);
+      outerLine.translate(0, 0, reliefDepth / 2);
+      rails.push(outerLine);
+      
+      const innerLine = orientation === 'horizontal' ?
+        new THREE.BoxGeometry(length, lineThickness, reliefDepth) :
+        new THREE.BoxGeometry(lineThickness, length, reliefDepth);
+      innerLine.translate(0, 0, reliefDepth / 2);
+      rails.push(innerLine);
+      
+      return rails;
+    };
+
+    const topRails = createDecorativeRails(topSpan, 'horizontal');
+    const bottomRails = createDecorativeRails(bottomSpan, 'horizontal');
+    const leftRails = createDecorativeRails(leftSpan, 'vertical');
+    const rightRails = createDecorativeRails(rightSpan, 'vertical');
+
+    addEdgeBar(topRails[0], topCenterX, topOuterCenterY);
+    addEdgeBar(topRails[1], topCenterX, topInnerCenterY);
+    resourceGeometries.push(...topRails);
+
+    addEdgeBar(bottomRails[0], bottomCenterX, bottomOuterCenterY);
+    addEdgeBar(bottomRails[1], bottomCenterX, bottomInnerCenterY);
+    resourceGeometries.push(...bottomRails);
+
+    addEdgeBar(leftRails[0], leftOuterCenterX, leftCenterY);
+    addEdgeBar(leftRails[1], leftInnerCenterX, leftCenterY);
+    resourceGeometries.push(...leftRails);
+
+    addEdgeBar(rightRails[0], rightOuterCenterX, rightCenterY);
+    addEdgeBar(rightRails[1], rightInnerCenterX, rightCenterY);
+    resourceGeometries.push(...rightRails);
+  }
+
+  // Merge all parts (trimmed corners + generated rails)
+  if (borderParts.length > 0) {
+    const mergedBorder = mergeGeometries(borderParts, false);
+    borderParts.forEach((geom) => geom.dispose());
+    if (mergedBorder) {
+      const mesh = new THREE.Mesh(mergedBorder, material);
+      mesh.castShadow = false;
+      mesh.receiveShadow = false;
+      mesh.renderOrder = 3;
+      group.add(mesh);
+      resourceGeometries.push(mergedBorder);
+    }
+  }
+
+  merged.dispose();
+
+  return {
+    group,
+    geometries: resourceGeometries,
+    material,
+  };
 }

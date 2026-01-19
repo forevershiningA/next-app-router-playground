@@ -15,6 +15,7 @@ const CANVAS_ROUTES = new Set([
   '/select-material',
   '/select-additions',
   '/select-motifs',
+  '/select-border',
 ]);
 import {
   CAMERA_3D_POSITION_Z,
@@ -304,6 +305,7 @@ export default function ThreeScene() {
               }}
               onCreated={({ gl, scene }) => {
                 glRef.current = gl;
+                gl.localClippingEnabled = true;
                 
                 // Set environment map intensity for the entire scene
                 if (scene.environment) {

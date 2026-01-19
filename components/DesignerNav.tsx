@@ -763,13 +763,7 @@ export default function DesignerNav() {
 
     return (
       <div className={`fs-size-panel space-y-5 rounded-2xl p-4 shadow-xl backdrop-blur-sm ${extraClassName}`}>
-        {isPlaque ? (
-          <div className="flex justify-center">
-            <div className="rounded-md px-4 py-2 text-sm font-medium bg-[#D7B356] text-gray-900 shadow-md">
-              Plaque
-            </div>
-          </div>
-        ) : (
+        {!isPlaque && (
           <SegmentedControl
             value={editingObject}
             onChange={(value) => {
@@ -833,14 +827,14 @@ export default function DesignerNav() {
           </>
         )}
 
-        {editingObject === 'headstone' && (
+        {editingObject === 'headstone' && !isPlaque && (
           <>
             <SegmentedControl
               value={headstoneStyle}
               onChange={(value) => setHeadstoneStyle(value as 'upright' | 'slant')}
               options={[
-                { label: isPlaque ? 'No Border' : 'Upright', value: 'upright' },
-                { label: isPlaque ? 'Border' : 'Slant', value: 'slant' },
+                { label: 'Upright', value: 'upright' },
+                { label: 'Slant', value: 'slant' },
               ]}
             />
             <div className="border-t border-[#3A3A3A]/50 -mx-4"></div>

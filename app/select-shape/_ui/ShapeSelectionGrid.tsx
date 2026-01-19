@@ -43,8 +43,19 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   
   // Check if current product is a plaque
   const isPlaque = catalog?.product.type === 'plaque';
+  const hasBorder = catalog?.product?.border === '1';
   const fallbackProduct = data.products.find((p) => p.id === productId);
   const productName = catalog?.product?.name ?? fallbackProduct?.name;
+
+  const openBorderPanel = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('openFullscreenPanel', {
+          detail: { panel: 'select-border' },
+        }),
+      );
+    }
+  };
 
   const handleShapeSelect = (shape: Shape) => {
     // Plaque shapes (ovals and circle) are in /shapes/masks/, others in /shapes/headstones/
@@ -54,7 +65,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       ? `/shapes/masks/${shape.image}` 
       : `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);
-    router.push('/select-size');
+    if (hasBorder) {
+      router.push('/select-border');
+      openBorderPanel();
+    } else {
+      router.push('/select-size');
+    }
   };
 
   const handleCustomUpload = () => {
@@ -69,7 +85,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         const svgDataUrl = e.target?.result as string;
         setUploadedSvg(svgDataUrl);
         setShapeUrl(svgDataUrl);
-        router.push('/select-size');
+        if (hasBorder) {
+          router.push('/select-border');
+          openBorderPanel();
+        } else {
+          router.push('/select-size');
+        }
       };
       reader.readAsDataURL(file);
     } else {

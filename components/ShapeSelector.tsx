@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type Shape = {
@@ -17,12 +18,24 @@ type ShapeSelectorProps = {
 };
 
 export default function ShapeSelector({ shapes, disableInternalScroll = false }: ShapeSelectorProps) {
+  const router = useRouter();
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const hasBorder = useHeadstoneStore((s) => s.catalog?.product?.border === '1');
 
   const handleShapeSelect = (shape: Shape) => {
     const shapeUrl = `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);
+    if (hasBorder) {
+      router.push('/select-border');
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('openFullscreenPanel', {
+            detail: { panel: 'select-border' },
+          }),
+        );
+      }
+    }
   };
 
   return (

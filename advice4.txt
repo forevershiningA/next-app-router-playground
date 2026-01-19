@@ -1,77 +1,632 @@
-This is a huge improvement over the previous version. Moving to "Phases" instead of 8 individual steps makes the process feel much less overwhelming. The language is also significantly warmer ("Personalize their story" is excellent).
+This is the geometric slicing solution (which provides the perfect cut for the butterfly pattern) with the lighting regression fixed.
 
-However, there is now a layout and content redundancy issue. You have the same information repeating on the left (in the horizontal boxes) and on the right (in the vertical list). This confuses the user about where to look.
+The "half grey/half bronze" issue was caused by the scale transformation flipping the geometry's winding order (making the triangles face "inward" on the left side). This version detects the flip and corrects the vertex order so all surfaces face outward and reflect light correctly.
 
-Here are specific steps to refine this further for a funeral context:
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE BronzeBorder.tsx ---
 
-1. Fix the "Double Content" (Layout)
+/**
+ * Bronze Plaque Border Component
+ * Renders decorative 3D borders using extruded SVG geometry at plaque scale.
+ * Implements CPU-side geometry slicing to cleanly mask complex rail patterns.
+ */
 
-Currently, the user sees "Phase 1" on the left and "Phase 1" on the right. This wastes space and creates visual clutter.
+'use client';
 
-The Fix: Delete the vertical column on the right entirely.
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { SVGLoader, type SVGResult } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-Why: You already have the 3 phases clearly summarized on the left. You don't need the dense bullet points on the right.
+interface BronzeBorderProps {
+  borderName: string | null;
+  plaqueWidth: number;
+  plaqueHeight: number;
+  unitsPerMeter: number;
+  frontZ: number;
+  color: string;
+  depth: number;
+}
 
-What to do with the space: Move your 3D Preview Image into the space where the right column currently is (or make it larger and central). This will give the product "room to breathe."
+interface BorderResources {
+  geometries: THREE.BufferGeometry[];
+  material?: THREE.Material;
+}
 
-New Layout Idea:
+const BORDER_SLUG_ALIASES: Record<string, string> = {
+  bar: 'border1',
+  square: 'border2',
+  solidoutline: 'border3',
+  solid: 'border4',
+  notch: 'border5',
+  scallop: 'border6',
+  roundoutline: 'border7',
+  floral: 'border8',
+  decorative: 'border9',
+  squareangular: 'border10',
+};
 
-Left Side: Headline + Subheadline + The 3 Horizontal Phase Boxes (keep these exactly as they are).
+const BORDER_SCALE = 1.3;
+const BORDER_THICKNESS_SCALE = 1.5;
+const BORDER_RELIEF_SCALE = 0.33;
 
-Right Side: A large, beautiful image of the headstone (cleaner than the current one).
+interface BronzeTextures {
+  map: THREE.CanvasTexture;
+  roughnessMap: THREE.CanvasTexture;
+}
 
-Bottom: The Stats, Trust Signals, and CTA button spanning the width.
+// --- Geometry Helpers ---
 
-2. Refine the Headline (Speed vs. Comfort)
+function normalizeGeometry(geometry: THREE.BufferGeometry) {
+  let geom = geometry;
+  if (geom.index) {
+    const nonIndexed = geom.toNonIndexed();
+    geom.dispose();
+    geom = nonIndexed;
+  }
 
-The headline "Design a Beautiful Tribute in Minutes" is okay, but in the funeral industry, "speed" isn't the primary selling point—ease and peace of mind are. "Minutes" can sound rushed.
+  if (!geom.getAttribute('normal')) {
+    geom.computeVertexNormals();
+  }
 
-Suggested Change: "Design a Lasting Tribute from the Comfort of Home."
+  // Ensure UVs exist for texturing
+  if (!geom.getAttribute('uv')) {
+    const position = geom.getAttribute('position') as THREE.BufferAttribute;
+    const uvs = new Float32Array(position.count * 2);
+    // Simple planar mapping fallback
+    for (let i = 0; i < position.count; i++) {
+        uvs[i * 2] = position.getX(i);
+        uvs[i * 2 + 1] = position.getY(i);
+    }
+    geom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+  }
 
-Why: This emphasizes that they don't have to visit a showroom or deal with a salesperson while grieving. It sounds safer and more private.
+  geom.computeBoundingBox();
+  return geom;
+}
 
-3. Polish the Micro-Copy
+/**
+ * Slices a geometry along an axis at a specific value.
+ * Discards the side that doesn't match the keepCondition.
+ * Performs triangle splitting to ensure clean edges (no jagged holes).
+ */
+function sliceGeometryAxis(
+  geometry: THREE.BufferGeometry, 
+  axis: 'x' | 'y', 
+  limit: number, 
+  keepCondition: 'less' | 'greater'
+): THREE.BufferGeometry {
+  const posAttr = geometry.getAttribute('position');
+  const uvAttr = geometry.getAttribute('uv');
+  const normAttr = geometry.getAttribute('normal');
 
-There are a few phrases in the new text that feel slightly awkward or repetitive:
+  const newPos: number[] = [];
+  const newUV: number[] = [];
+  const newNorm: number[] = [];
 
-"Gentle sizing": In Phase 1 text, you wrote "gentle sizing." "Gentle" is an odd word for dimensions.
+  const axisIdx = axis === 'x' ? 0 : 1;
+  const isKept = (val: number) => keepCondition === 'less' ? val < limit : val > limit;
 
-Change to: "...and balanced proportions so everything feels grounded..."
+  // Helper to interpolate between two vertices
+  const lerp = (v1: number, v2: number, t: number) => v1 + (v2 - v1) * t;
 
-"Grounding": You use the word "grounded" in Phase 1 text.
+  const pushVertex = (p: number[], u: number[], n: number[]) => {
+    newPos.push(...p);
+    if (u) newUV.push(...u);
+    if (n) newNorm.push(...n);
+  };
 
-Alternative: "...so the design feels stable and dignified before you personalize."
+  // Pre-allocate arrays to avoid re-creation
+  const v1 = [0,0,0], v2 = [0,0,0], v3 = [0,0,0];
+  const uv1 = [0,0], uv2 = [0,0], uv3 = [0,0];
+  const n1 = [0,0,0], n2 = [0,0,0], n3 = [0,0,0];
 
-Simplify the Bullet Points (if you keep them): If you decide to keep the text details, cut the bullet points.
+  for (let i = 0; i < posAttr.count; i += 3) {
+    // Read triangle
+    v1[0] = posAttr.getX(i); v1[1] = posAttr.getY(i); v1[2] = posAttr.getZ(i);
+    v2[0] = posAttr.getX(i+1); v2[1] = posAttr.getY(i+1); v2[2] = posAttr.getZ(i+1);
+    v3[0] = posAttr.getX(i+2); v3[1] = posAttr.getY(i+2); v3[2] = posAttr.getZ(i+2);
 
-Instead of: "Choose a memorial style / Shape the stone / Select a durable stone / Set gentle proportions."
+    if (uvAttr) {
+      uv1[0] = uvAttr.getX(i); uv1[1] = uvAttr.getY(i);
+      uv2[0] = uvAttr.getX(i+1); uv2[1] = uvAttr.getY(i+1);
+      uv3[0] = uvAttr.getX(i+2); uv3[1] = uvAttr.getY(i+2);
+    }
+    if (normAttr) {
+      n1[0] = normAttr.getX(i); n1[1] = normAttr.getY(i); n1[2] = normAttr.getZ(i);
+      n2[0] = normAttr.getX(i+1); n2[1] = normAttr.getY(i+1); n2[2] = normAttr.getZ(i+1);
+      n3[0] = normAttr.getX(i+2); n3[1] = normAttr.getY(i+2); n3[2] = normAttr.getZ(i+2);
+    }
 
-Try: "Select the perfect shape, stone, and size to form the foundation of your design." (One sentence is easier to read than 4 bullets).
+    const d1 = v1[axisIdx];
+    const d2 = v2[axisIdx];
+    const d3 = v3[axisIdx];
 
-4. Clean Up the Product Image
+    const k1 = isKept(d1);
+    const k2 = isKept(d2);
+    const k3 = isKept(d3);
 
-The image in the center still looks like a software tutorial. It has overlays saying "Currently Editing: Select Size" and "Live Preview Step 03."
+    // All In
+    if (k1 && k2 && k3) {
+      pushVertex(v1, uv1, n1); pushVertex(v2, uv2, n2); pushVertex(v3, uv3, n3);
+      continue;
+    }
+    // All Out
+    if (!k1 && !k2 && !k3) {
+      continue;
+    }
 
-The Fix: Use a "clean" screenshot.
+    // Mixed case: Clip triangle
+    const getInter = (va: number[], vb: number[], uva: number[], uvb: number[], na: number[], nb: number[], da: number, db: number) => {
+      const t = (limit - da) / (db - da);
+      const pi = [lerp(va[0], vb[0], t), lerp(va[1], vb[1], t), lerp(va[2], vb[2], t)];
+      const uvi = uva ? [lerp(uva[0], uvb[0], t), lerp(uva[1], uvb[1], t)] : [0,0];
+      const ni = na ? [lerp(na[0], nb[0], t), lerp(na[1], nb[1], t), lerp(na[2], nb[2], t)] : [0,0,1];
+      return { p: pi, u: uvi, n: ni };
+    };
 
-Remove the UI overlay (the black boxes inside the image). Just show the headstone sitting beautifully in the grass.
+    // Cycle vertices to canonical configurations
+    let vs = [{v:v1,u:uv1,n:n1,k:k1,d:d1}, {v:v2,u:uv2,n:n2,k:k2,d:d2}, {v:v3,u:uv3,n:n3,k:k3,d:d3}];
+    
+    // Rotate until vs[0] is kept
+    if (!vs[0].k && vs[1].k) { vs = [vs[1], vs[2], vs[0]]; }
+    else if (!vs[0].k && !vs[1].k) { vs = [vs[2], vs[0], vs[1]]; }
 
-Add a simple caption under the image: "As you design, the 3D studio updates instantly."
+    // Case 1: 1 In, 2 Out
+    if (!vs[1].k && !vs[2].k) {
+      const i1 = getInter(vs[0].v, vs[1].v, vs[0].u, vs[1].u, vs[0].n, vs[1].n, vs[0].d, vs[1].d);
+      const i2 = getInter(vs[0].v, vs[2].v, vs[0].u, vs[2].u, vs[0].n, vs[2].n, vs[0].d, vs[2].d);
+      pushVertex(vs[0].v, vs[0].u, vs[0].n);
+      pushVertex(i1.p, i1.u, i1.n);
+      pushVertex(i2.p, i2.u, i2.n);
+    }
+    // Case 2: 2 In, 1 Out
+    else if (vs[1].k && !vs[2].k) {
+      const i1 = getInter(vs[1].v, vs[2].v, vs[1].u, vs[2].u, vs[1].n, vs[2].n, vs[1].d, vs[2].d);
+      const i2 = getInter(vs[0].v, vs[2].v, vs[0].u, vs[2].u, vs[0].n, vs[2].n, vs[0].d, vs[2].d);
+      // Tri 1
+      pushVertex(vs[0].v, vs[0].u, vs[0].n);
+      pushVertex(vs[1].v, vs[1].u, vs[1].n);
+      pushVertex(i1.p, i1.u, i1.n);
+      // Tri 2
+      pushVertex(vs[0].v, vs[0].u, vs[0].n);
+      pushVertex(i1.p, i1.u, i1.n);
+      pushVertex(i2.p, i2.u, i2.n);
+    }
+    // Case 3: In, Out, In (Split middle)
+    else {
+      const i1 = getInter(vs[0].v, vs[1].v, vs[0].u, vs[1].u, vs[0].n, vs[1].n, vs[0].d, vs[1].d);
+      const i2 = getInter(vs[2].v, vs[1].v, vs[2].u, vs[1].u, vs[2].n, vs[1].n, vs[2].d, vs[1].d);
+      // Tri 1
+      pushVertex(vs[0].v, vs[0].u, vs[0].n);
+      pushVertex(i1.p, i1.u, i1.n);
+      pushVertex(vs[2].v, vs[2].u, vs[2].n);
+      // Tri 2
+      pushVertex(i1.p, i1.u, i1.n);
+      pushVertex(i2.p, i2.u, i2.n);
+      pushVertex(vs[2].v, vs[2].u, vs[2].n);
+    }
+  }
 
-Why: You want them to visualize the memorial, not the software interface.
+  const newGeom = new THREE.BufferGeometry();
+  newGeom.setAttribute('position', new THREE.Float32BufferAttribute(newPos, 3));
+  if (uvAttr) newGeom.setAttribute('uv', new THREE.Float32BufferAttribute(newUV, 2));
+  if (normAttr) newGeom.setAttribute('normal', new THREE.Float32BufferAttribute(newNorm, 3));
+  
+  return newGeom;
+}
 
-5. Visual Hierarchy of the Stats
 
-The stats at the bottom (5,284 families, 40 shapes, etc.) are currently in dark grey boxes that blend into the background.
+// --- Texture & Material Helpers ---
 
-The Fix: Since you have removed the "Step 01...08" clutter, you can make these stats pop a little more. Give the text a slightly brighter color (like the gold used in the CTA) or a lighter grey. This validates that they are in safe hands.
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
-Summary of Action Plan
+function shiftLuminance(hex: string, delta: number) {
+  const color = new THREE.Color(hex);
+  const hsl = { h: 0, s: 0, l: 0 };
+  color.getHSL(hsl);
+  const next = new THREE.Color();
+  next.setHSL(hsl.h, clamp01(hsl.s + delta * 0.15), clamp01(hsl.l + delta));
+  return `#${next.getHexString()}`;
+}
 
-Remove the right-hand vertical list (it repeats the left-hand info).
+function createBronzeTextures(baseHex: string): BronzeTextures | null {
+  if (typeof document === 'undefined') {
+    return null;
+  }
 
-Move the Image to the right side to create a balanced 50/50 layout (Text on left, Image on right).
+  const mapCanvas = document.createElement('canvas');
+  mapCanvas.width = mapCanvas.height = 512;
+  const mapCtx = mapCanvas.getContext('2d');
+  if (!mapCtx) return null;
 
-Change Headline to focus on "Comfort" rather than "Minutes."
+  const gradient = mapCtx.createLinearGradient(0, 0, 0, mapCanvas.height);
+  gradient.addColorStop(0, shiftLuminance(baseHex, 0.2));
+  gradient.addColorStop(0.45, shiftLuminance(baseHex, 0.08));
+  gradient.addColorStop(0.6, baseHex);
+  gradient.addColorStop(1, shiftLuminance(baseHex, -0.2));
+  mapCtx.fillStyle = gradient;
+  mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
 
-Remove UI overlays from the product image to make it look more photorealistic and less like software.
+  mapCtx.globalAlpha = 0.08;
+  mapCtx.strokeStyle = 'rgba(255,255,255,0.6)';
+  for (let y = 0; y < mapCanvas.height; y += 2) {
+    mapCtx.beginPath();
+    const jitter = Math.random() * 1.5;
+    mapCtx.moveTo(0, y + jitter);
+    mapCtx.lineTo(mapCanvas.width, y + Math.random() * 1.5);
+    mapCtx.stroke();
+  }
+  mapCtx.globalAlpha = 0.12;
+  mapCtx.strokeStyle = 'rgba(0,0,0,0.4)';
+  for (let y = 1; y < mapCanvas.height; y += 3) {
+    mapCtx.beginPath();
+    mapCtx.moveTo(0, y + Math.random());
+    mapCtx.lineTo(mapCanvas.width, y + Math.random());
+    mapCtx.stroke();
+  }
+
+  const mapTexture = new THREE.CanvasTexture(mapCanvas);
+  mapTexture.wrapS = mapTexture.wrapT = THREE.RepeatWrapping;
+  mapTexture.anisotropy = 8;
+  mapTexture.needsUpdate = true;
+
+  const roughCanvas = document.createElement('canvas');
+  roughCanvas.width = roughCanvas.height = 256;
+  const roughCtx = roughCanvas.getContext('2d');
+  if (!roughCtx) {
+    return {
+      map: mapTexture,
+      roughnessMap: mapTexture.clone() as THREE.CanvasTexture,
+    };
+  }
+  const roughData = roughCtx.createImageData(roughCanvas.width, roughCanvas.height);
+  for (let i = 0; i < roughData.data.length; i += 4) {
+    const shade = 130 + Math.random() * 90;
+    roughData.data[i] = roughData.data[i + 1] = roughData.data[i + 2] = shade;
+    roughData.data[i + 3] = 255;
+  }
+  roughCtx.putImageData(roughData, 0, 0);
+  const roughnessMap = new THREE.CanvasTexture(roughCanvas);
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.anisotropy = 4;
+  roughnessMap.needsUpdate = true;
+
+  return { map: mapTexture, roughnessMap };
+}
+
+export function BronzeBorder({
+  borderName,
+  plaqueWidth,
+  plaqueHeight,
+  unitsPerMeter,
+  frontZ,
+  color,
+  depth,
+}: BronzeBorderProps) {
+  const unitScale = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
+  const localWidth = Math.max(1e-3, Math.abs(plaqueWidth) * unitScale);
+  const localHeight = Math.max(1e-3, Math.abs(plaqueHeight) * unitScale);
+
+  const normalizedName = borderName?.toLowerCase() ?? '';
+  const effectiveName = normalizedName.includes('no border') ? null : borderName;
+  const slug = effectiveName ? toBorderSlug(effectiveName) : null;
+  const resolvedSlug = slug ? `${slug}a` : null;
+  const usesIntegratedRails = Boolean(resolvedSlug);
+  const shouldRender = Boolean(resolvedSlug && localWidth > 0 && localHeight > 0);
+
+  const bronzeTextures = React.useMemo(() => createBronzeTextures(color), [color]);
+
+  useEffect(() => {
+    return () => {
+      bronzeTextures?.map.dispose();
+      bronzeTextures?.roughnessMap.dispose();
+    };
+  }, [bronzeTextures]);
+
+  const [svgData, setSvgData] = useState<SVGResult | null>(null);
+  const [borderGroup, setBorderGroup] = useState<THREE.Group | null>(null);
+
+  const resourcesRef = useRef<BorderResources | null>(null);
+  const svgCacheRef = useRef<Record<string, SVGResult>>({});
+
+  const disposeResources = useCallback(() => {
+    if (!resourcesRef.current) return;
+    resourcesRef.current.geometries.forEach((geom) => geom.dispose());
+    resourcesRef.current.material?.dispose();
+    resourcesRef.current = null;
+  }, []);
+
+  useEffect(() => disposeResources, [disposeResources]);
+
+  useEffect(() => {
+    if (!resolvedSlug) {
+      setSvgData(null);
+      return;
+    }
+
+    if (svgCacheRef.current[resolvedSlug]) {
+      setSvgData(svgCacheRef.current[resolvedSlug]);
+      return;
+    }
+
+    let cancelled = false;
+    const loader = new SVGLoader();
+
+    loader.load(
+      `/shapes/borders/${resolvedSlug}.svg`,
+      (data) => {
+        if (cancelled) return;
+        svgCacheRef.current[resolvedSlug] = data;
+        setSvgData(data);
+      },
+      undefined,
+      (error) => {
+        if (cancelled) return;
+        console.warn(`Failed to load border SVG ${resolvedSlug}`, error);
+        setSvgData(null);
+      },
+    );
+
+    return () => {
+      cancelled = true;
+    };
+  }, [resolvedSlug]);
+
+  useEffect(() => {
+    if (!shouldRender || !svgData) {
+      disposeResources();
+      setBorderGroup(null);
+      return;
+    }
+
+    const built = buildBorderGroup(svgData, {
+      plaqueWidth: localWidth,
+      plaqueHeight: localHeight,
+      depth,
+      color,
+      frontZ,
+      textures: bronzeTextures ?? undefined,
+      integratedRails: usesIntegratedRails,
+    });
+
+    if (!built) {
+      disposeResources();
+      setBorderGroup(null);
+      return;
+    }
+
+    disposeResources();
+    resourcesRef.current = {
+      geometries: built.geometries,
+      material: built.material,
+    };
+    setBorderGroup(built.group);
+  }, [svgData, shouldRender, localWidth, localHeight, depth, color, frontZ, bronzeTextures, disposeResources]);
+
+  if (!borderGroup) {
+    return null;
+  }
+
+  return <primitive object={borderGroup} />;
+}
+
+function toBorderSlug(name: string) {
+  const normalized = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const alias = BORDER_SLUG_ALIASES[normalized];
+  if (alias) {
+    return alias;
+  }
+  const match = name.match(/\d+/);
+  if (match) {
+    return `border${match[0]}`;
+  }
+  return normalized || 'border1';
+}
+
+function buildBorderGroup(
+  data: SVGResult,
+  params: {
+    plaqueWidth: number;
+    plaqueHeight: number;
+    depth: number;
+    color: string;
+    frontZ: number;
+    textures?: BronzeTextures;
+    integratedRails?: boolean;
+  },
+): {
+  group: THREE.Group;
+  geometries: THREE.BufferGeometry[];
+  material: THREE.MeshStandardMaterial;
+} | null {
+  const { plaqueWidth, plaqueHeight, depth, color, frontZ, textures, integratedRails = false } = params;
+  const width = Math.max(1e-3, Math.abs(plaqueWidth));
+  const height = Math.max(1e-3, Math.abs(plaqueHeight));
+
+  const reliefDepthBase = Math.max(0.001, Math.min(width, height) * 0.003);
+  const reliefDepth = reliefDepthBase * BORDER_RELIEF_SCALE;
+  const extrudeSettings = {
+    depth: reliefDepth,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: reliefDepth * 0.35,
+    bevelThickness: reliefDepth * 0.35,
+    steps: 1,
+    curveSegments: 24,
+  } satisfies THREE.ExtrudeGeometryOptions;
+
+  const tempGeometries: THREE.BufferGeometry[] = [];
+
+  for (const path of data.paths) {
+    const shapes = SVGLoader.createShapes(path);
+    for (const shape of shapes) {
+      if (!shape.curves.length) continue;
+      const raw = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      const geom = normalizeGeometry(raw);
+      tempGeometries.push(geom);
+    }
+  }
+
+  if (!tempGeometries.length) {
+    return null;
+  }
+
+  const merged = mergeGeometries(tempGeometries, false);
+  if (!merged) {
+    tempGeometries.forEach((geom) => geom.dispose());
+    return null;
+  }
+
+  merged.computeBoundingBox();
+  const centeredBounds = merged.boundingBox;
+  if (!centeredBounds) {
+    merged.dispose();
+    return null;
+  }
+
+  const originalWidth = Math.max(1e-3, centeredBounds.max.x - centeredBounds.min.x);
+  const originalHeight = Math.max(1e-3, centeredBounds.max.y - centeredBounds.min.y);
+  const centerX = (centeredBounds.min.x + centeredBounds.max.x) / 2;
+  const centerY = (centeredBounds.min.y + centeredBounds.max.y) / 2;
+
+  merged.translate(-centerX, -centerY, 0);
+
+  // Line thickness calculation for non-integrated fallback
+  const edgeThicknessBase = Math.max(0.01, Math.min(width, height) * 0.02 * BORDER_SCALE);
+  const edgeThickness = edgeThicknessBase * BORDER_THICKNESS_SCALE;
+  const lineThickness = edgeThickness * 0.4;
+  
+  if (integratedRails) {
+    const uniformScale = Math.min(width / originalWidth, height / originalHeight);
+    merged.scale(uniformScale, uniformScale, 1);
+  } else {
+    const targetCornerSpan = Math.max(lineThickness * 6, Math.min(width, height) * 0.25);
+    const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.7;
+    merged.scale(baseScale, baseScale, 1);
+  }
+
+  const textureRepeatX = Math.max(1, width / 120);
+  const textureRepeatY = Math.max(1, height / 120);
+
+  const material = new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color(color),
+    metalness: 0.95,
+    roughness: 0.28,
+    envMapIntensity: 1.5,
+    clearcoat: 0.7,
+    clearcoatRoughness: 0.18,
+    side: THREE.DoubleSide,
+  });
+
+  if (textures?.map) {
+    textures.map.repeat.set(textureRepeatX, textureRepeatY);
+    textures.map.needsUpdate = true;
+    material.map = textures.map;
+  }
+  if (textures?.roughnessMap) {
+    textures.roughnessMap.repeat.set(textureRepeatX, textureRepeatY);
+    textures.roughnessMap.needsUpdate = true;
+    material.roughnessMap = textures.roughnessMap;
+  }
+
+  const group = new THREE.Group();
+  const resourceGeometries: THREE.BufferGeometry[] = [];
+  const SURFACE_Z = frontZ + 0.0001;
+  const cornerParts: THREE.BufferGeometry[] = [];
+  
+  const createCornerMesh = (
+    source: THREE.BufferGeometry,
+    alignX: 'left' | 'right',
+    alignY: 'top' | 'bottom',
+  ) => {
+    let geom = source.clone();
+    
+    // 1. Flip for Orientation
+    const flipX = alignX === 'right';
+    const flipY = alignY === 'top';
+    if (flipX) geom.scale(-1, 1, 1);
+    if (flipY) geom.scale(1, -1, 1);
+    
+    // FIX: Correct winding order if geometry was inverted (asymmetrical flip)
+    // This fixes the "dark/grey" lighting issue on one side of the plaque
+    if (flipX !== flipY) {
+      const pos = geom.getAttribute('position');
+      // normalizeGeometry ensures we are non-indexed, so we swap vertices directly
+      for (let i = 0; i < pos.count; i += 3) {
+        const x2 = pos.getX(i + 1), y2 = pos.getY(i + 1), z2 = pos.getZ(i + 1);
+        const x3 = pos.getX(i + 2), y3 = pos.getY(i + 2), z3 = pos.getZ(i + 2);
+        pos.setXYZ(i + 1, x3, y3, z3);
+        pos.setXYZ(i + 2, x2, y2, z2);
+      }
+    }
+
+    geom = normalizeGeometry(geom);
+
+    // 2. Position Geometry at Corner
+    geom.computeBoundingBox();
+    const bounds = geom.boundingBox!;
+    const posX = alignX === 'left' ? -width / 2 - bounds.min.x : width / 2 - bounds.max.x;
+    const posY = alignY === 'top' ? height - bounds.max.y : 0 - bounds.min.y;
+    
+    geom.translate(posX, posY, SURFACE_Z);
+    
+    // Regenerate UVs based on final world position to ensure uniform texture gradient
+    const posAttr = geom.getAttribute('position');
+    const uvs = geom.getAttribute('uv');
+    for (let i = 0; i < posAttr.count; i++) {
+        uvs.setXY(i, posAttr.getX(i), posAttr.getY(i));
+    }
+    uvs.needsUpdate = true;
+
+    // 3. Slice Geometry to Prevent Overlap (Masking)
+    // Cut logic based on Quadrants
+    if (alignX === 'left') {
+      geom = sliceGeometryAxis(geom, 'x', 0, 'less');
+    } else {
+      geom = sliceGeometryAxis(geom, 'x', 0, 'greater');
+    }
+
+    if (alignY === 'top') {
+      geom = sliceGeometryAxis(geom, 'y', height / 2, 'greater');
+    } else {
+      geom = sliceGeometryAxis(geom, 'y', height / 2, 'less');
+    }
+
+    // Recompute normals after all manipulations
+    geom.computeVertexNormals();
+    
+    cornerParts.push(geom);
+  };
+
+  createCornerMesh(merged, 'left', 'top');
+  createCornerMesh(merged, 'right', 'top');
+  createCornerMesh(merged, 'left', 'bottom');
+  createCornerMesh(merged, 'right', 'bottom');
+
+  if (cornerParts.length > 0) {
+    const mergedCorners = mergeGeometries(cornerParts, false);
+    cornerParts.forEach(g => g.dispose());
+    
+    if (mergedCorners) {
+      const mesh = new THREE.Mesh(mergedCorners, material);
+      mesh.castShadow = false;
+      mesh.receiveShadow = false;
+      mesh.renderOrder = 3;
+      group.add(mesh);
+      resourceGeometries.push(mergedCorners);
+    }
+  }
+
+  merged.dispose();
+  
+  return {
+    group,
+    geometries: resourceGeometries,
+    material,
+  };
+}
