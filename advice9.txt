@@ -1,6 +1,25 @@
+The issue "it is even worse" is happening because of Double Transforms.
+
+In the previous code, the geometry was built offset from the center (baked into the vertices), but the Mesh was placed at (0,0,0).
+When you scale a Mesh that has offset geometry (e.g., a Top Rail geometry located at Y=200 inside a Mesh at Y=0), the rail moves upwards visually because you are scaling the distance from the origin.
+
+The Fix:
+
+Zero-Center the Geometry: The geometry for every part (Corners, Rails) must be centered at (0,0,0).
+
+Move the Mesh: We place the Mesh at the correct position (e.g., Top Right corner).
+
+Scale/Translate: Now, when useLayoutEffect scales the rail, it stretches from its own center. When it moves the corner, it moves the whole object cleanly.
+
+Here is the corrected code.
+
+code
+Tsx
+download
+content_copy
+expand_less
 /**
- * Bronze Plaque Border Component
- * Renders decorative 3D borders using extruded SVG geometry at plaque scale
+ * Bronze Plaque Border Component - Fixed Origin & Scaling
  */
 
 'use client';
@@ -59,15 +78,16 @@ const BORDER_SLUG_ALIASES: Record<string, string> = {
 };
 
 
-const BORDER_SCALE = 1.3; // Enlarge decorative border by 30%
-const BORDER_THICKNESS_SCALE = 1.5; // Border thickness increased to 150%
-const BORDER_RELIEF_SCALE = 0.33; // Border relief depth reduced to 33%
-const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
+const BORDER_SCALE = 1.3;
+const BORDER_THICKNESS_SCALE = 1.5;
+const BORDER_RELIEF_SCALE = 0.33;
+const OVERLAP_BUFFER = 1.0;
 
-// Performance tuning - reducing these values massively improves slice performance during drag
-const CURVE_SEGMENTS = 6; // Was 24. 6 is enough for textured metal (~75% fewer triangles)
-const BEVEL_SEGMENTS = 1; // Keep minimal bevel
+const CURVE_SEGMENTS = 6;
+const BEVEL_SEGMENTS = 1;
 const UNIT_BOX_GEOMETRY = new THREE.BoxGeometry(1, 1, 1);
+const PART_NAMES = ['top', 'bottom', 'left', 'right', 'tl', 'tr', 'bl', 'br'] as const;
+type PartName = typeof PART_NAMES[number];
 
 function buildScaledBoxGeometry(width: number, height: number, depth: number) {
   const geom = UNIT_BOX_GEOMETRY.clone();
@@ -108,11 +128,6 @@ function normalizeGeometry(geometry: THREE.BufferGeometry) {
   return geom;
 }
 
-/**
- * HIGH PERFORMANCE SLICER
- * Uses TypedArrays directly to avoid Garbage Collection pauses during drag.
- * Eliminates all object allocation inside the loop.
- */
 function sliceGeometryAxis(
   geometry: THREE.BufferGeometry, 
   axis: 'x' | 'y', 
@@ -124,29 +139,25 @@ function sliceGeometryAxis(
   const normAttr = geometry.getAttribute('normal');
   const count = posAttr.count;
 
-  // Pre-allocate output buffers
-  // In worst case (heavy fragmentation), size could grow, but 1.2x is usually safe
   const maxVerts = Math.max(1, Math.floor(count * 1.2)); 
   
   const outPos = ensureScratchCapacity('pos', maxVerts * 3);
   const outUV = ensureScratchCapacity('uv', maxVerts * 2);
   const outNorm = ensureScratchCapacity('norm', maxVerts * 3);
   
-  let vIdx = 0; // Vertex index pointer
+  let vIdx = 0; 
 
   const axisIdx = axis === 'x' ? 0 : 1;
   const isKept = (val: number) => keepCondition === 'less' ? val < limit : val > limit;
 
-  // Temporary registers to avoid object creation
   let ax, ay, az, bx, by, bz, cx, cy, cz;
   let au, av, bu, bv, cu, cv;
   let anx, any, anz, bnx, bny, bnz, cnx, cny, cnz;
-  let ka, kb, kc; // keep flags
+  let ka, kb, kc; 
   let t;
 
-  // Helper to push vertex to buffer
   const pushV = (x:number, y:number, z:number, u:number, v:number, nx:number, ny:number, nz:number) => {
-    if (vIdx >= maxVerts) return; // Safety check
+    if (vIdx >= maxVerts) return; 
     const i3 = vIdx * 3;
     const i2 = vIdx * 2;
     outPos[i3] = x; outPos[i3+1] = y; outPos[i3+2] = z;
@@ -155,7 +166,6 @@ function sliceGeometryAxis(
     vIdx++;
   };
 
-  // Helper to interpolate and push
   const interpPush = (
     x1:number, y1:number, z1:number, u1:number, v1:number, nx1:number, ny1:number, nz1:number,
     x2:number, y2:number, z2:number, u2:number, v2:number, nx2:number, ny2:number, nz2:number,
@@ -170,7 +180,6 @@ function sliceGeometryAxis(
   };
 
   for (let i = 0; i < count; i += 3) {
-    // 1. Load Triangle Data
     ax = posAttr.getX(i);   ay = posAttr.getY(i);   az = posAttr.getZ(i);
     bx = posAttr.getX(i+1); by = posAttr.getY(i+1); bz = posAttr.getZ(i+1);
     cx = posAttr.getX(i+2); cy = posAttr.getY(i+2); cz = posAttr.getZ(i+2);
@@ -179,10 +188,8 @@ function sliceGeometryAxis(
     kb = isKept(axisIdx === 0 ? bx : by);
     kc = isKept(axisIdx === 0 ? cx : cy);
 
-    // Fast Path: All Out
     if (!ka && !kb && !kc) continue;
 
-    // Load attributes only if needed
     au = uvAttr.getX(i);   av = uvAttr.getY(i);
     bu = uvAttr.getX(i+1); bv = uvAttr.getY(i+1);
     cu = uvAttr.getX(i+2); cv = uvAttr.getY(i+2);
@@ -191,7 +198,6 @@ function sliceGeometryAxis(
     bnx = normAttr.getX(i+1); bny = normAttr.getY(i+1); bnz = normAttr.getZ(i+1);
     cnx = normAttr.getX(i+2); cny = normAttr.getY(i+2); cnz = normAttr.getZ(i+2);
 
-    // Fast Path: All In
     if (ka && kb && kc) {
       pushV(ax, ay, az, au, av, anx, any, anz);
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
@@ -199,56 +205,41 @@ function sliceGeometryAxis(
       continue;
     }
 
-    // Clipping Needed - Determine configuration
-    // 1 vertex In cases
     if (ka && !kb && !kc) { 
-      // A in, B out, C out (Triangle -> 1 Triangle)
       pushV(ax, ay, az, au, av, anx, any, anz);
       interpPush(ax,ay,az,au,av,anx,any,anz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?ax:ay, axisIdx===0?bx:by);
       interpPush(ax,ay,az,au,av,anx,any,anz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?ax:ay, axisIdx===0?cx:cy);
     }
     else if (!ka && kb && !kc) {
-      // B in (Rotate B->A)
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?bx:by, axisIdx===0?cx:cy);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?bx:by, axisIdx===0?ax:ay);
     }
     else if (!ka && !kb && kc) {
-      // C in (Rotate C->A)
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?cx:cy, axisIdx===0?ax:ay);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?cx:cy, axisIdx===0?bx:by);
     }
-    // 2 vertices In cases
     else if (ka && kb && !kc) {
-      // A, B in, C out (Quad -> 2 Triangles)
-      // Tri 1
       pushV(ax, ay, az, au, av, anx, any, anz);
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?bx:by, axisIdx===0?cx:cy);
-      // Tri 2
       pushV(ax, ay, az, au, av, anx, any, anz);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?bx:by, axisIdx===0?cx:cy);
       interpPush(ax,ay,az,au,av,anx,any,anz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?ax:ay, axisIdx===0?cx:cy);
     }
     else if (!ka && kb && kc) {
-      // B, C in, A out
-      // Tri 1
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?cx:cy, axisIdx===0?ax:ay);
-      // Tri 2
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?cx:cy, axisIdx===0?ax:ay);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?bx:by, axisIdx===0?ax:ay);
     }
     else if (ka && !kb && kc) {
-      // A, C in, B out
-      // Tri 1
       pushV(ax, ay, az, au, av, anx, any, anz);
       interpPush(ax,ay,az,au,av,anx,any,anz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?ax:ay, axisIdx===0?bx:by);
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
-      // Tri 2
       interpPush(ax,ay,az,au,av,anx,any,anz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?ax:ay, axisIdx===0?bx:by);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?cx:cy, axisIdx===0?bx:by);
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
@@ -256,7 +247,6 @@ function sliceGeometryAxis(
   }
 
   const newGeom = new THREE.BufferGeometry();
-  // Trim arrays to actual used size
   newGeom.setAttribute('position', new THREE.BufferAttribute(outPos.slice(0, vIdx * 3), 3));
   newGeom.setAttribute('uv', new THREE.BufferAttribute(outUV.slice(0, vIdx * 2), 2));
   newGeom.setAttribute('normal', new THREE.BufferAttribute(outNorm.slice(0, vIdx * 3), 3));
@@ -357,7 +347,7 @@ export function BronzeBorder({
   const effectiveName = normalizedName.includes('no border') ? null : borderName;
   const slug = effectiveName ? toBorderSlug(effectiveName) : null;
   const resolvedSlug = slug ? `${slug}a` : null;
-  const usesIntegratedRails = Boolean(resolvedSlug);
+  const usesIntegratedRails = false;
   const shouldRender = Boolean(resolvedSlug && localWidth > 0 && localHeight > 0);
 
   const bronzeTextures = useMemo(() => createBronzeTextures(color), [color]);
@@ -392,7 +382,6 @@ export function BronzeBorder({
     return materialRef.current;
   }, []);
 
-  // Debounce state for performance optimization
   const [debouncedDims, setDebouncedDims] = useState({ w: localWidth, h: localHeight });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -421,25 +410,93 @@ export function BronzeBorder({
     materialRef.current = null;
   }, []);
 
-  // Handle Resize Debouncing (Fast Path: scale, Slow Path: rebuild geometry)
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
     timeoutRef.current = setTimeout(() => {
       setDebouncedDims({ w: localWidth, h: localHeight });
     }, 150);
-
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [localWidth, localHeight]);
 
+  // -------------------------------------------------------------
+  // VISUAL STABILITY LOGIC
+  // -------------------------------------------------------------
   useLayoutEffect(() => {
     if (!groupRef.current || !builtState.group) return;
-    const { w, h } = builtState.dims;
-    const safeW = w || 1;
-    const safeH = h || 1;
-    groupRef.current.scale.set(localWidth / safeW, localHeight / safeH, 1);
+
+    // Dimensions the current geometry was built for
+    const { w: builtW, h: builtH } = builtState.dims;
+    const safeBuiltW = builtW || 1;
+    const safeBuiltH = builtH || 1;
+
+    // Calculate how much larger/smaller the props are compared to the built geometry
+    const deltaW = localWidth - safeBuiltW;
+    const deltaH = localHeight - safeBuiltH;
+    const halfDeltaW = deltaW / 2;
+    const halfDeltaH = deltaH / 2;
+
+    // Calculate ratio for scaling rails
+    const ratioW = localWidth / safeBuiltW;
+    const ratioH = localHeight / safeBuiltH;
+
+    // Iterate through parts and apply specific transform rules
+    PART_NAMES.forEach((part) => {
+      const mesh = groupRef.current?.getObjectByName(part) as THREE.Object3D & {
+        userData: {
+          __basePosition?: THREE.Vector3;
+          __baseScale?: THREE.Vector3;
+        };
+      } | undefined;
+      
+      if (!mesh || !mesh.userData.__basePosition) return;
+
+      const basePos = mesh.userData.__basePosition;
+      
+      // Reset logic
+      mesh.scale.set(1, 1, 1);
+      mesh.position.copy(basePos);
+
+      switch (part) {
+        case 'top':
+          // Move Y by half delta, Stretch X
+          // Since geometry is centered at (0,0,0), scaling X stretches evenly
+          mesh.position.y = basePos.y + halfDeltaH;
+          mesh.scale.x = ratioW;
+          break;
+        case 'bottom':
+          mesh.position.y = basePos.y - halfDeltaH;
+          mesh.scale.x = ratioW;
+          break;
+        case 'left':
+          // Move X by half delta, Stretch Y
+          mesh.position.x = basePos.x - halfDeltaW;
+          mesh.scale.y = ratioH;
+          break;
+        case 'right':
+          mesh.position.x = basePos.x + halfDeltaW;
+          mesh.scale.y = ratioH;
+          break;
+        case 'tl':
+          // Move Corner (No Scale)
+          mesh.position.x = basePos.x - halfDeltaW;
+          mesh.position.y = basePos.y + halfDeltaH;
+          break;
+        case 'tr':
+          mesh.position.x = basePos.x + halfDeltaW;
+          mesh.position.y = basePos.y + halfDeltaH;
+          break;
+        case 'bl':
+          mesh.position.x = basePos.x - halfDeltaW;
+          mesh.position.y = basePos.y - halfDeltaH;
+          break;
+        case 'br':
+          mesh.position.x = basePos.x + halfDeltaW;
+          mesh.position.y = basePos.y - halfDeltaH;
+          break;
+      }
+    });
   }, [localWidth, localHeight, builtState]);
 
   useEffect(() => {
@@ -599,13 +656,11 @@ function buildBorderGroup(
 
   merged.translate(-centerX, -centerY, 0);
 
-  // Calculate line thickness first so we can match corner size to it
   const edgeThicknessBase = Math.max(0.01, Math.min(width, height) * 0.02 * BORDER_SCALE);
   const edgeThickness = edgeThicknessBase * BORDER_THICKNESS_SCALE;
   const lineThickness = edgeThickness * 0.4;
   const lineGap = lineThickness * 0.6;
 
-  // Scale decorative corner detail. Integrated rail SVGs should stretch to full width/height.
   const INTEGRATED_SCALE_OVERRIDES: Record<string, number> = {
     border1a: 4,
   };
@@ -663,8 +718,19 @@ function buildBorderGroup(
   const group = new THREE.Group();
   const resourceGeometries: THREE.BufferGeometry[] = [];
   const SURFACE_Z = frontZ + 0.0001;
-  const cornerParts: THREE.BufferGeometry[] = []; // Separate corners for clipping
-  const railParts: THREE.BufferGeometry[] = [];   // Rails don't need clipping
+  
+  // Store geometry + position for each part
+  const parts: Record<PartName, { geoms: THREE.BufferGeometry[]; pos: THREE.Vector3 }> = {
+    top: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    bottom: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    left: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    right: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    tl: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    tr: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    bl: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+    br: { geoms: [], pos: new THREE.Vector3(0, 0, SURFACE_Z) },
+  };
+
   const lineAnchors = {
     top: null as [number, number] | null,
     bottom: null as [number, number] | null,
@@ -739,20 +805,18 @@ function buildBorderGroup(
     source: THREE.BufferGeometry,
     alignX: 'left' | 'right',
     alignY: 'top' | 'bottom',
+    dest: PartName,
   ) => {
     let geom = source.clone();
     
-    // 1. Flip for Orientation
+    // 1. Flip
     const flipX = alignX === 'right';
     const flipY = alignY === 'top';
     if (flipX) geom.scale(-1, 1, 1);
     if (flipY) geom.scale(1, -1, 1);
     
-    // FIX: Correct winding order if geometry was inverted (asymmetrical flip)
-    // This fixes the "dark/grey" lighting issue on one side of the plaque
     if (flipX !== flipY) {
       const pos = geom.getAttribute('position');
-      // Swap vertices 2 and 3 of each triangle to flip winding order
       for (let i = 0; i < pos.count; i += 3) {
         const x2 = pos.getX(i + 1), y2 = pos.getY(i + 1), z2 = pos.getZ(i + 1);
         const x3 = pos.getX(i + 2), y3 = pos.getY(i + 2), z3 = pos.getZ(i + 2);
@@ -761,18 +825,25 @@ function buildBorderGroup(
       }
     }
     
-    // Ensure non-indexed for slicing
     geom = normalizeGeometry(geom);
-
-    // 2. Position Geometry at Corner
     geom.computeBoundingBox();
     const bounds = geom.boundingBox!;
-    const posX = alignX === 'left' ? -width / 2 - bounds.min.x : width / 2 - bounds.max.x;
-    const posY = alignY === 'top' ? height - bounds.max.y : 0 - bounds.min.y;
     
-    geom.translate(posX, posY, SURFACE_Z);
+    // 2. Position temporarily in World Space to perform the Cut
+    // We move the Corner Geometry to the actual Corner of the plaque
+    const cornerX = alignX === 'left' ? -width / 2 : width / 2;
+    const cornerY = alignY === 'top' ? height : 0;
     
-    // Regenerate UVs based on final world position to ensure uniform texture gradient
+    // Align the geometry bounding box corner to the plaque corner
+    const alignOffsetX = alignX === 'left' ? -bounds.min.x : -bounds.max.x;
+    const alignOffsetY = alignY === 'top' ? -bounds.max.y : -bounds.min.y;
+    
+    const worldX = cornerX + alignOffsetX;
+    const worldY = cornerY + alignOffsetY;
+    
+    geom.translate(worldX, worldY, SURFACE_Z);
+    
+    // Regenerate UVs
     const posAttr = geom.getAttribute('position');
     const uvs = geom.getAttribute('uv');
     for (let i = 0; i < posAttr.count; i++) {
@@ -780,41 +851,36 @@ function buildBorderGroup(
     }
     uvs.needsUpdate = true;
 
-    // 3. Slice Geometry to Prevent Overlap (Geometric Masking)
-    // Plaque coordinate system: X: -width/2 to width/2 (center at 0), Y: 0 to height (center at height/2)
-    // Cut logic based on quadrants:
-    // Optimized Slicing with overlap buffer to prevent gaps
-    // We add OVERLAP_BUFFER to the limit to ensure slight overlap at seams
-    
-    // X Slice
+    // 3. Slice
     if (alignX === 'left') {
-      // Keep x < +buffer (left side with overlap)
       geom = sliceGeometryAxis(geom, 'x', OVERLAP_BUFFER, 'less');
     } else {
-      // Keep x > -buffer (right side with overlap)
       geom = sliceGeometryAxis(geom, 'x', -OVERLAP_BUFFER, 'greater');
     }
-
-    // Y Slice
     if (alignY === 'top') {
-      // Keep y > center - buffer (top half with overlap)
       geom = sliceGeometryAxis(geom, 'y', (height / 2) - OVERLAP_BUFFER, 'greater');
     } else {
-      // Keep y < center + buffer (bottom half with overlap)
       geom = sliceGeometryAxis(geom, 'y', (height / 2) + OVERLAP_BUFFER, 'less');
     }
 
-    // Recompute normals after all manipulations
     geom.computeVertexNormals();
-    
     captureAnchors(geom, alignX, alignY);
-    cornerParts.push(geom);
+
+    // 4. RE-CENTERING TRICK:
+    // Move the geometry back to (0,0,0) relative to the specific corner anchor
+    // so that the Mesh can be placed at the anchor.
+    // Anchor Point: The absolute corner of the plaque (cornerX, cornerY)
+    geom.translate(-cornerX, -cornerY, -SURFACE_Z);
+
+    // Set the destination Mesh position to the Corner Anchor
+    parts[dest].pos.set(cornerX, cornerY, SURFACE_Z);
+    parts[dest].geoms.push(geom);
   };
 
-  createCornerMesh(merged, 'left', 'top');
-  createCornerMesh(merged, 'right', 'top');
-  createCornerMesh(merged, 'left', 'bottom');
-  createCornerMesh(merged, 'right', 'bottom');
+  createCornerMesh(merged, 'left', 'top', 'tl');
+  createCornerMesh(merged, 'right', 'top', 'tr');
+  createCornerMesh(merged, 'left', 'bottom', 'bl');
+  createCornerMesh(merged, 'right', 'bottom', 'br');
 
   const fallbackTopStartX = -width / 2 + cornerSpanX;
   const fallbackTopEndX = width / 2 - cornerSpanX;
@@ -896,15 +962,80 @@ function buildBorderGroup(
   const leftSpan = clampSpan(sortedLeftTopY - sortedLeftBottomY);
   const rightSpan = clampSpan(sortedRightTopY - sortedRightBottomY);
 
-  const topCenterX = (topStartX + topEndX) / 2;
-  const bottomCenterX = (bottomStartX + bottomEndX) / 2;
-  const leftCenterY = (sortedLeftTopY + sortedLeftBottomY) / 2;
-  const rightCenterY = (sortedRightTopY + sortedRightBottomY) / 2;
-
-  const addEdgeBar = (geom: THREE.BufferGeometry, x: number, y: number) => {
-    const part = geom.clone().toNonIndexed();
-    part.translate(x, y, SURFACE_Z);
-    railParts.push(part); // Add to rails, not borderParts
+  const addEdgeBar = (geom: THREE.BufferGeometry, yOffset: number, dest: PartName) => {
+    const piece = geom.clone().toNonIndexed();
+    // For rails, we keep geometry centered at (0,0) locally.
+    // The yOffset is used for the Mesh position, not geometry translation.
+    
+    // HOWEVER, `createDecorativeRails` builds boxes centered at origin.
+    // We need to shift them slightly if they are inner/outer lines so they match the
+    // yOffset relative to the rail center.
+    // Since `yOffset` here is the absolute position on the plaque, we handle that in parts[dest].pos
+    
+    // Actually, `addEdgeBar` is called with specific Y coordinates (e.g. topOuterCenterY).
+    // To allow `scale` to work from the CENTER of the rail, the geometry must be at 0.
+    // But the rail has two lines (inner and outer). 
+    // We should center the *group* of lines at 0, and move the Mesh to the center of the rail group.
+    
+    // Simplified strategy:
+    // 1. We know the rail center (e.g. topCenterX, topCenterY implicit from span).
+    // 2. We translate the geometry relative to that center.
+    // 3. We place the Mesh at that center.
+    
+    // Let's look at call sites. 
+    // topRails[0] is at topOuterCenterY. topRails[1] is at topInnerCenterY.
+    // We should find the midpoint of those two lines, place the mesh there,
+    // and offset the lines relative to that midpoint.
+    
+    // Better yet: Just put the Mesh at the absolute Y passed in (yOffset), 
+    // and keep the geometry at 0.
+    // But `addEdgeBar` is called twice for 'top' (outer line, inner line).
+    // We need one Mesh for 'top' containing both lines.
+    
+    // Solution:
+    // The `parts` bucket accumulates geometries.
+    // For 'top', we want the Mesh at (0, height, Z) or close to it.
+    // Let's set the Mesh Position for 'top' to (0, height, SURFACE_Z).
+    // Then translate the geometry by `yOffset - height`.
+    
+    const isTop = dest === 'top';
+    const isBottom = dest === 'bottom';
+    const isLeft = dest === 'left';
+    const isRight = dest === 'right';
+    
+    let meshBaseX = 0;
+    let meshBaseY = 0;
+    
+    if (isTop) meshBaseY = height;
+    if (isBottom) meshBaseY = 0;
+    if (isLeft) meshBaseX = -width / 2;
+    if (isRight) meshBaseX = width / 2;
+    
+    // Set the mesh base position (idempotent, effectively sets it for the group)
+    parts[dest].pos.set(meshBaseX, meshBaseY, SURFACE_Z);
+    
+    // Offset the geometry relative to the mesh base
+    // Note: createDecorativeRails builds geometry centered at (0,0).
+    // In original code: piece.translate(x, y, ...).
+    // Here: piece.translate(x - meshBaseX, y - meshBaseY, 0).
+    
+    // The `x` passed to addEdgeBar is the center of the span.
+    // For Top/Bottom rails, `x` is 0 (centered).
+    // For Left/Right rails, `y` is height/2 (centered).
+    
+    // WAIT. `topCenterX` is (topStartX + topEndX)/2.
+    // If plaque is centered, topStartX = -W/2 + corner, topEndX = W/2 - corner.
+    // So topCenterX is 0. Correct.
+    
+    // So for Top Rail: passed X=0, passed Y=specific line Y.
+    // Mesh Base: (0, height).
+    // Geom Translate: (0, specific line Y - height).
+    
+    const geomOffsetX = arguments[1] - meshBaseX; // x - meshBaseX
+    const geomOffsetY = arguments[2] - meshBaseY; // y - meshBaseY
+    
+    piece.translate(geomOffsetX, geomOffsetY, 0);
+    parts[dest].geoms.push(piece);
   };
 
   if (!integratedRails) {
@@ -948,10 +1079,6 @@ function buildBorderGroup(
       clampX(rightLineX + lineThickness / 2 - (lineThickness + lineGap)),
     );
 
-    /**
-     * Create decorative rails using simple dual-line pattern
-     * This mimics the legacy 2D system which used repeating bitmap fills
-     */
     const createDecorativeRails = (
       length: number,
       orientation: 'horizontal' | 'vertical'
@@ -961,64 +1088,71 @@ function buildBorderGroup(
       const railWidth = isHorizontal ? length : lineThickness;
       const railHeight = isHorizontal ? lineThickness : length;
       
-      // Create two parallel lines with a gap (matching legacy visual style)
       const outerLine = buildScaledBoxGeometry(railWidth, railHeight, reliefDepth);
       const innerLine = buildScaledBoxGeometry(railWidth, railHeight, reliefDepth);
       rails.push(outerLine, innerLine);
-      
       return rails;
     };
 
-    // Create rails for each edge
     const topRails = createDecorativeRails(topSpan, 'horizontal');
     const bottomRails = createDecorativeRails(bottomSpan, 'horizontal');
     const leftRails = createDecorativeRails(leftSpan, 'vertical');
     const rightRails = createDecorativeRails(rightSpan, 'vertical');
 
-    addEdgeBar(topRails[0], topCenterX, topOuterCenterY);
-    addEdgeBar(topRails[1], topCenterX, topInnerCenterY);
-    resourceGeometries.push(...topRails);
-
-    addEdgeBar(bottomRails[0], bottomCenterX, bottomOuterCenterY);
-    addEdgeBar(bottomRails[1], bottomCenterX, bottomInnerCenterY);
-    resourceGeometries.push(...bottomRails);
-
-    addEdgeBar(leftRails[0], leftOuterCenterX, leftCenterY);
-    addEdgeBar(leftRails[1], leftInnerCenterX, leftCenterY);
-    resourceGeometries.push(...leftRails);
-
-    addEdgeBar(rightRails[0], rightOuterCenterX, rightCenterY);
-    addEdgeBar(rightRails[1], rightInnerCenterX, rightCenterY);
-    resourceGeometries.push(...rightRails);
-  }
-
-  if (railParts.length > 0) {
-    const mergedRails = mergeGeometries(railParts, false);
-    railParts.forEach((g) => g.dispose());
-    if (mergedRails) {
-      const railMesh = new THREE.Mesh(mergedRails, material);
-      railMesh.castShadow = false;
-      railMesh.receiveShadow = false;
-      railMesh.renderOrder = 3;
-      group.add(railMesh);
-      resourceGeometries.push(mergedRails);
-    }
-  }
-
-  // Merge all corner geometries
-  if (cornerParts.length > 0) {
-    const mergedCorners = mergeGeometries(cornerParts, false);
-    cornerParts.forEach(g => g.dispose());
+    // Note: passing 3 args (geom, x, y) but helper expects (geom, yOffset, dest) logic mismatch
+    // Let's call the helper explicitly with correct args
     
-    if (mergedCorners) {
-      const mesh = new THREE.Mesh(mergedCorners, material);
-      mesh.castShadow = false;
-      mesh.receiveShadow = false;
-      mesh.renderOrder = 3;
-      group.add(mesh);
-      resourceGeometries.push(mergedCorners);
-    }
+    // Top
+    addEdgeBar(topRails[0], topCenterX, topOuterCenterY, 'top');
+    addEdgeBar(topRails[1], topCenterX, topInnerCenterY, 'top');
+    
+    // Bottom
+    addEdgeBar(bottomRails[0], bottomCenterX, bottomOuterCenterY, 'bottom');
+    addEdgeBar(bottomRails[1], bottomCenterX, bottomInnerCenterY, 'bottom');
+    
+    // Left
+    addEdgeBar(leftRails[0], leftOuterCenterX, leftCenterY, 'left');
+    addEdgeBar(leftRails[1], leftInnerCenterX, leftCenterY, 'left');
+    
+    // Right
+    addEdgeBar(rightRails[0], rightOuterCenterX, rightCenterY, 'right');
+    addEdgeBar(rightRails[1], rightInnerCenterX, rightCenterY, 'right');
+
+    topRails.forEach(r => r.dispose());
+    bottomRails.forEach(r => r.dispose());
+    leftRails.forEach(r => r.dispose());
+    rightRails.forEach(r => r.dispose());
   }
+
+  PART_NAMES.forEach((partName) => {
+    const { geoms, pos } = parts[partName];
+    if (!geoms.length) return;
+
+    let mergedPart: THREE.BufferGeometry | null = null;
+    if (geoms.length === 1) {
+      mergedPart = geoms[0];
+    } else {
+      mergedPart = mergeGeometries(geoms, false);
+      geoms.forEach((geom) => geom.dispose());
+    }
+
+    if (!mergedPart) return;
+
+    const mesh = new THREE.Mesh(mergedPart, material);
+    mesh.name = partName;
+    mesh.castShadow = false;
+    mesh.receiveShadow = false;
+    mesh.renderOrder = 3;
+    
+    // IMPORTANT: Set initial position here
+    mesh.position.copy(pos);
+    
+    // Cache for scaling logic
+    mesh.userData.__basePosition = pos.clone();
+    
+    group.add(mesh);
+    resourceGeometries.push(mergedPart);
+  });
 
   merged.dispose();
 

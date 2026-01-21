@@ -1,0 +1,340 @@
+Based on the screenshots and your description, here are the geometric rules for a stable, high-quality border system, followed by the specific implementation to fix the "rubber-banding" and "flashing" issues.
+
+The Rules of Stable Border Scaling
+
+To achieve the effect where the border feels like a "strong force" attached to the plaque without distorting, you must treat the border as 8 separate components (or a "9-slice" grid) rather than one single object.
+
+Corners (TL, TR, BL, BR):
+
+Rule: Never scale. Only Translate (move).
+
+Behavior: They must stick to the absolute corners of the plaque. If the plaque widens by 100mm, the Right corners move +50mm and Left corners move -50mm. They preserve their aspect ratio and thickness perfectly.
+
+Horizontal Rails (Top, Bottom):
+
+Rule: Scale X (Length) matches the plaque width change. Scale Y (Thickness) must stay locked at 1.0.
+
+Behavior: They move vertically to stick to the top/bottom edges, but they only stretch horizontally.
+
+Vertical Rails (Left, Right):
+
+Rule: Scale Y (Length) matches the plaque height change. Scale X (Thickness) must stay locked at 1.0.
+
+Behavior: They move horizontally to stick to the side edges, but they only stretch vertically.
+
+The Implementation
+
+The standard React Three Fiber approach of scaling the entire group (scale.set(w/oldW, h/oldH, 1)) breaks these rules because it makes the side rails "fat" when you widen the plaque.
+
+Solution:
+
+Modify buildBorderGroup to return separate meshes for each part (Top, Bottom, Left, Right, Corners) instead of merging them all together.
+
+Update useLayoutEffect to apply the specific translation/scaling rules defined above to each named part.
+
+Here is the updated code:
+
+code
+Tsx
+download
+content_copy
+expand_less
+/**
+ * Bronze Plaque Border Component - Stable Scaling Version
+ */
+
+'use client';
+
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from 'react';
+import * as THREE from 'three';
+import { SVGLoader, type SVGResult } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+
+// ... (Keep Interfaces, ScratchType, Buffer helpers, BORDER_SLUG_ALIASES, CONSTANTS same as before) ...
+
+// Keep these helper functions exactly as they were:
+// ensureScratchCapacity, buildScaledBoxGeometry, sliceGeometryAxis, 
+// normalizeGeometry, clamp01, shiftLuminance, createBronzeTextures, toBorderSlug
+
+// ... [Insert previous helper functions here] ...
+
+// --- NEW HELPER FOR IDENTIFYING PARTS ---
+const PART_NAMES = ['top', 'bottom', 'left', 'right', 'tl', 'tr', 'bl', 'br'] as const;
+type PartName = typeof PART_NAMES[number];
+
+interface BuiltState {
+  group: THREE.Group | null;
+  dims: { w: number; h: number };
+}
+
+export function BronzeBorder({
+  borderName,
+  plaqueWidth,
+  plaqueHeight,
+  unitsPerMeter,
+  frontZ,
+  color,
+  depth,
+}: BronzeBorderProps) {
+  const unitScale = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
+  const localWidth = Math.max(1e-3, Math.abs(plaqueWidth) * unitScale);
+  const localHeight = Math.max(1e-3, Math.abs(plaqueHeight) * unitScale);
+
+  // ... (Keep slug resolution and texture logic same as before) ...
+  const normalizedName = borderName?.toLowerCase() ?? '';
+  const effectiveName = normalizedName.includes('no border') ? null : borderName;
+  const slug = effectiveName ? toBorderSlug(effectiveName) : null;
+  const resolvedSlug = slug ? `${slug}a` : null;
+  const usesIntegratedRails = Boolean(resolvedSlug);
+  const shouldRender = Boolean(resolvedSlug && localWidth > 0 && localHeight > 0);
+
+  const bronzeTextures = useMemo(() => createBronzeTextures(color), [color]);
+  
+  // ... (Keep existing useEffect cleanup for textures) ...
+
+  const [svgData, setSvgData] = useState<SVGResult | null>(null);
+  const [builtState, setBuiltState] = useState<BuiltState>({ group: null, dims: { w: localWidth, h: localHeight } });
+
+  const resourcesRef = useRef<BorderResources | null>(null);
+  const svgCacheRef = useRef<Record<string, SVGResult>>({});
+  const groupRef = useRef<THREE.Group>(null);
+  const materialRef = useRef<THREE.MeshPhysicalMaterial | null>(null);
+
+  // ... (Keep getMaterial, debounce logic, disposeResources same as before) ...
+
+  // ---------------------------------------------------------------------------
+  // CRITICAL FIX: The Stable Scaling Logic
+  // ---------------------------------------------------------------------------
+  useLayoutEffect(() => {
+    if (!groupRef.current || !builtState.group) return;
+
+    const currentW = localWidth;
+    const currentH = localHeight;
+    const { w: builtW, h: builtH } = builtState.dims;
+    
+    // Avoid division by zero
+    const safeBuiltW = builtW || 1;
+    const safeBuiltH = builtH || 1;
+
+    // 1. Calculate the difference (Delta) for translation
+    // Since the geometry is baked centered at (0,0), expanding it means moving the 
+    // edges outward by half the total growth.
+    const deltaW = currentW - safeBuiltW;
+    const deltaH = currentH - safeBuiltH;
+    const halfDeltaW = deltaW / 2;
+    const halfDeltaH = deltaH / 2;
+
+    // 2. Calculate the Ratio for 1-Axis scaling (Rails only)
+    const ratioW = currentW / safeBuiltW;
+    const ratioH = currentH / safeBuiltH;
+
+    // 3. Apply the "Strong Force" Rules to each part
+    const group = groupRef.current;
+
+    PART_NAMES.forEach((name) => {
+      const mesh = group.getObjectByName(name);
+      if (!mesh) return;
+
+      // Reset transforms first to ensure clean state
+      mesh.position.set(0, 0, 0);
+      mesh.scale.set(1, 1, 1);
+
+      switch (name) {
+        case 'top':
+          // Move Up, Scale Width
+          mesh.position.y = halfDeltaH; 
+          mesh.scale.x = ratioW;
+          break;
+        case 'bottom':
+          // Move Down, Scale Width
+          mesh.position.y = -halfDeltaH;
+          mesh.scale.x = ratioW;
+          break;
+        case 'left':
+          // Move Left, Scale Height
+          mesh.position.x = -halfDeltaW;
+          mesh.scale.y = ratioH;
+          break;
+        case 'right':
+          // Move Right, Scale Height
+          mesh.position.x = halfDeltaW;
+          mesh.scale.y = ratioH;
+          break;
+        case 'tl': // Top Left
+          mesh.position.x = -halfDeltaW;
+          mesh.position.y = halfDeltaH;
+          break;
+        case 'tr': // Top Right
+          mesh.position.x = halfDeltaW;
+          mesh.position.y = halfDeltaH;
+          break;
+        case 'bl': // Bottom Left
+          mesh.position.x = -halfDeltaW;
+          mesh.position.y = -halfDeltaH;
+          break;
+        case 'br': // Bottom Right
+          mesh.position.x = halfDeltaW;
+          mesh.position.y = -halfDeltaH;
+          break;
+      }
+    });
+
+  }, [localWidth, localHeight, builtState]);
+
+  // ... (Keep SVG loading useEffect same as before) ...
+  // ... (Keep Geometry Build useEffect same as before) ...
+
+  if (!builtState.group) return null;
+  return <primitive object={builtState.group} ref={groupRef} />;
+}
+
+
+// ---------------------------------------------------------------------------
+// MODIFIED BUILD FUNCTION: Returns separated parts instead of merged mesh
+// ---------------------------------------------------------------------------
+function buildBorderGroup(
+  data: SVGResult,
+  params: {
+    plaqueWidth: number;
+    plaqueHeight: number;
+    depth: number;
+    frontZ: number;
+    textures?: BronzeTextures;
+    integratedRails?: boolean;
+    material: THREE.MeshPhysicalMaterial;
+    borderSlug?: string | null;
+  },
+): { group: THREE.Group; geometries: THREE.BufferGeometry[] } | null {
+  
+  const { plaqueWidth, plaqueHeight, frontZ, textures, integratedRails = false, material } = params;
+  const width = Math.max(1e-3, Math.abs(plaqueWidth));
+  const height = Math.max(1e-3, Math.abs(plaqueHeight));
+
+  // ... (Keep base geometry extraction and merging of 'merged' same as before) ...
+  // ... (Keep texture setup same as before) ...
+
+  // -- Setup Buckets for Separate Geometries --
+  const parts: Record<PartName, THREE.BufferGeometry[]> = {
+    top: [], bottom: [], left: [], right: [],
+    tl: [], tr: [], bl: [], br: []
+  };
+
+  const SURFACE_Z = frontZ + 0.0001;
+
+  // -- 1. Helper to add geometry to a specific bucket --
+  const addToPart = (geom: THREE.BufferGeometry, part: PartName) => {
+     parts[part].push(geom);
+  };
+
+  // -- 2. Create Corner Parts (Separate Meshes) --
+  // Instead of 'createCornerMesh' pushing to one array, pass the destination
+  const createCornerMesh = (
+    source: THREE.BufferGeometry,
+    alignX: 'left' | 'right',
+    alignY: 'top' | 'bottom',
+    dest: PartName
+  ) => {
+    let geom = source.clone();
+    
+    // ... (Keep flipping logic same as original code) ...
+    const flipX = alignX === 'right';
+    const flipY = alignY === 'top';
+    if (flipX) geom.scale(-1, 1, 1);
+    if (flipY) geom.scale(1, -1, 1);
+    
+    if (flipX !== flipY) {
+      const pos = geom.getAttribute('position');
+      for (let i = 0; i < pos.count; i += 3) {
+        const x2 = pos.getX(i + 1), y2 = pos.getY(i + 1), z2 = pos.getZ(i + 1);
+        const x3 = pos.getX(i + 2), y3 = pos.getY(i + 2), z3 = pos.getZ(i + 2);
+        pos.setXYZ(i + 1, x3, y3, z3);
+        pos.setXYZ(i + 2, x2, y2, z2);
+      }
+    }
+
+    geom = normalizeGeometry(geom);
+    geom.computeBoundingBox();
+    const bounds = geom.boundingBox!;
+    
+    // Position geometry at the actual corner of the plaque
+    const posX = alignX === 'left' ? -width / 2 - bounds.min.x : width / 2 - bounds.max.x;
+    const posY = alignY === 'top' ? height - bounds.max.y : 0 - bounds.min.y;
+    geom.translate(posX, posY, SURFACE_Z);
+
+    // ... (Keep slice logic same as original code) ...
+    if (alignX === 'left') geom = sliceGeometryAxis(geom, 'x', 1.0, 'less');
+    else geom = sliceGeometryAxis(geom, 'x', -1.0, 'greater');
+
+    if (alignY === 'top') geom = sliceGeometryAxis(geom, 'y', (height / 2) - 1.0, 'greater');
+    else geom = sliceGeometryAxis(geom, 'y', (height / 2) + 1.0, 'less');
+
+    geom.computeVertexNormals();
+    
+    // Add to specific bucket
+    parts[dest].push(geom);
+  };
+
+  createCornerMesh(merged, 'left', 'top', 'tl');
+  createCornerMesh(merged, 'right', 'top', 'tr');
+  createCornerMesh(merged, 'left', 'bottom', 'bl');
+  createCornerMesh(merged, 'right', 'bottom', 'br');
+
+  // -- 3. Create Rails (Separate Meshes) --
+  // ... (Recalculate spans same as original code) ...
+  // ... Note: You need to copy the logic for resolving `topSpan`, `leftSpan` etc here ...
+
+  // [Assuming the logic for finding spans exists here exactly as in original file]
+  // We skip the verbose span calculation lines for brevity, but they must be present.
+  
+  // Replace 'addEdgeBar' with specific assignment:
+  if (!integratedRails) {
+    const reliefDepth = 0.001; // Simplified for example, use original calculation
+    
+    // Helper to build rail geometry
+    const makeRail = (w: number, h: number, x: number, y: number, dest: PartName) => {
+        const g1 = buildScaledBoxGeometry(w, h, reliefDepth); // Outer
+        const g2 = buildScaledBoxGeometry(w, h, reliefDepth); // Inner
+        g1.translate(x, y, SURFACE_Z); // Outer pos (simplified)
+        g2.translate(x, y, SURFACE_Z); // Inner pos (simplified)
+        // Note: You should use the exact centering logic from your original code here
+        // to place the inner/outer lines correctly relative to center.
+        parts[dest].push(g1, g2);
+    };
+
+    // Note: In the original code, rails were created using `topSpan`.
+    // We add them to buckets:
+    // topRails -> parts.top
+    // bottomRails -> parts.bottom
+    // etc.
+  }
+
+  // -- 4. Assemble the Group with Named Children --
+  const group = new THREE.Group();
+  const allGeometries: THREE.BufferGeometry[] = [];
+
+  PART_NAMES.forEach(name => {
+    const partGeoms = parts[name];
+    if (partGeoms.length === 0) return;
+
+    // Merge geometries for this specific part (e.g., merge top_inner and top_outer)
+    const mergedPart = mergeGeometries(partGeoms, false);
+    if (mergedPart) {
+      const mesh = new THREE.Mesh(mergedPart, material);
+      mesh.name = name; // <--- VITAL: Naming the mesh allows us to find it later
+      mesh.castShadow = false;
+      mesh.receiveShadow = false;
+      group.add(mesh);
+      allGeometries.push(mergedPart);
+    }
+    // Clean up unmerged parts
+    partGeoms.forEach(g => g.dispose()); 
+  });
+
+  // Clean up source
+  merged.dispose();
+
+  return {
+    group,
+    geometries: allGeometries,
+  };
+}

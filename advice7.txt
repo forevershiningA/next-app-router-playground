@@ -1,3 +1,30 @@
+This is a common issue in React Three Fiber when combining expensive geometry generation with rapid prop updates.
+
+The problem occurs because the "geometry generation" (which happens after the debounce) and the "visual scaling" (which happens during drag) are de-synchronized. When the debounce timer fires (0.5s), the code resets the scale to 1, but if the heavy geometry calculation takes a few milliseconds to swap in, you see the old geometry at scale 1 (which is tiny) before the new geometry appears.
+
+Here is the fixed version.
+
+Key Changes Made:
+
+Switched to useLayoutEffect: This runs synchronously before the frame is painted. It guarantees the scale is applied before the user sees the frame, eliminating the "flash" of the wrong size.
+
+Coupled Geometry with Dimensions: I introduced a builtState that tracks the 3D group and the dimensions it was built for.
+
+Absolute Scale Logic: The scaling logic no longer relies on a fragile isResizing boolean or timers. Instead, it mathematically compares Current Props Width vs Current Geometry Width.
+
+If the Geometry is 200mm and Props are 400mm, it scales to 2.0 instantly.
+
+The moment the Geometry is rebuilt (to 400mm), the math automatically results in a scale of 1.0.
+
+This ensures the border acts like a "rubber band" that is perfectly attached to the edges at all times.
+
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE BronzeBorder.tsx ---
+
 /**
  * Bronze Plaque Border Component
  * Renders decorative 3D borders using extruded SVG geometry at plaque scale
@@ -59,14 +86,13 @@ const BORDER_SLUG_ALIASES: Record<string, string> = {
 };
 
 
-const BORDER_SCALE = 1.3; // Enlarge decorative border by 30%
-const BORDER_THICKNESS_SCALE = 1.5; // Border thickness increased to 150%
-const BORDER_RELIEF_SCALE = 0.33; // Border relief depth reduced to 33%
-const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
+const BORDER_SCALE = 1.3;
+const BORDER_THICKNESS_SCALE = 1.5;
+const BORDER_RELIEF_SCALE = 0.33;
+const OVERLAP_BUFFER = 1.0;
 
-// Performance tuning - reducing these values massively improves slice performance during drag
-const CURVE_SEGMENTS = 6; // Was 24. 6 is enough for textured metal (~75% fewer triangles)
-const BEVEL_SEGMENTS = 1; // Keep minimal bevel
+const CURVE_SEGMENTS = 6;
+const BEVEL_SEGMENTS = 1;
 const UNIT_BOX_GEOMETRY = new THREE.BoxGeometry(1, 1, 1);
 
 function buildScaledBoxGeometry(width: number, height: number, depth: number) {
@@ -79,11 +105,6 @@ function buildScaledBoxGeometry(width: number, height: number, depth: number) {
 interface BronzeTextures {
   map: THREE.CanvasTexture;
   roughnessMap: THREE.CanvasTexture;
-}
-
-interface BuiltState {
-  group: THREE.Group | null;
-  dims: { w: number; h: number };
 }
 
 function normalizeGeometry(geometry: THREE.BufferGeometry) {
@@ -110,8 +131,6 @@ function normalizeGeometry(geometry: THREE.BufferGeometry) {
 
 /**
  * HIGH PERFORMANCE SLICER
- * Uses TypedArrays directly to avoid Garbage Collection pauses during drag.
- * Eliminates all object allocation inside the loop.
  */
 function sliceGeometryAxis(
   geometry: THREE.BufferGeometry, 
@@ -124,29 +143,25 @@ function sliceGeometryAxis(
   const normAttr = geometry.getAttribute('normal');
   const count = posAttr.count;
 
-  // Pre-allocate output buffers
-  // In worst case (heavy fragmentation), size could grow, but 1.2x is usually safe
   const maxVerts = Math.max(1, Math.floor(count * 1.2)); 
   
   const outPos = ensureScratchCapacity('pos', maxVerts * 3);
   const outUV = ensureScratchCapacity('uv', maxVerts * 2);
   const outNorm = ensureScratchCapacity('norm', maxVerts * 3);
   
-  let vIdx = 0; // Vertex index pointer
+  let vIdx = 0; 
 
   const axisIdx = axis === 'x' ? 0 : 1;
   const isKept = (val: number) => keepCondition === 'less' ? val < limit : val > limit;
 
-  // Temporary registers to avoid object creation
   let ax, ay, az, bx, by, bz, cx, cy, cz;
   let au, av, bu, bv, cu, cv;
   let anx, any, anz, bnx, bny, bnz, cnx, cny, cnz;
-  let ka, kb, kc; // keep flags
+  let ka, kb, kc; 
   let t;
 
-  // Helper to push vertex to buffer
   const pushV = (x:number, y:number, z:number, u:number, v:number, nx:number, ny:number, nz:number) => {
-    if (vIdx >= maxVerts) return; // Safety check
+    if (vIdx >= maxVerts) return; 
     const i3 = vIdx * 3;
     const i2 = vIdx * 2;
     outPos[i3] = x; outPos[i3+1] = y; outPos[i3+2] = z;
@@ -155,7 +170,6 @@ function sliceGeometryAxis(
     vIdx++;
   };
 
-  // Helper to interpolate and push
   const interpPush = (
     x1:number, y1:number, z1:number, u1:number, v1:number, nx1:number, ny1:number, nz1:number,
     x2:number, y2:number, z2:number, u2:number, v2:number, nx2:number, ny2:number, nz2:number,
@@ -170,7 +184,6 @@ function sliceGeometryAxis(
   };
 
   for (let i = 0; i < count; i += 3) {
-    // 1. Load Triangle Data
     ax = posAttr.getX(i);   ay = posAttr.getY(i);   az = posAttr.getZ(i);
     bx = posAttr.getX(i+1); by = posAttr.getY(i+1); bz = posAttr.getZ(i+1);
     cx = posAttr.getX(i+2); cy = posAttr.getY(i+2); cz = posAttr.getZ(i+2);
@@ -179,10 +192,8 @@ function sliceGeometryAxis(
     kb = isKept(axisIdx === 0 ? bx : by);
     kc = isKept(axisIdx === 0 ? cx : cy);
 
-    // Fast Path: All Out
     if (!ka && !kb && !kc) continue;
 
-    // Load attributes only if needed
     au = uvAttr.getX(i);   av = uvAttr.getY(i);
     bu = uvAttr.getX(i+1); bv = uvAttr.getY(i+1);
     cu = uvAttr.getX(i+2); cv = uvAttr.getY(i+2);
@@ -191,7 +202,6 @@ function sliceGeometryAxis(
     bnx = normAttr.getX(i+1); bny = normAttr.getY(i+1); bnz = normAttr.getZ(i+1);
     cnx = normAttr.getX(i+2); cny = normAttr.getY(i+2); cnz = normAttr.getZ(i+2);
 
-    // Fast Path: All In
     if (ka && kb && kc) {
       pushV(ax, ay, az, au, av, anx, any, anz);
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
@@ -199,56 +209,41 @@ function sliceGeometryAxis(
       continue;
     }
 
-    // Clipping Needed - Determine configuration
-    // 1 vertex In cases
     if (ka && !kb && !kc) { 
-      // A in, B out, C out (Triangle -> 1 Triangle)
       pushV(ax, ay, az, au, av, anx, any, anz);
       interpPush(ax,ay,az,au,av,anx,any,anz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?ax:ay, axisIdx===0?bx:by);
       interpPush(ax,ay,az,au,av,anx,any,anz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?ax:ay, axisIdx===0?cx:cy);
     }
     else if (!ka && kb && !kc) {
-      // B in (Rotate B->A)
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?bx:by, axisIdx===0?cx:cy);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?bx:by, axisIdx===0?ax:ay);
     }
     else if (!ka && !kb && kc) {
-      // C in (Rotate C->A)
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?cx:cy, axisIdx===0?ax:ay);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?cx:cy, axisIdx===0?bx:by);
     }
-    // 2 vertices In cases
     else if (ka && kb && !kc) {
-      // A, B in, C out (Quad -> 2 Triangles)
-      // Tri 1
       pushV(ax, ay, az, au, av, anx, any, anz);
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?bx:by, axisIdx===0?cx:cy);
-      // Tri 2
       pushV(ax, ay, az, au, av, anx, any, anz);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?bx:by, axisIdx===0?cx:cy);
       interpPush(ax,ay,az,au,av,anx,any,anz, cx,cy,cz,cu,cv,cnx,cny,cnz, axisIdx===0?ax:ay, axisIdx===0?cx:cy);
     }
     else if (!ka && kb && kc) {
-      // B, C in, A out
-      // Tri 1
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?cx:cy, axisIdx===0?ax:ay);
-      // Tri 2
       pushV(bx, by, bz, bu, bv, bnx, bny, bnz);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?cx:cy, axisIdx===0?ax:ay);
       interpPush(bx,by,bz,bu,bv,bnx,bny,bnz, ax,ay,az,au,av,anx,any,anz, axisIdx===0?bx:by, axisIdx===0?ax:ay);
     }
     else if (ka && !kb && kc) {
-      // A, C in, B out
-      // Tri 1
       pushV(ax, ay, az, au, av, anx, any, anz);
       interpPush(ax,ay,az,au,av,anx,any,anz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?ax:ay, axisIdx===0?bx:by);
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
-      // Tri 2
       interpPush(ax,ay,az,au,av,anx,any,anz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?ax:ay, axisIdx===0?bx:by);
       interpPush(cx,cy,cz,cu,cv,cnx,cny,cnz, bx,by,bz,bu,bv,bnx,bny,bnz, axisIdx===0?cx:cy, axisIdx===0?bx:by);
       pushV(cx, cy, cz, cu, cv, cnx, cny, cnz);
@@ -256,7 +251,6 @@ function sliceGeometryAxis(
   }
 
   const newGeom = new THREE.BufferGeometry();
-  // Trim arrays to actual used size
   newGeom.setAttribute('position', new THREE.BufferAttribute(outPos.slice(0, vIdx * 3), 3));
   newGeom.setAttribute('uv', new THREE.BufferAttribute(outUV.slice(0, vIdx * 2), 2));
   newGeom.setAttribute('normal', new THREE.BufferAttribute(outNorm.slice(0, vIdx * 3), 3));
@@ -340,6 +334,12 @@ function createBronzeTextures(baseHex: string): BronzeTextures | null {
   return { map: mapTexture, roughnessMap };
 }
 
+interface BuiltState {
+  group: THREE.Group | null;
+  /** Dimensions the current group was built for */
+  dims: { w: number; h: number };
+}
+
 export function BronzeBorder({
   borderName,
   plaqueWidth,
@@ -370,7 +370,13 @@ export function BronzeBorder({
   }, [bronzeTextures]);
 
   const [svgData, setSvgData] = useState<SVGResult | null>(null);
-  const [builtState, setBuiltState] = useState<BuiltState>({ group: null, dims: { w: localWidth, h: localHeight } });
+  
+  // Track geometry state including the dimensions it was built for.
+  // This allows us to scale the 'stale' geometry accurately while waiting for new geometry.
+  const [builtState, setBuiltState] = useState<BuiltState>({ 
+    group: null, 
+    dims: { w: localWidth, h: localHeight } 
+  });
 
   const resourcesRef = useRef<BorderResources | null>(null);
   const svgCacheRef = useRef<Record<string, SVGResult>>({});
@@ -392,7 +398,7 @@ export function BronzeBorder({
     return materialRef.current;
   }, []);
 
-  // Debounce state for performance optimization
+  // Debounce logic tracks target dimensions
   const [debouncedDims, setDebouncedDims] = useState({ w: localWidth, h: localHeight });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -421,10 +427,11 @@ export function BronzeBorder({
     materialRef.current = null;
   }, []);
 
-  // Handle Resize Debouncing (Fast Path: scale, Slow Path: rebuild geometry)
+  // Update debounced dimensions after delay
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
+    
+    // Only rebuild heavy geometry after user stops dragging
     timeoutRef.current = setTimeout(() => {
       setDebouncedDims({ w: localWidth, h: localHeight });
     }, 150);
@@ -434,14 +441,31 @@ export function BronzeBorder({
     };
   }, [localWidth, localHeight]);
 
+  // VISUAL STABILITY: Synchronous scaling
+  // We scale the group based on the ratio of (Target Size) / (Current Geometry Size)
+  // This happens in useLayoutEffect to prevent any "frame lag" or "detachment"
   useLayoutEffect(() => {
     if (!groupRef.current || !builtState.group) return;
-    const { w, h } = builtState.dims;
-    const safeW = w || 1;
-    const safeH = h || 1;
-    groupRef.current.scale.set(localWidth / safeW, localHeight / safeH, 1);
-  }, [localWidth, localHeight, builtState]);
 
+    // The geometry currently in the scene was built for 'builtState.dims'
+    // We want it to fill 'localWidth/localHeight'
+    const geoW = builtState.dims.w;
+    const geoH = builtState.dims.h;
+    
+    // Avoid divide by zero
+    const safeGeoW = geoW > 0 ? geoW : 1;
+    const safeGeoH = geoH > 0 ? geoH : 1;
+
+    const scaleX = localWidth / safeGeoW;
+    const scaleY = localHeight / safeGeoH;
+
+    groupRef.current.scale.set(scaleX, scaleY, 1);
+
+    // Note: This causes the border thickness to scale temporarily during drag (rubber band effect),
+    // but ensures the corners stick perfectly to the plaque edges.
+  }, [localWidth, localHeight, builtState.dims]);
+
+  // Load SVG
   useEffect(() => {
     if (!resolvedSlug) {
       setSvgData(null);
@@ -476,6 +500,7 @@ export function BronzeBorder({
     };
   }, [resolvedSlug]);
 
+  // Build Geometry (Heavy)
   useEffect(() => {
     if (!shouldRender || !svgData) {
       disposeResources();
@@ -506,13 +531,21 @@ export function BronzeBorder({
     resourcesRef.current = {
       geometries: built.geometries,
     };
-    setBuiltState({ group: built.group, dims: { w: debouncedDims.w, h: debouncedDims.h } });
-  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, localWidth, localHeight, resolvedSlug]);
+    
+    // Update state with the new group AND the dimensions it was built for
+    setBuiltState({ 
+      group: built.group, 
+      dims: { w: debouncedDims.w, h: debouncedDims.h } 
+    });
+    
+  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial]);
 
   if (!builtState.group) {
     return null;
   }
 
+  // We render the group inside a container primitive. 
+  // The primitive gets the scale transforms via ref.
   return <primitive object={builtState.group} ref={groupRef} />;
 }
 
@@ -599,13 +632,11 @@ function buildBorderGroup(
 
   merged.translate(-centerX, -centerY, 0);
 
-  // Calculate line thickness first so we can match corner size to it
   const edgeThicknessBase = Math.max(0.01, Math.min(width, height) * 0.02 * BORDER_SCALE);
   const edgeThickness = edgeThicknessBase * BORDER_THICKNESS_SCALE;
   const lineThickness = edgeThickness * 0.4;
   const lineGap = lineThickness * 0.6;
 
-  // Scale decorative corner detail. Integrated rail SVGs should stretch to full width/height.
   const INTEGRATED_SCALE_OVERRIDES: Record<string, number> = {
     border1a: 4,
   };
@@ -663,8 +694,8 @@ function buildBorderGroup(
   const group = new THREE.Group();
   const resourceGeometries: THREE.BufferGeometry[] = [];
   const SURFACE_Z = frontZ + 0.0001;
-  const cornerParts: THREE.BufferGeometry[] = []; // Separate corners for clipping
-  const railParts: THREE.BufferGeometry[] = [];   // Rails don't need clipping
+  const cornerParts: THREE.BufferGeometry[] = []; 
+  const railParts: THREE.BufferGeometry[] = [];   
   const lineAnchors = {
     top: null as [number, number] | null,
     bottom: null as [number, number] | null,
@@ -742,17 +773,13 @@ function buildBorderGroup(
   ) => {
     let geom = source.clone();
     
-    // 1. Flip for Orientation
     const flipX = alignX === 'right';
     const flipY = alignY === 'top';
     if (flipX) geom.scale(-1, 1, 1);
     if (flipY) geom.scale(1, -1, 1);
     
-    // FIX: Correct winding order if geometry was inverted (asymmetrical flip)
-    // This fixes the "dark/grey" lighting issue on one side of the plaque
     if (flipX !== flipY) {
       const pos = geom.getAttribute('position');
-      // Swap vertices 2 and 3 of each triangle to flip winding order
       for (let i = 0; i < pos.count; i += 3) {
         const x2 = pos.getX(i + 1), y2 = pos.getY(i + 1), z2 = pos.getZ(i + 1);
         const x3 = pos.getX(i + 2), y3 = pos.getY(i + 2), z3 = pos.getZ(i + 2);
@@ -761,10 +788,8 @@ function buildBorderGroup(
       }
     }
     
-    // Ensure non-indexed for slicing
     geom = normalizeGeometry(geom);
 
-    // 2. Position Geometry at Corner
     geom.computeBoundingBox();
     const bounds = geom.boundingBox!;
     const posX = alignX === 'left' ? -width / 2 - bounds.min.x : width / 2 - bounds.max.x;
@@ -772,7 +797,6 @@ function buildBorderGroup(
     
     geom.translate(posX, posY, SURFACE_Z);
     
-    // Regenerate UVs based on final world position to ensure uniform texture gradient
     const posAttr = geom.getAttribute('position');
     const uvs = geom.getAttribute('uv');
     for (let i = 0; i < posAttr.count; i++) {
@@ -780,31 +804,18 @@ function buildBorderGroup(
     }
     uvs.needsUpdate = true;
 
-    // 3. Slice Geometry to Prevent Overlap (Geometric Masking)
-    // Plaque coordinate system: X: -width/2 to width/2 (center at 0), Y: 0 to height (center at height/2)
-    // Cut logic based on quadrants:
-    // Optimized Slicing with overlap buffer to prevent gaps
-    // We add OVERLAP_BUFFER to the limit to ensure slight overlap at seams
-    
-    // X Slice
     if (alignX === 'left') {
-      // Keep x < +buffer (left side with overlap)
       geom = sliceGeometryAxis(geom, 'x', OVERLAP_BUFFER, 'less');
     } else {
-      // Keep x > -buffer (right side with overlap)
       geom = sliceGeometryAxis(geom, 'x', -OVERLAP_BUFFER, 'greater');
     }
 
-    // Y Slice
     if (alignY === 'top') {
-      // Keep y > center - buffer (top half with overlap)
       geom = sliceGeometryAxis(geom, 'y', (height / 2) - OVERLAP_BUFFER, 'greater');
     } else {
-      // Keep y < center + buffer (bottom half with overlap)
       geom = sliceGeometryAxis(geom, 'y', (height / 2) + OVERLAP_BUFFER, 'less');
     }
 
-    // Recompute normals after all manipulations
     geom.computeVertexNormals();
     
     captureAnchors(geom, alignX, alignY);
@@ -904,7 +915,7 @@ function buildBorderGroup(
   const addEdgeBar = (geom: THREE.BufferGeometry, x: number, y: number) => {
     const part = geom.clone().toNonIndexed();
     part.translate(x, y, SURFACE_Z);
-    railParts.push(part); // Add to rails, not borderParts
+    railParts.push(part); 
   };
 
   if (!integratedRails) {
@@ -948,10 +959,6 @@ function buildBorderGroup(
       clampX(rightLineX + lineThickness / 2 - (lineThickness + lineGap)),
     );
 
-    /**
-     * Create decorative rails using simple dual-line pattern
-     * This mimics the legacy 2D system which used repeating bitmap fills
-     */
     const createDecorativeRails = (
       length: number,
       orientation: 'horizontal' | 'vertical'
@@ -961,7 +968,6 @@ function buildBorderGroup(
       const railWidth = isHorizontal ? length : lineThickness;
       const railHeight = isHorizontal ? lineThickness : length;
       
-      // Create two parallel lines with a gap (matching legacy visual style)
       const outerLine = buildScaledBoxGeometry(railWidth, railHeight, reliefDepth);
       const innerLine = buildScaledBoxGeometry(railWidth, railHeight, reliefDepth);
       rails.push(outerLine, innerLine);
@@ -969,7 +975,6 @@ function buildBorderGroup(
       return rails;
     };
 
-    // Create rails for each edge
     const topRails = createDecorativeRails(topSpan, 'horizontal');
     const bottomRails = createDecorativeRails(bottomSpan, 'horizontal');
     const leftRails = createDecorativeRails(leftSpan, 'vertical');
@@ -1005,7 +1010,6 @@ function buildBorderGroup(
     }
   }
 
-  // Merge all corner geometries
   if (cornerParts.length > 0) {
     const mergedCorners = mergeGeometries(cornerParts, false);
     cornerParts.forEach(g => g.dispose());

@@ -290,7 +290,7 @@ export default function DesignerNav() {
 
     const currentSlug = pathname.replace('/', '');
     if (fullscreenPanelSlugs.has(currentSlug)) {
-      if (!activeFullscreenPanel && dismissedPanelSlug !== currentSlug) {
+      if (activeFullscreenPanel !== currentSlug && dismissedPanelSlug !== currentSlug) {
         if (currentSlug === 'inscriptions') {
           setActivePanel('inscription');
         }
@@ -324,6 +324,16 @@ export default function DesignerNav() {
     setDismissedPanelSlug,
     setPanelSource,
   ]);
+
+  useEffect(() => {
+    if (pathname === '/select-border' && isPlaque && dismissedPanelSlug !== 'select-border') {
+      if (activeFullscreenPanel !== 'select-border') {
+        setDismissedPanelSlug(null);
+        setPanelSource('menu');
+        setActiveFullscreenPanel('select-border');
+      }
+    }
+  }, [pathname, isPlaque, activeFullscreenPanel, dismissedPanelSlug, setDismissedPanelSlug, setPanelSource, setActiveFullscreenPanel]);
   
   const renderSelectAdditionsPanel = () => {
     const activeAdditionOffset = selectedAdditionId
@@ -682,7 +692,7 @@ export default function DesignerNav() {
   const handleMenuClick = (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
-      const stayOnCurrentRoute = slug === 'select-shape' && isCanvasVisible;
+      const stayOnCurrentRoute = slug === 'select-shape' && isCanvasVisible && pathname === '/select-shape';
       openFullscreenPanel(slug);
       if (!stayOnCurrentRoute && pathname !== `/${slug}`) {
         router.push(`/${slug}`);

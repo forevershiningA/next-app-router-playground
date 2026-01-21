@@ -193,6 +193,7 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - Catalog products flagged with `border="1"` (all bronze plaques) automatically advance to **Select Border** after the user confirms a shape. The shape selector now pushes to `/select-border` and dispatches `openFullscreenPanel('select-border')` so the sidebar panel opens immediately.
 - `BronzeBorder.tsx` loads `/public/shapes/borders/{slug}.svg`, extrudes the supplier corner SVG once, scales it to ~25 % of the shorter plaque edge (70 % final size), mirrors it into each corner, and generates the connecting rails procedurally. All mirrored parts are converted to non‑indexed geometries and merged into a single mesh, eliminating the old floating box lines and ensuring a continuous bronze frame that sits flush on the plaque face.
 - **2026-01-19 update:** every catalog slug now maps to a dedicated `borderXa.svg` file that already contains the extended rail artwork. BronzeBorder scales the merged SVG to the plaque bounds, clamps it inside a four-plane mask (±width/2, 0→height), and disposes/rehydrates textures for each load so the rail artwork stretches perfectly to whatever width/height the user selects without overlapping neighboring corners. The legacy dual-line rail generator still runs for any slug that lacks a suffixed SVG.
+- **2026-01-20 rollback:** the experimental 9-slice border system from advice8/9 was reverted after a console error surfaced; BronzeBorder is presently back to the "single merged mesh" workflow with whole-group scaling plus the debounced rebuild/fast-path stretch described below. The 9-slice plan (per advice7‑9) remains documented for future reimplementation once the runtime error is understood, and the refreshed `border1a.svg` now ships at 4800×4800px so its engraved detail stays crisp even though the current code continues to scale the entire mesh uniformly.
 
 **Detection:**
 ```typescript
@@ -1821,6 +1822,11 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-20 (Afternoon)**: Bronze Border 9-Slice Attempt Rolled Back
+  - Attempted to land the advice7/8/9 "strong border" upgrade (per-corner meshes + rail scaling) but a console error surfaced during verification, so BronzeBorder.tsx was reverted to the 2026-01-19 build for stability.
+  - The current component once again clones the merged SVG into four corners, optionally adds procedural rails when a suffixed SVG is missing, debounces geometry rebuilds, and scales the entire group during drag gestures (rubber-band effect) until the slow-path rebuild finishes.
+  - Future work: re-introduce the per-part mesh architecture after isolating the console error and re-validating the material/position caching strategy described in advice9.
 
 - **2026-01-19 (Evening)**: Bronze Border Performance Optimization - Allocation-Free Geometry Slicing (Production-Ready)
   - **Performance Breakthrough**: Implemented three-tier optimization for 60fps smooth slider interaction

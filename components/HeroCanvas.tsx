@@ -313,7 +313,7 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
             rotation={[0, Math.PI, 0]}
           >
             <GoldText
-              position={[0, 0.25, 0]}
+              position={[0, 0.35, 0]}
               fontSize={0.16}
               text="“The Lord is my shepherd.”"
               font="/fonts/Garamond.ttf"
