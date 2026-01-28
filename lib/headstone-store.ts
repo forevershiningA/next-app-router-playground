@@ -210,7 +210,17 @@ type HeadstoneState = {
   motifRefs: Record<string, React.RefObject<Group | null>>;
   motifOffsets: Record<
     string,
-    { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number; target?: 'headstone' | 'base' }
+    {
+      xPos: number;
+      yPos: number;
+      scale: number;
+      rotationZ: number;
+      heightMm: number;
+      target?: 'headstone' | 'base';
+      coordinateSpace?: 'absolute' | 'offset';
+      flipX?: boolean;
+      flipY?: boolean;
+    }
   >;
 
   setInscriptions: (
@@ -272,6 +282,8 @@ type HeadstoneState = {
 
 let nextId = 0;
 const genId = () => `l-${nextId++}`;
+let nextMotifId = 0;
+const genMotifId = () => `motif-${nextMotifId++}`;
 
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   catalog: null,
@@ -341,15 +353,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   // Sample template: Add dove motif
-  selectedMotifs: [
-    { 
-      id: 'motif_dove_1', 
-      svgPath: '/shapes/motifs/dove_002.svg', 
-      color: '#c99d44' 
-    },
-  ],
+  // selectedMotifs: [
+  //   { 
+  //     id: 'motif_dove_1', 
+  //     svgPath: '/shapes/motifs/dove_002.svg', 
+  //     color: '#c99d44' 
+  //   },
+  // ],
+  selectedMotifs: [],
   addMotif: (svgPath) => {
-    const id = `motif_${Date.now()}`;
+    const id = genMotifId();
     const state = get();
     const { catalog, selected } = state;
     const isLaser = catalog?.product.laser === '1';
@@ -370,6 +383,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           rotationZ: 0,
           heightMm: 100,
           target,
+          coordinateSpace: 'offset',
         }
       };
       return {
@@ -717,65 +731,66 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   // Sample template: Beautiful memorial inscriptions with much larger spacing
-  inscriptions: [
-    {
-      id: genId(),
-      text: 'In Loving Memory',
-      font: 'Chopin Script',
-      sizeMm: 55,
-      color: '#c99d44',
-      xPos: 0,
-      yPos: 50,  // Moved higher for more space
-      rotationDeg: 0,
-      ref: React.createRef<Group>(),
-    },
-    {
-      id: genId(),
-      text: 'Sarah Elizabeth Thompson',
-      font: 'Chopin Script',
-      sizeMm: 75,
-      color: '#c99d44',
-      xPos: 0,
-      yPos: 20,  // Larger gap (30mm from above)
-      rotationDeg: 0,
-      ref: React.createRef<Group>(),
-    },
-    {
-      id: genId(),
-      text: '1945 - 2023',
-      font: 'Franklin Gothic',  // Different font for dates
-      sizeMm: 50,
-      color: '#ffffff',  // White for contrast
-      xPos: 0,
-      yPos: -12,  // Larger gap (32mm from above)
-      rotationDeg: 0,
-      ref: React.createRef<Group>(),
-    },
-    {
-      id: genId(),
-      text: 'Forever in Our Hearts',
-      font: 'Chopin Script',
-      sizeMm: 45,
-      color: '#c99d44',
-      xPos: 0,
-      yPos: -38,  // Larger gap (26mm from above)
-      rotationDeg: 0,
-      ref: React.createRef<Group>(),
-    },
-    {
-      id: genId(),
-      text: 'Beloved Mother & Grandmother',
-      font: 'Chopin Script',
-      sizeMm: 38,
-      color: '#c99d44',
-      xPos: 0,
-      yPos: -60,  // Larger gap (22mm from above)
-      rotationDeg: 0,
-      ref: React.createRef<Group>(),
-    },
-  ],
+  // inscriptions: [
+  //   {
+  //     id: genId(),
+  //     text: 'In Loving Memory',
+  //     font: 'Chopin Script',
+  //     sizeMm: 55,
+  //     color: '#c99d44',
+  //     xPos: 0,
+  //     yPos: 50,  // Moved higher for more space
+  //     rotationDeg: 0,
+  //     ref: React.createRef<Group>(),
+  //   },
+  //   {
+  //     id: genId(),
+  //     text: 'Sarah Elizabeth Thompson',
+  //     font: 'Chopin Script',
+  //     sizeMm: 75,
+  //     color: '#c99d44',
+  //     xPos: 0,
+  //     yPos: 20,  // Larger gap (30mm from above)
+  //     rotationDeg: 0,
+  //     ref: React.createRef<Group>(),
+  //   },
+  //   {
+  //     id: genId(),
+  //     text: '1945 - 2023',
+  //     font: 'Franklin Gothic',  // Different font for dates
+  //     sizeMm: 50,
+  //     color: '#ffffff',  // White for contrast
+  //     xPos: 0,
+  //     yPos: -12,  // Larger gap (32mm from above)
+  //     rotationDeg: 0,
+  //     ref: React.createRef<Group>(),
+  //   },
+  //   {
+  //     id: genId(),
+  //     text: 'Forever in Our Hearts',
+  //     font: 'Chopin Script',
+  //     sizeMm: 45,
+  //     color: '#c99d44',
+  //     xPos: 0,
+  //     yPos: -38,  // Larger gap (26mm from above)
+  //     rotationDeg: 0,
+  //     ref: React.createRef<Group>(),
+  //   },
+  //   {
+  //     id: genId(),
+  //     text: 'Beloved Mother & Grandmother',
+  //     font: 'Chopin Script',
+  //     sizeMm: 38,
+  //     color: '#c99d44',
+  //     xPos: 0,
+  //     yPos: -60,  // Larger gap (22mm from above)
+  //     rotationDeg: 0,
+  //     ref: React.createRef<Group>(),
+  //   },
+  // ],
+  inscriptions: [],
   selectedInscriptionId: null,
-  activeInscriptionText: 'In Loving Memory',
+  activeInscriptionText: '',
   inscriptionMinHeight: 5,
   inscriptionMaxHeight: 1200,
   fontLoading: false,
@@ -787,17 +802,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   selectedAdditionId: null,
   additionRefs: {},
   // Sample template: Pre-positioned additions for beautiful composition
-  additionOffsets: {
-    'B2127': { xPos: 0, yPos: -130, scale: 0.6, rotationZ: 0 },        // Cross at top
-    'B1134S': { xPos: 150, yPos: -90, scale: 0.7, rotationZ: 0 },     // Angel at right side
-  },
+  // additionOffsets: {
+  //   'B2127': { xPos: 0, yPos: -130, scale: 0.6, rotationZ: 0 },        // Cross at top
+  //   'B1134S': { xPos: 150, yPos: -90, scale: 0.7, rotationZ: 0 },     // Angel at right side
+  // },
+  additionOffsets: {},
 
   selectedMotifId: null,
   motifRefs: {},
   // Sample template: Pre-positioned motif
-  motifOffsets: {
-    'motif_dove_1': { xPos: -170, yPos: 0, scale: 1.2, rotationZ: 0, heightMm: 40 },   // Dove - centered vertically
-  },
+  // motifOffsets: {
+  //   'motif_dove_1': { xPos: -170, yPos: 0, scale: 1.2, rotationZ: 0, heightMm: 40 },   // Dove - centered vertically
+  // },
+  motifOffsets: {},
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
@@ -1045,7 +1062,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({ motifRefs: { ...s.motifRefs, [id]: ref } })),
   setMotifOffset: (
     id: string,
-    offset: { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number },
+    offset: {
+      xPos: number;
+      yPos: number;
+      scale: number;
+      rotationZ: number;
+      heightMm: number;
+      target?: 'headstone' | 'base';
+      coordinateSpace?: 'absolute' | 'offset';
+    },
   ) => {
     set((s) => ({ motifOffsets: { ...s.motifOffsets, [id]: offset } }));
     // Recalculate cost when height changes
@@ -1059,7 +1084,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     if (!motif) return;
     
     // Generate a unique instance ID for the duplicate
-    const newId = `motif_${Date.now()}`;
+    const newId = genMotifId();
     
     // Add the duplicate
     set((s) => ({ 

@@ -1,0 +1,1364 @@
+The discrepancy you are seeing—where the "recreated" design has elements positioned too high or completely off-canvas (like the birds)—is caused by how the Desktop Pixel Ratio (DPR) is handled.
+
+In the legacy design (1725769905504), the dpr is 2.32. The coordinates were saved with this scale factor (which is why they are large numbers like y: -386). The scripts were forcing dpr = 1 for all desktop designs, causing the large coordinates to be treated as logical pixels rather than scaling them down. This resulted in millimeter positions that were ~2.3x larger than intended (e.g., 335mm instead of 144mm).
+
+Here are the fixes for saved-design-loader-utils.ts and convert-legacy-design.js to respect the raw DPR on desktop when physical coordinates are detected.
+
+1. saved-design-loader-utils.ts
+
+I have updated normalizeDesignDpr to trust the raw DPR on desktop (instead of forcing 1) and removed the fallback logic that clamped desktop DPR in loadCanonicalDesignIntoEditor.
+
+code
+Typescript:saved-design-loader-utils.ts
+download
+content_copy
+expand_less
+/**
+ * Utility functions for loading saved designs into the DYO tool
+ */
+
+import { createRef } from 'react';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import type { SavedDesignData } from '#/components/SavedDesignLoader';
+import type { Line } from '#/lib/headstone-store';
+import type { Group } from 'three';
+
+export interface LoadDesignOptions {
+  clearExisting?: boolean; // Whether to clear existing inscriptions first
+  autoSave?: boolean; // Whether to auto-save after loading
+}
+
+export type CanonicalDesignData = {
+  version?: string;
+  generatedAt?: string;
+  product?: {
+    id?: string | number;
+    name?: string;
+    type?: string;
+    slug?: string;
+    category?: string;
+    shape?: string;
+  };
+  components?: {
+    headstone?: {
+      width_mm?: number;
+      height_mm?: number;
+      thickness_mm?: number;
+      texture?: string;
+    };
+    base?: {
+      width_mm?: number;
+      height_mm?: number;
+      depth_mm?: number;
+      texture?: string;
+    };
+  };
+  elements?: {
+    inscriptions?: Array<{
+      id?: string;
+      text?: string;
+      originalText?: string;
+      font?: { family?: string; size_mm?: number };
+      position?: { x_mm?: number; y_mm?: number };
+      rotation?: { z_deg?: number };
+      color?: string;
+      surface?: string;
+    }>;
+    motifs?: Array<{
+      id?: string;
+      asset?: string;
+      position?: { x_mm?: number; y_mm?: number };
+      height_mm?: number;
+      rotation?: { z_deg?: number };
+      color?: string;
+      surface?: string;
+    }>;
+  };
+  assets?: {
+    motifs?: Array<{ id: string; path: string }>;
+  };
+};
+
+const MIN_CANONICAL_INSCRIPTION_SIZE = 5;
+const MAX_CANONICAL_INSCRIPTION_SIZE = 1200;
+const MIN_CANONICAL_ROTATION = -45;
+const MAX_CANONICAL_ROTATION = 45;
+const DEFAULT_CANONICAL_FONT = 'Garamond';
+const DEFAULT_CANONICAL_COLOR = '#000000';
+export const DEFAULT_CANONICAL_DESIGN_VERSION = 'v2026';
+
+const clampCanonicalSize = (value?: number) => {
+  if (typeof value !== 'number' || Number.isNaN(value)) return 40;
+  return Math.min(MAX_CANONICAL_INSCRIPTION_SIZE, Math.max(MIN_CANONICAL_INSCRIPTION_SIZE, Math.round(value)));
+};
+
+const clampCanonicalRotation = (value?: number) => {
+  if (typeof value !== 'number' || Number.isNaN(value)) return 0;
+  return Math.max(MIN_CANONICAL_ROTATION, Math.min(MAX_CANONICAL_ROTATION, Math.round(value)));
+};
+
+const MIN_CANONICAL_MOTIF_HEIGHT = 20;
+const MAX_CANONICAL_MOTIF_HEIGHT = 800;
+const clampCanonicalMotifHeight = (value?: number) => {
+  if (typeof value !== 'number' || Number.isNaN(value)) return 100;
+  return Math.min(MAX_CANONICAL_MOTIF_HEIGHT, Math.max(MIN_CANONICAL_MOTIF_HEIGHT, Math.round(value)));
+};
+
+const canonicalToRadians = (deg?: number) => (typeof deg === 'number' ? (deg * Math.PI) / 180 : 0);
+
+const normalizeDesignDpr = (rawDpr = 1, device: string = 'desktop') => {
+  // FIX: Trust desktop raw DPR. Some desktop designs have DPR > 1 (e.g. 2.32) 
+  // with physical coordinates that require scaling.
+  if (device === 'desktop') return rawDpr;
+  
+  const standards = [1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4];
+  return standards.reduce((closest, candidate) =>
+    Math.abs(candidate - rawDpr) < Math.abs(closest - rawDpr) ? candidate : closest,
+  standards[0]);
+};
+
+const detectPhysicalCoordinates = (items: SavedDesignData, initW: number, initH: number) => {
+  if (!initW || !initH) return false;
+  const marginX = initW / 2 + 50;
+  const marginY = initH / 2 + 50;
+  return items.some((item) => {
+    if (!item || (item.type !== 'Inscription' && item.type !== 'Motif')) return false;
+    const rawX = item.x ?? item.cx ?? 0;
+    const rawY = item.y ?? item.cy ?? 0;
+    return Math.abs(rawX) > marginX || Math.abs(rawY) > marginY;
+  });
+};
+
+type LegacyCanvasInfo = {
+  initW: number;
+  initH: number;
+  designDpr: number;
+  usesPhysicalCoords: boolean;
+  mmPerPxXHeadstone: number;
+  mmPerPxYHeadstone: number;
+  mmPerPxXBase: number;
+  mmPerPxYBase: number;
+};
+
+const computeLegacyCanvasInfo = (designData: SavedDesignData, baseProduct?: any): LegacyCanvasInfo => {
+  const headstoneItem = designData.find((item) => item.type === 'Headstone') || baseProduct || {};
+  const baseItem = designData.find((item) => item.type === 'Base');
+
+  const initW = headstoneItem.init_width || baseProduct?.init_width || headstoneItem.viewportWidth || 800;
+  const initH = headstoneItem.init_height || baseProduct?.init_height || headstoneItem.viewportHeight || 600;
+  const designDpr = normalizeDesignDpr(headstoneItem.dpr ?? baseProduct?.dpr ?? 1, headstoneItem.device ?? baseProduct?.device ?? 'desktop');
+  const usesPhysicalCoords = detectPhysicalCoordinates(designData, initW, initH);
+
+  const headstoneWidthMm = headstoneItem.width || baseProduct?.width || 600;
+  const headstoneHeightMm = headstoneItem.height || baseProduct?.height || 400;
+  const baseWidthMm = baseItem?.width || headstoneWidthMm;
+  const baseHeightMm = baseItem?.height || 100;
+
+  const mmPerPxXHeadstone = headstoneWidthMm && initW ? headstoneWidthMm / initW : 0.75;
+  const mmPerPxYHeadstone = headstoneHeightMm && initH ? headstoneHeightMm / initH : 0.75;
+  const mmPerPxXBase = baseWidthMm && initW ? baseWidthMm / initW : mmPerPxXHeadstone;
+  const mmPerPxYBase = baseHeightMm && initH ? baseHeightMm / initH : mmPerPxYHeadstone;
+
+  return {
+    initW,
+    initH,
+    designDpr,
+    usesPhysicalCoords,
+    mmPerPxXHeadstone,
+    mmPerPxYHeadstone,
+    mmPerPxXBase,
+    mmPerPxYBase,
+  };
+};
+
+const decodeHtmlEntities = (value?: string) => {
+  if (!value) return '';
+  return value
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&');
+};
+
+const canonicalSurfaceTarget = (surface?: string): 'base' | 'headstone' =>
+  surface?.toLowerCase().includes('base') ? 'base' : 'headstone';
+
+const buildCanonicalMotifPathMap = (design?: CanonicalDesignData) =>
+  new Map((design?.assets?.motifs ?? []).map((asset) => [asset.id, asset.path]));
+
+const resolveCanonicalMotifPath = (
+  assetId: string | undefined,
+  motifId: string,
+  motifAssetMap: Map<string, string>,
+) => {
+  if (assetId && motifAssetMap.has(assetId)) {
+    return motifAssetMap.get(assetId)!;
+  }
+  if (assetId) {
+    return `/shapes/motifs/${assetId}.svg`;
+  }
+  return `/shapes/motifs/${motifId}.svg`;
+};
+
+/**
+ * Bronze texture mapping
+ */
+const BRONZE_TEXTURES = [
+  { name: "Black", color: "#000000", img: "/textures/phoenix/s/01.webp" },
+  { name: "Brown", color: "#48280f", img: "/textures/phoenix/s/02.webp" },
+  { name: "Casino Blue", color: "#0c1137", img: "/textures/phoenix/s/03.webp" },
+  { name: "Dark Brown", color: "#24160b", img: "/textures/phoenix/s/04.webp" },
+  { name: "Dark Green", color: "#1a391a", img: "/textures/phoenix/s/05.webp" },
+  { name: "Grey", color: "#6d696a", img: "/textures/phoenix/s/06.webp" },
+  { name: "Holly Green", color: "#07723a", img: "/textures/phoenix/s/07.webp" },
+  { name: "Ice Blue", color: "#afcadb", img: "/textures/phoenix/s/08.webp" },
+  { name: "Maroon", color: "#4c0f1e", img: "/textures/phoenix/s/09.webp" },
+  { name: "Navy Blue", color: "#2c2c76", img: "/textures/phoenix/s/10.webp" },
+  { name: "Purple", color: "#513a68", img: "/textures/phoenix/s/11.webp" },
+  { name: "Red", color: "#c72028", img: "/textures/phoenix/s/12.webp" },
+  { name: "Sundance Pink", color: "#c99cb0", img: "/textures/phoenix/s/13.webp" },
+  { name: "Turquoise", color: "#295363", img: "/textures/phoenix/s/14.webp" },
+  { name: "White", color: "#ffffff", img: "/textures/phoenix/s/15.webp" }
+];
+
+/**
+ * Material/texture mapping for headstones and plaques
+ */
+const MATERIAL_TEXTURES: Record<string, string> = {
+  // Blue Pearl variants
+  'blue-pearl': '/textures/forever/l/Blue-Pearl.webp',
+  'blue pearl': '/textures/forever/l/Blue-Pearl.webp',
+  
+  // Glory Black (for laser etched - IDs 18 and 19)
+  'glory-black': '/textures/forever/l/Glory-Black-2.webp',
+  'glory black': '/textures/forever/l/Glory-Black-2.webp',
+  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
+  
+  // Other common materials
+  'african-black': '/textures/forever/l/African-Black.webp',
+  'noble-black': '/textures/forever/l/Noble-Black.webp',
+  'g654': '/textures/forever/l/01.webp', // Fallback to numbered texture
+};
+
+/**
+ * Map texture path from saved design to actual texture
+ */
+function mapTexture(texturePath: string, productId: string): string {
+  if (!texturePath) return '';
+  
+  // Check if it's a bronze plaque (productId 5)
+  if (productId === '5') {
+    // Handle paths like "src/bronzes/phoenix/l/04.webp" -> "/textures/phoenix/l/04.webp"
+    if (texturePath.includes('phoenix')) {
+      const match = texturePath.match(/phoenix[\/\\](l|s)[\/\\](\d+)\.(jpg|webp)$/);
+      if (match) {
+        const size = match[1]; // 'l' or 's'
+        const number = match[2];
+        return `/textures/phoenix/${size}/${number}.webp`;
+      }
+    }
+    
+    // Extract bronze color from path if possible (fallback)
+    const bronzeMatch = texturePath.match(/[\/\\](\d+)\.(jpg|webp)$/);
+    if (bronzeMatch) {
+      const number = bronzeMatch[1];
+      return `/textures/phoenix/l/${number}.webp`;
+    }
+    
+    // Default bronze
+    return BRONZE_TEXTURES[0].img;
+  }
+  
+  // For headstones, check material IDs 18 or 19 (Glory Black)
+  if (texturePath.includes('18') || texturePath.includes('19') || 
+      texturePath.includes('Glory-Black')) {
+    return MATERIAL_TEXTURES['glory-black'];
+  }
+  
+  // Check for Blue Pearl
+  if (texturePath.toLowerCase().includes('blue-pearl') || 
+      texturePath.toLowerCase().includes('bluepearl')) {
+    return MATERIAL_TEXTURES['blue-pearl'];
+  }
+  
+  // Try to extract material name from texture path
+  const pathLower = texturePath.toLowerCase();
+  for (const [key, value] of Object.entries(MATERIAL_TEXTURES)) {
+    if (pathLower.includes(key)) {
+      return value;
+    }
+  }
+  
+  // If path already looks valid, convert .jpg to .webp if needed
+  if (texturePath.startsWith('/textures/')) {
+    return texturePath.replace(/\.jpg$/i, '.webp');
+  }
+  
+  // Handle legacy paths like "src/granites/forever2/l/Blue-Pearl.jpg"
+  if (texturePath.includes('granites/forever') || texturePath.includes('forever2')) {
+    const match = texturePath.match(/[\/\\]([\w-]+)\.(jpg|webp)$/i);
+    if (match) {
+      const materialName = match[1];
+      return `/textures/forever/l/${materialName}.webp`;
+    }
+  }
+  
+  // Default fallback - convert .jpg to .webp
+  return texturePath.replace(/\.jpg$/i, '.webp');
+}
+
+/**
+ * Load a saved design into the DYO editor
+ */
+export async function loadSavedDesignIntoEditor(
+  designData: SavedDesignData,
+  designId: string,
+  options: LoadDesignOptions = {}
+) {
+  const store = useHeadstoneStore.getState();
+  const { clearExisting = true } = options;
+
+  // Get the base product first (to determine product type)
+  const baseProduct = designData.find(
+    item => item.type === 'Headstone' || item.type === 'Plaque'
+  );
+
+  // Set the correct product based on productid
+  if (baseProduct && baseProduct.productid) {
+    const productId = String(baseProduct.productid);
+    
+    try {
+      await store.setProductId(productId);
+      
+      // IMPORTANT: Set dimensions AFTER product is loaded
+      // The setProductId sets default init dimensions, so we need to override them
+      if (baseProduct.width && baseProduct.height) {
+        store.setWidthMm(baseProduct.width);
+        store.setHeightMm(baseProduct.height);
+      }
+    } catch (error) {
+      // Continue anyway - we'll try to load the design
+    }
+  }
+
+  // Clear existing content if requested
+  if (clearExisting) {
+    // Clear inscriptions
+    const currentInscriptions = [...store.inscriptions];
+    currentInscriptions.forEach(insc => {
+      store.deleteInscription(insc.id);
+    });
+    
+    // Clear motifs - use selectedMotifs array
+    if (store.selectedMotifs && store.selectedMotifs.length > 0) {
+      const currentMotifs = [...store.selectedMotifs];
+      currentMotifs.forEach(motif => {
+        store.removeMotif(motif.id);
+      });
+    }
+    
+    // Clear additions - use selectedAdditions array
+    if (store.selectedAdditions && store.selectedAdditions.length > 0) {
+      const currentAdditions = [...store.selectedAdditions];
+      currentAdditions.forEach(addId => {
+        store.removeAddition(addId);
+      });
+    }
+  }
+
+  // Set product properties if available
+  if (baseProduct) {
+    // Set border if available
+    if (baseProduct.border) {
+      store.setBorderName(baseProduct.border);
+    }
+    
+    // Set material/texture if available - with a small delay to ensure setProductId fully completes
+    if (baseProduct.texture) {
+      const mappedTexture = mapTexture(baseProduct.texture, String(baseProduct.productid));
+      
+      // Wait a tick to ensure setProductId has fully completed
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      store.setHeadstoneMaterialUrl(mappedTexture);
+    }
+    // Note: Dimensions are set immediately after setProductId completes (see above)
+  }
+
+  // Add inscriptions
+  const inscriptions = designData.filter(
+    item => item.type === 'Inscription' && item.label && item.label.trim()
+  );
+
+  // Sort inscriptions by OLD Y position
+  // In old system: MORE NEGATIVE Y = HIGHER UP on screen (top)
+  // After negation at line 327: these become MORE POSITIVE yPos values
+  // We want top inscriptions first in array, so sort OLD Y ascending (most negative first)
+  const sortedInscriptions = [...inscriptions].sort((a, b) => {
+    const aY = typeof a.y === 'number' ? a.y : 0;
+    const bY = typeof b.y === 'number' ? b.y : 0;
+    // Sort by OLD Y values: most negative first (top inscriptions)
+    // This way "BIGGEST SIZE IN DYO" (old y=-205) comes before "– Our Designers..." (old y=229)
+    return aY - bY;
+  });
+
+  const canvasInfo = computeLegacyCanvasInfo(designData, baseProduct);
+
+  for (const insc of sortedInscriptions) {
+    const text = insc.label || '';
+    const font = insc.font_family || 'Arial';
+    const surfaceIsBase = (insc.part?.toLowerCase() || '') === 'base';
+
+    const rawFont = typeof insc.font === 'string' ? insc.font : '';
+    const fontMatch = rawFont.match(/([\d.]+)px/);
+    const fontPixels = fontMatch ? parseFloat(fontMatch[1]) : 0;
+
+    const rawX = typeof insc.x === 'number' ? insc.x : 0;
+    const rawY = typeof insc.y === 'number' ? insc.y : 0;
+    const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
+    const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
+
+    const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
+    const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
+
+    const xPos = canvasX * mmPerPxX;
+    const yPos = -(canvasY * mmPerPxY);
+
+    const canvasFontPx = fontPixels > 0 ? (canvasInfo.usesPhysicalCoords ? fontPixels / canvasInfo.designDpr : fontPixels) : 0;
+    let sizeMm = insc.font_size || 10;
+    if (canvasFontPx > 0) {
+      sizeMm = canvasFontPx * mmPerPxY;
+    }
+
+    store.addInscriptionLine({
+      text,
+      font,
+      sizeMm,
+      xPos,
+      yPos,
+      rotationDeg: typeof insc.rotation === 'number' ? insc.rotation : 0,
+      color: insc.color || '#000000',
+    });
+  }
+
+  // Load motifs
+  const motifs = designData.filter(
+    item => item.type === 'Motif' && item.src
+  );
+
+  for (const motif of motifs) {
+    const svgPath = `/shapes/motifs/${motif.src}.svg`;
+    const color = motif.color || '#c99d44';
+    const surfaceIsBase = (motif.part?.toLowerCase() || '') === 'base';
+    
+    store.addMotif(svgPath);
+    
+    const updatedState = useHeadstoneStore.getState();
+    const addedMotifs = updatedState.selectedMotifs;
+    if (addedMotifs.length > 0) {
+      const newMotif = addedMotifs[addedMotifs.length - 1];
+      
+      store.setMotifColor(newMotif.id, color);
+      
+      const rawX = typeof motif.x === 'number' ? motif.x : 0;
+      const rawY = typeof motif.y === 'number' ? motif.y : 0;
+      const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
+      const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
+
+      const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
+      const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
+
+      const xPos = canvasX * mmPerPxX;
+      const yPos = -(canvasY * mmPerPxY);
+
+      let heightMm = 100;
+      if (typeof motif.height === 'number' && motif.height > 0) {
+        if (motif.height > 10 && motif.height < 2000 && !motif.ratio) {
+          heightMm = motif.height;
+        } else {
+          const canvasHeight = canvasInfo.usesPhysicalCoords ? motif.height / canvasInfo.designDpr : motif.height;
+          heightMm = canvasHeight * mmPerPxY;
+        }
+      } else if (typeof motif.ratio === 'number' && motif.ratio > 0) {
+        const basePx = 100;
+        const canvasHeight = basePx * motif.ratio * (canvasInfo.usesPhysicalCoords ? canvasInfo.designDpr : 1);
+        heightMm = canvasHeight * mmPerPxY;
+      }
+      heightMm = Math.max(20, Math.min(800, heightMm));
+
+      console.log(`[LOADER] Motif ${newMotif.id}: saved=(${motif.x}, ${motif.y}) → offset=(${xPos.toFixed(1)}, ${yPos.toFixed(1)}), height=${heightMm.toFixed(1)}mm`);
+
+      store.setMotifOffset(newMotif.id, {
+        xPos,
+        yPos,
+        scale: 1.0,
+        rotationZ: typeof motif.rotation === 'number' ? motif.rotation : 0,
+        heightMm,
+      });
+    }
+  }
+
+  // Deselect any selected motif after loading all motifs
+  if (motifs.length > 0) {
+    store.setSelectedMotifId(null);
+    store.setActivePanel(null);
+  }
+
+  const result = {
+    inscriptionsLoaded: inscriptions.length,
+    motifsLoaded: motifs.length,
+  };
+  
+  return result;
+}
+
+/**
+ * Load a canonical v2026+ design file directly into the editor
+ */
+export async function loadCanonicalDesignIntoEditor(
+  designData: CanonicalDesignData,
+  options: LoadDesignOptions = {},
+) {
+  if (!designData) {
+    throw new Error('Canonical design data is required.');
+  }
+
+  const store = useHeadstoneStore.getState();
+  const { clearExisting = true } = options;
+
+  const headstone = designData.components?.headstone;
+  const base = designData.components?.base;
+  const legacyRawDesign = Array.isArray(designData.legacy?.raw)
+    ? (designData.legacy?.raw as SavedDesignData)
+    : null;
+  const canonicalInscriptionSnapshot = designData.elements?.inscriptions ?? [];
+  const canonicalMotifSnapshot = designData.elements?.motifs ?? [];
+  const headstoneHalf = headstone?.height_mm ? headstone.height_mm / 2 : null;
+
+  const canonicalOutOfBounds = () => {
+    if (!legacyRawDesign || headstoneHalf == null) return null;
+    const tolerance = 5;
+    const baseHalf = base?.height_mm ? base.height_mm / 2 : 0;
+    const stageHalf = headstoneHalf + baseHalf;
+    const headstoneLimit = stageHalf + tolerance;
+    const baseLimit = stageHalf + tolerance;
+
+    const headstoneInscriptionMax = canonicalInscriptionSnapshot.reduce((max, line) => {
+      const y = Math.abs(line.position?.y_mm ?? 0);
+      return Math.max(max, y);
+    }, 0);
+    if (headstoneInscriptionMax > headstoneLimit) {
+      return 'inscriptions exceed headstone bounds';
+    }
+
+    let headstoneMotifMax = 0;
+    let baseMotifMax = 0;
+    canonicalMotifSnapshot.forEach((motif) => {
+      const y = Math.abs(motif.position?.y_mm ?? 0);
+      const target = canonicalSurfaceTarget(motif.surface);
+      if (target === 'base') {
+        baseMotifMax = Math.max(baseMotifMax, y);
+      } else {
+        headstoneMotifMax = Math.max(headstoneMotifMax, y);
+      }
+    });
+
+    if (headstoneMotifMax > headstoneLimit) {
+      return 'motifs exceed headstone bounds';
+    }
+
+    if (baseHalf > 0 && baseMotifMax > baseLimit) {
+      return 'motifs exceed base bounds';
+    }
+
+    // Additional stage-coordinate detection: if combined spread wildly exceeds tablet height, assume legacy data
+    const maxMotifSpread = canonicalMotifSnapshot.reduce((max, motif) => {
+      const y = Math.abs(motif.position?.y_mm ?? 0);
+      return Math.max(max, y);
+    }, 0);
+    const combinedLimit = stageHalf + tolerance;
+    if (maxMotifSpread > combinedLimit * 1.1) {
+      return 'motif coordinates appear to be in stage space';
+    }
+
+    return null;
+  };
+
+  const fallbackReason = canonicalOutOfBounds();
+  if (fallbackReason && legacyRawDesign) {
+    console.warn(
+      `[loadCanonicalDesignIntoEditor] ${fallbackReason}; falling back to embedded legacy layout`,
+    );
+    await loadSavedDesignIntoEditor(legacyRawDesign, designData.source?.id ?? 'canonical', {
+      clearExisting,
+    });
+    return {
+      inscriptionsLoaded: canonicalInscriptionSnapshot.length,
+      motifsLoaded: canonicalMotifSnapshot.length,
+    };
+  }
+
+  if (clearExisting) {
+    store.setInscriptions([]);
+    if (store.selectedMotifs.length) {
+      [...store.selectedMotifs].forEach((motif) => store.removeMotif(motif.id));
+    }
+    if (store.selectedAdditions.length) {
+      [...store.selectedAdditions].forEach((additionId) => store.removeAddition(additionId));
+    }
+    store.setSelectedInscriptionId(null);
+    store.setSelectedMotifId(null);
+    store.setSelectedAdditionId(null);
+    store.setActiveInscriptionText('');
+  }
+
+  const productId = designData.product?.id;
+  if (productId != null) {
+    try {
+      await store.setProductId(String(productId));
+    } catch (error) {
+      console.warn('Failed to set product while loading canonical design', error);
+    }
+  }
+
+  // Set shape if available
+  const shapeName = designData.product?.shape;
+  if (shapeName) {
+    // Convert shape name to URL (e.g., "Curved Gable" -> "/shapes/headstones/curved_gable.svg")
+    // Use underscore, not dash, to match actual file names
+    const shapeSlug = shapeName.toLowerCase().replace(/\s+/g, '_');
+    const shapeUrl = `/shapes/headstones/${shapeSlug}.svg`;
+    store.setShapeUrl(shapeUrl);
+  }
+
+  if (headstone?.width_mm) store.setWidthMm(headstone.width_mm);
+  if (headstone?.height_mm) store.setHeightMm(headstone.height_mm);
+  if (headstone?.thickness_mm) {
+    store.setUprightThickness(headstone.thickness_mm);
+    store.setSlantThickness(headstone.thickness_mm);
+  }
+  if (headstone?.texture) {
+    store.setHeadstoneMaterialUrl(headstone.texture);
+  }
+
+  if (base) {
+    store.setShowBase(true);
+    if (base.width_mm) store.setBaseWidthMm(base.width_mm);
+    if (base.height_mm) store.setBaseHeightMm(base.height_mm);
+    if (base.depth_mm) store.setBaseThickness(base.depth_mm);
+    if (base.texture) {
+      store.setBaseMaterialUrl(base.texture);
+    }
+  } else {
+    store.setShowBase(false);
+  }
+
+  const headstoneWidthMm = headstone?.width_mm ?? designData.scene?.canvas?.width_mm ?? 0;
+  const headstoneHeightMm = headstone?.height_mm ?? designData.scene?.canvas?.height_mm ?? 0;
+
+  const motifAssetMap = buildCanonicalMotifPathMap(designData);
+  const canonicalLines: Line[] = (designData.elements?.inscriptions ?? []).map((inscription, index) => {
+    const id = inscription.id ?? `insc-${index}`;
+    const text = decodeHtmlEntities(inscription.text ?? inscription.originalText ?? '');
+    const xPos = inscription.position?.x_mm ?? 0;
+    const yPos = inscription.position?.y_mm ?? 0;
+    return {
+      id,
+      text,
+      font: inscription.font?.family ?? DEFAULT_CANONICAL_FONT,
+      sizeMm: clampCanonicalSize(inscription.font?.size_mm),
+      color: inscription.color ?? DEFAULT_CANONICAL_COLOR,
+      xPos,
+      yPos,
+      rotationDeg: clampCanonicalRotation(inscription.rotation?.z_deg),
+      target: canonicalSurfaceTarget(inscription.surface),
+      ref: createRef<Group | null>(),
+    };
+  });
+
+  store.setInscriptions(canonicalLines);
+  store.setActiveInscriptionText(canonicalLines[0]?.text ?? '');
+  store.setSelectedInscriptionId(null);
+
+  const canonicalMotifs = designData.elements?.motifs ?? [];
+  const legacyMotifs = Array.isArray(designData.legacy?.raw)
+    ? designData.legacy?.raw.filter((item: any) => item.type === 'Motif' && item.src)
+    : [];
+
+  const canonicalMotifByItemId = new Map<number, (typeof canonicalMotifs)[number]>();
+  canonicalMotifs.forEach((motif, index) => {
+    const idMatch = motif.id?.match(/(\d+)$/);
+    const key = idMatch ? Number(idMatch[1]) : index;
+    canonicalMotifByItemId.set(key, motif);
+  });
+
+  if (canonicalMotifs.length > 0) {
+    console.log('[loadCanonicalDesignIntoEditor] Loading motifs from canonical data:', canonicalMotifs.length);
+    canonicalMotifs.forEach((motif, index) => {
+      const svgPath = resolveCanonicalMotifPath(motif.asset, motif.id ?? `motif-${index}`, motifAssetMap);
+      store.addMotif(svgPath);
+
+      const updatedState = useHeadstoneStore.getState();
+      const addedMotifs = updatedState.selectedMotifs;
+      if (!addedMotifs.length) return;
+      const newMotif = addedMotifs[addedMotifs.length - 1];
+
+      const color = motif.color ?? DEFAULT_CANONICAL_COLOR;
+      store.setMotifColor(newMotif.id, color);
+
+      const xPos = motif.position?.x_mm ?? 0;
+      const yPos = motif.position?.y_mm ?? 0;
+      const heightMm = clampCanonicalMotifHeight(motif.height_mm);
+      const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
+      const target = canonicalSurfaceTarget(motif.surface);
+
+      store.setMotifOffset(newMotif.id, {
+        xPos,
+        yPos,
+        scale: 1.0,
+        rotationZ,
+        heightMm,
+        target,
+        coordinateSpace: 'absolute',
+      });
+    });
+
+    store.setSelectedMotifId(null);
+    store.setActivePanel(null);
+  } else if (legacyMotifs.length > 0) {
+    console.log('[loadCanonicalDesignIntoEditor] Using legacy motif coordinates');
+    const headstoneData = designData.legacy?.raw?.find((item: any) => item.type === 'Headstone');
+
+    const init_width = headstoneData?.init_width || 1116;
+    const init_height = headstoneData?.init_height || 654;
+    const raw_dpr = headstoneData?.dpr || 1;
+    const device = headstoneData?.device || 'desktop';
+    const productWidthMm = headstoneData?.width || 400;
+    const productHeightMm = headstoneData?.height || 300;
+
+    // FIX: Do not clamp desktop DPR to 1 here either
+    const design_dpr = raw_dpr;
+
+    const viewportWidth = init_width;
+    const viewportHeight = init_height;
+    const designCanvasWidth = viewportWidth * design_dpr;
+    const designCanvasHeight = viewportHeight * design_dpr;
+    const designPixelsPerMmX = designCanvasWidth / productWidthMm;
+    const designPixelsPerMmY = designCanvasHeight / productHeightMm;
+
+    for (const motif of legacyMotifs) {
+      const meta = canonicalMotifByItemId.get(Number(motif.itemID));
+      const svgPath = meta
+        ? resolveCanonicalMotifPath(meta.asset, meta.id ?? `motif-${motif.itemID}`, motifAssetMap)
+        : `/shapes/motifs/${motif.src}.svg`;
+
+      store.addMotif(svgPath);
+
+      const updatedState = useHeadstoneStore.getState();
+      const addedMotifs = updatedState.selectedMotifs;
+      if (!addedMotifs.length) continue;
+      const newMotif = addedMotifs[addedMotifs.length - 1];
+
+      const color = meta?.color ?? motif.color ?? DEFAULT_CANONICAL_COLOR;
+      store.setMotifColor(newMotif.id, color);
+
+      const xPixels = typeof motif.x === 'number' ? motif.x : 0;
+      const yPixels = typeof motif.y === 'number' ? motif.y : 0;
+      const xMmFromCenter = xPixels / designPixelsPerMmX;
+      const yMmFromCenter = yPixels / designPixelsPerMmY;
+
+      const xPos = xMmFromCenter;
+      const yPos = -yMmFromCenter;
+      const heightMm = meta
+        ? clampCanonicalMotifHeight(meta.height_mm)
+        : typeof motif.height === 'number'
+          ? motif.height
+          : 100;
+      const rotationZ = meta
+        ? canonicalToRadians(meta.rotation?.z_deg)
+        : typeof motif.rotation === 'number'
+          ? (motif.rotation * Math.PI) / 180
+          : 0;
+      const target = canonicalSurfaceTarget(meta?.surface);
+
+      store.setMotifOffset(newMotif.id, {
+        xPos,
+        yPos,
+        scale: 1.0,
+        rotationZ,
+        heightMm,
+        target,
+        coordinateSpace: 'offset',
+      });
+    }
+
+    store.setSelectedMotifId(null);
+    store.setActivePanel(null);
+  } else {
+    console.warn('[loadCanonicalDesignIntoEditor] No motif data available');
+  }
+}
+
+/**
+ * Anonymize sensitive data in a design
+ * Replaces names with placeholders
+ */
+export function anonymizeDesignData(
+  designData: SavedDesignData
+): SavedDesignData {
+  const namePatterns = [
+    /\b[A-Z][a-z]+ [A-Z][a-z]+\b/g, // First Last
+    /\b[A-Z]\. [A-Z][a-z]+\b/g, // F. Last
+    /\b[A-Z][a-z]+ [A-Z]\. [A-Z][a-z]+\b/g, // First M. Last
+  ];
+
+  const replacements = [
+    'John Smith',
+    'Jane Doe',
+    'Robert Johnson',
+    'Mary Williams',
+    'James Brown',
+  ];
+
+  let replacementIndex = 0;
+
+  return designData.map(item => {
+    if (item.type !== 'Inscription' || !item.label) {
+      return item;
+    }
+
+    let anonymized = item.label;
+
+    // Replace names with placeholders
+    namePatterns.forEach(pattern => {
+      anonymized = anonymized.replace(pattern, () => {
+        const replacement = replacements[replacementIndex % replacements.length];
+        replacementIndex++;
+        return replacement;
+      });
+    });
+
+    // Replace dates in format DD/MM/YYYY or MM/DD/YYYY
+    anonymized = anonymized.replace(
+      /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g,
+      '01/01/2000'
+    );
+
+    // Replace years
+    anonymized = anonymized.replace(/\b(19|20)\d{2}\b/g, '2000');
+
+    return {
+      ...item,
+      label: anonymized,
+    };
+  });
+}
+
+/**
+ * Check for duplicate designs
+ * Returns true if a very similar design already exists
+ */
+export function checkForDuplicates(
+  designData: SavedDesignData,
+  existingDesigns: SavedDesignData[]
+): boolean {
+  // Get all inscription text from new design
+  const newTexts = designData
+    .filter(item => item.type === 'Inscription' && item.label)
+    .map(item => item.label?.toLowerCase().trim())
+    .filter(Boolean);
+
+  // Check against existing designs
+  for (const existing of existingDesigns) {
+    const existingTexts = existing
+      .filter(item => item.type === 'Inscription' && item.label)
+      .map(item => item.label?.toLowerCase().trim())
+      .filter(Boolean);
+
+    // Calculate similarity (simple approach: check overlap)
+    const overlap = newTexts.filter(text => existingTexts.includes(text)).length;
+    const similarity = overlap / Math.max(newTexts.length, existingTexts.length);
+
+    // If more than 80% similar, consider it a duplicate
+    if (similarity > 0.8) {
+      return true;
+    }
+  }
+
+  return false;
+}
+2. convert-legacy-design.js
+
+I have updated the normalizeDpr function here as well to remove the desktop forcing logic.
+
+code
+Javascript:convert-legacy-design.js
+download
+content_copy
+expand_less
+#!/usr/bin/env node
+/*
+ * Convert legacy saved-design JSON files (ML exports) into the canonical v2026 format.
+ *
+ * Usage:
+ *   node scripts/convert-legacy-design.js <designId> [--mlDir=headstonesdesigner] [--version=v2026] [--spec=2026.01]
+ *
+ * If the original ML JSON is not available, the script will fall back to the
+ * `legacy.raw` payload stored inside the existing canonical JSON file.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const DEFAULT_FOLDER_VERSION = 'v2026';
+const DEFAULT_SPEC_VERSION = '2026.01';
+const DEFAULT_ML_DIR = 'headstonesdesigner';
+
+function parseArgs(argv) {
+  const args = { designId: null, mlDir: DEFAULT_ML_DIR, folderVersion: DEFAULT_FOLDER_VERSION, specVersion: DEFAULT_SPEC_VERSION };
+  for (const token of argv) {
+    if (!args.designId) {
+      args.designId = token;
+      continue;
+    }
+    if (token.startsWith('--mlDir=')) {
+      args.mlDir = token.split('=')[1] || args.mlDir;
+    } else if (token.startsWith('--version=')) {
+      args.folderVersion = token.split('=')[1] || args.folderVersion;
+    } else if (token.startsWith('--spec=')) {
+      args.specVersion = token.split('=')[1] || args.specVersion;
+    }
+  }
+  return args;
+}
+
+function loadLegacyData({ designId, mlDir }, canonicalPath) {
+  const legacyPath = path.join(process.cwd(), 'public', 'ml', mlDir, 'saved-designs', 'json', `${designId}.json`);
+  if (fs.existsSync(legacyPath)) {
+    return JSON.parse(fs.readFileSync(legacyPath, 'utf8'));
+  }
+
+  if (fs.existsSync(canonicalPath)) {
+    const existing = JSON.parse(fs.readFileSync(canonicalPath, 'utf8'));
+    if (existing?.legacy?.raw) {
+      return existing.legacy.raw;
+    }
+  }
+
+  throw new Error(`Unable to locate legacy data for design ${designId}. Tried ${legacyPath} and canonical fallback.`);
+}
+
+function normalizeDpr(rawDpr = 1, device = 'desktop') {
+  // FIX: Trust raw DPR on desktop. High DPR (e.g. 2.32) with large coords means
+  // the design was saved with zoom, and we must respect that scale.
+  if (device === 'desktop') {
+    return rawDpr;
+  }
+  const standards = [1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4];
+  return standards.reduce(
+    (closest, candidate) => (Math.abs(candidate - rawDpr) < Math.abs(closest - rawDpr) ? candidate : closest),
+    standards[0],
+  );
+}
+
+function detectPhysicalCoordinates(legacyData, initW, initH) {
+  if (!initW || !initH) return false;
+  const marginX = initW / 2 + 50;
+  const marginY = initH / 2 + 50;
+  return legacyData.some((item) => {
+    if (!item || (item.type !== 'Inscription' && item.type !== 'Motif')) return false;
+    const rawX = item.x ?? item.cx ?? 0;
+    const rawY = item.y ?? item.cy ?? 0;
+    return Math.abs(rawX) > marginX || Math.abs(rawY) > marginY;
+  });
+}
+
+function computeMetrics(legacyData) {
+  const headstone = legacyData.find((item) => item.type === 'Headstone') || {};
+  const base = legacyData.find((item) => item.type === 'Base') || {};
+
+  const headstoneWidth = headstone.width || 600;
+  const baseWidth = base.width || 0;
+  const headstoneHeight = headstone.height || 400;
+  const baseHeight = base.height || 0;
+  const stageHeight = headstoneHeight + baseHeight;
+
+  const productWidth = Math.max(headstoneWidth, baseWidth, 1);
+  const productHeight = headstoneHeight;
+
+  const navMatch = typeof headstone.navigator === 'string' ? headstone.navigator.match(/(\d+)x(\d+)/i) : null;
+  const viewportWidth = navMatch ? parseInt(navMatch[1], 10) : Math.round(headstone.init_width || 1000);
+  const viewportHeight = navMatch ? parseInt(navMatch[2], 10) : Math.round(headstone.init_height || 600);
+
+  const rawDpr = headstone.dpr || 1;
+  const designDpr = normalizeDpr(rawDpr, headstone.device || 'desktop');
+
+  const designCanvasWidth = headstone.init_width || viewportWidth;
+  const designCanvasHeight = headstone.init_height || viewportHeight;
+
+  const pixelsPerMmX = designCanvasWidth / Math.max(productWidth, 1);
+  const pixelsPerMmY = designCanvasHeight / Math.max(productHeight, 1);
+  const stagePixelsPerMmY = designCanvasHeight / Math.max(stageHeight || productHeight, 1);
+
+  return {
+    productWidth,
+    productHeight,
+    headstoneHeight,
+    baseHeight,
+    stageHeight,
+    stagePixelsPerMmY,
+    viewportWidth: designCanvasWidth,
+    viewportHeight: designCanvasHeight,
+    designDpr,
+    pixelsPerMmX,
+    pixelsPerMmY,
+    canvasWidthPx: designCanvasWidth,
+    canvasHeightPx: designCanvasHeight,
+    usesPhysicalCoords: detectPhysicalCoordinates(legacyData, designCanvasWidth, designCanvasHeight),
+  };
+}
+
+function round(value) {
+  return Math.round(value * 1000) / 1000;
+}
+
+function parseFontPixelValue(item) {
+  if (typeof item.font === 'string') {
+    const match = item.font.match(/([\d.]+)px/i);
+    if (match) return parseFloat(match[1]);
+  }
+  if (typeof item.font_size === 'number') return item.font_size;
+  return 30;
+}
+
+function buildSanitizedLookup(existingCanonical) {
+  const map = new Map();
+  if (!existingCanonical?.elements?.inscriptions) return map;
+  for (const inscription of existingCanonical.elements.inscriptions) {
+    if (inscription?.originalText && inscription?.text && inscription.originalText !== inscription.text) {
+      map.set(inscription.originalText, inscription.text);
+    }
+  }
+  return map;
+}
+
+function sanitizeText(originalText, lookup) {
+  if (!originalText) return '';
+  return lookup.get(originalText) || originalText;
+}
+
+function legacyYToCanonical(yPx = 0, targetSurface, metrics, options = {}) {
+  const { negate = false } = options;
+  const pixelsPerMm = metrics.pixelsPerMmY || 1;
+  const mm = yPx / pixelsPerMm;
+  return negate ? -mm : mm;
+}
+
+function computeCanvasInfo(legacyData, metrics) {
+  const headstone = legacyData.find((item) => item.type === 'Headstone') || {};
+  const base = legacyData.find((item) => item.type === 'Base') || {};
+  const initW = headstone.init_width || metrics.canvasWidthPx || 800;
+  const initH = headstone.init_height || metrics.canvasHeightPx || 600;
+  const designDpr = normalizeDpr(headstone.dpr || 1, headstone.device || 'desktop');
+  const usesPhysicalCoords = detectPhysicalCoordinates(legacyData, initW, initH);
+
+  const headstoneWidthMm = headstone.width || metrics.productWidth || 600;
+  const headstoneHeightMm = headstone.height || metrics.productHeight || 400;
+  const baseWidthMm = base.width || headstoneWidthMm;
+  const baseHeightMm = base.height || metrics.baseHeight || 100;
+
+  const fallbackPxPerMmX = metrics.pixelsPerMmX || (initW / Math.max(headstoneWidthMm, 1));
+  const fallbackPxPerMmY = metrics.pixelsPerMmY || (initH / Math.max(headstoneHeightMm, 1));
+
+  const mmPerPxXHeadstone = headstoneWidthMm && initW ? headstoneWidthMm / initW : 1 / fallbackPxPerMmX;
+  const mmPerPxYHeadstone = headstoneHeightMm && initH ? headstoneHeightMm / initH : 1 / fallbackPxPerMmY;
+  const mmPerPxXBase = baseWidthMm && initW ? baseWidthMm / initW : mmPerPxXHeadstone;
+  const mmPerPxYBase = baseHeightMm && initH ? baseHeightMm / initH : mmPerPxYHeadstone;
+
+  return {
+    initW,
+    initH,
+    designDpr,
+    usesPhysicalCoords,
+    mmPerPxXHeadstone,
+    mmPerPxYHeadstone,
+    mmPerPxXBase,
+    mmPerPxYBase,
+  };
+}
+
+function convertInscriptions(legacyData, metrics, canvasInfo, sanitizedLookup) {
+  const inscriptions = legacyData.filter((item) => item.type === 'Inscription' && item.label);
+  let counter = 1;
+  return inscriptions.map((item) => {
+    const fontPx = parseFontPixelValue(item);
+    const targetSurface = item.part?.toLowerCase() === 'base' ? 'base/front' : 'headstone/front';
+    const surfaceIsBase = targetSurface.startsWith('base');
+
+    const rawX = item.x || 0;
+    const rawY = item.y || 0;
+    const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
+    const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
+
+    const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
+    const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
+
+    const xMm = round(canvasX * mmPerPxX);
+    const yMm = round(-canvasY * mmPerPxY);
+
+    const canvasFontPx = canvasInfo.usesPhysicalCoords ? fontPx / canvasInfo.designDpr : fontPx;
+    const sizeMm = round(canvasFontPx * mmPerPxY);
+
+    const originalText = item.label || '';
+    const sanitized = sanitizeText(originalText, sanitizedLookup);
+
+    return {
+      id: `insc-${counter++}`,
+      text: sanitized,
+      originalText,
+      font: {
+        family: item.font_family || item.font?.replace(/[\d.]+px\s*/i, '')?.trim() || 'Garamond',
+        size_mm: sizeMm,
+        weight: 400,
+      },
+      position: {
+        x_mm: xMm,
+        y_mm: yMm,
+        z_mm: 0,
+      },
+      rotation: {
+        z_deg: item.rotation || 0,
+      },
+      color: item.color || '#000000',
+      align: item.align || 'center',
+      surface: targetSurface,
+    };
+  });
+}
+
+function convertMotifs(legacyData, metrics, canvasInfo) {
+  const motifs = legacyData.filter((item) => item.type === 'Motif' && (item.src || item.item));
+  let counter = 1;
+  return motifs.map((motif) => {
+    const id = motif.itemID ? `motif-${motif.itemID}` : `motif-${counter++}`;
+    const asset = (motif.src || motif.item || `motif-${counter}`).trim();
+    const surface = motif.part?.toLowerCase() === 'base' ? 'base/front' : 'headstone/front';
+    const surfaceIsBase = surface.startsWith('base');
+
+    const rawX = motif.x || 0;
+    const rawY = motif.y || 0;
+    const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
+    const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
+
+    const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
+    const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
+
+    const xMm = round(canvasX * mmPerPxX);
+    const yMm = round(-canvasY * mmPerPxY);
+
+    let heightMm = 100;
+    if (typeof motif.height === 'number' && motif.height > 0) {
+      if (motif.height > 10 && motif.height < 2000 && !motif.ratio) {
+        heightMm = round(motif.height);
+      } else {
+        const canvasHeight = canvasInfo.usesPhysicalCoords ? motif.height / canvasInfo.designDpr : motif.height;
+        heightMm = round(canvasHeight * mmPerPxY);
+      }
+    } else if (typeof motif.ratio === 'number' && motif.ratio > 0) {
+      const basePx = 100;
+      const canvasHeight = basePx * motif.ratio * (canvasInfo.usesPhysicalCoords ? canvasInfo.designDpr : 1);
+      heightMm = round(canvasHeight * mmPerPxY);
+    }
+
+    const heightClamped = Math.max(20, Math.min(800, heightMm));
+
+    const flipX = motif.flipx === 1 || motif.flipx === true;
+    const flipY = motif.flipy === 1 || motif.flipy === true;
+    
+    return {
+      id,
+      asset,
+      position: {
+        x_mm: xMm,
+        y_mm: yMm,
+        z_mm: 0,
+      },
+      height_mm: heightClamped,
+      rotation: {
+        z_deg: motif.rotation || 0,
+      },
+      color: motif.color || '#000000',
+      flip: {
+        x: flipX,
+        y: flipY,
+      },
+      surface,
+    };
+  });
+}
+
+function mapTexture(texturePath) {
+  if (!texturePath || typeof texturePath !== 'string') return null;
+  const file = texturePath.split(/[\\/]/).pop();
+  if (!file) return null;
+  return `/textures/forever/l/${file.replace(/\.(jpg|jpeg)$/i, '.webp')}`;
+}
+
+function buildComponents(legacyData, existingCanonical) {
+  const components = { ...(existingCanonical?.components || {}) };
+  const headstone = legacyData.find((item) => item.type === 'Headstone');
+  if (headstone) {
+    components.headstone = {
+      width_mm: headstone.width || components.headstone?.width_mm || 600,
+      height_mm: headstone.height || components.headstone?.height_mm || 400,
+      thickness_mm: headstone._length || components.headstone?.thickness_mm || 80,
+      surface: 'front',
+      texture: mapTexture(headstone.texture) || components.headstone?.texture || null,
+    };
+  }
+
+  const base = legacyData.find((item) => item.type === 'Base');
+  if (base) {
+    components.base = {
+      width_mm: base.width || components.base?.width_mm || 600,
+      height_mm: base.height || components.base?.height_mm || 100,
+      depth_mm: base._length || components.base?.depth_mm || 200,
+      texture: mapTexture(base.texture) || components.base?.texture || null,
+    };
+  } else if (components.base) {
+    delete components.base;
+  }
+
+  return components;
+}
+
+function buildScene(metrics) {
+  return {
+    canvas: {
+      width_mm: metrics.productWidth,
+      height_mm: metrics.productHeight,
+    },
+    viewportPx: {
+      width: metrics.viewportWidth,
+      height: metrics.viewportHeight,
+      dpr: metrics.designDpr,
+    },
+    surface: {
+      origin: [0, 0, 0],
+      normal: [0, 0, 1],
+    },
+  };
+}
+
+function buildAssets(motifs) {
+  const seen = new Set();
+  const motifAssets = [];
+  for (const motif of motifs) {
+    if (!motif.asset || seen.has(motif.asset)) continue;
+    seen.add(motif.asset);
+    motifAssets.push({ id: motif.asset, path: `/shapes/motifs/${motif.asset}.svg` });
+  }
+  return { motifs: motifAssets };
+}
+
+function buildDefaultCanonical(designId, mlDir, legacyData, components, scene, specVersion) {
+  const headstone = legacyData.find((item) => item.type === 'Headstone') || {};
+  return {
+    version: specVersion,
+    generatedAt: new Date().toISOString(),
+    units: 'mm',
+    source: {
+      id: designId,
+      slug: designId,
+      mlDir,
+      legacyFile: `/ml/${mlDir}/saved-designs/json/${designId}.json`,
+      savedAt: new Date().toISOString(),
+    },
+    product: {
+      id: String(headstone.productid || 'unknown'),
+      name: headstone.name || 'Unknown Product',
+      type: 'headstone',
+      slug: 'headstone',
+      category: 'unknown',
+      title: headstone.name || 'Headstone',
+      shape: headstone.shape || 'Unknown',
+      material: {
+        name: headstone.texture || 'unknown',
+        texture: components.headstone?.texture || null,
+      },
+    },
+    scene,
+    components,
+    elements: {
+      inscriptions: [],
+      motifs: [],
+      photos: [],
+      logos: [],
+      additions: [],
+    },
+    assets: {
+      motifs: [],
+    },
+    legacy: {
+      raw: legacyData,
+    },
+  };
+}
+
+function main() {
+  const args = parseArgs(process.argv.slice(2));
+  if (!args.designId) {
+    console.error('Usage: node scripts/convert-legacy-design.js <designId> [--mlDir=dir] [--version=v2026] [--spec=2026.01]');
+    process.exit(1);
+  }
+
+  const canonicalDir = path.join(process.cwd(), 'public', 'canonical-designs', args.folderVersion);
+  fs.mkdirSync(canonicalDir, { recursive: true });
+  const canonicalPath = path.join(canonicalDir, `${args.designId}.json`);
+
+  const legacyData = loadLegacyData(args, canonicalPath);
+  const metrics = computeMetrics(legacyData);
+  const canvasInfo = computeCanvasInfo(legacyData, metrics);
+
+  const existingCanonical = fs.existsSync(canonicalPath)
+    ? JSON.parse(fs.readFileSync(canonicalPath, 'utf8'))
+    : null;
+
+  const sanitizedLookup = buildSanitizedLookup(existingCanonical);
+  const inscriptions = convertInscriptions(legacyData, metrics, canvasInfo, sanitizedLookup);
+  const motifs = convertMotifs(legacyData, metrics, canvasInfo);
+  const components = buildComponents(legacyData, existingCanonical);
+  const scene = buildScene(metrics);
+  const assets = buildAssets(motifs);
+
+  const canonical = existingCanonical
+    ? { ...existingCanonical }
+    : buildDefaultCanonical(args.designId, args.mlDir, legacyData, components, scene, args.specVersion);
+
+  const previousElements = canonical.elements || {};
+
+  canonical.version = args.specVersion;
+  canonical.generatedAt = new Date().toISOString();
+  canonical.scene = scene;
+  canonical.components = components;
+  canonical.elements = {
+    inscriptions,
+    motifs,
+    photos: previousElements.photos || [],
+    logos: previousElements.logos || [],
+    additions: previousElements.additions || [],
+  };
+  canonical.assets = assets;
+  canonical.legacy = { raw: legacyData };
+
+  fs.writeFileSync(canonicalPath, JSON.stringify(canonical, null, 2));
+  console.log(`✅ Converted legacy design ${args.designId} → ${canonicalPath}`);
+}
+
+if (require.main === module) {
+  try {
+    main();
+  } catch (error) {
+    console.error('❌ Conversion failed:', error.message || error);
+    process.exit(1);
+  }
+}

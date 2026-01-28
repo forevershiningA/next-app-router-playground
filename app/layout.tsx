@@ -11,6 +11,7 @@ import MainContent from '#/components/MainContent';
 import ConditionalCanvas from '#/components/ConditionalCanvas';
 import ConditionalNav from '#/components/ConditionalNav';
 import MaterialsLoader from '#/components/MaterialsLoader';
+import DefaultDesignLoader from '#/components/DefaultDesignLoader';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -53,6 +54,7 @@ export default async function RootLayout({
       >
         <ErrorBoundary>
           <RouterBinder /> {/* ← mount once, early */}
+          <DefaultDesignLoader />
           <MaterialsLoader materials={materials} />
           <MobileHeader />
           <ConditionalNav items={demos} />

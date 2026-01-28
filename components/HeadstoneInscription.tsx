@@ -83,6 +83,17 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const mouse = React.useMemo(() => new THREE.Vector2(), []);
 
     const units = headstone.unitsPerMeter;
+    const mmToLocalUnits = React.useMemo(() => {
+      const safeUnitsPerMeter = Math.abs(units) > 1e-6 ? Math.abs(units) : 1000;
+      return safeUnitsPerMeter / 1000;
+    }, [units]);
+    const fontSizeUnits = React.useMemo(() => {
+      const converted = height * mmToLocalUnits;
+      if (!Number.isFinite(converted) || converted <= 0) {
+        return height;
+      }
+      return converted;
+    }, [height, mmToLocalUnits]);
     // Keep text on surface for both types (lean 0.05mm offset prevents z-fighting)
     const liftLocal = 0.05;
 
@@ -106,21 +117,34 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       const stone = headstone.mesh.current as THREE.Mesh | null;
       if (!stone || !stone.geometry) return;
 
-      // Only position initial and duplicated inscriptions (xPos=0)
-      if (xPos !== 0) return;
-
       const raf = requestAnimationFrame(() => {
         const g = stone.geometry as THREE.BufferGeometry;
         g.computeBoundingBox();
         const bb = g.boundingBox;
         if (!bb) return;
-        setPos(
-          new THREE.Vector3(
-            (bb.min.x + bb.max.x) / 2,
-            (bb.min.y + bb.max.y) / 2,
-            headstone.frontZ + liftLocal,
-          ),
-        );
+        const centerY = (bb.min.y + bb.max.y) / 2;
+        
+        // Log once for debugging
+        if (!window.__headstone_bounds_logged) {
+          console.log('[HeadstoneInscription] Headstone bounding box:', {
+            min: bb.min.y.toFixed(3),
+            max: bb.max.y.toFixed(3),
+            center: centerY.toFixed(3),
+            height: (bb.max.y - bb.min.y).toFixed(3)
+          });
+          window.__headstone_bounds_logged = true;
+        }
+        
+        // Only update pos for initial inscriptions (xPos=0)
+        if (xPos === 0) {
+          setPos(
+            new THREE.Vector3(
+              (bb.min.x + bb.max.x) / 2,
+              centerY,
+              headstone.frontZ + liftLocal,
+            ),
+          );
+        }
       });
       return () => cancelAnimationFrame(raf);
     }, [headstone.mesh, headstone.frontZ, liftLocal, xPos, yPos]);
@@ -293,58 +317,26 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         ref={groupRef}
         position={[pos.x + xPos, pos.y + yPos, pos.z + zBump]}
         rotation={[0, 0, (rotationDeg * Math.PI) / 180]}
+        onAfterRender={() => {
+          if (groupRef.current && text.includes('MIGUEL')) {
+            groupRef.current.getWorldPosition(new THREE.Vector3());
+            const worldPos = new THREE.Vector3();
+            groupRef.current.getWorldPosition(worldPos);
+            console.log(`[HeadstoneInscription] "${text}" world position:`, {
+              local: { x: pos.x + xPos, y: pos.y + yPos, z: pos.z + zBump },
+              world: { x: worldPos.x.toFixed(1), y: worldPos.y.toFixed(1), z: worldPos.z.toFixed(1) },
+              xPos, yPos, posY: pos.y
+            });
+          }
+        }}
       >
-        {/* Drop shadow for Traditional Engraved (sandblasted effect) */}
-        {/* Single blurred shadow layer behind the text */}
-        {isTraditionalEngraved && (
-          <>
-            {/* Blur simulation - multiple layers at same position with increasing size */}
-            <Text
-              font={font}
-              color="#000000"
-              anchorX="center"
-              anchorY="middle"
-              fontSize={height * 1.08}
-              outlineWidth={0}
-              fillOpacity={0.2}
-              position={[0, 0, -0.55]}
-            >
-              {text}
-            </Text>
-            <Text
-              font={font}
-              color="#000000"
-              anchorX="center"
-              anchorY="middle"
-              fontSize={height * 1.05}
-              outlineWidth={0}
-              fillOpacity={0.3}
-              position={[0, 0, -0.52]}
-            >
-              {text}
-            </Text>
-            <Text
-              font={font}
-              color="#000000"
-              anchorX="center"
-              anchorY="middle"
-              fontSize={height}
-              outlineWidth={0}
-              fillOpacity={0.8}
-              position={[0, 0, -0.5]}
-            >
-              {text}
-            </Text>
-          </>
-        )}
-        
         {/* Main text */}
         <Text
           font={font}
           color={color}
           anchorX="center"
           anchorY="middle"
-          fontSize={height}
+          fontSize={fontSizeUnits}
           outlineWidth={isTraditionalEngraved || isPlaque ? 0 : 0.002 * units}
           outlineColor={isTraditionalEngraved || isPlaque ? color : "black"}
           fillOpacity={isTraditionalEngraved ? 1 : 1}

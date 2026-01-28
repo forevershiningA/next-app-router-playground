@@ -49,7 +49,7 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
         const url = `/ml/${mlDir}/saved-designs/json/${designId}.json`;
 
         // Fetch the saved design JSON
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: 'no-store' });
         
         if (!response.ok) {
           if (response.status === 404) {
@@ -128,7 +128,7 @@ export function useSavedDesign(designId: string | null, mlDir: string = 'forever
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/ml/${mlDir}/saved-designs/json/${designId}.json`);
+        const response = await fetch(`/ml/${mlDir}/saved-designs/json/${designId}.json`, { cache: 'no-store' });
         
         if (!response.ok) {
           if (response.status === 404) {

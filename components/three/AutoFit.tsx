@@ -76,11 +76,19 @@ export default function AutoFit({
     }
     
     // Calculate proportional offset based on object height and whether base is shown
-    // Even without a base we still nudge the target downward slightly so low-profile pieces (plaques)
-    // sit comfortably in frame instead of hugging the bottom edge.
-    const tallHeadstoneRatio = boxSize.y > 1 ? 0.10 : 0.15;
-    const lowProfileRatio = boxSize.y > 0.4 ? 0.08 : 0.12;
+    // Minimal offset to ensure all inscriptions/motifs are visible
+    const tallHeadstoneRatio = boxSize.y > 1 ? 0.00 : 0.00; // No offset for tall headstones
+    const lowProfileRatio = boxSize.y > 0.4 ? 0.00 : 0.00; // No offset for low profile
     const verticalOffset = (showBase ? tallHeadstoneRatio : lowProfileRatio) * boxSize.y;
+    
+    console.log('[AutoFit] Bounding box:', {
+      min: { x: box.min.x.toFixed(2), y: box.min.y.toFixed(2), z: box.min.z.toFixed(2) },
+      max: { x: box.max.x.toFixed(2), y: box.max.y.toFixed(2), z: box.max.z.toFixed(2) },
+      size: { x: boxSize.x.toFixed(2), y: boxSize.y.toFixed(2), z: boxSize.z.toFixed(2) },
+      centerBefore: sphere.center.toArray().map(v => v.toFixed(2)),
+      verticalOffset: verticalOffset.toFixed(2),
+      showBase
+    });
     
     // Offset the target downward so camera shows more of the top
     const toTgt = sphere.center.clone();

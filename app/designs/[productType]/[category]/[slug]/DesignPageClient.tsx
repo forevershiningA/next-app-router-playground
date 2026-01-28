@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense, useRef, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSavedDesign, convertSavedDesignToDYO } from '#/components/SavedDesignLoader';
-import { loadSavedDesignIntoEditor } from '#/lib/saved-design-loader-utils';
+import { loadSavedDesignIntoEditor, loadCanonicalDesignIntoEditor, DEFAULT_CANONICAL_DESIGN_VERSION } from '#/lib/saved-design-loader-utils';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { data } from '#/app/_internal/_data';
@@ -1152,7 +1152,10 @@ export default function DesignPageClient({
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(true); // Always show preview, no editor
   const [motifDimensions, setMotifDimensions] = useState<Record<string, { width: number; height: number }>>({}); // Always show preview, no editor
+  const [canonicalLoadState, setCanonicalLoadState] = useState<'idle' | 'loading' | 'success' | 'failed'>('idle');
   const loadAttempted = useRef(false);
+  const canonicalStateIdRef = useRef<string | null>(null);
+  const legacyLoadedRef = useRef(false);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const [svgContent, setSvgContent] = useState<string | null>(null);
   const [svgDimensions, setSvgDimensions] = useState<{ width: number; height: number } | null>(null);
@@ -1166,11 +1169,82 @@ export default function DesignPageClient({
   const [inscriptionTexts, setInscriptionTexts] = useState<Record<number, string>>({});
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
+  const canonicalDesignUrl = useMemo(() => (
+    designId ? `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json` : null
+  ), [designId]);
+  
+  useEffect(() => {
+    legacyLoadedRef.current = false;
+    canonicalStateIdRef.current = null;
+    setCanonicalLoadState('idle');
+  }, [designId]);
   
   // Check if we're on localhost
   useEffect(() => {
     setIsLocalhost(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
   }, []);
+  
+  useEffect(() => {
+    if (!designId || !canonicalDesignUrl) return;
+    let cancelled = false;
+
+    setCanonicalLoadState('loading');
+    (async () => {
+      try {
+        const response = await fetch(canonicalDesignUrl, { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`Canonical design request failed with status ${response.status}`);
+        }
+        const canonicalData = await response.json();
+        if (cancelled) return;
+        await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
+        if (!cancelled) {
+          canonicalStateIdRef.current = designId;
+          setCanonicalLoadState('success');
+        }
+      } catch (error) {
+        if (!cancelled) {
+          canonicalStateIdRef.current = designId;
+          console.warn('Failed to load canonical design', error);
+          setCanonicalLoadState('failed');
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [designId, canonicalDesignUrl]);
+  
+  useEffect(() => {
+    if (
+      canonicalLoadState !== 'failed' ||
+      !designId ||
+      !designData ||
+      canonicalStateIdRef.current !== designId ||
+      legacyLoadedRef.current
+    ) {
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        await loadSavedDesignIntoEditor(designData, designId);
+        if (!cancelled) {
+          legacyLoadedRef.current = true;
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Failed to load legacy design fallback', error);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [canonicalLoadState, designId, designData]);
   
   // Load screenshot dimensions from metadata JSON file instead of analyzing image
   useEffect(() => {

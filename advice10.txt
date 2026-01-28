@@ -1,0 +1,117 @@
+You have correctly identified the root cause: the mismatch between the infinite resolution of vector math (analytic Bézier curves) and the discrete resolution of rasterized 3D graphics (triangulated polygon meshes).
+
+Here are the three ways to solve this in Three.js, ranging from the immediate code fix to performance-optimized production techniques.
+
+Solution 1: Increase curveSegments (The Immediate Fix)
+
+The THREE.ShapeGeometry (and THREE.ExtrudeGeometry) constructor accepts a second argument for options. You need to drastically increase the curveSegments from the default (12) to something closer to 64, 128, or even higher depending on how close the camera gets.
+
+Change your code from this:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const geometry = new THREE.ShapeGeometry(shape);
+
+To this:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const geometry = new THREE.ShapeGeometry(shape, {
+  curveSegments: 96 // Try 64, 96, or 128
+});
+
+Note: If you are using ExtrudeGeometry, the parameter is exactly the same.
+
+Why this works: It forces the engine to sample the Bézier curve at 96 distinct points per curve segment before triangulating the face.
+The risk: This will skyrocket your vertex count. If your SVG has hundreds of paths, this might tank your frame rate.
+
+Solution 2: Geometry Merging (The Performance Fix)
+
+If increasing curveSegments makes the model look good but causes the browser to lag (due to thousands of individual Draw Calls), you must merge the geometry. SVGs often contain hundreds of individual path commands. Rendering them as separate meshes is expensive; rendering them as one "Madonna" mesh is cheap.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+import * as THREE from 'three';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const loader = new SVGLoader();
+
+loader.load('1_184_13.svg', function (data) {
+    const geometries = [];
+
+    data.paths.forEach((path) => {
+        const shapes = SVGLoader.createShapes(path);
+
+        shapes.forEach((shape) => {
+            // 1. High resolution for crisp curves
+            const geom = new THREE.ShapeGeometry(shape, {
+                curveSegments: 96 
+            });
+            
+            // 2. Align data usage if needed (UVs, etc)
+            // geom.deleteAttribute('uv'); // Optional cleanup
+            
+            geometries.push(geom);
+        });
+    });
+
+    // 3. Merge all high-res pieces into ONE mesh
+    if (geometries.length > 0) {
+        const mergedGeometry = mergeGeometries(geometries);
+        const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const mesh = new THREE.Mesh(mergedGeometry, material);
+        scene.add(mesh);
+    }
+});
+Solution 3: Dynamic Sampling (The "Smart" Fix)
+
+If curveSegments: 96 is overkill for long straight lines but necessary for tight hair curls, you can manually control the discretization instead of letting ShapeGeometry guess.
+
+Three.js Shapes have a .getSpacedPoints() method which attempts to divide the shape by arc length rather than blindly dividing every curve segment equally.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// Instead of passing 'shape' directly to geometry...
+const divisions = 50; // Adjust density based on complexity
+const points = shape.getSpacedPoints( divisions ); 
+const geometry = new THREE.ShapeGeometry( new THREE.Shape( points ) );
+
+Pros: Even distribution of vertices.
+Cons: You lose the specific "sharp" corners of the original design because everything becomes a smooth approximation. For a silhouette like a Madonna, this is often acceptable, but for mechanical parts, it is not.
+
+Solution 4: The Texture Fallback (The "Cheat")
+
+If you do not need to physically extrude the mesh (if it is just a flat sticker on the headstone), do not use geometry at all.
+
+Use a high-resolution CanvasTexture or render the SVG to a PNG.
+
+Load the SVG into an HTML <canvas> element (or an Image).
+
+Create a THREE.PlaneGeometry.
+
+Use THREE.CanvasTexture or THREE.TextureLoader.
+
+Enable material.transparent = true and material.alphaTest = 0.5.
+
+This keeps the curves "pixel perfect" (up to the texture resolution) without generating millions of triangles.
+
+Summary Recommendation
+
+Try Solution 1 first. Set curveSegments: 96.
+
+Check the vertex count (using renderer.info.render.triangles).
+
+If performance drops, implement Solution 2 (Merging).

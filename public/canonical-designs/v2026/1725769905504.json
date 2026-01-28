@@ -1,0 +1,432 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-01-28T12:52:47.803Z",
+  "units": "mm",
+  "source": {
+    "id": "1725769905504",
+    "slug": "1725769905504",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1725769905504.json",
+    "savedAt": "2026-01-27T17:30:17.542Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "headstone",
+    "category": "unknown",
+    "title": "Traditional Engraved Headstone",
+    "shape": "Curved Gable",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 700,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 707,
+      "height": 476.002685546875,
+      "dpr": 2.3249998092651367
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "KLEIN",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 76,
+          "size_px": 59.344,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 2.89,
+          "y_px": -301.318
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "MAY 13, 1927",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "size_px": 14.055,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -297.787,
+          "y_px": 51.426
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "FEB 2, 2024",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "size_px": 14.055,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -293.057,
+          "y_px": 80.896
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "OCT 2, 1933",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "size_px": 14.055,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 214.914,
+          "y_px": 92.201
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "SEPT 18, 2022",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "size_px": 14.055,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 217.237,
+          "y_px": 117.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "May Heaven&apos;s eternal happiness be thine.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 26,
+          "size_px": 20.302,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 9.619,
+          "y_px": -201.804
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "TERESA ISABELLA",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 25,
+          "size_px": 19.521,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 231.019,
+          "y_px": 9.749
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "ISABEL WADE",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 22,
+          "size_px": 17.179,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 224.128,
+          "y_px": 56.368
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "MIGUEL THOMPSON",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 22,
+          "size_px": 17.179,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -283.6,
+          "y_px": 16.638
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_155_13",
+        "position": {
+          "x_px": -328.099,
+          "y_px": 262.937
+        },
+        "height_mm": 65.314,
+        "height_px": 51,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_154_15",
+        "position": {
+          "x_px": -86.167,
+          "y_px": -421.779
+        },
+        "height_mm": 116.541,
+        "height_px": 91,
+        "rotation": {
+          "z_deg": 73
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_184_13",
+        "position": {
+          "x_px": -6.729,
+          "y_px": 8.197
+        },
+        "height_mm": 231.8,
+        "height_px": 181,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_129_03",
+        "position": {
+          "x_px": -202.162,
+          "y_px": -383.39
+        },
+        "height_mm": 57.63,
+        "height_px": 45,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_129_03",
+        "position": {
+          "x_px": 170.98,
+          "y_px": -390.603
+        },
+        "height_mm": 56.349,
+        "height_px": 44,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-16",
+        "asset": "1_016_05",
+        "position": {
+          "x_px": 265.656,
+          "y_px": 239.458
+        },
+        "height_mm": 67.875,
+        "height_px": 53,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "1_154_15",
+        "position": {
+          "x_px": 43.951,
+          "y_px": -417.051
+        },
+        "height_mm": 117.821,
+        "height_px": 92,
+        "rotation": {
+          "z_deg": 100
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-18",
+        "asset": "cross_001",
+        "position": {
+          "x_px": 204.021,
+          "y_px": 232.569
+        },
+        "height_mm": 65.314,
+        "height_px": 51,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_13",
+        "path": "/shapes/motifs/1_155_13.svg"
+      },
+      {
+        "id": "1_154_15",
+        "path": "/shapes/motifs/1_154_15.svg"
+      },
+      {
+        "id": "1_184_13",
+        "path": "/shapes/motifs/1_184_13.svg"
+      },
+      {
+        "id": "1_129_03",
+        "path": "/shapes/motifs/1_129_03.svg"
+      },
+      {
+        "id": "1_016_05",
+        "path": "/shapes/motifs/1_016_05.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      }
+    ]
+  }
+}

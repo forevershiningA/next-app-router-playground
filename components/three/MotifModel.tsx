@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useLoader, useThree } from '@react-three/fiber';
-import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import SelectionBox from '../SelectionBox';
@@ -17,6 +16,8 @@ type Props = {
   headstone?: HeadstoneAPI;
   index?: number;
 };
+
+const MAX_TEXTURE_DIMENSION = 2048;
 
 export default function MotifModel({ id, svgPath, color, headstone, index = 0 }: Props) {
   const { gl, camera, controls } = useThree();
@@ -48,85 +49,103 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   }), []);
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
+  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.CanvasTexture; aspect: number } | null>(null);
+  const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
 
-  // Load SVG
-  const svgData = useLoader(SVGLoader, svgPath);
+  React.useEffect(() => () => planeGeometry.dispose(), [planeGeometry]);
 
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
 
-  // Create mesh from SVG paths
-  const mesh = React.useMemo(() => {
-    if (!svgData) return null;
+  React.useEffect(() => {
+    let disposed = false;
+    let activeTexture: THREE.CanvasTexture | null = null;
 
-    const group = new THREE.Group();
-    const paths = svgData.paths;
-
-    // Parse the color to THREE.Color
-    const motifColor = new THREE.Color(color);
-
-    for (let i = 0; i < paths.length; i++) {
-      const path = paths[i];
-      const shapes = SVGLoader.createShapes(path);
-
-      for (const shape of shapes) {
-        const geometry = new THREE.ShapeGeometry(shape);
-        // Use the motif color with metallic properties for realistic rendering
-        const isGoldColor = color.toLowerCase().includes('gold') || 
-                           color.toLowerCase() === '#d4af37' || 
-                           color.toLowerCase() === '#ffd700';
-        
-        const material = new THREE.MeshStandardMaterial({
-          color: motifColor,
-          side: THREE.DoubleSide,
-          depthWrite: true,
-          depthTest: true,
-          metalness: isGoldColor ? 1.0 : 0.2,
-          roughness: isGoldColor ? 0.3 : 0.4,
-          envMapIntensity: isGoldColor ? 2.0 : 1.5,
-        });
-
-        const shapeMesh = new THREE.Mesh(geometry, material);
-        group.add(shapeMesh);
+    async function loadTexture() {
+      try {
+        const response = await fetch(svgPath);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch SVG: ${response.status}`);
+        }
+        const svgText = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, 'image/svg+xml');
+        const svgElement = doc.documentElement as SVGSVGElement;
+        const viewBoxAttr = svgElement.getAttribute('viewBox');
+        let width = parseFloat(svgElement.getAttribute('width') || '');
+        let height = parseFloat(svgElement.getAttribute('height') || '');
+        if ((!Number.isFinite(width) || width <= 0 || !Number.isFinite(height) || height <= 0) && viewBoxAttr) {
+          const vb = viewBoxAttr.split(/[\s,]+/).map(parseFloat);
+          if (vb.length === 4) {
+            width = vb[2];
+            height = vb[3];
+          }
+        }
+        if (!Number.isFinite(width) || width <= 0) width = 1024;
+        if (!Number.isFinite(height) || height <= 0) height = 1024;
+        const aspect = width / height || 1;
+        let targetHeight = MAX_TEXTURE_DIMENSION;
+        let targetWidth = Math.round(targetHeight * aspect);
+        if (targetWidth > MAX_TEXTURE_DIMENSION) {
+          const scale = MAX_TEXTURE_DIMENSION / targetWidth;
+          targetWidth = MAX_TEXTURE_DIMENSION;
+          targetHeight = Math.round(targetHeight * scale);
+        }
+        svgElement.setAttribute('width', `${targetWidth}`);
+        svgElement.setAttribute('height', `${targetHeight}`);
+        svgElement.setAttribute('preserveAspectRatio', svgElement.getAttribute('preserveAspectRatio') || 'xMidYMid meet');
+        const serializer = new XMLSerializer();
+        const serialized = serializer.serializeToString(svgElement);
+        const blob = new Blob([serialized], { type: 'image/svg+xml' });
+        const blobUrl = URL.createObjectURL(blob);
+        try {
+          const image = new Image();
+          image.crossOrigin = 'anonymous';
+          await new Promise((resolve, reject) => {
+            image.onload = () => resolve(null);
+            image.onerror = (err) => reject(err);
+            image.src = blobUrl;
+          });
+          const canvas = document.createElement('canvas');
+          canvas.width = image.width;
+          canvas.height = image.height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('Failed to create canvas context');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          activeTexture = new THREE.CanvasTexture(canvas);
+          if (typeof gl.capabilities.getMaxAnisotropy === 'function') {
+            activeTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
+          }
+          activeTexture.generateMipmaps = true;
+          activeTexture.minFilter = THREE.LinearMipmapLinearFilter;
+          activeTexture.magFilter = THREE.LinearFilter;
+          if ('colorSpace' in activeTexture) {
+            (activeTexture as any).colorSpace = THREE.SRGBColorSpace;
+          }
+          activeTexture.needsUpdate = true;
+          if (!disposed) {
+            setTextureInfo({ texture: activeTexture, aspect: canvas.width / canvas.height || 1 });
+          }
+        } finally {
+          URL.revokeObjectURL(blobUrl);
+        }
+      } catch (error) {
+        console.error('[MotifModel] Failed to rasterize SVG motif', svgPath, error);
+        if (!disposed) setTextureInfo(null);
       }
     }
 
-    // Calculate bounding box to center and scale
-    const box = new THREE.Box3().setFromObject(group);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
+    loadTexture();
 
-    // Center the group
-    group.position.sub(center);
-
-    // Fix upside-down issue: scale Y by 1 instead of -1
-    // SVG Y coordinates are top-down, but we want them right-side up
-    group.scale.y = 1;
-
-    return { group, size };
-  }, [svgData, id, color]);
-
-  // Cleanup effect: dispose of manually created resources
-  React.useEffect(() => {
     return () => {
-      if (mesh && mesh.group) {
-        mesh.group.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            if (child.geometry) child.geometry.dispose();
-            if (child.material) {
-              if (Array.isArray(child.material)) {
-                child.material.forEach((m) => m.dispose());
-              } else {
-                child.material.dispose();
-              }
-            }
-          }
-        });
+      disposed = true;
+      if (activeTexture) {
+        activeTexture.dispose();
       }
     };
-  }, [mesh]);
+  }, [svgPath, gl]);
+
 
   const placeFromClientXY = React.useCallback(
     (clientX: number, clientY: number) => {
@@ -171,16 +190,31 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
         localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
-        // Calculate center position (like inscriptions)
-        const centerX = (bbox.min.x + bbox.max.x) / 2;
-        const centerY = (bbox.min.y + bbox.max.y) / 2;
+        // Get current offset to check if it's canonical format
+        const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
+        const coordinateSpace = currentOffset.coordinateSpace
+          ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
+        const isCanonical = coordinateSpace === 'absolute';
         
-        // Store as OFFSET from center, but NEGATE Y to match old Y-down saved format
-        setMotifOffset(id, {
-          ...(motifOffsets[id] ?? baseOffsetDefaults),
-          xPos: localPt.x - centerX,
-          yPos: -(localPt.y - centerY),  // Negate to convert Y-up to Y-down format
-        });
+        if (isCanonical) {
+          // Canonical format: store absolute world coordinates
+          setMotifOffset(id, {
+            ...currentOffset,
+            xPos: localPt.x,
+            yPos: localPt.y,
+            coordinateSpace: 'absolute',
+          });
+        } else {
+          // Legacy format: store as offset from center (Y-down)
+          const centerX = (bbox.min.x + bbox.max.x) / 2;
+          const centerY = (bbox.min.y + bbox.max.y) / 2;
+          setMotifOffset(id, {
+            ...currentOffset,
+            xPos: localPt.x - centerX,
+            yPos: -(localPt.y - centerY),
+            coordinateSpace: 'offset',
+          });
+        }
       }
     },
     [headstone, gl, camera, raycaster, mouse, id, motifOffsets, setMotifOffset, baseOffsetDefaults, dragPlane, fallbackIntersection]
@@ -248,7 +282,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   }, [dragging, gl, controls, placeFromClientXY]);
 
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
-  if (!headstone || !stone || !mesh) {
+  if (!headstone || !stone || !textureInfo) {
     return null;
   }
 
@@ -258,7 +292,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
-  const centerZ = headstone.frontZ + 0.05;
+  const centerZ = headstone.frontZ + 0.02;
 
   const inset = 0.01;
   const spanY = bbox.max.y - bbox.min.y;
@@ -281,76 +315,82 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
 
   const offset = motifOffsets[id] ?? defaultOffset;
 
-  // Scale based on heightMm to match the specified height
-  // NOTE: In the headstone coordinate system, mm values are used directly as units
-  // (same as inscriptions use sizeMm directly as fontSize)
-  // So 100mm = 100 units in the coordinate system
-  const targetHeightInUnits = offset.heightMm ?? 100;
+  const unitsPerMeter = Math.abs(headstone.unitsPerMeter) > 1e-6 ? Math.abs(headstone.unitsPerMeter) : 1000;
+  const mmToLocalUnits = unitsPerMeter / 1000;
+
+  const targetHeightMm = offset.heightMm ?? 100;
+  const planeHeightUnits = targetHeightMm * mmToLocalUnits;
+  const aspectRatio = textureInfo.aspect || 1;
+  const planeWidthUnits = planeHeightUnits * aspectRatio;
+
+  const flipX = offset.flipX ?? false;
+  const flipY = offset.flipY ?? false;
   
-  // Use the Y dimension (height) of the mesh for scaling
-  const meshHeight = mesh.size.y;
-  // Calculate scale to make the motif's height match the heightMm value
-  const finalScale = meshHeight > 0 ? targetHeightInUnits / meshHeight : 1;
+  const scaleX = planeWidthUnits * (flipX ? -1 : 1);
+  const scaleY = -planeHeightUnits * (flipY ? -1 : 1);
 
   const isSelected = selectedMotifId === id;
 
-  // Calculate scaled bounds for SelectionBox (in world space)
   const scaledBounds = {
-    width: mesh.size.x * finalScale,
-    height: mesh.size.y * finalScale,
+    width: Math.abs(planeWidthUnits),
+    height: Math.abs(planeHeightUnits),
   };
 
-  // Convert offset from old Y-down saved format to Y-up display format
-  const displayY = centerY - (offset.yPos || 0);
+  // Position the motif:
+  // TWO FORMATS:
+  // 1. Legacy: positions stored as offsets from centerY (Y-down format)
+  //    - Uses: displayY = centerY - yPos
+  // 2. Canonical: positions are absolute world coords (Y-up format) 
+  //    - Uses: displayY = yPos
+  //
+  // Detection: explicit coordinateSpace flag (fallback to legacy heuristic)
+  const coordinateSpace = offset.coordinateSpace
+    ?? (offset.target !== undefined ? 'absolute' : 'offset');
+  const isCanonical = coordinateSpace === 'absolute';
+  
+  const displayX = isCanonical ? offset.xPos : centerX + offset.xPos;
+  const displayY = isCanonical ? offset.yPos : centerY - (offset.yPos || 0);
+
+  console.log('[MotifModel] Positioning:', {
+    id,
+    isCanonical,
+    hasTarget: offset.target !== undefined,
+    offset: { x: offset.xPos, y: offset.yPos },
+    center: { x: centerX.toFixed(1), y: centerY.toFixed(1) },
+    display: { x: displayX.toFixed(1), y: displayY.toFixed(1) },
+    flip: { x: flipX, y: flipY },
+    scale: { x: scaleX.toFixed(2), y: scaleY.toFixed(2) }
+  });
 
   return (
     <>
       {/* Parent group for positioning - same coordinate system as inscriptions */}
       <group
-        position={[centerX + offset.xPos, displayY, centerZ]}
+        position={[displayX, displayY, centerZ]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
-        {/* Drop shadow for Traditional Engraved (sandblasted effect) */}
-        {isTraditionalEngraved && (
-          <>
-            {/* Blur simulation - multiple layers at same position with increasing size */}
-            <group
-              scale={[finalScale * 1.08, -finalScale * 1.08, 1]}
-              position={[0, 0, -0.05]}
-            >
-              <primitive object={mesh.group.clone()} />
-              <meshBasicMaterial color="#000000" opacity={0.2} transparent depthTest={true} />
-            </group>
-            <group
-              scale={[finalScale * 1.05, -finalScale * 1.05, 1]}
-              position={[0, 0, -0.02]}
-            >
-              <primitive object={mesh.group.clone()} />
-              <meshBasicMaterial color="#000000" opacity={0.3} transparent depthTest={true} />
-            </group>
-            <group
-              scale={[finalScale, -finalScale, 1]}
-              position={[0, 0, 0]}
-            >
-              <primitive object={mesh.group.clone()} />
-              <meshBasicMaterial color="#000000" opacity={0.8} transparent depthTest={true} />
-            </group>
-          </>
-        )}
-        
-        {/* Motif mesh with scale - Y-flipped because SVG shapes are stored Y-down */}
-        <group
+        {/* Motif mesh rendered as textured plane */}
+        <mesh
           ref={ref}
-          scale={[finalScale, -finalScale, 1]}
-          visible={true}
+          geometry={planeGeometry}
+          scale={[scaleX, scaleY, 1]}
           name={`motif-${id}`}
           onClick={handleClick}
           onPointerDown={handlePointerDown}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
-          <primitive object={mesh.group} />
-        </group>
+          <meshBasicMaterial
+            color={'#ffffff'}
+            toneMapped={false}
+            transparent
+            depthWrite={false}
+            depthTest={true}
+            side={THREE.DoubleSide}
+            map={textureInfo.texture}
+            alphaTest={0.01}
+          />
+        </mesh>
         
         {/* Selection box without scale - sibling to motif */}
         {isSelected && (

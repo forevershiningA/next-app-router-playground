@@ -195,18 +195,6 @@ export default function Scene({
     return () => clearTimeout(timer);
   }, [loading, baseSwapping, onReady]);
 
-  // Reset camera when scene becomes ready
-  const { camera, controls } = useThree();
-  useEffect(() => {
-    if (!camera || !controls) return;
-    
-    camera.position.set(0, 4.2, 10);
-    camera.lookAt(0, 3.8, 0);
-    camera.updateProjectionMatrix();
-    
-    (controls as any).target.set(0, 3.8, 0);
-    (controls as any).update();
-  }, [camera, controls]);
 
   // Smooth rotation animation
   useFrame(() => {

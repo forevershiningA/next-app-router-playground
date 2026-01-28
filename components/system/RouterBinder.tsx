@@ -6,6 +6,14 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { defaultErrorHandler } from '#/lib/error-handler';
 import { data } from '#/app/_internal/_data';
 
+const DESIGNER_ROUTES = [
+  '/select-size',
+  '/select-material',
+  '/inscriptions',
+  '/select-additions',
+  '/select-motifs',
+];
+
 /**
  * Wires Next.js router into the store so it can do SPA navigations.
  * Mount once near the top of the app (e.g., in app/layout.tsx).
@@ -44,6 +52,10 @@ export default function RouterBinder() {
     
     // Skip setting product if we're on a design page - it will be set by the design loader
     if (currentPath.startsWith('/designs/')) {
+      return;
+    }
+
+    if (DESIGNER_ROUTES.some((route) => currentPath.startsWith(route))) {
       return;
     }
     
