@@ -25,10 +25,30 @@
 
 ---
 
-## Current Status (2026-01-28)
-- `components/DefaultDesignLoader.tsx` now points to canonical design **1578016189116** (biblical curved gable). The converter produced `/public/canonical-designs/v2026/1578016189116.json`, but the 3D loader currently misplaces its motifs/inscriptions (severe Y-offset and unintended flip on some motifs). Keep design `1725769905504` handy for regression comparisons until the loader math is fixed.
-- Canonical-to-3D coordinate mapping remains unresolved for designs with taller canvases (forevershining ML set). The existing loader still relies on legacy stage offsets plus heuristics; attempts to normalize using per-surface spans were rolled back due to duplication/runtime errors. Short-term plan: derive a single stage→component formula that subtracts base offset and scales to ±headstone_half without bespoke biases.
-- Screenshots of the current mismatch live under `public/screenshots/1.png` for reference when reworking the loader.
+## Current Status (2026-01-28 Evening)
+
+### ✅ Recent Changes (Today)
+1. **Manual Design Loading**: Automatic design loading disabled. Headstone now starts completely empty.
+   - `components/DefaultDesignLoader.tsx` converted to manual trigger via `useLoadDefaultDesign()` hook
+   - New "Load Design" button in top-right corner loads canonical design `1725769905504`
+   - See `LOAD_DESIGN_BUTTON.md` for implementation details
+
+2. **Default 3D Additions Removed**: 
+   - Removed `B2127` (Cross) and `B1134S` (Angel) from default state
+   - `selectedAdditions: []` in `lib/headstone-store.ts`
+   - Users start with clean empty headstone
+
+3. **Check Price Always Enabled**:
+   - Modified `components/DesignerNav.tsx` to enable "Check Price" even with empty headstone
+   - Users can see base price before adding any content
+   - Exception added: `item.slug !== 'check-price'` in disabled logic
+
+### ⚠️ Known Issues
+- Canonical design **1578016189116** has coordinate mapping issues (severe Y-offset, motif flips)
+- Canonical-to-3D coordinate mapping unresolved for taller canvases (forevershining ML set)
+- Current loader relies on legacy stage offsets + heuristics
+- Screenshots of mismatch: `public/screenshots/1.png`
+- Short-term plan: derive single stage→component formula without bespoke biases
 
 ## Project Overview
 
@@ -74,6 +94,23 @@ A Next.js-based 3D headstone designer allowing users to:
   - Rectangles: `/shapes/headstones/landscape.svg`, `portrait.svg`
   - Ovals & Circle: `/shapes/masks/oval_horizontal.svg`, `oval_vertical.svg`, `circle.svg`
 - **Pricing**: Uses `quantity_type="Width + Height"` from catalog
+
+### Load Design Feature (2026-01-28)
+**Manual Design Loading** replaces automatic loading:
+- Headstone starts **completely empty** (no inscriptions, motifs, or 3D additions)
+- **"Load Design" button** in top-right corner of canvas (golden border, semi-transparent)
+- Loads canonical design `1725769905504` (Curved Gable biblical memorial)
+- Three button states:
+  - Default: "Load Design" (amber/gold styling with hover glow)
+  - Loading: "Loading..." (amber with bouncing icon)
+  - Loaded: "Design Loaded" (green, disabled)
+- Design persists throughout session until page refresh
+- See `LOAD_DESIGN_BUTTON.md` for implementation details
+
+**Components:**
+- `components/LoadDesignButton.tsx` - Button component with state management
+- `components/DefaultDesignLoader.tsx` - Exports `useLoadDefaultDesign()` hook
+- `components/ConditionalCanvas.tsx` - Renders button in canvas overlay
 
 ---
 
@@ -424,6 +461,14 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 4. Scroll shape/material grids on small laptops → lists fill the column with a single scrollbar.
 5. Switch between headstone/base toggles inside material/size panels → selection state stays synced with the canvas.
 
+### Menu Item Enabled States (2026-01-28)
+**Check Price Always Enabled:**
+- Modified `components/DesignerNav.tsx` to enable "Check Price" menu item even with empty headstone
+- Logic change: `const needsProduct = index >= 2 && item.slug !== 'check-price'`
+- **Reason:** Users can view base price before adding any content (inscriptions, motifs, additions)
+- Useful for price comparison and budgeting before starting design
+- All other menu items (Select Material, Select Size, etc.) still require product selection
+
 ---
 
 ## State Management
@@ -459,10 +504,10 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
   selectedAdditionId: string | null;
   selectedMotifId: string | null;
   
-  // Content
-  inscriptions: Line[];            // Text overlays
-  selectedAdditions: string[];     // 3D models
-  selectedMotifs: Motif[];         // SVG motifs
+  // Content (2026-01-28: Now starts empty by default)
+  inscriptions: Line[];            // Text overlays (empty array on init)
+  selectedAdditions: string[];     // 3D models (empty array on init - no default angel/cross)
+  selectedMotifs: Motif[];         // SVG motifs (empty array on init)
   
   // UI
   activePanel: PanelName | null;
@@ -490,6 +535,12 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - `addAddition()` - Add 3D model
 - `calculateInscriptionCost()` - Pricing
 - `loadDesignFromXML()` - Import saved design
+
+**Default State (2026-01-28):**
+- Headstone starts **completely empty**: `inscriptions: []`, `selectedAdditions: []`, `selectedMotifs: []`
+- Previous defaults removed: `B2127` (Cross) and `B1134S` (Angel) no longer auto-loaded
+- Users can load sample design via "Load Design" button (uses `useLoadDefaultDesign()` hook)
+- Design loading is now manual, not automatic on first visit
 
 **Catalog-driven dimension rails (Jan 2026):** `setProductId()` now records the active shape’s min/max width, height, base, and thickness limits straight from the catalog XML. Every slider/input (including base width/height and upright/slant thickness) clamps against those live bounds, so compact products such as the Laser-etched Black Granite Mini Headstone (id 22) retain their exact 200 mm × 300 mm × 50 mm proportions on the canvas while still allowing larger monuments to use their broader ranges.
 
@@ -2261,6 +2312,31 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-28 (Evening)**: Manual Design Loading & Empty Headstone Default State
+  - **Load Design Button Feature**:
+    - Disabled automatic design loading on first visit
+    - Created `LoadDesignButton.tsx` component with three states (Default/Loading/Loaded)
+    - Button positioned in top-right corner of canvas with golden styling
+    - Loads canonical design `1725769905504` via `useLoadDefaultDesign()` hook
+    - Design persists throughout session until page refresh
+    - See `LOAD_DESIGN_BUTTON.md` for full implementation details
+  - **Empty Headstone Default**:
+    - Removed default 3D additions: `B2127` (Cross) and `B1134S` (Angel)
+    - Changed `selectedAdditions: ['B2127', 'B1134S']` to `selectedAdditions: []`
+    - Headstone now starts completely empty (no inscriptions, motifs, or additions)
+    - Users can add content manually or load sample design via button
+  - **Check Price Menu Enhancement**:
+    - Modified `components/DesignerNav.tsx` to enable "Check Price" even with empty headstone
+    - Logic: `const needsProduct = index >= 2 && item.slug !== 'check-price'`
+    - Users can view base price before adding any content
+    - Useful for budgeting and price comparison
+  - **Files Modified**:
+    - `components/DefaultDesignLoader.tsx` - Converted to manual hook
+    - `components/LoadDesignButton.tsx` - NEW button component
+    - `components/ConditionalCanvas.tsx` - Added button to canvas overlay
+    - `lib/headstone-store.ts` - Removed default additions
+    - `components/DesignerNav.tsx` - Enabled Check Price for empty state
 
 - **2026-01-26 (Evening)**: Canonical Loader Simplification & Inscription Rendering Cleanup
   - Removed all design-specific offsets (e.g., "KLEIN" surname scaling, ivy/bird motif shifts) from `loadCanonicalDesignIntoEditor()` so every canonical file loads via the same pipeline.

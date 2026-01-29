@@ -288,6 +288,10 @@ export default function DesignerNav() {
       return;
     }
 
+    if (panelSource === 'canvas' && activeFullscreenPanel) {
+      return;
+    }
+
     const currentSlug = pathname.replace('/', '');
     if (fullscreenPanelSlugs.has(currentSlug)) {
       if (activeFullscreenPanel !== currentSlug && dismissedPanelSlug !== currentSlug) {
@@ -319,6 +323,7 @@ export default function DesignerNav() {
     isCanvasVisible,
     activeFullscreenPanel,
     dismissedPanelSlug,
+    panelSource,
     setActivePanel,
     setActiveFullscreenPanel,
     setDismissedPanelSlug,
@@ -1482,7 +1487,8 @@ export default function DesignerNav() {
             }
             
             // Determine if step should be disabled (steps 3-10 need a product selected)
-            const needsProduct = index >= 2; // Steps from index 2 onwards (Select Material, Select Size, etc.)
+            // Exception: Check Price is always enabled (users can see base price even with empty headstone)
+            const needsProduct = index >= 2 && item.slug !== 'check-price';
             const isDisabled = needsProduct && !catalog;
             
             return (

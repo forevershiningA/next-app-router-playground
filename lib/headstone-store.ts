@@ -307,11 +307,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   minThicknessMm: 40,
   maxThicknessMm: 300,
 
-  // Sample template: Beautiful headstone with angel and cross (all with colorMap textures)
-  selectedAdditions: [
-    'B2127',  // Cross (bottom right) - has colorMap
-    'B1134S', // Angel application (centered top) - has colorMap
-  ],
+  // Start with empty additions - user can add via "Select Additions" panel
+  selectedAdditions: [],
   addAddition: (id) => {
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;

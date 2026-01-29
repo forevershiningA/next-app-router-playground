@@ -6,6 +6,7 @@ import ThreeScene from '#/components/ThreeScene';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
 import CheckPricePanel from '#/components/CheckPricePanel';
 import SEOPanel from '#/components/SEOPanel';
+import LoadDesignButton from '#/components/LoadDesignButton';
 import ErrorBoundary from '#/components/ErrorBoundary';
 import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 
@@ -103,6 +104,7 @@ export default function ConditionalCanvas() {
             </div>
           }
         >
+          <LoadDesignButton />
           <SceneOverlayHost />
           <CheckPricePanel />
           <SEOPanel />
