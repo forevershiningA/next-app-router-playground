@@ -382,7 +382,7 @@ export default function HomeSplash() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
             backgroundImage: 'url(/backgrounds/tree-2916763_1920.webp)',
-            filter: 'blur(16px) saturate(1.4) brightness(0.9)',
+            filter: 'blur(16px) saturate(1.2) brightness(0.9)',
             transform: 'scale(1.1)'
           }}
           role="presentation"

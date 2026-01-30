@@ -34,7 +34,7 @@ export default function BorderSelector({ disableInternalScroll = false }: Border
 
   return (
     <div className="space-y-3">
-      <div className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}>
+      <div className={`grid grid-cols-3 gap-2 pl-1 pr-2 py-1 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}>
         {borders.map((border) => {
           const isSelected = currentBorderName === border.name || 
                            (border.id === 'no-border' && !currentBorderName);
@@ -45,38 +45,39 @@ export default function BorderSelector({ disableInternalScroll = false }: Border
           return (
             <button
               key={border.id}
+              type="button"
               onClick={() => handleBorderSelect(border)}
-              className={`relative overflow-hidden rounded-xl bg-[#0f0a07] transition-all duration-150 hover:bg-[#1a110b] ${baseCardClasses}`}
+              className={`relative overflow-hidden rounded-xl bg-[#0f0a07] transition-all duration-150 hover:bg-[#1a110b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CD7F32] ${baseCardClasses} cursor-pointer`}
               title={border.name}
             >
               {/* Border Preview */}
-              <div className="relative aspect-square overflow-hidden rounded-t-xl bg-gradient-to-b from-black/40 via-black/10 to-black/40">
+              <div className="relative aspect-square rounded-t-xl bg-gradient-to-b from-black/40 via-black/10 to-black/40">
                 {border.image ? (
                   <>
                     <div
-                      className="absolute inset-0"
+                      className="absolute inset-4"
                       style={{
                         backgroundColor: BRONZE_HEX,
                         WebkitMaskImage: `url(/shapes/borders/${border.image})`,
                         maskImage: `url(/shapes/borders/${border.image})`,
                         WebkitMaskRepeat: 'no-repeat',
                         maskRepeat: 'no-repeat',
-                        WebkitMaskSize: '70% 70%',
-                        maskSize: '70% 70%',
+                        WebkitMaskSize: '85% 85%',
+                        maskSize: '85% 85%',
                         WebkitMaskPosition: 'center',
                         maskPosition: 'center',
                       }}
                     />
                     <div
-                      className="absolute inset-0 opacity-25"
+                      className="absolute inset-4 opacity-20"
                       style={{
                         backgroundColor: '#fff',
                         WebkitMaskImage: `url(/shapes/borders/${border.image})`,
                         maskImage: `url(/shapes/borders/${border.image})`,
                         WebkitMaskRepeat: 'no-repeat',
                         maskRepeat: 'no-repeat',
-                        WebkitMaskSize: '70% 70%',
-                        maskSize: '70% 70%',
+                        WebkitMaskSize: '85% 85%',
+                        maskSize: '85% 85%',
                         WebkitMaskPosition: 'center',
                         maskPosition: 'center',
                       }}

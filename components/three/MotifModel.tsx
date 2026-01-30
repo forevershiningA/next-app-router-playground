@@ -40,6 +40,8 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
+  const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
+  const animationFrameRef = React.useRef<number | null>(null);
   const baseOffsetDefaults = React.useMemo(() => ({
     xPos: 0,
     yPos: 0,
@@ -113,6 +115,37 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
           if (!ctx) throw new Error('Failed to create canvas context');
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          
+          // Convert to grayscale alpha mask - extract alpha channel only
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+            
+            // Calculate luminance/brightness of the original color
+            const luminance = (r + g + b) / 3;
+            
+            // Set RGB to white
+            data[i] = 255;     // R
+            data[i + 1] = 255; // G
+            data[i + 2] = 255; // B
+            
+            // Use luminance as alpha - if original pixel was dark/colored, make it opaque
+            // If it was already transparent (a=0), keep it transparent
+            if (a > 0) {
+              // For non-transparent pixels, use luminance to determine opacity
+              // Invert luminance so dark colors = opaque, white = transparent
+              data[i + 3] = 255 - luminance;
+            } else {
+              // Keep transparent pixels transparent
+              data[i + 3] = 0;
+            }
+          }
+          ctx.putImageData(imageData, 0, 0);
+          
           activeTexture = new THREE.CanvasTexture(canvas);
           if (typeof gl.capabilities.getMaxAnisotropy === 'function') {
             activeTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
@@ -198,21 +231,31 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         
         if (isCanonical) {
           // Canonical format: store absolute world coordinates
-          setMotifOffset(id, {
-            ...currentOffset,
+          dragPositionRef.current = {
             xPos: localPt.x,
             yPos: localPt.y,
-            coordinateSpace: 'absolute',
-          });
+          };
         } else {
           // Legacy format: store as offset from center (Y-down)
           const centerX = (bbox.min.x + bbox.max.x) / 2;
           const centerY = (bbox.min.y + bbox.max.y) / 2;
-          setMotifOffset(id, {
-            ...currentOffset,
+          dragPositionRef.current = {
             xPos: localPt.x - centerX,
             yPos: -(localPt.y - centerY),
-            coordinateSpace: 'offset',
+          };
+        }
+        
+        // Request animation frame to update store (throttled)
+        if (animationFrameRef.current === null) {
+          animationFrameRef.current = requestAnimationFrame(() => {
+            if (dragPositionRef.current) {
+              setMotifOffset(id, {
+                ...currentOffset,
+                ...dragPositionRef.current,
+                coordinateSpace: isCanonical ? 'absolute' : 'offset',
+              });
+            }
+            animationFrameRef.current = null;
           });
         }
       }
@@ -265,6 +308,28 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
 
     const onUp = (e: PointerEvent) => {
       e.preventDefault();
+      
+      // Cancel any pending animation frame
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      
+      // Final update with drag position
+      if (dragPositionRef.current) {
+        const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
+        const coordinateSpace = currentOffset.coordinateSpace
+          ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
+        const isCanonical = coordinateSpace === 'absolute';
+        
+        setMotifOffset(id, {
+          ...currentOffset,
+          ...dragPositionRef.current,
+          coordinateSpace: isCanonical ? 'absolute' : 'offset',
+        });
+        dragPositionRef.current = null;
+      }
+      
       setDragging(false);
       if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
@@ -278,8 +343,13 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
     return () => {
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
+      // Cancel any pending animation frame on cleanup
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
     };
-  }, [dragging, gl, controls, placeFromClientXY]);
+  }, [dragging, gl, controls, placeFromClientXY, id, motifOffsets, setMotifOffset, baseOffsetDefaults]);
 
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
   if (!headstone || !stone || !textureInfo) {
@@ -327,7 +397,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const flipY = offset.flipY ?? false;
   
   const scaleX = planeWidthUnits * (flipX ? -1 : 1);
-  const scaleY = -planeHeightUnits * (flipY ? -1 : 1);
+  const scaleY = planeHeightUnits * (flipY ? -1 : 1);
 
   const isSelected = selectedMotifId === id;
 
@@ -351,17 +421,6 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const displayX = isCanonical ? offset.xPos : centerX + offset.xPos;
   const displayY = isCanonical ? offset.yPos : centerY - (offset.yPos || 0);
 
-  console.log('[MotifModel] Positioning:', {
-    id,
-    isCanonical,
-    hasTarget: offset.target !== undefined,
-    offset: { x: offset.xPos, y: offset.yPos },
-    center: { x: centerX.toFixed(1), y: centerY.toFixed(1) },
-    display: { x: displayX.toFixed(1), y: displayY.toFixed(1) },
-    flip: { x: flipX, y: flipY },
-    scale: { x: scaleX.toFixed(2), y: scaleY.toFixed(2) }
-  });
-
   return (
     <>
       {/* Parent group for positioning - same coordinate system as inscriptions */}
@@ -381,7 +440,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
           onPointerOut={handlePointerOut}
         >
           <meshBasicMaterial
-            color={'#ffffff'}
+            color={color}
             toneMapped={false}
             transparent
             depthWrite={false}

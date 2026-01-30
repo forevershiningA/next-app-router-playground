@@ -292,6 +292,10 @@ export default function DesignerNav() {
       return;
     }
 
+    if (activeFullscreenPanel === 'select-shape' && pathname !== '/select-shape') {
+      return;
+    }
+
     const currentSlug = pathname.replace('/', '');
     if (fullscreenPanelSlugs.has(currentSlug)) {
       if (activeFullscreenPanel !== currentSlug && dismissedPanelSlug !== currentSlug) {
@@ -595,7 +599,7 @@ export default function DesignerNav() {
             />
           </div>
 
-          {!isLaser && (
+          {!isLaser && catalog?.product?.color !== '0' && (
             <div>
               <label className="mb-2 block text-sm font-medium text-white">Select Color</label>
               <div className="grid grid-cols-2 gap-2 mb-3">
@@ -632,13 +636,7 @@ export default function DesignerNav() {
           )}
         </div>
         </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-white/15 bg-[#1F1F1F]/60 p-6 text-sm text-gray-300 shadow-inner">
-            {showMotifCatalog
-              ? 'Select a motif on the memorial to adjust its properties, or browse the motif library below to add a new engraving.'
-              : 'Select a motif on the memorial to adjust its properties.'}
-          </div>
-        )}
+        ) : null}
 
         {showMotifCatalog && (
           <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
@@ -697,9 +695,9 @@ export default function DesignerNav() {
   const handleMenuClick = (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
-      const stayOnCurrentRoute = slug === 'select-shape' && isCanvasVisible && pathname === '/select-shape';
+      const keepCanvasVisibleForShape = slug === 'select-shape' && isCanvasVisible;
       openFullscreenPanel(slug);
-      if (!stayOnCurrentRoute && pathname !== `/${slug}`) {
+      if (!keepCanvasVisibleForShape && pathname !== `/${slug}`) {
         router.push(`/${slug}`);
       }
       return;
@@ -1234,7 +1232,7 @@ export default function DesignerNav() {
             )}
             {activeFullscreenPanel === 'select-border' && (
               <div className="space-y-6">
-                <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-280px)] overflow-hidden">
+                <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-220px)] overflow-hidden">
                   <div className="h-full overflow-y-auto pr-1">
                     <BorderSelector disableInternalScroll />
                   </div>
@@ -1368,7 +1366,7 @@ export default function DesignerNav() {
                     type="button"
                     data-section={item.slug}
                     onClick={(e) => handleMenuClick(item.slug, e)}
-                    className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                    className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                       highlightActive
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm'
                         : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
@@ -1419,7 +1417,7 @@ export default function DesignerNav() {
                     <Link
                       href={`/${item.slug}`}
                       data-section={item.slug}
-                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                      className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                         isActive 
                           ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
                           : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
@@ -1471,7 +1469,7 @@ export default function DesignerNav() {
                     <Link
                       href={`/${item.slug}`}
                       data-section={item.slug}
-                      className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                      className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                         isActive 
                           ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
                           : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
@@ -1505,7 +1503,7 @@ export default function DesignerNav() {
                   <Link
                     href={`/${item.slug}`}
                     onClick={(e) => handleMenuClick(item.slug, e)}
-                    className={`flex items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                    className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
                         ? `text-white bg-white/15 shadow-lg border backdrop-blur-sm ${statusClasses}` 
                         : `hover:bg-white/10 border hover:border-white/20 ${statusClasses}`
@@ -1543,7 +1541,7 @@ export default function DesignerNav() {
         {/* Browse Designs CTA */}
         <Link
           href="/designs"
-          className="flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
         >
           <SparklesIcon className="h-5 w-5 flex-shrink-0" />
           <span>Browse Designs</span>

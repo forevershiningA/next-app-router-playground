@@ -647,30 +647,22 @@ export async function loadCanonicalDesignIntoEditor(
     store.setShowBase(false);
   }
 
-  const {
-    widthMm: activeHeadstoneWidthMm,
-    heightMm: activeHeadstoneHeightMm,
-    baseWidthMm: activeBaseWidthMm,
-    baseHeightMm: activeBaseHeightMm,
-  } = useHeadstoneStore.getState();
-
+  // CRITICAL FIX: For canonical designs, we just set the dimensions into the store above,
+  // so the "active" dimensions should match the "canonical" dimensions.
+  // Use the canonical values directly instead of reading from store to avoid race conditions.
   const canonicalHeadstoneWidthMm =
-    headstone?.width_mm ?? designData.scene?.canvas?.width_mm ?? activeHeadstoneWidthMm ?? 0;
+    headstone?.width_mm ?? designData.scene?.canvas?.width_mm ?? 0;
   const canonicalHeadstoneHeightMm =
-    headstone?.height_mm ?? designData.scene?.canvas?.height_mm ?? activeHeadstoneHeightMm ?? 0;
+    headstone?.height_mm ?? designData.scene?.canvas?.height_mm ?? 0;
   const canonicalBaseWidthMm = base?.width_mm ?? canonicalHeadstoneWidthMm;
   const canonicalBaseHeightMm = base?.height_mm ?? 0;
 
-  const HEADSTONE_X_SCALE =
-    canonicalHeadstoneWidthMm ? activeHeadstoneWidthMm / canonicalHeadstoneWidthMm : 1;
-  const HEADSTONE_Y_SCALE =
-    canonicalHeadstoneHeightMm ? activeHeadstoneHeightMm / canonicalHeadstoneHeightMm : 1;
-  const BASE_X_SCALE = base
-    ? (canonicalBaseWidthMm ? activeBaseWidthMm / canonicalBaseWidthMm : HEADSTONE_X_SCALE)
-    : HEADSTONE_X_SCALE;
-  const BASE_Y_SCALE = base
-    ? (canonicalBaseHeightMm ? activeBaseHeightMm / canonicalBaseHeightMm : HEADSTONE_Y_SCALE)
-    : HEADSTONE_Y_SCALE;
+  // Since we're loading a canonical design with its exact dimensions,
+  // no scaling is needed - coordinates are already in the correct space
+  const HEADSTONE_X_SCALE = 1;
+  const HEADSTONE_Y_SCALE = 1;
+  const BASE_X_SCALE = 1;
+  const BASE_Y_SCALE = 1;
 
   const canonicalViewportWidthCssPx = designData.scene?.viewportPx?.width ?? 0;
   const canonicalViewportHeightCssPx = designData.scene?.viewportPx?.height ?? 0;
@@ -921,7 +913,7 @@ export async function loadCanonicalDesignIntoEditor(
       
       const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
       const flipX = !(motif.flip?.x ?? false);
-      const flipY = Boolean(motif.flip?.y);
+      const flipY = !(motif.flip?.y ?? false);  // Inverted since we removed negative scaleY
 
       store.setMotifOffset(newMotif.id, {
         xPos,

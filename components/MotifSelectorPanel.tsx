@@ -22,6 +22,8 @@ interface MotifSelectorPanelProps {
   motifs: MotifCategory[];
 }
 
+const BRONZE_HEX = '#CD7F32';
+
 export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) {
   const [selectedCategory, setSelectedCategory] = useState<MotifCategory | null>(null);
   const [individualMotifs, setIndividualMotifs] = useState<IndividualMotif[]>([]);
@@ -31,6 +33,10 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const addMotif = useHeadstoneStore((s) => s.addMotif);
   const removeMotif = useHeadstoneStore((s) => s.removeMotif);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  
+  // Check if product allows color (color="1")
+  const allowsColor = catalog?.product?.color === '1';
 
   useEffect(() => {
     if (!selectedCategory) {
@@ -89,22 +95,39 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
             <span className="text-xs text-white/50">{motifs.length} categories</span>
           </div>
           <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 p-1">
               {motifs.map((category) => (
                 <button
                   key={category.id}
                   type="button"
                   onClick={() => handleCategorySelect(category)}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#161616] text-left transition-all hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10"
+                  className="group flex flex-col overflow-hidden rounded-2xl border-2 border-white/10 bg-[#161616] text-left transition-all hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10 cursor-pointer"
                 >
                   <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50">
                     <div className="absolute inset-0 flex items-center justify-center p-4">
-                      <img
-                        src={category.img ?? '/ico/forever-transparent-logo.png'}
-                        alt={getMotifCategoryName(category.name)}
-                        className="max-h-full max-w-full object-contain filter brightness-0 invert"
-                        loading="lazy"
-                      />
+                      {allowsColor ? (
+                        <div
+                          className="absolute inset-4"
+                          style={{
+                            backgroundColor: BRONZE_HEX,
+                            WebkitMaskImage: `url(${category.img ?? '/ico/forever-transparent-logo.png'})`,
+                            maskImage: `url(${category.img ?? '/ico/forever-transparent-logo.png'})`,
+                            WebkitMaskRepeat: 'no-repeat',
+                            maskRepeat: 'no-repeat',
+                            WebkitMaskSize: 'contain',
+                            maskSize: 'contain',
+                            WebkitMaskPosition: 'center',
+                            maskPosition: 'center',
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={category.img ?? '/ico/forever-transparent-logo.png'}
+                          alt={getMotifCategoryName(category.name)}
+                          className="max-h-full max-w-full object-contain filter brightness-0 invert"
+                          loading="lazy"
+                        />
+                      )}
                     </div>
                   </div>
                   <div className="px-3 py-3">
@@ -147,7 +170,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                 No motifs available in this category yet.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3 p-1">
                 {individualMotifs.map((motif, index) => {
                   const isSelected = selectedMotifs.some((m) => m.svgPath === motif.path);
                   return (
@@ -155,7 +178,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                       key={`${motif.path}-${index}`}
                       type="button"
                       onClick={() => handleMotifToggle(motif.path)}
-                      className={`group flex flex-col overflow-hidden rounded-2xl border text-left transition-all ${
+                      className={`group flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all cursor-pointer ${
                         isSelected
                           ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20'
                           : 'border-white/10 bg-[#161616] hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
@@ -163,12 +186,29 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                     >
                       <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/40 to-gray-900/40">
                         <div className="absolute inset-0 flex items-center justify-center p-4">
-                          <img
-                            src={motif.path}
-                            alt={motif.name}
-                            className="max-h-full max-w-full object-contain filter brightness-0 invert"
-                            loading="lazy"
-                          />
+                          {allowsColor ? (
+                            <div
+                              className="absolute inset-4"
+                              style={{
+                                backgroundColor: BRONZE_HEX,
+                                WebkitMaskImage: `url(${motif.path})`,
+                                maskImage: `url(${motif.path})`,
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskRepeat: 'no-repeat',
+                                WebkitMaskSize: 'contain',
+                                maskSize: 'contain',
+                                WebkitMaskPosition: 'center',
+                                maskPosition: 'center',
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={motif.path}
+                              alt={motif.name}
+                              className="max-h-full max-w-full object-contain filter brightness-0 invert"
+                              loading="lazy"
+                            />
+                          )}
                         </div>
                         {isSelected && (
                           <div className="absolute right-2 top-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black">

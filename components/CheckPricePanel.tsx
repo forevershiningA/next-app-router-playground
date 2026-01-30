@@ -148,65 +148,61 @@ export default function CheckPricePanel() {
       onClick={handleClose}
     >
       <div 
-        className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden bg-white shadow-2xl"
+        className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white shadow-2xl rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
-          <h2 className="text-2xl font-bold text-white">Check Price</h2>
-          <button
-            onClick={handleClose}
-            className="text-white hover:text-gray-300 text-2xl font-bold"
-            aria-label="Close"
-          >
-            ×
-          </button>
+        {/* Header with green background */}
+        <div className="bg-[#a8d5ba] px-6 py-4">
+          <h2 className="text-2xl font-medium text-gray-800">
+            Check Price (${totalPrice.toFixed(2)})
+          </h2>
         </div>
 
         {/* Content - Table */}
-        <div className="max-h-[calc(90vh-180px)] overflow-y-auto overflow-x-auto">
+        <div className="max-h-[calc(90vh-180px)] overflow-y-auto overflow-x-auto bg-white">
           <table className="w-full border-collapse">
-            <thead className="bg-gray-100 sticky top-0">
+            <thead className="bg-gray-50 sticky top-0">
               <tr>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700 border-b-2 border-gray-300" style={{width: '55%'}}>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
                   Product
                 </th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700 border-b-2 border-gray-300" style={{width: '15%'}}>
+                <th className="text-center px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300" style={{width: '10%'}}>
                   Qty
                 </th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700 border-b-2 border-gray-300" style={{width: '15%'}}>
+                <th className="text-right px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300" style={{width: '15%'}}>
                   Price
                 </th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-700 border-b-2 border-gray-300" style={{width: '15%'}}>
+                <th className="text-right px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300" style={{width: '15%'}}>
                   Item Total
                 </th>
               </tr>
             </thead>
             <tbody>
               {/* Headstone */}
-              <tr className="border-b border-gray-200 hover:bg-gray-50">
-                <td className="px-4 py-3 text-gray-900">
-                  <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Product</span>
-                  <p>
-                    <strong>Product ID: {catalog?.product.id || 'N/A'} - {catalog?.product.name || 'Headstone'}</strong>
-                    <br />
-                    Shape: <span className="capitalize">{shapeName}</span>
-                    <br />
-                    Material: {getMaterialName(headstoneMaterialUrl)}
-                    <br />
-                    Size: {widthMm} mm x {heightMm} mm
-                  </p>
+              <tr className="border-b border-gray-200">
+                <td className="px-6 py-4">
+                  <div className="text-sm">
+                    <p className="font-semibold text-gray-900 mb-1">
+                      Product ID: {catalog?.product.id || 'N/A'} - {catalog?.product.name || 'Headstone'}
+                    </p>
+                    <p className="text-gray-600">
+                      Bronze colour: {getMaterialName(headstoneMaterialUrl)}
+                      <br />
+                      Border: {shapeName}
+                      <br />
+                      Size: {widthMm} mm x {heightMm} mm
+                      <br />
+                      Fastening Type: Lugs with Studs
+                    </p>
+                  </div>
                 </td>
-                <td className="px-4 py-3 text-gray-900">
-                  <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Qty</span>
+                <td className="px-6 py-4 text-center text-sm text-gray-900">
                   1
                 </td>
-                <td className="px-4 py-3 text-gray-900">
-                  <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Price</span>
+                <td className="px-6 py-4 text-right text-sm text-gray-900">
                   ${headstonePrice.toFixed(2)}
                 </td>
-                <td className="px-4 py-3 text-gray-900">
-                  <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Item Total</span>
+                <td className="px-6 py-4 text-right text-sm text-gray-900">
                   ${headstonePrice.toFixed(2)}
                 </td>
               </tr>
@@ -249,28 +245,27 @@ export default function CheckPricePanel() {
                 const lineTotal = charCount * pricePerChar;
                 
                 return (
-                  <tr key={line.id} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Product</span>
-                      <p>
-                        <strong>Product ID: {showInscriptionColor ? '125' : '16'} - Inscription ({showInscriptionColor ? 'Traditional Engraved' : 'Laser Etched'})</strong>
-                        <br />
-                        {line.text}
-                        <br />
-                        {line.sizeMm}mm {line.font}, colour: {colorName} ({line.color})
-                      </p>
+                  <tr key={line.id} className="border-b border-gray-200">
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          Product ID: {showInscriptionColor ? '78' : '16'} - Inscription (Bronze)
+                        </p>
+                        <p className="text-gray-600">
+                          {line.text}
+                          <br />
+                          {line.sizeMm}mm {line.font}, colour: {colorName} ({line.color})
+                        </p>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Qty</span>
-                      {charCount}
+                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                      1
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Price</span>
-                      ${pricePerChar.toFixed(2)}
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      $0.00
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Item Total</span>
-                      ${lineTotal.toFixed(2)}
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      $0.00
                     </td>
                   </tr>
                 );
@@ -346,67 +341,58 @@ export default function CheckPricePanel() {
                 }
                 
                 return (
-                  <tr key={motif.id} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Product</span>
-                      <p>
-                        <strong>Product ID: 126 - Motif ({productType})</strong>
-                        <br />
-                        File: {motifFileName}
-                        <br />
-                        {heightMm} mm, colour: {colorDisplay} ({motif.color})
-                      </p>
+                  <tr key={motif.id} className="border-b border-gray-200">
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <p className="font-semibold text-gray-900 mb-1">
+                          Product ID: 51 - Motif (Bronze)
+                        </p>
+                        <p className="text-gray-600">
+                          File: {motifFileName}
+                          <br />
+                          {heightMm} mm, colour: {colorDisplay} ({motif.color})
+                        </p>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Qty</span>
+                    <td className="px-6 py-4 text-center text-sm text-gray-900">
                       1
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Price</span>
-                      ${individualPrice.toFixed(2)}
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      $0.00
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
-                      <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Item Total</span>
-                      ${individualPrice.toFixed(2)}
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      $0.00
                     </td>
                   </tr>
                 );
               })}
 
               {/* Total Row */}
-              <tr className="bg-gray-100 font-bold">
-                <td className="px-4 py-3 text-gray-900"></td>
-                <td className="px-4 py-3 text-gray-900"></td>
-                <td className="px-4 py-3 text-right text-gray-900">Total</td>
-                <td className="px-4 py-3 text-gray-900">${totalPrice.toFixed(2)}</td>
-              </tr>
-
-              {/* Disclaimer */}
-              <tr>
-                <td colSpan={4} className="px-4 py-3 text-sm text-gray-600">
-                  Price in Australian dollars. Cost is inclusive of GST and shipping to mainland Australia. 
-                  See <a href="https://www.forevershining.com.au/help/delivery/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Delivery</a> for full details.
-                </td>
+              <tr className="border-t-2 border-gray-300">
+                <td className="px-6 py-4"></td>
+                <td className="px-6 py-4"></td>
+                <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">Total</td>
+                <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">${totalPrice.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-4 border-t border-gray-200 bg-gray-50 px-6 py-4">
-          <button
-            onClick={handleClose}
-            className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors"
-          >
-            CLOSE
-          </button>
+        {/* Footer with green background */}
+        <div className="flex items-center justify-end gap-3 bg-[#a8d5ba] px-6 py-4">
           <button
             onClick={() => {
               // TODO: Implement PDF download
             }}
-            className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-gray-800 hover:bg-gray-900 transition-colors uppercase"
           >
-            DOWNLOAD PDF
+            Download PDF
+          </button>
+          <button
+            onClick={handleClose}
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-gray-800 hover:bg-gray-900 transition-colors uppercase"
+          >
+            Close
           </button>
         </div>
       </div>

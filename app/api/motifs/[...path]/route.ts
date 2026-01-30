@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { filenameMatchesCategory } from '#/lib/motif-category-mappings';
 
 export async function GET(
   request: NextRequest,
@@ -11,27 +10,27 @@ export async function GET(
     const { path: categoryPathArray } = await params;
     const categoryPath = categoryPathArray.join('/');
     
-    // SVG files are in the root motifs directory
-    const motifsDir = path.join(process.cwd(), 'public', 'shapes', 'motifs');
+    // Motif files are organized in category subdirectories under public/motifs/
+    const categoryDir = path.join(process.cwd(), 'public', 'motifs', categoryPath);
+    const filesListPath = path.join(categoryDir, 'files.txt');
     
-    if (!fs.existsSync(motifsDir)) {
+    // Check if category directory and files.txt exist
+    if (!fs.existsSync(categoryDir) || !fs.existsSync(filesListPath)) {
+      console.log(`Category not found: ${categoryPath}`);
       return NextResponse.json({ motifs: [] });
     }
     
-    // Read all SVG files from the motifs directory
-    const files = fs.readdirSync(motifsDir);
-    const svgFiles = files.filter(file => file.endsWith('.svg'));
+    // Read the files.txt which contains comma-separated list of filenames (without .svg extension)
+    const filesContent = fs.readFileSync(filesListPath, 'utf-8');
+    const fileNames = filesContent
+      .split(',')
+      .map(name => name.trim())
+      .filter(name => name.length > 0);
     
-    // Filter files that match the category
-    const categoryFiles = svgFiles.filter(file => 
-      filenameMatchesCategory(file, categoryPath)
-    );
-    
-    // Map to motif objects
-    const motifs = categoryFiles.map(file => ({
-      path: `/shapes/motifs/${file}`,
-      name: file
-        .replace('.svg', '')
+    // Map to motif objects - files are in public/shapes/motifs/ with .svg extension
+    const motifs = fileNames.map(fileName => ({
+      path: `/shapes/motifs/${fileName}.svg`,
+      name: fileName
         .replace(/_/g, ' ')
         .replace(/\s+/g, ' ')
         .trim(),

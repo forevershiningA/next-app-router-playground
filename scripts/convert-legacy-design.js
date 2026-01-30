@@ -416,6 +416,21 @@ function convertMotifs(legacyData, metrics, canvasInfo, options = {}) {
 
 function mapTexture(texturePath) {
   if (!texturePath || typeof texturePath !== 'string') return null;
+  
+  // Mapping from old numbered texture paths to new named material files
+  const textureMapping = {
+    'forever2/l/17.jpg': 'Glory-Black-1.webp',
+    'forever2/l/18.jpg': 'Glory-Gold-Spots.webp',
+  };
+  
+  // Try to match the texture path with our mapping
+  for (const [oldPath, newImage] of Object.entries(textureMapping)) {
+    if (texturePath.includes(oldPath)) {
+      return `/textures/forever/l/${newImage}`;
+    }
+  }
+  
+  // Fallback: extract filename and convert extension
   const file = texturePath.split(/[\\/]/).pop();
   if (!file) return null;
   return `/textures/forever/l/${file.replace(/\.(jpg|jpeg)$/i, '.webp')}`;

@@ -8,10 +8,7 @@ import MotifSelectionGrid from './_ui/MotifSelectionGrid';
 export default function Page() {
   const motifs = data.motifs;
   const pathname = usePathname();
-  const [isDesktop, setIsDesktop] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth >= 1024;
-  });
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {

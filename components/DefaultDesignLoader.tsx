@@ -27,26 +27,20 @@ export default function DefaultDesignLoader() {
 }
 
 /**
- * Hook to load the default canonical design programmatically
- * Used by the "Load Design" button
+ * Hook to load a specific canonical design programmatically
+ * Used by the "Load Design" buttons
+ * Always allows reloading - clears existing design each time
  */
-export function useLoadDefaultDesign() {
-  const loadedRef = useRef(false);
-
+export function useLoadDesign(designId: string) {
   const loadDesign = async () => {
-    if (loadedRef.current) {
-      console.log('[useLoadDefaultDesign] Design already loaded this session');
-      return { success: false, message: 'Design already loaded' };
-    }
-
-    const canonicalDesignUrl = `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${DEFAULT_DESIGN_ID}.json`;
+    const canonicalDesignUrl = `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json`;
 
     try {
-      console.log('[useLoadDefaultDesign] Loading canonical design:', DEFAULT_DESIGN_ID);
+      console.log(`[useLoadDesign] Loading canonical design: ${designId}`);
       
       const response = await fetch(canonicalDesignUrl, { cache: 'no-cache' });
       if (!response.ok) {
-        console.warn('[useLoadDefaultDesign] Failed to fetch canonical design:', response.status);
+        console.warn(`[useLoadDesign] Failed to fetch canonical design ${designId}:`, response.status);
         return { success: false, message: 'Failed to fetch design' };
       }
 
@@ -54,14 +48,22 @@ export function useLoadDefaultDesign() {
       
       await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
       
-      loadedRef.current = true;
-      console.log('[useLoadDefaultDesign] Successfully loaded canonical design');
+      console.log(`[useLoadDesign] Successfully loaded canonical design ${designId}`);
       return { success: true, message: 'Design loaded successfully' };
     } catch (error) {
-      console.error('[useLoadDefaultDesign] Error loading canonical design:', error);
+      console.error(`[useLoadDesign] Error loading canonical design ${designId}:`, error);
       return { success: false, message: 'Error loading design' };
     }
   };
 
-  return { loadDesign, isLoaded: loadedRef.current };
+  return { loadDesign, isLoaded: false };
+}
+
+/**
+ * Hook to load the default canonical design programmatically
+ * Used by the "Load Design" button
+ * @deprecated Use useLoadDesign(designId) instead
+ */
+export function useLoadDefaultDesign() {
+  return useLoadDesign(DEFAULT_DESIGN_ID);
 }

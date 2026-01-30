@@ -363,14 +363,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
     const { catalog, selected } = state;
     const isLaser = catalog?.product.laser === '1';
-    const defaultColor = isLaser ? '#ffffff' : '#c99d44'; // White for laser, gold for others
+    // Use defaultColor from catalog, fallback to white for laser or gold for others
+    const defaultColor = catalog?.product.defaultColor || (isLaser ? '#ffffff' : '#c99d44');
     
     // Set target based on currently selected object (headstone or base)
     const target: 'base' | 'headstone' = selected === 'base' ? 'base' : 'headstone';
     
     set((s) => {
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
-      // Initialize offset with target
+      // Initialize offset with target and flip defaults
       const newOffsets = {
         ...s.motifOffsets,
         [id]: {
@@ -381,6 +382,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           heightMm: 100,
           target,
           coordinateSpace: 'offset',
+          flipX: false,
+          flipY: false,
         }
       };
       return {
@@ -446,7 +449,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const isHeadstoneLike =
         productType === 'headstone' || productType === 'mini-headstone';
       const showBase = isHeadstoneLike || productType === 'monument';
-      const showInscriptionColor = catalog.product.laser !== '1';
+      const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
       set({ showBase, showInscriptionColor });
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
@@ -834,10 +837,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const rotationDeg = clampInscriptionRotation(patch.rotationDeg ?? 0);
     const xPos = patch.xPos ?? 0;
     const yPos = patch.yPos ?? 0;
-    const color =
-      state.showInscriptionColor === false
-        ? '#ffffff'
-        : (patch.color ?? '#c99d44');
+    
+    // Determine color: use catalog defaultColor if available, otherwise use hardcoded defaults
+    let color: string;
+    if (state.showInscriptionColor === false) {
+      color = '#ffffff';
+    } else {
+      color = patch.color ?? state.catalog?.product.defaultColor ?? '#c99d44';
+    }
     
     // Set target based on currently selected object (headstone or base)
     const target = state.selected === 'base' ? 'base' : 'headstone';

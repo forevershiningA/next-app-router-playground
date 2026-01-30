@@ -24,6 +24,8 @@ type MotifSelectionGridProps = {
   motifs: Motif[];
 };
 
+const BRONZE_HEX = '#CD7F32';
+
 export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) {
   const [selectedCategoryMotif, setSelectedCategoryMotif] = useState<Motif | null>(null);
   const [individualMotifs, setIndividualMotifs] = useState<IndividualMotif[]>([]);
@@ -31,6 +33,10 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const addMotif = useHeadstoneStore((s) => s.addMotif);
   const removeMotif = useHeadstoneStore((s) => s.removeMotif);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  
+  // Check if product allows color (color="1")
+  const allowsColor = catalog?.product?.color === '1';
 
   // Load individual motifs from a category folder
   useEffect(() => {
@@ -112,7 +118,7 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
             <div className="mb-6 text-sm text-gray-400">
               Showing {motifs.length} categor{motifs.length !== 1 ? 'ies' : 'y'}
             </div>
-                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-1">
                   {motifs.map((motif) => (
                     <button
                       key={motif.id}
@@ -122,11 +128,28 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
                       {/* Motif Image - Square aspect ratio */}
                       <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
                         <div className="absolute inset-0 flex items-center justify-center p-8">
-                          <img
-                            src={motif.img}
-                            alt={getMotifCategoryName(motif.name)}
-                            className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
-                          />
+                          {allowsColor ? (
+                            <div
+                              className="absolute inset-8"
+                              style={{
+                                backgroundColor: BRONZE_HEX,
+                                WebkitMaskImage: `url(${motif.img})`,
+                                maskImage: `url(${motif.img})`,
+                                WebkitMaskRepeat: 'no-repeat',
+                                maskRepeat: 'no-repeat',
+                                WebkitMaskSize: 'contain',
+                                maskSize: 'contain',
+                                WebkitMaskPosition: 'center',
+                                maskPosition: 'center',
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={motif.img}
+                              alt={getMotifCategoryName(motif.name)}
+                              className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
+                            />
+                          )}
                         </div>
                       </div>
 
@@ -169,7 +192,7 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
                 <div className="mb-6 text-sm text-gray-400">
                   Showing {individualMotifs.length} motif{individualMotifs.length !== 1 ? 's' : ''}
                 </div>
-                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-1">
                   {/* Return to Categories Card - First Position */}
                   <button
                     onClick={handleBackToCategories}
@@ -240,11 +263,28 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
                         {/* Motif Image - Square aspect ratio */}
                         <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
                           <div className="absolute inset-0 flex items-center justify-center p-8">
-                            <img
-                              src={motif.path}
-                              alt={motif.name}
-                              className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
-                            />
+                            {allowsColor ? (
+                              <div
+                                className="absolute inset-8"
+                                style={{
+                                  backgroundColor: BRONZE_HEX,
+                                  WebkitMaskImage: `url(${motif.path})`,
+                                  maskImage: `url(${motif.path})`,
+                                  WebkitMaskRepeat: 'no-repeat',
+                                  maskRepeat: 'no-repeat',
+                                  WebkitMaskSize: 'contain',
+                                  maskSize: 'contain',
+                                  WebkitMaskPosition: 'center',
+                                  maskPosition: 'center',
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={motif.path}
+                                alt={motif.name}
+                                className="object-contain max-h-full max-w-full transition-transform group-hover:scale-105"
+                              />
+                            )}
                           </div>
                         </div>
 

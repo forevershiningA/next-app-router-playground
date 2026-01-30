@@ -274,7 +274,7 @@ export default function ThreeScene() {
     <>
       {showLoader && (
         <div className="absolute inset-0 z-50 grid place-items-center bg-transparent">
-          <div className="flex flex-col items-center gap-4 text-white drop-shadow">
+          <div className="flex flex-col items-center gap-4 text-white">
             <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
             <div className="font-mono text-sm opacity-90">
               Loading Headstone…

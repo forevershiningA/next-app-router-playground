@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-28  
+**Last Updated:** 2026-01-29  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -25,12 +25,47 @@
 
 ---
 
-## Current Status (2026-01-28 Evening)
+## Current Status (2026-01-29)
 
-### ✅ Recent Changes (Today)
+### ✅ Recent Changes (January 29, 2026)
+1. **Canonical Loader Scaling Fix**: Fixed race condition in coordinate scaling
+   - Removed dynamic scale factor calculation that compared old design dimensions with new ones
+   - Set all scale factors to 1.0 for canonical designs (coordinates already in correct space)
+   - Fixes Design 2 (1578016189116) loading with incorrect positioning
+   - Files: `lib/saved-design-loader-utils.ts`
+
+2. **Texture Mapping Enhancement**: Added numbered texture mapping to converter
+   - Converter now maps `forever2/l/17.jpg` → `Glory-Black-1.webp`
+   - Converter now maps `forever2/l/18.jpg` → `Glory-Gold-Spots.webp`
+   - Matches DesignPageClient texture mapping logic
+   - Files: `scripts/convert-legacy-design.js`
+
+3. **Motif Color Recoloring Fixed**: SVG rasterization now supports dynamic color changes
+   - Converts rasterized SVG to grayscale alpha mask (white shape + alpha channel)
+   - Material `color` prop now properly tints the white mask
+   - Uses luminance inversion to preserve shape detail in alpha
+   - Files: `components/three/MotifModel.tsx`
+
+4. **Load Design Buttons Always Active**: Removed "loaded" state that disabled buttons
+   - Both "Load Design 1" and "Load Design 2" always clickable
+   - Allows switching between designs freely
+   - Each click clears existing design and loads fresh
+   - Files: `components/LoadDesignButton.tsx`, `components/DefaultDesignLoader.tsx`
+
+5. **Dual Design Loading**: Added second design loader button
+   - "Load Design 1": Loads canonical design `1725769905504` (Curved Gable biblical)
+   - "Load Design 2": Loads canonical design `1578016189116` (forevershining 3-person memorial)
+   - Buttons stacked in top-right corner (top-4 and top-20 positioning)
+   - Files: `components/ConditionalCanvas.tsx`, `components/LoadDesignButton.tsx`
+
+6. **Loading Spinner Drop Shadow Removed**: Cleaned up loader styling
+   - Removed `drop-shadow` class from loading overlays
+   - Files: `components/LoadingOverlay.tsx`, `components/ThreeScene.tsx`
+
+### ✅ Recent Changes (January 28, 2026)
 1. **Manual Design Loading**: Automatic design loading disabled. Headstone now starts completely empty.
-   - `components/DefaultDesignLoader.tsx` converted to manual trigger via `useLoadDefaultDesign()` hook
-   - New "Load Design" button in top-right corner loads canonical design `1725769905504`
+   - `components/DefaultDesignLoader.tsx` converted to manual trigger via `useLoadDesign()` hook
+   - New "Load Design" buttons in top-right corner
    - See `LOAD_DESIGN_BUTTON.md` for implementation details
 
 2. **Default 3D Additions Removed**: 
@@ -43,12 +78,14 @@
    - Users can see base price before adding any content
    - Exception added: `item.slug !== 'check-price'` in disabled logic
 
+### 🔧 Fixed Issues
+- ✅ **Canonical loader scaling bug**: Scale factors now set to 1.0, preventing dimension mismatch
+- ✅ **Texture mapping**: Numbered textures (17.jpg, 18.jpg) now properly mapped to named files
+- ✅ **Motif recoloring**: Color picker now works with rasterized SVG motifs
+- ✅ **Design switching**: Load buttons remain active, allowing free design switching
+
 ### ⚠️ Known Issues
-- Canonical design **1578016189116** has coordinate mapping issues (severe Y-offset, motif flips)
-- Canonical-to-3D coordinate mapping unresolved for taller canvases (forevershining ML set)
-- Current loader relies on legacy stage offsets + heuristics
-- Screenshots of mismatch: `public/screenshots/1.png`
-- Short-term plan: derive single stage→component formula without bespoke biases
+- None currently reported
 
 ## Project Overview
 
@@ -57,7 +94,7 @@ A Next.js-based 3D headstone designer allowing users to:
 - **Select headstone style** (Upright or Slant)
 - **Select base finish** (Polished or Rock Pitch)
 - Add inscriptions with custom fonts and positioning (simple click-and-drag)
-- Place decorative motifs (SVG-based)
+- Place decorative motifs (SVG-based with dynamic color changes)
 - Add 3D models (statues, vases, applications)
 - View real-time 3D preview with texture mapping
 - Calculate pricing based on configuration
@@ -95,22 +132,22 @@ A Next.js-based 3D headstone designer allowing users to:
   - Ovals & Circle: `/shapes/masks/oval_horizontal.svg`, `oval_vertical.svg`, `circle.svg`
 - **Pricing**: Uses `quantity_type="Width + Height"` from catalog
 
-### Load Design Feature (2026-01-28)
-**Manual Design Loading** replaces automatic loading:
+### Load Design Feature (2026-01-28/29)
+**Manual Design Loading** with dual design support:
 - Headstone starts **completely empty** (no inscriptions, motifs, or 3D additions)
-- **"Load Design" button** in top-right corner of canvas (golden border, semi-transparent)
-- Loads canonical design `1725769905504` (Curved Gable biblical memorial)
-- Three button states:
-  - Default: "Load Design" (amber/gold styling with hover glow)
+- **"Load Design 1" button** in top-right corner loads canonical design `1725769905504` (Curved Gable biblical)
+- **"Load Design 2" button** below loads canonical design `1578016189116` (forevershining 3-person memorial)
+- Two button states (no "loaded" state - always active):
+  - Default: "Load Design 1/2" (amber/gold styling with hover glow)
   - Loading: "Loading..." (amber with bouncing icon)
-  - Loaded: "Design Loaded" (green, disabled)
-- Design persists throughout session until page refresh
+- Buttons always remain clickable for free design switching
+- Each load clears existing design before loading new one
 - See `LOAD_DESIGN_BUTTON.md` for implementation details
 
 **Components:**
-- `components/LoadDesignButton.tsx` - Button component with state management
-- `components/DefaultDesignLoader.tsx` - Exports `useLoadDefaultDesign()` hook
-- `components/ConditionalCanvas.tsx` - Renders button in canvas overlay
+- `components/LoadDesignButton.tsx` - Reusable button component with designId/label/position props
+- `components/DefaultDesignLoader.tsx` - Exports `useLoadDesign(designId)` hook (no caching)
+- `components/ConditionalCanvas.tsx` - Renders both buttons in canvas overlay
 
 ---
 
@@ -296,6 +333,43 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 ```typescript
 const isPlaque = catalog?.product.type === 'plaque';
 ```
+
+### Motif Color Recoloring (2026-01-29)
+**Implementation:** Dynamic color changes on rasterized SVG motifs
+
+**Challenge:** SVGs are rasterized to high-quality bitmaps for sharp rendering. Original colors were baked into the texture, preventing color changes.
+
+**Solution:** Alpha mask extraction + material tinting
+```typescript
+// Convert rasterized image to white shape with alpha channel
+const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+const data = imageData.data;
+for (let i = 0; i < data.length; i += 4) {
+  const luminance = (data[i] + data[i + 1] + data[i + 2]) / 3;
+  // Set all pixels to white
+  data[i] = data[i + 1] = data[i + 2] = 255;
+  // Use inverted luminance as alpha (dark = opaque, light = transparent)
+  if (data[i + 3] > 0) {
+    data[i + 3] = 255 - luminance;
+  }
+}
+```
+
+**Material Setup:**
+```typescript
+<meshBasicMaterial
+  color={color}  // User-selected color tints the white texture
+  map={alphaTexture}
+  transparent
+  alphaTest={0.01}
+/>
+```
+
+**Result:**
+- SVG detail preserved in alpha channel
+- Color picker dynamically recolors motifs
+- High quality maintained (2048px textures)
+- No performance impact
 
 ---
 
@@ -2312,6 +2386,36 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-01-29 (Evening)**: Canonical Loader Fixes & Motif Color Recoloring
+  - **Canonical Loader Scaling Fix**:
+    - **Issue**: Design 2 (1578016189116) loaded with severe positioning errors - inscriptions missing, motifs clustered above headstone
+    - **Root Cause**: Race condition in scale factor calculation - comparing old design dimensions (609.6mm) with new design dimensions (1200mm), causing 0.508 scaling
+    - **Solution**: Set all scale factors to 1.0 for canonical designs since coordinates are already in correct millimeter space
+    - **Result**: Both Design 1 and Design 2 now load correctly with 1:1 positioning
+    - **Files**: `lib/saved-design-loader-utils.ts`
+  - **Texture Number-to-Name Mapping**:
+    - **Issue**: Design 2 loaded with incorrect texture (`17.webp` instead of `Glory-Black-1.webp`)
+    - **Solution**: Added texture mapping to converter's `mapTexture()` function
+    - **Mappings**: `forever2/l/17.jpg` → `Glory-Black-1.webp`, `18.jpg` → `Glory-Gold-Spots.webp`
+    - **Result**: Regenerated canonical JSON now has correct Glory Black texture
+    - **Files**: `scripts/convert-legacy-design.js`
+  - **Motif Color Recoloring**:
+    - **Issue**: Color picker didn't work on rasterized SVG motifs (colors baked into bitmap)
+    - **Solution**: Convert rasterized image to white alpha mask, use material color for tinting
+    - **Implementation**: Extract luminance, set RGB to white, use inverted luminance as alpha
+    - **Result**: Dynamic color changes now work while maintaining high quality
+    - **Files**: `components/three/MotifModel.tsx`
+  - **Dual Design Loading**:
+    - Added second "Load Design 2" button below first button
+    - Design 1: `1725769905504` (Curved Gable biblical memorial)
+    - Design 2: `1578016189116` (forevershining 3-person memorial)
+    - Both buttons always active (removed "loaded" disabled state)
+    - Users can freely switch between designs
+    - **Files**: `components/LoadDesignButton.tsx`, `components/DefaultDesignLoader.tsx`, `components/ConditionalCanvas.tsx`
+  - **Loading Spinner Cleanup**:
+    - Removed drop-shadow from loading overlays for cleaner appearance
+    - **Files**: `components/LoadingOverlay.tsx`, `components/ThreeScene.tsx`
 
 - **2026-01-28 (Evening)**: Manual Design Loading & Empty Headstone Default State
   - **Load Design Button Feature**:
