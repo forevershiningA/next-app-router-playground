@@ -170,35 +170,147 @@ export default function InscriptionEditPanel() {
           {active && (
             <>
               {/* Size Slider */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-200">
-                  Size: {active.sizeMm ?? 30} <span className="text-slate-500">mm</span>
-                </label>
-                <input
-                  type="range"
-                  min={inscriptionMinHeight}
-                  max={inscriptionMaxHeight}
-                  step={1}
-                  value={active.sizeMm ?? 30}
-                  onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
-                  className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
-                />
+              <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-sm font-medium text-gray-200 w-20">Size</label>
+                  <div className="flex items-center gap-2 justify-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newVal = Math.max(inscriptionMinHeight, (active.sizeMm ?? 30) - 1);
+                        updateLine(active.id, { sizeMm: newVal });
+                      }}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Decrease size by 1mm"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      min={inscriptionMinHeight}
+                      max={inscriptionMaxHeight}
+                      step={1}
+                      value={active.sizeMm ?? 30}
+                      onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
+                      onBlur={(e) => {
+                        const val = Number(e.target.value);
+                        if (val < inscriptionMinHeight) {
+                          updateLine(active.id, { sizeMm: inscriptionMinHeight });
+                        } else if (val > inscriptionMaxHeight) {
+                          updateLine(active.id, { sizeMm: inscriptionMaxHeight });
+                        }
+                      }}
+                      className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                        (active.sizeMm ?? 30) < inscriptionMinHeight || (active.sizeMm ?? 30) > inscriptionMaxHeight
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newVal = Math.min(inscriptionMaxHeight, (active.sizeMm ?? 30) + 1);
+                        updateLine(active.id, { sizeMm: newVal });
+                      }}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Increase size by 1mm"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                    <span className="text-sm font-medium text-gray-300">mm</span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={inscriptionMinHeight}
+                    max={inscriptionMaxHeight}
+                    step={1}
+                    value={active.sizeMm ?? 30}
+                    onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
+                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                    <span>{inscriptionMinHeight}mm</span>
+                    <span>{inscriptionMaxHeight}mm</span>
+                  </div>
+                </div>
               </div>
 
               {/* Rotation Slider */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-200">
-                  Rotation: {active.rotationDeg ?? 0} <span className="text-slate-500">°</span>
-                </label>
-                <input
-                  type="range"
-                  min={-180}
-                  max={180}
-                  step={1}
-                  value={active.rotationDeg ?? 0}
-                  onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
-                  className="fs-range h-1 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-slate-900/95 [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_0_2px_rgba(0,0,0,0.25)]"
-                />
+              <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
+                  <div className="flex items-center gap-2 justify-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newVal = Math.max(-180, (active.rotationDeg ?? 0) - 1);
+                        updateLine(active.id, { rotationDeg: newVal });
+                      }}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Decrease rotation by 1 degree"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      min={-180}
+                      max={180}
+                      step={1}
+                      value={active.rotationDeg ?? 0}
+                      onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
+                      onBlur={(e) => {
+                        const val = Number(e.target.value);
+                        if (val < -180) {
+                          updateLine(active.id, { rotationDeg: -180 });
+                        } else if (val > 180) {
+                          updateLine(active.id, { rotationDeg: 180 });
+                        }
+                      }}
+                      className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                        (active.rotationDeg ?? 0) < -180 || (active.rotationDeg ?? 0) > 180
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newVal = Math.min(180, (active.rotationDeg ?? 0) + 1);
+                        updateLine(active.id, { rotationDeg: newVal });
+                      }}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Increase rotation by 1 degree"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                    <span className="text-sm font-medium text-gray-300">°</span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={-180}
+                    max={180}
+                    step={1}
+                    value={active.rotationDeg ?? 0}
+                    onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
+                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                    <span>-180°</span>
+                    <span>180°</span>
+                  </div>
+                </div>
               </div>
             </>
           )}
