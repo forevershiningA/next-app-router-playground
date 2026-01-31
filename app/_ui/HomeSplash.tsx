@@ -398,14 +398,22 @@ export default function HomeSplash() {
           <div className="text-center">
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
-            <h1 className="text-3xl font-playfair-display tracking-tight text-white sm:text-5xl mb-2 sm:mb-3 leading-tight">
+            <h1 className="text-3xl font-playfair-display tracking-tight sm:text-5xl mb-2 sm:mb-3 leading-tight">
               <span
-                className="inline-block text-shadow-hero font-semibold text-[2rem] sm:text-5xl mx-auto"
+                className="inline-block font-semibold text-[2rem] sm:text-5xl mx-auto"
+                style={{ 
+                  color: '#FFFEF8',
+                  textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.4)'
+                }}
               >
                 Create the Perfect Tribute
               </span>
               <span
-                className="block font-light text-shadow-hero text-xl sm:text-3xl mt-4 text-gray-200"
+                className="block font-light text-xl sm:text-3xl mt-4"
+                style={{ 
+                  color: '#FFFFFF',
+                  textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 4px 20px rgba(0,0,0,0.3)'
+                }}
               >
                 Design a beautiful tribute in real-time 3D - save, share, and order when ready.
               </span>
@@ -421,11 +429,23 @@ export default function HomeSplash() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-md font-medium text-white text-shadow-hero">
+                <p 
+                  className="text-md font-semibold"
+                  style={{ 
+                    color: '#F8D64F',
+                    textShadow: '0 2px 8px rgba(0,0,0,0.5)'
+                  }}
+                >
                   Trusted by 5,000+ families
                 </p>
               </div>
-              <p className="text-sm text-gray-300 text-shadow-hero">
+              <p 
+                className="text-sm font-medium"
+                style={{ 
+                  color: '#FFFFFF',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.5)'
+                }}
+              >
                 Save designs • Share with family • No obligation · No credit card required<br/>
                 Headstones • Plaques • Urns • Full Monuments<br/>
                 Design exactly what you need.
@@ -528,22 +548,20 @@ export default function HomeSplash() {
             </div>
 
             <div className="mt-10 w-full max-w-2xl mx-auto lg:mx-0">
-              <div className="relative hidden sm:block pointer-events-none">
-                <div className="absolute inset-x-6 top-1/2 h-px bg-[#d4af37]/20" />
-                <div className="absolute inset-x-10 top-1/2 -translate-y-1/2 text-[#d4af37]/60 text-lg flex justify-between max-w-[calc(100%-80px)] mx-auto">
-                  <span>→</span>
-                  <span>→</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-stretch relative z-10">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-stretch relative z-10">
                 {compassionPhases.map((phase) => (
                   <div
                     key={phase.key}
-                    className="rounded-2xl border border-[#3A3A3A] bg-[#1B130C]/85 px-4 py-5 text-left shadow-[0_15px_35px_rgba(0,0,0,0.45)] h-full min-h-[190px] flex flex-col"
+                    className="group relative rounded-2xl border border-[#d4af37]/30 bg-gradient-to-b from-[#2a1f15]/80 to-[#1a120c]/90 px-6 py-6 text-left backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] h-full min-h-[190px] flex flex-col transition-all duration-300 hover:border-[#d4af37]/60 hover:shadow-[0_12px_40px_rgba(212,175,55,0.2)] hover:scale-[1.02]"
                   >
-                    <p className="text-[10px] uppercase tracking-[0.45em] text-white/60">{phase.eyebrow}</p>
-                    <p className="text-lg font-serif text-white mt-2">{phase.summary}</p>
-                    <p className="text-sm text-white/90 mt-2 leading-relaxed flex-1">{phase.description}</p>
+                    {/* Subtle glow effect on hover */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#d4af37]/0 to-[#d4af37]/0 group-hover:from-[#d4af37]/5 group-hover:to-transparent transition-all duration-300"></div>
+                    
+                    <div className="relative flex flex-col h-full">
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-[#d4af37]/80 font-medium mb-3">{phase.eyebrow}</p>
+                      <p className="text-xl font-serif text-white mt-1 mb-3">{phase.summary}</p>
+                      <p className="text-sm text-white/75 leading-relaxed flex-1">{phase.description}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -574,31 +592,36 @@ export default function HomeSplash() {
         </div>
 
         <div className="mt-16 space-y-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-[1280px] w-full mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-[1280px] w-full mx-auto">
             {howItWorksHighlights.map(({ label, icon: HighlightIcon }) => (
               <div
                 key={label}
-                className="flex items-center gap-3 px-2 text-white"
+                className="group relative flex items-center gap-4 px-2"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#20150e]/80 border border-[#f3d48f]/40 flex items-center justify-center text-[#f7dca3]">
-                  <HighlightIcon className="w-5 h-5" />
+                <div className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/10 border border-[#d4af37]/40 flex items-center justify-center text-[#f7dca3] group-hover:from-[#d4af37]/30 group-hover:to-[#d4af37]/15 group-hover:border-[#d4af37]/60 transition-all duration-300 shadow-lg">
+                  <HighlightIcon className="w-6 h-6" />
                 </div>
-                <p className="text-sm font-semibold leading-snug text-white">
+                <p className="text-sm font-semibold leading-snug text-white/90 group-hover:text-white transition-colors">
                   {label}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {tributeStats.map(({ label, value, detail }) => (
               <div 
                 key={label} 
-                className="rounded-2xl border border-[#d4af37]/70 bg-[#1f130c]/90 p-6 shadow-[0_20px_45px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-[#d4af37] hover:shadow-[0_25px_50px_rgba(212,175,55,0.15)]"
+                className="group relative rounded-2xl border border-[#d4af37]/30 bg-gradient-to-b from-[#2a1f15]/80 to-[#1a120c]/90 p-8 backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-[#d4af37]/60 hover:shadow-[0_12px_40px_rgba(212,175,55,0.2)] hover:scale-[1.02]"
               >
-                <p className="text-[10px] uppercase tracking-[0.4em] text-white mb-2">{label}</p>
-                <p className="text-3xl font-serif text-white mt-1">{value}</p>
-                <p className="text-[13px] text-white/95 mt-2 leading-snug">{detail}</p>
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#d4af37]/0 to-[#d4af37]/0 group-hover:from-[#d4af37]/5 group-hover:to-transparent transition-all duration-300"></div>
+                
+                <div className="relative">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-[#d4af37]/80 font-medium mb-3">{label}</p>
+                  <p className="text-4xl font-serif text-white mt-2 mb-3 tracking-tight">{value}</p>
+                  <p className="text-sm text-white/75 leading-relaxed">{detail}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -607,18 +630,9 @@ export default function HomeSplash() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden border-t border-[#cfac6c]/20 py-24">
-        <div className="absolute inset-0">
-          <Image
-            src="/backgrounds/dyo.webp"
-            alt="Design studio background"
-            fill
-            className="object-cover opacity-20 blur-sm"
-            sizes="100vw"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/85 to-[#15100b]/90"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_25%,rgba(212,175,55,0.18),transparent_60%)]"></div>
+      <section className="relative overflow-hidden border-t border-[#cfac6c]/30 py-24" style={{ background: 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(212,175,55,0.12),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(238,178,31,0.08),transparent_50%)]"></div>
 
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
           <div className="text-center lg:text-left space-y-6">
@@ -645,7 +659,7 @@ export default function HomeSplash() {
                 onClick={handleHashLink('contact')}
                 role="button"
                 aria-haspopup="dialog"
-                className="w-full sm:w-auto rounded-full border border-white/40 px-10 py-4 text-base font-semibold text-white/90 hover:border-white hover:text-white transition-colors text-center"
+                className="w-full sm:w-auto rounded-full border-2 border-[#d4af37]/60 bg-gradient-to-r from-[#d4af37]/10 to-[#d4af37]/5 px-10 py-4 text-base font-semibold text-white shadow-[0_8px_24px_rgba(212,175,55,0.2)] hover:border-[#d4af37] hover:bg-[#d4af37]/15 hover:shadow-[0_12px_32px_rgba(212,175,55,0.35)] transition-all hover:scale-105 text-center"
               >
                 Request a Designer's Help
               </Link>
@@ -657,12 +671,17 @@ export default function HomeSplash() {
           </div>
 
           <div className="relative text-white flex justify-center lg:justify-end">
-            <div className="w-full max-w-md rounded-[32px] bg-gradient-to-br from-white/12 via-white/5 to-transparent p-10 shadow-[0_45px_90px_rgba(0,0,0,0.6)] backdrop-blur flex flex-col justify-between">
+            <div className="group relative w-full max-w-md rounded-[32px] border border-[#d4af37]/30 bg-gradient-to-b from-[#2a1f15]/80 to-[#1a120c]/90 p-10 backdrop-blur-sm shadow-[0_12px_48px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-[#d4af37]/60 hover:shadow-[0_16px_56px_rgba(212,175,55,0.25)] hover:scale-[1.02] flex flex-col justify-between">
+              {/* Subtle glow effect on hover */}
+              <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-[#d4af37]/0 to-[#d4af37]/0 group-hover:from-[#d4af37]/5 group-hover:to-transparent transition-all duration-300"></div>
+              
+              <div className="relative">
               <div className="text-[#f3d48f] text-2xl tracking-[0.4em]">★★★★★</div>
-              <p className="mt-8 text-[2.25rem] font-serif italic leading-snug">
+              <p className="mt-8 text-[2.25rem] font-serif italic leading-snug text-white">
                 “The guided studio let our family align on every detail before we ever talked pricing. Seeing it live in 3D gave us complete confidence.”
               </p>
-              <p className="mt-8 text-sm uppercase tracking-[0.4em] text-white/75">— Sarah & Liam, Perth</p>
+              <p className="mt-8 text-sm uppercase tracking-[0.4em] text-[#d4af37]/80 font-medium">— Sarah & Liam, Perth</p>
+              </div>
             </div>
           </div>
         </div>
@@ -930,7 +949,7 @@ function DesignPossibilitiesSection() {
           <div className="relative w-full max-w-xl mx-auto lg:mx-0 perspective-1000">
             <div className="relative px-4 py-8 sm:px-8 lg:px-12">
               <div className="relative">
-                <div className={`relative z-10 mb-8 transition-all duration-700 ease-out ${activeStep === 1 ? 'scale-105 drop-shadow-2xl' : 'scale-100 drop-shadow-xl'}`}>
+                <div className={`relative z-10 mb-8 transition-all duration-700 ease-out ${activeStep === 1 ? 'scale-105' : 'scale-100'}`}>
                   <div
                     className="relative w-full aspect-[1.15/1] transition-all duration-500 ease-in-out"
                     style={{
@@ -1066,28 +1085,28 @@ function DesignPossibilitiesSection() {
                         setActiveStep(item.stage);
                       }}
                       aria-pressed={isActive}
-                      className={`group w-full text-left rounded-2xl border px-4 py-4 transition-all duration-300 ${
+                      className={`group w-full text-left rounded-2xl border px-5 py-5 transition-all duration-300 ${
                         isActive
-                          ? 'border-[#d4af37]/70 bg-[#1f130c]/90 text-white shadow-[0_20px_45px_rgba(0,0,0,0.55)]'
-                          : 'border-white/10 bg-[#0f0804]/60 text-white/65 hover:border-white/25 hover:text-white'
+                          ? 'border-[#d4af37]/30 bg-gradient-to-b from-[#2a1f15]/80 to-[#1a120c]/90 text-white shadow-[0_12px_40px_rgba(212,175,55,0.2)] backdrop-blur-sm'
+                          : 'border-white/15 bg-gradient-to-b from-[#1a120c]/40 to-[#0f0804]/30 text-white/70 hover:border-[#d4af37]/40 hover:from-[#1a120c]/60 hover:to-[#0f0804]/50 hover:text-white/90 backdrop-blur-sm'
                       }`}
                     >
                       <div className="flex items-start gap-4">
                         <div
-                          className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-300 ${
+                          className={`w-14 h-14 rounded-xl flex items-center justify-center border transition-all duration-300 shadow-lg ${
                             isActive
-                              ? 'border-[#d4af37] bg-[#2b1f14]/85 text-[#f8e3b6]'
-                              : 'border-white/20 bg-[#1a120c]/70 text-white/65'
+                              ? 'border-[#d4af37]/50 bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/10 text-[#f8e3b6]'
+                              : 'border-white/25 bg-gradient-to-br from-white/10 to-white/5 text-white/60 group-hover:border-[#d4af37]/30 group-hover:from-[#d4af37]/15 group-hover:to-[#d4af37]/8 group-hover:text-white/80'
                           }`}
                         >
-                          <Icon className="w-5 h-5" />
+                          <Icon className="w-6 h-6" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-[10px] uppercase tracking-[0.4em] text-white/45 mb-1">
+                          <p className="text-[11px] uppercase tracking-[0.3em] text-[#d4af37]/70 font-medium mb-1">
                             Step {String(index + 1).padStart(2, '0')}
                           </p>
-                          <p className="text-xl font-serif text-white">{item.label}</p>
-                          <p className="text-[13px] text-white/70 mt-1 leading-snug">{item.copy}</p>
+                          <p className="text-xl font-serif text-white mb-1">{item.label}</p>
+                          <p className="text-sm text-white/75 mt-1 leading-relaxed">{item.copy}</p>
                         </div>
                       </div>
                     </button>
@@ -1100,15 +1119,15 @@ function DesignPossibilitiesSection() {
                               key={shape.name}
                               onClick={() => setShapeIndex(idx)}
                               aria-pressed={shapeIndex === idx}
-                              className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-200 ${
+                              className={`relative flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-200 border ${
                                 shapeIndex === idx
-                                  ? 'ring-2 ring-[#d4af37]'
-                                  : 'ring-1 ring-white/20 hover:ring-white/40'
+                                  ? 'border-[#d4af37]/60 bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/10 shadow-[0_4px_16px_rgba(212,175,55,0.3)]'
+                                  : 'border-white/20 bg-gradient-to-br from-white/10 to-white/5 hover:border-[#d4af37]/40 hover:from-[#d4af37]/15 hover:to-[#d4af37]/8 shadow-md'
                               }`}
                               title={shape.name}
                             >
                               <div
-                                className="w-9 h-9"
+                                className="w-10 h-10"
                                 style={{
                                   maskImage: `url('${shape.file}')`,
                                   maskSize: 'contain',
@@ -1118,8 +1137,7 @@ function DesignPossibilitiesSection() {
                                   WebkitMaskSize: 'contain',
                                   WebkitMaskRepeat: 'no-repeat',
                                   WebkitMaskPosition: 'center',
-                                  backgroundColor: shapeIndex === idx ? '#F9F4E8' : 'rgba(255,255,255,0.85)',
-                                  boxShadow: shapeIndex === idx ? '0 4px 12px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.2)',
+                                  backgroundColor: shapeIndex === idx ? '#f8e3b6' : 'rgba(255,255,255,0.9)',
                                 }}
                               />
                             </button>
