@@ -65,11 +65,15 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
         
         // Fallback: use motifs_data.js
         try {
+          console.log('API failed, loading motifs_data.js fallback');
           const { MotifsData } = await import('../motifs_data.js');
+          console.log('MotifsData loaded:', MotifsData.length, 'categories');
           const categoryName = selectedCategory.src.split('/').pop(); // Get last part (e.g., "Birds" from "Animals/Birds")
+          console.log('Looking for category:', categoryName);
           const categoryData = MotifsData.find(
             (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
           );
+          console.log('Found category data:', categoryData ? 'yes' : 'no');
           
           if (categoryData) {
             const fileNames = categoryData.files.split(',').map((name) => name.trim());
@@ -78,12 +82,15 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
               name: fileName.replace(/_/g, ' '),
               category: selectedCategory.src
             }));
+            console.log('Generated motifs:', motifs.length);
             setIndividualMotifs(motifs);
           } else {
+            console.log('No category data found for:', categoryName);
             setIndividualMotifs([]);
           }
           setLoading(false);
         } catch (err) {
+          console.error('Fallback error:', err);
           setError('Unable to load motifs for this category.');
           setLoading(false);
         }

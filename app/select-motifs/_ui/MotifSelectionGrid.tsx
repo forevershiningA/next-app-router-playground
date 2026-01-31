@@ -55,11 +55,15 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
         .catch(async () => {
           // Fallback: use motifs_data.js
           try {
+            console.log('API failed, loading motifs_data.js fallback');
             const { MotifsData } = await import('../../../motifs_data.js');
+            console.log('MotifsData loaded:', MotifsData.length, 'categories');
             const categoryName = selectedCategoryMotif.src.split('/').pop();
+            console.log('Looking for category:', categoryName);
             const categoryData = MotifsData.find(
               (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
             );
+            console.log('Found category data:', categoryData ? 'yes' : 'no');
             
             if (categoryData) {
               const fileNames = categoryData.files.split(',').map((name) => name.trim());
@@ -68,12 +72,15 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
                 name: fileName.replace(/_/g, ' '),
                 category: selectedCategoryMotif.src
               }));
+              console.log('Generated motifs:', motifs.length);
               setIndividualMotifs(motifs);
             } else {
+              console.log('No category data found for:', categoryName);
               setIndividualMotifs([]);
             }
             setLoading(false);
           } catch (err) {
+            console.error('Fallback error:', err);
             setIndividualMotifs([]);
             setLoading(false);
           }
