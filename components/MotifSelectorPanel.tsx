@@ -53,11 +53,14 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
     // Try API first (for Vercel), fall back to import if API fails
     fetch(`/api/motifs/${selectedCategory.src}`)
       .then((res) => {
+        console.log('API response status:', res.status, res.ok);
         if (!res.ok) throw new Error('API failed');
         return res.json();
       })
       .then((data) => {
         if (cancelled) return;
+        console.log('API returned data:', data);
+        console.log('Motifs count:', data.motifs?.length || 0);
         setIndividualMotifs(data.motifs || []);
         setLoading(false);
       })

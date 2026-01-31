@@ -46,10 +46,13 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
       // Try API first, fall back to motifs_data.js if API fails
       fetch(`/api/motifs/${selectedCategoryMotif.src}`)
         .then((res) => {
+          console.log('API response status:', res.status, res.ok);
           if (!res.ok) throw new Error('API failed');
           return res.json();
         })
         .then((data) => {
+          console.log('API returned data:', data);
+          console.log('Motifs count:', data.motifs?.length || 0);
           setIndividualMotifs(data.motifs || []);
           setLoading(false);
         })
