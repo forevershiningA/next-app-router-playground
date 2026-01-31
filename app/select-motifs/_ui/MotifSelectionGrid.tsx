@@ -42,15 +42,41 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
   useEffect(() => {
     if (selectedCategoryMotif) {
       setLoading(true);
-      // Fetch SVG files from the category folder
+      // Try API first, fall back to motifs_data.js if API fails
       fetch(`/api/motifs/${selectedCategoryMotif.src}`)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error('API failed');
+          return res.json();
+        })
         .then((data) => {
           setIndividualMotifs(data.motifs || []);
           setLoading(false);
         })
-        .catch(() => {
-          setLoading(false);
+        .catch(async () => {
+          // Fallback: use motifs_data.js
+          try {
+            const { MotifsData } = await import('../../../motifs_data.js');
+            const categoryName = selectedCategoryMotif.src.split('/').pop();
+            const categoryData = MotifsData.find(
+              (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
+            );
+            
+            if (categoryData) {
+              const fileNames = categoryData.files.split(',').map((name) => name.trim());
+              const motifs = fileNames.map((fileName) => ({
+                path: `/shapes/motifs/${fileName}.svg`,
+                name: fileName.replace(/_/g, ' '),
+                category: selectedCategoryMotif.src
+              }));
+              setIndividualMotifs(motifs);
+            } else {
+              setIndividualMotifs([]);
+            }
+            setLoading(false);
+          } catch (err) {
+            setIndividualMotifs([]);
+            setLoading(false);
+          }
         });
     }
   }, [selectedCategoryMotif]);

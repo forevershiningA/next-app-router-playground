@@ -49,17 +49,44 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
     setLoading(true);
     setError(null);
 
+    // Try API first (for Vercel), fall back to import if API fails
     fetch(`/api/motifs/${selectedCategory.src}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('API failed');
+        return res.json();
+      })
       .then((data) => {
         if (cancelled) return;
         setIndividualMotifs(data.motifs || []);
         setLoading(false);
       })
-      .catch(() => {
+      .catch(async () => {
         if (cancelled) return;
-        setError('Unable to load motifs for this category.');
-        setLoading(false);
+        
+        // Fallback: use motifs_data.js
+        try {
+          const { MotifsData } = await import('../motifs_data.js');
+          const categoryName = selectedCategory.src.split('/').pop(); // Get last part (e.g., "Birds" from "Animals/Birds")
+          const categoryData = MotifsData.find(
+            (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
+          );
+          
+          if (categoryData) {
+            const fileNames = categoryData.files.split(',').map((name) => name.trim());
+            const motifs = fileNames.map((fileName) => ({
+              path: `/shapes/motifs/${fileName}.svg`,
+              name: fileName.replace(/_/g, ' '),
+              category: selectedCategory.src
+            }));
+            setIndividualMotifs(motifs);
+          } else {
+            setIndividualMotifs([]);
+          }
+          setLoading(false);
+        } catch (err) {
+          setError('Unable to load motifs for this category.');
+          setLoading(false);
+        }
       });
 
     return () => {

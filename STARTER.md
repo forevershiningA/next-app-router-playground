@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-29  
+**Last Updated:** 2026-01-30  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -25,7 +25,67 @@
 
 ---
 
-## Current Status (2026-01-29)
+## Current Status (2026-01-30)
+
+### ✅ Recent Changes (January 30, 2026)
+1. **Default Color from XML**: Catalog default-color attribute now used for inscriptions and motifs
+   - Added `defaultColor` field to catalog XML parser (`lib/xml-parser.ts`)
+   - Bronze Plaques use `#ffb35a` (Texas Rose) from catalog-id-5.xml
+   - Traditional Headstones use `#c99d44` (Gold) from catalog-id-124.xml
+   - Fallback to hardcoded values if not specified in XML
+   - Files: `lib/xml-parser.ts`, `lib/headstone-store.ts`
+
+2. **Check Price Modal Redesign**: Updated to match design from screen.png
+   - Green header/footer background (#a8d5ba) with total price in title
+   - Clean table layout with Product, Qty, Price, Item Total columns
+   - Right-aligned prices, center-aligned quantities
+   - Individual rows for each inscription and motif
+   - Bronze color details shown in product descriptions
+   - Files: `components/CheckPricePanel.tsx`
+
+3. **Motif Smooth Dragging**: Fixed jumpy motion with requestAnimationFrame throttling
+   - Store updates reduced from ~200-500/sec to ~60/sec (70-90% reduction)
+   - RAF-based throttling locks to display refresh rate
+   - Drag position stored in ref, final update on release
+   - Smooth 60fps dragging performance
+   - Files: `components/three/MotifModel.tsx`
+
+4. **Motif Visual Enhancements**: Matches border selector styling
+   - Thicker borders (2px instead of 1px)
+   - Bronze color (#CD7F32) for products with `color="1"` using CSS mask
+   - Removed unnecessary info card
+   - Consistent styling across sidebar and fullscreen panels
+   - Files: `components/MotifSelectorPanel.tsx`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, `components/DesignerNav.tsx`
+
+5. **Motif Flip Fix**: Corrected default orientation
+   - Removed negative scaleY default that caused Y-axis flip
+   - Initialize `flipX: false, flipY: false` when adding motifs
+   - Updated canonical loader to invert flipY logic
+   - Motifs now appear in correct orientation by default
+   - Files: `components/three/MotifModel.tsx`, `lib/headstone-store.ts`, `lib/saved-design-loader-utils.ts`
+
+6. **Motif Selector Improvements**: Enhanced hover and cursor states
+   - Cursor changes to pointer (hand) on hover
+   - Grid padding prevents border cutoff on top/bottom rows
+   - Consistent with border selector behavior
+   - Files: `components/MotifSelectorPanel.tsx`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`
+
+7. **Motif Path Fix**: Updated to use public/motifs/ directory
+   - Changed from old XML paths to new public directory structure
+   - Uses files.txt for category-to-folder mappings
+   - API endpoint serves SVG files from correct location
+   - Files: `components/MotifSelectorPanel.tsx`, `app/api/motifs/[category]/route.ts`
+
+8. **Bronze Plaque Color Control**: Hides color selection when color="0"
+   - Checks `catalog?.product?.color === '0'` to hide color controls
+   - Motif and inscription colors remain fixed (no color picker)
+   - Only shows colors for products with `color="1"`
+   - Files: `components/DesignerNav.tsx`
+
+9. **Hydration Error Fix**: Removed SSR/client mismatch in MotifSelectorPanel
+   - Eliminated `typeof window !== 'undefined'` check in useState
+   - State now initialized uniformly on client and server
+   - Files: `components/MotifSelectorPanel.tsx`
 
 ### ✅ Recent Changes (January 29, 2026)
 1. **Canonical Loader Scaling Fix**: Fixed race condition in coordinate scaling
