@@ -52,15 +52,48 @@ export default function TailwindSlider({
   };
 
   return (
-    <div className="w-full">
-      <label className="block text-sm font-medium md:text-gray-700 text-white/70">{label}</label>
-      <div className="flex items-center space-x-2">
-        <button
-          onClick={decrement}
-          className="flex h-8 w-8 items-center justify-center rounded-md border md:border-gray-300 md:bg-white md:text-gray-900 md:hover:bg-gray-50 border-gray-600 bg-gray-800 text-white hover:bg-gray-700"
-        >
-          -
-        </button>
+    <div className="space-y-1">
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-sm font-medium text-gray-200 w-20">{label}</label>
+        <div className="flex items-center gap-2 justify-end">
+          <button
+            type="button"
+            onClick={decrement}
+            className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+            aria-label={`Decrease ${label}`}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+            </svg>
+          </button>
+          <input
+            type="number"
+            min={min}
+            max={max}
+            step={step}
+            value={textValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+              value < min || value > max
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+            }`}
+          />
+          <button
+            type="button"
+            onClick={increment}
+            className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+            aria-label={`Increase ${label}`}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+          <span className="text-sm font-medium text-gray-300">{unit}</span>
+        </div>
+      </div>
+      <div className="relative">
         <input
           type="range"
           min={min}
@@ -68,22 +101,12 @@ export default function TailwindSlider({
           step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-700"
+          className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
         />
-        <button
-          onClick={increment}
-          className="flex h-8 w-8 items-center justify-center rounded-md border md:border-gray-300 md:bg-white md:text-gray-900 md:hover:bg-gray-50 border-gray-600 bg-gray-800 text-white hover:bg-gray-700"
-        >
-          +
-        </button>
-        <input
-          type="text"
-          value={textValue}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-          className="w-20 rounded-md border md:border-gray-300 md:bg-white md:text-gray-900 border-gray-600 bg-gray-800 px-2 py-1 text-sm text-white"
-        />
-        {unit && <span className="text-sm md:text-gray-700 text-white/70">{unit}</span>}
+        <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+          <span>{min}{unit}</span>
+          <span>{max}{unit}</span>
+        </div>
       </div>
     </div>
   );
