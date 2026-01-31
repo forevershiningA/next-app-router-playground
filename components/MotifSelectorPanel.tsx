@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { getMotifCategoryName } from '#/lib/motif-translations';
+import { MotifsData } from '../motifs_data.js';
 
 type MotifCategory = {
   id: string | number;
@@ -66,7 +67,6 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
         // Fallback: use motifs_data.js
         try {
           console.log('API failed, loading motifs_data.js fallback');
-          const { MotifsData } = await import('../motifs_data.js');
           console.log('MotifsData loaded:', MotifsData.length, 'categories');
           const categoryName = selectedCategory.src.split('/').pop(); // Get last part (e.g., "Birds" from "Animals/Birds")
           console.log('Looking for category:', categoryName);

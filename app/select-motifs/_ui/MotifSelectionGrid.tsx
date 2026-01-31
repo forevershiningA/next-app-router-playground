@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import Loader from '#/ui/loader';
+import { MotifsData } from '../../../motifs_data.js';
 
 type Motif = {
   id: string | number;
@@ -56,7 +57,6 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
           // Fallback: use motifs_data.js
           try {
             console.log('API failed, loading motifs_data.js fallback');
-            const { MotifsData } = await import('../../../motifs_data.js');
             console.log('MotifsData loaded:', MotifsData.length, 'categories');
             const categoryName = selectedCategoryMotif.src.split('/').pop();
             console.log('Looking for category:', categoryName);
