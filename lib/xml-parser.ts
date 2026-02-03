@@ -32,6 +32,7 @@ export interface AdditionData {
   id: string;
   type: string;
   name: string;
+  formula?: string;
   minHeight?: number;
   maxHeight?: number;
   initHeight?: number;
@@ -377,8 +378,9 @@ export async function parseCatalogXML(
     const addId = addEl.getAttribute('id') || '';
     const addType = addEl.getAttribute('type') || '';
     const addName = addEl.getAttribute('name') || '';
+    const addFormula = addEl.getAttribute('formula') || undefined;
 
-    let addition: AdditionData = { id: addId, type: addType, name: addName };
+    let addition: AdditionData = { id: addId, type: addType, name: addName, formula: addFormula };
 
     if (addType === 'inscription') {
       const inscriptionDetails = await fetchAndParseInscriptionDetails(addId);

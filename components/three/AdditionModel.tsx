@@ -140,10 +140,16 @@ function AdditionModelInner({
     const tempSize = new THREE.Vector3();
     tempBox.getSize(tempSize);
     
-    // Center the model at origin
+    // Center the model at origin by moving each mesh individually
+    // This preserves the relative positions of disconnected parts
     const tempCenter = new THREE.Vector3();
     tempBox.getCenter(tempCenter);
-    cloned.position.sub(tempCenter);
+    
+    cloned.traverse((child: any) => {
+      if (child instanceof THREE.Mesh) {
+        child.position.sub(tempCenter);
+      }
+    });
     
     // Now rotate 180 degrees around Z to flip it right-side up
     cloned.rotation.z = Math.PI;
@@ -460,25 +466,45 @@ function AdditionModelInner({
   // scale: target sizes in headstone units (1 unit = 10mm)
   const targetH = TARGET_HEIGHTS[addition.type as keyof typeof TARGET_HEIGHTS] || TARGET_HEIGHTS.application;
 
+  // Map sizeVariant (1, 2, 3, 4) to scale multipliers
+  // This is a temporary mapping until we parse XML sizes
+  const sizeVariantToScale = (variant: number) => {
+    switch (variant) {
+      case 1: return 1.0;   // Size 1 - base size
+      case 2: return 1.4;   // Size 2 - ~40% larger
+      case 3: return 1.8;   // Size 3 - ~80% larger
+      case 4: return 2.2;   // Size 4 - ~120% larger
+      default: return 1.0;
+    }
+  };
+
   // Size is in headstone units
   const maxDim = Math.max(size.x, size.y);
   const h = Math.max(1e-6, maxDim);
   const auto = targetH / h;
-  const user = Math.max(0.05, Math.min(5, offset.scale ?? 1));
+  
+  // Use sizeVariant if available, otherwise fall back to scale
+  const sizeVariant = offset.sizeVariant ?? 1;
+  const user = Math.max(0.05, Math.min(5, sizeVariantToScale(sizeVariant)));
   const finalScale = auto * user;
 
   // Determine Z position based on type
   // Coordinate system: 1 unit = 1mm
-  const zScaleFactor = 0.1; // Reduced Z-scale to make additions flatter (10% depth)
-  const modelDepth = size.z * finalScale * zScaleFactor;
+  const zScaleFactor = 0.1; // Reduced Z-scale for applications only (not statues/vases)
+  
   let zPosition = 0;
   
   if (addition.type === 'statue' || addition.type === 'vase') {
-    // Statues and vases sit on the base
-    zPosition = headstone.frontZ;
+    // For statues and vases, use normal Z-scale (not flattened)
+    const modelDepth = size.z * finalScale;
+    zPosition = headstone.frontZ + (modelDepth / 2);
   } else if (addition.type === 'application') {
-    // Position application on headstone surface with minimal offset to avoid z-fighting
-    zPosition = headstone.frontZ + APPLICATION_Z_OFFSET;
+    // Applications use flattened Z-scale
+    // Calculate the actual depth after Z-scale flattening
+    const flattenedDepth = size.z * finalScale * zScaleFactor;
+    
+    // Position so the back of the flattened application touches the headstone
+    zPosition = headstone.frontZ + (flattenedDepth / 2) + APPLICATION_Z_OFFSET;
   }
 
   const isSelected = selectedAdditionId === id;
@@ -496,10 +522,15 @@ function AdditionModelInner({
         position={[centerX + offset.xPos, centerY - offset.yPos, zPosition]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
-        {/* Addition mesh with scale and Y-flip, with reduced Z-scale for flatter appearance */}
+        {/* Addition mesh with scale and Y-flip */}
+        {/* Applications use reduced Z-scale for flatter appearance, statues/vases use normal scale */}
         <group
           ref={ref}
-          scale={[finalScale, -finalScale, finalScale * zScaleFactor]}
+          scale={[
+            finalScale, 
+            -finalScale, 
+            addition.type === 'application' ? finalScale * zScaleFactor : finalScale
+          ]}
           visible={true}
           name={`addition-${id}`}
           onClick={handleClick}

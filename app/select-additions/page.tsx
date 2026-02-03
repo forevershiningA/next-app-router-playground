@@ -8,17 +8,14 @@ import AdditionSelectionGrid from './_ui/AdditionSelectionGrid';
 export default function Page() {
   const additions = data.additions;
   const pathname = usePathname();
-  const [isDesktop, setIsDesktop] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth >= 1024;
-  });
+  const [isDesktop, setIsDesktop] = useState(false); // Always start with false to match SSR
 
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
     };
 
-    handleResize();
+    handleResize(); // Set initial value on mount
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);

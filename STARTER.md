@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-01-30  
+**Last Updated:** 2026-02-02  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -18,14 +18,104 @@
 10. [Rock Pitch Base Feature](#rock-pitch-base-feature)
 11. [Slant Headstone Feature](#slant-headstone-feature)
 12. [Design Gallery & SEO](#design-gallery--seo)
-13. [Performance Considerations](#performance-considerations)
-14. [Memory Management](#memory-management)
-15. [Common Issues & Solutions](#common-issues--solutions)
-16. [Development Workflow](#development-workflow)
+13. [Check Price Feature](#check-price-feature)
+14. [Performance Considerations](#performance-considerations)
+15. [Memory Management](#memory-management)
+16. [Common Issues & Solutions](#common-issues--solutions)
+17. [Development Workflow](#development-workflow)
 
 ---
 
-## Current Status (2026-01-30)
+## Current Status (2026-02-02)
+
+### ✅ Recent Changes (February 2, 2026)
+1. **Check Price Interactive Details**: Added clickable detail modals for inscriptions, motifs, and additions
+   - **Clickable Counts**: "8 motifs", "9 inscriptions", "2 items" are now clickable links (white with underline, hover → gold)
+   - **Zero Items**: When count is 0, displays as plain text (not clickable) - e.g., "0 items"
+   - **Detail Modals**: Click count to open modal with full item breakdown
+     - **Inscriptions Modal**: Text, font, character count (Qty), size (mm), color swatch + name, price
+     - **Motifs Modal**: Thumbnail image (48×48px), name (linked to SVG file), size (mm), color swatch + display name, price
+     - **Additions Modal**: Name with ID, type, price
+   - **Motif Thumbnails**: SVG preview in first column with clickable link to open full SVG in new tab
+   - **Modal Styling**: Dark gradient theme matching Check Price page, gold accents, sticky table headers
+   - **Files**: `app/check-price/_ui/CheckPriceGrid.tsx`
+
+### ✅ Recent Changes (January 31, 2026)
+1. **Homepage Visual Refinements**: Comprehensive UI improvements across all sections
+   - **Hero Section Text Colors**: Enhanced readability and visual hierarchy
+     - Main headline: Warm white (#FFFEF8) with enhanced shadow for depth
+     - Subheadline: Pure white (#FFFFFF) with stronger shadow (was gray)
+     - Trust badge "Trusted by 5,000+ families": Gold (#F8D64F) to match CTA button
+     - Bullet points: Pure white (#FFFFFF) with medium weight (was light gray)
+     - All text now has professional shadows: `0 2px 8-12px rgba(0,0,0,0.5-0.6)`
+   
+   - **How It Works Section Cards**: Updated Step 1, 2, 3 cards styling
+     - Lighter gradient backgrounds: `from-[#2a1f15]/80 to-[#1a120c]/90`
+     - Gold borders: `border-[#d4af37]/30` with hover brightening to `/60`
+     - Subtle glow effect overlay on hover
+     - Enhanced spacing: `gap-6` between cards, better padding
+     - Gold "STEP 01/02/03" labels with improved typography
+     - Files: `app/_ui/HomeSplash.tsx`
+   
+   - **Icon Highlights**: Three icon row (See every change..., Transparent pricing, Save drafts)
+     - Removed card backgrounds, kept transparent for cleaner look
+     - Enhanced icon boxes: Larger (w-14 h-14), gradient backgrounds, gold tints
+     - Better hover effects with smooth transitions
+     - Files: `app/_ui/HomeSplash.tsx`
+   
+   - **Stat Cards** (5,284 families, 40 shapes, 5000+ accents):
+     - Much lighter backgrounds: Gradient `from-[#2a1f15]/80 to-[#1a120c]/90`
+     - Gold borders with subtle glow on hover
+     - Larger text, better spacing, backdrop blur
+     - Hover effects: scale, enhanced shadow with gold tint
+     - Files: `app/_ui/HomeSplash.tsx`
+   
+   - **Ready When You Are Section**:
+     - Updated CTA button "Request a Designer's Help": Gold theme with enhanced visibility
+     - Border: `border-[#d4af37]/60`, gradient background, shadow with gold tint
+     - Testimonial card: Same elegant design as stat cards (lighter, gold border, glow)
+     - Background: Hero gradient `radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)`
+     - Files: `app/_ui/HomeSplash.tsx`
+   
+   - **Design Possibilities Section** (Interactive Studio):
+     - Step cards: Updated to match "How It Works" elegant styling
+     - Enhanced icon boxes: Larger, gradient backgrounds with gold accents
+     - Gold "STEP 01/02/03" labels with better contrast
+     - Shape selection icons: Larger (h-16 w-16), card-style with gradients
+     - Removed drop shadow from headstone preview for cleaner look
+     - Files: `app/_ui/HomeSplash.tsx`
+
+2. **Motif System Enhancements**: Fixed Vercel deployment and improved UI consistency
+   - **Vercel Motif Loading Fix**: Added `public/motifs/` directory structure to git
+     - Created `files.txt` manifests for each motif category
+     - API endpoint now serves motifs from correct public directory
+     - Fixed "No motifs available" error on production
+     - Files: `app/api/motifs/[category]/route.ts`, `public/motifs/*/files.txt`
+   
+   - **Inscription Panel Sliders**: Updated Size and Rotation to match Select Size design
+     - Added +/- buttons with icon SVGs for precise 1mm/1° adjustments
+     - Number input fields between buttons (w-16, right-aligned)
+     - Min/max labels below sliders (e.g., "18mm - 200mm", "-180° - 180°")
+     - Gold gradient slider track with enhanced thumb styling
+     - Files: `components/DesignerNav.tsx`
+   
+   - **Motif Panel Sliders**: Updated Height and Rotation in Select Motifs panel
+     - Same +/- button and input design as inscriptions
+     - Consistent styling across all dimension controls
+     - Files: `components/DesignerNav.tsx`
+
+3. **Design System Consistency**: Unified card styling and visual language
+   - All section cards now use consistent:
+     - Gradient backgrounds: `from-[#2a1f15]/80 to-[#1a120c]/90`
+     - Gold borders: `border-[#d4af37]/30` with hover effects
+     - Backdrop blur for modern glass effect
+     - Glow overlays on hover
+     - Professional shadows with gold tints
+   - Slider controls unified across:
+     - Select Size (Width/Height)
+     - Inscriptions (Size/Rotation)
+     - Select Motifs (Height/Rotation)
+   - Icon boxes standardized: w-14 h-14, gradients, gold accents
 
 ### ✅ Recent Changes (January 30, 2026)
 1. **Default Color from XML**: Catalog default-color attribute now used for inscriptions and motifs
@@ -1547,6 +1637,104 @@ export async function extractTotalPrice(
    - Client/server component separation
    - Price quotes integrated throughout
    - Proper TypeScript types for all design data
+
+---
+
+## Check Price Feature
+
+### Overview
+The Check Price page (`/check-price`) provides an interactive pricing breakdown with detailed item inspection.
+
+### Main Layout
+**Two-Column Design:**
+- **Left Column**: "Your Design" - Summary of all selections
+- **Right Column**: "Price Summary" - Subtotal, tax, and total
+
+### Interactive Item Details (February 2, 2026)
+
+**Clickable Counts:**
+- Item counts are clickable links that open detail modals
+- **Zero items** display as plain text (not clickable)
+- **1+ items** display as white underlined text (hover → gold)
+
+**Examples:**
+```
+Additions: 0 items (plain text)
+Decorative Motifs: 8 motifs (clickable)
+Custom Inscriptions: 9 inscriptions (clickable)
+```
+
+### Detail Modals
+
+#### Inscription Details Modal
+**Columns:**
+1. **Name**: Inscription text + font name (below in small gray)
+2. **Qty**: Character count (e.g., "15 chars" or "1 char")
+3. **Size**: Font size in mm
+4. **Color**: Color swatch (16×16px) + color name
+5. **Price**: Individual inscription price
+
+#### Motif Details Modal
+**Columns:**
+1. **Name**: Thumbnail image (48×48px) + motif filename
+   - Entire row links to SVG file (opens in new tab)
+   - Border changes to gold on hover
+   - SVG inverted to white if color isn't black
+2. **Size**: Height in mm
+3. **Color**: Color swatch + display name (Gold Gilding, Silver Gilding, Paint Fill, etc.)
+4. **(Empty)**: Alignment column
+5. **Price**: Individual motif price
+
+#### Addition Details Modal
+**Columns:**
+1. **Name**: Addition name + ID (below in small gray)
+2. **Size**: Type (statue, vase, application)
+3. **Color**: "-" (not applicable)
+4. **(Empty)**: Alignment column
+5. **Price**: Individual addition price ($75.00)
+
+### Modal Styling
+- **Dark gradient theme**: Matches Check Price page design
+- **Gold accents**: Headers with gold gradient (#cfac6c)
+- **Sticky headers**: Table headers stay visible while scrolling
+- **Hover effects**: Rows highlight with subtle white/5 background
+- **Close button**: Large × in header, plus Close button in footer
+
+### Implementation Files
+- **Component**: `app/check-price/_ui/CheckPriceGrid.tsx`
+- **State**: Uses `useState` for `detailModal` ('inscriptions' | 'motifs' | 'additions' | null)
+- **Data**: Pulls from Zustand store (inscriptions, selectedMotifs, selectedAdditions)
+
+### Technical Details
+
+**Item Processing:**
+```typescript
+// Motif items with color display names
+const motifItems = useMemo(() => {
+  return selectedMotifs.map((motif) => {
+    const offset = motifOffsets[motif.id];
+    const heightMm = offset?.heightMm ?? 100;
+    
+    let colorDisplay = 'Standard';
+    if (motif.color === '#c99d44') colorDisplay = 'Gold Gilding';
+    else if (motif.color === '#eeeeee') colorDisplay = 'Silver Gilding';
+    // ... etc
+    
+    return { id, name, svgPath, heightMm, color, colorDisplay, price };
+  });
+}, [selectedMotifs, motifOffsets, motifPriceModel, catalog]);
+```
+
+**Conditional Rendering:**
+```typescript
+{selectedMotifs.length > 0 ? (
+  <button onClick={() => setDetailModal('motifs')}>
+    {selectedMotifs.length} motif{selectedMotifs.length !== 1 ? 's' : ''}
+  </button>
+) : (
+  <p>0 motifs</p>
+)}
+```
 
 ---
 
@@ -3306,6 +3494,33 @@ git log --oneline -10   # Recent commits
 **Happy Coding! 🚀**
 
 For questions or issues:
+- Check `STARTER.md` for comprehensive documentation
+- Check `CHECK_PRICE_REDESIGN.md` for Check Price feature details (if exists)
 - Check `TEXTURE_IMPROVEMENTS_SUMMARY.md` for material/texture optimization details
 - Review existing documentation in the root directory
 - See audit files for detailed texture improvement analysis
+
+---
+
+## Recent Updates (2026)
+
+- **2026-02-02 (Evening)**: Check Price Interactive Details (Production-Ready)
+  - **Clickable Item Counts**: Made inscription/motif/addition counts clickable
+    - Counts with 1+ items: Clickable white underlined text (hover → gold)
+    - Counts with 0 items: Plain white text (not clickable)
+    - Opens detail modal showing all items in a table
+  - **Detail Modals**: Three modal types for different content
+    - **Inscriptions**: Text, font, character count (Qty), size (mm), color swatch + name, price
+    - **Motifs**: Thumbnail image (48×48px) + name, size (mm), color display, price
+      - Entire row links to SVG file (opens in new tab)
+      - Image border changes to gold on hover
+    - **Additions**: Name + ID, type, price
+  - **Modal Styling**: Dark gradient theme matching Check Price page
+    - Gold accent headers (#cfac6c)
+    - Sticky table headers for scrolling
+    - Hover effects on rows
+    - Close button in header and footer
+  - **Files Modified**: `app/check-price/_ui/CheckPriceGrid.tsx`
+  - **Implementation**: Used `useState` for modal state, `useMemo` for item processing
+
+- **2026-01-31 (Afternoon)**: Homepage Visual Refinements & Motif System (Production-Ready)

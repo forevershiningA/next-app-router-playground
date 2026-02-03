@@ -203,7 +203,7 @@ type HeadstoneState = {
   additionRefs: Record<string, React.RefObject<Group | null>>;
   additionOffsets: Record<
     string,
-    { xPos: number; yPos: number; scale: number; rotationZ: number }
+    { xPos: number; yPos: number; scale: number; rotationZ: number; sizeVariant?: number }
   >;
 
   selectedMotifId: string | null;
@@ -241,7 +241,7 @@ type HeadstoneState = {
   setAdditionRef: (id: string, ref: React.RefObject<Group | null>) => void;
   setAdditionOffset: (
     id: string,
-    offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
+    offset: { xPos: number; yPos: number; scale: number; rotationZ: number; sizeVariant?: number },
   ) => void;
   duplicateAddition: (id: string) => void;
 
@@ -316,6 +316,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       selectedAdditions: [...s.selectedAdditions, instanceId],
       selectedAdditionId: instanceId, // Auto-select the newly added addition
       activePanel: 'addition', // Open the edit panel
+      // Initialize with default offset including sizeVariant
+      additionOffsets: {
+        ...s.additionOffsets,
+        [instanceId]: { xPos: 0, yPos: 0, scale: 1, rotationZ: 0, sizeVariant: 1 }
+      },
     }));
   },
   removeAddition: (id) => {
