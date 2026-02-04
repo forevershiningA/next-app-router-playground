@@ -203,7 +203,15 @@ type HeadstoneState = {
   additionRefs: Record<string, React.RefObject<Group | null>>;
   additionOffsets: Record<
     string,
-    { xPos: number; yPos: number; scale: number; rotationZ: number; sizeVariant?: number }
+    {
+      xPos?: number;
+      yPos?: number;
+      zPos?: number;
+      scale: number;
+      rotationZ: number;
+      sizeVariant?: number;
+      targetSurface?: 'headstone' | 'base';
+    }
   >;
 
   selectedMotifId: string | null;
@@ -241,7 +249,14 @@ type HeadstoneState = {
   setAdditionRef: (id: string, ref: React.RefObject<Group | null>) => void;
   setAdditionOffset: (
     id: string,
-    offset: { xPos: number; yPos: number; scale: number; rotationZ: number; sizeVariant?: number },
+    offset: {
+      xPos?: number;
+      yPos?: number;
+      scale: number;
+      rotationZ: number;
+      sizeVariant?: number;
+      targetSurface?: 'headstone' | 'base';
+    },
   ) => void;
   duplicateAddition: (id: string) => void;
 
@@ -319,7 +334,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Initialize with default offset including sizeVariant
       additionOffsets: {
         ...s.additionOffsets,
-        [instanceId]: { xPos: 0, yPos: 0, scale: 1, rotationZ: 0, sizeVariant: 1 }
+        [instanceId]: {
+          scale: 1,
+          rotationZ: 0,
+          sizeVariant: 1,
+          targetSurface: 'headstone',
+        },
       },
     }));
   },
@@ -1009,7 +1029,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({ additionRefs: { ...s.additionRefs, [id]: ref } })),
   setAdditionOffset: (
     id: string,
-    offset: { xPos: number; yPos: number; scale: number; rotationZ: number },
+    offset: {
+      xPos?: number;
+      yPos?: number;
+      scale: number;
+      rotationZ: number;
+      sizeVariant?: number;
+      targetSurface?: 'headstone' | 'base';
+    },
   ) => {
     set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
   },
@@ -1035,8 +1062,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Offset by 30 units to the right and 30 units down
       const newOffset = {
         ...currentOffset,
-        xPos: currentOffset.xPos + 30,
-        yPos: currentOffset.yPos + 30,
+        xPos: (currentOffset.xPos ?? 0) + 30,
+        yPos: (currentOffset.yPos ?? 0) + 30,
+        targetSurface: currentOffset.targetSurface,
       };
       
       // Set the offset for the duplicate with its instance ID

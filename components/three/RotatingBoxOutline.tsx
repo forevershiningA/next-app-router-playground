@@ -36,7 +36,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   through = true,
   renderOrder = 1000,
   excludeAdditions = false,
-  lineLength = 0.15, // 15% of box size
+  lineLength = 0.15,
 }: RotatingBoxOutlineProps) {
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
 
@@ -57,16 +57,22 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         depthTest: !through,
         depthWrite: false,
         transparent: true,
-        opacity: 0.8,
+        opacity: 1.0,
+        linewidth: 2,
       });
 
       const helper = new THREE.LineSegments(geometry, material);
       helper.renderOrder = renderOrder;
+      helper.matrixAutoUpdate = false;
       helperRef.current = helper;
 
-      if (obj.parent) {
-        obj.parent.add(helper);
+      // Add helper to the scene root, not to the object's parent
+      // This way it won't inherit any transforms
+      let sceneRoot = obj;
+      while (sceneRoot.parent) {
+        sceneRoot = sceneRoot.parent;
       }
+      sceneRoot.add(helper);
     };
 
     attachHelper();
@@ -94,7 +100,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       return;
     }
 
-    // Calculate bounding box in local space - only for the mesh itself
+    // Calculate bounding box
     const localBox = new THREE.Box3();
     
     if (excludeAdditions) {
@@ -126,12 +132,8 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         localBox.copy(obj.geometry.boundingBox);
       }
     } else {
-      // Fallback: calculate in world space then convert
-      const worldBox = new THREE.Box3().setFromObject(obj);
-      const inverseMatrix = obj.matrixWorld.clone().invert();
-      const min = worldBox.min.clone().applyMatrix4(inverseMatrix);
-      const max = worldBox.max.clone().applyMatrix4(inverseMatrix);
-      localBox.set(min, max);
+      // For groups, use setFromObject to get world-space box
+      localBox.setFromObject(obj);
     }
 
     if (localBox.isEmpty()) {
@@ -214,11 +216,13 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     helper.geometry.computeBoundingSphere();
     
-    // Make helper follow object's world transform
-    helper.position.copy(obj.position);
-    helper.rotation.copy(obj.rotation);
-    helper.scale.copy(obj.scale);
-    helper.updateMatrixWorld();
+    // Position helper at world origin with identity transform
+    // The geometry vertices are already in world space
+    helper.position.set(0, 0, 0);
+    helper.rotation.set(0, 0, 0);
+    helper.scale.set(1, 1, 1);
+    helper.updateMatrix();
+    helper.matrixAutoUpdate = false;
     
     helper.visible = true;
   });

@@ -393,7 +393,8 @@ export default function DesignerNav() {
                   if (selectedAdditionId) {
                     removeAddition(selectedAdditionId);
                     setSelectedAdditionId(null);
-                    setActivePanel(null);
+                    // Keep activePanel as 'addition' to show the addition catalog
+                    // Don't set to null so user can immediately add another addition
                   }
                 }}
               >

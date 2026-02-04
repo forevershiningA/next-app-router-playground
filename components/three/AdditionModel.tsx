@@ -9,6 +9,7 @@ import type { HeadstoneAPI } from '../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
 import SelectionBox from '../SelectionBox';
+import RotatingBoxOutline from './RotatingBoxOutline';
 
 // Addition positioning constants
 const DEFAULT_POSITIONS = {
@@ -33,6 +34,8 @@ const TARGET_HEIGHTS = {
 };
 
 const APPLICATION_Z_OFFSET = 0.05; // 0.05mm offset keeps applications flush without z-fighting
+const STATUE_DEPTH_SCALE = 0.28;
+const VASE_DEPTH_SCALE = 0.32;
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -100,6 +103,9 @@ function AdditionModelInner({
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const baseDimensionsKey = useHeadstoneStore(
+    (s) => `${s.baseWidthMm}-${s.baseHeightMm}-${s.baseThickness}-${s.baseFinish}-${s.showBase}`
+  );
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   
@@ -180,14 +186,53 @@ function AdditionModelInner({
 
   // Compute headstone bounds and default offsets early so helper hooks can use them
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
+  const prefersBaseSurface = addition.type === 'statue' || addition.type === 'vase';
+  const [baseMesh, setBaseMesh] = React.useState<THREE.Mesh | null>(null);
+  React.useEffect(() => {
+    let cancelled = false;
+    const findBase = () => threeScene.getObjectByName('base') as THREE.Mesh | null;
+    const updateBase = () => {
+      if (cancelled) return false;
+      const found = prefersBaseSurface ? findBase() : null;
+      setBaseMesh(found ?? null);
+      return !!found;
+    };
+
+    if (!prefersBaseSurface) {
+      setBaseMesh(null);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    if (updateBase()) {
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const interval = setInterval(() => {
+      if (updateBase()) {
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [threeScene, baseDimensionsKey, prefersBaseSurface]);
   const bbox = React.useMemo(() => {
     if (!stone) return null;
     if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
     return stone.geometry.boundingBox?.clone() ?? null;
   }, [stone]);
 
-  const defaultOffset = React.useMemo(() => {
-    if (!bbox) return { xPos: 0, yPos: 0, scale: 1, rotationZ: 0 };
+
+  const fallbackOffset = React.useMemo(() => {
+    if (!bbox) {
+      return { xPos: 0, yPos: 0, zPos: undefined, scale: 1, rotationZ: 0, sizeVariant: 1, targetSurface: 'headstone' };
+    }
     const centerX = (bbox.min.x + bbox.max.x) / 2;
     const centerY = (bbox.min.y + bbox.max.y) / 2;
     const inset = 0.01;
@@ -197,9 +242,10 @@ function AdditionModelInner({
     const minY = bbox.min.y + inset + 0.04 * spanY;
     const maxY = bbox.max.y - inset;
 
-    let defaultX = 0;
-    let defaultY = 0;
     const posConfig = DEFAULT_POSITIONS[addition.type as keyof typeof DEFAULT_POSITIONS] || DEFAULT_POSITIONS.application;
+
+    let defaultX = posConfig.xOffset;
+    let defaultY = posConfig.yOffset;
 
     if (addition.type === 'statue') {
       defaultX = minX + posConfig.xOffset - centerX;
@@ -207,20 +253,144 @@ function AdditionModelInner({
     } else if (addition.type === 'vase') {
       defaultX = maxX + posConfig.xOffset - centerX;
       defaultY = minY + posConfig.yOffset - centerY;
-    } else {
-      defaultX = posConfig.xOffset;
-      defaultY = posConfig.yOffset;
     }
 
     return {
       xPos: defaultX,
       yPos: defaultY,
+      zPos: undefined, // No Z offset for headstone surface
       scale: 1,
       rotationZ: 0,
+      sizeVariant: 1,
+      targetSurface: 'headstone',
     };
-  }, [bbox, addition.type]);
+  }, [addition.type, bbox]);
 
-  const offset = additionOffsets[id] ?? defaultOffset;
+  const defaultOffsetResult = React.useMemo(() => {
+    if (!bbox || !stone) {
+      return {
+        values: fallbackOffset,
+        ready: false,
+      };
+    }
+
+    const headCenterX = (bbox.min.x + bbox.max.x) / 2;
+    const headCenterY = (bbox.min.y + bbox.max.y) / 2;
+
+    if (prefersBaseSurface && baseMesh) {
+      if (!baseMesh.geometry.boundingBox) baseMesh.geometry.computeBoundingBox();
+      const targetBBox = baseMesh.geometry.boundingBox?.clone();
+      if (targetBBox) {
+        const inset = 0.01;
+        const spanY = targetBBox.max.y - targetBBox.min.y;
+        const minX = targetBBox.min.x + inset;
+        const maxX = targetBBox.max.x - inset;
+        const minY = targetBBox.min.y + inset + 0.04 * spanY;
+        const maxY = targetBBox.max.y - inset;
+
+        const posConfig = DEFAULT_POSITIONS[addition.type as keyof typeof DEFAULT_POSITIONS] || DEFAULT_POSITIONS.application;
+
+        // Convert headstone edges to base local coordinates
+        const headstoneLeftWorld = stone.localToWorld(new THREE.Vector3(bbox.min.x, 0, 0));
+        const headstoneRightWorld = stone.localToWorld(new THREE.Vector3(bbox.max.x, 0, 0));
+        const headstoneLeftInBase = baseMesh.worldToLocal(headstoneLeftWorld.clone()).x;
+        const headstoneRightInBase = baseMesh.worldToLocal(headstoneRightWorld.clone()).x;
+
+        // Position statues in the LEFT pad (space between base edge and headstone edge)
+        // Position vases in the RIGHT pad
+        let targetX: number;
+        if (addition.type === 'statue') {
+          // Center of left pad: midpoint between base left edge and headstone left edge
+          const baseLeft = minX;
+          targetX = (baseLeft + headstoneLeftInBase) / 2;
+        } else if (addition.type === 'vase') {
+          // Center of right pad: midpoint between headstone right edge and base right edge
+          const baseRight = maxX;
+          targetX = (headstoneRightInBase + baseRight) / 2;
+        } else {
+          // Applications: center of entire base
+          targetX = (minX + maxX) / 2;
+        }
+
+        targetX = Math.min(maxX, Math.max(minX, targetX));
+        const surfaceY = targetBBox.max.y; // Y: top surface of base
+        const baseCenterZ = (targetBBox.min.z + targetBBox.max.z) / 2; // Z: centered in base's depth
+
+        // For X and Y, convert through world space to get headstone coordinates
+        const targetPointLocal = new THREE.Vector3(targetX, surfaceY, baseCenterZ);
+        const pointWorld = baseMesh.localToWorld(targetPointLocal.clone());
+        const pointInHead = stone.worldToLocal(pointWorld.clone());
+        
+        // For Z: Base and headstone share the same parent, so base's position.z is our reference
+        // The statue should be at the base's Z position (center of base in world/headstone parent space)
+        const baseWorldPos = new THREE.Vector3();
+        baseMesh.getWorldPosition(baseWorldPos);
+        const baseZInStoneParent = stone.worldToLocal(baseWorldPos.clone()).z;
+
+        console.log('[AdditionModel] Base positioning:', {
+          id,
+          type: addition.type,
+          baseBBox: { minZ: targetBBox.min.z, maxZ: targetBBox.max.z },
+          baseCenterZ_local: baseCenterZ,
+          baseWorldPos,
+          baseZInStoneParent,
+          pointInHead,
+          xPos: pointInHead.x - headCenterX,
+          yPos: -(pointInHead.y - headCenterY),
+        });
+
+        return {
+          values: {
+            xPos: pointInHead.x - headCenterX,
+            yPos: -(pointInHead.y - headCenterY),
+            zPos: baseZInStoneParent, // Base's Z position in headstone parent space
+            scale: 1,
+            rotationZ: 0,
+            sizeVariant: 1,
+            targetSurface: 'base',
+          },
+          ready: true,
+        };
+      }
+    }
+
+    return {
+      values: fallbackOffset,
+      ready: !prefersBaseSurface,
+    };
+  }, [addition.type, baseMesh, bbox, prefersBaseSurface, stone, fallbackOffset]);
+
+  const defaultOffset = defaultOffsetResult.values;
+  const defaultReady = defaultOffsetResult.ready;
+
+  const storedOffset = additionOffsets[id];
+  const offset = React.useMemo(() => {
+    if (!storedOffset) return defaultOffset;
+    return {
+      ...defaultOffset,
+      ...storedOffset,
+      scale: storedOffset.scale ?? defaultOffset.scale,
+      rotationZ: storedOffset.rotationZ ?? defaultOffset.rotationZ,
+      targetSurface: storedOffset.targetSurface ?? defaultOffset.targetSurface,
+    };
+  }, [defaultOffset, storedOffset]);
+
+  React.useEffect(() => {
+    if (!defaultReady) return;
+    const desiredSurface = prefersBaseSurface && baseMesh ? 'base' : 'headstone';
+    const coordsMissing = !storedOffset || storedOffset.xPos === undefined || storedOffset.yPos === undefined;
+    const needsSurfaceUpdate = storedOffset?.targetSurface !== desiredSurface;
+    if (coordsMissing || needsSurfaceUpdate) {
+      setAdditionOffset(id, {
+        ...storedOffset,
+        ...defaultOffset,
+        scale: storedOffset?.scale ?? defaultOffset.scale,
+        rotationZ: storedOffset?.rotationZ ?? defaultOffset.rotationZ,
+        sizeVariant: storedOffset?.sizeVariant ?? defaultOffset.sizeVariant,
+        targetSurface: desiredSurface,
+      });
+    }
+  }, [defaultReady, storedOffset, defaultOffset, id, setAdditionOffset, prefersBaseSurface, baseMesh]);
 
   const computeInteractionPoint = React.useCallback(
     (clientX: number, clientY: number) => {
@@ -235,11 +405,8 @@ function AdditionModelInner({
       raycaster.setFromCamera(mouse, camera);
 
       let targetMesh: THREE.Mesh | null = headstoneMesh;
-      if (addition.type === 'statue' || addition.type === 'vase') {
-        const baseMesh = threeScene.getObjectByName('base') as THREE.Mesh | null;
-        if (baseMesh) {
-          targetMesh = baseMesh;
-        }
+      if (prefersBaseSurface && baseMesh) {
+        targetMesh = baseMesh;
       }
       if (!targetMesh) return null;
 
@@ -276,9 +443,16 @@ function AdditionModelInner({
       const centerX = (targetBBox.min.x + targetBBox.max.x) / 2;
       const centerY = (targetBBox.min.y + targetBBox.max.y) / 2;
 
+      if (prefersBaseSurface && baseMesh && targetMesh === baseMesh) {
+        const spanY = maxY - minY;
+        const anchorInsetY = Math.min(spanY * 0.15, 0.02);
+        const anchorY = maxY - anchorInsetY;
+        clamped.y = anchorY;
+      }
+
       return { clamped, centerX, centerY, minX, maxX, minY, maxY, targetMesh };
     },
-    [headstone, gl, mouse, raycaster, camera, addition.type, threeScene, applicationDragPlane, fallbackIntersection]
+    [headstone, gl, mouse, raycaster, camera, prefersBaseSurface, baseMesh, applicationDragPlane, fallbackIntersection]
   );
 
   // Drag handler - must be defined before effects
@@ -298,7 +472,7 @@ function AdditionModelInner({
       }
 
       const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
-      if (!headstoneMesh) return;
+      if (!headstoneMesh || !bbox) return;
 
       const convertToHeadstone = (vec: THREE.Vector3) => {
         const worldPoint = targetMesh.localToWorld(vec.clone());
@@ -306,17 +480,16 @@ function AdditionModelInner({
       };
 
       const headstonePoint = convertToHeadstone(clamped);
-      const headstoneCenterPoint = convertToHeadstone(
-        new THREE.Vector3(centerX, centerY, clamped.z)
-      );
+      const headCenterX = (bbox.min.x + bbox.max.x) / 2;
+      const headCenterY = (bbox.min.y + bbox.max.y) / 2;
 
       setAdditionOffset(id, {
         ...offset,
-        xPos: headstonePoint.x - headstoneCenterPoint.x,
-        yPos: -(headstonePoint.y - headstoneCenterPoint.y),
+        xPos: headstonePoint.x - headCenterX,
+        yPos: -(headstonePoint.y - headCenterY),
       });
     },
-    [computeInteractionPoint, headstone, id, offset, setAdditionOffset]
+    [computeInteractionPoint, headstone, id, offset, setAdditionOffset, bbox]
   );
 
   const handleClick = React.useCallback((e: any) => {
@@ -466,45 +639,85 @@ function AdditionModelInner({
   // scale: target sizes in headstone units (1 unit = 10mm)
   const targetH = TARGET_HEIGHTS[addition.type as keyof typeof TARGET_HEIGHTS] || TARGET_HEIGHTS.application;
 
-  // Map sizeVariant (1, 2, 3, 4) to scale multipliers
-  // This is a temporary mapping until we parse XML sizes
-  const sizeVariantToScale = (variant: number) => {
-    switch (variant) {
-      case 1: return 1.0;   // Size 1 - base size
-      case 2: return 1.4;   // Size 2 - ~40% larger
-      case 3: return 1.8;   // Size 3 - ~80% larger
-      case 4: return 2.2;   // Size 4 - ~120% larger
-      default: return 1.0;
-    }
-  };
-
   // Size is in headstone units
   const maxDim = Math.max(size.x, size.y);
   const h = Math.max(1e-6, maxDim);
   const auto = targetH / h;
   
-  // Use sizeVariant if available, otherwise fall back to scale
-  const sizeVariant = offset.sizeVariant ?? 1;
-  const user = Math.max(0.05, Math.min(5, sizeVariantToScale(sizeVariant)));
+  const user = Math.max(0.05, Math.min(5, offset.scale ?? 1));
   const finalScale = auto * user;
 
   // Determine Z position based on type
   // Coordinate system: 1 unit = 1mm
   const zScaleFactor = 0.1; // Reduced Z-scale for applications only (not statues/vases)
+  const headFrontZ = headstone.frontZ ?? (bbox?.max.z ?? 0);
+
+  const baseSurfaceZ = React.useMemo(() => {
+    if (!prefersBaseSurface || !baseMesh || !stone) return null;
+    if (!baseMesh.geometry.boundingBox) baseMesh.geometry.computeBoundingBox();
+    const targetBBox = baseMesh.geometry.boundingBox;
+    if (!targetBBox) return null;
+    const topPoint = new THREE.Vector3(0, targetBBox.max.y, 0);
+    const worldTop = baseMesh.localToWorld(topPoint.clone());
+    return stone.worldToLocal(worldTop.clone()).z;
+  }, [prefersBaseSurface, baseMesh, stone]);
   
   let zPosition = 0;
   
-  if (addition.type === 'statue' || addition.type === 'vase') {
-    // For statues and vases, use normal Z-scale (not flattened)
-    const modelDepth = size.z * finalScale;
-    zPosition = headstone.frontZ + (modelDepth / 2);
-  } else if (addition.type === 'application') {
-    // Applications use flattened Z-scale
-    // Calculate the actual depth after Z-scale flattening
-    const flattenedDepth = size.z * finalScale * zScaleFactor;
-    
-    // Position so the back of the flattened application touches the headstone
-    zPosition = headstone.frontZ + (flattenedDepth / 2) + APPLICATION_Z_OFFSET;
+  const depthScale =
+    addition.type === 'application'
+      ? zScaleFactor
+      : addition.type === 'statue'
+        ? STATUE_DEPTH_SCALE
+        : addition.type === 'vase'
+          ? VASE_DEPTH_SCALE
+          : 1;
+  const actualDepth = size.z * finalScale * depthScale;
+
+  let surfaceZ = headFrontZ;
+  if ((addition.type === 'statue' || addition.type === 'vase') && baseSurfaceZ !== null) {
+    // Statues and vases always use base surface if available
+    surfaceZ = baseSurfaceZ;
+  } else if (offset.targetSurface === 'base' && baseSurfaceZ !== null) {
+    surfaceZ = baseSurfaceZ;
+  }
+
+  // Use stored zPos if available (for base-positioned items), otherwise calculate from surface
+  if (offset.zPos !== undefined) {
+    // zPos represents the Z coordinate (in headstone space) of the target position on the base
+    // For statues/vases, this is already the correct Z position (center of base depth, top surface in Y)
+    // The statue model's origin is at its bottom, so we just need to lift it by its depth
+    if (addition.type === 'application') {
+      zPosition = offset.zPos + actualDepth / 2 + APPLICATION_Z_OFFSET;
+    } else {
+      // For statues/vases: they stand upright, so add their full depth to lift them off the base surface
+      zPosition = offset.zPos + actualDepth;
+    }
+    console.log('[AdditionModel] Using stored zPos:', {
+      id,
+      type: addition.type,
+      storedZPos: offset.zPos,
+      actualDepth,
+      depthScale: addition.type === 'statue' ? STATUE_DEPTH_SCALE : VASE_DEPTH_SCALE,
+      finalZPosition: zPosition,
+      offsetObject: offset,
+    });
+  } else {
+    // Fallback to surface-based calculation
+    if (addition.type === 'application') {
+      zPosition = surfaceZ + actualDepth / 2 + APPLICATION_Z_OFFSET;
+    } else {
+      // For statues and vases, position them so the back of their bounding box sits on the surface
+      // Since they're 3D objects that should stand on the base, add the full depth
+      zPosition = surfaceZ + actualDepth;
+    }
+    console.log('[AdditionModel] Using surface-based Z:', {
+      id,
+      type: addition.type,
+      surfaceZ,
+      actualDepth,
+      finalZPosition: zPosition,
+    });
   }
 
   const isSelected = selectedAdditionId === id;
@@ -514,22 +727,41 @@ function AdditionModelInner({
     width: size.x * finalScale,
     height: size.y * finalScale,
   };
+  
+  // Applications get blue selection box with handles
+  // Statues/Vases get simple white corner outlines like headstone
+  const showApplicationBox = isSelected && addition.type === 'application' && scaledBounds.width > 0 && scaledBounds.height > 0;
+  const showCornerOutline = isSelected && (addition.type === 'statue' || addition.type === 'vase');
+  
+  // Debug logging
+  React.useEffect(() => {
+    if (isSelected) {
+      console.log('[AdditionModel] Selected:', {
+        id,
+        type: addition.type,
+        showCornerOutline,
+        showApplicationBox,
+        refCurrent: ref.current,
+        sceneChildren: scene?.children.length,
+      });
+    }
+  }, [isSelected, showCornerOutline, showApplicationBox, id, addition.type, scene]);
 
   return (
     <>      
       {/* Parent group for positioning - convert Y-down saved coords to Y-up display */}
       <group
         position={[centerX + offset.xPos, centerY - offset.yPos, zPosition]}
-        rotation={[0, 0, offset.rotationZ || 0]}
+        rotation={[0, offset.rotationZ || 0, 0]}
       >
         {/* Addition mesh with scale and Y-flip */}
         {/* Applications use reduced Z-scale for flatter appearance, statues/vases use normal scale */}
         <group
           ref={ref}
           scale={[
-            finalScale, 
-            -finalScale, 
-            addition.type === 'application' ? finalScale * zScaleFactor : finalScale
+            finalScale,
+            -finalScale,
+            finalScale * depthScale
           ]}
           visible={true}
           name={`addition-${id}`}
@@ -541,8 +773,8 @@ function AdditionModelInner({
           <primitive object={scene} />
         </group>
         
-        {/* Selection box with resize and rotation handles */}
-        {isSelected && scaledBounds.width > 0 && scaledBounds.height > 0 && (
+        {/* Selection box with resize and rotation handles - for applications only */}
+        {showApplicationBox && (
           <SelectionBox
             objectId={id}
             position={new THREE.Vector3(0, 0, 0.002)}
@@ -554,17 +786,27 @@ function AdditionModelInner({
             additionType={addition.type as 'application' | 'statue' | 'vase'}
             onUpdate={(data) => {
               if (data.scaleFactor !== undefined) {
-                // Update scale based on scale factor
                 const newScale = (offset.scale ?? 1) * data.scaleFactor;
                 const clampedScale = Math.max(0.05, Math.min(5, newScale));
                 setAdditionOffset(id, { ...offset, scale: clampedScale });
               }
               if (data.rotationDeg !== undefined) {
-                // Add the rotation delta to current rotation
                 const newRotation = (offset.rotationZ || 0) + (data.rotationDeg * Math.PI / 180);
                 setAdditionOffset(id, { ...offset, rotationZ: newRotation });
               }
             }}
+          />
+        )}
+        
+        {/* Simple white corner outline - for statues and vases (like headstone) */}
+        {showCornerOutline && (
+          <RotatingBoxOutline
+            targetRef={ref}
+            visible={true}
+            color="#ffffff"
+            pad={0.002}
+            through={true}
+            lineLength={0.15}
           />
         )}
       </group>
@@ -576,3 +818,5 @@ function AdditionModelInner({
 useGLTF.preload('/additions/1134/Art1134.glb');
 useGLTF.preload('/additions/2497/Art2497.glb');
 useGLTF.preload('/additions/320/320.glb');
+
+

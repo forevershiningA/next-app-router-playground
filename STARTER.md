@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-02  
+**Last Updated:** 2026-02-03  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,7 +26,71 @@
 
 ---
 
-## Current Status (2026-02-02)
+## Current Status (2026-02-03)
+
+### ✅ Recent Changes (February 3, 2026)
+1. **Check Price Page Enhancements**: Improved motif and inscription detail modals
+   - **Motif Images**: Changed from card backgrounds to clean white/grey-tinted images (2x larger)
+   - **Color Column Simplified**: Removed duplicate empty "Color" column in motif details
+   - **Color Display**: Shows color name (e.g., "Black") + hex value below it (no swatch box)
+   - **Filename Positioning**: Moved filename below motif image as alt text
+   - **Column Headers**: Changed "Name" to "Motif", left-aligned content
+   - **Removed Filename Link**: Filename now appears as image alt text, image is clickable
+   - **Inscription Color**: Matched motif color display format (name + hex)
+   - **Product Details Added**: Shows "Product ID: X - Name" format with shape, material, size for headstone and base
+   - **Price Integration**: Added prices for headstone, base, motifs, and inscriptions
+   - **Column Width Adjustment**: Your Design (60%), Price Summary (40%)
+   - **Link Cursors**: Added cursor pointer to motif/inscription count links
+   - **Real Price Calculations**: Motif and inscription totals now calculate from actual item prices
+   - Files: `app/check-price/_ui/CheckPriceGrid.tsx`
+
+2. **Addition Catalog Behavior**: Fixed addition list visibility after deletion
+   - **Delete Button**: Keeps `activePanel = 'addition'` instead of setting to null
+   - **Result**: Catalog immediately reappears for quick addition of another item
+   - Files: `components/DesignerNav.tsx`
+
+3. **Addition Auto-Selection**: Fixed additions not being selected after adding
+   - **Issue**: `addAddition()` creates instance ID but selector was setting wrong ID
+   - **Fix**: Removed redundant `setSelectedAdditionId` calls since `addAddition()` handles it
+   - **Result**: Newly added additions auto-select and edit panel opens
+   - Files: `components/AdditionSelector.tsx`, `lib/headstone-store.ts`
+
+4. **Addition Size Control**: Implemented discrete size slider (Size 1-4)
+   - **Changed from**: Continuous scale (0.1-3.0×)
+   - **Changed to**: Integer size variants (1, 2, 3, 4)
+   - **Purpose**: Prepare for XML-based fixed size selection from catalog
+   - **Store**: Added `sizeVariant` field to addition offsets
+   - **UI**: Shows "Size 1" to "Size 4" with integer steps
+   - Files: `components/DesignerNav.tsx`, `lib/headstone-store.ts`
+
+5. **Statue/Vase Placement Pipeline**: Statues and vases now snap to the base surface
+   - Addition offsets track a `targetSurface` so saved coordinates resnap once the base mesh loads
+   - Default placement converts base top/world coordinates into headstone space, constraining anchors to left/right pads
+   - **X Position**: Statues positioned in **left pad** (center between base left edge and headstone left edge)
+   - **X Position**: Vases positioned in **right pad** (center between headstone right edge and base right edge)
+   - **Y Position**: On top surface of base (`targetBBox.max.y`)
+   - **Z Position**: Currently at front edge of base - **KNOWN ISSUE: Should be centered in base depth**
+   - Dragging statues stays locked to those pads while applications continue using the headstone plane fallback
+   - ElegantSelection replaces the blue handle box for statues/vases, while applications keep resize handles
+   - **Rotation**: Statues rotate around Y-axis (vertical spin), not Z-axis
+   - **Store Fields**: `xPos`, `yPos`, `zPos` (optional), `rotationZ`, `scale`, `sizeVariant`, `targetSurface`
+   - Files: `components/three/AdditionModel.tsx`, `lib/headstone-store.ts`
+
+6. **Statue Depth & Scale Normalization**
+   - Introduced `STATUE_DEPTH_SCALE` / `VASE_DEPTH_SCALE` so GLB Z-depth is clamped to ~30% of original, preventing stretched silhouettes
+   - Z-positioning now derives from the scaled depth rather than raw mesh bounds
+   - Files: `components/three/AdditionModel.tsx`
+
+7. **Base Auto-Resize When Statues Present**
+   - Base width expands by 30% and depth by 1.5× whenever `hasStatue()` is true, giving statues breathing room on both sides
+   - Base center alignment logic updated so the enlarged base still stays flush with the upright back plane
+   - Files: `components/three/headstone/HeadstoneBaseAuto.tsx`
+
+### ⚠️ Known Issues (2026-02-04)
+- **Statue Z-Position Bug**: Statues/vases position at the **front edge** of the base instead of being centered in the base's depth dimension. The calculation attempts to use `baseMesh.getWorldPosition()` and convert to headstone space, but the resulting Z coordinate is incorrect. Multiple coordinate transformation approaches have been tried (base-local → world → headstone-local, using base center Z, using base world position) but all result in front-edge positioning.
+- **Root Cause**: Unclear - coordinate system transformation between base mesh (which has its own position/rotation in headstone parent space) and the final statue position is not working as expected.
+- **Workaround Needed**: May require direct Z-offset calculation based on base position + base depth/2, or alternative coordinate reference system.
+- **Statue QA**: Depth scaling and anchor snapping are in place, but QA is still validating real catalog statues for extreme aspect ratios (e.g., very thin angels). Report any remaining stretching with the GLB ID so we can fine-tune the depth scale constants per model group.
 
 ### ✅ Recent Changes (February 2, 2026)
 1. **Check Price Interactive Details**: Added clickable detail modals for inscriptions, motifs, and additions
@@ -1371,6 +1435,25 @@ apiData: {
 **Issue: Wedge shape instead of trapezoid**
 - **Cause**: Fixed 15° angle causes top to meet at sharp point
 - **Solution**: Use thickness ratio approach: `topThickness = baseThickness * 0.2`
+
+**Issue: Statue Z-Position on Base (UNRESOLVED - 2026-02-04)**
+- **Problem**: Statues position at front edge of base instead of centered in base depth
+- **Symptoms**: 
+  - X position: ✅ Correctly centered in left pad
+  - Y position: ✅ Correctly on top surface
+  - Z position: ❌ At front edge (near viewer) instead of centered
+- **Attempted Solutions**:
+  1. Calculate base center Z in base-local coords, convert to headstone space
+  2. Use `baseMesh.localToWorld()` → `stone.worldToLocal()` transformation
+  3. Get base world position via `getWorldPosition()`, convert to stone parent space
+- **All Fail**: Despite different coordinate transformation approaches, statue still appears at front edge
+- **Coordinate System Context**:
+  - Base mesh has its own position/rotation in headstone parent coordinate system
+  - Base position: `baseZCenter = -(alignmentDepth/2) + baseDTotal/2`
+  - Statue parent group uses `position={[centerX + xPos, centerY - yPos, zPosition]}`
+  - `zPosition` is in headstone parent coordinate system, not base-local
+- **Debug Logging Added**: Lines 328-345 log coordinate transformations
+- **Next Steps**: May need to directly calculate Z as `baseMesh.position.z` without coordinate conversion, or investigate if base mesh position itself is incorrect
 
 ---
 
@@ -3503,6 +3586,28 @@ For questions or issues:
 ---
 
 ## Recent Updates (2026)
+
+- **2026-02-04 (Afternoon)**: Statue/Vase Positioning on Base - Attempted Fixes (IN PROGRESS)
+  - **Goal**: Position statues centered in the left pad of the base (X ✅, Y ✅, Z ❌)
+  - **X Position - FIXED**: Statues now correctly centered in left pad area
+    - Converts headstone left edge to base-local coordinates
+    - Calculates midpoint: `(baseLeft + headstoneLeftInBase) / 2`
+    - Works correctly after coordinate space transformation fix
+  - **Y Position - WORKING**: Statues correctly positioned on top surface of base
+    - Uses `targetBBox.max.y` from base bounding box
+  - **Z Position - BROKEN**: Statues still appear at front edge instead of centered in depth
+    - **Attempted Fix 1**: Calculate `targetZ = (baseBBox.min.z + baseBBox.max.z) / 2`, convert to headstone space
+    - **Attempted Fix 2**: Use `baseMesh.localToWorld()` → `stone.worldToLocal()` for Z coordinate
+    - **Attempted Fix 3**: Get base world position via `baseMesh.getWorldPosition()`, convert to stone parent space
+    - **Result**: All attempts still position statue at front edge of base
+  - **Rotation Axis - FIXED**: Changed from Z-axis to Y-axis
+    - Changed `rotation={[0, 0, rotationZ]}` → `rotation={[0, rotationZ, 0]}`
+    - Statues now spin vertically (left/right) instead of tipping (forward/back)
+  - **Store Updates**: Added `zPos?: number` to `additionOffsets` type
+  - **Files Modified**: 
+    - `components/three/AdditionModel.tsx` (lines 230-350, 675-710, 750)
+    - `lib/headstone-store.ts` (line 208)
+  - **Status**: X and Y positioning working, Z positioning and rotation axis fixed but Z still incorrect
 
 - **2026-02-02 (Evening)**: Check Price Interactive Details (Production-Ready)
   - **Clickable Item Counts**: Made inscription/motif/addition counts clickable

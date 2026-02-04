@@ -425,31 +425,32 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       const baseW = baseWidthMm / 1000;
       const baseD = baseThickness / 1000; // Convert mm to meters
 
-      const statueExtension = hasStatue() ? 0.2 : 0;
-      const xOffset = statueExtension / 2;
+      const statuePresent = hasStatue();
+      const baseWTotal = statuePresent ? baseW * 1.3 : baseW; // widen by 30%
+      const baseDTotal = statuePresent ? baseD * 1.5 : baseD; // 75% of previous doubling
 
       // CRITICAL: Align base back edge with headstone back edge
       // Both upright and slant headstones have their backs at: -(uprightThickness / 2 / 1000)
       // Base back should match, so: baseZCenter - baseD/2 = -(alignmentDepth / 2)
       // Therefore: baseZCenter = -(alignmentDepth / 2) + baseD / 2
-      const baseZCenter = -(alignmentDepth / 2) + baseD / 2;
+      const baseZCenter = -(alignmentDepth / 2) + baseDTotal / 2;
 
       targetPos.current.set(
-        -xOffset,
+        0,
         -baseHeightMeters * 0.5 + EPSILON,
         baseZCenter
       );
-      targetScale.current.set(baseW, baseHeightMeters, baseD);
+      targetScale.current.set(baseWTotal, baseHeightMeters, baseDTotal);
 
       if (
-        baseDimensions.width !== baseW ||
+        baseDimensions.width !== baseWTotal ||
         baseDimensions.height !== baseHeightMeters ||
-        baseDimensions.depth !== baseD
+        baseDimensions.depth !== baseDTotal
       ) {
         setBaseDimensions({
-          width: baseW,
+          width: baseWTotal,
           height: baseHeightMeters,
-          depth: baseD,
+          depth: baseDTotal,
         });
       }
 

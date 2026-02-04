@@ -38,18 +38,20 @@ export default function AdditionSelector({ additions }: Props) {
   }, [additions, category]);
 
   const handleToggle = (addition: Addition) => {
-    if (selectedAdditions.includes(addition.id)) {
-      removeAddition(addition.id);
-      if (currentSelectedAdditionId === addition.id) {
+    // Check if any instance of this addition ID exists
+    const existingInstance = selectedAdditions.find(aid => aid.startsWith(addition.id + '_'));
+    
+    if (existingInstance) {
+      removeAddition(existingInstance);
+      if (currentSelectedAdditionId === existingInstance) {
         setSelectedAdditionId(null);
         setActivePanel(null);
       }
       return;
     }
 
+    // addAddition already sets selectedAdditionId and activePanel internally
     addAddition(addition.id);
-    setSelectedAdditionId(addition.id);
-    setActivePanel('addition');
   };
 
   return (
