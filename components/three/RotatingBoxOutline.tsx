@@ -39,6 +39,26 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   lineLength = 0.15,
 }: RotatingBoxOutlineProps) {
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
+  const localBox = new THREE.Box3();
+  const childBox = new THREE.Box3();
+  const inverseMatrix = new THREE.Matrix4();
+  const localCenter = new THREE.Vector3();
+  const localSize = new THREE.Vector3();
+  const worldCenter = new THREE.Vector3();
+  const axisXVec = new THREE.Vector3();
+  const axisYVec = new THREE.Vector3();
+  const axisZVec = new THREE.Vector3();
+  const axisXDir = new THREE.Vector3();
+  const axisYDir = new THREE.Vector3();
+  const axisZDir = new THREE.Vector3();
+  const halfAxisX = new THREE.Vector3();
+  const halfAxisY = new THREE.Vector3();
+  const halfAxisZ = new THREE.Vector3();
+  const armXVector = new THREE.Vector3();
+  const armYVector = new THREE.Vector3();
+  const armZVector = new THREE.Vector3();
+  const cornerTemp = new THREE.Vector3();
+  const endpointTemp = new THREE.Vector3();
 
   // Create the helper geometry and material (wait until target is ready)
   React.useEffect(() => {
@@ -100,117 +120,122 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       return;
     }
 
-    // Calculate bounding box
-    const localBox = new THREE.Box3();
-    
-    if (excludeAdditions) {
-      // Calculate bounding box excluding addition models and text
-      obj.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.geometry) {
-          const parentName = child.parent?.name || '';
-          const childName = child.name || '';
-          
-          const isAddition = parentName.startsWith('addition-') || childName.startsWith('addition-');
-          const isText = child.geometry.type === 'TextGeometry' || 
-                        childName.includes('text') || 
-                        parentName.includes('text') ||
-                        child.userData?.isText;
-          
-          if (!isAddition && !isText) {
-            child.geometry.computeBoundingBox();
-            if (child.geometry.boundingBox) {
-              const childBox = child.geometry.boundingBox.clone();
-              localBox.union(childBox);
-            }
-          }
-        }
-      });
-    } else if (obj instanceof THREE.Mesh && obj.geometry) {
-      // For a single mesh, calculate box from geometry in local space
-      obj.geometry.computeBoundingBox();
-      if (obj.geometry.boundingBox) {
-        localBox.copy(obj.geometry.boundingBox);
+    // Calculate oriented bounding box in local space
+    obj.updateWorldMatrix(true, true);
+    inverseMatrix.copy(obj.matrixWorld).invert();
+    localBox.makeEmpty();
+
+    obj.traverse((child) => {
+      if (!(child instanceof THREE.Mesh) || !child.geometry) {
+        return;
       }
-    } else {
-      // For groups, use setFromObject to get world-space box
-      localBox.setFromObject(obj);
-    }
+
+      const parentName = child.parent?.name || '';
+      const childName = child.name || '';
+      const isAddition = parentName.startsWith('addition-') || childName.startsWith('addition-');
+      const isText = child.geometry.type === 'TextGeometry' ||
+        childName.includes('text') ||
+        parentName.includes('text') ||
+        child.userData?.isText;
+
+      if (excludeAdditions && (isAddition || isText)) {
+        return;
+      }
+
+      if (!child.geometry.boundingBox) {
+        child.geometry.computeBoundingBox();
+      }
+      if (child.geometry.boundingBox) {
+        childBox.copy(child.geometry.boundingBox);
+        childBox.applyMatrix4(child.matrixWorld);
+        childBox.applyMatrix4(inverseMatrix);
+        localBox.union(childBox);
+      }
+    });
 
     if (localBox.isEmpty()) {
       helper.visible = false;
       return;
     }
 
-    // Expand by padding
-    localBox.expandByScalar(pad);
+    localBox.getCenter(localCenter);
+    localBox.getSize(localSize);
 
-    // Get center and size in local space
-    const center = new THREE.Vector3();
-    const size = new THREE.Vector3();
-    localBox.getCenter(center);
-    localBox.getSize(size);
+    if (localSize.lengthSq() === 0) {
+      helper.visible = false;
+      return;
+    }
 
-    // Calculate corner arm lengths based on box size
-    const lenX = size.x * lineLength;
-    const lenY = size.y * lineLength;
-    const lenZ = size.z * lineLength;
+    axisXVec.setFromMatrixColumn(obj.matrixWorld, 0);
+    axisYVec.setFromMatrixColumn(obj.matrixWorld, 1);
+    axisZVec.setFromMatrixColumn(obj.matrixWorld, 2);
 
-    // Build the "Viewfinder" Geometry (8 corners, 3 lines per corner = 24 lines)
+    const axisXLength = axisXVec.length() || 1;
+    const axisYLength = axisYVec.length() || 1;
+    const axisZLength = axisZVec.length() || 1;
+
+    axisXDir.copy(axisXVec).divideScalar(axisXLength);
+    axisYDir.copy(axisYVec).divideScalar(axisYLength);
+    axisZDir.copy(axisZVec).divideScalar(axisZLength);
+
+    const width = localSize.x * axisXLength;
+    const height = localSize.y * axisYLength;
+    const depth = localSize.z * axisZLength;
+
+    const paddedWidth = width + pad * 2;
+    const paddedHeight = height + pad * 2;
+    const paddedDepth = depth + pad * 2;
+
+    const halfWidth = paddedWidth / 2;
+    const halfHeight = paddedHeight / 2;
+    const halfDepth = paddedDepth / 2;
+
+    halfAxisX.copy(axisXDir).multiplyScalar(halfWidth);
+    halfAxisY.copy(axisYDir).multiplyScalar(halfHeight);
+    halfAxisZ.copy(axisZDir).multiplyScalar(halfDepth);
+
+    const lenX = paddedWidth * lineLength;
+    const lenY = paddedHeight * lineLength;
+    const lenZ = paddedDepth * lineLength;
+
+    armXVector.copy(axisXDir).multiplyScalar(lenX);
+    armYVector.copy(axisYDir).multiplyScalar(lenY);
+    armZVector.copy(axisZDir).multiplyScalar(lenZ);
+
+    worldCenter.copy(localCenter).applyMatrix4(obj.matrixWorld);
+
     const positions: number[] = [];
-    
-    // Helper to push a line segment
-    const pushLine = (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number) => {
-      positions.push(x1, y1, z1, x2, y2, z2);
+    const pushLine = (start: THREE.Vector3, end: THREE.Vector3) => {
+      positions.push(start.x, start.y, start.z, end.x, end.y, end.z);
     };
 
-    const hx = size.x / 2;
-    const hy = size.y / 2;
-    const hz = size.z / 2;
-    const cx = center.x;
-    const cy = center.y;
-    const cz = center.z;
+    const cornerSigns: [number, number, number][] = [
+      [-1, -1, 1],
+      [1, -1, 1],
+      [-1, -1, -1],
+      [1, -1, -1],
+      [-1, 1, 1],
+      [1, 1, 1],
+      [-1, 1, -1],
+      [1, 1, -1],
+    ];
 
-    // --- Bottom Corners ---
-    // Front-Left-Bottom
-    pushLine(cx - hx, cy - hy, cz + hz, cx - hx + lenX, cy - hy, cz + hz); // X
-    pushLine(cx - hx, cy - hy, cz + hz, cx - hx, cy - hy + lenY, cz + hz); // Y
-    pushLine(cx - hx, cy - hy, cz + hz, cx - hx, cy - hy, cz + hz - lenZ); // Z
+    cornerSigns.forEach(([sx, sy, sz]) => {
+      cornerTemp
+        .copy(worldCenter)
+        .addScaledVector(halfAxisX, sx)
+        .addScaledVector(halfAxisY, sy)
+        .addScaledVector(halfAxisZ, sz);
 
-    // Front-Right-Bottom
-    pushLine(cx + hx, cy - hy, cz + hz, cx + hx - lenX, cy - hy, cz + hz);
-    pushLine(cx + hx, cy - hy, cz + hz, cx + hx, cy - hy + lenY, cz + hz);
-    pushLine(cx + hx, cy - hy, cz + hz, cx + hx, cy - hy, cz + hz - lenZ);
+      endpointTemp.copy(cornerTemp).addScaledVector(armXVector, -sx);
+      pushLine(cornerTemp, endpointTemp);
 
-    // Back-Left-Bottom
-    pushLine(cx - hx, cy - hy, cz - hz, cx - hx + lenX, cy - hy, cz - hz);
-    pushLine(cx - hx, cy - hy, cz - hz, cx - hx, cy - hy + lenY, cz - hz);
-    pushLine(cx - hx, cy - hy, cz - hz, cx - hx, cy - hy, cz - hz + lenZ);
+      endpointTemp.copy(cornerTemp).addScaledVector(armYVector, -sy);
+      pushLine(cornerTemp, endpointTemp);
 
-    // Back-Right-Bottom
-    pushLine(cx + hx, cy - hy, cz - hz, cx + hx - lenX, cy - hy, cz - hz);
-    pushLine(cx + hx, cy - hy, cz - hz, cx + hx, cy - hy + lenY, cz - hz);
-    pushLine(cx + hx, cy - hy, cz - hz, cx + hx, cy - hy, cz - hz + lenZ);
-
-    // --- Top Corners ---
-    // Front-Left-Top
-    pushLine(cx - hx, cy + hy, cz + hz, cx - hx + lenX, cy + hy, cz + hz);
-    pushLine(cx - hx, cy + hy, cz + hz, cx - hx, cy + hy - lenY, cz + hz);
-    pushLine(cx - hx, cy + hy, cz + hz, cx - hx, cy + hy, cz + hz - lenZ);
-
-    // Front-Right-Top
-    pushLine(cx + hx, cy + hy, cz + hz, cx + hx - lenX, cy + hy, cz + hz);
-    pushLine(cx + hx, cy + hy, cz + hz, cx + hx, cy + hy - lenY, cz + hz);
-    pushLine(cx + hx, cy + hy, cz + hz, cx + hx, cy + hy, cz + hz - lenZ);
-
-    // Back-Left-Top
-    pushLine(cx - hx, cy + hy, cz - hz, cx - hx + lenX, cy + hy, cz - hz);
-    pushLine(cx - hx, cy + hy, cz - hz, cx - hx, cy + hy - lenY, cz - hz);
-    pushLine(cx - hx, cy + hy, cz - hz, cx - hx, cy + hy, cz - hz + lenZ);
-
-    // Back-Right-Top
-    pushLine(cx + hx, cy + hy, cz - hz, cx + hx - lenX, cy + hy, cz - hz);
-    pushLine(cx + hx, cy + hy, cz - hz, cx + hx, cy + hy - lenY, cz - hz);
-    pushLine(cx + hx, cy + hy, cz - hz, cx + hx, cy + hy, cz - hz + lenZ);
+      endpointTemp.copy(cornerTemp).addScaledVector(armZVector, -sz);
+      pushLine(cornerTemp, endpointTemp);
+    });
 
     const vertices = new Float32Array(positions);
     helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));

@@ -1,0 +1,80 @@
+Yep — it’s still not visible because **the bad Z block is still in your file** and it’s pushing the statue *behind / out of view*.
+
+In `/mnt/data/AdditionModel.tsx` you currently still have this for statues/vases:
+
+```ts
+const baseDepth = baseBBox.max.z - baseBBox.min.z;
+const centerOffset = -baseDepth / 2;
+const statueHalfDepth = actualDepth / 2;
+
+zPosition = surfaceZ + centerOffset + statueHalfDepth;
+```
+
+### Why this makes the statue disappear
+
+* `surfaceZ` is in **headstone-local space** (you computed it using `stone.worldToLocal(...)`)
+* `baseDepth` is in **base-local space** (from `baseMesh.geometry.boundingBox`)
+* You’re mixing spaces, so `centerOffset` is nonsense in headstone space → huge wrong shift → statue vanishes.
+
+---
+
+## ✅ The correct Z calculation (use ONE coordinate space)
+
+You already fixed `baseSurfaceZ` to be the **top-front** of the base *in headstone space*:
+
+```ts
+const topFrontPoint = new THREE.Vector3(0, targetBBox.max.y, targetBBox.max.z);
+const worldTopFront = baseMesh.localToWorld(topFrontPoint.clone());
+return stone.worldToLocal(worldTopFront.clone()).z;
+```
+
+That means:
+
+* `baseSurfaceZ` is the **front plane** of the base (in headstone space)
+* To keep the statue sitting *on* the base (not hanging off the front), you want the statue center moved **back by half its depth**.
+
+### Replace your entire statue/vase Z block with this:
+
+```ts
+const MARGIN = 0.01; // 10mm in meters
+
+if (addition.type === 'application') {
+  zPosition = surfaceZ + actualDepth / 2 + APPLICATION_Z_OFFSET;
+} else {
+  // statues/vases
+  if (offset.targetSurface === 'base' && baseSurfaceZ !== null) {
+    // baseSurfaceZ = base front plane (in headstone space)
+    zPosition = baseSurfaceZ - actualDepth / 2 - MARGIN;
+  } else {
+    // if ever placed on headstone surface, keep it in front
+    zPosition = headFrontZ + actualDepth / 2;
+  }
+}
+```
+
+**Important:** delete the `baseDepth / centerOffset` logic completely.
+
+---
+
+## Quick sanity check (so you know it will show)
+
+Temporarily force:
+
+```ts
+zPosition = headFrontZ + 0.2;
+```
+
+If you still can’t see it after that, then it’s not Z — it’s likely **scale became tiny** or the model got rotated/translated into the headstone.
+
+But in your case, the Z mix-up is enough to make it disappear.
+
+---
+
+If you paste your console log of:
+
+* `headFrontZ`
+* `baseSurfaceZ`
+* `actualDepth`
+* `zPosition`
+
+…I’ll confirm the sign (+/-) is correct for your camera direction, but the fix above is the correct coordinate-space-safe formula.

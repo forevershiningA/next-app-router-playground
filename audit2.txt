@@ -1,0 +1,146 @@
+Yep — the reason it “still looks the same” is **not** your Z math yet. It’s more fundamental:
+
+## What’s actually wrong (why it doesn’t move)
+
+### 1) Your offsets are in **mm**, but your scene/bounding boxes are in **meters**
+
+In `AdditionModel.tsx` you have:
+
+```ts
+const DEFAULT_POSITIONS = {
+  statue: { xOffset: -80 /* mm */ ... },
+  vase:   { xOffset:  30 /* mm */ ... },
+}
+```
+
+…but everywhere you clamp/compute you’re clearly working in **meters**:
+
+* `inset = 0.01` (that’s 10mm if you’re in meters)
+* you add `-0.15` (150mm) as a “move back” tweak
+* bounding boxes from Three.js are in the same units as the geometry (your models are behaving like meters)
+
+So when you do this (base placement path):
+
+```ts
+targetX = minX + posConfig.xOffset; // <-- -80 gets added
+targetX = Math.min(maxX, Math.max(minX, targetX)); // <-- clamps
+```
+
+`posConfig.xOffset = -80` means **-80 meters**, which forces `targetX` way outside the range and then the clamp pins it to **minX every time**.
+
+✅ That is exactly why the statue keeps appearing stuck at the base corner in your screenshots: it’s being **hard-clamped to the base minimum X**.
+
+---
+
+## Where the statue is now vs where it should be
+
+### Current (what your code is doing)
+
+* Statue is forced to **baseBBox.min.x** (leftmost end of base) because of the huge (-80m) offset.
+* Z is then derived from `headFrontZ` or `baseSurfaceZ`, but you also apply an extra `-0.15` in the group position, so it’s “sort of okay-ish” depth-wise — but it’s not your main blocker.
+
+### Correct (what you want)
+
+* Statue X should be “near headstone” or “near extension” depending on intent, **but not pinned to minX**.
+* Z should be based on **the base top/front plane**, not headstone front.
+
+---
+
+## The precise fix you need (do this first)
+
+### Step A — convert mm offsets to meters
+
+Add a constant:
+
+```ts
+const MM = 0.001; // meters per mm
+```
+
+Then update your defaults:
+
+```ts
+const DEFAULT_POSITIONS = {
+  statue: { xOffset: -80 * MM, yOffset: 0 },
+  vase:   { xOffset:  30 * MM, yOffset: 0 },
+  application: { xOffset: 0, yOffset: 0 },
+};
+```
+
+Also fix:
+
+```ts
+const APPLICATION_Z_OFFSET = 0.05 * MM;
+```
+
+After that single change, your statue will **stop clamping to the corner** and you’ll finally see movement that matches your inputs.
+
+---
+
+## Now fix the Z calculation properly (statues on the base)
+
+Right now, your base “surfaceZ” is computed from the **top-center point** of the base:
+
+```ts
+const topPoint = new THREE.Vector3(0, targetBBox.max.y, 0);
+...
+return stone.worldToLocal(worldTop).z;
+```
+
+That gives you the Z of the base’s center, not the front face.
+
+### Correct base surface point for “sit on base, near front”
+
+Use the base bbox front edge:
+
+```ts
+const topFrontPoint = new THREE.Vector3(0, targetBBox.max.y, targetBBox.max.z);
+const worldTopFront = baseMesh.localToWorld(topFrontPoint.clone());
+const baseTopFrontZInHeadstone = stone.worldToLocal(worldTopFront.clone()).z;
+```
+
+Then:
+
+* If you want the statue’s **back** to be flush with the base’s **front** plane, you’d set it based on half its depth.
+* If you want it **centered on the base depth**, you use `(minZ+maxZ)/2` (what you were doing earlier).
+
+### Also remove this hack once you do it properly:
+
+```ts
+zPosition + (prefersBaseSurface ? -0.15 : 0)
+```
+
+That “move back 150mm” is a band-aid and will fight your real calculation.
+
+---
+
+## Specific issues in your current code causing the problem
+
+1. **Unit mismatch** (mm offsets applied into meter-space)
+   → clamps X to `minX` permanently.
+
+2. **Conflicting unit comments**
+
+   * “1 unit = 10mm” vs “1 unit = 1mm”
+   * Your actual numeric choices (`0.01`, `0.15`) behave like **meters**.
+
+3. **baseSurfaceZ uses top-center (z=0) not top-front**
+   → your Z reference is not the plane you think it is.
+
+4. **Extra hardcoded Z shove (-0.15)**
+   → masks whether Z logic is correct.
+
+---
+
+## Do this in order
+
+1. **Convert offsets to meters** (`* 0.001`) → you’ll immediately stop seeing it stuck at the corner.
+2. Then adjust Z using **top-front** (or depth-center) and remove the `-0.15` hack.
+
+---
+
+If you tell me what your intended placement is (these two are different):
+
+* **A)** statue on the **right extension** (away from headstone)
+* **B)** statue tight to the headstone (near left)
+
+…I’ll give you the exact `targetX` formula (relative to headstone footprint vs relative to base bbox).

@@ -252,6 +252,7 @@ type HeadstoneState = {
     offset: {
       xPos?: number;
       yPos?: number;
+      zPos?: number;
       scale: number;
       rotationZ: number;
       sizeVariant?: number;
@@ -339,6 +340,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           rotationZ: 0,
           sizeVariant: 1,
           targetSurface: 'headstone',
+          zPos: undefined,
         },
       },
     }));
@@ -1032,6 +1034,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     offset: {
       xPos?: number;
       yPos?: number;
+      zPos?: number;
       scale: number;
       rotationZ: number;
       sizeVariant?: number;
@@ -1065,6 +1068,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         xPos: (currentOffset.xPos ?? 0) + 30,
         yPos: (currentOffset.yPos ?? 0) + 30,
         targetSurface: currentOffset.targetSurface,
+        zPos: currentOffset.zPos,
       };
       
       // Set the offset for the duplicate with its instance ID

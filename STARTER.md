@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-03  
+**Last Updated:** 2026-02-06  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -25,6 +25,27 @@
 17. [Development Workflow](#development-workflow)
 
 ---
+
+## Current Status (2026-02-06)
+
+### ✅ Recent Changes (February 6, 2026)
+1. **Statue/Vase Depth Controls & Collision Guardrails**
+   - Addition offsets now persist a `zPos` field so statues and vases remember their depth when saved, duplicated, or reloaded.
+   - Z placement is clamped between the headstone front plane and the back half of the base with a 5 mm safety pad, preventing models from intersecting the upright.
+   - Selection logic only applies the clamp after a user actually drags in Z, keeping canonical defaults untouched.
+   - Files: `components/three/AdditionModel.tsx`, `lib/headstone-store.ts`, `components/AdditionOverlayPanel.tsx`.
+
+2. **Base-Friendly Dragging**
+   - Dragging statues/vases now projects pointer movement onto a calculated plane aligned with the base top; movement continues even if the cursor leaves the mesh until mouse-up.
+   - Shared pointer tracking mirrors the application/motif fallback so all additions feel identical to move.
+   - Files: `components/three/AdditionModel.tsx`.
+
+3. **Geometry Readiness Guards**
+   - AdditionModel now waits for base/headstone bounding boxes before rendering base-mounted items to avoid hook-order warnings and undefined geometry.
+   - Files: `components/three/AdditionModel.tsx`.
+
+### ⚠️ Known Issues (2026-02-06)
+- **Legacy Canonical Design Alignment**: Load Design 1/2 can still misplace motifs/inscriptions if the converter output was altered outside the current session; re-running `scripts/convert-legacy-design.js` is the recommended fix when QA spots regression.
 
 ## Current Status (2026-02-03)
 

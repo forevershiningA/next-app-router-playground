@@ -19,6 +19,7 @@ export default function AdditionOverlayPanel() {
   const activeOffset = activeId ? (additionOffsets[activeId] || {
     xPos: 0,
     yPos: 0,
+    zPos: 0,
     scale: 1,
     rotationZ: 0,
   }) : null;

@@ -1,0 +1,265 @@
+Good — this is a classic coordinate-frame mismatch problem. Let’s break it down cleanly and mechanically.
+
+From your render:
+
+* The base (plinth) is long in X
+* Depth appears to be Z
+* Height is Y (as expected in three.js / R3F)
+
+So we’re working in a standard Three.js world:
+
+```
+X = left/right
+Y = up/down
+Z = forward/back
+```
+
+---
+
+## 1️⃣ What’s Currently Wrong
+
+From the screenshot, the statue is:
+
+* Sitting on the **far right end of the base**
+* Slightly offset visually
+* Likely positioned using the base’s *center* as reference
+* And likely not accounting for:
+
+  * Base half-depth
+  * Statue bounding box height
+  * Statue pivot origin (VERY important)
+
+### The real issue
+
+Your statue’s `position.z` is probably being set like this:
+
+```ts
+statue.position.z = baseDepth / 2
+```
+
+But that assumes:
+
+* Base origin is centered
+* Statue origin is centered
+* Statue origin is at its bottom
+
+And that last one is almost never true.
+
+Most models have:
+
+* Pivot at center
+* Or pivot at 0,0,0 from Blender
+* Or pivot at feet but not guaranteed
+
+So visually:
+
+The statue is likely:
+
+* Floating slightly
+* Or clipping
+* Or not perfectly aligned to the top of the base
+
+---
+
+## 2️⃣ Where It Should Be
+
+Let’s define proper placement mathematically.
+
+Assume:
+
+```
+Base:
+width  = baseWidth
+height = baseHeight
+depth  = baseDepth
+
+Statue:
+bbox = new THREE.Box3().setFromObject(statue)
+statueHeight = bbox.max.y - bbox.min.y
+statueDepth  = bbox.max.z - bbox.min.z
+```
+
+---
+
+### ✅ Correct Y Placement (Height)
+
+The statue should sit ON TOP of the base:
+
+If base is centered at Y=0:
+
+```
+base top = baseHeight / 2
+```
+
+Statue must be lifted by:
+
+```
+statueY = baseHeight / 2 - bbox.min.y
+```
+
+That accounts for the statue pivot not being at the feet.
+
+This is the most common thing people miss.
+
+---
+
+### ✅ Correct Z Placement (Front/Back)
+
+If the base is centered at 0:
+
+```
+base front face = baseDepth / 2
+```
+
+To place statue centered on depth:
+
+```
+statueZ = 0
+```
+
+To place statue near front edge:
+
+```
+statueZ = baseDepth / 2 - statueDepth / 2 - margin
+```
+
+To place statue at rear edge:
+
+```
+statueZ = -baseDepth / 2 + statueDepth / 2 + margin
+```
+
+Right now you likely used:
+
+```
+statueZ = baseDepth / 2
+```
+
+Which puts the statue’s center at the edge, meaning half of it hangs off.
+
+---
+
+### ✅ Correct X Placement (Left/Right)
+
+If centered:
+
+```
+statueX = 0
+```
+
+If placed to the right:
+
+```
+statueX = baseWidth / 2 - statueWidth / 2 - margin
+```
+
+---
+
+## 3️⃣ The Fundamental Mistake
+
+The mistake is almost always this:
+
+❌ Using base dimensions directly
+instead of
+✅ Using half-dimensions and statue bounding box dimensions.
+
+And especially:
+
+❌ Not compensating for `bbox.min.y`
+
+That causes floating / sinking.
+
+---
+
+## 4️⃣ What You Should Actually Implement
+
+Inside your model load effect:
+
+```ts
+const bbox = new THREE.Box3().setFromObject(statue);
+const size = new THREE.Vector3();
+bbox.getSize(size);
+
+const baseTop = baseHeight / 2;
+
+// Lift statue so feet sit on base
+statue.position.y = baseTop - bbox.min.y;
+
+// Center in X
+statue.position.x = 0;
+
+// Position toward front edge safely
+statue.position.z =
+  baseDepth / 2 - size.z / 2 - 0.02; // 2cm margin
+```
+
+That is mathematically correct.
+
+---
+
+## 5️⃣ One More Critical Thing
+
+If your base mesh is NOT centered (for example if its geometry is built from 0 to height instead of centered), then:
+
+Your assumptions break.
+
+Check this:
+
+```ts
+base.geometry.computeBoundingBox();
+console.log(base.geometry.boundingBox);
+```
+
+If min.y = 0 and max.y = height
+Then base origin is at bottom, not center.
+
+In that case:
+
+```
+baseTop = baseHeight
+```
+
+NOT
+
+```
+baseHeight / 2
+```
+
+This is often the hidden cause.
+
+---
+
+## 6️⃣ Summary of What’s Wrong
+
+You are likely:
+
+* Positioning statue using full base depth instead of half
+* Not subtracting half statue depth
+* Not correcting for bbox.min.y
+* Possibly misunderstanding whether base origin is centered
+
+---
+
+## The Rule To Remember
+
+When placing one object on another:
+
+Always use:
+
+```
+parentHalfSize
+minus
+childHalfSize
+minus
+margin
+```
+
+And always compensate for pivot offset:
+
+```
+- bbox.min.y
+```
+
+---
+
+If you paste your exact current position calculation, I can pinpoint the exact broken line.

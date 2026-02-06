@@ -93,6 +93,8 @@ export default function DesignerNav() {
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selectedAdditions = useHeadstoneStore ((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
@@ -101,6 +103,8 @@ export default function DesignerNav() {
   const showBase = useHeadstoneStore((s) => s.showBase);
   const setShowBase = useHeadstoneStore((s) => s.setShowBase);
   const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
 
   // Check if anything has been added to the headstone
   const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;
@@ -119,6 +123,8 @@ export default function DesignerNav() {
   const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<string | null>(null);
   const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<string | null>(null);
   const [panelSource, setPanelSource] = React.useState<'menu' | 'canvas' | null>(null);
+  const [forceAdditionCatalog, setForceAdditionCatalog] = React.useState(false);
+  const [forceMotifCatalog, setForceMotifCatalog] = React.useState(false);
   const activeFullscreenPanelRef = React.useRef<string | null>(null);
   activeFullscreenPanelRef.current = activeFullscreenPanel;
 
@@ -186,6 +192,18 @@ export default function DesignerNav() {
     // URL stays the same (e.g., stays on /select-size)
   }, [activeFullscreenPanel, pathname, setActivePanel, setDismissedPanelSlug]);
 
+  const handleBackToAdditionList = React.useCallback(() => {
+    setForceAdditionCatalog(true);
+    setSelectedAdditionId(null);
+    setActivePanel('addition');
+  }, [setForceAdditionCatalog, setSelectedAdditionId, setActivePanel]);
+
+  const handleBackToMotifList = React.useCallback(() => {
+    setForceMotifCatalog(true);
+    setSelectedMotifId(null);
+    setActivePanel('motif');
+  }, [setForceMotifCatalog, setSelectedMotifId, setActivePanel]);
+
   const closePanelHandlerRef = React.useRef(closeFullscreenPanel);
   closePanelHandlerRef.current = closeFullscreenPanel;
 
@@ -210,6 +228,27 @@ export default function DesignerNav() {
       }));
     }
   }, [pathname]);
+
+  useEffect(() => {
+    if (activeFullscreenPanel !== 'select-additions') {
+      setForceAdditionCatalog(false);
+    }
+    if (activeFullscreenPanel !== 'select-motifs') {
+      setForceMotifCatalog(false);
+    }
+  }, [activeFullscreenPanel]);
+
+  useEffect(() => {
+    if (selectedAdditionId) {
+      setForceAdditionCatalog(false);
+    }
+  }, [selectedAdditionId]);
+
+  useEffect(() => {
+    if (selectedMotifId) {
+      setForceMotifCatalog(false);
+    }
+  }, [selectedMotifId]);
   
   // Auto-open full-screen panel based on current route
   // DISABLED: Panel should only open when menu item is clicked, not automatically on route
@@ -235,8 +274,6 @@ export default function DesignerNav() {
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   
-  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
-  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
   const removeMotif = useHeadstoneStore((s) => s.removeMotif);
@@ -244,8 +281,6 @@ export default function DesignerNav() {
   const setMotifColor = useHeadstoneStore((s) => s.setMotifColor);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
   
-  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
-  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
@@ -265,11 +300,25 @@ export default function DesignerNav() {
   
   // Show Select Size panel when on select-size page
   const isSelectSizePage = pathname === '/select-size';
+  const isSelectAdditionsPage = pathname === '/select-additions';
   
   // Determine if canvas is visible (on pages with 3D scene)
   const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-border', '/select-additions'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
+  
+  const isAdditionCatalogVisible =
+    activeFullscreenPanel === 'select-additions' &&
+    (forceAdditionCatalog || panelSource === 'menu' || (panelSource === null && isSelectAdditionsPage)) &&
+    !selectedAdditionId;
+
+  const isMotifCatalogVisible =
+    activeFullscreenPanel === 'select-motifs' &&
+    (forceMotifCatalog || !selectedMotifId);
+
+  const shouldShowBackToListButton =
+    (activeFullscreenPanel === 'select-additions' && !isAdditionCatalogVisible) ||
+    (activeFullscreenPanel === 'select-motifs' && !isMotifCatalogVisible);
   
   // Close fullscreen panel if user navigates away from its route or when canvas is hidden
   useEffect(() => {
@@ -354,9 +403,18 @@ export default function DesignerNav() {
         })
       : null;
     const hasActiveAddition = !!selectedAdditionId && !!activeAdditionOffset && activePanel === 'addition';
+    
+    // Find the addition type to determine if rotation should be enabled
+    // Extract base ID from instance ID (e.g., "K0096_177030562074Z" -> "K0096")
+    const baseAdditionId = selectedAdditionId?.split('_')[0];
+    const activeAddition = baseAdditionId 
+      ? additionsList.find(a => a.id === baseAdditionId)
+      : null;
+    const isStatueOrVase = activeAddition?.type === 'statue' || activeAddition?.type === 'vase';
+    
     const additionRotation = ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
     const showAdditionCatalog =
-      panelSource === 'menu' || (panelSource === null && isSelectAdditionsPage);
+      forceAdditionCatalog || panelSource === 'menu' || (panelSource === null && isSelectAdditionsPage);
     
     return (
       <div className="flex h-full flex-col gap-4">
@@ -503,11 +561,12 @@ export default function DesignerNav() {
                 </div>
               </div>
               
-              {/* Rotation Slider */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
-                  <div className="flex items-center gap-2 justify-end">
+              {/* Rotation Slider - Only shown for applications, not for statues/vases */}
+              {!isStatueOrVase && (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
+                    <div className="flex items-center gap-2 justify-end">
                     <button
                       type="button"
                       onClick={() => {
@@ -598,6 +657,7 @@ export default function DesignerNav() {
                   </div>
                 </div>
               </div>
+              )}
             </div>
           </div>
         ) : null}
@@ -653,7 +713,8 @@ export default function DesignerNav() {
             isLaser
           )
         : null;
-    const showMotifCatalog = !hasActiveMotif && activeFullscreenPanel === 'select-motifs';
+    const showMotifCatalog =
+      activeFullscreenPanel === 'select-motifs' && (forceMotifCatalog || !hasActiveMotif);
 
     return (
       <div className="flex h-full flex-col gap-4">
@@ -1030,7 +1091,6 @@ export default function DesignerNav() {
   const isSelectProductPage = pathname === '/select-product';
   const isSelectShapePage = pathname === '/select-shape';
   const isSelectMaterialPage = pathname === '/select-material';
-  const isSelectAdditionsPage = pathname === '/select-additions';
   const isSelectMotifsPage = pathname === '/select-motifs';
   const isHomePage = pathname === '/';
   const isCheckPricePage = pathname === '/check-price';
@@ -1502,17 +1562,30 @@ export default function DesignerNav() {
           {/* Panel Header - desktop only */}
           <div className="hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <button
-                onClick={closeFullscreenPanel}
-                className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
-              >
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </span>
-                <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={closeFullscreenPanel}
+                  className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
+                >
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </span>
+                  <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
+                </button>
+                {shouldShowBackToListButton && (
+                  <button
+                    onClick={activeFullscreenPanel === 'select-additions' ? handleBackToAdditionList : handleBackToMotifList}
+                    className="inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-200 hover:border-white/40 hover:text-white"
+                  >
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
+                      <Squares2X2Icon className="h-4 w-4" />
+                    </span>
+                    <span className="tracking-wide">Back&nbsp;to&nbsp;List</span>
+                  </button>
+                )}
+              </div>
               <div className="text-left md:text-right">
                 <p className="text-xs uppercase tracking-[0.35em] text-white/50">Guided Step</p>
                 <h2 className="mt-1 text-2xl font-semibold text-white">{menuItems.find(item => item.slug === activeFullscreenPanel)?.name}</h2>
