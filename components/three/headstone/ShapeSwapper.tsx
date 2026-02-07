@@ -129,7 +129,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
-  const bronzeBorderColor = '#FFB65A';
+  const bronzeBorderColor = '#FFDFA3';
   const isSelectSizeRoute = pathname === '/select-size';
   const isSelectMaterialRoute = pathname === '/select-material';
   const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;

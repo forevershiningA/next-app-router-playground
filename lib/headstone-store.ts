@@ -56,6 +56,7 @@ const clampInscriptionRotation = (v: number) =>
     MIN_INSCRIPTION_ROTATION_DEG,
     Math.min(MAX_INSCRIPTION_ROTATION_DEG, Math.round(v)),
   );
+const MIN_MOTIF_HEIGHT_MM = 10;
 
 /* types */
 export type Line = {
@@ -445,6 +446,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
     console.trace('[Store] setProductId call stack');
 
+    const prevSnapshot = get();
+    const prevHeadstoneHeight = Math.max(prevSnapshot.heightMm || 0, 1);
+    const prevBaseHeight = Math.max(
+      prevSnapshot.baseHeightMm || prevSnapshot.heightMm || 0,
+      1,
+    );
+    const prevWidthMm = prevSnapshot.widthMm ?? 0;
+    const prevHeightMm = prevSnapshot.heightMm ?? 0;
+    const prevSquare610 =
+      Math.abs(prevWidthMm - prevHeightMm) <= 5 &&
+      Math.abs(prevWidthMm - 610) <= 20 &&
+      Math.abs(prevHeightMm - 610) <= 20;
+
     // Immediately capture the user's selection so downstream effects know a
     // product has been chosen even while the catalog XML is loading.
     // CRITICAL: Clear the old catalog to prevent showing stale data
@@ -478,6 +492,25 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const showBase = isHeadstoneLike || productType === 'monument';
       const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
       set({ showBase, showInscriptionColor });
+      const hasBase = showBase;
+      const prevProductType = prevSnapshot.catalog?.product?.type;
+      const prevProductWasPlaque =
+        prevProductType === 'plaque' || prevProductType === 'bronze_plaque';
+      const shouldForceSquarePlaque =
+        isPlaque && (prevSquare610 || !prevProductWasPlaque);
+
+      const supportsBorder = isPlaque && catalog.product.border === '1';
+      const currentBorderName = get().borderName;
+      if (supportsBorder) {
+        if (!currentBorderName || currentBorderName.toLowerCase().includes('no border')) {
+          const defaultBorder = data.borders.find((border) => border.id !== '0');
+          if (defaultBorder) {
+            set({ borderName: defaultBorder.name });
+          }
+        }
+      } else if (currentBorderName) {
+        set({ borderName: null });
+      }
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
       const materialOptions = isBronzePlaqueProduct
@@ -561,16 +594,37 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
         const clampedWidth = Math.max(widthMin, Math.min(Math.max(widthMin, widthMax), shape.table.initWidth || currentState.widthMm));
         const clampedHeight = Math.max(heightMin, Math.min(Math.max(heightMin, heightMax), shape.table.initHeight || currentState.heightMm));
-        const clampedStandWidth = Math.max(clampedWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand.initWidth || currentState.baseWidthMm));
+        let targetWidth = clampedWidth;
+        let targetHeight = clampedHeight;
+        if (shouldForceSquarePlaque) {
+          const desiredSquare = 300;
+          const maxAllowedWidth = Math.max(widthMin, widthMax);
+          const maxAllowedHeight = Math.max(heightMin, heightMax);
+          targetWidth = Math.max(widthMin, Math.min(maxAllowedWidth, desiredSquare));
+          targetHeight = Math.max(heightMin, Math.min(maxAllowedHeight, desiredSquare));
+        }
+        const clampedStandWidth = Math.max(targetWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand.initWidth || currentState.baseWidthMm));
         const clampedStandHeight = Math.max(baseHeightMin, Math.min(Math.max(baseHeightMin, baseHeightMax), shape.stand.initHeight || currentState.baseHeightMm));
         const clampedStandDepth = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.stand.initDepth || currentState.baseThickness));
         const clampedTabletThickness = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.table.initDepth || currentState.uprightThickness));
+        const effectiveStandHeight = hasBase ? clampedStandHeight : 0;
+
+        const headstoneScaleFactor = Math.min(
+          1,
+          targetHeight / prevHeadstoneHeight,
+        );
+        const baseScaleFactor = hasBase
+          ? Math.min(
+              1,
+              effectiveStandHeight / prevBaseHeight,
+            )
+          : headstoneScaleFactor;
 
         set({
-          widthMm: clampedWidth,
-          heightMm: clampedHeight,
+          widthMm: targetWidth,
+          heightMm: targetHeight,
           baseWidthMm: clampedStandWidth,
-          baseHeightMm: clampedStandHeight,
+          baseHeightMm: effectiveStandHeight,
           baseThickness: clampedStandDepth,
           uprightThickness: clampedTabletThickness,
           slantThickness: clampedTabletThickness,
@@ -590,6 +644,123 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
             ? shape.stand.color 
             : `/${shape.stand.color}`;
           set({ baseMaterialUrl: baseTexturePath });
+        }
+
+        const productDefaultColor =
+          catalog.product.defaultColor ||
+          (catalog.product.laser === '1' ? '#ffffff' : '#c99d44');
+        const headstoneHeightLimit = Math.max(10, targetHeight);
+        const baseHeightLimit = hasBase
+          ? Math.max(10, effectiveStandHeight > 0 ? effectiveStandHeight : targetHeight)
+          : headstoneHeightLimit;
+
+        const existingState = get();
+        if (
+          existingState.inscriptions.length > 0 ||
+          existingState.selectedMotifs.length > 0 ||
+          Object.keys(existingState.motifOffsets).length > 0
+        ) {
+          set((s) => {
+            const motifEntries = Object.entries(s.motifOffsets);
+            const minFontSize = Math.max(
+              MIN_INSCRIPTION_SIZE_MM,
+              s.inscriptionMinHeight || MIN_INSCRIPTION_SIZE_MM,
+            );
+            const maxFontSize = Math.max(
+              minFontSize,
+              s.inscriptionMaxHeight || MAX_INSCRIPTION_SIZE_MM,
+            );
+            const clampYWithin = (value: number, limit: number) => {
+              const half = Math.max(limit / 2, 0);
+              if (!half) return value;
+              return Math.max(-half, Math.min(half, value));
+            };
+            const updatedMotifOffsets =
+              motifEntries.length > 0
+                ? (Object.fromEntries(
+                    motifEntries.map(([key, offset]) => {
+                      const originalTarget = offset.target ?? 'headstone';
+                      const normalizedTarget = !hasBase && originalTarget === 'base'
+                        ? 'headstone'
+                        : originalTarget;
+                      const limit = normalizedTarget === 'base' ? baseHeightLimit : headstoneHeightLimit;
+                      const baseScale = normalizedTarget === 'base' ? baseScaleFactor : headstoneScaleFactor;
+                      const originalHeight = offset.heightMm ?? limit;
+                      const minHeightRatio = originalHeight > 0
+                        ? Math.min(1, MIN_MOTIF_HEIGHT_MM / originalHeight)
+                        : 1;
+                      const effectiveScale = Math.min(1, Math.max(baseScale, minHeightRatio));
+                      const scaledHeight = Math.round(originalHeight * effectiveScale);
+                      const boundedHeight = Math.max(
+                        MIN_MOTIF_HEIGHT_MM,
+                        Math.min(limit, scaledHeight),
+                      );
+                      return [
+                        key,
+                        {
+                          ...offset,
+                          target: normalizedTarget,
+                          heightMm: boundedHeight,
+                          yPos: offset.yPos ?? 0,
+                        },
+                      ];
+                    }),
+                  ) as typeof s.motifOffsets)
+                : s.motifOffsets;
+
+            const scaledLines = s.inscriptions.map((line) => {
+              const originalTarget = line.target === 'base' ? 'base' : 'headstone';
+              const normalizedTarget = !hasBase && originalTarget === 'base' ? 'headstone' : originalTarget;
+              const limit = normalizedTarget === 'base' ? baseHeightLimit : headstoneHeightLimit;
+              const baseScale = normalizedTarget === 'base' ? baseScaleFactor : headstoneScaleFactor;
+              const minScaleRatio = line.sizeMm > 0
+                ? Math.min(1, minFontSize / line.sizeMm)
+                : 1;
+              const effectiveScale = Math.min(1, Math.max(baseScale, minScaleRatio));
+              const scaledSize = Math.round(line.sizeMm * effectiveScale);
+              const boundedSize = Math.max(
+                minFontSize,
+                Math.min(maxFontSize, scaledSize),
+              );
+              return {
+                ...line,
+                target: normalizedTarget,
+                color: productDefaultColor,
+                sizeMm: boundedSize,
+                yPos: line.yPos,
+              };
+            });
+
+            const entries = Object.entries(updatedMotifOffsets);
+            const scaledOffsets = entries.length > 0
+              ? (Object.fromEntries(
+                  entries.map(([key, offset]) => {
+                    const normalizedTarget = !hasBase && offset.target === 'base'
+                      ? 'headstone'
+                      : offset.target ?? 'headstone';
+                    const limit = normalizedTarget === 'base' ? baseHeightLimit : headstoneHeightLimit;
+                    return [
+                      key,
+                      {
+                        ...offset,
+                        target: normalizedTarget,
+                        yPos: offset.yPos ?? 0,
+                      },
+                    ];
+                  }),
+                ) as typeof s.motifOffsets)
+              : updatedMotifOffsets;
+
+            return {
+              inscriptions: scaledLines,
+              selectedMotifs: s.selectedMotifs.map((motif) => ({
+                ...motif,
+                color: productDefaultColor,
+              })),
+              motifOffsets: scaledOffsets,
+            };
+          });
+          setTimeout(() => get().calculateMotifCost(), 0);
         }
       }
 

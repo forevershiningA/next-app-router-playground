@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 
 type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   /** Object whose bounds should be outlined */
@@ -22,6 +22,8 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   excludeAdditions?: boolean;
   /** Length of corner arms relative to box size (0 to 0.5) */
   lineLength?: number;
+  /** Only render corners facing the active camera */
+  frontFacingOnly?: boolean;
 };
 
 /**
@@ -37,7 +39,9 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   renderOrder = 1000,
   excludeAdditions = false,
   lineLength = 0.15,
+  frontFacingOnly = false,
 }: RotatingBoxOutlineProps) {
+  const { gl } = useThree();
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
   const localBox = new THREE.Box3();
   const childBox = new THREE.Box3();
@@ -56,9 +60,19 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   const halfAxisZ = new THREE.Vector3();
   const armXVector = new THREE.Vector3();
   const armYVector = new THREE.Vector3();
-  const armZVector = new THREE.Vector3();
   const cornerTemp = new THREE.Vector3();
   const endpointTemp = new THREE.Vector3();
+  const cameraDir = new THREE.Vector3();
+  const clippingPlaneRef = React.useRef(new THREE.Plane());
+
+  React.useEffect(() => {
+    if (!frontFacingOnly) return;
+    const prev = gl.localClippingEnabled;
+    gl.localClippingEnabled = true;
+    return () => {
+      gl.localClippingEnabled = prev;
+    };
+  }, [gl, frontFacingOnly]);
 
   // Create the helper geometry and material (wait until target is ready)
   React.useEffect(() => {
@@ -79,6 +93,8 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         transparent: true,
         opacity: 1.0,
         linewidth: 2,
+        clippingPlanes: frontFacingOnly ? [clippingPlaneRef.current] : null,
+        clipIntersection: false,
       });
 
       const helper = new THREE.LineSegments(geometry, material);
@@ -111,7 +127,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   }, [targetRef, color, through, renderOrder]);
 
   // Update the helper every frame
-  useFrame(() => {
+  useFrame((state) => {
     const obj = targetRef.current;
     const helper = helperRef.current;
     
@@ -196,13 +212,25 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     const lenX = paddedWidth * lineLength;
     const lenY = paddedHeight * lineLength;
-    const lenZ = paddedDepth * lineLength;
 
     armXVector.copy(axisXDir).multiplyScalar(lenX);
     armYVector.copy(axisYDir).multiplyScalar(lenY);
-    armZVector.copy(axisZDir).multiplyScalar(lenZ);
 
     worldCenter.copy(localCenter).applyMatrix4(obj.matrixWorld);
+
+    cameraDir.copy(state.camera.position).sub(worldCenter);
+    const cameraDistanceSq = cameraDir.lengthSq();
+    if (cameraDistanceSq > 1e-9) {
+      cameraDir.divideScalar(Math.sqrt(cameraDistanceSq));
+    } else {
+      cameraDir.set(0, 0, 1);
+    }
+
+    if (frontFacingOnly && helper) {
+      clippingPlaneRef.current.setFromNormalAndCoplanarPoint(cameraDir, worldCenter);
+      clippingPlaneRef.current.constant += pad;
+      (helper.material as THREE.LineBasicMaterial).clippingPlanes = [clippingPlaneRef.current];
+    }
 
     const positions: number[] = [];
     const pushLine = (start: THREE.Vector3, end: THREE.Vector3) => {
@@ -233,8 +261,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       endpointTemp.copy(cornerTemp).addScaledVector(armYVector, -sy);
       pushLine(cornerTemp, endpointTemp);
 
-      endpointTemp.copy(cornerTemp).addScaledVector(armZVector, -sz);
-      pushLine(cornerTemp, endpointTemp);
+      // Skip the depth leg so corners stay like a 2D viewfinder even on thick meshes
     });
 
     const vertices = new Float32Array(positions);

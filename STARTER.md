@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-06  
+**Last Updated:** 2026-02-07  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -25,6 +25,38 @@
 17. [Development Workflow](#development-workflow)
 
 ---
+
+## Current Status (2026-02-07)
+
+### ✅ Recent Changes (February 7, 2026)
+1. **Convert Design Panel & Button Refresh**
+   - Replaced the legacy "3D Preview" shortcut with a persistent **Convert Design** button in the left sidebar; clicking it opens a dedicated panel that mirrors the Select Product layout but forces a single product per row for readability.
+   - Selecting a product from this panel dispatches `setProductId()` immediately so catalog XML, pricing, and materials swap in-place without navigating away from the designer.
+   - Panel shares the same guided-step chrome (Back to Menu pill, warm gradient) to keep seniors oriented while experimenting with alternate products.
+
+2. **Product Conversion Pipeline Updates**
+   - When switching products we now detect prior square canvases (≈610 mm × 610 mm) or any non-plaque source product and automatically clamp plaque targets to 300 mm × 300 mm so Bronze plaques stay within their catalog envelope.
+   - Inscriptions and motifs have their **sizes** scaled down to respect the new product’s height limits, but their **Y positions remain untouched**, preventing the mid-canvas pileups that happened earlier.
+   - Colors refresh to the destination catalog’s `default-color`, inscription/motif targets retarget to the plaque surface (base nodes drop away), and min/max sliders reuse catalog min/max values immediately after conversion.
+
+3. **Bronze Plaque Defaults & Border Handling**
+   - Catalogs flagged with `border="1"` now auto-enable the first decorative border when loaded via Convert Design; non-border products clear the state so granite uprights don’t inherit plaque rails.
+   - Bronze border meshes use a lighter highlight color (`#FFDFA3`) to match the art direction supplied in `screen.png` and look less orange against dark backgrounds.
+   - Added aspect-aware limits so square plaques inherit 300 mm × 300 mm defaults and landscape plaques stay at 300 mm × 200 mm unless the catalog allows larger values.
+
+4. **Bronze Border Geometry & Selection Rail Tweaks**
+   - `BronzeBorder.tsx` now derives edge thickness, decorative corner span, and dual-line selection rails from the plaque’s **shorter** dimension with aggressive compression for near-square aspect ratios (≤0.95) so borders no longer dominate 300 mm × 300 mm canvases.
+   - Corner fallback anchors, line thickness, and gaps are scaled with a `sizeCompression` factor, bringing the inner selection rails closer to the plaque edges and reducing their width.
+   - Square conversions get an additional inset clamp so dual selection rails hug the plaque edge and decorative corners stay compact after Convert Design forces a 300 mm × 300 mm canvas.
+   - Border thickness, line gaps, and corner spans now derive from real millimeter measurements (unitScale-aware), keeping 300 mm plaques delicate while still allowing larger monuments to feel substantial.
+   - Integrated rails remain available (via suffixed `borderXa.svg`) but non-integrated slugs now respect the same size-aware math, ensuring consistent visuals regardless of slug.
+
+5. **Selection Outline Cleanup**
+   - `RotatingBoxOutline.tsx` now renders classic two-axis viewfinder corners only, removing the depth leg that previously protruded toward the camera on flat plaques and causing the corners to look oversized.
+   - Headstone/Base outlines are flagged as **front-facing only**, so rear corners never leak through the stone even though we still render “through” to keep bottom edges visible.
+
+### ⚠️ Known Issues (February 7, 2026)
+- **Bronze Border Visual QA**: Despite the new scaling heuristics, QA still reports oversized borders and rail offsets on certain 300 mm plaques (see latest `screen.png`). Border tuning remains in progress—expect another pass on inset math and SVG scaling constants.
 
 ## Current Status (2026-02-06)
 
@@ -361,10 +393,13 @@ A Next.js-based 3D headstone designer allowing users to:
 - **Border Options**: 
   - "No Border" (maps to `headstoneStyle: 'upright'`)
   - "Border" (maps to `headstoneStyle: 'slant'`)
+  - Convert Design automatically toggles a decorative border when the destination catalog exposes `border="1"`, and clears it for non-border products.
+- **Color Defaults**: When switching into plaques we immediately repaint inscriptions and motifs with the catalog’s `default-color` (Bronze Plaque uses `#ffb35a`) so legacy gold/white schemes don’t clash.
 - **No Outline**: Inscriptions render without black outline for clean appearance
 - **Shape Sources**:
   - Rectangles: `/shapes/headstones/landscape.svg`, `portrait.svg`
   - Ovals & Circle: `/shapes/masks/oval_horizontal.svg`, `oval_vertical.svg`, `circle.svg`
+- **Sizing Guardrails**: Square-to-plaque conversions clamp to 300 mm × 300 mm (catalog min/max permitting) while landscape plaques default to 300 mm × 200 mm.
 - **Pricing**: Uses `quantity_type="Width + Height"` from catalog
 
 ### Load Design Feature (2026-01-28/29)
@@ -558,11 +593,12 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - Fixed 10mm depth
 - Simplified UI (no base, no thickness controls)
 
-**Border Workflow (2026-01-17):**
+**Border Workflow (2026-01-17, updated 2026-02-07):**
 - Catalog products flagged with `border="1"` (all bronze plaques) automatically advance to **Select Border** after the user confirms a shape. The shape selector now pushes to `/select-border` and dispatches `openFullscreenPanel('select-border')` so the sidebar panel opens immediately.
 - `BronzeBorder.tsx` loads `/public/shapes/borders/{slug}.svg`, extrudes the supplier corner SVG once, scales it to ~25 % of the shorter plaque edge (70 % final size), mirrors it into each corner, and generates the connecting rails procedurally. All mirrored parts are converted to non‑indexed geometries and merged into a single mesh, eliminating the old floating box lines and ensuring a continuous bronze frame that sits flush on the plaque face.
 - **2026-01-19 update:** every catalog slug now maps to a dedicated `borderXa.svg` file that already contains the extended rail artwork. BronzeBorder scales the merged SVG to the plaque bounds, clamps it inside a four-plane mask (±width/2, 0→height), and disposes/rehydrates textures for each load so the rail artwork stretches perfectly to whatever width/height the user selects without overlapping neighboring corners. The legacy dual-line rail generator still runs for any slug that lacks a suffixed SVG.
 - **2026-01-20 rollback:** the experimental 9-slice border system from advice8/9 was reverted after a console error surfaced; BronzeBorder is presently back to the "single merged mesh" workflow with whole-group scaling plus the debounced rebuild/fast-path stretch described below. The 9-slice plan (per advice7‑9) remains documented for future reimplementation once the runtime error is understood, and the refreshed `border1a.svg` now ships at 4800×4800px so its engraved detail stays crisp even though the current code continues to scale the entire mesh uniformly.
+- **2026-02-07 update:** edge thickness, line gaps, and decorative rail spans now scale off the plaque’s shorter side with aggressive compression on near-square plaques, fallback inset anchors inherit the same scaling so the dual selection rails hug the plaque edges, and the bronze highlight color lightened to `#FFDFA3` for better contrast. QA still reports oversized rails on the latest `screen.png`, so another pass on inset math is planned.
 
 **Detection:**
 ```typescript
@@ -743,6 +779,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
 - **Select Additions** – Provides a split experience: if an addition is selected, the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise a dashed guidance card appears above the catalog.
 - **Select Motifs** – Mirrors the additions flow but also surfaces price estimates (non-laser products) plus curated gold/silver buttons and the full color palette.
+- **Convert Design** – Replaces the old 3D Preview link with a fullscreen product picker; it mirrors Select Product but enforces a single column list, so seniors can quickly audition alternate catalogs without leaving the designer.
 
 ### Layout & UX Notes
 - The header button uses non-breaking spaces so "Back to Menu" never wraps (we no longer need a fixed 147px width).

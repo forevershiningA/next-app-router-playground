@@ -13,7 +13,6 @@ import {
   SparklesIcon,
   CurrencyDollarIcon,
   ArrowPathIcon,
-  EyeIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   RectangleStackIcon,
@@ -105,6 +104,7 @@ export default function DesignerNav() {
   const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setProductId = useHeadstoneStore((s) => s.setProductId);
 
   // Check if anything has been added to the headstone
   const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;
@@ -125,6 +125,7 @@ export default function DesignerNav() {
   const [panelSource, setPanelSource] = React.useState<'menu' | 'canvas' | null>(null);
   const [forceAdditionCatalog, setForceAdditionCatalog] = React.useState(false);
   const [forceMotifCatalog, setForceMotifCatalog] = React.useState(false);
+  const [showConvertPanel, setShowConvertPanel] = React.useState(false);
   const activeFullscreenPanelRef = React.useRef<string | null>(null);
   activeFullscreenPanelRef.current = activeFullscreenPanel;
 
@@ -250,6 +251,16 @@ export default function DesignerNav() {
     }
   }, [selectedMotifId]);
   
+  useEffect(() => {
+    if (!productId && showConvertPanel) {
+      setShowConvertPanel(false);
+    }
+  }, [productId, showConvertPanel]);
+
+  useEffect(() => {
+    setShowConvertPanel(false);
+  }, [pathname]);
+  
   // Auto-open full-screen panel based on current route
   // DISABLED: Panel should only open when menu item is clicked, not automatically on route
   /*
@@ -288,6 +299,9 @@ export default function DesignerNav() {
   
   // Get materials and shapes from store
   const materials = useHeadstoneStore((s) => s.materials);
+  const products = React.useMemo(() => {
+    return data.products || [];
+  }, []);
   const shapes = React.useMemo(() => {
     return data.shapes || [];
   }, []);
@@ -1083,9 +1097,16 @@ export default function DesignerNav() {
     }
   };
 
-  const handlePreviewClick = (e: React.MouseEvent) => {
+  const handleToggleConvertPanel = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push('/select-size');
+    if (!productId) return;
+    setShowConvertPanel((prev) => !prev);
+  };
+
+  const handleConvertProductSelect = (selectedProductId: string) => {
+    if (!selectedProductId) return;
+    setProductId(selectedProductId);
+    setShowConvertPanel(false);
   };
 
   const isSelectProductPage = pathname === '/select-product';
@@ -1649,7 +1670,7 @@ export default function DesignerNav() {
           <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 md:space-y-0 md:p-4">
 
         {/* Primary/Secondary CTAs */}
-        {(hasCustomizations || (!showCanvas && pathname !== '/' && pathname !== '/select-size')) && (
+        {(hasCustomizations || productId) && (
           <div className="flex flex-col gap-3 sm:flex-row mb-5">
             {hasCustomizations && (
               <button
@@ -1660,19 +1681,74 @@ export default function DesignerNav() {
                 <span>New Design</span>
               </button>
             )}
-            {!showCanvas && pathname !== '/' && pathname !== '/select-size' && (
+            {productId && (
               <button
-                onClick={handlePreviewClick}
+                onClick={handleToggleConvertPanel}
                 className={`flex-1 inline-flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border ${
-                  hasCustomizations
-                    ? 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
-                    : 'text-gray-200 border-white/15 hover:border-white/30 hover:bg-white/5'
+                  showConvertPanel
+                    ? 'text-[#f4d07e] border-[#f4d07e] bg-white/5'
+                    : 'text-gray-200 border-white/20 hover:border-white/40 hover:bg-white/5'
                 }`}
               >
-                <EyeIcon className="h-5 w-5" />
-                <span>3D Preview</span>
+                <Squares2X2Icon className="h-5 w-5" />
+                <span>Convert&nbsp;Design</span>
               </button>
             )}
+          </div>
+        )}
+
+        {showConvertPanel && productId && (
+          <div className="mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-white">Convert this design</p>
+                <p className="text-xs text-white/60">Select a different product to reload catalog settings</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowConvertPanel(false)}
+                className="rounded-full border border-white/15 px-3 py-1 text-xs uppercase tracking-wide text-white/70 hover:border-white/40 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+            <div className="mt-4 max-h-80 overflow-y-auto pr-1">
+              <div className="grid grid-cols-1 gap-3">
+                {products.map((product) => {
+                  const isActiveProduct = product.id === productId;
+                  return (
+                    <button
+                      key={product.id}
+                      type="button"
+                      onClick={() => handleConvertProductSelect(product.id)}
+                      className={`flex items-center gap-3 rounded-xl border px-3 py-3 text-left transition-all ${
+                        isActiveProduct
+                          ? 'border-[#cfac6c] bg-white/10 shadow-lg shadow-[#cfac6c]/15'
+                          : 'border-white/10 hover:border-white/25 hover:bg-white/5'
+                      }`}
+                    >
+                      <div className="h-16 w-16 overflow-hidden rounded-lg bg-black/40">
+                        <img
+                          src={`/webp/products/${product.image}`}
+                          alt={product.name}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-semibold text-white leading-tight">{product.name}</p>
+                        <p className="text-xs text-white/60 capitalize">{product.category}</p>
+                        {isActiveProduct ? (
+                          <span className="text-[11px] font-medium text-emerald-400">Current product</span>
+                        ) : (
+                          <span className="text-[11px] text-white/50">Tap to convert</span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
 

@@ -59,7 +59,7 @@ const BORDER_SLUG_ALIASES: Record<string, string> = {
 };
 
 
-const BORDER_SCALE = 1.3; // Enlarge decorative border by 30%
+const BORDER_SCALE = 0.75; // Smaller decorative border for compact plaques
 const BORDER_THICKNESS_SCALE = 1.5; // Border thickness increased to 150%
 const BORDER_RELIEF_SCALE = 0.33; // Border relief depth reduced to 33%
 const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
@@ -490,6 +490,7 @@ export function BronzeBorder({
       plaqueHeight: debouncedDims.h,
       depth,
       frontZ,
+      unitScale,
       textures: bronzeTextures ?? undefined,
       integratedRails: usesIntegratedRails,
       material,
@@ -536,6 +537,7 @@ function buildBorderGroup(
     plaqueHeight: number;
     depth: number;
     frontZ: number;
+    unitScale?: number;
     textures?: BronzeTextures;
     integratedRails?: boolean;
     material: THREE.MeshPhysicalMaterial;
@@ -545,7 +547,18 @@ function buildBorderGroup(
   group: THREE.Group;
   geometries: THREE.BufferGeometry[];
 } | null {
-  const { plaqueWidth, plaqueHeight, depth, frontZ, textures, integratedRails = false, material, borderSlug } = params;
+  const {
+    plaqueWidth,
+    plaqueHeight,
+    depth,
+    frontZ,
+    unitScale,
+    textures,
+    integratedRails = false,
+    material,
+    borderSlug,
+  } = params;
+  const safeUnitScale = Math.max(1e-6, unitScale ?? 1);
   const width = Math.max(1e-3, Math.abs(plaqueWidth));
   const height = Math.max(1e-3, Math.abs(plaqueHeight));
 
@@ -599,11 +612,29 @@ function buildBorderGroup(
 
   merged.translate(-centerX, -centerY, 0);
 
-  // Calculate line thickness first so we can match corner size to it
-  const edgeThicknessBase = Math.max(0.01, Math.min(width, height) * 0.02 * BORDER_SCALE);
-  const edgeThickness = edgeThicknessBase * BORDER_THICKNESS_SCALE;
-  const lineThickness = edgeThickness * 0.4;
-  const lineGap = lineThickness * 0.6;
+  const minDimension = Math.max(1e-3, Math.min(width, height));
+  const maxDimension = Math.max(width, height);
+  const minDimensionMm = Math.max(1, (minDimension / safeUnitScale) * 1000);
+  const maxDimensionMm = Math.max(minDimensionMm, (maxDimension / safeUnitScale) * 1000);
+  const aspectRatio = minDimensionMm / Math.max(1, maxDimensionMm);
+  let squareScale = 1;
+  if (aspectRatio >= 0.95) squareScale = 0.35;
+  else if (aspectRatio >= 0.9) squareScale = 0.5;
+  else if (aspectRatio >= 0.8) squareScale = 0.7;
+
+  const sizeCompression = Math.min(1, minDimensionMm / 500);
+  const borderScaleFactor = BORDER_SCALE * squareScale * sizeCompression;
+
+  // Calculate line thickness first so we can match corner size to it (work in mm then convert back)
+  const edgeThicknessMmBase = Math.max(1.5, minDimensionMm * 0.012 * borderScaleFactor);
+  const edgeThickness = Math.max(
+    0.0005 * safeUnitScale,
+    (edgeThicknessMmBase / 1000) * safeUnitScale * (BORDER_THICKNESS_SCALE * (0.45 + 0.25 * sizeCompression)),
+  );
+  const lineThicknessMm = Math.max(0.9, edgeThicknessMmBase * (0.18 + 0.22 * sizeCompression));
+  const lineThickness = Math.max(0.00025 * safeUnitScale, (lineThicknessMm / 1000) * safeUnitScale);
+  const lineGapMm = Math.max(0.6, lineThicknessMm * (0.2 + 0.12 * sizeCompression));
+  const lineGap = Math.max(0.00015 * safeUnitScale, (lineGapMm / 1000) * safeUnitScale);
 
   // Scale decorative corner detail. Integrated rail SVGs should stretch to full width/height.
   const INTEGRATED_SCALE_OVERRIDES: Record<string, number> = {
@@ -617,8 +648,9 @@ function buildBorderGroup(
     }
     merged.scale(uniformScale, uniformScale, 1);
   } else {
-    const targetCornerSpan = Math.max(lineThickness * 6, Math.min(width, height) * 0.25);
-    const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.7;
+    const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
+    const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
+    const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
     merged.scale(baseScale, baseScale, 1);
   }
   merged.computeVertexNormals();
@@ -816,18 +848,19 @@ function buildBorderGroup(
   createCornerMesh(merged, 'left', 'bottom');
   createCornerMesh(merged, 'right', 'bottom');
 
-  const fallbackTopStartX = -width / 2 + cornerSpanX;
-  const fallbackTopEndX = width / 2 - cornerSpanX;
+  const insetScale = Math.min(0.35, squareScale * 0.6);
+  const fallbackTopStartX = -width / 2 + cornerSpanX * insetScale;
+  const fallbackTopEndX = width / 2 - cornerSpanX * insetScale;
   const fallbackBottomStartX = fallbackTopStartX;
   const fallbackBottomEndX = fallbackTopEndX;
-  const fallbackTopInnerY = height - cornerSpanY;
-  const fallbackBottomInnerY = cornerSpanY;
+  const fallbackTopInnerY = height - cornerSpanY * insetScale;
+  const fallbackBottomInnerY = cornerSpanY * insetScale;
   const fallbackLeftTopInnerY = fallbackTopInnerY;
   const fallbackLeftBottomInnerY = fallbackBottomInnerY;
   const fallbackRightTopInnerY = fallbackTopInnerY;
   const fallbackRightBottomInnerY = fallbackBottomInnerY;
-  const fallbackLeftInnerX = -width / 2 + cornerSpanX;
-  const fallbackRightInnerX = width / 2 - cornerSpanX;
+  const fallbackLeftInnerX = -width / 2 + cornerSpanX * insetScale;
+  const fallbackRightInnerX = width / 2 - cornerSpanX * insetScale;
 
   const clampEdgeXValue = (value: number | null) => {
     if (typeof value !== 'number' || !Number.isFinite(value)) return null;
