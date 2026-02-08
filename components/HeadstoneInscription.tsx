@@ -411,6 +411,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             unitsPerMeter={units}
             currentSizeMm={height} // height is already in mm!
             objectType="inscription"
+            animateOnShow
+            animationDuration={520}
             onUpdate={(data) => {
               if (data.sizeMm !== undefined) {
                 // Use the absolute size value directly

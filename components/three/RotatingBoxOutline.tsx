@@ -24,6 +24,12 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   lineLength?: number;
   /** Only render corners facing the active camera */
   frontFacingOnly?: boolean;
+  /** Raise bottom corners upward along the local Y axis (world units) */
+  bottomLift?: number;
+  /** Animate corner arms when the outline first becomes visible */
+  animateOnShow?: boolean;
+  /** Duration of the show animation in milliseconds */
+  animationDuration?: number;
 };
 
 /**
@@ -40,6 +46,9 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   excludeAdditions = false,
   lineLength = 0.15,
   frontFacingOnly = false,
+  bottomLift = 0,
+  animateOnShow = false,
+  animationDuration = 420,
 }: RotatingBoxOutlineProps) {
   const { gl } = useThree();
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
@@ -64,6 +73,9 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   const endpointTemp = new THREE.Vector3();
   const cameraDir = new THREE.Vector3();
   const clippingPlaneRef = React.useRef(new THREE.Plane());
+  const animationStartRef = React.useRef<number | null>(null);
+  const animationProgressRef = React.useRef(animateOnShow ? 0 : 1);
+  const prevVisibleRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!frontFacingOnly) return;
@@ -130,10 +142,44 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   useFrame((state) => {
     const obj = targetRef.current;
     const helper = helperRef.current;
-    
-    if (!obj || !helper || !visible) {
-      if (helper) helper.visible = false;
+
+    if (!helper || !obj || !visible) {
+      if (helper) {
+        helper.visible = false;
+      }
+      prevVisibleRef.current = false;
+      animationStartRef.current = null;
+      animationProgressRef.current = animateOnShow ? 0 : 1;
       return;
+    }
+
+    if (!prevVisibleRef.current) {
+      animationStartRef.current = state.clock.elapsedTime;
+    }
+
+    if (animateOnShow) {
+      const durationSec = Math.max(animationDuration / 1000, 1e-4);
+      const startTime = animationStartRef.current ?? state.clock.elapsedTime;
+      const elapsed = state.clock.elapsedTime - startTime;
+      animationProgressRef.current = Math.min(1, elapsed / durationSec);
+    } else {
+      animationProgressRef.current = 1;
+    }
+    prevVisibleRef.current = true;
+
+    const rawAnimProgress = animateOnShow ? animationProgressRef.current : 1;
+    const easedProgress = rawAnimProgress >= 1 ? 1 : 1 - Math.pow(1 - rawAnimProgress, 3);
+    const horizontalScale = animateOnShow
+      ? Math.min(1, easedProgress * 1.35)
+      : 1;
+    const verticalScale = animateOnShow
+      ? THREE.MathUtils.clamp((easedProgress - 0.2) / 0.8, 0, 1)
+      : 1;
+
+    const material = helper.material as THREE.LineBasicMaterial;
+    const targetOpacity = animateOnShow ? 0.35 + 0.65 * easedProgress : 1;
+    if (material.opacity !== targetOpacity) {
+      material.opacity = targetOpacity;
     }
 
     // Calculate oriented bounding box in local space
@@ -255,11 +301,19 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         .addScaledVector(halfAxisY, sy)
         .addScaledVector(halfAxisZ, sz);
 
-      endpointTemp.copy(cornerTemp).addScaledVector(armXVector, -sx);
-      pushLine(cornerTemp, endpointTemp);
+      if (sy < 0 && bottomLift !== 0) {
+        cornerTemp.addScaledVector(axisYDir, bottomLift);
+      }
 
-      endpointTemp.copy(cornerTemp).addScaledVector(armYVector, -sy);
-      pushLine(cornerTemp, endpointTemp);
+      if (horizontalScale > 0.0001) {
+        endpointTemp.copy(cornerTemp).addScaledVector(armXVector, -sx * horizontalScale);
+        pushLine(cornerTemp, endpointTemp);
+      }
+
+      if (verticalScale > 0.0001) {
+        endpointTemp.copy(cornerTemp).addScaledVector(armYVector, -sy * verticalScale);
+        pushLine(cornerTemp, endpointTemp);
+      }
 
       // Skip the depth leg so corners stay like a 2D viewfinder even on thick meshes
     });

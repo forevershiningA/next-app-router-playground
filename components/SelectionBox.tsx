@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { useThree, useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 
+const DEFAULT_ANIMATION_DURATION_MS = 520;
+
 type Props = {
   /** Unique ID for the selected object */
   objectId: string;
@@ -30,6 +32,10 @@ type Props = {
   objectType?: 'inscription' | 'motif' | 'addition';
   /** Addition type (for additions only) - used to determine if it's 2D or 3D */
   additionType?: 'application' | 'statue' | 'vase';
+  /** Enable the cinematic intro animation */
+  animateOnShow?: boolean;
+  /** Duration of the intro animation (ms) */
+  animationDuration?: number;
 };
 
 type HandleType = 
@@ -49,6 +55,8 @@ export default function SelectionBox({
   onUpdate,
   objectType = 'inscription',
   additionType,
+  animateOnShow = false,
+  animationDuration = DEFAULT_ANIMATION_DURATION_MS,
 }: Props) {
   const threeContext = useThree();
   const { camera, gl, controls } = threeContext;
@@ -73,6 +81,7 @@ export default function SelectionBox({
   const shouldShowHandles = !usesSubtleOutline;
   const outlineColor = usesSubtleOutline ? 0xf8f5ee : 0x2196F3;
   const outlineLineWidth = usesSubtleOutline ? 1.5 : 3;
+  const baseOutlineOpacity = usesSubtleOutline ? 0.9 : 1;
   const handleColor = shouldShowHandles ? 0x2196F3 : outlineColor;
 
   // Calculate handle positions - ensure minimum spacing (MUST be before useEffect)
@@ -96,6 +105,29 @@ export default function SelectionBox({
     target: null as any,
     pointerId: 0,
   });
+
+  const [isVisible, setIsVisible] = React.useState(true);
+  const visibilityRef = React.useRef(isVisible);
+  const [animationProgress, setAnimationProgress] = React.useState(animateOnShow ? 0 : 1);
+  const animationProgressRef = React.useRef(animationProgress);
+  const animationDurationSec = React.useMemo(
+    () => Math.max((animationDuration ?? DEFAULT_ANIMATION_DURATION_MS) / 1000, 0.001),
+    [animationDuration],
+  );
+
+  React.useEffect(() => {
+    if (animateOnShow) {
+      animationProgressRef.current = 0;
+      setAnimationProgress(0);
+    } else {
+      animationProgressRef.current = 1;
+      setAnimationProgress(1);
+    }
+  }, [objectId, animateOnShow]);
+
+  const worldPos = React.useMemo(() => new THREE.Vector3(), []);
+  const worldNormal = React.useMemo(() => new THREE.Vector3(), []);
+  const cameraDir = React.useMemo(() => new THREE.Vector3(), []);
 
   // Create outline segments (viewfinder-style for flat selections)
   const outlineSegments = React.useMemo(() => {
@@ -126,10 +158,47 @@ export default function SelectionBox({
     ];
   }, [minHalfWidth, minHalfHeight, usesSubtleOutline]);
 
+  const easedProgress = animateOnShow
+    ? animationProgress >= 1
+      ? 1
+      : 1 - Math.pow(1 - animationProgress, 3)
+    : 1;
+  const horizontalScale = animateOnShow
+    ? Math.min(1, easedProgress * 1.35)
+    : 1;
+  const verticalScale = animateOnShow
+    ? THREE.MathUtils.clamp((easedProgress - 0.25) / 0.75, 0, 1)
+    : 1;
+  const outlineOpacity = animateOnShow
+    ? THREE.MathUtils.lerp(0.15, baseOutlineOpacity, easedProgress)
+    : baseOutlineOpacity;
+  const handleScale = shouldShowHandles
+    ? (animateOnShow ? THREE.MathUtils.clamp((easedProgress - 0.45) / 0.55, 0, 1) : 1)
+    : 1;
+  const handleOpacity = shouldShowHandles ? handleScale : 1;
+  const handlesVisible = shouldShowHandles && handleScale > 0.001;
+
+  const animatedSegments = React.useMemo(
+    () =>
+      outlineSegments.map(([start, end]) => {
+        const startPoint = start.clone();
+        const delta = end.clone().sub(start);
+        const isHorizontal = Math.abs(delta.x) >= Math.abs(delta.y);
+        const scale = isHorizontal ? horizontalScale : verticalScale;
+        const endPoint = startPoint.clone().add(delta.multiplyScalar(scale));
+        return [startPoint, endPoint] as [THREE.Vector3, THREE.Vector3];
+      }),
+    [outlineSegments, horizontalScale, verticalScale],
+  );
+
   // Handle pointer down on handles
   const handlePointerDown = React.useCallback(
     (e: any, handleType: HandleType) => {
       e.stopPropagation();
+
+      if (animateOnShow && animationProgressRef.current < 0.35) {
+        return;
+      }
       
       // Capture pointer to prevent events going to headstone
       if (e.target && e.target.setPointerCapture) {
@@ -372,29 +441,31 @@ export default function SelectionBox({
     };
   }, []);
 
-  const [isVisible, setIsVisible] = React.useState(true);
-  
-  // Use useFrame to check visibility on every frame
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (groupRef.current) {
-      const worldPos = new THREE.Vector3();
       groupRef.current.getWorldPosition(worldPos);
-      
-      const worldNormal = new THREE.Vector3();
       groupRef.current.getWorldDirection(worldNormal);
-      
-      const cameraDir = new THREE.Vector3();
       cameraDir.subVectors(camera.position, worldPos).normalize();
-      
       const dotProduct = cameraDir.dot(worldNormal);
-      
-      // Update visibility based on dot product
-      // Positive = front view (visible), Negative = back view (hidden)
-      setIsVisible(dotProduct >= 0);
+      const nextVisible = dotProduct >= 0;
+      if (nextVisible !== visibilityRef.current) {
+        visibilityRef.current = nextVisible;
+        setIsVisible(nextVisible);
+      }
+    }
+
+    if (animateOnShow && animationProgressRef.current < 1) {
+      const increment = delta / animationDurationSec;
+      if (increment > 0) {
+        const next = Math.min(1, animationProgressRef.current + increment);
+        if (Math.abs(next - animationProgressRef.current) > 1e-3) {
+          animationProgressRef.current = next;
+          setAnimationProgress(next);
+        }
+      }
     }
   });
   
-  // Don't render if not visible
   if (!isVisible) {
     return null;
   }
@@ -402,7 +473,7 @@ export default function SelectionBox({
   return (
     <group ref={groupRef} position={position} rotation={[0, 0, rotation]}>
       {/* Box outline */}
-      {outlineSegments.map((segment, index) => (
+      {animatedSegments.map((segment, index) => (
         <Line
           key={`outline-segment-${index}`}
           points={segment}
@@ -412,7 +483,7 @@ export default function SelectionBox({
           depthWrite={false}
           depthTest={false}
           transparent
-          opacity={0.9}
+          opacity={outlineOpacity}
           raycast={disableRaycast}
         />
       ))}
@@ -423,7 +494,8 @@ export default function SelectionBox({
           <mesh
             position={[-minHalfWidth, minHalfHeight, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'topLeft')}
             onPointerEnter={() => handlePointerEnter('topLeft')}
@@ -432,7 +504,8 @@ export default function SelectionBox({
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -442,7 +515,8 @@ export default function SelectionBox({
           <mesh
             position={[minHalfWidth, minHalfHeight, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'topRight')}
             onPointerEnter={() => handlePointerEnter('topRight')}
@@ -451,7 +525,8 @@ export default function SelectionBox({
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -461,7 +536,8 @@ export default function SelectionBox({
           <mesh
             position={[-minHalfWidth, -minHalfHeight, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'bottomLeft')}
             onPointerEnter={() => handlePointerEnter('bottomLeft')}
@@ -470,7 +546,8 @@ export default function SelectionBox({
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -480,7 +557,8 @@ export default function SelectionBox({
           <mesh
             position={[minHalfWidth, -minHalfHeight, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'bottomRight')}
             onPointerEnter={() => handlePointerEnter('bottomRight')}
@@ -489,7 +567,8 @@ export default function SelectionBox({
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -499,13 +578,15 @@ export default function SelectionBox({
           <mesh
             position={[0, minHalfHeight, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
           >
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -515,13 +596,15 @@ export default function SelectionBox({
           <mesh
             position={[0, -minHalfHeight, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
           >
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -531,13 +614,15 @@ export default function SelectionBox({
           <mesh
             position={[-minHalfWidth, 0, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
           >
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />
@@ -547,13 +632,15 @@ export default function SelectionBox({
           <mesh
             position={[minHalfWidth, 0, handleZOffset]}
             renderOrder={1002}
-            visible={true}
+            visible={handlesVisible}
+            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
           >
             <boxGeometry args={[fixedHandleSize, fixedHandleSize, handleThickness]} />
             <meshBasicMaterial
               color={handleColor}
-              transparent={false}
+              transparent
+              opacity={handleOpacity}
               depthWrite={false}
               depthTest={false}
             />

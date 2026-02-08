@@ -31,10 +31,12 @@ export default function HeadstoneAssembly() {
   const isPlaque = productType === 'plaque';
   const headstoneOutlinePad = isPlaque ? -0.0005 : 0.02;
   const headstoneOutlineLineLength = isPlaque ? 0.08 : 0.15;
-  const headstoneOutlineThrough = true;
+  const headstoneOutlineThrough = false;
+  const headstoneBottomLift = isPlaque ? 0 : 0.025;
   const baseOutlinePad = isPlaque ? -0.0005 : 0.01;
   const baseOutlineLineLength = isPlaque ? 0.08 : 0.15;
-  const baseOutlineThrough = true;
+  const baseOutlineThrough = false;
+  const baseBottomLift = isPlaque ? 0 : 0.015;
   
   // Convert base height from mm to meters
   const baseHeightMeters = baseHeightMm / 1000;
@@ -61,7 +63,9 @@ export default function HeadstoneAssembly() {
           pad={headstoneOutlinePad}
           through={headstoneOutlineThrough}
           lineLength={headstoneOutlineLineLength}
-          frontFacingOnly
+          bottomLift={headstoneBottomLift}
+          animateOnShow
+          animationDuration={520}
         />
 
         <RotatingBoxOutline
@@ -71,7 +75,9 @@ export default function HeadstoneAssembly() {
           pad={baseOutlinePad}
           through={baseOutlineThrough}
           lineLength={baseOutlineLineLength}
-          frontFacingOnly
+          bottomLift={baseBottomLift}
+          animateOnShow
+          animationDuration={520}
         />
 
         {selectedInscription && (

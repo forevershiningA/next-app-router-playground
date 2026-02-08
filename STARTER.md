@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-07  
+**Last Updated:** 2026-02-08  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,6 +26,22 @@
 
 ---
 
+## Current Status (2026-02-08)
+
+### ✅ Recent Changes (February 8, 2026)
+1. **Cinematic Selection Outlines & Depth Masking**
+   - `RotatingBoxOutline.tsx` gained a `bottomLift` prop plus an optional reveal animation. Headstone/base outlines now render with depth testing again so rear corners never leak through the stone, while downward corners lift 10‑25 mm to keep brackets visible above the base/ground without floating.
+   - HeadstoneAssembly wires the new props for both the headstone and base, and extension models (statues/vases) opt into the reveal so every viewfinder indicator matches the premium “draw-on” look from `screen.png`.
+   - Files: `components/three/RotatingBoxOutline.tsx`, `components/three/headstone/HeadstoneAssembly.tsx`, `components/three/AdditionModel.tsx`.
+
+2. **Animated Selection Boxes & Single-Selection Enforcement**
+   - `components/SelectionBox.tsx` now animates its corner arms and resize handles whenever inscriptions, motifs, or application-style additions become selected; handles fade/scale in after the line draw completes for a high-end feel without obscuring the stone.
+   - All SelectionBox call sites (inscriptions, motifs, additions) enable the animation. The store’s `setSelected` helper also clears motif/addition/inscription IDs whenever the user selects the headstone/base, guaranteeing only one outline is visible at a time.
+   - Files: `components/SelectionBox.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/AdditionModel.tsx`, `lib/headstone-store.ts`.
+
+### ⚠️ Known Issues (February 8, 2026)
+- **Border QA Still Pending:** Plaque borders remain under review after the latest scaling changes; continue referencing `screen.png` for problem cases while the inset math is refined.
+
 ## Current Status (2026-02-07)
 
 ### ✅ Recent Changes (February 7, 2026)
@@ -50,10 +66,12 @@
    - Square conversions get an additional inset clamp so dual selection rails hug the plaque edge and decorative corners stay compact after Convert Design forces a 300 mm × 300 mm canvas.
    - Border thickness, line gaps, and corner spans now derive from real millimeter measurements (unitScale-aware), keeping 300 mm plaques delicate while still allowing larger monuments to feel substantial.
    - Integrated rails remain available (via suffixed `borderXa.svg`) but non-integrated slugs now respect the same size-aware math, ensuring consistent visuals regardless of slug.
+   - Fixed a React crash introduced during the mm-scaling work by threading `unitScale` through `buildBorderGroup()`—Convert Design can swap into plaques again without hitting `ReferenceError: safeUnitScale is not defined`.
 
 5. **Selection Outline Cleanup**
    - `RotatingBoxOutline.tsx` now renders classic two-axis viewfinder corners only, removing the depth leg that previously protruded toward the camera on flat plaques and causing the corners to look oversized.
    - Headstone/Base outlines are flagged as **front-facing only**, so rear corners never leak through the stone even though we still render “through” to keep bottom edges visible.
+   - Front-facing logic now uses a real clipping plane derived from the active camera normal (via R3F local clipping) instead of heuristic dot products, which keeps bottom edges visible while allowing the renderer to trim any geometry physically behind the headstone.
 
 ### ⚠️ Known Issues (February 7, 2026)
 - **Bronze Border Visual QA**: Despite the new scaling heuristics, QA still reports oversized borders and rail offsets on certain 300 mm plaques (see latest `screen.png`). Border tuning remains in progress—expect another pass on inset math and SVG scaling constants.

@@ -925,7 +925,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   selected: null,
   setSelected(p) {
-    set({ selected: p });
+    if (p) {
+      set({
+        selected: p,
+        selectedAdditionId: null,
+        selectedInscriptionId: null,
+        selectedMotifId: null,
+      });
+    } else {
+      set({ selected: p });
+    }
   },
 
   // Sample template: Beautiful memorial inscriptions with much larger spacing

@@ -461,6 +461,8 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
             unitsPerMeter={headstone.unitsPerMeter}
             currentSizeMm={offset.heightMm ?? 100}
             objectType="motif"
+            animateOnShow
+            animationDuration={520}
             onUpdate={(data) => {
               if (data.scaleFactor !== undefined) {
                 // Update heightMm based on scale factor

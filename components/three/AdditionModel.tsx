@@ -836,6 +836,8 @@ function AdditionModelInner({
             currentSizeMm={targetH * (offset.scale ?? 1)}
             objectType="addition"
             additionType={addition.type as 'application' | 'statue' | 'vase'}
+            animateOnShow
+            animationDuration={520}
             onUpdate={(data) => {
               if (data.scaleFactor !== undefined) {
                 const newScale = (offset.scale ?? 1) * data.scaleFactor;
@@ -859,6 +861,8 @@ function AdditionModelInner({
             pad={0.002}
             through={true}
             lineLength={0.15}
+            animateOnShow
+            animationDuration={420}
           />
         )}
       </group>
