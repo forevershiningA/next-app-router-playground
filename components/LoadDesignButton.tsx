@@ -23,10 +23,12 @@ export default function LoadDesignButton({ designId, label, position }: LoadDesi
     setLoading(true);
     try {
       const result = await loadDesign();
-      if (result.success) {
-        console.log(`Design ${designId} loaded successfully`);
-      } else {
-        console.warn(`Failed to load design ${designId}:`, result.message);
+      if (process.env.NODE_ENV !== 'production') {
+        if (result.success) {
+          console.log(`Design ${designId} loaded successfully`);
+        } else {
+          console.warn(`Failed to load design ${designId}:`, result.message);
+        }
       }
     } finally {
       setLoading(false);

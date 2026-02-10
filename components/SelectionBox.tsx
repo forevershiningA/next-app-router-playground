@@ -78,6 +78,10 @@ export default function SelectionBox({
     objectType === 'inscription' ||
     objectType === 'motif' ||
     (objectType === 'addition' && additionType === 'application');
+  const usesSubtleOutlineRef = React.useRef(usesSubtleOutline);
+  React.useEffect(() => {
+    usesSubtleOutlineRef.current = usesSubtleOutline;
+  }, [usesSubtleOutline]);
   const shouldShowHandles = !usesSubtleOutline;
   const outlineColor = usesSubtleOutline ? 0xf8f5ee : 0x2196F3;
   const outlineLineWidth = usesSubtleOutline ? 1.5 : 3;
@@ -443,14 +447,21 @@ export default function SelectionBox({
 
   useFrame((_, delta) => {
     if (groupRef.current) {
-      groupRef.current.getWorldPosition(worldPos);
-      groupRef.current.getWorldDirection(worldNormal);
-      cameraDir.subVectors(camera.position, worldPos).normalize();
-      const dotProduct = cameraDir.dot(worldNormal);
-      const nextVisible = dotProduct >= 0;
-      if (nextVisible !== visibilityRef.current) {
-        visibilityRef.current = nextVisible;
-        setIsVisible(nextVisible);
+      if (usesSubtleOutlineRef.current) {
+        if (!visibilityRef.current) {
+          visibilityRef.current = true;
+          setIsVisible(true);
+        }
+      } else {
+        groupRef.current.getWorldPosition(worldPos);
+        groupRef.current.getWorldDirection(worldNormal);
+        cameraDir.subVectors(camera.position, worldPos).normalize();
+        const dotProduct = cameraDir.dot(worldNormal);
+        const nextVisible = dotProduct >= 0;
+        if (nextVisible !== visibilityRef.current) {
+          visibilityRef.current = nextVisible;
+          setIsVisible(nextVisible);
+        }
       }
     }
 

@@ -37,9 +37,13 @@ export default function AdditionSelector({ additions }: Props) {
     return additions.filter((addition) => addition.type === category);
   }, [additions, category]);
 
+  const findInstanceId = (additionId: string) =>
+    selectedAdditions.find(
+      (instanceId) => instanceId === additionId || instanceId.startsWith(`${additionId}_`)
+    );
+
   const handleToggle = (addition: Addition) => {
-    // Check if any instance of this addition ID exists
-    const existingInstance = selectedAdditions.find(aid => aid.startsWith(addition.id + '_'));
+    const existingInstance = findInstanceId(addition.id);
     
     if (existingInstance) {
       removeAddition(existingInstance);
@@ -78,7 +82,8 @@ export default function AdditionSelector({ additions }: Props) {
 
       <div className="grid grid-cols-2 gap-2 overflow-y-auto pr-2 custom-scrollbar">
         {filteredAdditions.map((addition) => {
-          const isSelected = selectedAdditions.includes(addition.id);
+          const instanceId = findInstanceId(addition.id);
+          const isSelected = Boolean(instanceId);
           const dirName = addition.file?.split('/')?.[0] || '';
           const imagePath = `/additions/${dirName}/${addition.image}`;
 

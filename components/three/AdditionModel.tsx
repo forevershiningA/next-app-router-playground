@@ -11,19 +11,21 @@ import { useRouter, usePathname } from 'next/navigation';
 import SelectionBox from '../SelectionBox';
 import RotatingBoxOutline from './RotatingBoxOutline';
 
+const MM = 0.001; // meters per millimeter
+
 // Addition positioning constants
 const DEFAULT_POSITIONS = {
   statue: {
-    xOffset: -80, // mm left of headstone
-    yOffset: 0,   // Near top
+    xOffset: 80 * MM,  // 80mm inset from left edge
+    yOffset: 0,
   },
   vase: {
-    xOffset: 30,  // mm right of headstone
-    yOffset: 0,   // Near top
+    xOffset: -30 * MM, // 30mm inset from right edge
+    yOffset: 0,
   },
   application: {
-    xOffset: 0,   // Center
-    yOffset: 0,   // Center
+    xOffset: 0,
+    yOffset: 0,
   },
 };
 
@@ -33,11 +35,12 @@ const TARGET_HEIGHTS = {
   application: 100, // 100mm
 };
 
-const APPLICATION_Z_OFFSET = 0.05; // 0.05mm offset keeps applications flush without z-fighting
+const APPLICATION_Z_OFFSET = 0.05 * MM; // 0.05mm offset keeps applications flush without z-fighting
 const APPLICATION_DEPTH_SCALE = 0.1;
 const STATUE_DEPTH_SCALE = 0.28;
 const VASE_DEPTH_SCALE = 0.32;
-const HEADSTONE_COLLISION_PADDING = 5; // mm clearance from headstone plane
+const HEADSTONE_COLLISION_PADDING = 5 * MM; // 5mm clearance from headstone plane
+const BASE_SURFACE_MARGIN = 10 * MM; // extra inset to keep statues/vases fully on the base
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -50,11 +53,10 @@ export default function AdditionModel({ id, headstone, index = 0 }: Props) {
   // e.g., "B1134S_1234567890" => "B1134S"
   const baseId = React.useMemo(() => {
     const parts = id.split('_');
-    // If last part is a number (timestamp), remove it
-    if (parts.length > 1 && !isNaN(Number(parts[parts.length - 1]))) {
-      return parts.slice(0, -1).join('_');
+    while (parts.length > 1 && !Number.isNaN(Number(parts[parts.length - 1]))) {
+      parts.pop();
     }
-    return id;
+    return parts.join('_');
   }, [id]);
 
   // Find the addition data using base ID
@@ -351,7 +353,8 @@ function AdditionModelInner({
   const maxDim = Math.max(size.x, size.y);
   const h = Math.max(1e-6, maxDim);
   const auto = targetH / h;
-  const user = Math.max(0.05, Math.min(5, offset.scale ?? 1));
+  const sizeVariant = offset.sizeVariant ?? 1;
+  const user = Math.max(0.05, Math.min(5, (offset.scale ?? 1) * sizeVariant));
   const finalScale = auto * user;
   const depthScale =
     addition.type === 'application'
@@ -391,19 +394,9 @@ function AdditionModelInner({
     if (!baseMesh.geometry.boundingBox) baseMesh.geometry.computeBoundingBox();
     const targetBBox = baseMesh.geometry.boundingBox;
     if (!targetBBox) return null;
-    const topPoint = new THREE.Vector3(0, targetBBox.max.y, 0);
-    const worldTop = baseMesh.localToWorld(topPoint.clone());
-    return stone.worldToLocal(worldTop.clone()).z;
-  }, [prefersBaseSurface, baseMesh, stone]);
-
-  const baseFrontZ = React.useMemo(() => {
-    if (!prefersBaseSurface || !baseMesh || !stone) return null;
-    if (!baseMesh.geometry.boundingBox) baseMesh.geometry.computeBoundingBox();
-    const targetBBox = baseMesh.geometry.boundingBox;
-    if (!targetBBox) return null;
-    const frontPoint = new THREE.Vector3(0, targetBBox.max.y, targetBBox.max.z);
-    const worldFront = baseMesh.localToWorld(frontPoint.clone());
-    return stone.worldToLocal(worldFront.clone()).z;
+    const topFrontPoint = new THREE.Vector3(0, targetBBox.max.y, targetBBox.max.z);
+    const worldTopFront = baseMesh.localToWorld(topFrontPoint.clone());
+    return stone.worldToLocal(worldTopFront.clone()).z;
   }, [prefersBaseSurface, baseMesh, stone]);
 
   const baseDepthRange = React.useMemo(() => {
@@ -714,8 +707,17 @@ function AdditionModelInner({
   }, [dragging, gl, controls, placeFromClientXY]);
 
   const defaultZPosition = React.useMemo(() => {
+    const onBase = offset.targetSurface === 'base';
+
+    if (onBase && addition.type !== 'application') {
+      const anchorZ = offset.zPos ?? baseSurfaceZ ?? headFrontZ;
+      if (anchorZ != null) {
+        return anchorZ - halfDepth - BASE_SURFACE_MARGIN;
+      }
+    }
+
     let surfaceZ = headFrontZ;
-    if (offset.targetSurface === 'base' && baseSurfaceZ !== null) {
+    if (onBase && baseSurfaceZ !== null) {
       surfaceZ = baseSurfaceZ;
     }
 
@@ -723,15 +725,8 @@ function AdditionModelInner({
       return surfaceZ + actualDepth / 2 + APPLICATION_Z_OFFSET;
     }
 
-    if (supportsDepthDrag && offset.targetSurface === 'base' && baseFrontZ !== null) {
-      const frontReference = headFrontZ;
-      const padFront = Math.max(baseFrontZ, frontReference);
-      const padMid = frontReference + (padFront - frontReference) * 0.5;
-      return padMid;
-    }
-
     return surfaceZ + actualDepth / 2;
-  }, [addition.type, actualDepth, baseFrontZ, baseSurfaceZ, headFrontZ, offset.targetSurface, supportsDepthDrag]);
+  }, [addition.type, actualDepth, baseSurfaceZ, halfDepth, headFrontZ, offset.targetSurface, offset.zPos]);
 
   let zPosition = offset.zPos ?? defaultZPosition;
 
@@ -772,18 +767,6 @@ function AdditionModelInner({
     (addition.type === 'statue' || addition.type === 'vase');
   
   // Debug logging
-  React.useEffect(() => {
-    if (isSelected) {
-      console.log('[AdditionModel] Selected:', {
-        id,
-        type: addition.type,
-        showCornerOutline,
-        showApplicationBox,
-        refCurrent: ref.current,
-        sceneChildren: scene?.children.length,
-      });
-    }
-  }, [isSelected, showCornerOutline, showApplicationBox, id, addition.type, scene]);
 
   // ✅ guard: ensure required geometry is ready before rendering base-mounted additions
   if (!headstone || !stone || !scene || !bbox) {
@@ -791,7 +774,7 @@ function AdditionModelInner({
   }
   if (
     prefersBaseSurface &&
-    (baseSurfaceZ === null || baseFrontZ === null || baseDepthRange === null)
+    (baseSurfaceZ === null || baseDepthRange === null)
   ) {
     return null;
   }

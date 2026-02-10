@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-08  
+**Last Updated:** 2026-02-10  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -25,6 +25,17 @@
 17. [Development Workflow](#development-workflow)
 
 ---
+
+## Current Status (2026-02-10)
+
+### ✅ Recent Changes (February 10, 2026)
+1. **Addition Placement Uses Real Units & Base-Aligned Anchors**
+   - `components/three/AdditionModel.tsx` now defines a shared `MM` helper and converts every default offset, collision pad, and application lift from millimeters to meters before doing bounding-box math. This fixes the long-standing clamp bug that snapped statues to the base’s minX edge because offsets were previously interpreted as meters.
+   - Statues and vases sample the base’s top-front plane in headstone space, then subtract half their scaled depth plus a 10 mm safety margin so they rest flush on the base without hanging over the front or disappearing behind it. Default statue (left pad) and vase (right pad) anchors now land 80 mm and 30 mm in from their respective edges and persist correctly when duplicating or reloading thanks to the stored `zPos`.
+
+### ⚠️ Known Issues (February 10, 2026)
+- **Bronze Plaque Selection Visibility:** QA reports that bronze plaques only show selection corners on the rear face; the front outline is barely visible. Selection overlays for plaques should mirror the bright white cinematic outline used on inscriptions/motifs, keeping the white color while slightly lifting corners off the surface to avoid z-fighting.
+- **Addition Duplication “No File Data” Error:** Duplicating additions like `K0096` or `B2497D` intermittently logs “has no file data” because the cloned addition ID does not carry over the original `file` reference before `AdditionModel` mounts. When creating duplicate additions, persist the source addition’s `file` metadata (or fetch it by baseId) so `useGLTF('/additions/{file}')` resolves.
 
 ## Current Status (2026-02-08)
 

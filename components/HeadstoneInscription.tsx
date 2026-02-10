@@ -123,18 +123,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         const bb = g.boundingBox;
         if (!bb) return;
         const centerY = (bb.min.y + bb.max.y) / 2;
-        
-        // Log once for debugging
-        if (!window.__headstone_bounds_logged) {
-          console.log('[HeadstoneInscription] Headstone bounding box:', {
-            min: bb.min.y.toFixed(3),
-            max: bb.max.y.toFixed(3),
-            center: centerY.toFixed(3),
-            height: (bb.max.y - bb.min.y).toFixed(3)
-          });
-          window.__headstone_bounds_logged = true;
-        }
-        
         // Only update pos for initial inscriptions (xPos=0)
         if (xPos === 0) {
           setPos(
@@ -317,18 +305,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         ref={groupRef}
         position={[pos.x + xPos, pos.y + yPos, pos.z + zBump]}
         rotation={[0, 0, (rotationDeg * Math.PI) / 180]}
-        onAfterRender={() => {
-          if (groupRef.current && text.includes('MIGUEL')) {
-            groupRef.current.getWorldPosition(new THREE.Vector3());
-            const worldPos = new THREE.Vector3();
-            groupRef.current.getWorldPosition(worldPos);
-            console.log(`[HeadstoneInscription] "${text}" world position:`, {
-              local: { x: pos.x + xPos, y: pos.y + yPos, z: pos.z + zBump },
-              world: { x: worldPos.x.toFixed(1), y: worldPos.y.toFixed(1), z: worldPos.z.toFixed(1) },
-              xPos, yPos, posY: pos.y
-            });
-          }
-        }}
       >
         {/* Main text */}
         <Text

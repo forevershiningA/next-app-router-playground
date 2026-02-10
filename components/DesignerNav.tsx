@@ -727,6 +727,7 @@ export default function DesignerNav() {
             isLaser
           )
         : null;
+    const clampHeight = (value: number) => Math.min(maxHeight, Math.max(minHeight, value));
     const showMotifCatalog =
       activeFullscreenPanel === 'select-motifs' && (forceMotifCatalog || !hasActiveMotif);
 
@@ -790,7 +791,7 @@ export default function DesignerNav() {
                   type="button"
                   onClick={() => {
                     if (!selectedMotifId) return;
-                    const newVal = Math.max(minHeight, (activeOffset.heightMm ?? initHeight) - 1);
+                    const newVal = clampHeight((activeOffset.heightMm ?? initHeight) - 1);
                     setMotifOffset(selectedMotifId, {
                       ...activeOffset,
                       heightMm: newVal,
@@ -811,25 +812,19 @@ export default function DesignerNav() {
                   value={activeOffset.heightMm ?? initHeight}
                   onChange={(e) => {
                     if (!selectedMotifId) return;
+                    const clampedValue = clampHeight(Number(e.target.value));
                     setMotifOffset(selectedMotifId, {
                       ...activeOffset,
-                      heightMm: Number(e.target.value),
+                      heightMm: clampedValue,
                     });
                   }}
                   onBlur={(e) => {
                     if (!selectedMotifId) return;
-                    const val = Number(e.target.value);
-                    if (val < minHeight) {
-                      setMotifOffset(selectedMotifId, {
-                        ...activeOffset,
-                        heightMm: minHeight,
-                      });
-                    } else if (val > maxHeight) {
-                      setMotifOffset(selectedMotifId, {
-                        ...activeOffset,
-                        heightMm: maxHeight,
-                      });
-                    }
+                    const clampedValue = clampHeight(Number(e.target.value));
+                    setMotifOffset(selectedMotifId, {
+                      ...activeOffset,
+                      heightMm: clampedValue,
+                    });
                   }}
                   className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
                     (activeOffset.heightMm ?? initHeight) < minHeight || (activeOffset.heightMm ?? initHeight) > maxHeight
@@ -841,7 +836,7 @@ export default function DesignerNav() {
                   type="button"
                   onClick={() => {
                     if (!selectedMotifId) return;
-                    const newVal = Math.min(maxHeight, (activeOffset.heightMm ?? initHeight) + 1);
+                    const newVal = clampHeight((activeOffset.heightMm ?? initHeight) + 1);
                     setMotifOffset(selectedMotifId, {
                       ...activeOffset,
                       heightMm: newVal,
@@ -864,13 +859,14 @@ export default function DesignerNav() {
                 max={maxHeight}
                 step={1}
                 value={activeOffset.heightMm ?? initHeight}
-                onChange={(e) =>
-                  selectedMotifId &&
+                onChange={(e) => {
+                  if (!selectedMotifId) return;
+                  const clampedValue = clampHeight(Number(e.target.value));
                   setMotifOffset(selectedMotifId, {
                     ...activeOffset,
-                    heightMm: Number(e.target.value),
-                  })
-                }
+                    heightMm: clampedValue,
+                  });
+                }}
                 className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">

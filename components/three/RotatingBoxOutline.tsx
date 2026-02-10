@@ -12,8 +12,10 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   visible?: boolean;
   /** Outline color */
   color?: string | number;
-  /** Expand the box slightly to avoid z-fighting */
+  /** Expand the box slightly to avoid z-fighting (width/height planes) */
   pad?: number;
+  /** Optional override specifically for depth padding */
+  depthPad?: number;
   /** If true, draw through objects (no depth test) */
   through?: boolean;
   /** Render order for the helper */
@@ -41,6 +43,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   visible = true,
   color = 'white',
   pad = 0.004,
+  depthPad,
   through = true,
   renderOrder = 1000,
   excludeAdditions = false,
@@ -52,6 +55,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 }: RotatingBoxOutlineProps) {
   const { gl } = useThree();
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
+  const depthPadding = depthPad ?? pad;
   const localBox = new THREE.Box3();
   const childBox = new THREE.Box3();
   const inverseMatrix = new THREE.Matrix4();
@@ -246,7 +250,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     const paddedWidth = width + pad * 2;
     const paddedHeight = height + pad * 2;
-    const paddedDepth = depth + pad * 2;
+    const paddedDepth = depth + depthPadding * 2;
 
     const halfWidth = paddedWidth / 2;
     const halfHeight = paddedHeight / 2;
@@ -274,7 +278,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     if (frontFacingOnly && helper) {
       clippingPlaneRef.current.setFromNormalAndCoplanarPoint(cameraDir, worldCenter);
-      clippingPlaneRef.current.constant += pad;
+      clippingPlaneRef.current.constant += depthPadding;
       (helper.material as THREE.LineBasicMaterial).clippingPlanes = [clippingPlaneRef.current];
     }
 

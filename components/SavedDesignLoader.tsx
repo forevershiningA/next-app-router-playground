@@ -41,6 +41,16 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
   const [design, setDesign] = useState<SavedDesignData | null>(null);
 
   useEffect(() => {
+    if (!designId) {
+      setDesign(null);
+      setLoading(false);
+      console.warn('⚠️ No design ID provided');
+      return;
+    }
+
+    const controller = new AbortController();
+    let isCancelled = false;
+
     async function loadDesign() {
       try {
         setLoading(true);
@@ -49,7 +59,7 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
         const url = `/ml/${mlDir}/saved-designs/json/${designId}.json`;
 
         // Fetch the saved design JSON
-        const response = await fetch(url, { cache: 'no-store' });
+        const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
         
         if (!response.ok) {
           if (response.status === 404) {
@@ -59,6 +69,7 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
         }
 
         const data = await response.json();
+        if (isCancelled) return;
         
         setDesign(data);
         
@@ -66,20 +77,26 @@ export function SavedDesignLoader({ designId, onLoad, mlDir = 'forevershining' }
           onLoad(data);
         }
       } catch (err) {
+        if (controller.signal.aborted) return;
         const errorMsg = err instanceof Error ? err.message : 'Failed to load design';
         console.error('❌ Error loading saved design:', errorMsg);
         console.error('📋 Full error:', err);
-        setError(errorMsg);
+        if (!isCancelled) {
+          setError(errorMsg);
+        }
       } finally {
-        setLoading(false);
+        if (!isCancelled) {
+          setLoading(false);
+        }
       }
     }
 
-    if (designId) {
-      loadDesign();
-    } else {
-      console.warn('⚠️ No design ID provided');
-    }
+    loadDesign();
+
+    return () => {
+      isCancelled = true;
+      controller.abort();
+    };
   }, [designId, onLoad, mlDir]);
 
   if (loading) {
@@ -120,15 +137,20 @@ export function useSavedDesign(designId: string | null, mlDir: string = 'forever
   useEffect(() => {
     if (!designId) {
       setDesign(null);
+      setLoading(false);
+      setError(null);
       return;
     }
+
+    const controller = new AbortController();
+    let isCancelled = false;
 
     async function loadDesign() {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/ml/${mlDir}/saved-designs/json/${designId}.json`, { cache: 'no-store' });
+        const response = await fetch(`/ml/${mlDir}/saved-designs/json/${designId}.json`, { cache: 'no-store', signal: controller.signal });
         
         if (!response.ok) {
           if (response.status === 404) {
@@ -138,16 +160,27 @@ export function useSavedDesign(designId: string | null, mlDir: string = 'forever
         }
 
         const data = await response.json();
+        if (isCancelled) return;
         setDesign(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load design');
+        if (controller.signal.aborted) return;
+        if (!isCancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load design');
+        }
         console.error('Error loading saved design:', err);
       } finally {
-        setLoading(false);
+        if (!isCancelled) {
+          setLoading(false);
+        }
       }
     }
 
     loadDesign();
+
+    return () => {
+      isCancelled = true;
+      controller.abort();
+    };
   }, [designId, mlDir]);
 
   return { design, loading, error };

@@ -41,54 +41,65 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
 
   // Load individual motifs from a category folder
   useEffect(() => {
-    if (selectedCategoryMotif) {
-      setLoading(true);
-      // Try API first, fall back to motifs_data.js if API fails
-      fetch(`/api/motifs/${selectedCategoryMotif.src}`)
-        .then((res) => {
-          console.log('API response status:', res.status, res.ok);
-          if (!res.ok) throw new Error('API failed');
-          return res.json();
-        })
-        .then((data) => {
-          console.log('API returned data:', data);
-          console.log('Motifs count:', data.motifs?.length || 0);
-          setIndividualMotifs(data.motifs || []);
-          setLoading(false);
-        })
-        .catch(async () => {
-          // Fallback: use motifs_data.js
-          try {
-            console.log('API failed, loading motifs_data.js fallback');
-            console.log('MotifsData loaded:', MotifsData.length, 'categories');
-            const categoryName = selectedCategoryMotif.src.split('/').pop();
-            console.log('Looking for category:', categoryName);
-            const categoryData = MotifsData.find(
-              (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
-            );
-            console.log('Found category data:', categoryData ? 'yes' : 'no');
-            
-            if (categoryData) {
-              const fileNames = categoryData.files.split(',').map((name) => name.trim());
-              const motifs = fileNames.map((fileName) => ({
-                path: `/shapes/motifs/${fileName}.svg`,
-                name: fileName.replace(/_/g, ' '),
-                category: selectedCategoryMotif.src
-              }));
-              console.log('Generated motifs:', motifs.length);
-              setIndividualMotifs(motifs);
-            } else {
-              console.log('No category data found for:', categoryName);
-              setIndividualMotifs([]);
-            }
-            setLoading(false);
-          } catch (err) {
-            console.error('Fallback error:', err);
-            setIndividualMotifs([]);
-            setLoading(false);
-          }
-        });
+    if (!selectedCategoryMotif) {
+      setIndividualMotifs([]);
+      setLoading(false);
+      return;
     }
+
+    const controller = new AbortController();
+    let isCancelled = false;
+
+    async function loadMotifs() {
+      setLoading(true);
+      try {
+        // Try API first
+        const response = await fetch(`/api/motifs/${selectedCategoryMotif.src}`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error('API failed');
+        const data = await response.json();
+        if (isCancelled) return;
+        setIndividualMotifs(data.motifs || []);
+      } catch (apiError) {
+        if (controller.signal.aborted) return;
+        try {
+          const categoryName = selectedCategoryMotif.src.split('/').pop();
+          const categoryData = MotifsData.find(
+            (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
+          );
+
+          if (isCancelled) return;
+
+          if (categoryData) {
+            const fileNames = categoryData.files.split(',').map((name) => name.trim());
+            const motifs = fileNames.map((fileName) => ({
+              path: `/shapes/motifs/${fileName}.svg`,
+              name: fileName.replace(/_/g, ' '),
+              category: selectedCategoryMotif.src,
+            }));
+            setIndividualMotifs(motifs);
+          } else {
+            setIndividualMotifs([]);
+          }
+        } catch (fallbackError) {
+          if (isCancelled) return;
+          console.error('Fallback error:', fallbackError);
+          setIndividualMotifs([]);
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadMotifs();
+
+    return () => {
+      isCancelled = true;
+      controller.abort();
+    };
   }, [selectedCategoryMotif]);
 
   const handleCategoryClick = (motif: Motif) => {

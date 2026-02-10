@@ -13,13 +13,29 @@ export default function PriceDetails({ designId, mlDir }: PriceDetailsProps) {
   const [totalPrice, setTotalPrice] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!designId || !mlDir) {
+      setPriceHtml(null);
+      setTotalPrice(null);
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    let isCancelled = false;
+
     async function loadPriceHtml() {
       try {
         setLoading(true);
-        const response = await fetch(`/ml/${mlDir}/saved-designs/html/${designId}.html`);
+        setPriceHtml(null);
+        setTotalPrice(null);
+
+        const response = await fetch(`/ml/${mlDir}/saved-designs/html/${designId}.html`, {
+          signal: controller.signal,
+        });
         
         if (response.ok) {
           const html = await response.text();
+          if (isCancelled) return;
           setPriceHtml(html);
           
           // Extract total price from HTML
@@ -29,15 +45,21 @@ export default function PriceDetails({ designId, mlDir }: PriceDetailsProps) {
           }
         }
       } catch (error) {
+        if (controller.signal.aborted) return;
         console.error('Error loading price HTML:', error);
       } finally {
-        setLoading(false);
+        if (!isCancelled) {
+          setLoading(false);
+        }
       }
     }
 
-    if (designId && mlDir) {
-      loadPriceHtml();
-    }
+    loadPriceHtml();
+
+    return () => {
+      isCancelled = true;
+      controller.abort();
+    };
   }, [designId, mlDir]);
 
   if (loading) {

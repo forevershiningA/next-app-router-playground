@@ -29,14 +29,16 @@ export default function HeadstoneAssembly() {
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
   const isPlaque = productType === 'plaque';
-  const headstoneOutlinePad = isPlaque ? -0.0005 : 0.02;
+  const headstoneOutlinePad = isPlaque ? -0.0005 : 0.006;
+  const headstoneOutlineDepthPad = isPlaque ? -0.00025 : 0.0008;
   const headstoneOutlineLineLength = isPlaque ? 0.08 : 0.15;
   const headstoneOutlineThrough = false;
-  const headstoneBottomLift = isPlaque ? 0 : 0.025;
-  const baseOutlinePad = isPlaque ? -0.0005 : 0.01;
+  const headstoneBottomLift = isPlaque ? 0 : 0.012;
+  const baseOutlinePad = isPlaque ? -0.0005 : 0.004;
+  const baseOutlineDepthPad = isPlaque ? -0.00025 : 0.0006;
   const baseOutlineLineLength = isPlaque ? 0.08 : 0.15;
   const baseOutlineThrough = false;
-  const baseBottomLift = isPlaque ? 0 : 0.015;
+  const baseBottomLift = isPlaque ? 0 : 0.01;
   
   // Convert base height from mm to meters
   const baseHeightMeters = baseHeightMm / 1000;
@@ -61,6 +63,7 @@ export default function HeadstoneAssembly() {
           visible={selected === 'headstone'}
           color="#ffffff"
           pad={headstoneOutlinePad}
+          depthPad={headstoneOutlineDepthPad}
           through={headstoneOutlineThrough}
           lineLength={headstoneOutlineLineLength}
           bottomLift={headstoneBottomLift}
@@ -73,6 +76,7 @@ export default function HeadstoneAssembly() {
           visible={selected === 'base'}
           color="#ffffff"
           pad={baseOutlinePad}
+          depthPad={baseOutlineDepthPad}
           through={baseOutlineThrough}
           lineLength={baseOutlineLineLength}
           bottomLift={baseBottomLift}

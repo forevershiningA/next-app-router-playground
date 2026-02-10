@@ -6,6 +6,7 @@ import { loadCanonicalDesignIntoEditor, DEFAULT_CANONICAL_DESIGN_VERSION, type C
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 const DEFAULT_DESIGN_ID = '1725769905504';
+const isDevEnvironment = process.env.NODE_ENV !== 'production';
 
 // Routes where we should attempt to load the default design
 const DESIGNER_ROUTES = [
@@ -40,7 +41,9 @@ export function useLoadDesign(designId: string) {
       
       const response = await fetch(canonicalDesignUrl, { cache: 'no-cache' });
       if (!response.ok) {
-        console.warn(`[useLoadDesign] Failed to fetch canonical design ${designId}:`, response.status);
+        if (isDevEnvironment) {
+          console.warn(`[useLoadDesign] Failed to fetch canonical design ${designId}:`, response.status);
+        }
         return { success: false, message: 'Failed to fetch design' };
       }
 
@@ -48,7 +51,9 @@ export function useLoadDesign(designId: string) {
       
       await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
       
-      console.log(`[useLoadDesign] Successfully loaded canonical design ${designId}`);
+      if (isDevEnvironment) {
+        console.log(`[useLoadDesign] Successfully loaded canonical design ${designId}`);
+      }
       return { success: true, message: 'Design loaded successfully' };
     } catch (error) {
       console.error(`[useLoadDesign] Error loading canonical design ${designId}:`, error);

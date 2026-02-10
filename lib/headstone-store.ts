@@ -425,9 +425,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     setTimeout(() => state.calculateMotifCost(), 0);
   },
   removeMotif: (id) => {
-    set((s) => ({
-      selectedMotifs: s.selectedMotifs.filter((m) => m.id !== id),
-    }));
+    set((s) => {
+      const updatedOffsets = { ...s.motifOffsets };
+      delete updatedOffsets[id];
+      const isActiveMotif = s.selectedMotifId === id;
+      return {
+        selectedMotifs: s.selectedMotifs.filter((m) => m.id !== id),
+        motifOffsets: updatedOffsets,
+        selectedMotifId: isActiveMotif ? null : s.selectedMotifId,
+        activePanel: isActiveMotif ? null : s.activePanel,
+      };
+    });
     // Calculate cost after removing
     setTimeout(() => get().calculateMotifCost(), 0);
   },
@@ -443,8 +451,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   productId: null,
   setProductId: async (id) => {
-
-    console.trace('[Store] setProductId call stack');
 
     const prevSnapshot = get();
     const prevHeadstoneHeight = Math.max(prevSnapshot.heightMm || 0, 1);
@@ -479,11 +485,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
       set({ catalog, productId: id });
       
-      console.log('[Store] Catalog set for product', id, ':', {
-        catalogName: catalog.product.name,
-        catalogId: catalog.product.id,
-        catalogType: catalog.product.type
-      });
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[Store] Catalog set for product', id, ':', {
+          catalogName: catalog.product.name,
+          catalogId: catalog.product.id,
+          catalogType: catalog.product.type
+        });
+      }
 
       const productType = catalog.product.type;
       const isPlaque = productType === 'plaque';
@@ -1226,23 +1234,21 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   duplicateAddition: (id: string) => {
     const { selectedAdditions, additionOffsets } = get();
     
-    // Check if the addition exists in selected additions
-    if (!selectedAdditions.includes(id)) return;
+    const originalIndex = selectedAdditions.indexOf(id);
+    if (originalIndex === -1) return;
     
-    // Generate a unique instance ID for the duplicate
-    const instanceId = `${id}_${Date.now()}`;
+    const parts = id.split('_');
+    const hasTimestampSuffix = parts.length > 1 && !Number.isNaN(Number(parts[parts.length - 1]));
+    const baseId = hasTimestampSuffix ? parts.slice(0, -1).join('_') : id;
+    const instanceId = `${baseId}_${Date.now()}`;
     
-    // Add the duplicate with unique instance ID
     set((s) => ({ 
       selectedAdditions: [...s.selectedAdditions, instanceId] 
     }));
     
-    // Get the current offset for the original
     const currentOffset = additionOffsets[id];
     
     if (currentOffset) {
-      // Create a new offset slightly offset from the original
-      // Offset by 30 units to the right and 30 units down
       const newOffset = {
         ...currentOffset,
         xPos: (currentOffset.xPos ?? 0) + 30,

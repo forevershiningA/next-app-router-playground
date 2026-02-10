@@ -31,18 +31,13 @@ export default function CheckPriceGrid() {
   const productName = catalog?.product?.name || 'Not selected';
   
   // Get motif and inscription details from catalog additions
-  console.log('Full catalog object:', catalog);
-  console.log('Catalog additions:', catalog?.product?.additions);
-  
   const motifAddition = catalog?.product?.additions?.find(a => a.type === 'motif');
-  console.log('Found motif addition:', motifAddition);
   
   const motifProductId = motifAddition?.id || productId;
   const motifName = motifAddition?.name || 'Motif';
   const motifFormula = motifAddition?.formula || '';
   
   const inscriptionAddition = catalog?.product?.additions?.find(a => a.type === 'inscription');
-  console.log('Found inscription addition:', inscriptionAddition);
   
   const inscriptionProductId = inscriptionAddition?.id || productId;
   const inscriptionName = inscriptionAddition?.name || 'Inscription';

@@ -37,9 +37,15 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
   const addAddition = useHeadstoneStore((s) => s.addAddition);
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
 
+  const findInstanceId = (additionId: string) =>
+    selectedAdditions.find(
+      (instanceId) => instanceId === additionId || instanceId.startsWith(`${additionId}_`)
+    );
+
   const handleAdditionToggle = (addition: Addition) => {
-    if (selectedAdditions.includes(addition.id)) {
-      removeAddition(addition.id);
+    const existingInstanceId = findInstanceId(addition.id);
+    if (existingInstanceId) {
+      removeAddition(existingInstanceId);
     } else {
       addAddition(addition.id);
     }
@@ -121,7 +127,8 @@ export default function AdditionSelectionGrid({ additions }: { additions: Additi
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {filteredAdditions.map((addition) => {
-                const isSelected = selectedAdditions.includes(addition.id);
+                const instanceId = findInstanceId(addition.id);
+                const isSelected = Boolean(instanceId);
                 // Extract directory from file path (e.g., "207/Art207.glb" -> "207")
                 const dirName = addition.file?.split('/')[0] || '';
                 const imagePath = `/additions/${dirName}/${addition.image}`;
