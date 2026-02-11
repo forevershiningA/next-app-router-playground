@@ -28,17 +28,25 @@ export default function HeadstoneAssembly() {
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const borderName = useHeadstoneStore((s) => s.borderName);
   const isPlaque = productType === 'plaque';
-  const headstoneOutlinePad = isPlaque ? -0.0005 : 0.006;
-  const headstoneOutlineDepthPad = isPlaque ? -0.00025 : 0.0008;
-  const headstoneOutlineLineLength = isPlaque ? 0.08 : 0.15;
+  const hasBorder =
+    isPlaque && borderName ? !borderName.toLowerCase().includes('no border') : false;
+  const headstoneOutlinePad = isPlaque ? 0.0012 : 0.006;
+  const headstoneOutlineDepthPad = isPlaque
+    ? hasBorder
+      ? 0.0018
+      : 0.0009
+    : 0.0008;
+  const headstoneOutlineLineLength = isPlaque ? 0.12 : 0.15;
   const headstoneOutlineThrough = false;
-  const headstoneBottomLift = isPlaque ? 0 : 0.012;
-  const baseOutlinePad = isPlaque ? -0.0005 : 0.004;
-  const baseOutlineDepthPad = isPlaque ? -0.00025 : 0.0006;
-  const baseOutlineLineLength = isPlaque ? 0.08 : 0.15;
+  const headstoneBottomLift = isPlaque ? 0.0015 : 0.012;
+  const headstoneFrontExtension = hasBorder ? 0.0055 : 0;
+  const baseOutlinePad = isPlaque ? 0.001 : 0.004;
+  const baseOutlineDepthPad = isPlaque ? 0.0009 : 0.0006;
+  const baseOutlineLineLength = isPlaque ? 0.12 : 0.15;
   const baseOutlineThrough = false;
-  const baseBottomLift = isPlaque ? 0 : 0.01;
+  const baseBottomLift = isPlaque ? 0.0015 : 0.01;
   
   // Convert base height from mm to meters
   const baseHeightMeters = baseHeightMm / 1000;
@@ -64,6 +72,7 @@ export default function HeadstoneAssembly() {
           color="#ffffff"
           pad={headstoneOutlinePad}
           depthPad={headstoneOutlineDepthPad}
+          frontExtension={headstoneFrontExtension}
           through={headstoneOutlineThrough}
           lineLength={headstoneOutlineLineLength}
           bottomLift={headstoneBottomLift}

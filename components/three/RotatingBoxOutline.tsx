@@ -16,6 +16,8 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   pad?: number;
   /** Optional override specifically for depth padding */
   depthPad?: number;
+  /** Push only the front corners outward along the local Z axis */
+  frontExtension?: number;
   /** If true, draw through objects (no depth test) */
   through?: boolean;
   /** Render order for the helper */
@@ -44,6 +46,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   color = 'white',
   pad = 0.004,
   depthPad,
+  frontExtension = 0,
   through = true,
   renderOrder = 1000,
   excludeAdditions = false,
@@ -307,6 +310,10 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
       if (sy < 0 && bottomLift !== 0) {
         cornerTemp.addScaledVector(axisYDir, bottomLift);
+      }
+
+      if (frontExtension !== 0 && sz > 0) {
+        cornerTemp.addScaledVector(axisZDir, frontExtension);
       }
 
       if (horizontalScale > 0.0001) {

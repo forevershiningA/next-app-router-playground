@@ -72,6 +72,7 @@ export type Line = {
   ref: React.RefObject<Group | null>; // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
+export type AdditionKind = 'statue' | 'vase' | 'application';
 export type Material = {
   id: string;
   name: string;
@@ -208,10 +209,16 @@ type HeadstoneState = {
       xPos?: number;
       yPos?: number;
       zPos?: number;
-      scale: number;
-      rotationZ: number;
+      scale?: number;
+      rotationZ?: number;
       sizeVariant?: number;
       targetSurface?: 'headstone' | 'base';
+      additionType?: AdditionKind;
+      assetFile?: string;
+      sourceId?: string;
+      additionName?: string;
+      zPosFinalized?: boolean;
+      footprintWidth?: number;
     }
   >;
 
@@ -254,10 +261,16 @@ type HeadstoneState = {
       xPos?: number;
       yPos?: number;
       zPos?: number;
-      scale: number;
-      rotationZ: number;
+      scale?: number;
+      rotationZ?: number;
       sizeVariant?: number;
       targetSurface?: 'headstone' | 'base';
+      additionType?: AdditionKind;
+      assetFile?: string;
+      sourceId?: string;
+      additionName?: string;
+      zPosFinalized?: boolean;
+      footprintWidth?: number;
     },
   ) => void;
   duplicateAddition: (id: string) => void;
@@ -327,6 +340,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   // Start with empty additions - user can add via "Select Additions" panel
   selectedAdditions: [],
   addAddition: (id) => {
+    const additionData = data.additions.find((a) => a.id === id);
+    const additionType: AdditionKind = (additionData?.type as AdditionKind) ?? 'application';
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
     set((s) => ({ 
@@ -342,6 +357,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           sizeVariant: 1,
           targetSurface: 'headstone',
           zPos: undefined,
+          additionType,
+          assetFile: additionData?.file,
+          sourceId: id,
+          additionName: additionData?.name,
+          zPosFinalized: false,
         },
       },
     }));
@@ -1223,46 +1243,56 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       xPos?: number;
       yPos?: number;
       zPos?: number;
-      scale: number;
-      rotationZ: number;
+      scale?: number;
+      rotationZ?: number;
       sizeVariant?: number;
       targetSurface?: 'headstone' | 'base';
+      additionType?: AdditionKind;
+      assetFile?: string;
+      sourceId?: string;
+      additionName?: string;
+      zPosFinalized?: boolean;
     },
   ) => {
-    set((s) => ({ additionOffsets: { ...s.additionOffsets, [id]: offset } }));
+    set((s) => ({
+      additionOffsets: {
+        ...s.additionOffsets,
+        [id]: {
+          ...s.additionOffsets[id],
+          ...offset,
+        },
+      },
+    }));
   },
   duplicateAddition: (id: string) => {
-    const { selectedAdditions, additionOffsets } = get();
-    
-    const originalIndex = selectedAdditions.indexOf(id);
-    if (originalIndex === -1) return;
-    
+    const { additionOffsets } = get();
+    const currentOffset = additionOffsets[id];
+    if (!currentOffset) return;
+
     const parts = id.split('_');
     const hasTimestampSuffix = parts.length > 1 && !Number.isNaN(Number(parts[parts.length - 1]));
     const baseId = hasTimestampSuffix ? parts.slice(0, -1).join('_') : id;
     const instanceId = `${baseId}_${Date.now()}`;
-    
-    set((s) => ({ 
-      selectedAdditions: [...s.selectedAdditions, instanceId] 
+
+    const isBase = currentOffset.targetSurface === 'base';
+    const footprintWidth = currentOffset.footprintWidth;
+    const widthDelta = footprintWidth && footprintWidth > 0 ? footprintWidth : isBase ? 120 : 30;
+    const margin = isBase ? Math.max(widthDelta * 0.25, 20) : 0;
+    const deltaX = isBase ? widthDelta + margin : 30;
+    const deltaY = isBase ? 0 : 30;
+
+    set((s) => ({
+      selectedAdditions: [...s.selectedAdditions, instanceId],
+      additionOffsets: {
+        ...s.additionOffsets,
+        [instanceId]: {
+          ...currentOffset,
+          xPos: (currentOffset.xPos ?? 0) + deltaX,
+          yPos: (currentOffset.yPos ?? 0) + deltaY,
+        },
+      },
+      selectedAdditionId: instanceId,
     }));
-    
-    const currentOffset = additionOffsets[id];
-    
-    if (currentOffset) {
-      const newOffset = {
-        ...currentOffset,
-        xPos: (currentOffset.xPos ?? 0) + 30,
-        yPos: (currentOffset.yPos ?? 0) + 30,
-        targetSurface: currentOffset.targetSurface,
-        zPos: currentOffset.zPos,
-      };
-      
-      // Set the offset for the duplicate with its instance ID
-      set((s) => ({ 
-        additionOffsets: { ...s.additionOffsets, [instanceId]: newOffset },
-        selectedAdditionId: instanceId, // Select the new duplicate
-      }));
-    }
   },
 
   setSelectedMotifId: (id) => {

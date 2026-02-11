@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-10  
+**Last Updated:** 2026-02-11  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,6 +26,23 @@
 
 ---
 
+## Current Status (2026-02-11)
+
+### ✅ Recent Changes (February 11, 2026)
+1. **Addition Duplication Reliability & Metadata**
+   - `lib/headstone-store.ts` now persists per-instance metadata (`additionType`, `assetFile`, `footprintWidth`, finalized `zPos`) when additions are added or duplicated, so clones keep their GLB paths and exact placement.
+   - `components/three/AdditionModel.tsx` can fall back to stored metadata when the catalog lacks a `file`, preventing "has no file data" errors, and each addition reports its true footprint width so duplicates offset by their own size instead of a hardcoded value.
+
+2. **Statue/Vase Grounding & Base Alignment**
+   - Addition meshes are re-centered differently per type: statues/vases snap their origin to the GLB’s base while applications stay centered, keeping silhouettes upright.
+   - Base-mounted additions compute the base-top plane in headstone space and clamp both `yPos` and `zPos` to that surface, eliminating the sinking/stacking drift that happened after repeated duplicates or base edits.
+
+3. **Application Selection Outline Centering**
+   - Because GLB centering is now type-aware, application selection boxes stay centered on the motif instead of hugging the bottom edge, restoring the cinematic outline animation introduced on Feb 8.
+
+### ⚠️ Known Issues (February 11, 2026)
+- **Bronze Plaque Selection Visibility:** QA reports that bronze plaques only show selection corners on the rear face; the front outline is barely visible. Selection overlays for plaques should mirror the bright white cinematic outline used on inscriptions/motifs, keeping the white color while slightly lifting corners off the surface to avoid z-fighting.
+
 ## Current Status (2026-02-10)
 
 ### ✅ Recent Changes (February 10, 2026)
@@ -35,7 +52,6 @@
 
 ### ⚠️ Known Issues (February 10, 2026)
 - **Bronze Plaque Selection Visibility:** QA reports that bronze plaques only show selection corners on the rear face; the front outline is barely visible. Selection overlays for plaques should mirror the bright white cinematic outline used on inscriptions/motifs, keeping the white color while slightly lifting corners off the surface to avoid z-fighting.
-- **Addition Duplication “No File Data” Error:** Duplicating additions like `K0096` or `B2497D` intermittently logs “has no file data” because the cloned addition ID does not carry over the original `file` reference before `AdditionModel` mounts. When creating duplicate additions, persist the source addition’s `file` metadata (or fetch it by baseId) so `useGLTF('/additions/{file}')` resolves.
 
 ## Current Status (2026-02-08)
 
