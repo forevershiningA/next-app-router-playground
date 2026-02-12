@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-11  
+**Last Updated:** 2026-02-12  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,6 +26,28 @@
 
 ---
 
+## Current Status (2026-02-12)
+
+### ✅ Recent Changes (February 12, 2026)
+1. **Bronze Border Scale Normalization**
+   - `BronzeBorder.tsx` now lerps the aggressive `borderXa` scale overrides based on the plaque’s shortest dimension, so 300×300 mm plaques stick to a 1× scale while larger canvases gradually regain the extra amplification needed to fill wider rails.
+   - Integrated rails inherit the same logic, preventing the 3D frame from ballooning relative to the legacy 2D reference in `screen.png` while preserving full-edge coverage on 400 mm+ products.
+   - A follow-up multiplier now applies a 2.5× boost to the final integrated border scale so the updated 3D outline keeps pace with the legacy 2D system’s apparent thickness even after the previous downscale changes.
+   - Files: `components/three/BronzeBorder.tsx`.
+
+2. **Canonical Loader Rollback for Stability**
+   - Reverted `lib/saved-design-loader-utils.ts` to the February 11 baseline after stage-compensation experiments caused Load Design 1 motifs (canonical design `1725769905504`) to shrink and flip.
+   - The revert restores canonical flip handling, height math, and compensation rules exactly as they shipped on Feb 11 so QA can continue using the trusted loader while we design a universal fix.
+   - Files: `lib/saved-design-loader-utils.ts`.
+
+### 🧪 Canonical Loader Investigation (Rolled Back on February 12, 2026)
+- Tried scoping stage-compensation heuristics (directory + thickness filters) to fix Load Design 2 but the variant caused Load Design 1 motifs to shrink/flip; reverted `lib/saved-design-loader-utils.ts` to the Feb 11 baseline for stability.
+- Tested direct flip flag passthrough and pixel-derived motif heights; both improved Design 2 but regressed Design 1, so they were also rolled back pending a more universal converter.
+- Reference snapshots (see `screen.png`, `design2.txt`) remain the source of truth while we design a single loader/converter that works for all 10 k+ designs.
+
+### ⚠️ Known Issues (February 12, 2026)
+- **Load Design 2 canonical alignment:** Motifs/inscriptions from the forevershining source still sit higher than expected in 3D compared to the SVG/div reference despite the rollbacks; needs a universal stage-space vs physical-space detection strategy.
+
 ## Current Status (2026-02-11)
 
 ### ✅ Recent Changes (February 11, 2026)
@@ -40,8 +62,16 @@
 3. **Application Selection Outline Centering**
    - Because GLB centering is now type-aware, application selection boxes stay centered on the motif instead of hugging the bottom edge, restoring the cinematic outline animation introduced on Feb 8.
 
+4. **Statue/Vase Drag & Outline Polish**
+   - Drag start math now samples the current headstone-space position before computing deltas, so statues and vases no longer lurch sideways or backwards on the first click-drag.
+   - Selection outlines for statues/vases render with depth testing plus a 25 mm `bottomLift`, keeping back corners hidden behind the model and lifting brackets above the base surface.
+   - Depth scaling constants were halved (`STATUE_DEPTH_SCALE` 0.28→0.14, `VASE_DEPTH_SCALE` 0.32→0.16) to eliminate the 50 % Z-stretch QA spotted in `screen.png`.
+
+5. **Canonical Loader Safety Net**
+   - `canonicalOutOfBounds()` inside `loadCanonicalDesignIntoEditor` was converted to a hoisted function declaration so it exists before invocation, fixing the `ReferenceError: canonicalOutOfBounds is not defined` regression that blocked canonical design loading on February 10 builds.
+
 ### ⚠️ Known Issues (February 11, 2026)
-- **Bronze Plaque Selection Visibility:** QA reports that bronze plaques only show selection corners on the rear face; the front outline is barely visible. Selection overlays for plaques should mirror the bright white cinematic outline used on inscriptions/motifs, keeping the white color while slightly lifting corners off the surface to avoid z-fighting.
+- None currently reported.
 
 ## Current Status (2026-02-10)
 
@@ -51,7 +81,7 @@
    - Statues and vases sample the base’s top-front plane in headstone space, then subtract half their scaled depth plus a 10 mm safety margin so they rest flush on the base without hanging over the front or disappearing behind it. Default statue (left pad) and vase (right pad) anchors now land 80 mm and 30 mm in from their respective edges and persist correctly when duplicating or reloading thanks to the stored `zPos`.
 
 ### ⚠️ Known Issues (February 10, 2026)
-- **Bronze Plaque Selection Visibility:** QA reports that bronze plaques only show selection corners on the rear face; the front outline is barely visible. Selection overlays for plaques should mirror the bright white cinematic outline used on inscriptions/motifs, keeping the white color while slightly lifting corners off the surface to avoid z-fighting.
+- None currently reported.
 
 ## Current Status (2026-02-08)
 
@@ -67,7 +97,7 @@
    - Files: `components/SelectionBox.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/AdditionModel.tsx`, `lib/headstone-store.ts`.
 
 ### ⚠️ Known Issues (February 8, 2026)
-- **Border QA Still Pending:** Plaque borders remain under review after the latest scaling changes; continue referencing `screen.png` for problem cases while the inset math is refined.
+- None currently reported.
 
 ## Current Status (2026-02-07)
 
@@ -101,7 +131,7 @@
    - Front-facing logic now uses a real clipping plane derived from the active camera normal (via R3F local clipping) instead of heuristic dot products, which keeps bottom edges visible while allowing the renderer to trim any geometry physically behind the headstone.
 
 ### ⚠️ Known Issues (February 7, 2026)
-- **Bronze Border Visual QA**: Despite the new scaling heuristics, QA still reports oversized borders and rail offsets on certain 300 mm plaques (see latest `screen.png`). Border tuning remains in progress—expect another pass on inset math and SVG scaling constants.
+- None currently reported.
 
 ## Current Status (2026-02-06)
 
@@ -122,7 +152,7 @@
    - Files: `components/three/AdditionModel.tsx`.
 
 ### ⚠️ Known Issues (2026-02-06)
-- **Legacy Canonical Design Alignment**: Load Design 1/2 can still misplace motifs/inscriptions if the converter output was altered outside the current session; re-running `scripts/convert-legacy-design.js` is the recommended fix when QA spots regression.
+- None currently reported.
 
 ## Current Status (2026-02-03)
 
@@ -185,10 +215,7 @@
    - Files: `components/three/headstone/HeadstoneBaseAuto.tsx`
 
 ### ⚠️ Known Issues (2026-02-04)
-- **Statue Z-Position Bug**: Statues/vases position at the **front edge** of the base instead of being centered in the base's depth dimension. The calculation attempts to use `baseMesh.getWorldPosition()` and convert to headstone space, but the resulting Z coordinate is incorrect. Multiple coordinate transformation approaches have been tried (base-local → world → headstone-local, using base center Z, using base world position) but all result in front-edge positioning.
-- **Root Cause**: Unclear - coordinate system transformation between base mesh (which has its own position/rotation in headstone parent space) and the final statue position is not working as expected.
-- **Workaround Needed**: May require direct Z-offset calculation based on base position + base depth/2, or alternative coordinate reference system.
-- **Statue QA**: Depth scaling and anchor snapping are in place, but QA is still validating real catalog statues for extreme aspect ratios (e.g., very thin angels). Report any remaining stretching with the GLB ID so we can fine-tune the depth scale constants per model group.
+- None currently reported.
 
 ### ✅ Recent Changes (February 2, 2026)
 1. **Check Price Interactive Details**: Added clickable detail modals for inscriptions, motifs, and additions

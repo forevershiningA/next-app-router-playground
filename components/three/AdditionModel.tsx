@@ -37,8 +37,8 @@ const TARGET_HEIGHTS = {
 
 const APPLICATION_Z_OFFSET = 0.05 * MM; // 0.05mm offset keeps applications flush without z-fighting
 const APPLICATION_DEPTH_SCALE = 0.1;
-const STATUE_DEPTH_SCALE = 0.28;
-const VASE_DEPTH_SCALE = 0.32;
+const STATUE_DEPTH_SCALE = 0.14;
+const VASE_DEPTH_SCALE = 0.16;
 const HEADSTONE_COLLISION_PADDING = 5 * MM; // 5mm clearance from headstone plane
 const BASE_SURFACE_MARGIN = 10 * MM; // extra inset to keep statues/vases fully on the base
 
@@ -664,44 +664,6 @@ function AdditionModelInner({
     window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-additions' } }));
   }, [id, setSelectedAdditionId, setActivePanel]);
 
-  const handlePointerDown = React.useCallback(
-    (e: any) => {
-      e.stopPropagation();
-      setDragging(true);
-
-      const clientX = e.clientX ?? e?.nativeEvent?.clientX;
-      const clientY = e.clientY ?? e?.nativeEvent?.clientY;
-      if (typeof clientX === 'number' && typeof clientY === 'number') {
-        const data = computeInteractionPoint(clientX, clientY);
-        if (data && bbox) {
-          const { clamped, targetMesh } = data;
-          const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
-          if (headstoneMesh) {
-            const headCenterX = (bbox.min.x + bbox.max.x) / 2;
-            const headCenterY = (bbox.min.y + bbox.max.y) / 2;
-            const currentHeadstonePoint = new THREE.Vector3(
-              headCenterX + offset.xPos,
-              headCenterY - offset.yPos,
-              clamped.z
-            );
-            const worldPoint = headstoneMesh.localToWorld(currentHeadstonePoint.clone());
-            const currentTargetPoint = targetMesh.worldToLocal(worldPoint.clone());
-            dragDeltaRef.current = {
-              x: clamped.x - currentTargetPoint.x,
-              y: clamped.y - currentTargetPoint.y,
-              z: clamped.z - currentTargetPoint.z,
-            };
-          } else {
-            dragDeltaRef.current = null;
-          }
-        } else {
-          dragDeltaRef.current = null;
-        }
-      }
-    },
-    [computeInteractionPoint, headstone, offset, bbox]
-  );
-
   const handlePointerOver = React.useCallback(() => {
     if (document.body) {
       document.body.style.cursor = 'grab';
@@ -840,6 +802,58 @@ function AdditionModelInner({
     setAdditionOffset(id, { zPos: zPosition, zPosFinalized: true });
   }, [additionKind, id, offset.zPos, offset.zPosFinalized, prefersBaseSurface, setAdditionOffset, zPosition]);
 
+  const handlePointerDown = React.useCallback(
+    (e: any) => {
+      e.stopPropagation();
+      setDragging(true);
+
+      const clientX = e.clientX ?? e?.nativeEvent?.clientX;
+      const clientY = e.clientY ?? e?.nativeEvent?.clientY;
+      if (typeof clientX !== 'number' || typeof clientY !== 'number') {
+        dragDeltaRef.current = null;
+        return;
+      }
+
+      const data = computeInteractionPoint(clientX, clientY);
+      if (!data || !bbox) {
+        dragDeltaRef.current = null;
+        return;
+      }
+
+      const { clamped, targetMesh } = data;
+      const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
+      if (!headstoneMesh) {
+        dragDeltaRef.current = null;
+        return;
+      }
+
+      const headCenterX = (bbox.min.x + bbox.max.x) / 2;
+      const headCenterY = (bbox.min.y + bbox.max.y) / 2;
+      const currentHeadstonePoint = new THREE.Vector3(
+        headCenterX + (offset.xPos ?? 0),
+        headCenterY - (offset.yPos ?? 0),
+        zPosition,
+      );
+
+      const worldPoint = headstoneMesh.localToWorld(currentHeadstonePoint.clone());
+      const currentTargetPoint = targetMesh.worldToLocal(worldPoint.clone());
+
+      dragDeltaRef.current = {
+        x: clamped.x - currentTargetPoint.x,
+        y: clamped.y - currentTargetPoint.y,
+        z: clamped.z - currentTargetPoint.z,
+      };
+    },
+    [
+      bbox,
+      computeInteractionPoint,
+      headstone,
+      offset.xPos,
+      offset.yPos,
+      zPosition,
+    ]
+  );
+
   const isSelected = selectedAdditionId === id;
 
   // Calculate scaled bounds for SelectionBox (in world space)
@@ -944,12 +958,15 @@ function AdditionModelInner({
         {/* Simple white corner outline - for statues and vases (like headstone) */}
         {showCornerOutline && (
           <RotatingBoxOutline
+            key={`${id}-${depthScale}-outline`}
             targetRef={ref}
             visible={true}
             color="#ffffff"
             pad={0.002}
-            through={true}
+            depthPad={0.002 * depthScale}
+            through={false}
             lineLength={0.15}
+            bottomLift={0.025}
             animateOnShow
             animationDuration={420}
           />

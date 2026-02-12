@@ -644,8 +644,12 @@ function buildBorderGroup(
   if (integratedRails) {
     let uniformScale = Math.min(width / originalWidth, height / originalHeight);
     if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
-      uniformScale *= INTEGRATED_SCALE_OVERRIDES[borderSlug];
+      const rawOverride = INTEGRATED_SCALE_OVERRIDES[borderSlug];
+      const smallPlaqueFactor = clamp01((minDimensionMm - 320) / 480);
+      const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
+      uniformScale *= lerpedOverride;
     }
+    uniformScale *= 2.5;
     merged.scale(uniformScale, uniformScale, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);

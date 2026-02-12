@@ -40,13 +40,13 @@ export default function HeadstoneAssembly() {
     : 0.0008;
   const headstoneOutlineLineLength = isPlaque ? 0.12 : 0.15;
   const headstoneOutlineThrough = false;
-  const headstoneBottomLift = isPlaque ? 0.0015 : 0.012;
+  const headstoneBottomLift = isPlaque ? 0.002 : 0.009;
   const headstoneFrontExtension = hasBorder ? 0.0055 : 0;
   const baseOutlinePad = isPlaque ? 0.001 : 0.004;
   const baseOutlineDepthPad = isPlaque ? 0.0009 : 0.0006;
   const baseOutlineLineLength = isPlaque ? 0.12 : 0.15;
   const baseOutlineThrough = false;
-  const baseBottomLift = isPlaque ? 0.0015 : 0.01;
+  const baseBottomLift = isPlaque ? 0.002 : 0.006;
   
   // Convert base height from mm to meters
   const baseHeightMeters = baseHeightMm / 1000;
