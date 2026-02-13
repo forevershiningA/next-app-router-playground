@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-12  
+**Last Updated:** 2026-02-13  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,6 +26,20 @@
 
 ---
 
+## Current Status (2026-02-13)
+
+### ✅ Recent Changes (February 13, 2026)
+1. **Canonical Loader Auto-Centering for Forevershining Layouts**
+   - The loader now samples every headstone-target inscription and motif before applying the legacy HEADSTONE_HALF/2 vertical shift.
+   - If a design's pre-shift coordinates are already centered within 5% of the headstone envelope (e.g., the forevershining multi-person memorial), the extra lift is skipped so motifs/inscriptions stop floating above the 2D reference.
+   - Legacy designs that rely on the historic offset (like canonical design 1725769905504) still receive the original shift, and both code paths clamp the applied shift to keep geometry within the stone's physical bounds.
+2. **Rotating Selection Outline Uses True OBBs**
+   - `RotatingBoxOutline.tsx` now transforms each child mesh’s bounding box directly into the target’s local space (single `inverse * world` matrix mul), so the headstone selection frame stays glued to the stone at every 30° arrow rotation—no more Z-axis drifting or width-as-depth stretching.
+   - The helper reattaches to the target mesh each frame, ensuring Load Design 1 once again shows its headstone outline immediately after loading (base outline was already unaffected).
+
+### ⚠️ Known Issues (February 13, 2026)
+- None currently reported.
+
 ## Current Status (2026-02-12)
 
 ### ✅ Recent Changes (February 12, 2026)
@@ -40,13 +54,17 @@
    - The revert restores canonical flip handling, height math, and compensation rules exactly as they shipped on Feb 11 so QA can continue using the trusted loader while we design a universal fix.
    - Files: `lib/saved-design-loader-utils.ts`.
 
+3. **Selection Outline Rotation Sync**
+   - `RotatingBoxOutline` now attaches its helper geometry to the target’s parent instead of the global scene root, so the headstone/base viewfinder corners inherit the same Y-axis rotations triggered by the 15° arrow buttons (no more drifting forward/back after repeated clicks).
+   - Files: `components/three/RotatingBoxOutline.tsx`.
+
 ### 🧪 Canonical Loader Investigation (Rolled Back on February 12, 2026)
 - Tried scoping stage-compensation heuristics (directory + thickness filters) to fix Load Design 2 but the variant caused Load Design 1 motifs to shrink/flip; reverted `lib/saved-design-loader-utils.ts` to the Feb 11 baseline for stability.
 - Tested direct flip flag passthrough and pixel-derived motif heights; both improved Design 2 but regressed Design 1, so they were also rolled back pending a more universal converter.
 - Reference snapshots (see `screen.png`, `design2.txt`) remain the source of truth while we design a single loader/converter that works for all 10 k+ designs.
 
 ### ⚠️ Known Issues (February 12, 2026)
-- **Load Design 2 canonical alignment:** Motifs/inscriptions from the forevershining source still sit higher than expected in 3D compared to the SVG/div reference despite the rollbacks; needs a universal stage-space vs physical-space detection strategy.
+- **Load Design 2 canonical alignment:** Motifs/inscriptions from the forevershining source still sit higher than expected in 3D compared to the SVG/div reference despite the rollbacks; needs a universal stage-space vs physical-space detection strategy. *(Resolved February 13 via the auto-centering shift described above.)*
 
 ## Current Status (2026-02-11)
 

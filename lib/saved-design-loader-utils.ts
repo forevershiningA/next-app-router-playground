@@ -805,9 +805,62 @@ export async function loadCanonicalDesignIntoEditor(
   };
 
   const GLOBAL_LAYOUT_SCALE = 1;
-  const HEADSTONE_Y_SHIFT_MM = HEADSTONE_HALF_MM / 2;
+  const DEFAULT_HEADSTONE_Y_SHIFT_MM = HEADSTONE_HALF_MM / 2;
   const BASE_Y_SHIFT_MM = HEADSTONE_HALF_MM / 2;
   const INSCRIPTION_SIZE_SCALE = 0.85;
+
+  type RangeTracker = { min: number; max: number; count: number };
+
+  const createRangeTracker = (): RangeTracker => ({
+    min: Number.POSITIVE_INFINITY,
+    max: Number.NEGATIVE_INFINITY,
+    count: 0,
+  });
+
+  const recordRangeValue = (tracker: RangeTracker, value: number) => {
+    if (!Number.isFinite(value)) return;
+    tracker.min = Math.min(tracker.min, value);
+    tracker.max = Math.max(tracker.max, value);
+    tracker.count += 1;
+  };
+
+  const computeHeadstoneShift = (
+    tracker: RangeTracker,
+    halfBound: number,
+    defaultShift: number,
+    mode: 'default' | 'auto-center',
+  ) => {
+    if (!tracker || tracker.count === 0 || halfBound <= 0) {
+      return defaultShift;
+    }
+
+    if (mode !== 'auto-center') {
+      return defaultShift;
+    }
+
+    let adjustedShift = -((tracker.min + tracker.max) / 2);
+    const overflowTop = tracker.max + adjustedShift - halfBound;
+    if (overflowTop > 0) {
+      adjustedShift -= overflowTop;
+    }
+    const overflowBottom = -halfBound - (tracker.min + adjustedShift);
+    if (overflowBottom > 0) {
+      adjustedShift += overflowBottom;
+    }
+    return adjustedShift;
+  };
+
+  type PendingMotifData = {
+    svgPath: string;
+    color: string;
+    target: 'headstone' | 'base';
+    xPos: number;
+    yPos: number;
+    heightMm: number;
+    rotationZ: number;
+    flipX: boolean;
+    flipY: boolean;
+  };
   
   // Calculate display ratio: how many pixels per mm in the current 3D view
   // This matches the legacy getRatio() logic: canvas_pixels / headstone_mm
@@ -840,22 +893,31 @@ export async function loadCanonicalDesignIntoEditor(
 
 
   const motifAssetMap = buildCanonicalMotifPathMap(designData);
-  const canonicalLines: Line[] = (designData.elements?.inscriptions ?? []).map((inscription, index) => {
+  const headstoneRangeTracker = createRangeTracker();
+  const pendingLines: Array<{ target: 'headstone' | 'base'; line: Line }> = [];
+  const pendingMotifs: PendingMotifData[] = [];
+
+  (designData.elements?.inscriptions ?? []).forEach((inscription, index) => {
     const id = inscription.id ?? `insc-${index}`;
     const text = decodeHtmlEntities(inscription.text ?? '');
-    
     const targetSurface = canonicalSurfaceTarget(inscription.surface);
     const scaleX = targetSurface === 'base' ? BASE_X_SCALE : HEADSTONE_X_SCALE;
     const scaleY = targetSurface === 'base' ? BASE_Y_SCALE : HEADSTONE_Y_SCALE;
-    const { xMm, yMm } = convertPositionToMm(inscription.position, targetSurface === 'base' ? 'base' : 'headstone');
+    const { xMm, yMm } = convertPositionToMm(
+      inscription.position,
+      targetSurface === 'base' ? 'base' : 'headstone',
+    );
     const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
-    const yShift = targetSurface === 'base' ? BASE_Y_SHIFT_MM : HEADSTONE_Y_SHIFT_MM;
-    const adjustedYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE + yShift;
-    const baseSize = clampCanonicalSize(resolveFontSizeMm(inscription.font, targetSurface === 'base' ? 'base' : 'headstone'));
-    // Apply display ratio: convert mm to display pixels, matching legacy getRatio() behavior
-    // This ensures text scales proportionally with headstone size changes
+    const baseYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE;
+    const baseSize = clampCanonicalSize(
+      resolveFontSizeMm(inscription.font, targetSurface === 'base' ? 'base' : 'headstone'),
+    );
     const scaledSize = clampCanonicalSize(baseSize * GLOBAL_LAYOUT_SCALE);
-    
+
+    if (targetSurface === 'headstone') {
+      recordRangeValue(headstoneRangeTracker, baseYPos);
+    }
+
     if (index === 0) {
       console.log('[Canonical Loader] First inscription size:', {
         text: inscription.text,
@@ -864,67 +926,108 @@ export async function loadCanonicalDesignIntoEditor(
         scaledSize,
       });
     }
-    
-    return {
-      id,
-      text,
-      font: inscription.font?.family ?? DEFAULT_CANONICAL_FONT,
-      sizeMm: scaledSize,
-      color: inscription.color ?? DEFAULT_CANONICAL_COLOR,
-      xPos,
-      yPos: adjustedYPos,
-      rotationDeg: clampCanonicalRotation(inscription.rotation?.z_deg),
+
+    pendingLines.push({
       target: targetSurface,
-      ref: createRef<Group | null>(),
-    };
+      line: {
+        id,
+        text,
+        font: inscription.font?.family ?? DEFAULT_CANONICAL_FONT,
+        sizeMm: scaledSize,
+        color: inscription.color ?? DEFAULT_CANONICAL_COLOR,
+        xPos,
+        yPos: baseYPos,
+        rotationDeg: clampCanonicalRotation(inscription.rotation?.z_deg),
+        target: targetSurface,
+        ref: createRef<Group | null>(),
+      },
+    });
   });
+
+  const canonicalMotifs = designData.elements?.motifs ?? [];
+
+  canonicalMotifs.forEach((motif, index) => {
+    const svgPath = resolveCanonicalMotifPath(motif.asset, motif.id ?? `motif-${index}`, motifAssetMap);
+    const color = motif.color ?? DEFAULT_CANONICAL_COLOR;
+    const target = canonicalSurfaceTarget(motif.surface);
+    const scaleX = target === 'base' ? BASE_X_SCALE : HEADSTONE_X_SCALE;
+    const scaleY = target === 'base' ? BASE_Y_SCALE : HEADSTONE_Y_SCALE;
+    const { xMm, yMm } = convertPositionToMm(motif.position, target === 'base' ? 'base' : 'headstone');
+    const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
+    const baseYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE;
+    const canonicalHeight = clampCanonicalMotifHeight(
+      resolveMotifHeightMm(motif, target === 'base' ? 'base' : 'headstone'),
+    );
+    const scaledHeight = clampCanonicalMotifHeight(canonicalHeight * GLOBAL_LAYOUT_SCALE);
+    const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
+    const flipX = !(motif.flip?.x ?? false);
+    const flipY = !(motif.flip?.y ?? false);
+
+    if (target === 'headstone') {
+      recordRangeValue(headstoneRangeTracker, baseYPos);
+    }
+
+    pendingMotifs.push({
+      svgPath,
+      color,
+      target,
+      xPos,
+      yPos: baseYPos,
+      heightMm: scaledHeight,
+      rotationZ,
+      flipX,
+      flipY,
+    });
+  });
+
+  const shouldAutoCenterHeadstone = (designData.source?.mlDir ?? '').toLowerCase() === 'forevershining';
+  const headstoneShiftMm = computeHeadstoneShift(
+    headstoneRangeTracker,
+    HEADSTONE_HALF_MM,
+    DEFAULT_HEADSTONE_Y_SHIFT_MM,
+    shouldAutoCenterHeadstone ? 'auto-center' : 'default',
+  );
+  if (shouldAutoCenterHeadstone) {
+    console.log('[Canonical Loader] Forevershining auto-centering applied:', {
+      appliedShiftMm: headstoneShiftMm,
+      defaultShiftMm: DEFAULT_HEADSTONE_Y_SHIFT_MM,
+      min: headstoneRangeTracker.min,
+      max: headstoneRangeTracker.max,
+    });
+  }
+  const baseShiftMm = BASE_Y_SHIFT_MM;
+
+  const canonicalLines: Line[] = pendingLines.map((entry) => ({
+    ...entry.line,
+    yPos: entry.line.yPos + (entry.target === 'base' ? baseShiftMm : headstoneShiftMm),
+  }));
 
   store.setInscriptions(canonicalLines);
   store.setActiveInscriptionText(canonicalLines[0]?.text ?? '');
   store.setSelectedInscriptionId(null);
 
-  const canonicalMotifs = designData.elements?.motifs ?? [];
-
-  if (canonicalMotifs.length > 0) {
-    console.log('[loadCanonicalDesignIntoEditor] Loading motifs from canonical data:', canonicalMotifs.length);
-    canonicalMotifs.forEach((motif, index) => {
-      const svgPath = resolveCanonicalMotifPath(motif.asset, motif.id ?? `motif-${index}`, motifAssetMap);
-      store.addMotif(svgPath);
+  if (pendingMotifs.length > 0) {
+    console.log('[loadCanonicalDesignIntoEditor] Loading motifs from canonical data:', pendingMotifs.length);
+    pendingMotifs.forEach((motifData) => {
+      store.addMotif(motifData.svgPath);
 
       const updatedState = useHeadstoneStore.getState();
       const addedMotifs = updatedState.selectedMotifs;
       if (!addedMotifs.length) return;
       const newMotif = addedMotifs[addedMotifs.length - 1];
 
-      const color = motif.color ?? DEFAULT_CANONICAL_COLOR;
-      store.setMotifColor(newMotif.id, color);
-
-      const target = canonicalSurfaceTarget(motif.surface);
-      const scaleX = target === 'base' ? BASE_X_SCALE : HEADSTONE_X_SCALE;
-      const scaleY = target === 'base' ? BASE_Y_SCALE : HEADSTONE_Y_SCALE;
-      const { xMm, yMm } = convertPositionToMm(motif.position, target === 'base' ? 'base' : 'headstone');
-      const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
-      const yShift = target === 'base' ? BASE_Y_SHIFT_MM : HEADSTONE_Y_SHIFT_MM;
-      const adjustedYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE + yShift;
-      
-      const canonicalHeight = clampCanonicalMotifHeight(resolveMotifHeightMm(motif, target === 'base' ? 'base' : 'headstone'));
-      // Apply display ratio: convert mm to display pixels, matching legacy getRatio() behavior
-      const scaledHeight = clampCanonicalMotifHeight(canonicalHeight * GLOBAL_LAYOUT_SCALE);
-      
-      const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
-      const flipX = !(motif.flip?.x ?? false);
-      const flipY = !(motif.flip?.y ?? false);  // Inverted since we removed negative scaleY
+      store.setMotifColor(newMotif.id, motifData.color);
 
       store.setMotifOffset(newMotif.id, {
-        xPos,
-        yPos: adjustedYPos,
+        xPos: motifData.xPos,
+        yPos: motifData.yPos + (motifData.target === 'base' ? baseShiftMm : headstoneShiftMm),
         scale: 1.0,
-        rotationZ,
-        heightMm: scaledHeight,
-        target,
+        rotationZ: motifData.rotationZ,
+        heightMm: motifData.heightMm,
+        target: motifData.target,
         coordinateSpace: 'absolute',
-        flipX,
-        flipY,
+        flipX: motifData.flipX,
+        flipY: motifData.flipY,
       });
     });
 

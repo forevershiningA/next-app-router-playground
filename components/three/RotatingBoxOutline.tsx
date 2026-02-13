@@ -62,23 +62,16 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   const localBox = new THREE.Box3();
   const childBox = new THREE.Box3();
   const inverseMatrix = new THREE.Matrix4();
+  const relativeMatrix = new THREE.Matrix4();
   const localCenter = new THREE.Vector3();
   const localSize = new THREE.Vector3();
   const worldCenter = new THREE.Vector3();
   const axisXVec = new THREE.Vector3();
   const axisYVec = new THREE.Vector3();
   const axisZVec = new THREE.Vector3();
-  const axisXDir = new THREE.Vector3();
-  const axisYDir = new THREE.Vector3();
-  const axisZDir = new THREE.Vector3();
-  const halfAxisX = new THREE.Vector3();
-  const halfAxisY = new THREE.Vector3();
-  const halfAxisZ = new THREE.Vector3();
-  const armXVector = new THREE.Vector3();
-  const armYVector = new THREE.Vector3();
+  const cameraDir = new THREE.Vector3();
   const cornerTemp = new THREE.Vector3();
   const endpointTemp = new THREE.Vector3();
-  const cameraDir = new THREE.Vector3();
   const clippingPlaneRef = React.useRef(new THREE.Plane());
   const animationStartRef = React.useRef<number | null>(null);
   const animationProgressRef = React.useRef(animateOnShow ? 0 : 1);
@@ -118,16 +111,10 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
       const helper = new THREE.LineSegments(geometry, material);
       helper.renderOrder = renderOrder;
-      helper.matrixAutoUpdate = false;
+      helper.raycast = () => null;
       helperRef.current = helper;
 
-      // Add helper to the scene root, not to the object's parent
-      // This way it won't inherit any transforms
-      let sceneRoot = obj;
-      while (sceneRoot.parent) {
-        sceneRoot = sceneRoot.parent;
-      }
-      sceneRoot.add(helper);
+      obj.add(helper);
     };
 
     attachHelper();
@@ -158,6 +145,10 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       animationStartRef.current = null;
       animationProgressRef.current = animateOnShow ? 0 : 1;
       return;
+    }
+
+    if (helper.parent !== obj) {
+      obj.add(helper);
     }
 
     if (!prevVisibleRef.current) {
@@ -191,6 +182,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     // Calculate oriented bounding box in local space
     obj.updateWorldMatrix(true, true);
+    helper.parent?.updateWorldMatrix(true, true);
     inverseMatrix.copy(obj.matrixWorld).invert();
     localBox.makeEmpty();
 
@@ -215,9 +207,9 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         child.geometry.computeBoundingBox();
       }
       if (child.geometry.boundingBox) {
+        relativeMatrix.multiplyMatrices(inverseMatrix, child.matrixWorld);
         childBox.copy(child.geometry.boundingBox);
-        childBox.applyMatrix4(child.matrixWorld);
-        childBox.applyMatrix4(inverseMatrix);
+        childBox.applyMatrix4(relativeMatrix);
         localBox.union(childBox);
       }
     });
@@ -235,6 +227,11 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       return;
     }
 
+    helper.position.copy(localCenter);
+    helper.rotation.set(0, 0, 0);
+    helper.scale.set(1, 1, 1);
+    helper.updateMatrixWorld();
+
     axisXVec.setFromMatrixColumn(obj.matrixWorld, 0);
     axisYVec.setFromMatrixColumn(obj.matrixWorld, 1);
     axisZVec.setFromMatrixColumn(obj.matrixWorld, 2);
@@ -243,31 +240,19 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     const axisYLength = axisYVec.length() || 1;
     const axisZLength = axisZVec.length() || 1;
 
-    axisXDir.copy(axisXVec).divideScalar(axisXLength);
-    axisYDir.copy(axisYVec).divideScalar(axisYLength);
-    axisZDir.copy(axisZVec).divideScalar(axisZLength);
+    const padXLocal = axisXLength !== 0 ? pad / axisXLength : pad;
+    const padYLocal = axisYLength !== 0 ? pad / axisYLength : pad;
+    const padZLocal = axisZLength !== 0 ? depthPadding / axisZLength : depthPadding;
 
-    const width = localSize.x * axisXLength;
-    const height = localSize.y * axisYLength;
-    const depth = localSize.z * axisZLength;
+    const halfWidthLocal = localSize.x / 2 + padXLocal;
+    const halfHeightLocal = localSize.y / 2 + padYLocal;
+    const halfDepthLocal = localSize.z / 2 + padZLocal;
 
-    const paddedWidth = width + pad * 2;
-    const paddedHeight = height + pad * 2;
-    const paddedDepth = depth + depthPadding * 2;
+    const lenXLocal = halfWidthLocal * 2 * lineLength;
+    const lenYLocal = halfHeightLocal * 2 * lineLength;
 
-    const halfWidth = paddedWidth / 2;
-    const halfHeight = paddedHeight / 2;
-    const halfDepth = paddedDepth / 2;
-
-    halfAxisX.copy(axisXDir).multiplyScalar(halfWidth);
-    halfAxisY.copy(axisYDir).multiplyScalar(halfHeight);
-    halfAxisZ.copy(axisZDir).multiplyScalar(halfDepth);
-
-    const lenX = paddedWidth * lineLength;
-    const lenY = paddedHeight * lineLength;
-
-    armXVector.copy(axisXDir).multiplyScalar(lenX);
-    armYVector.copy(axisYDir).multiplyScalar(lenY);
+    const bottomLiftLocal = axisYLength !== 0 ? bottomLift / axisYLength : bottomLift;
+    const frontExtensionLocal = axisZLength !== 0 ? frontExtension / axisZLength : frontExtension;
 
     worldCenter.copy(localCenter).applyMatrix4(obj.matrixWorld);
 
@@ -286,8 +271,15 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     }
 
     const positions: number[] = [];
-    const pushLine = (start: THREE.Vector3, end: THREE.Vector3) => {
-      positions.push(start.x, start.y, start.z, end.x, end.y, end.z);
+    const pushLine = (startLocal: THREE.Vector3, endLocal: THREE.Vector3) => {
+      positions.push(
+        startLocal.x,
+        startLocal.y,
+        startLocal.z,
+        endLocal.x,
+        endLocal.y,
+        endLocal.z,
+      );
     };
 
     const cornerSigns: [number, number, number][] = [
@@ -302,27 +294,29 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     ];
 
     cornerSigns.forEach(([sx, sy, sz]) => {
-      cornerTemp
-        .copy(worldCenter)
-        .addScaledVector(halfAxisX, sx)
-        .addScaledVector(halfAxisY, sy)
-        .addScaledVector(halfAxisZ, sz);
+      cornerTemp.set(
+        sx * halfWidthLocal,
+        sy * halfHeightLocal,
+        sz * halfDepthLocal,
+      );
 
-      if (sy < 0 && bottomLift !== 0) {
-        cornerTemp.addScaledVector(axisYDir, bottomLift);
+      if (sy < 0 && bottomLiftLocal !== 0) {
+        cornerTemp.y += bottomLiftLocal;
       }
 
-      if (frontExtension !== 0 && sz > 0) {
-        cornerTemp.addScaledVector(axisZDir, frontExtension);
+      if (frontExtensionLocal !== 0 && sz > 0) {
+        cornerTemp.z += frontExtensionLocal;
       }
 
       if (horizontalScale > 0.0001) {
-        endpointTemp.copy(cornerTemp).addScaledVector(armXVector, -sx * horizontalScale);
+        endpointTemp.copy(cornerTemp);
+        endpointTemp.x -= sx * lenXLocal * horizontalScale;
         pushLine(cornerTemp, endpointTemp);
       }
 
       if (verticalScale > 0.0001) {
-        endpointTemp.copy(cornerTemp).addScaledVector(armYVector, -sy * verticalScale);
+        endpointTemp.copy(cornerTemp);
+        endpointTemp.y -= sy * lenYLocal * verticalScale;
         pushLine(cornerTemp, endpointTemp);
       }
 
@@ -332,15 +326,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     const vertices = new Float32Array(positions);
     helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     helper.geometry.computeBoundingSphere();
-    
-    // Position helper at world origin with identity transform
-    // The geometry vertices are already in world space
-    helper.position.set(0, 0, 0);
-    helper.rotation.set(0, 0, 0);
-    helper.scale.set(1, 1, 1);
-    helper.updateMatrix();
-    helper.matrixAutoUpdate = false;
-    
+
     helper.visible = true;
   });
 
