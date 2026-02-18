@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage[margin=1in]{geometry}
+
+\title{Active Screen Gravity: A Running Planck Mass Approach to Inflation}
+\author{Albert De Boer (draft) \\ Independent Researcher \\ \texttt{albert@example.com} }
+\date{June 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Active Screen Gravity (ASG) extends conventional inflationary constructions by introducing a field-dependent running effective Planck mass $F(\phi)$ motivated by renormalization group flow. This modifies the Einstein-frame potential $U(\phi) = V(\phi)/F(\phi)^2$, generating a geometric tilt and suppressing tensor modes without fine-tuning the particle physics potential $V(\phi)$. We derive the slow-roll parameters, propose concrete forms for $F(\phi)$ and $V(\phi)$, and provide a numerical framework for parameter scans in the $(n_s, r)$ plane. The model predicts a trajectory with suppressed $r \lesssim 10^{-4}$ in benchmark regions, distinguishable from Starobinsky and $\alpha$-attractors. We assess robustness against ghosts, radiative corrections, and post-inflation GR recovery, and include numerical results from representative scans.
+\end{abstract}
+
+\section{Introduction}
+Active Screen Gravity (ASG) proposes that the effective Planck mass $F(\phi)$ runs during inflation due to RG-like dynamics, altering the geometry of field space. This produces the scalar spectral tilt $n_s$ geometrically, without requiring the particle physics potential $V(\phi)$ to carry the whole burden. In the Einstein frame the effective potential becomes $U = V/F^2$, and observational signatures are driven by the shape of $F(\phi)$.
+
+\section{Formalism}
+\subsection{Jordan-Frame Lagrangian}
+We consider the action in the Jordan frame,
+\begin{equation}
+\mathcal{S} = \int d^4x \sqrt{-g} \left[ \frac{1}{2} F(\phi) R - \frac{1}{2} g^{\mu\nu} \partial_\mu \phi \partial_\nu \phi - V(\phi) \right],
+\end{equation}
+with $F(\phi)>0$ and units $M_{\rm Pl}=1$ in the main text. $F(\phi)$ plays the role of a field-dependent effective Planck mass squared.
+
+\subsection{Einstein-Frame Transformation}
+Under the conformal transformation $\tilde g_{\mu\nu} = \Omega^2 g_{\mu\nu}$ with $\Omega^2 = F(\phi)$, the canonically normalized field $\chi$ satisfies
+\begin{equation}
+\left( \frac{d\chi}{d\phi} \right)^2 = \frac{1}{F} + \frac{3}{2} \left( \frac{F_{,\phi}}{F} \right)^2.
+\end{equation}
+The Einstein-frame potential reads
+\begin{equation}
+U(\phi) = \frac{V(\phi)}{F(\phi)^2}.
+\end{equation}
+
+\subsection{Slow-roll parameters}
+Slow-roll parameters in the Einstein frame are
+\begin{equation}
+\epsilon_U = \frac{1}{2} \left( \frac{U_{,\chi}}{U} \right)^2, \qquad \eta_U = \frac{U_{,\chi\chi}}{U}.
+\end{equation}
+Writing derivatives with respect to $\phi$,
+\begin{equation}
+\frac{U_{,\chi}}{U} = \frac{1}{\chi_{,\phi}} \left( \frac{V_{,\phi}}{V} - 2\frac{F_{,\phi}}{F} \right),
+\end{equation}
+so that
+\begin{equation}
+\epsilon_U = \frac{1}{2}\frac{1}{(\chi_{,\phi})^2} \left( \frac{V_{,\phi}}{V} - 2\frac{F_{,\phi}}{F} \right)^2.
+\end{equation}
+
+Observables are approximated by
+\begin{equation}
+n_s - 1 \approx -6\epsilon_U + 2\eta_U, \qquad r \approx 16\epsilon_U.
+\end{equation}
+
+The number of e-folds is
+\begin{equation}
+N = \int_{\phi_{\rm end}}^{\phi_*} \frac{U}{U_{,\chi}} d\chi = \int_{\phi_{\rm end}}^{\phi_*} \frac{U\,\chi_{,\phi}}{U_{,\phi}} d\phi,
+\end{equation}
+with $\phi_{\rm end}$ defined by $\epsilon_U(\phi_{\rm end}) = 1$.
+
+\section{Benchmark functions and numerical setup}
+We adopt a set of benchmark functional forms for $F(\phi)$ and $V(\phi)$ to explore the model's phenomenology.
+
+\subsection{$F(\phi)$ prototypes}
+\begin{itemize}
+\item Log-running: $F(\phi) = 1 + \beta \ln(1 + \phi/\mu)$ (RG-inspired).
+\item Tanh-screen: $F(\phi) = 1 + \beta \tanh(\phi/\phi_0)$ (saturating recovery to GR).
+\item Power-law: $F(\phi) = 1 + \gamma (\phi)^p$ (analytic control).
+\end{itemize}
+
+\subsection{$V(\phi)$ prototypes}
+\begin{itemize}
+\item Plateau: $V(\phi) = V_0 (1 - e^{-\alpha \phi})^2$.
+\item Quadratic: $V(\phi) = \tfrac{1}{2} m^2 \phi^2$.
+\end{itemize}
+
+\subsection{Numerical details}
+We implemented the model in Python (SciPy) and scanned $\beta \in [0,0.05]$ for the log-running $F$ with plateau $V$ and $\alpha=1$, $\mu=1$. For each parameter point we: (i) compute $\chi_{,\phi}$ numerically; (ii) find $\phi_{\rm end}$ from $\epsilon_U=1$; (iii) solve for $\phi_*$ matching $N=50,60$; (iv) evaluate $(n_s,r)$. Scan outputs are available as CSV (see attached). Integration difficulties appear for extreme parameters (very flat effective $U$); we used robust bracketing and accumulation strategies described in the supplement.
+
+\section{Representative numerical results}
+Figure~\ref{fig:nsr} shows the $(n_s,r)$ trajectories for the benchmark scan and the reheating band $N=50\text{--}60$. Results confirm that increasing $|\beta|$ can substantially suppress $r$ while shifting $n_s$; moderate $\beta$ values map into the Planck-preferred range with $r\lesssim 10^{-3}$.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{asg_ns_r_trajectory.png}
+\caption{ASG trajectory in the $(n_s,r)$ plane for log-running $F$ and plateau $V$. The shaded region marks the reheating band $N=50$--$60$.}
+\label{fig:nsr}
+\end{figure}
+
+Scan results are attached as \texttt{asg_scan_results_corrected.csv}.
+
+\section{Theoretical validation and UV considerations}
+\subsection{Ghost freedom and stability}
+Ghost freedom requires $\chi_{,\phi}^2>0$. For the benchmark functions used in the scan this condition holds across the inflationary path. Stability of scalar perturbations demands $c_s^2>0$; under slow-roll and minimal couplings to matter this is satisfied in the model's domain. A complete perturbation analysis is left to future work.
+
+\subsection{Radiative corrections}
+We estimate the 1-loop Coleman-Weinberg correction using
+\begin{equation}
+\delta V_{\rm 1-loop} \sim \frac{1}{64\pi^2} M(\phi)^4 \ln\frac{M(\phi)^2}{\Lambda^2},
+\end{equation}
+where $M(\phi)$ are the relevant field-dependent mass scales. If $F(\phi)$ arises from weakly-coupled RG flow or from a protected modulus (approximate shift symmetry), loop corrections can be suppressed below the tree-level potential for $\beta\lesssim 10^{-2}$.
+
+\subsection{Post-inflation GR recovery}
+Forms of $F(\phi)$ that saturate at small $\phi$ (e.g., tanh-screen) permit $F\to 1$ after inflation, avoiding variations of Newton's constant constrained by local tests ($|\dot G/G| \lesssim 10^{-13}\ \text{yr}^{-1}$) and BBN bounds. Embedding $F$ within a stabilized moduli potential is a natural route for UV completion.
+
+\section{Observational signatures and comparisons}
+ASG couples the tilt $n_s$ and tensor amplitude $r$ through geometric running. Compared with Starobinsky ($n_s\approx0.968, r\approx 3\times10^{-3}$) and $\alpha$-attractors, ASG can yield significantly smaller $r$ for similar $n_s$, or produce the same $r$ with a distinct correlation to $n_s$. LiteBIRD and next-generation CMB experiments will probe the viable region of parameter space.
+
+\section{Conclusions and outlook}
+Active Screen Gravity provides a geometrically-driven, testable alternative to conventional inflationary model-building. The next steps include: (i) a detailed perturbation analysis and non-Gaussianity estimate; (ii) a comprehensive 1-loop renormalization analysis; (iii) exploration of UV embeddings (dilaton/moduli, asymptotic safety). Source code and scan outputs are included in the supplemental ZIP.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

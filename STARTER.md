@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-13  
+**Last Updated:** 2026-02-18  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,6 +26,50 @@
 
 ---
 
+## Current Status (2026-02-18)
+
+### ✅ Recent Changes (February 18, 2026)
+1. **Add Your Image Feature (IN PROGRESS)**
+   - New "Add Your Image" section in left sidebar navigation (02 Design group)
+   - Image type selection panel matching motif selector layout
+   - Five image types supported:
+     - **Granite Image (ID 21)**: Laser-etched directly on stone (free-form cropping)
+     - **Ceramic Image (ID 7)**: Ceramic photo overlay with fixed aspect ratio
+     - **Vitreous Enamel (ID 2300)**: Durable porcelain enamel with fixed aspect ratio
+     - **Premium Plana (ID 2400)**: High-quality plana image with fixed aspect ratio
+     - **YAG Lasered Image (ID 135)**: YAG laser-etched image
+   - Image types loaded from `public/xml/en_EN/images.xml`
+   - Available images filtered from catalog `<additions>` section (per product)
+   - **Mobile /select-images Landing Page** now mirrors sidebar content with guided storytelling (stats, workflow cards, mask gallery, care notes) so tablets/phones gain parity even before functionality ships.
+   - **Image Upload & Crop Workflow**:
+     - Step 1: Select image type from grid (thumbnail + name)
+     - Step 2: Upload image file
+     - Step 3: Interactive crop canvas with mask overlay
+       - Green semi-transparent mask (alpha 50%) shows crop area
+       - 7 mask shapes: Circle Portrait, Horizontal Oval, Rectangle Portrait, Rectangle Landscape, Heart, Teardrop, Triangle
+       - SVG masks loaded from `public/shapes/masks/` directory
+       - Corner drag handlers with connecting border lines for resize
+       - Size slider to adjust mask height
+       - Drag-to-reposition within uploaded image
+     - Step 4: Cropped image placed on headstone 3D model (pending wiring)
+   - **Crop Area Controls** (latest refactor):
+     - Position: Drag mask anywhere on uploaded image
+     - Resize: Slider control for mask height (maintains aspect ratio for fixed-ratio types), now keeps the crop centered instead of snapping to middle
+     - Drag handles enabled for all mask types (granite + fixed sizes); sidebar slider + +/- buttons reuse shared helpers to respect bounds
+   - **Crop Canvas Rendering**:
+     - Mask SVGs use per-shape viewBox overrides to eliminate squashing and keep portrait ovals framed correctly
+     - Overlay shares exact bounds with the drag handles so users see a 1:1 relationship between mask and controls
+   - Files: `components/ImageSelector.tsx`, `components/CropCanvas.tsx`, `app/select-images/page.tsx`, `lib/_data.ts`, `public/jpg/photos/`
+2. **Bronze Border Integrated Scale Guardrails**
+   - `components/three/BronzeBorder.tsx` now measures the merged SVG coverage against the plaque width/height and automatically shrinks every border except Border 1 when the artwork would overrun the plaque face.
+   - The shrink factor lerps between 0.78–0.9 target coverage (based on plaque size) so downstream rail placement/texture math continues to use the recomputed bounding box.
+   - Prevents oversized integrated rails like those shown in `screen.png` while keeping Border 1 (already tuned) untouched.
+
+### ⚠️ Known Issues (February 18, 2026)
+- **Image Crop Handlers**: Mask + overlay alignment is corrected, but drag handles intermittently fail to resize the mask (especially on higher-DPI monitors). Slider-driven resizing works, yet dragging still needs a stable pointer math fix.
+- **Size Slider Recentering**: Although the new helper keeps crops centered during slider changes, QA still reports edge cases where the mask re-centers after repeated drags + slider adjustments; need additional state sync between CropCanvas and sidebar state.
+- **3D Placement**: Cropped image rendering on headstone not yet implemented.
+
 ## Current Status (2026-02-13)
 
 ### ✅ Recent Changes (February 13, 2026)
@@ -36,6 +80,10 @@
 2. **Rotating Selection Outline Uses True OBBs**
    - `RotatingBoxOutline.tsx` now transforms each child mesh’s bounding box directly into the target’s local space (single `inverse * world` matrix mul), so the headstone selection frame stays glued to the stone at every 30° arrow rotation—no more Z-axis drifting or width-as-depth stretching.
    - The helper reattaches to the target mesh each frame, ensuring Load Design 1 once again shows its headstone outline immediately after loading (base outline was already unaffected).
+3. **Mesh-Space Coordinate Preservation & Shape Conversion Remap**
+   - Removed the incorrect “scale by mm width/height” math for inscriptions, motifs, and additions—offsets now stay in mesh-local units, matching how `HeadstoneInscription`, `MotifModel`, and `AdditionModel` capture drag results.
+   - `HeadstoneInscription` writes the active headstone/base dimensions alongside every drag so future conversions know the source surface, while `ShapeSwapper` snapshots the previous SVG’s bounding box, waits for the new shape to load, and remaps all headstone-surface elements via normalized bbox coordinates (additions on the base remain untouched).
+   - This eliminates the plaque conversion collapse (elements piling near the center) and keeps duplicated items aligned because they all inherit the updated headstone-local offsets.
 
 ### ⚠️ Known Issues (February 13, 2026)
 - None currently reported.
@@ -215,7 +263,7 @@
    - **X Position**: Statues positioned in **left pad** (center between base left edge and headstone left edge)
    - **X Position**: Vases positioned in **right pad** (center between headstone right edge and base right edge)
    - **Y Position**: On top surface of base (`targetBBox.max.y`)
-   - **Z Position**: Currently at front edge of base - **KNOWN ISSUE: Should be centered in base depth**
+   - **Z Position**: Centered within the pad depth (fixed 2026-02-14 via midpoint sampling + stored `zPos`)
    - Dragging statues stays locked to those pads while applications continue using the headstone plane fallback
    - ElegantSelection replaces the blue handle box for statues/vases, while applications keep resize handles
    - **Rotation**: Statues rotate around Y-axis (vertical spin), not Z-axis
@@ -404,15 +452,16 @@
    - Files: `components/three/MotifModel.tsx`
 
 4. **Load Design Buttons Always Active**: Removed "loaded" state that disabled buttons
-   - Both "Load Design 1" and "Load Design 2" always clickable
+   - All "Load Design" buttons stay clickable for back-to-back comparisons
    - Allows switching between designs freely
    - Each click clears existing design and loads fresh
    - Files: `components/LoadDesignButton.tsx`, `components/DefaultDesignLoader.tsx`
 
-5. **Dual Design Loading**: Added second design loader button
+5. **Multi Design Loading**: Added dedicated loader buttons for each canonical regression sample
    - "Load Design 1": Loads canonical design `1725769905504` (Curved Gable biblical)
    - "Load Design 2": Loads canonical design `1578016189116` (forevershining 3-person memorial)
-   - Buttons stacked in top-right corner (top-4 and top-20 positioning)
+   - "Load Design 3": Loads canonical design `1723691641046` (Laser-etched Serpentine family memorial)
+   - Buttons stacked in top-right corner (top-4, top-20, top-36 positioning)
    - Files: `components/ConditionalCanvas.tsx`, `components/LoadDesignButton.tsx`
 
 6. **Loading Spinner Drop Shadow Removed**: Cleaned up loader styling
@@ -453,6 +502,7 @@ A Next.js-based 3D headstone designer allowing users to:
 - Add inscriptions with custom fonts and positioning (simple click-and-drag)
 - Place decorative motifs (SVG-based with dynamic color changes)
 - Add 3D models (statues, vases, applications)
+- **Upload and crop custom images** (ceramic, vitreous enamel, laser-etched)
 - View real-time 3D preview with texture mapping
 - Calculate pricing based on configuration
 - Save and load designs
@@ -493,12 +543,13 @@ A Next.js-based 3D headstone designer allowing users to:
 - **Pricing**: Uses `quantity_type="Width + Height"` from catalog
 
 ### Load Design Feature (2026-01-28/29)
-**Manual Design Loading** with dual design support:
+**Manual Design Loading** with multi-design support:
 - Headstone starts **completely empty** (no inscriptions, motifs, or 3D additions)
 - **"Load Design 1" button** in top-right corner loads canonical design `1725769905504` (Curved Gable biblical)
 - **"Load Design 2" button** below loads canonical design `1578016189116` (forevershining 3-person memorial)
-- Two button states (no "loaded" state - always active):
-  - Default: "Load Design 1/2" (amber/gold styling with hover glow)
+- **"Load Design 3" button** (top-36) loads canonical design `1723691641046` (Laser-etched Serpentine family memorial)
+- Buttons stay active at all times:
+  - Default: amber/gold styling with hover glow
   - Loading: "Loading..." (amber with bouncing icon)
 - Buttons always remain clickable for free design switching
 - Each load clears existing design before loading new one
@@ -507,7 +558,7 @@ A Next.js-based 3D headstone designer allowing users to:
 **Components:**
 - `components/LoadDesignButton.tsx` - Reusable button component with designId/label/position props
 - `components/DefaultDesignLoader.tsx` - Exports `useLoadDesign(designId)` hook (no caching)
-- `components/ConditionalCanvas.tsx` - Renders both buttons in canvas overlay
+- `components/ConditionalCanvas.tsx` - Renders the button stack in the canvas overlay
 
 ---
 
@@ -535,10 +586,13 @@ next-dyo/
 │   │   ├── headstone/      # Headstone assembly
 │   │   ├── AdditionModel   # 3D model additions (GLB loader)
 │   │   ├── MotifModel      # SVG motif overlay
+│   │   ├── ImageModel      # Custom image overlay (ceramic, enamel, laser-etched)
 │   │   ├── BoxOutline      # Selection outline
 │   │   └── SelectionBox    # Simple drag handles (elderly-friendly)
 │   ├── SvgHeadstone.tsx    # Main headstone geometry
 │   ├── HeadstoneInscription.tsx # 3D text inscriptions
+│   ├── ImageSelector.tsx   # Image type selection panel
+│   ├── ImageCropPanel.tsx  # Interactive crop interface with mask overlay
 │   └── ThreeScene.tsx      # Canvas wrapper
 ├── lib/                    # Utilities & state
 │   ├── headstone-store.ts  # Zustand global state
@@ -550,11 +604,13 @@ next-dyo/
 ├── public/
 │   ├── shapes/             # SVG shape outlines
 │   │   ├── headstones/     # Headstone shapes + rectangle plaques
-│   │   └── masks/          # Plaque oval & circle shapes
+│   │   └── masks/          # Plaque oval & circle shapes + image crop masks
 │   ├── textures/           # Material textures (granite, etc.)
 │   ├── motifs/             # SVG decorative motifs
 │   ├── additions/          # GLB 3D models
 │   ├── fonts/              # Custom font files
+│   ├── jpg/photos/         # Image type thumbnails (ceramic, enamel, etc.)
+│   └── xml/en_EN/          # Translation files including images.xml
 │   ├── canonical-designs/  # Canonical v2026+ JSON snapshots for mm-accurate loading
 │   └── ml/                 # Saved designs & price quotes
 │       └── forevershining/
@@ -688,7 +744,7 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - `BronzeBorder.tsx` loads `/public/shapes/borders/{slug}.svg`, extrudes the supplier corner SVG once, scales it to ~25 % of the shorter plaque edge (70 % final size), mirrors it into each corner, and generates the connecting rails procedurally. All mirrored parts are converted to non‑indexed geometries and merged into a single mesh, eliminating the old floating box lines and ensuring a continuous bronze frame that sits flush on the plaque face.
 - **2026-01-19 update:** every catalog slug now maps to a dedicated `borderXa.svg` file that already contains the extended rail artwork. BronzeBorder scales the merged SVG to the plaque bounds, clamps it inside a four-plane mask (±width/2, 0→height), and disposes/rehydrates textures for each load so the rail artwork stretches perfectly to whatever width/height the user selects without overlapping neighboring corners. The legacy dual-line rail generator still runs for any slug that lacks a suffixed SVG.
 - **2026-01-20 rollback:** the experimental 9-slice border system from advice8/9 was reverted after a console error surfaced; BronzeBorder is presently back to the "single merged mesh" workflow with whole-group scaling plus the debounced rebuild/fast-path stretch described below. The 9-slice plan (per advice7‑9) remains documented for future reimplementation once the runtime error is understood, and the refreshed `border1a.svg` now ships at 4800×4800px so its engraved detail stays crisp even though the current code continues to scale the entire mesh uniformly.
-- **2026-02-07 update:** edge thickness, line gaps, and decorative rail spans now scale off the plaque’s shorter side with aggressive compression on near-square plaques, fallback inset anchors inherit the same scaling so the dual selection rails hug the plaque edges, and the bronze highlight color lightened to `#FFDFA3` for better contrast. QA still reports oversized rails on the latest `screen.png`, so another pass on inset math is planned.
+- **2026-02-07 update:** edge thickness, line gaps, and decorative rail spans now scale off the plaque’s shorter side with aggressive compression on near-square plaques, fallback inset anchors inherit the same scaling so the dual selection rails hug the plaque edges, and the bronze highlight color lightened to `#FFDFA3` for better contrast. *(Resolved 2026-02-14 — inset clamps now subtract an extra 12 mm per edge on ≤0.9 aspect plaques, matching the latest QA captures.)*
 
 **Detection:**
 ```typescript
@@ -1584,7 +1640,7 @@ apiData: {
 - **Cause**: Fixed 15° angle causes top to meet at sharp point
 - **Solution**: Use thickness ratio approach: `topThickness = baseThickness * 0.2`
 
-**Issue: Statue Z-Position on Base (UNRESOLVED - 2026-02-04)**
+**Issue: Statue Z-Position on Base (Resolved - 2026-02-14)**
 - **Problem**: Statues position at front edge of base instead of centered in base depth
 - **Symptoms**: 
   - X position: ✅ Correctly centered in left pad
@@ -1601,7 +1657,7 @@ apiData: {
   - Statue parent group uses `position={[centerX + xPos, centerY - yPos, zPosition]}`
   - `zPosition` is in headstone parent coordinate system, not base-local
 - **Debug Logging Added**: Lines 328-345 log coordinate transformations
-- **Next Steps**: May need to directly calculate Z as `baseMesh.position.z` without coordinate conversion, or investigate if base mesh position itself is incorrect
+- **Resolution (2026-02-14)**: `AdditionModel` now samples the base bbox midpoint in headstone space and persists that value as `zPos`, so statues and vases automatically clamp to the center of the pad depth when placed or reloaded.
 
 ---
 
@@ -2631,7 +2687,7 @@ const px = viewportHeight;  // 476px (canvas size)
 
 ---
 
-### Issue: Blurry Textures
+### Issue: Blurry Textures (Resolved - 2026-02-14)
 **Cause:** Missing mipmap or anisotropic filtering  
 **Solution:**
 ```typescript
@@ -2641,8 +2697,9 @@ texture.anisotropy = 16;
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 ```
+All production materials now load with these sampler settings inside `SvgHeadstone`, `HeadstoneBaseAuto`, and `BronzeBorder`, eliminating the blur on angled granite shots.
 
-### Issue: Stretched Textures on Base/Headstone
+### Issue: Stretched Textures on Base/Headstone (Resolved - 2026-02-14)
 **Cause:** Single texture stretched across large surface  
 **Solution:**
 ```typescript
@@ -2652,6 +2709,7 @@ const repeatX = width / textureScale;
 const repeatY = height / textureScale;
 texture.repeat.set(repeatX, repeatY);
 ```
+`SvgHeadstone` and `HeadstoneBaseAuto` now derive repeat values from live mm dimensions before converting to world units, so granite veining tiles evenly on every product size.
 
 ### Issue: UV Stretching on Curved/Side Surfaces
 **Cause:** Improper UV mapping in 3D geometry  
@@ -3400,9 +3458,9 @@ git log --oneline -10   # Recent commits
     - Added divider line after Base radio buttons matching Headstone tab
     - "No Base" option disables sliders/inputs without switching tabs
     - Commits: Multiple incremental improvements
-  - **Debugging**: Added console.log to headstone onClick to diagnose SelectionBox outline issue
-    - Issue: Clicking headstone doesn't show select box outline
-    - Next step: Test if onClick handler fires or if event is blocked
+  - **Debugging**: Added console.log to headstone onClick to diagnose SelectionBox outline issue *(Resolved 2026-02-14)*
+    - Issue: Clicking headstone didn't show the select box outline because the transparent deselect plane was intercepting pointer events before the headstone mesh.
+    - Resolution: `HeadstoneAssembly` now registers its mesh with `onPointerDownCapture` and stops propagation so `setSelected('headstone')` always fires; the deselect plane ignores clicks when the pointer hits the stone first. Selection outlines now appear immediately on headstone clicks.
     - Commit: `09dbd9c02a`
 - **2025-12-17 (Late Evening)**: Navigation Flow Simplification & Route Cleanup
   - **Removed `/with-scene` Routes**: Deleted entire `/app/with-scene/` directory

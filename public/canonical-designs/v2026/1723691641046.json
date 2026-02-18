@@ -1,0 +1,219 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-02-17T10:50:17.361Z",
+  "units": "mm",
+  "source": {
+    "id": "1723691641046",
+    "slug": "1723691641046",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1723691641046.json",
+    "savedAt": "2026-02-17T10:50:17.361Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser Etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "headstone",
+    "category": "unknown",
+    "title": "Laser Etched Black Granite Headstone",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Gold-Spots.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 946.15,
+      "height_mm": 558.8000000000001
+    },
+    "viewportPx": {
+      "width": 1246,
+      "height": 679,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 812.8000000000002,
+      "height_mm": 558.8000000000001,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Gold-Spots.webp"
+    },
+    "base": {
+      "width_mm": 946.15,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Gold-Spots.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Beers-Laxamana",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 108,
+          "size_px": 131.231,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 1.257,
+          "y_px": -126.778
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Baxter",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 73,
+          "size_px": 88.703,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -256.017,
+          "y_px": -49.987
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "“To love another person is to see the face of God”",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 38,
+          "size_px": 46.174,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 210
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Sylvester",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 94,
+          "size_px": 114.22,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 219.267,
+          "y_px": -44.738
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "November 6, 1961",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 36,
+          "size_px": 43.744,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 228.013,
+          "y_px": 3.03
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "April 24, 1970",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 36,
+          "size_px": 43.744,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -257.519,
+          "y_px": 1.783
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_mm": 32.919,
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_208_03",
+        "path": "/shapes/motifs/1_208_03.svg"
+      }
+    ]
+  }
+}

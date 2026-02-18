@@ -384,6 +384,8 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   };
 
   const offset = motifOffsets[id] ?? defaultOffset;
+  const scaledOffsetX = offset.xPos ?? 0;
+  const scaledOffsetY = offset.yPos ?? 0;
 
   const unitsPerMeter = Math.abs(headstone.unitsPerMeter) > 1e-6 ? Math.abs(headstone.unitsPerMeter) : 1000;
   const mmToLocalUnits = unitsPerMeter / 1000;
@@ -418,8 +420,8 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
     ?? (offset.target !== undefined ? 'absolute' : 'offset');
   const isCanonical = coordinateSpace === 'absolute';
   
-  const displayX = isCanonical ? offset.xPos : centerX + offset.xPos;
-  const displayY = isCanonical ? offset.yPos : centerY - (offset.yPos || 0);
+  const displayX = isCanonical ? scaledOffsetX : centerX + scaledOffsetX;
+  const displayY = isCanonical ? scaledOffsetY : centerY - scaledOffsetY;
 
   return (
     <>

@@ -659,7 +659,25 @@ function buildBorderGroup(
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
-  const scaledBounds = merged.boundingBox!;
+  let scaledBounds = merged.boundingBox!;
+
+  if (integratedRails && borderSlug !== 'border1a' && width > 0 && height > 0) {
+    const coverageX = (scaledBounds.max.x - scaledBounds.min.x) / width;
+    const coverageY = (scaledBounds.max.y - scaledBounds.min.y) / height;
+    const coverageLerp = clamp01((minDimensionMm - 320) / 520);
+    const minTargetCoverage = 0.78;
+    const maxTargetCoverage = 0.9;
+    const targetCoverage = THREE.MathUtils.lerp(minTargetCoverage, maxTargetCoverage, coverageLerp);
+    const dominantCoverage = Math.max(coverageX, coverageY);
+
+    if (dominantCoverage > targetCoverage) {
+      const shrink = Math.max(0.25, targetCoverage / Math.max(1e-6, dominantCoverage));
+      merged.scale(shrink, shrink, 1);
+      merged.computeBoundingBox();
+      scaledBounds = merged.boundingBox!;
+    }
+  }
+
   const cornerSpanX = scaledBounds.max.x - scaledBounds.min.x;
   const cornerSpanY = scaledBounds.max.y - scaledBounds.min.y;
 

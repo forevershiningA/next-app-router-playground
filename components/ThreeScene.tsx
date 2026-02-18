@@ -174,16 +174,22 @@ export default function ThreeScene() {
   const contextLostHandler = useRef<any>(null);
   const contextRestoredHandler = useRef<any>(null);
   const previousPathRef = useRef<string | null>(null);
+  const hasPlayedSelectSizeFade = useRef(false);
 
 
-  // Force a fresh fade when landing on /select-size from non-canvas routes
+  // Only play the /select-size fade the first time we visit it per session
   useEffect(() => {
-    const previousPath = previousPathRef.current;
-    const cameFromCanvasRoute = previousPath ? CANVAS_ROUTES.has(previousPath) : false;
-
-    if (pathname === '/select-size' && previousPath !== '/select-size' && !cameFromCanvasRoute) {
-      setShouldAnimateFade(true);
-      setSceneReady(false);
+    if (pathname === '/select-size') {
+      if (!hasPlayedSelectSizeFade.current) {
+        hasPlayedSelectSizeFade.current = true;
+        setShouldAnimateFade(true);
+        setSceneReady(false);
+      } else {
+        setShouldAnimateFade(false);
+        setSceneReady(true);
+      }
+    } else {
+      setShouldAnimateFade(false);
     }
 
     previousPathRef.current = pathname ?? null;

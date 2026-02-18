@@ -1,0 +1,245 @@
+Good — this last screenshot confirms something important.
+
+This is **not just width scaling**.
+
+This is a **coordinate-system mismatch between two shape types**.
+
+When you convert:
+
+```
+Traditional Headstone (arched, tall)
+→ Bronze Plaque (rectangular, shorter)
+```
+
+your layout engine still assumes the *original headstone's vertical reference space*.
+
+That’s why everything collapses toward the lower middle.
+
+---
+
+# 🎯 The Real Root Cause
+
+Your system is doing this:
+
+```
+Store element positions in absolute mm or meters
+Apply them directly to a different geometry
+```
+
+But the two shapes do NOT share:
+
+* Same height
+* Same origin reference
+* Same vertical usable area
+* Same silhouette top boundary
+
+So when you swap shape:
+
+The layout space changes
+But the element coordinate space does not.
+
+---
+
+# 🧠 Why It Looks Centered on Headstone but Not Plaque
+
+The headstone shape has:
+
+* A curved top
+* Taller usable engraving zone
+
+The plaque has:
+
+* Flat top
+* Shorter engraving zone
+
+Your elements are positioned relative to the headstone’s taller internal engraving region.
+
+When applied to plaque, the same Y values are too low relative to new height.
+
+---
+
+# 🔥 The Correct Architectural Fix (Not a Patch)
+
+You must separate:
+
+```
+Physical mesh dimensions
+from
+Layout coordinate space
+```
+
+Right now they are the same.
+
+They should not be.
+
+---
+
+# ✅ Proper Solution: Introduce a “Design Layout Space”
+
+Each shape must define:
+
+```
+layoutWidth
+layoutHeight
+layoutOffsetY
+```
+
+Example:
+
+Traditional Headstone:
+
+```
+layoutHeight = full mesh height
+layoutOffsetY = 0
+```
+
+Bronze Plaque:
+
+```
+layoutHeight = usable engraving zone only
+layoutOffsetY = maybe slightly higher
+```
+
+---
+
+# Then convert like this:
+
+Instead of:
+
+```tsx
+xPos={line.xPos}
+yPos={line.yPos}
+```
+
+Do:
+
+```tsx
+const scaleX = currentLayoutWidth / baseLayoutWidth;
+const scaleY = currentLayoutHeight / baseLayoutHeight;
+
+const x = line.xPos * scaleX;
+const y = line.yPos * scaleY + layoutOffsetY;
+```
+
+Now layout is mapped from one shape’s engraving space → another’s engraving space.
+
+---
+
+# 🚨 Why Your Current Conversion Collapses
+
+Because you're doing:
+
+```
+headstone height = ~1000mm usable
+plaque height = ~600mm usable
+```
+
+But your Y values still assume the taller system.
+
+So they get proportionally pushed down.
+
+---
+
+# 💡 The Clean Long-Term Fix
+
+Store layout positions as:
+
+```
+u = 0..1 horizontally
+v = 0..1 vertically
+```
+
+Relative to shape’s layout space.
+
+Then render with:
+
+```ts
+x = (u - 0.5) * layoutWidth;
+y = (v - 0.5) * layoutHeight;
+```
+
+Now:
+
+* Change width → layout scales cleanly
+* Change height → layout scales cleanly
+* Change shape type → layout still scales cleanly
+* Convert headstone → plaque → works automatically
+
+No special case code.
+
+---
+
+# 🎯 Why This Is Happening Specifically In Your System
+
+Because:
+
+* You built dynamic geometry scaling first
+* Then added shape switching
+* But layout space was never abstracted from mesh space
+
+So now layout and geometry are fighting each other.
+
+---
+
+# 📌 Immediate Minimal Fix (If You Want Fast Repair)
+
+Inside `ShapeSwapper.tsx`, when `shapeType` changes:
+
+1. Capture previous width/height
+2. Apply proportional rescale to all inscription/addition positions
+
+Like:
+
+```ts
+const scaleX = newWidthMm / oldWidthMm;
+const scaleY = newHeightMm / oldHeightMm;
+
+line.xPos *= scaleX;
+line.yPos *= scaleY;
+```
+
+Run that once when converting shape.
+
+That will stop the collapse.
+
+---
+
+# 🧠 My Recommendation For Your System (Because Yours Is Advanced)
+
+You’re building a professional-grade designer.
+
+Do not patch this.
+
+Introduce:
+
+```
+layoutSpace
+```
+
+separate from:
+
+```
+meshSpace
+```
+
+It will solve:
+
+* Shape conversion
+* Width/height changes
+* Scaling consistency
+* Border offsets
+* Motif positioning
+* Future curved plaques
+
+All at once.
+
+---
+
+If you want, tell me:
+
+* Are your `xPos/yPos` in meters (like 0.12, -0.3)?
+* Or in mm (like 150, 500)?
+
+That determines whether we apply scale before or after unit conversion.
+
+And I’ll give you the exact 6-line change to make it stable immediately.

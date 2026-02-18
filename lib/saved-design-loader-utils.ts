@@ -83,6 +83,49 @@ const DEFAULT_CANONICAL_FONT = 'Garamond';
 const DEFAULT_CANONICAL_COLOR = '#000000';
 export const DEFAULT_CANONICAL_DESIGN_VERSION = 'v2026';
 
+type ShapeDirectory = 'headstones' | 'masks';
+
+const CANONICAL_SHAPE_MAP: Record<string, { file: string; directory?: ShapeDirectory }> = {
+  'bronze plaque': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle (landscape)': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle (portrait)': { file: 'portrait.svg', directory: 'headstones' },
+  'oval (landscape)': { file: 'oval_horizontal.svg', directory: 'masks' },
+  'oval (portrait)': { file: 'oval_vertical.svg', directory: 'masks' },
+  circle: { file: 'circle.svg', directory: 'masks' },
+};
+
+const DEFAULT_SHAPE_FILE = 'serpentine.svg';
+
+const normalizeShapeKey = (value: string) => value.toLowerCase().replace(/\s+/g, ' ').trim();
+
+const stripParenthetical = (value: string) =>
+  value.replace(/\s*\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
+
+const sanitizeShapeSlug = (value: string) =>
+  value
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+const resolveCanonicalShapeUrl = (shapeName?: string) => {
+  if (!shapeName) {
+    return `/shapes/headstones/${DEFAULT_SHAPE_FILE}`;
+  }
+
+  const normalized = normalizeShapeKey(shapeName);
+  const normalizedWithoutParens = stripParenthetical(normalized) || normalized;
+  const override =
+    CANONICAL_SHAPE_MAP[normalized] ?? CANONICAL_SHAPE_MAP[normalizedWithoutParens];
+
+  if (override) {
+    const directory = override.directory ?? 'headstones';
+    return `/shapes/${directory}/${override.file}`;
+  }
+
+  const slug = sanitizeShapeSlug(normalizedWithoutParens);
+  const fileName = slug ? `${slug}.svg` : DEFAULT_SHAPE_FILE;
+  return `/shapes/headstones/${fileName}`;
+};
+
 const clampCanonicalSize = (value?: number) => {
   if (typeof value !== 'number' || Number.isNaN(value)) return 40;
   return Math.min(MAX_CANONICAL_INSCRIPTION_SIZE, Math.max(MIN_CANONICAL_INSCRIPTION_SIZE, Math.round(value)));
@@ -239,7 +282,8 @@ const MATERIAL_TEXTURES: Record<string, string> = {
   // Glory Black (for laser etched - IDs 18 and 19)
   'glory-black': '/textures/forever/l/Glory-Black-2.webp',
   'glory black': '/textures/forever/l/Glory-Black-2.webp',
-  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
+  'glory-gold-spots': '/textures/forever/l/Glory-Gold-Spots.webp',
+  'glory gold spots': '/textures/forever/l/Glory-Gold-Spots.webp',
   
   // Other common materials
   'african-black': '/textures/forever/l/African-Black.webp',
@@ -557,6 +601,10 @@ export async function loadCanonicalDesignIntoEditor(
   const canonicalInscriptionSnapshot = designData.elements?.inscriptions ?? [];
   const canonicalMotifSnapshot = designData.elements?.motifs ?? [];
   const headstoneHalf = headstone?.height_mm ? headstone.height_mm / 2 : null;
+  const normalizedMlDir = (designData.source?.mlDir ?? '').toLowerCase();
+  const isForevershining = normalizedMlDir === 'forevershining';
+  const needsLegacyStageCompensation = !isForevershining;
+  const invertLegacyFlips = normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque';
 
   let canonicalOutOfBounds = () => null as string | null;
 
@@ -606,11 +654,7 @@ export async function loadCanonicalDesignIntoEditor(
   // Set shape if available
   const shapeName = designData.product?.shape;
   if (shapeName) {
-    // Convert shape name to URL (e.g., "Curved Gable" -> "/shapes/headstones/curved_gable.svg")
-    // Use underscore, not dash, to match actual file names
-    const shapeSlug = shapeName.toLowerCase().replace(/\s+/g, '_');
-    const shapeUrl = `/shapes/headstones/${shapeSlug}.svg`;
-    store.setShapeUrl(shapeUrl);
+    store.setShapeUrl(resolveCanonicalShapeUrl(shapeName));
   }
 
   if (headstone?.width_mm) {
@@ -625,8 +669,33 @@ export async function loadCanonicalDesignIntoEditor(
     store.setUprightThickness(headstone.thickness_mm);
     store.setSlantThickness(headstone.thickness_mm);
   }
+  const enforceTexture = (
+    type: 'headstone' | 'base',
+    texture: string,
+    attempt = 0,
+  ) => {
+    const setter = type === 'headstone'
+      ? store.setHeadstoneMaterialUrl
+      : store.setBaseMaterialUrl;
+    const getter = type === 'headstone'
+      ? () => useHeadstoneStore.getState().headstoneMaterialUrl
+      : () => useHeadstoneStore.getState().baseMaterialUrl;
+
+    setter(texture);
+
+    if (attempt >= 5) {
+      return;
+    }
+
+    setTimeout(() => {
+      if (getter() !== texture) {
+        enforceTexture(type, texture, attempt + 1);
+      }
+    }, 150 + attempt * 75);
+  };
+
   if (headstone?.texture) {
-    store.setHeadstoneMaterialUrl(headstone.texture);
+    enforceTexture('headstone', headstone.texture);
   }
 
   if (base) {
@@ -641,7 +710,7 @@ export async function loadCanonicalDesignIntoEditor(
       store.setBaseThickness(base.depth_mm);
     }
     if (base.texture) {
-      store.setBaseMaterialUrl(base.texture);
+      enforceTexture('base', base.texture);
     }
   } else {
     store.setShowBase(false);
@@ -700,7 +769,9 @@ export async function loadCanonicalDesignIntoEditor(
   const BASE_HALF_MM = canonicalBaseHeightMm ? canonicalBaseHeightMm / 2 : 0;
   const BASE_CENTER_OFFSET_MM = HEADSTONE_HALF_MM + BASE_HALF_MM;
   const HEADSTONE_STAGE_OFFSET_MM = BASE_HALF_MM;
-  const HEADSTONE_VERTICAL_BIAS_MM = canonicalHeadstoneHeightMm ? canonicalHeadstoneHeightMm * 0.08 : 0;
+  const HEADSTONE_VERTICAL_BIAS_MM = needsLegacyStageCompensation && canonicalHeadstoneHeightMm
+    ? canonicalHeadstoneHeightMm * 0.08
+    : 0;
   let HEADSTONE_STAGE_SCALE = 1;
 
   function convertPositionToMm(
@@ -723,7 +794,7 @@ export async function loadCanonicalDesignIntoEditor(
     const stageXMm = xPx * mmPerPxX;
     const stageYMm = -yPx * mmPerPxY;
     let yMm = useBase ? stageYMm + BASE_CENTER_OFFSET_MM : stageYMm - HEADSTONE_STAGE_OFFSET_MM;
-    if (!useBase) {
+    if (!useBase && needsLegacyStageCompensation) {
       yMm = yMm * HEADSTONE_STAGE_SCALE + HEADSTONE_VERTICAL_BIAS_MM;
     }
     return { xMm: stageXMm, yMm };
@@ -805,8 +876,8 @@ export async function loadCanonicalDesignIntoEditor(
   };
 
   const GLOBAL_LAYOUT_SCALE = 1;
-  const DEFAULT_HEADSTONE_Y_SHIFT_MM = HEADSTONE_HALF_MM / 2;
-  const BASE_Y_SHIFT_MM = HEADSTONE_HALF_MM / 2;
+  const DEFAULT_HEADSTONE_Y_SHIFT_MM = needsLegacyStageCompensation ? HEADSTONE_HALF_MM / 2 : 0;
+  const BASE_Y_SHIFT_MM = needsLegacyStageCompensation ? HEADSTONE_HALF_MM / 2 : 0;
   const INSCRIPTION_SIZE_SCALE = 0.85;
 
   type RangeTracker = { min: number; max: number; count: number };
@@ -867,9 +938,13 @@ export async function loadCanonicalDesignIntoEditor(
   // CRITICAL: Legacy system uses TOTAL canvas height (headstone + base canvas pixels)
   
   const CANONICAL_TOTAL_HEIGHT_MM = canonicalHeadstoneHeightMm + canonicalBaseHeightMm;
-  HEADSTONE_STAGE_SCALE = CANONICAL_TOTAL_HEIGHT_MM
-    ? canonicalHeadstoneHeightMm / CANONICAL_TOTAL_HEIGHT_MM
-    : 1;
+  if (needsLegacyStageCompensation) {
+    HEADSTONE_STAGE_SCALE = CANONICAL_TOTAL_HEIGHT_MM
+      ? canonicalHeadstoneHeightMm / CANONICAL_TOTAL_HEIGHT_MM
+      : 1;
+  } else {
+    HEADSTONE_STAGE_SCALE = 1;
+  }
   
   // Calculate base canvas height in pixels using the same ratio as headstone
   const headstoneCanvasRatio = canonicalViewportHeightCssPx / canonicalHeadstoneHeightMm;
@@ -960,8 +1035,10 @@ export async function loadCanonicalDesignIntoEditor(
     );
     const scaledHeight = clampCanonicalMotifHeight(canonicalHeight * GLOBAL_LAYOUT_SCALE);
     const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
-    const flipX = !(motif.flip?.x ?? false);
-    const flipY = !(motif.flip?.y ?? false);
+    const rawFlipX = motif.flip?.x ?? false;
+    const rawFlipY = motif.flip?.y ?? false;
+    const flipX = invertLegacyFlips ? !rawFlipX : rawFlipX;
+    const flipY = invertLegacyFlips ? !rawFlipY : rawFlipY;
 
     if (target === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
@@ -980,14 +1057,13 @@ export async function loadCanonicalDesignIntoEditor(
     });
   });
 
-  const shouldAutoCenterHeadstone = (designData.source?.mlDir ?? '').toLowerCase() === 'forevershining';
   const headstoneShiftMm = computeHeadstoneShift(
     headstoneRangeTracker,
     HEADSTONE_HALF_MM,
     DEFAULT_HEADSTONE_Y_SHIFT_MM,
-    shouldAutoCenterHeadstone ? 'auto-center' : 'default',
+    isForevershining ? 'auto-center' : 'default',
   );
-  if (shouldAutoCenterHeadstone) {
+  if (isForevershining) {
     console.log('[Canonical Loader] Forevershining auto-centering applied:', {
       appliedShiftMm: headstoneShiftMm,
       defaultShiftMm: DEFAULT_HEADSTONE_Y_SHIFT_MM,

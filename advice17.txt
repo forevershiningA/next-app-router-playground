@@ -1,0 +1,191 @@
+Yep — and **I can now say exactly why your “baseWidthMm scaling” changes did nothing**:
+
+### ✅ Your `xPos/yPos` are **NOT mm**
+
+In `HeadstoneInscription.tsx` you store:
+
+```ts
+updateLineStore(id, { xPos: next.x, yPos: next.y });
+```
+
+`next.x/next.y` are **SVG/mesh local geometry units** (the output of `stone.worldToLocal()`), **not mm**.
+
+So in `ShapeSwapper.tsx`, this line is mathematically meaningless:
+
+```ts
+(value / baseWidthMm) * currentWidthMm
+```
+
+You’re dividing a **mesh-unit value** by **mm**, so the scaling logic can never correctly “re-center” or “convert shape”.
+
+That’s why after conversion to Bronze Plaque it “is still the same”.
+
+---
+
+# What actually must happen on shape conversion
+
+When you convert **Headstone SVG → Plaque SVG**, the two SVGs have **different bounding boxes / origins / centers** in their own geometry units.
+
+So you need to remap positions using **relative position inside the old bounding box**, not mm scaling.
+
+### Correct remap (one-time) formula
+
+Given:
+
+* old bbox: `oldBB`
+* new bbox: `newBB`
+* old point: `(x,y)` in old geometry units
+
+Compute normalized coords in old space:
+
+```ts
+nx = (x - oldCenterX) / oldWidth
+ny = (y - oldCenterY) / oldHeight
+```
+
+Then map into the new bbox:
+
+```ts
+x2 = newCenterX + nx * newWidth
+y2 = newCenterY + ny * newHeight
+```
+
+That’s the conversion you need.
+
+---
+
+# Minimal fix you can apply now
+
+## 1) STOP mm scaling for inscriptions (it’s wrong units)
+
+In `ShapeSwapper.tsx`, replace:
+
+```ts
+const scaledX = scalePosition(line.xPos, line.baseWidthMm, currentWidth);
+const scaledY = scalePosition(line.yPos, line.baseHeightMm, currentHeight);
+```
+
+with:
+
+```ts
+const scaledX = line.xPos ?? 0;
+const scaledY = line.yPos ?? 0;
+```
+
+This alone will stop “mystery stretching” when width/height changes for the **same SVG**, because mesh local units already track correctly through parent scaling.
+
+But it will **not** fix headstone→plaque conversion (that needs bbox remap).
+
+---
+
+## 2) STOP mm scaling for motifs (same issue)
+
+In `MotifModel.tsx`, you do:
+
+```ts
+const scaledOffsetX = scalePosition(offset.xPos, baseW, currentWidth);
+const scaledOffsetY = scalePosition(offset.yPos, baseH, currentHeight);
+```
+
+Those `offset.xPos/yPos` are also in mesh units (from `worldToLocal`), so remove that scaling:
+
+```ts
+const scaledOffsetX = offset.xPos ?? 0;
+const scaledOffsetY = offset.yPos ?? 0;
+```
+
+(Keep your canonical/legacy “offset vs absolute” handling — just don’t mm-scale.)
+
+---
+
+## 3) STOP mm scaling for additions too
+
+In `AdditionModel.tsx`:
+
+```ts
+const displayOffsetX = scalePosition(offset.xPos ?? 0, offset.baseWidthMm, currentWidth);
+const displayOffsetY = scalePosition(offset.yPos ?? 0, offset.baseHeightMm, currentHeight);
+```
+
+Same fix:
+
+```ts
+const displayOffsetX = offset.xPos ?? 0;
+const displayOffsetY = offset.yPos ?? 0;
+```
+
+Again: these are mesh units.
+
+---
+
+# The real fix for “converted to plaque” (bbox remap)
+
+You need to run a one-time conversion when you change shape.
+
+### Where to do it
+
+Do it at the moment you switch the SVG URL (headstone → bronze plaque), **while the old mesh is still mounted**, and then again after the new mesh is mounted.
+
+### Add this helper somewhere shared (or inside your conversion handler)
+
+```ts
+function remapPointBetweenBBoxes(
+  x: number,
+  y: number,
+  oldBB: THREE.Box3,
+  newBB: THREE.Box3
+) {
+  const oldW = oldBB.max.x - oldBB.min.x;
+  const oldH = oldBB.max.y - oldBB.min.y;
+  const newW = newBB.max.x - newBB.min.x;
+  const newH = newBB.max.y - newBB.min.y;
+
+  const oldCX = (oldBB.min.x + oldBB.max.x) / 2;
+  const oldCY = (oldBB.min.y + oldBB.max.y) / 2;
+  const newCX = (newBB.min.x + newBB.max.x) / 2;
+  const newCY = (newBB.min.y + newBB.max.y) / 2;
+
+  const nx = oldW !== 0 ? (x - oldCX) / oldW : 0;
+  const ny = oldH !== 0 ? (y - oldCY) / oldH : 0;
+
+  return {
+    x: newCX + nx * newW,
+    y: newCY + ny * newH,
+  };
+}
+```
+
+### Then in your “convert to plaque” action:
+
+1. compute `oldBB` from current stone geometry
+2. switch the shape URL
+3. after new SVG loads, compute `newBB`
+4. remap every inscription/motif/addition stored `(xPos,yPos)` from oldBB → newBB and write back to store
+
+That is what will stop the collapse/overlap.
+
+---
+
+# Why your current conversion looks like it’s “stuck”
+
+Because you’re applying **headstone-local coordinates** onto a **different SVG coordinate space** (plaque svg), so everything lands in the wrong region (often the center-lower area), which matches your screenshot perfectly.
+
+---
+
+# Next step (so I can give you the exact patch location)
+
+Show me **where you trigger the conversion** (the function that changes `catalog.product.type` / `shapeUrl` to the bronze plaque SVG).
+
+Upload or paste one of these files (whichever contains the conversion logic / “Load Design” / “Convert” button handler):
+
+* the zustand store file `#/lib/headstone-store` (or the action that swaps `shapeUrl`)
+* the UI component that changes product type / shape url
+
+Then I’ll write the exact conversion code that:
+
+* captures old bbox
+* swaps the svg
+* waits for new mesh
+* remaps inscriptions + motifs + additions correctly
+
+…and you’ll get a clean conversion every time.

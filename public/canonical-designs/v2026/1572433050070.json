@@ -1,0 +1,88 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-02-14T18:26:07.545Z",
+  "units": "mm",
+  "source": {
+    "id": "1572433050070",
+    "slug": "1572433050070",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1572433050070.json",
+    "savedAt": "2026-02-14T18:26:07.545Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+    "type": "headstone",
+    "slug": "headstone",
+    "category": "unknown",
+    "title": "Bronze Plaque - Dark Brown - Lugs with Studs",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/forever/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1270,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Test",
+        "font": {
+          "family": "Arial",
+          "size_mm": 20,
+          "size_px": 87.3,
+          "weight": 400
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  }
+}

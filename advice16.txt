@@ -1,0 +1,155 @@
+Got them — and now we can be *precise*, because your code shows exactly why it collapses/overlaps after conversion.
+
+## What’s causing it (confirmed in your code)
+
+### 1) **Your stored positions are NOT mm**
+
+In `HeadstoneInscription.tsx`, when you drag/place text you store:
+
+```ts
+updateLineStore(id, { xPos: next.x, yPos: next.y });
+```
+
+`next.x/next.y` are **headstone mesh local coordinates** (the same units as the SVG mesh geometry). They are *not* mm.
+
+So if you change the headstone width/height (or swap to plaque), you must scale these local coords by the **ratio of new size to the size they were created at**.
+
+### 2) You *attempt* to scale in `ShapeSwapper.tsx`, but it silently does nothing
+
+In `ShapeSwapper.tsx` you do:
+
+```ts
+const scaledX = scalePosition(line.xPos, line.baseWidthMm, currentWidth);
+const scaledY = scalePosition(line.yPos, line.baseHeightMm, currentHeight);
+```
+
+…and `scalePosition` returns the original value whenever `line.baseWidthMm` / `line.baseHeightMm` are missing.
+
+That is exactly what happens on converted/legacy designs: the per-line base dims aren’t set → **no scaling** → positions are interpreted on a differently-sized mesh → collapse/overlap.
+
+Same pattern exists in `AdditionModel.tsx`:
+
+```ts
+const displayOffsetX = scalePosition(offset.xPos ?? 0, offset.baseWidthMm, currentWidth);
+const displayOffsetY = scalePosition(offset.yPos ?? 0, offset.baseHeightMm, currentHeight);
+```
+
+If `offset.baseWidthMm` isn’t stored, scaling doesn’t happen.
+
+---
+
+# The minimal fix (surgical, works immediately)
+
+## ✅ Patch 1: Fix inscriptions scaling in `ShapeSwapper.tsx`
+
+Replace this:
+
+```ts
+const scaledX = scalePosition(line.xPos, line.baseWidthMm, currentWidth);
+const scaledY = scalePosition(line.yPos, line.baseHeightMm, currentHeight);
+```
+
+with this (fallback to global base dims from the store):
+
+```ts
+const baseW = line.baseWidthMm ?? baseWidthMm ?? currentWidth;
+const baseH = line.baseHeightMm ?? baseHeightMm ?? currentHeight;
+
+const scaledX = scalePosition(line.xPos, baseW, currentWidth);
+const scaledY = scalePosition(line.yPos, baseH, currentHeight);
+```
+
+**Why this works:**
+Even if older lines don’t have per-line base dims, they will scale correctly using the global `baseWidthMm/baseHeightMm` you already have in the store.
+
+---
+
+## ✅ Patch 2: Fix addition scaling in `AdditionModel.tsx`
+
+Replace:
+
+```ts
+const displayOffsetX = scalePosition(offset.xPos ?? 0, offset.baseWidthMm, currentWidth);
+const displayOffsetY = scalePosition(offset.yPos ?? 0, offset.baseHeightMm, currentHeight);
+```
+
+with:
+
+```ts
+const baseW = offset.baseWidthMm ?? baseWidthMm ?? currentWidth;
+const baseH = offset.baseHeightMm ?? baseHeightMm ?? currentHeight;
+
+const displayOffsetX = scalePosition(offset.xPos ?? 0, baseW, currentWidth);
+const displayOffsetY = scalePosition(offset.yPos ?? 0, baseH, currentHeight);
+```
+
+---
+
+# The “proper” fix (so you never regress again)
+
+Right now, scaling depends on base dims being present.
+So the robust approach is:
+
+### When you **write** xPos/yPos to the store, also write the base dims at that moment.
+
+## ✅ Patch 3: Store base dims when saving inscription drag updates
+
+In `HeadstoneInscription.tsx`, change:
+
+```ts
+updateLineStore(id, { xPos: next.x, yPos: next.y });
+```
+
+to:
+
+```ts
+const wMm = useHeadstoneStore.getState().widthMm;
+const hMm = useHeadstoneStore.getState().heightMm;
+
+updateLineStore(id, {
+  xPos: next.x,
+  yPos: next.y,
+  baseWidthMm: wMm,
+  baseHeightMm: hMm,
+});
+```
+
+That ensures every line always knows what size it was authored against.
+
+## ✅ Patch 4: Store base dims for additions when writing offsets
+
+Anywhere you call `setAdditionOffset(id, { xPos, yPos })` during placement/drag, include:
+
+```ts
+baseWidthMm: widthMm,
+baseHeightMm: heightMm,
+```
+
+(You’ll have several calls; the idea is the same.)
+
+---
+
+# One more thing (important)
+
+You also render motifs:
+
+```tsx
+<MotifModel ... />
+```
+
+I haven’t got `MotifModel.tsx` in this upload, but it will almost certainly have the same issue (base dims missing → no scaling). Apply the **same fallback pattern** there too.
+
+---
+
+## Summary
+
+If you apply just the two fallback patches:
+
+* `ShapeSwapper.tsx` (inscriptions)
+* `AdditionModel.tsx` (additions)
+
+…your converted headstone → plaque layouts will stop collapsing immediately.
+
+If you also add the “store base dims at write-time” patches, you’ll make it bulletproof.
+
+If you upload `MotifModel.tsx` too, I’ll point to the exact lines to patch in that file as well.

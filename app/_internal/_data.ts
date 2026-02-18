@@ -620,6 +620,12 @@ const demos = [
           'Inscriptions commemorate the lost family member or friend in an individual way.',
       },
       {
+        slug: 'select-images',
+        name: 'Add Your Image',
+        description:
+          'Upload a photo to add to your memorial. Choose from ceramic images, vitreous enamel, or laser-etched options.',
+      },
+      {
         slug: 'select-motifs',
         name: 'Select Motifs',
         description:

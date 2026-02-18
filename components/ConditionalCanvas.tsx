@@ -3,16 +3,19 @@
 import { Suspense, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import ThreeScene from '#/components/ThreeScene';
+import CropCanvas from '#/components/CropCanvas';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
 import CheckPricePanel from '#/components/CheckPricePanel';
 import SEOPanel from '#/components/SEOPanel';
 import LoadDesignButton from '#/components/LoadDesignButton';
 import ErrorBoundary from '#/components/ErrorBoundary';
 import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function ConditionalCanvas() {
   const pathname = usePathname();
   const hideOverlay = useSceneOverlayStore((s) => s.hide);
+  const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
   
   // Hide canvas on design pages:
   // /designs/ -> ['designs'] = 1 segment (root page)
@@ -106,10 +109,12 @@ export default function ConditionalCanvas() {
         >
           <LoadDesignButton designId="1725769905504" label="Load Design 1" position="top" />
           <LoadDesignButton designId="1578016189116" label="Load Design 2" position="middle" />
+          <LoadDesignButton designId="1723691641046" label="Load Design 3" position="bottom" />
           <SceneOverlayHost />
           <CheckPricePanel />
           <SEOPanel />
-          <ThreeScene />
+          {/* Show CropCanvas when cropping, otherwise show ThreeScene */}
+          {cropCanvasData ? <CropCanvas /> : <ThreeScene />}
         </ErrorBoundary>
       </Suspense>
     </div>

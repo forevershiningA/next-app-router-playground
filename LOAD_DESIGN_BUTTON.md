@@ -94,16 +94,16 @@ Loaded:   bg-green-900/50 border-green-500/50 text-green-200 (disabled)
 1. User navigates to `/select-size` or any designer page
 2. **Headstone is completely empty** - no inscriptions, motifs, or 3D models
 3. User sees "Load Design" button in top-right corner
-4. Clicking button loads the canonical design (1725769905504)
-5. Button changes to "Design Loaded" (green, disabled)
+4. Clicking any Load Design button loads its canonical design (see ID list below)
+5. Button returns to the ready state after loading so users can hop between samples
 6. Design persists for entire session (won't reload on page change)
 
 ## Technical Details
 
-### Design ID
-- Uses canonical design: `1725769905504` (Curved Gable biblical memorial)
-- Located at: `/canonical-designs/v2026/1725769905504.json`
-- Same design that was previously auto-loaded
+### Design IDs (2026-02-14)
+- **Load Design 1** → `1725769905504` (Curved Gable biblical memorial) at `/canonical-designs/v2026/1725769905504.json`
+- **Load Design 2** → `1578016189116` (Forevershining 3-person memorial) at `/canonical-designs/v2026/1578016189116.json`
+- **Load Design 3** → `1723691641046` (Laser-etched Serpentine family memorial) at `/canonical-designs/v2026/1723691641046.json`
 
 ### Load Function
 ```typescript

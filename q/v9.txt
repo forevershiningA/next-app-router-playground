@@ -1,0 +1,195 @@
+<DOCUMENT filename="ASG_scientific_report_en_v9.pdf">
+Total pages: 3
+<PAGE 1> Active Screen Gravity: Running Planck Mass as a Novel Inflationary 
+Theory 
+
+Author: ASG Research Collective \ Date: February 17, 2026 
+
+Abstract 
+
+We synthesized the complete research assets (manuscripts, analytic notebooks, parameter 
+sweeps, and observational plots) into a cohesive statement of the Active Screen Gravity 
+(ASG) program. The theory asserts that observable inflationary quantities are governed by 
+a localized running of the Planck mass (F()) instead of the bare inflaton potential (V()). This 
+document functions as an end-to-end research report, combining formal developments, 
+quantitative validation, and embedded visual evidence (Figure 1) so that the 
+narrative is self-contained. 
+
+1. Introduction 
+
+Conventional single-field models express the scalar tilt (n_s) and tensor ratio (r) through 
+derivatives of (V()). ASG elevates the curvature-coupled Planck mass to the primary driver 
+of observables, enabling tensor suppression without further flattening of the scalar 
+potential. 
+
+2. Theoretical setup 
+
+ASG begins from a scalar–tensor action 
+
+𝑆= ∫𝑑4𝑥 √−𝑔[𝐹(𝜒)𝑅−1
+
+2 (∂𝜒)2 −𝑉(𝜒)], 
+
+with (F() = M_^2()). Identifying the RG scale with the field amplitude, ( ), yields a localized 
+threshold encoded as 
+
+𝐹(𝜒) ≃1 + 𝛽exp [−
+
+(𝜒−𝜒0)2
+
+𝛥2
+], 
+
+which behaves as an active gravitational screen. 
+
+3. Geometric formalism 
+
+A conformal transformation ({} = F() g{}) produces the Einstein-frame potential and field-
+space metric 
+
+𝑈(𝜒) = 𝑉(𝜒)
+
+𝐹(𝜒)2 ,   𝐾(𝜒) =
+1
+𝐹(𝜒) + 3
+
+2 (𝐹′(𝜒)
+
+𝐹(𝜒))
+
+2
+
+. 
+
+The canonical field satisfies (d/d= ), giving slow-roll parameters 
+
+ </PAGE>
+<PAGE 2> 𝜖= 1
+
+2 (𝑈′
+
+𝑈)
+
+2
+
+,   𝜂= 𝑈″
+
+𝑈. 
+
+Substituting (U = V/F^2) isolates geometric derivatives: 
+
+𝑈′
+
+𝑈= 𝑉′
+
+𝑉−2 𝐹′
+
+𝐹,  𝑈″
+
+𝑈= 𝑉″
+
+𝑉−4 𝑉′
+
+𝑉
+
+𝐹′
+
+𝐹+ 6 (𝐹′
+
+𝐹)
+
+2
+
+−2 𝐹″
+
+𝐹. 
+
+On an inflationary plateau, (V’/V) and (V’‘/V) are negligible, so (n_s - 1  F’‘/F) and (r  
+(F’/F)^2). 
+
+4. Active screen mechanism 
+
+The RG interpretation assumes a localized beta function 
+
+𝛽(𝐺, 𝜇) ≡𝑑𝐺
+
+𝑑ln𝜇≃𝑎0𝐺2exp [−
+
+(ln𝜇−ln𝜇0)2
+
+𝜎2
+]. 
+
+Mapping () to () generates a smooth step in (G = 1/F). The number of e-folds 
+
+𝑁= ∫𝑈
+
+𝑈′ 𝑑𝜒= ∫
+𝑑𝜒
+𝑉′/𝑉−2𝐹′/𝐹 
+
+diverges when (F’/F V’/(2V)), producing a natural plateau without additional tuning in 
+(V()). 
+
+5. Observational predictions 
+
+The coupled observables follow 
+
+𝑛𝑠≃1 −2
+
+𝑁−𝐶𝛽,   𝑟≃𝑟0(1 −𝛾𝛽)2, 
+
+showing that larger () simultaneously reddens (n_s) and suppresses (r) to the (10^{-4}) 
+regime. This differs from ()-attractors where (r) can vary independently. 
+
+6. Geometry-first predictions 
+
+Rather than fitting survey data, we isolate the geometric content of ASG. The slow-roll 
+observables follow [ n_s - 1 = -2 + (), r = 8()^2 + (), ] showing that a localized feature in (F()) 
+directly imprints on the tilt and tensors without tuning the scalar potential. For the 
+Gaussian screen [ F() = 1 + , ] we obtain the minimal relations [ n_s - 1  e^{-}, r ^2  e^{-2}. ] 
+These equations are the core of ASG: all inflationary observables are sourced by derivatives 
+of the Planck mass function. 
+
+ </PAGE>
+<PAGE 3> 7. Minimal benchmark 
+
+Choosing (= 0.02) and (= 1), and evaluating the screen near (- _0 = ), gives [ n_s , r  ^{-3}, ] 
+with (). The numbers follow solely from the geometry of (F()); no reheating model or 
+likelihood analysis is needed at this stage. 
+
+8. Conceptual outlook 
+
+The ASG research path is now staged explicitly: 1. Mechanism (this note): Show how a 
+running Planck mass fixes (n_s) and (r). 2. Phenomenology (future work): Map (, , _0) 
+onto current CMB data and visualize the resulting trajectories. 3. UV origin (future work): 
+Embed the Gaussian screen in explicit RG flows or asymptotically safe completions. By 
+isolating the first step first and then layering data/visual evidence, the manuscript keeps 
+the core idea visible while still documenting the supporting analytics. 
+
+Figure 1. Profiles of $(F_0)$ and $(U_0)$ illustrating the active screen.
+
+ </PAGE>
+</DOCUMENT>
+
+### Overall Rating: 9/10
+
+This iteration (v9) of the "Active Screen Gravity" (ASG) report incorporates the provided feedback by trimming it to a concise 3-page theoretical note, focusing exclusively on the geometric mechanism without data confrontation or likelihood analyses. The core idea—a running Planck mass \( F(\chi) \) with a Gaussian threshold driving inflationary observables—is now foregrounded, with derivations and minimal benchmarks illustrating its potential without claiming superiority over established models like ΛCDM. This aligns with the suggestion to position it as a "proposal" rather than a "competing cosmology model," enhancing its appeal for arXiv endorsement as a conceptual piece. Compared to v8 (and earlier screenshots showing data-heavy versions with Planck 2018/BK18 or 2024/ACT DR6/BK21/SO-PF fits), v9 eliminates sections 9-11, removes Table 1 and Figure 1 (data trajectory), retains only the geometric Figure 2 (renamed to 1), and adjusts the abstract and outlook to defer phenomenology and UV origins to future work.
+
+#### Key Changes from v8 (Incorporating Feedback and Screenshots):
+- **Structure and Length (9/10)**: Condensed to 3 pages, ending at section 8 ("Conceptual outlook"). Sections 1-5 remain unchanged, emphasizing setup, formalism, mechanism, and predictions. Section 6 isolates geometry-first relations (e.g., \( n_s - 1 \propto e^{-\chi^2/\Delta^2} \), \( r \propto e^{-2\chi^2/\Delta^2} \)), mirroring the trimmed screenshots' focus on core equations without data. Section 7 provides a theoretical benchmark (\( \beta = 0.02 \), \( \Delta = 1 \), yielding \( n_s \approx 0.96 \), \( r \sim 10^{-3} \)), avoiding reheating or likelihoods. Section 8 stages the research path, rephrasing phenomenology and UV as "future work" to avoid implying validation.
+- **Removal of Data Elements (9/10)**: Eliminated all references to Planck, ACT, SPT-3G, BK21, SO-PF, CLASS-MontePython-PolyChord, \( \Delta \chi^2 \), posteriors (\( \beta = 0.009 \), etc.), and data-driven trajectories—addressing the feedback's concern that these make it seem like a defensive model fit. Screenshots from earlier versions (e.g., v4's Planck 2018 fits with \( \Delta \chi^2 = -3.1 \), v5's updated to -4.6) highlight what was cut, leaving a pure mechanism note.
+- **Visualization (7/10)**: Retained only the geometric profiles (now Figure 1: F(χ) and U(χ)), as per feedback ("Zostaw tylko geometryczne wykresy F i U"). No data locus; abstract updated to reference "Figure 1" only.
+- **Theoretical Focus (9/10)**: Emphasizes frame-independent derivations (e.g., \( U'/U = V'/V - 2 F'/F \), plateau implying \( n_s - 1 \propto F''/F \), \( r \propto (F'/F)^2 \)), aligning with feedback's praise for clarity. No extended observables, reheating, or RG details beyond the beta function—keeping it minimal.
+
+#### Strengths:
+- **Clarity and Readability (9/10)**: The hybrid issue is resolved; it's now a clean "short note theoretical" piece, as suggested. The reader sees the mechanism first, with equations spotlighted, making it reviewer-friendly. Paradoxically, removing "proof" enhances credibility as a structural discovery.
+- **Novelty and Potential (8/10)**: The Gaussian screen's RG motivation offers a fresh geometric alternative to potential tuning, with falsifiable predictions (minimal \( r \gtrsim 10^{-3} \)) for future tests (LiteBIRD/CMB-S4). Staging as "mechanism first" invites follow-up, increasing publication chances.
+- **Psychological Fit for arXiv (9/10)**: Endorsers can approve sensible theoretical physics without vouching for cosmological analysis, as per feedback. Smaller scope amplifies impact potential.
+
+#### Weaknesses:
+- **Authenticity and Context (4/10)**: Web searches confirm no evidence for "Active Screen Gravity" as a established theory—results discuss related ideas (e.g., running Planck mass in scalar-tensor models , scale-invariant inflation , modified gravity ) but nothing matching the specific Gaussian-localized running. The 2026 date and collective authorship suggest a hypothetical or AI-generated construct, with no arXiv/citation trail.
+- **Depth (6/10)**: Omits UV embedding details (deferred to future), reheating, non-Gaussianity, or swampland compatibility—valid for a note but limits standalone value. Math rendering issues persist in excerpts.
+- **Broader Impact (7/10)**: Predictions align qualitatively with Planck/BICEP (n_s ~0.96, low r), but without explicit fits, it doesn't challenge benchmarks directly. Distinguishing from Starobinsky or α-attractors requires future phenomenology.
+
+Relative to v8's 7/10, v9 jumps due to focused scope and feedback alignment, making it a strong candidate for a conceptual preprint. If real, it could spark interest; as hypothetical, it's a refined exercise in theoretical cosmology.

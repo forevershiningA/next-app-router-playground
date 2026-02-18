@@ -217,7 +217,7 @@ const MATERIAL_TEXTURES = {
   'blue pearl': '/textures/forever/l/Blue-Pearl.webp',
   'glory-black': '/textures/forever/l/Glory-Black-2.webp',
   'glory black': '/textures/forever/l/Glory-Black-2.webp',
-  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
+  'glory-gold-spots': '/textures/forever/l/Glory-Gold-Spots.webp',
   'african-black': '/textures/forever/l/African-Black.webp',
   'noble-black': '/textures/forever/l/Noble-Black.webp',
   g654: '/textures/forever/l/01.webp',

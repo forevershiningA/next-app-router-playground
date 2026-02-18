@@ -9,6 +9,7 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 import AutoFit from '../AutoFit';
 import AdditionModel from '../AdditionModel';
 import MotifModel from '../MotifModel';
+import ImageModel from '../ImageModel';
 import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { BronzeBorder } from '../BronzeBorder';
@@ -23,6 +24,55 @@ import type { Component, ReactNode } from 'react';
 const TEX_BASE = '/textures/forever/l/';
 const DEFAULT_TEX = 'Imperial-Red.webp';
 const BASE_H = 2; // used by AutoFit only
+const BBOX_EPSILON = 1e-6;
+
+type BoxMetrics = {
+  centerX: number;
+  centerY: number;
+  width: number;
+  height: number;
+};
+
+const getBoxMetrics = (box: THREE.Box3): BoxMetrics => {
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  return {
+    centerX: center.x,
+    centerY: center.y,
+    width: Math.max(size.x, BBOX_EPSILON),
+    height: Math.max(size.y, BBOX_EPSILON),
+  };
+};
+
+const remapPointBetweenBoxes = (
+  x: number,
+  y: number,
+  oldMetrics: BoxMetrics,
+  newMetrics: BoxMetrics,
+) => {
+  const nx = (x - oldMetrics.centerX) / oldMetrics.width;
+  const ny = (y - oldMetrics.centerY) / oldMetrics.height;
+  return {
+    x: newMetrics.centerX + nx * newMetrics.width,
+    y: newMetrics.centerY + ny * newMetrics.height,
+  };
+};
+
+const absoluteFromCenterOffsets = (
+  offsetX: number | undefined,
+  offsetY: number | undefined,
+  metrics: BoxMetrics,
+) => ({
+  x: metrics.centerX + (offsetX ?? 0),
+  y: metrics.centerY - (offsetY ?? 0),
+});
+
+const centerOffsetsFromAbsolute = (x: number, y: number, metrics: BoxMetrics) => ({
+  xPos: x - metrics.centerX,
+  yPos: metrics.centerY - y,
+});
 
 /* --------------------------------- font map --------------------------------- */
 // Simply use the font files as specified in the data
@@ -91,6 +141,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const { invalidate, controls, camera } = useThree();
   const router = useRouter();
 
+  const internalHeadstoneMeshRef = React.useRef<THREE.Mesh | null>(null);
+  const resolvedHeadstoneMeshRef = headstoneMeshRef ?? internalHeadstoneMeshRef;
+  const currentBoundingBoxRef = React.useRef<THREE.Box3 | null>(null);
+  const [bboxVersion, setBboxVersion] = React.useState(0);
+  const pendingRemapRef = React.useRef<{ oldBox: THREE.Box3; targetShapeUrl: string } | null>(null);
+  const prevShapeUrlRef = React.useRef<string | null>(null);
+
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
@@ -124,6 +181,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
+  const selectedImages = useHeadstoneStore((s) => s.selectedImages || []);
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
@@ -133,6 +191,103 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const isSelectSizeRoute = pathname === '/select-size';
   const isSelectMaterialRoute = pathname === '/select-material';
   const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;
+
+  const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
+    const oldMetrics = getBoxMetrics(oldBox);
+    const newMetrics = getBoxMetrics(newBox);
+
+    useHeadstoneStore.setState((state) => {
+      const updates: Partial<typeof state> = {};
+
+      if (state.inscriptions.length > 0) {
+        let linesChanged = false;
+        const remappedLines = state.inscriptions.map((line) => {
+          if (line.target === 'base') {
+            return line;
+          }
+          const originalX = line.xPos ?? 0;
+          const originalY = line.yPos ?? 0;
+          const mapped = remapPointBetweenBoxes(originalX, originalY, oldMetrics, newMetrics);
+          if (
+            Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
+            Math.abs(mapped.y - originalY) > BBOX_EPSILON
+          ) {
+            linesChanged = true;
+            return { ...line, xPos: mapped.x, yPos: mapped.y };
+          }
+          return line;
+        });
+        if (linesChanged) {
+          updates.inscriptions = remappedLines;
+        }
+      }
+
+      if (Object.keys(state.additionOffsets).length > 0) {
+        let additionClone: typeof state.additionOffsets | null = null;
+        for (const [id, offset] of Object.entries(state.additionOffsets)) {
+          const surface = offset.targetSurface ?? 'headstone';
+          if (surface === 'base') continue;
+          const absolutePoint = absoluteFromCenterOffsets(offset.xPos, offset.yPos, oldMetrics);
+          const mapped = remapPointBetweenBoxes(absolutePoint.x, absolutePoint.y, oldMetrics, newMetrics);
+          const nextOffsets = centerOffsetsFromAbsolute(mapped.x, mapped.y, newMetrics);
+          if (
+            Math.abs((offset.xPos ?? 0) - nextOffsets.xPos) > BBOX_EPSILON ||
+            Math.abs((offset.yPos ?? 0) - nextOffsets.yPos) > BBOX_EPSILON
+          ) {
+            if (!additionClone) {
+              additionClone = { ...state.additionOffsets };
+            }
+            additionClone[id] = { ...offset, xPos: nextOffsets.xPos, yPos: nextOffsets.yPos };
+          }
+        }
+        if (additionClone) {
+          updates.additionOffsets = additionClone;
+        }
+      }
+
+      if (Object.keys(state.motifOffsets).length > 0) {
+        let motifClone: typeof state.motifOffsets | null = null;
+        for (const [id, offset] of Object.entries(state.motifOffsets)) {
+          const surface = offset.target ?? 'headstone';
+          if (surface === 'base') continue;
+          const isAbsolute = (offset.coordinateSpace ?? 'offset') === 'absolute';
+
+          if (isAbsolute) {
+            const originalX = offset.xPos ?? 0;
+            const originalY = offset.yPos ?? 0;
+            const mapped = remapPointBetweenBoxes(originalX, originalY, oldMetrics, newMetrics);
+            if (
+              Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
+              Math.abs(mapped.y - originalY) > BBOX_EPSILON
+            ) {
+              if (!motifClone) {
+                motifClone = { ...state.motifOffsets };
+              }
+              motifClone[id] = { ...offset, xPos: mapped.x, yPos: mapped.y };
+            }
+          } else {
+            const absolutePoint = absoluteFromCenterOffsets(offset.xPos, offset.yPos, oldMetrics);
+            const mapped = remapPointBetweenBoxes(absolutePoint.x, absolutePoint.y, oldMetrics, newMetrics);
+            const nextOffsets = centerOffsetsFromAbsolute(mapped.x, mapped.y, newMetrics);
+            if (
+              Math.abs((offset.xPos ?? 0) - nextOffsets.xPos) > BBOX_EPSILON ||
+              Math.abs((offset.yPos ?? 0) - nextOffsets.yPos) > BBOX_EPSILON
+            ) {
+              if (!motifClone) {
+                motifClone = { ...state.motifOffsets };
+              }
+              motifClone[id] = { ...offset, xPos: nextOffsets.xPos, yPos: nextOffsets.yPos };
+            }
+          }
+        }
+        if (motifClone) {
+          updates.motifOffsets = motifClone;
+        }
+      }
+
+      return updates;
+    });
+  }, []);
 
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
@@ -238,6 +393,48 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     return () => cancelAnimationFrame(id);
   }, []);
 
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      const mesh = resolvedHeadstoneMeshRef.current;
+      if (!mesh?.geometry) return;
+      const geometry = mesh.geometry as THREE.BufferGeometry;
+      geometry.computeBoundingBox();
+      const bbox = geometry.boundingBox?.clone();
+      if (!bbox) return;
+      const prev = currentBoundingBoxRef.current;
+      if (!prev || !prev.equals(bbox)) {
+        currentBoundingBoxRef.current = bbox;
+        setBboxVersion((v) => v + 1);
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, [resolvedHeadstoneMeshRef, visibleUrl, widthMm, heightMm, fitTick]);
+
+  React.useEffect(() => {
+    if (!shapeUrl) return;
+    if (
+      prevShapeUrlRef.current &&
+      prevShapeUrlRef.current !== shapeUrl &&
+      currentBoundingBoxRef.current
+    ) {
+      pendingRemapRef.current = {
+        oldBox: currentBoundingBoxRef.current.clone(),
+        targetShapeUrl: shapeUrl,
+      };
+    }
+    prevShapeUrlRef.current = shapeUrl;
+  }, [shapeUrl]);
+
+  React.useEffect(() => {
+    const pending = pendingRemapRef.current;
+    if (!pending) return;
+    if (visibleUrl !== pending.targetShapeUrl) return;
+    const newBox = currentBoundingBoxRef.current;
+    if (!newBox) return;
+    remapLayoutsBetweenBoxes(pending.oldBox, newBox);
+    pendingRemapRef.current = null;
+  }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion]);
+
 
   return (
     <>
@@ -281,15 +478,17 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
             // Safe ref assignment using useLayoutEffect to avoid render phase side-effects
             React.useLayoutEffect(() => {
-              if (headstoneMeshRef && api.mesh.current) {
-                (headstoneMeshRef as any).current = api.mesh.current;
+              if (resolvedHeadstoneMeshRef && api.mesh.current) {
+                (resolvedHeadstoneMeshRef as any).current = api.mesh.current;
               }
-            }, [headstoneMeshRef, api.mesh]);
+            }, [resolvedHeadstoneMeshRef, api.mesh]);
             
             return (
             <>
               {inscriptions.map((line: Line, i: number) => {
                 const zBump = (inscriptions.length - 1 - i) * 0.00005;
+                const scaledX = line.xPos ?? 0;
+                const scaledY = line.yPos ?? 0;
                 return (
                 <ErrorBoundary key={line.id}>
                   <React.Suspense fallback={null}>
@@ -320,8 +519,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       }}
                       color={line.color}
                       lift={0.002}
-                      xPos={line.xPos}
-                      yPos={line.yPos}
+                      xPos={scaledX}
+                      yPos={scaledY}
                       rotationDeg={line.rotationDeg}
                       height={line.sizeMm}
                       text={line.text}
@@ -357,6 +556,24 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                 </ErrorBoundary>
               ))}
 
+              {selectedImages.map((image, i) => (
+                <ErrorBoundary key={`${image.id}-${i}`}>
+                  <React.Suspense fallback={null}>
+                    <ImageModel
+                      id={image.id}
+                      imageUrl={image.imageUrl}
+                      widthMm={image.widthMm}
+                      heightMm={image.heightMm}
+                      xPos={image.xPos}
+                      yPos={image.yPos}
+                      rotationZ={image.rotationZ}
+                      headstone={api}
+                      index={i}
+                    />
+                  </React.Suspense>
+                </ErrorBoundary>
+              ))}
+
               {/* Render bronze border if set */}
               {borderName && isPlaque && (
                 <ErrorBoundary>
@@ -381,7 +598,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
         <AutoFit
           target={tabletRef}
-          anchor={headstoneMeshRef}
+          anchor={resolvedHeadstoneMeshRef}
           margin={1.20}
           pad={0}
           duration={0.25}

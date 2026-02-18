@@ -69,6 +69,8 @@ export type Line = {
   yPos: number;
   rotationDeg: number;
   target?: 'headstone' | 'base'; // Which object the inscription is on
+  baseWidthMm?: number;
+  baseHeightMm?: number;
   ref: React.RefObject<Group | null>; // ✅ allow null
 };
 export type Part = 'headstone' | 'base' | null;
@@ -127,6 +129,33 @@ type HeadstoneState = {
   addMotif: (svgPath: string) => void;
   removeMotif: (id: string) => void;
   setMotifColor: (id: string, color: string) => void;
+
+  selectedImages: Array<{
+    id: string;
+    typeId: number;
+    typeName: string;
+    imageUrl: string;
+    widthMm: number;
+    heightMm: number;
+    xPos: number;
+    yPos: number;
+    rotationZ: number;
+  }>;
+  addImage: (image: {
+    id: string;
+    typeId: number;
+    typeName: string;
+    imageUrl: string;
+    widthMm: number;
+    heightMm: number;
+    xPos: number;
+    yPos: number;
+    rotationZ: number;
+  }) => void;
+  removeImage: (id: string) => void;
+  updateImagePosition: (id: string, xPos: number, yPos: number) => void;
+  updateImageSize: (id: string, widthMm: number, heightMm: number) => void;
+  updateImageRotation: (id: string, rotationZ: number) => void;
 
   productId: string | null;
   setProductId: (id: string) => void;
@@ -219,6 +248,8 @@ type HeadstoneState = {
       additionName?: string;
       zPosFinalized?: boolean;
       footprintWidth?: number;
+      baseWidthMm?: number;
+      baseHeightMm?: number;
     }
   >;
 
@@ -236,6 +267,8 @@ type HeadstoneState = {
       coordinateSpace?: 'absolute' | 'offset';
       flipX?: boolean;
       flipY?: boolean;
+      baseWidthMm?: number;
+      baseHeightMm?: number;
     }
   >;
 
@@ -310,6 +343,68 @@ type HeadstoneState = {
   resetDesign: () => void;
 };
 
+const MIN_SURFACE_DIMENSION_MM = 1;
+
+const resolveSurfaceDimensions = (
+  state: Pick<HeadstoneState, 'widthMm' | 'heightMm' | 'baseWidthMm' | 'baseHeightMm'>,
+  surface: 'headstone' | 'base',
+) => {
+  if (surface === 'base') {
+    const widthMm = state.baseWidthMm || state.widthMm || MIN_SURFACE_DIMENSION_MM;
+    const heightMm = state.baseHeightMm || state.heightMm || MIN_SURFACE_DIMENSION_MM;
+    return { widthMm, heightMm };
+  }
+  return {
+    widthMm: state.widthMm || MIN_SURFACE_DIMENSION_MM,
+    heightMm: state.heightMm || MIN_SURFACE_DIMENSION_MM,
+  };
+};
+
+const withLineSurfaceDimensions = (
+  line: Line,
+  surface: 'headstone' | 'base',
+  state: HeadstoneState,
+  force = false,
+): Line => {
+  const dims = resolveSurfaceDimensions(state, surface);
+  const needsWidth = force || !line.baseWidthMm;
+  const needsHeight = force || !line.baseHeightMm;
+  return {
+    ...line,
+    target: surface,
+    baseWidthMm: needsWidth ? dims.widthMm : line.baseWidthMm,
+    baseHeightMm: needsHeight ? dims.heightMm : line.baseHeightMm,
+  };
+};
+
+const normalizeLineDimensions = (lines: Line[], state: HeadstoneState) =>
+  lines.map((line) =>
+    withLineSurfaceDimensions(
+      line,
+      line.target === 'base' ? 'base' : 'headstone',
+      state,
+      !line.baseWidthMm || !line.baseHeightMm,
+    ),
+  );
+
+type OffsetWithDimensions = { baseWidthMm?: number; baseHeightMm?: number };
+
+const withOffsetSurfaceDimensions = <T extends OffsetWithDimensions>(
+  offset: T,
+  surface: 'headstone' | 'base',
+  state: HeadstoneState,
+  force = false,
+): T & { baseWidthMm: number; baseHeightMm: number } => {
+  const dims = resolveSurfaceDimensions(state, surface);
+  const baseWidthMm = force || !offset.baseWidthMm ? dims.widthMm : offset.baseWidthMm;
+  const baseHeightMm = force || !offset.baseHeightMm ? dims.heightMm : offset.baseHeightMm;
+  return {
+    ...offset,
+    baseWidthMm,
+    baseHeightMm,
+  } as T & { baseWidthMm: number; baseHeightMm: number };
+};
+
 let nextId = 0;
 const genId = () => `l-${nextId++}`;
 let nextMotifId = 0;
@@ -344,18 +439,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const additionType: AdditionKind = (additionData?.type as AdditionKind) ?? 'application';
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
-    set((s) => ({ 
-      selectedAdditions: [...s.selectedAdditions, instanceId],
-      selectedAdditionId: instanceId, // Auto-select the newly added addition
-      activePanel: 'addition', // Open the edit panel
-      // Initialize with default offset including sizeVariant
-      additionOffsets: {
-        ...s.additionOffsets,
-        [instanceId]: {
+    set((s) => {
+      const targetSurface: 'headstone' | 'base' = s.selected === 'base' ? 'base' : 'headstone';
+      const defaultOffset = withOffsetSurfaceDimensions(
+        {
           scale: 1,
           rotationZ: 0,
           sizeVariant: 1,
-          targetSurface: 'headstone',
+          targetSurface,
           zPos: undefined,
           additionType,
           assetFile: additionData?.file,
@@ -363,8 +454,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           additionName: additionData?.name,
           zPosFinalized: false,
         },
-      },
-    }));
+        targetSurface,
+        s,
+        true,
+      );
+      return {
+        selectedAdditions: [...s.selectedAdditions, instanceId],
+        selectedAdditionId: instanceId,
+        activePanel: 'addition',
+        additionOffsets: {
+          ...s.additionOffsets,
+          [instanceId]: defaultOffset,
+        },
+      };
+    });
   },
   removeAddition: (id) => {
     set((s) => {
@@ -419,10 +522,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     
     set((s) => {
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
-      // Initialize offset with target and flip defaults
-      const newOffsets = {
-        ...s.motifOffsets,
-        [id]: {
+      const defaultOffset = withOffsetSurfaceDimensions(
+        {
           xPos: 0,
           yPos: 0,
           scale: 1,
@@ -432,7 +533,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           coordinateSpace: 'offset',
           flipX: false,
           flipY: false,
-        }
+        },
+        target,
+        s,
+        true,
+      );
+      const newOffsets = {
+        ...s.motifOffsets,
+        [id]: defaultOffset,
       };
       return {
         selectedMotifs: newMotifs,
@@ -467,6 +575,43 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     }));
     // Recalculate cost when color changes
     setTimeout(() => get().calculateMotifCost(), 0);
+  },
+
+  // Image management
+  selectedImages: [],
+  cropCanvasData: null, // Stores the crop canvas state when user is cropping
+  setCropCanvasData: (data) => set({ cropCanvasData: data }),
+  addImage: (image) => {
+    set((s) => ({
+      selectedImages: [...s.selectedImages, image],
+      cropCanvasData: null, // Clear crop canvas after adding
+    }));
+  },
+  removeImage: (id) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.filter((img) => img.id !== id),
+    }));
+  },
+  updateImagePosition: (id, xPos, yPos) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.map((img) =>
+        img.id === id ? { ...img, xPos, yPos } : img
+      ),
+    }));
+  },
+  updateImageSize: (id, widthMm, heightMm) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.map((img) =>
+        img.id === id ? { ...img, widthMm, heightMm } : img
+      ),
+    }));
+  },
+  updateImageRotation: (id, rotationZ) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.map((img) =>
+        img.id === id ? { ...img, rotationZ } : img
+      ),
+    }));
   },
 
   productId: null,
@@ -1053,9 +1198,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
-      set({ inscriptions: inscriptions(get().inscriptions) });
+      set((s) => ({
+        inscriptions: normalizeLineDimensions(inscriptions(s.inscriptions), s),
+      }));
     } else {
-      set({ inscriptions });
+      set((s) => ({ inscriptions: normalizeLineDimensions(inscriptions, s) }));
     }
     get().calculateInscriptionCost();
   },
@@ -1096,9 +1243,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       target,
       ref: React.createRef<Group>(),
     };
+    const normalizedLine = withLineSurfaceDimensions(newLine, target, state, true);
 
     set((s) => ({
-      inscriptions: [...s.inscriptions, newLine],
+      inscriptions: [...s.inscriptions, normalizedLine],
       selectedInscriptionId: id,
     }));
     state.calculateInscriptionCost();
@@ -1107,22 +1255,29 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   updateInscription: (id, patch) => {
     set((s) => ({
-      inscriptions: s.inscriptions.map((l) =>
-        l.id === id
-          ? {
-              ...l,
-              ...patch,
-              sizeMm:
-                patch.sizeMm !== undefined
-                  ? clampInscriptionSize(patch.sizeMm)
-                  : l.sizeMm,
-              rotationDeg:
-                patch.rotationDeg !== undefined
-                  ? clampInscriptionRotation(patch.rotationDeg)
-                  : l.rotationDeg,
-            }
-          : l,
-      ),
+      inscriptions: s.inscriptions.map((l) => {
+        if (l.id !== id) return l;
+        const nextTarget = patch.target ?? l.target ?? 'headstone';
+        const updatedLine: Line = {
+          ...l,
+          ...patch,
+          sizeMm:
+            patch.sizeMm !== undefined
+              ? clampInscriptionSize(patch.sizeMm)
+              : l.sizeMm,
+          rotationDeg:
+            patch.rotationDeg !== undefined
+              ? clampInscriptionRotation(patch.rotationDeg)
+              : l.rotationDeg,
+        };
+        const needsDimensions =
+          patch.target !== undefined ||
+          patch.xPos !== undefined ||
+          patch.yPos !== undefined ||
+          !updatedLine.baseWidthMm ||
+          !updatedLine.baseHeightMm;
+        return withLineSurfaceDimensions(updatedLine, nextTarget, s, needsDimensions);
+      }),
     }));
     get().calculateInscriptionCost();
   },
@@ -1252,17 +1407,37 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       sourceId?: string;
       additionName?: string;
       zPosFinalized?: boolean;
+      footprintWidth?: number;
+      baseWidthMm?: number;
+      baseHeightMm?: number;
     },
   ) => {
-    set((s) => ({
-      additionOffsets: {
-        ...s.additionOffsets,
-        [id]: {
-          ...s.additionOffsets[id],
+    set((s) => {
+      const previous = s.additionOffsets[id] ?? {};
+      const surface = offset.targetSurface ?? previous.targetSurface ?? 'headstone';
+      const shouldRefreshDims =
+        offset.targetSurface !== undefined ||
+        offset.xPos !== undefined ||
+        offset.yPos !== undefined ||
+        !previous.baseWidthMm ||
+        !previous.baseHeightMm;
+      const nextOffset = withOffsetSurfaceDimensions(
+        {
+          ...previous,
           ...offset,
+          targetSurface: surface,
         },
-      },
-    }));
+        surface,
+        s,
+        shouldRefreshDims,
+      );
+      return {
+        additionOffsets: {
+          ...s.additionOffsets,
+          [id]: nextOffset,
+        },
+      };
+    });
   },
   duplicateAddition: (id: string) => {
     const { additionOffsets } = get();
@@ -1281,18 +1456,26 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const deltaX = isBase ? widthDelta + margin : 30;
     const deltaY = isBase ? 0 : 30;
 
-    set((s) => ({
-      selectedAdditions: [...s.selectedAdditions, instanceId],
-      additionOffsets: {
-        ...s.additionOffsets,
-        [instanceId]: {
+    set((s) => {
+      const surface = currentOffset.targetSurface ?? 'headstone';
+      const duplicatedOffset = withOffsetSurfaceDimensions(
+        {
           ...currentOffset,
           xPos: (currentOffset.xPos ?? 0) + deltaX,
           yPos: (currentOffset.yPos ?? 0) + deltaY,
         },
-      },
-      selectedAdditionId: instanceId,
-    }));
+        surface,
+        s,
+      );
+      return {
+        selectedAdditions: [...s.selectedAdditions, instanceId],
+        additionOffsets: {
+          ...s.additionOffsets,
+          [instanceId]: duplicatedOffset,
+        },
+        selectedAdditionId: instanceId,
+      };
+    });
   },
 
   setSelectedMotifId: (id) => {
@@ -1327,9 +1510,33 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       heightMm: number;
       target?: 'headstone' | 'base';
       coordinateSpace?: 'absolute' | 'offset';
+      baseWidthMm?: number;
+      baseHeightMm?: number;
+      flipX?: boolean;
+      flipY?: boolean;
     },
   ) => {
-    set((s) => ({ motifOffsets: { ...s.motifOffsets, [id]: offset } }));
+    set((s) => {
+      const previous = s.motifOffsets[id];
+      const surface = offset.target ?? previous?.target ?? 'headstone';
+      const shouldRefreshDims =
+        offset.target !== undefined ||
+        offset.xPos !== undefined ||
+        offset.yPos !== undefined ||
+        !previous?.baseWidthMm ||
+        !previous?.baseHeightMm;
+      const nextOffset = withOffsetSurfaceDimensions(
+        {
+          ...previous,
+          ...offset,
+          target: surface,
+        },
+        surface,
+        s,
+        shouldRefreshDims,
+      );
+      return { motifOffsets: { ...s.motifOffsets, [id]: nextOffset } };
+    });
     // Recalculate cost when height changes
     setTimeout(() => get().calculateMotifCost(), 0);
   },
@@ -1352,18 +1559,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const currentOffset = motifOffsets[id];
     
     if (currentOffset) {
-      // Create a new offset slightly offset from the original
-      const newOffset = {
-        ...currentOffset,
-        xPos: currentOffset.xPos + 30,
-        yPos: currentOffset.yPos + 30,
-      };
-      
-      // Set the offset for the duplicate
-      set((s) => ({ 
-        motifOffsets: { ...s.motifOffsets, [newId]: newOffset },
-        selectedMotifId: newId, // Select the new duplicate
-      }));
+      set((s) => {
+        const surface = currentOffset.target ?? 'headstone';
+        const duplicatedOffset = withOffsetSurfaceDimensions(
+          {
+            ...currentOffset,
+            xPos: currentOffset.xPos + 30,
+            yPos: currentOffset.yPos + 30,
+          },
+          surface,
+          s,
+        );
+        return {
+          motifOffsets: { ...s.motifOffsets, [newId]: duplicatedOffset },
+          selectedMotifId: newId,
+        };
+      });
     }
   },
 

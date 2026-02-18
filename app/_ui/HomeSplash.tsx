@@ -363,16 +363,16 @@ export default function HomeSplash() {
           {/* Top Right Navigation */}
           <nav className="hidden md:flex items-center gap-6">
             <Link 
-              href="/designs" 
-              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors"
-            >
-              Browse Designs
-            </Link>
-            <Link 
               href="/select-product" 
               className="rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-5 py-2 text-sm font-semibold text-slate-900 shadow-md transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#cfac6c]/30 hover:from-[#d4af37] hover:to-[#cfac6c]"
             >
               Start Designing
+            </Link>
+            <Link 
+              href="/designs" 
+              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors"
+            >
+              Browse Designs
             </Link>
           </nav>
         </header>
@@ -403,7 +403,7 @@ export default function HomeSplash() {
                 className="inline-block font-semibold text-[2rem] sm:text-5xl mx-auto"
                 style={{ 
                   color: '#FFFEF8',
-                  textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.4)'
+                  textShadow: '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
                 }}
               >
                 Create the Perfect Tribute
@@ -412,7 +412,7 @@ export default function HomeSplash() {
                 className="block font-light text-xl sm:text-3xl mt-4"
                 style={{ 
                   color: '#FFFFFF',
-                  textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 4px 20px rgba(0,0,0,0.3)'
+                  textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
                 }}
               >
                 Design a beautiful tribute in real-time 3D - save, share, and order when ready.

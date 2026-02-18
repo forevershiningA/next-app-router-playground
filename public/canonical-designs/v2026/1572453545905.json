@@ -1,0 +1,132 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-02-17T10:24:55.649Z",
+  "units": "mm",
+  "source": {
+    "id": "1572453545905",
+    "slug": "1572453545905",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1572453545905.json",
+    "savedAt": "2026-02-17T10:24:55.649Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+    "type": "headstone",
+    "slug": "headstone",
+    "category": "unknown",
+    "title": "Bronze Plaque - Dark Brown - Lugs with Studs",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/forever/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1270,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Test",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 80,
+          "size_px": 349.2,
+          "weight": 400
+        },
+        "position": {
+          "x_px": -14.999,
+          "y_px": -87.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_154_18",
+        "position": {
+          "x_px": -275.002,
+          "y_px": -148.999
+        },
+        "height_mm": 20,
+        "height_px": 87.3,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_154_18",
+        "position": {
+          "x_px": 268.897,
+          "y_px": -143.002
+        },
+        "height_mm": 20,
+        "height_px": 87.3,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_18",
+        "path": "/shapes/motifs/1_154_18.svg"
+      }
+    ]
+  }
+}

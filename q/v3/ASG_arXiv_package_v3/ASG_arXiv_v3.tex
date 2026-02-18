@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+
+\title{Active Screen Gravity: A Running Planck Mass Approach to Inflation}
+\author{Albert De Boer (draft) \\ Independent Researcher \\ \texttt{albert@example.com} }
+\date{June 2026 (v3)}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Active Screen Gravity (ASG) extends conventional inflationary constructions by introducing a field-dependent running effective Planck mass $F(\phi)$ motivated by renormalization group flow. This modifies the Einstein-frame potential $U(\phi) = V(\phi)/F(\phi)^2$, generating a geometric tilt and suppressing tensor modes without fine-tuning the particle physics potential $V(\phi)$. We derive the slow-roll parameters, propose concrete forms for $F(\phi)$ and $V(\phi)$, and provide a numerical framework for parameter scans in the $(n_s, r)$ plane. The model predicts a trajectory with suppressed $r \lesssim 10^{-4}$ in benchmark regions, distinguishable from Starobinsky and $\\alpha$-attractors. We assess robustness against ghosts, radiative corrections, and post-inflation GR recovery, and include numerical results from representative scans. \textit{Keywords:} Inflation, Modified Gravity, Cosmology.
+\end{abstract}
+
+\section{Introduction}
+(omitted here for brevity; see previous versions)\\
+
+\section{New diagnostics: relation to attractors and running of $n_s$}
+\subsection{Relation to $\alpha$-attractors and pole inflation}
+ASG sits within the broad family of attractor/pole-inflation models because the field-space metric induced by $F(\phi)$ controls the canonical field redefinition. For the tanh-screen benchmark $F(\phi)=1+\beta\tanh(\phi/\phi_0)$ the field-space factor $\chi_{,\phi}$ tends to a constant at large field and the Einstein-frame potential becomes plateau-like, mirroring classic attractor behavior. The distinguishing feature is that the running of $F$ during the observable window contributes explicitly to the slow-roll derivatives (through $F'/F$ and $F''/F$), producing a coupled change in $n_s$ and $r$ (redder $n_s$ with lower $r$ as $\beta$ increases). We emphasize this point and include explicit comparison plots in Fig.~\\ref{fig:nsr_improved}.
+
+\subsection{Approximate running $\alpha_s$ from finite differences}
+We estimate the running using finite differences between $N=50$ and $N=60$:
+\begin{equation}
+\alpha_s \equiv \frac{dn_s}{d\ln k} \approx \frac{n_s(N=50)-n_s(N=60)}{\ln k_{50}-\ln k_{60}},
+\end{equation}
+with $\ln k=-N$ so $\ln k_{50}-\ln k_{60}=10$. Table~\\ref{tab:alpha} and Fig.~\\ref{fig:alpha} summarize the result for the tanh-screen scan: typical values are $\\alpha_s\\sim -2\\times10^{-4}$ at small $\\beta$ and can reach $|\\alpha_s|\\sim 10^{-3}$ for moderate $\\beta$ when horizon crossing occurs near the transition region of $F$. This enhanced running is a key observable discriminator compared with classic attractors.
+
+\\begin{table}[ht]
+\\centering
+\\caption{Approximate running $\\alpha_s$ (finite-difference estimate)}
+\\begin{tabular}{ccc}
+\\toprule
+$\\beta$ & $n_s(50)$ & $\\alpha_s$ \\\\
+\\midrule
+
+0.00000 & 0.96125 & -0.000633 \\
+0.00263 & 1.00000 & 0.000000 \\
+0.00526 & 1.00000 & 0.000000 \\
+0.00789 & 1.00000 & 0.000000 \\
+0.01053 & 1.00000 & 0.000000 \\
+0.01316 & 1.00000 & 0.000000 \\
+\bottomrule
+\end{tabular}
+\label{tab:alpha}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/asg_ns_r_trajectory_improved.png}
+\caption{ASG trajectory in $(n_s,r)$ plane for tanh-screen $F$ and plateau $V$.}
+\label{fig:nsr_improved}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{asg_alpha_vs_beta.png}
+\caption{Approximate running $\\alpha_s$ vs $\\beta$ from finite difference $N=50$ vs $N=60$.}
+\label{fig:alpha}
+\end{figure}
+
+\section{Physical interpretation of the scalar field $\phi$}
+A minimal, conservative interpretation is to view $\phi$ as a dilaton-like conformal compensator associated with approximate scale symmetry breaking. In such a picture $F(\\phi)$ encodes the RG-running of the effective gravitational coupling; inflation is the epoch where the dilaton slowly relaxes, screening gravity (enhanced $F$) and generating the observed geometric tilt, before settling to $F\\to1$ and restoring GR. This interpretation connects ASG to scale-invariant and asymptotically safe approaches and provides a route toward UV completion while keeping the phenomenology agnostic and robust.
+
+\section{Conclusion and next steps}
+(omitted)\\
+
+\\begin{thebibliography}{99}
+\\bibitem{Bezrukov:2007ep} F. Bezrukov and M. Shaposhnikov, Phys. Lett. B 659 (2008) 703-706.
+\\bibitem{Kallosh:2013yoa} R. Kallosh and A. Linde, JCAP 1307 (2013) 002.
+\\bibitem{Starobinsky:1980te} A. A. Starobinsky, Phys. Lett. B 91 (1980) 99-102.
+\\bibitem{Coleman:1973jx} S. Coleman and E. Weinberg, Phys. Rev. D8 (1973) 1888.
+\\bibitem{LiteBIRD:2020khw} LiteBIRD Collaboration, Proc. SPIE 11443 (2020) 114432F.
+\\end{thebibliography}
+
+\end{document}

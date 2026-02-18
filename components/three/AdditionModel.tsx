@@ -387,6 +387,9 @@ function AdditionModelInner({
       zPos: storedOffset.zPos ?? defaultOffset.zPos,
     };
   }, [defaultOffset, storedOffset]);
+  const targetSurface = offset.targetSurface === 'base' ? 'base' : 'headstone';
+  const displayOffsetX = offset.xPos ?? 0;
+  const displayOffsetY = offset.yPos ?? 0;
 
   const targetH = TARGET_HEIGHTS[additionKind] || TARGET_HEIGHTS.application;
   const maxDim = Math.max(size.x, size.y);
@@ -455,12 +458,12 @@ function AdditionModelInner({
     if (offset.targetSurface !== 'base') return;
     if (!bbox || baseTopY == null) return;
     const centerY = (bbox.min.y + bbox.max.y) / 2;
-    const currentYWorld = centerY - (offset.yPos ?? 0);
+    const currentYWorld = centerY - displayOffsetY;
     const desiredY = baseTopY;
     if (Math.abs(currentYWorld - desiredY) < 1e-4) return;
     const adjustedYPos = centerY - desiredY;
     setAdditionOffset(id, { yPos: adjustedYPos });
-  }, [additionKind, baseTopY, bbox, id, offset.targetSurface, offset.yPos, prefersBaseSurface, setAdditionOffset]);
+  }, [additionKind, baseTopY, bbox, displayOffsetY, id, offset.targetSurface, prefersBaseSurface, setAdditionOffset]);
 
   React.useEffect(() => {
     if (!prefersBaseSurface || additionKind === 'application') return;
@@ -830,8 +833,8 @@ function AdditionModelInner({
       const headCenterX = (bbox.min.x + bbox.max.x) / 2;
       const headCenterY = (bbox.min.y + bbox.max.y) / 2;
       const currentHeadstonePoint = new THREE.Vector3(
-        headCenterX + (offset.xPos ?? 0),
-        headCenterY - (offset.yPos ?? 0),
+        headCenterX + displayOffsetX,
+        headCenterY - displayOffsetY,
         zPosition,
       );
 
@@ -848,8 +851,8 @@ function AdditionModelInner({
       bbox,
       computeInteractionPoint,
       headstone,
-      offset.xPos,
-      offset.yPos,
+      displayOffsetX,
+      displayOffsetY,
       zPosition,
     ]
   );
@@ -897,7 +900,7 @@ function AdditionModelInner({
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
 
-  const desiredY = centerY - offset.yPos;
+  const desiredY = centerY - displayOffsetY;
   const finalY = prefersBaseSurface && offset.targetSurface === 'base' && baseTopY !== null
     ? Math.max(baseTopY, desiredY)
     : desiredY;
@@ -906,7 +909,7 @@ function AdditionModelInner({
     <>
       {/* Parent group for positioning - convert Y-down saved coords to Y-up display */}
       <group
-        position={[centerX + offset.xPos, finalY, zPosition]}
+        position={[centerX + displayOffsetX, finalY, zPosition]}
         rotation={[0, 0, offset.rotationZ || 0]}
       >
         {/* Addition mesh with scale and Y-flip */}

@@ -1,0 +1,200 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,graphicx,cite,hyperref}
+
+\title{Active Screen Gravity: Running Planck Mass as the Origin of the Inflationary Attractor}
+
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present a scalar--tensor inflationary framework in which cosmological observables are governed by the renormalization--group running of the effective Planck mass rather than by tuning of the inflaton potential. A localized deformation of the gravitational coupling generates an ultra--flat effective potential through dynamical slope cancellation. We show that the scalar spectral index is determined by curvature of the running Planck mass while the tensor amplitude depends on its slope, producing a correlated trajectory in the $(n_s,r)$ plane. The cancellation regime is demonstrated to be a dynamical attractor. The model predicts $r \sim 10^{-4}$ without fine tuning and is testable by future CMB polarization missions.
+\end{abstract}
+
+\section{Introduction}
+
+Inflationary plateau models successfully reproduce the observed scalar tilt but generically predict a tensor amplitude $r\sim10^{-3}$ \cite{Starobinsky1980,Kallosh2013}. Lowering $r$ typically requires tuning the inflaton potential.
+
+Here we explore a different mechanism: running gravitational coupling. We consider the scalar--tensor action
+
+\begin{equation}
+S=\int d^4x\sqrt{-g}\left[F(\chi)R-\frac{1}{2}(\partial\chi)^2-V(\chi)\right].
+\label{action}
+\end{equation}
+
+After conformal transformation to the Einstein frame the effective potential becomes
+
+\begin{equation}
+U(\chi)=\frac{V(\chi)}{F(\chi)^2}.
+\label{effectiveU}
+\end{equation}
+
+Inflationary dynamics therefore depend on derivatives of $F(\chi)$ as well as $V(\chi)$.
+
+\section{Field-Theoretic Origin}
+
+We interpret $\chi$ as an ordinary inflaton coupled to heavy thresholds
+
+\begin{equation}
+m_i(\chi)=m_{i0}e^{\chi/\Delta}.
+\label{thresholds}
+\end{equation}
+
+Vacuum polarization induces a field-dependent Planck mass
+
+\begin{equation}
+M_{Pl}^2(\chi)=M_0^2+\Pi(\chi).
+\label{planckrun}
+\end{equation}
+
+Near the transition scale this produces a localized deformation
+
+\begin{equation}
+F(\chi)=1+\beta\exp\left[-\frac{(\chi-\chi_0)^2}{\Delta^2}\right].
+\label{gaussianF}
+\end{equation}
+
+The Gaussian therefore arises from threshold physics rather than an ad hoc ansatz.
+
+\section{Inflationary Dynamics}
+
+Slow-roll parameters are
+
+\begin{align}
+\epsilon &= \frac{1}{2}\left(\frac{U'}{U}\right)^2, \\
+\eta &= \frac{U''}{U}.
+\end{align}
+
+Using Eq.~(\ref{effectiveU}):
+
+\begin{equation}
+\frac{U'}{U}=\frac{V'}{V}-2\frac{F'}{F},
+\label{logderivative}
+\end{equation}
+
+\begin{equation}
+\eta=\frac{V''}{V}-4\frac{V'}{V}\frac{F'}{F}+6\left(\frac{F'}{F}\right)^2-2\frac{F''}{F}.
+\label{etaeq}
+\end{equation}
+
+In the plateau regime $V'/V\ll F'/F$,
+
+\begin{equation}
+n_s-1\approx2\eta\approx-4\frac{F''}{F}.
+\label{nsresult}
+\end{equation}
+
+Thus the spectral tilt originates from curvature of the running Planck mass.
+
+\section{Tensor Suppression}
+
+\begin{equation}
+r=16\epsilon=8\left(\frac{V'}{V}-2\frac{F'}{F}\right)^2.
+\label{tensor}
+\end{equation}
+
+Near the attractor this gives
+
+\begin{equation}
+r\approx r_0(1-\gamma\beta)^2,
+\label{rresult}
+\end{equation}
+
+yielding $r\sim10^{-4}$ for $\beta\sim0.02$.
+
+\section{Dynamical Attractor}
+
+Define the effective slope
+
+\begin{equation}
+X=\frac{V'}{V}-2\frac{F'}{F}.
+\label{Xdef}
+\end{equation}
+
+Evolution in e-fold time:
+
+\begin{align}
+\frac{d\chi}{dN} &= -X, \\
+\frac{dX}{dN} &\approx 2\frac{F''}{F}X.
+\end{align}
+
+For the Gaussian deformation $F''/F<0$ near $\chi_0$, therefore
+
+\begin{equation}
+X\rightarrow0.
+\end{equation}
+
+The cancellation regime is a stable attractor rather than fine tuning.
+
+\section{Perturbations}
+
+Scalar perturbations obey the Mukhanov--Sasaki equation \cite{Mukhanov1991}
+
+\begin{equation}
+v_k''+(k^2-\frac{z''}{z})v_k=0,
+\end{equation}
+
+with $z=a\sqrt{2\epsilon}$.
+
+Using Eq.~(\ref{logderivative}) in the plateau regime reproduces Eq.~(\ref{nsresult}), confirming that geometry controls the tilt.
+
+\section{Reheating}
+
+Inflation ends when $F'(\chi)\rightarrow0$, restoring the Planck mass.  
+The reheating temperature is therefore linked to horizon-crossing observables:
+
+\begin{equation}
+T_{reh}\propto U(\chi_{exit})^{1/4}.
+\label{reheating}
+\end{equation}
+
+\section{Observational Signature}
+
+The model predicts a correlated trajectory in the $(n_s,r)$ plane.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{nsr_trajectory_analytic.png}
+\caption{Trajectory in the $(n_s,r)$ plane as $\beta$ increases. Green regions show approximate Planck constraints; blue region shows LiteBIRD sensitivity.}
+\end{figure}
+
+\section{Conclusion}
+
+Inflationary observables measure derivatives of the gravitational coupling rather than the inflaton potential:
+
+\begin{itemize}
+\item $n_s$ probes curvature of $F(\chi)$
+\item $r$ probes slope of $F(\chi)$
+\end{itemize}
+
+Future detection of $r\sim10^{-4}$ would strongly support geometry-driven inflation.
+
+\begin{thebibliography}{9}
+
+\bibitem{Starobinsky1980}
+A.~A.~Starobinsky,
+Phys.\ Lett.\ B {\bf 91}, 99 (1980).
+
+\bibitem{Kallosh2013}
+R.~Kallosh and A.~Linde,
+JCAP {\bf 1307}, 002 (2013).
+
+\bibitem{Mukhanov1991}
+V.~Mukhanov,
+Phys.\ Lett.\ B {\bf 218}, 17 (1989).
+
+\bibitem{Reuter1998}
+M.~Reuter,
+Phys.\ Rev.\ D {\bf 57}, 971 (1998).
+
+\bibitem{Codello2009}
+A.~Codello, R.~Percacci, C.~Rahmede,
+Annals Phys.\ {\bf 324}, 414 (2009).
+
+\end{thebibliography}
+
+\end{document}

@@ -16,6 +16,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   RectangleStackIcon,
+  PhotoIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
@@ -29,6 +30,7 @@ import ShapeSelector from './ShapeSelector';
 import BorderSelector from './BorderSelector';
 import AdditionSelector from './AdditionSelector';
 import MotifSelectorPanel from './MotifSelectorPanel';
+import ImageSelector from './ImageSelector';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -46,6 +48,7 @@ const menuGroups = [
     label: 'Design',
     items: [
       { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
+      { slug: 'select-images', name: 'Add Your Image', icon: PhotoIcon },
       { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
       { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
       { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
@@ -55,7 +58,7 @@ const menuGroups = [
 
 // Flatten for compatibility with existing code
 const menuItems = menuGroups.flatMap(group => group.items);
-const fullscreenPanelSlugs = new Set(['select-size', 'select-shape', 'select-material', 'select-border', 'inscriptions', 'select-additions', 'select-motifs']);
+const fullscreenPanelSlugs = new Set(['select-size', 'select-shape', 'select-material', 'select-border', 'inscriptions', 'select-images', 'select-additions', 'select-motifs']);
 
 export default function DesignerNav() {
   const pathname = usePathname();
@@ -317,7 +320,7 @@ export default function DesignerNav() {
   const isSelectAdditionsPage = pathname === '/select-additions';
   
   // Determine if canvas is visible (on pages with 3D scene)
-  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-border', '/select-additions'];
+  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-border', '/select-additions', '/select-images'];
   const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
   
@@ -1023,6 +1026,16 @@ export default function DesignerNav() {
     );
   };
 
+  const renderSelectImagesPanel = () => {
+    return (
+      <div className="flex h-full flex-col">
+        <div className="flex-1">
+          <ImageSelector />
+        </div>
+      </div>
+    );
+  };
+
   // Sync canvas selection with editingObject on select-size page
   useEffect(() => {
     if (isSelectSizePage && selected !== editingObject) {
@@ -1640,6 +1653,7 @@ export default function DesignerNav() {
               </div>
             )}
             {activeFullscreenPanel === 'select-additions' && renderSelectAdditionsPanel()}
+            {activeFullscreenPanel === 'select-images' && renderSelectImagesPanel()}
             {activeFullscreenPanel === 'select-motifs' && renderSelectMotifsPanel()}
           </div>
         </div>

@@ -37,6 +37,12 @@ export default function RouterBinder() {
     );
   }, [router, setNavTo]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !pathname) return;
+    if (pathname === '/check-price') return;
+    sessionStorage.setItem('designer:last-section', pathname);
+  }, [pathname]);
+
   // Set product ID based on URL - only when no product has been selected yet
   useEffect(() => {
     if (currentProductId) {

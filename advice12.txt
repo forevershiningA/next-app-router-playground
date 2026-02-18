@@ -1,0 +1,137 @@
+Yep — what you’re seeing happens when your **design elements are positioned in absolute “world/plaque units”**, but when you change the plaque width you only change the **plaque mesh size**, not the **coordinate system the elements use**.
+
+So as the plaque gets wider, the *elements stay where they were*, instead of staying “centered relative to the plaque”.
+
+The fix is to make **all element positions expressed in plaque-local coordinates**, not world coordinates.
+
+---
+
+## The pattern that fixes it (works every time)
+
+### 1) Put the plaque + all elements inside a single group whose origin is the plaque center
+
+```tsx
+<group ref={plaqueGroupRef} position={plaqueWorldPos} rotation={plaqueWorldRot}>
+  <mesh /* plaque */ />
+  <group /* elements */>
+    {elements...}
+  </group>
+</group>
+```
+
+Now every element position is in **plaque local space**.
+
+---
+
+### 2) Store element positions in normalized coordinates (recommended)
+
+Store each element like this:
+
+* `u` = 0..1 left→right
+* `v` = 0..1 bottom→top
+
+Then compute position from current width/height:
+
+```ts
+function uvToPlaqueLocal(u: number, v: number, w: number, h: number, z = 0) {
+  // center-based local coords
+  const x = (u - 0.5) * w;
+  const y = (v - 0.5) * h;
+  return new THREE.Vector3(x, y, z);
+}
+```
+
+So when width changes, you don’t “move elements” manually — you just recompute from `(u,v)` using the new `w,h`.
+
+Example:
+
+```tsx
+const w = plaqueWidthMeters;
+const h = plaqueHeightMeters;
+
+const pos = uvToPlaqueLocal(el.u, el.v, w, h, 0.002);
+child.position.copy(pos);
+```
+
+This guarantees: **the layout stays centered and proportional** no matter the plaque size.
+
+---
+
+## If you currently store mm from top-left
+
+Convert to centered local coords:
+
+```ts
+function mmTopLeftToLocal(xMm: number, yMm: number, wMm: number, hMm: number) {
+  // xMm: 0..wMm from left
+  // yMm: 0..hMm from top  (common UI)
+  const x = (xMm - wMm / 2) / 1000;      // meters
+  const y = (hMm / 2 - yMm) / 1000;      // meters (invert Y)
+  return new THREE.Vector3(x, y, 0.002);
+}
+```
+
+If you don’t do this conversion, increasing width will “pull the left/right anchored items out of center”.
+
+---
+
+## Text centering gotcha (very common)
+
+If you’re using troika text (`<Text />`) or similar, make sure it’s *actually centered around its own origin*:
+
+```tsx
+<Text
+  anchorX="center"
+  anchorY="middle"
+  textAlign="center"
+/>
+```
+
+If you’re using `TextGeometry`, you must re-center its geometry after text changes:
+
+```ts
+textGeom.computeBoundingBox();
+textGeom.center(); // critical
+```
+
+Otherwise your “position is centered” but the glyphs are offset.
+
+---
+
+## What to change (the actual rule)
+
+When plaque width/height changes, **only these should change**:
+
+✅ plaque mesh scale/geometry size
+✅ mapping function from stored element coords → local coords
+
+❌ do NOT keep hard-coded `x` positions like `x = 0.18` meters that were tuned for the square version
+
+---
+
+## Quick diagnostic
+
+If in your code you see things like:
+
+```ts
+child.position.x = somethingFixed;
+```
+
+and that “somethingFixed” was chosen for the square plaque, that’s why it drifts.
+
+Replace it with:
+
+```ts
+child.position.x = (el.u - 0.5) * plaqueWidth;
+```
+
+(or the mm conversion variant)
+
+---
+
+If you paste the part of the code where:
+
+1. plaque width is changed, and
+2. elements get positioned (text/motifs/border)
+
+…I’ll rewrite that exact section into the `u/v → local` mapping so it stays perfectly centered at any width.

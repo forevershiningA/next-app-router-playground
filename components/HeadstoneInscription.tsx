@@ -166,8 +166,23 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         // next is in headstone-local space, corrected by the initial grab offset
         const next = local.add(dragOffset);
 
+        const state = useHeadstoneStore.getState();
+        const line = state.inscriptions.find((l) => l.id === id);
+        const targetSurface = line?.target === 'base' ? 'base' : 'headstone';
+        const baseWidth = targetSurface === 'base'
+          ? state.baseWidthMm ?? state.widthMm
+          : state.widthMm;
+        const baseHeight = targetSurface === 'base'
+          ? state.baseHeightMm ?? state.heightMm
+          : state.heightMm;
+
         // Update store with new position offsets (no target change)
-        updateLineStore(id, { xPos: next.x, yPos: next.y });
+        updateLineStore(id, {
+          xPos: next.x,
+          yPos: next.y,
+          baseWidthMm: baseWidth,
+          baseHeightMm: baseHeight,
+        });
 
         // Reset local pos to base position (0, 0)
         setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));

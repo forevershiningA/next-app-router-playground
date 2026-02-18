@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
@@ -9,7 +11,9 @@ import { calculatePrice } from '#/lib/xml-parser';
 type DetailModalType = 'inscriptions' | 'motifs' | 'additions' | null;
 
 export default function CheckPriceGrid() {
+  const router = useRouter();
   const [detailModal, setDetailModal] = useState<DetailModalType>(null);
+  const [returnPath, setReturnPath] = useState('/select-size');
   const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
@@ -27,6 +31,24 @@ export default function CheckPriceGrid() {
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = sessionStorage.getItem('designer:last-section');
+    if (stored && stored !== '/check-price') {
+      const allowedPrefixes = ['/select', '/inscriptions'];
+      const isAllowed = allowedPrefixes.some((prefix) => stored.startsWith(prefix));
+      if (isAllowed) {
+        setReturnPath(stored);
+        return;
+      }
+    }
+    setReturnPath('/select-size');
+  }, []);
+
+  const handleClosePage = () => {
+    router.push(returnPath || '/select-size');
+  };
+ 
   // Get product name from catalog
   const productName = catalog?.product?.name || 'Not selected';
   
@@ -195,6 +217,15 @@ export default function CheckPriceGrid() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+      <button
+        type="button"
+        onClick={handleClosePage}
+        className="fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        aria-label="Close check price"
+      >
+        <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+        <span className="hidden sm:inline">Close</span>
+      </button>
       
       {/* Header Section */}
       <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">

@@ -7,7 +7,7 @@ import { DocumentArrowDownIcon } from '@heroicons/react/24/outline';
 interface LoadDesignButtonProps {
   designId: string;
   label: string;
-  position: 'top' | 'middle';
+  position: 'top' | 'middle' | 'bottom';
 }
 
 /**
@@ -35,9 +35,11 @@ export default function LoadDesignButton({ designId, label, position }: LoadDesi
     }
   };
 
-  const positionClasses = position === 'top' 
-    ? 'top-4' 
-    : 'top-20';
+  const positionClasses = {
+    top: 'top-4',
+    middle: 'top-20',
+    bottom: 'top-36',
+  }[position];
 
   return (
     <button
