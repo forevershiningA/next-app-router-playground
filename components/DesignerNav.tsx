@@ -97,6 +97,9 @@ export default function DesignerNav() {
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+  const selectedImages = useHeadstoneStore((s) => s.selectedImages);
+  const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
+  const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
@@ -1042,6 +1045,13 @@ export default function DesignerNav() {
       setSelected(editingObject);
     }
   }, [isSelectSizePage, editingObject, selected, setSelected]);
+
+  // Auto-open image panel when an image is selected
+  useEffect(() => {
+    if (selectedImageId && activeFullscreenPanel !== 'select-images') {
+      setActiveFullscreenPanel('select-images');
+    }
+  }, [selectedImageId, activeFullscreenPanel]);
 
   let quantity = widthMm * heightMm;
   if (catalog) {

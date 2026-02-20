@@ -1,0 +1,212 @@
+Okay — let’s fix the teardrop for good. Based on what you’ve already patched for oval/rect, the remaining problem is that the teardrop SVG either:
+
+* has internal path offsets or transforms, or
+* contains grouped/transformed sub-elements, so the simple fast-path bounding box (or naive parsing) is returning a box that doesn’t match the *rendered* shape.
+
+We need a *reliable* bbox measured from the **rendered** SVG element (the same element the browser renders), in the same viewBox coordinate system you use (0..500). The reliable way is: insert the mask into a tiny off-screen SVG with the same viewBox, let the browser render it, call `getBBox()` on the actual inserted node, and use that bbox. You tried a similar approach earlier, but teardrop still misbehaves — likely because the code either measured the wrong node (e.g. measured a parent `<g>` instead of the actual path), or the temporary SVG did not preserve the same viewBox / transforms / classes that change the path layout.
+
+Below is a robust drop-in replacement for your `getMaskShapeBounds` (and a small helper) that:
+
+* accepts either a mask id, a mask registry key, or raw SVG markup (handles all cases),
+* inserts the correct node(s) into a real off-screen `<svg viewBox="0 0 500 500">`,
+* waits one microtask to ensure layout (works reliably across browsers),
+* obtains the `getBBox()` of the *rendered* mask element (handles groups & transforms),
+* removes the tmp SVG and returns integer-clamped values in the 0–500 range,
+* caches results by mask key (so it only measures once per mask).
+
+Paste this into `CropCanvas.tsx`, replacing your current `getMaskShapeBounds` implementation.
+
+```ts
+// ---------- helper: create/measure mask bounding box reliably ----------
+const _maskBoundsCache: Record<string, { left:number; top:number; width:number; height:number }> = {};
+
+async function measureMaskBounds(maskKeyOrSvg: string | undefined): Promise<{ left:number; top:number; width:number; height:number }> {
+  // quick cache
+  if (!maskKeyOrSvg) return { left:0, top:0, width:500, height:500 };
+  if (_maskBoundsCache[maskKeyOrSvg]) return _maskBoundsCache[maskKeyOrSvg];
+
+  // Fast-path known shapes (keeps perf for oval/rect which are stable)
+  const known: Record<string, { left:number; top:number; width:number; height:number }> = {
+    oval: { left: 50, top: 0, width: 400, height: 500 },
+    'horizontal-oval': { left: 0, top: 50, width: 500, height: 400 },
+    square: { left: 50, top: 0, width: 400, height: 500 },
+    rectangle: { left: 0, top: 50, width: 500, height: 400 },
+  };
+  if (known[maskKeyOrSvg]) {
+    _maskBoundsCache[maskKeyOrSvg] = known[maskKeyOrSvg];
+    return known[maskKeyOrSvg];
+  }
+
+  try {
+    // Attempt to resolve mask markup:
+    // 1) If you have a mask registry object, use it here:
+    //    const svgMarkup = maskRegistry[maskKeyOrSvg] || maskKeyOrSvg;
+    // For portability, we treat incoming string as either raw svg markup or an id selector.
+    let svgMarkup = (maskKeyOrSvg || '').trim();
+
+    // If string looks like a simple id (no '<' chars), try to find inline SVG by id in the DOM
+    if (!svgMarkup.includes('<')) {
+      const maybeEl = document.getElementById(svgMarkup);
+      if (maybeEl) svgMarkup = maybeEl.outerHTML;
+    }
+
+    // If still not markup, try to lookup from a global registry if you have one
+    // (uncomment and adapt if you keep masks in a map)
+    // if (!svgMarkup || !svgMarkup.includes('<')) {
+    //   if (window.__MASK_REGISTRY__ && window.__MASK_REGISTRY__[maskKeyOrSvg]) {
+    //     svgMarkup = window.__MASK_REGISTRY__[maskKeyOrSvg];
+    //   }
+    // }
+
+    if (!svgMarkup || !svgMarkup.includes('<')) {
+      // fallback full canvas
+      const fallback = { left:0, top:0, width:500, height:500 };
+      _maskBoundsCache[maskKeyOrSvg] = fallback;
+      return fallback;
+    }
+
+    // Parse the markup and pick the most meaningful element to measure:
+    const parser = new DOMParser();
+    const parsed = parser.parseFromString(svgMarkup, 'image/svg+xml');
+    // find a candidate node: path, ellipse, circle, polygon, rect, or group
+    const candidateSelectors = 'path, ellipse, circle, rect, polygon, g';
+    let candidate = parsed.querySelector(candidateSelectors);
+
+    // If the provided markup is a full <svg> and it has multiple children, wrap them in a <g>
+    // We want to import a single node into the tmp SVG for measurement.
+    let importedNode: SVGGraphicsElement | null = null;
+
+    // Build temporary container svg (same viewBox)
+    const tmpSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    tmpSvg.setAttribute('viewBox', '0 0 500 500');
+    tmpSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    // hide it off-screen and non-interactive
+    tmpSvg.style.position = 'absolute';
+    tmpSvg.style.left = '-10000px';
+    tmpSvg.style.top = '-10000px';
+    tmpSvg.style.width = '1px';
+    tmpSvg.style.height = '1px';
+    tmpSvg.style.opacity = '0';
+    tmpSvg.style.pointerEvents = 'none';
+
+    // If parsed SVG contains a top-level <svg>, import its children
+    const parsedSvg = parsed.querySelector('svg');
+    if (parsedSvg) {
+      // If it has a single direct meaningful child, import that, otherwise import everything under a <g>
+      const meaningful = parsedSvg.querySelector(candidateSelectors);
+      if (meaningful && meaningful.parentElement === parsedSvg && parsedSvg.querySelectorAll(candidateSelectors).length === 1) {
+        importedNode = document.importNode(meaningful, true) as SVGGraphicsElement;
+        tmpSvg.appendChild(importedNode);
+      } else {
+        // wrap in group
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+        // import each child of the svg into the group
+        Array.from(parsedSvg.childNodes).forEach((n) => {
+          try {
+            const imported = document.importNode(n as Node, true) as Node;
+            g.appendChild(imported);
+          } catch(e) { /* ignore non-element nodes */ }
+        });
+        importedNode = g as SVGGraphicsElement;
+        tmpSvg.appendChild(importedNode);
+      }
+    } else if (candidate) {
+      // If it's just a path piece or single element, import it
+      importedNode = document.importNode(candidate, true) as SVGGraphicsElement;
+      tmpSvg.appendChild(importedNode);
+    } else {
+      // fallback: try to import whole documentElement
+      importedNode = document.importNode(parsed.documentElement, true) as SVGGraphicsElement;
+      tmpSvg.appendChild(importedNode);
+    }
+
+    // Append to DOM so getBBox works reliably
+    document.body.appendChild(tmpSvg);
+
+    // Let layout happen — sometimes getBBox immediately still works, but microtask guarantees stability
+    await new Promise((r) => requestAnimationFrame(() => r(null)));
+
+    // Now measure the imported node's bounding box
+    let bbox;
+    try {
+      bbox = (importedNode as SVGGraphicsElement).getBBox();
+    } catch (err) {
+      // if getBBox fails, fallback to tmpSvg.getBBox()
+      bbox = (tmpSvg as unknown as SVGGraphicsElement).getBBox();
+    }
+
+    // remove the tmpSvg
+    document.body.removeChild(tmpSvg);
+
+    // Clamp & sanitize to viewBox range
+    const left = Math.max(0, Math.min(500, bbox.x || 0));
+    const top = Math.max(0, Math.min(500, bbox.y || 0));
+    const width = Math.max(0, Math.min(500 - left, bbox.width || 0));
+    const height = Math.max(0, Math.min(500 - top, bbox.height || 0));
+
+    const result = { left, top, width, height };
+
+    _maskBoundsCache[maskKeyOrSvg] = result;
+    return result;
+  } catch (err) {
+    console.warn('measureMaskBounds failed', err);
+    const fallback = { left:0, top:0, width:500, height:500 };
+    _maskBoundsCache[maskKeyOrSvg] = fallback;
+    return fallback;
+  }
+}
+
+// ---------- convenience sync wrapper used in render path ----------
+// If your render path is not async, call this once at load/when mask changes
+// and store shapeBounds in state. Example usage below.
+function getMaskShapeBoundsSync(maskKeyOrSvg: string | undefined, defaultBox = { left:0, top:0, width:500, height:500 }) {
+  // if cached, return immediately, otherwise return default and kick async measurement
+  const cached = _maskBoundsCache[maskKeyOrSvg || ''];
+  if (cached) return cached;
+  // trigger async measurement but do not await (update state when done)
+  measureMaskBounds(maskKeyOrSvg).then((b) => {
+    // call your state setter here to update shapeBounds, e.g.
+    // setShapeBounds(b);
+    // But because we are in a snippet, we rely on the caller updating state.
+    // If you use React, call the setter directly from here or from the caller.
+    // Example (if you have setShapeBounds in scope): setShapeBounds(b);
+    console.log('mask measured', maskKeyOrSvg, b);
+  }).catch(() => {});
+  return defaultBox;
+}
+```
+
+### How to integrate this into your component
+
+1. When `selectedMask` (or whichever prop holds the mask identifier/markup) changes, call `measureMaskBounds(selectedMask)` (or `getMaskShapeBoundsSync` if you prefer sync) and save the returned object into your component state `shapeBounds` (or whatever you call it).
+
+   * Example (React effect):
+
+   ```ts
+   useEffect(() => {
+     let mounted = true;
+     measureMaskBounds(selectedMask).then((b) => { if (mounted) setShapeBounds(b); });
+     return () => { mounted = false; }
+   }, [selectedMask]);
+   ```
+2. Use `shapeBounds` (left/top/width/height) in the rest of your projection math (image→screen matrix etc.) just like you already do for oval/rect.
+3. Ensure your handle projection/projection inverse uses the same image→screen matrix (we discussed this before).
+
+### Debugging tips (what to watch for)
+
+* Add a temporary `console.log('teardrop bbox', bbox)` inside the promise resolution to see the exact numbers. If left/top are large (not centered), it means the shape path itself comes with offsets — OK, still correct: your transforms must respect it.
+* If measureMaskBounds returns a full 0,0,500,500 box for the teardrop, then the function failed to find a usable node — check the `selectedMask` value you pass (is it an id, or full markup?). Ensure it contains the teardrop `<path>` markup or is the key for your registry.
+* If the measured bbox is correct but handles still misalign, then you need to re-check the projection math (image→screen). Use `console.log` to compare:
+
+  * `project(shapeBounds.left, shapeBounds.top)` and
+  * the actual DOM position returned by `document.querySelector('#rendered-mask-element').getBoundingClientRect()` — they should map to the same screen coords after your projection.
+
+### Extra: handle shapes with internal transforms
+
+If your teardrop contains its own transform (e.g., `<g transform="translate(20,10) scale(0.9)">`), the above approach preserves that transform because it imports the node with transform attributes into the tmpSvg. `getBBox()` returns coordinates after that transform *if measured on the rendered element* — so it will be correct.
+
+### Final sanity-check steps (do these now)
+
+1. Swap in the snippet and call `measureMaskBounds(selectedMask)` on mask change.
+2. Log the bbox returned for teardrop. Paste me the numbers if it still looks wrong.
+3. If bbox looks correct, but UI still misaligns, paste the `project()` function you use to map image coords to screen coords — I’ll give the exact math to align the handles.

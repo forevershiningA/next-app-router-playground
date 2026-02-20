@@ -18,10 +18,63 @@ const IMAGE_THUMBNAILS: Record<string, string> = {
   '2400': '/jpg/photos/plana.jpg',
 };
 
+// Size configurations for different image products (from images.xml)
+const IMAGE_SIZE_CONFIGS: Record<string, { sizes: Array<{ width: number; height: number }> }> = {
+  '7': { // Ceramic Images - 9 sizes
+    sizes: [
+      { width: 40, height: 60 },   // Size 1
+      { width: 50, height: 70 },   // Size 2
+      { width: 60, height: 80 },   // Size 3
+      { width: 70, height: 90 },   // Size 4
+      { width: 80, height: 100 },  // Size 5
+      { width: 90, height: 120 },  // Size 6
+      { width: 110, height: 150 }, // Size 7
+      { width: 130, height: 180 }, // Size 8
+      { width: 180, height: 240 }, // Size 9
+    ],
+  },
+  '2300': { // Vitreous Enamel - 9 sizes (similar)
+    sizes: [
+      { width: 40, height: 60 },
+      { width: 50, height: 70 },
+      { width: 60, height: 80 },
+      { width: 70, height: 90 },
+      { width: 80, height: 100 },
+      { width: 90, height: 120 },
+      { width: 110, height: 150 },
+      { width: 130, height: 180 },
+      { width: 180, height: 240 },
+    ],
+  },
+  '2400': { // Premium Plana - 4 sizes
+    sizes: [
+      { width: 60, height: 80 },
+      { width: 90, height: 120 },
+      { width: 110, height: 150 },
+      { width: 130, height: 180 },
+    ],
+  },
+  // Products without fixed sizes (flexible sizing)
+  '21': { sizes: [] }, // Granite Image - laser etched, flexible size
+  '135': { sizes: [] }, // YAG Lasered - flexible size
+};
+
 type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
-type CropAreaState = { x: number; y: number; width: number; height: number };
 
 export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
+  // Store hooks
+  const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
+  const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
+  const selectedImages = useHeadstoneStore((s) => s.selectedImages);
+  const activePanel = useHeadstoneStore((s) => s.activePanel);
+  const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
+  const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
+  const updateImageSizeVariant = useHeadstoneStore((s) => s.updateImageSizeVariant);
+  const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
+  const removeImage = useHeadstoneStore((s) => s.removeImage);
+  const duplicateImage = useHeadstoneStore((s) => s.duplicateImage);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  
   const [selectedType, setSelectedType] = useState<AdditionData | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showCropSection, setShowCropSection] = useState(false);
@@ -36,24 +89,47 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [flipY, setFlipY] = useState(false);
   
   // Crop area state (in percentage of preview container)
-  const [cropArea, setCropArea] = useState<CropAreaState>({
-    x: 30, // left position as %
+  // Default for oval (portrait): 0.8:1 aspect ratio (400/500)
+  const [cropArea, setCropArea] = useState({
+    x: 26, // left position as % - centered for 48% width
     y: 20, // top position as %
-    width: 40, // width as %
+    width: 48, // width as % - 0.8 aspect ratio
     height: 60, // height as % (portrait aspect)
   });
   
-  // Adjust crop area dimensions when mask changes
+  // Adjust crop area dimensions when mask changes or on initial load
   useEffect(() => {
-    if (!imageDimensions) return;
+    // Determine mask orientation
+    const isLandscapeMask = selectedMask === 'horizontal-oval' || selectedMask === 'rectangle';
+    
+    // If we don't have imageDimensions yet, set initial crop area based on mask
+    if (!imageDimensions) {
+      if (isLandscapeMask) {
+        const height = 50;
+        const width = height * 1.25; // 1.25:1 for horizontal masks
+        setCropArea({
+          x: (100 - width) / 2,
+          y: (100 - height) / 2,
+          width,
+          height,
+        });
+      } else {
+        const height = 60;
+        const width = height * 0.8; // 0.8:1 for vertical masks
+        setCropArea({
+          x: (100 - width) / 2,
+          y: (100 - height) / 2,
+          width,
+          height,
+        });
+      }
+      return;
+    }
     
     const isGraniteImage = selectedType?.id === 21 || selectedType?.id === 135;
     const imgWidth = imageDimensions.width;
     const imgHeight = imageDimensions.height;
     const imgType = imgWidth === imgHeight ? 'SQUARE' : (imgWidth > imgHeight ? 'LANDSCAPE' : 'PORTRAIT');
-    
-    // Determine mask orientation
-    const isLandscapeMask = selectedMask === 'horizontal-oval' || selectedMask === 'rectangle';
     
     if (isGraniteImage) {
       // For Granite Image - size varies based on image orientation
@@ -82,21 +158,27 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       // They maintain fixed aspect ratio based on mask orientation
       if (isLandscapeMask) {
         // Landscape masks: wider than tall
+        // horizontal-oval mask: 500 wide × 400 tall = 1.25:1 aspect ratio
+        const height = 50; // Base height
+        const width = height * 1.25; // 62.5% width to maintain 1.25:1 ratio
         setCropArea(prev => ({
           ...prev,
-          x: 15,
-          y: 30,
-          width: 70,
-          height: 40,
+          x: (100 - width) / 2,  // Center horizontally
+          y: (100 - height) / 2, // Center vertically
+          width,
+          height,
         }));
       } else {
         // Portrait masks: taller than wide
+        // oval mask: 400 wide × 500 tall = 0.8:1 aspect ratio
+        const height = 60; // Base height
+        const width = height * 0.8; // 48% width to maintain 0.8:1 ratio
         setCropArea(prev => ({
           ...prev,
-          x: 30,
-          y: 15,
-          width: 40,
-          height: 70,
+          x: (100 - width) / 2,  // Center horizontally
+          y: (100 - height) / 2, // Center vertically
+          width,
+          height,
         }));
       }
     }
@@ -157,70 +239,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const hasFixedSizes = availableSizes !== null && availableSizes.length > 0;
 
-  const SIZE_SLIDER_MIN = 20;
-  const SIZE_SLIDER_MAX = 80;
-
-  const getSelectedAspectRatio = (area: CropAreaState) => {
-    if (hasFixedSizes && availableSizes && availableSizes.length > 0) {
-      const clampedIndex = Math.min(selectedSizeIndex, availableSizes.length - 1);
-      const size = availableSizes[clampedIndex];
-      if (size && size.height) {
-        return size.width / size.height;
-      }
-    }
-    const fallbackRatio = area.width / Math.max(0.01, area.height);
-    return Number.isFinite(fallbackRatio) && fallbackRatio > 0 ? fallbackRatio : 1;
-  };
-
-  const clampPercentage = (value: number, min = 10, max = 100) => Math.min(max, Math.max(min, value));
-
-  const resizeAreaAroundCenter = (area: CropAreaState, targetHeight: number) => {
-    const ratio = getSelectedAspectRatio(area);
-    let height = clampPercentage(targetHeight);
-    let width = height * ratio;
-
-    if (width > 100) {
-      width = 100;
-      height = width / Math.max(0.01, ratio);
-    }
-    if (height > 100) {
-      height = 100;
-      width = height * ratio;
-    }
-    if (height < 10) {
-      height = 10;
-      width = height * ratio;
-    }
-
-    const centerX = area.x + area.width / 2;
-    const centerY = area.y + area.height / 2;
-
-    let x = centerX - width / 2;
-    let y = centerY - height / 2;
-
-    if (x < 0) x = 0;
-    if (y < 0) y = 0;
-    if (x + width > 100) x = 100 - width;
-    if (y + height > 100) y = 100 - height;
-
-    return {
-      ...area,
-      x,
-      y,
-      width,
-      height,
-    };
-  };
-
-  const applyHeightChange = (resolver: number | ((area: CropAreaState) => number)) => {
-    setCropArea((prev) => {
-      const target = typeof resolver === 'function' ? resolver(prev) : resolver;
-      return resizeAreaAroundCenter(prev, target);
-    });
-  };
-
   const catalog = useHeadstoneStore((s) => s.catalog);
-  const selectedImages = useHeadstoneStore((s) => s.selectedImages || []);
   const addImage = useHeadstoneStore((s) => s.addImage);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
 
@@ -292,54 +311,271 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     reader.readAsDataURL(file);
   };
 
-  const handleCropImage = () => {
+  const handleCropImage = async () => {
     if (!selectedType || !uploadedImage || !addImage) return;
 
-    addImage({
-      id: `img-${Date.now()}`,
-      typeId: parseInt(selectedType.id),
-      typeName: selectedType.name,
-      imageUrl: uploadedImage,
-      widthMm: 100,
-      heightMm: 150,
-      xPos: 0,
-      yPos: 0,
-      rotationZ: 0,
-    });
+    console.log('[handleCropImage] Starting image processing...');
+    console.log('cropArea:', cropArea);
+    console.log('selectedMask:', selectedMask);
+    console.log('cropRotation:', cropRotation);
+    console.log('cropScale:', cropScale);
 
-    // Reset crop state
-    setUploadedImage(null);
-    setShowCropSection(false);
-    setCropScale(100);
-    setCropRotation(0);
-    setSelectedMask('oval');
-    setCropColorMode('full');
-    setFlipX(false);
-    setFlipY(false);
-    setCropArea({ x: 30, y: 20, width: 40, height: 60 });
+    try {
+      // 1. Create canvas for processing
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error('Failed to get canvas context');
+        return;
+      }
+
+      // 2. Load uploaded image
+      const img = new window.Image();
+      img.crossOrigin = 'anonymous'; // Allow CORS for data URLs
+      img.src = uploadedImage;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+      console.log('[handleCropImage] Image loaded:', img.width, 'x', img.height);
+
+      // 3. Calculate crop area in actual image pixels
+      const cropX = (cropArea.x / 100) * img.width;
+      const cropY = (cropArea.y / 100) * img.height;
+      const cropW = (cropArea.width / 100) * img.width;
+      const cropH = (cropArea.height / 100) * img.height;
+      console.log('[handleCropImage] Crop dimensions:', { cropX, cropY, cropW, cropH });
+
+      // 4. Set canvas size to crop dimensions
+      canvas.width = cropW;
+      canvas.height = cropH;
+
+      // 5. Apply transforms (rotation, flip, scale)
+      ctx.save();
+      ctx.translate(cropW / 2, cropH / 2);
+      ctx.rotate((cropRotation * Math.PI) / 180);
+      ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+      ctx.scale(cropScale / 100, cropScale / 100);
+
+      // 6. Draw cropped and transformed portion of image
+      ctx.drawImage(
+        img,
+        cropX, cropY, cropW, cropH,
+        -cropW / 2, -cropH / 2, cropW, cropH
+      );
+      ctx.restore();
+      console.log('[handleCropImage] Image drawn to canvas');
+
+      // 7. Apply color mode filter
+      if (cropColorMode === 'bw') {
+        const imageData = ctx.getImageData(0, 0, cropW, cropH);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+          data[i] = data[i + 1] = data[i + 2] = gray;
+        }
+        ctx.putImageData(imageData, 0, 0);
+        console.log('[handleCropImage] B&W filter applied');
+      } else if (cropColorMode === 'sepia') {
+        const imageData = ctx.getImageData(0, 0, cropW, cropH);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          data[i] = Math.min(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
+          data[i + 1] = Math.min(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
+          data[i + 2] = Math.min(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+        }
+        ctx.putImageData(imageData, 0, 0);
+        console.log('[handleCropImage] Sepia filter applied');
+      }
+
+      // 8. Apply mask shape using compositing
+      const maskUrl = getMaskUrl(selectedMask);
+      console.log('[handleCropImage] Loading mask:', maskUrl);
+      
+      if (maskUrl) {
+        // Instead of loading SVG as image, we'll use canvas compositing
+        // Save current canvas content
+        const imageCanvas = document.createElement('canvas');
+        imageCanvas.width = cropW;
+        imageCanvas.height = cropH;
+        const imageCtx = imageCanvas.getContext('2d');
+        if (!imageCtx) return;
+        
+        // Copy current image to temp canvas
+        imageCtx.drawImage(canvas, 0, 0);
+        
+        // Load mask SVG
+        const maskImg = new window.Image();
+        maskImg.crossOrigin = 'anonymous';
+        maskImg.src = maskUrl;
+        await new Promise((resolve, reject) => {
+          maskImg.onload = resolve;
+          maskImg.onerror = (e) => {
+            console.error('Failed to load mask:', maskUrl, e);
+            reject(e);
+          };
+        });
+        console.log('[handleCropImage] Mask loaded:', maskImg.width, 'x', maskImg.height);
+
+        // Get the expected aspect ratio for this mask shape
+        const getMaskAspectRatio = (mask: string): number => {
+          const boundsMap: Record<string, { width: number; height: number }> = {
+            'oval': { width: 400, height: 500 },            // 0.8:1 (portrait)
+            'horizontal-oval': { width: 500, height: 400 }, // 1.25:1 (landscape)
+            'square': { width: 400, height: 500 },          // 0.8:1
+            'rectangle': { width: 500, height: 400 },       // 1.25:1
+            'heart': { width: 500, height: 470 },           // ~1.06:1
+            'teardrop': { width: 340, height: 480 },        // ~0.71:1
+            'triangle': { width: 440, height: 380 },        // ~1.16:1
+          };
+          const bounds = boundsMap[mask] || { width: 100, height: 150 };
+          return bounds.width / bounds.height;
+        };
+
+        const targetMaskAspect = getMaskAspectRatio(selectedMask);
+        
+        // For oval masks, the SVG has 10% padding on left/right (80% effective width)
+        // So the actual visible shape is narrower than the aspect ratio suggests
+        // We need to scale width by 1.25 (1/0.8) to compensate
+        const effectiveAspect = selectedMask === 'oval' ? targetMaskAspect * 1.25 : targetMaskAspect;
+        
+        const canvasAspect = cropW / cropH;
+        
+        let maskDrawWidth, maskDrawHeight, maskDrawX, maskDrawY;
+        
+        if (canvasAspect > effectiveAspect) {
+          // Canvas is wider - fit mask to height
+          maskDrawHeight = cropH;
+          maskDrawWidth = cropH * effectiveAspect;
+          maskDrawX = (cropW - maskDrawWidth) / 2;
+          maskDrawY = 0;
+        } else {
+          // Canvas is taller - fit mask to width
+          maskDrawWidth = cropW;
+          maskDrawHeight = cropW / effectiveAspect;
+          maskDrawX = 0;
+          maskDrawY = (cropH - maskDrawHeight) / 2;
+        }
+
+        console.log('[handleCropImage] Mask drawing dims:', { 
+          maskDrawWidth, maskDrawHeight, maskDrawX, maskDrawY,
+          targetMaskAspect, canvasAspect 
+        });
+
+        // Create final output canvas with exact mask dimensions
+        const finalCanvas = document.createElement('canvas');
+        finalCanvas.width = Math.round(maskDrawWidth);
+        finalCanvas.height = Math.round(maskDrawHeight);
+        const finalCtx = finalCanvas.getContext('2d');
+        if (!finalCtx) return;
+        
+        console.log('[handleCropImage] Creating final canvas:', finalCanvas.width, 'x', finalCanvas.height);
+        
+        // Draw the FULL cropped image, scaled to fill the final canvas
+        finalCtx.drawImage(
+          imageCanvas,
+          0, 0, cropW, cropH,                              // source: full crop area
+          0, 0, finalCanvas.width, finalCanvas.height      // dest: fill final canvas
+        );
+        
+        // Use destination-in to clip image to mask shape
+        finalCtx.globalCompositeOperation = 'destination-in';
+        
+        // Draw mask - this will clip the image to the mask shape
+        finalCtx.drawImage(maskImg, 0, 0, finalCanvas.width, finalCanvas.height);
+        
+        finalCtx.globalCompositeOperation = 'source-over';
+        
+        console.log('[handleCropImage] Mask applied to final canvas');
+        
+        // Replace main canvas with final masked version
+        canvas.width = finalCanvas.width;
+        canvas.height = finalCanvas.height;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(finalCanvas, 0, 0);
+      }
+
+      // 9. Export as data URL
+      const processedImageUrl = canvas.toDataURL('image/png');
+      console.log('[handleCropImage] Canvas exported:', {
+        canvasWidth: canvas.width,
+        canvasHeight: canvas.height,
+        canvasAspect: canvas.width / canvas.height,
+        selectedMask,
+      });
+      console.log('[handleCropImage] Image exported, length:', processedImageUrl.length);
+
+      // 10. Calculate dimensions based on trimmed canvas aspect ratio
+      // After trimming, the canvas matches the mask's visible bounds exactly
+      const trimmedAspectRatio = canvas.width / canvas.height;
+      
+      // Use a base height and calculate width to maintain the trimmed aspect ratio
+      const baseHeightMm = 100;
+      const calculatedWidthMm = baseHeightMm * trimmedAspectRatio;
+
+      // 11. Add to 3D scene with trimmed aspect ratio
+      addImage({
+        id: `img-${Date.now()}`,
+        typeId: parseInt(selectedType.id),
+        typeName: selectedType.name,
+        imageUrl: processedImageUrl,
+        widthMm: calculatedWidthMm,
+        heightMm: baseHeightMm,
+        xPos: 0,
+        yPos: 100, // Start higher up on the headstone
+        rotationZ: 0,
+        sizeVariant: 1, // Start at size 1
+      });
+      console.log('[handleCropImage] Image added to scene with trimmed aspect ratio:', trimmedAspectRatio);
+
+      // 12. Reset and close crop UI
+      setUploadedImage(null);
+      setShowCropSection(false);
+      setCropScale(100);
+      setCropRotation(0);
+      setSelectedMask('oval');
+      setCropColorMode('full');
+      setFlipX(false);
+      setFlipY(false);
+      setCropArea({ x: 26, y: 20, width: 48, height: 60 });
+      
+      // Clear crop canvas
+      setCropCanvasData(null);
+      console.log('[handleCropImage] Cleanup complete');
+      
+    } catch (error) {
+      console.error('[handleCropImage] Error processing image:', error);
+      alert('Failed to process image. Please try again.');
+    }
+  };
+
+  // Helper function to get mask URL
+  const getMaskUrl = (mask: string) => {
+    const maskMap: Record<string, string> = {
+      'oval': '/shapes/masks/oval_vertical.svg',
+      'horizontal-oval': '/shapes/masks/oval_horizontal.svg',
+      'square': '/shapes/masks/rectangle_vertical.svg',
+      'rectangle': '/shapes/masks/rectangle_horizontal.svg',
+      'heart': '/shapes/masks/heart.svg',
+      'teardrop': '/shapes/masks/teardrop.svg',
+      'triangle': '/shapes/masks/triangle.svg',
+    };
+    return maskMap[mask];
   };
 
   const handleFlipX = () => setFlipX(!flipX);
   const handleFlipY = () => setFlipY(!flipY);
   const handleRotateLeft = () => setCropRotation(cropRotation - 90);
   const handleRotateRight = () => setCropRotation(cropRotation + 90);
-  const handleDuplicate = () => {
-    if (!selectedType || !uploadedImage || !addImage) return;
-    addImage({
-      id: `img-${Date.now()}`,
-      typeId: parseInt(selectedType.id),
-      typeName: selectedType.name,
-      imageUrl: uploadedImage,
-      widthMm: 100,
-      heightMm: 150,
-      xPos: 20,
-      yPos: 20,
-      rotationZ: 0,
-    });
-  };
 
   const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
     e.preventDefault();
+    
+    // For fixed sizes, only allow moving, not resizing
+    if (hasFixedSizes && handle !== 'move') {
+      return;
+    }
     
     setIsDragging(true);
     setDragHandle(handle);
@@ -413,6 +649,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     setUploadedImage(null);
   };
 
+  // Get selected image data
+  const selectedImage = selectedImages.find(img => img.id === selectedImageId);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('[ImageSelector] State:', { 
+      selectedImageId, 
+      activePanel, 
+      hasSelectedImage: !!selectedImage,
+      selectedImagesCount: selectedImages.length,
+      selectedImageData: selectedImage ? { id: selectedImage.id, typeName: selectedImage.typeName } : null
+    });
+  }, [selectedImageId, activePanel, selectedImage, selectedImages]);
+
   // Show message if no image types available
   if (imageTypes.length === 0) {
     return (
@@ -422,6 +672,231 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <p className="text-sm text-white/60">This product does not support images.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If an image is selected, show editing controls
+  // This works both in fullscreen mode and sidebar mode
+  if (selectedImageId && selectedImage) {
+    const imageRotationDeg = selectedImage.rotationZ || 0;
+    
+    // Get size configuration for this image type
+    const sizeConfig = IMAGE_SIZE_CONFIGS[selectedImage.typeId.toString()] || { sizes: [] };
+    const hasFixedSizes = sizeConfig.sizes.length > 0;
+    const currentSizeVariant = selectedImage.sizeVariant || 1;
+    const maxSize = hasFixedSizes ? sizeConfig.sizes.length : 4;
+    
+    return (
+      <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-300">
+            Selected: <span className="font-semibold text-white">{selectedImageId}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedImageId(null);
+              setActivePanel(null);
+            }}
+            className="text-xs text-white/60 hover:text-white transition-colors"
+          >
+            Clear selection
+          </button>
+        </div>
+        
+        <div className="flex gap-2">
+          <button
+            type="button"
+            className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
+            onClick={() => duplicateImage(selectedImageId)}
+          >
+            Duplicate
+          </button>
+          <button
+            type="button"
+            className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+            onClick={() => {
+              removeImage(selectedImageId);
+              setSelectedImageId(null);
+            }}
+          >
+            Delete
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          {/* Size Slider */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between gap-2">
+              <label className="text-sm font-medium text-gray-200 w-20">Size</label>
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newSize = Math.max(1, currentSizeVariant - 1);
+                    updateImageSizeVariant(selectedImageId, newSize);
+                    if (hasFixedSizes) {
+                      const dims = sizeConfig.sizes[newSize - 1];
+                      updateImageSize(selectedImageId, dims.width, dims.height);
+                    }
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Decrease size"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  max={maxSize}
+                  step={1}
+                  value={currentSizeVariant}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    if (!isNaN(val) && val >= 1 && val <= maxSize) {
+                      updateImageSizeVariant(selectedImageId, val);
+                      if (hasFixedSizes) {
+                        const dims = sizeConfig.sizes[val - 1];
+                        updateImageSize(selectedImageId, dims.width, dims.height);
+                      }
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const val = parseInt(e.target.value);
+                    if (isNaN(val) || val < 1) {
+                      updateImageSizeVariant(selectedImageId, 1);
+                      if (hasFixedSizes) {
+                        const dims = sizeConfig.sizes[0];
+                        updateImageSize(selectedImageId, dims.width, dims.height);
+                      }
+                    } else if (val > maxSize) {
+                      updateImageSizeVariant(selectedImageId, maxSize);
+                      if (hasFixedSizes) {
+                        const dims = sizeConfig.sizes[maxSize - 1];
+                        updateImageSize(selectedImageId, dims.width, dims.height);
+                      }
+                    }
+                  }}
+                  className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newSize = Math.min(maxSize, currentSizeVariant + 1);
+                    updateImageSizeVariant(selectedImageId, newSize);
+                    if (hasFixedSizes) {
+                      const dims = sizeConfig.sizes[newSize - 1];
+                      updateImageSize(selectedImageId, dims.width, dims.height);
+                    }
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Increase size"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min={1}
+                max={maxSize}
+                step={1}
+                value={currentSizeVariant}
+                onChange={(e) => {
+                  const newSize = parseInt(e.target.value);
+                  updateImageSizeVariant(selectedImageId, newSize);
+                  if (hasFixedSizes) {
+                    const dims = sizeConfig.sizes[newSize - 1];
+                    updateImageSize(selectedImageId, dims.width, dims.height);
+                  }
+                }}
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                <span>Size 1</span>
+                <span>Size {maxSize}</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Rotation Slider */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between gap-2">
+              <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newVal = Math.max(-180, imageRotationDeg - 1);
+                    updateImageRotation(selectedImageId, newVal);
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Decrease rotation by 1 degree"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  min={-180}
+                  max={180}
+                  step={1}
+                  value={Math.round(imageRotationDeg)}
+                  onChange={(e) => {
+                    updateImageRotation(selectedImageId, Number(e.target.value));
+                  }}
+                  onBlur={(e) => {
+                    const val = Number(e.target.value);
+                    if (val < -180) {
+                      updateImageRotation(selectedImageId, -180);
+                    } else if (val > 180) {
+                      updateImageRotation(selectedImageId, 180);
+                    }
+                  }}
+                  className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newVal = Math.min(180, imageRotationDeg + 1);
+                    updateImageRotation(selectedImageId, newVal);
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Increase rotation by 1 degree"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                <span className="text-sm font-medium text-gray-300">°</span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min={-180}
+                max={180}
+                step={1}
+                value={imageRotationDeg}
+                onChange={(e) => {
+                  updateImageRotation(selectedImageId, Number(e.target.value));
+                }}
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                <span>-180°</span>
+                <span>180°</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -612,19 +1087,74 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       <div className="text-xs text-white/60">Adjust Size</div>
                       <input
                         type="range"
-                        min={SIZE_SLIDER_MIN}
-                        max={SIZE_SLIDER_MAX}
-                        value={Math.max(SIZE_SLIDER_MIN, Math.min(SIZE_SLIDER_MAX, Math.round(cropArea.height)))}
+                        min="20"
+                        max="80"
+                        value={cropArea.height}
                         onChange={(e) => {
-                          const newHeight = parseInt(e.target.value, 10);
-                          applyHeightChange(Number.isNaN(newHeight) ? cropArea.height : newHeight);
+                          const newHeight = parseInt(e.target.value);
+                          setCropArea(prev => {
+                            // Calculate center point (stays fixed during resize)
+                            const centerX = prev.x + prev.width / 2;
+                            const centerY = prev.y + prev.height / 2;
+                            
+                            // Maintain aspect ratio if fixed sizes
+                            if (hasFixedSizes && availableSizes.length > 0) {
+                              const size = availableSizes[selectedSizeIndex];
+                              const aspectRatio = size.width / size.height;
+                              const newWidth = newHeight * aspectRatio;
+                              return {
+                                ...prev,
+                                x: centerX - newWidth / 2,
+                                y: centerY - newHeight / 2,
+                                width: newWidth,
+                                height: newHeight,
+                              };
+                            }
+                            // Free scaling - maintain current aspect ratio
+                            const currentAspectRatio = prev.width / prev.height;
+                            const newWidth = newHeight * currentAspectRatio;
+                            return {
+                              ...prev,
+                              x: centerX - newWidth / 2,
+                              y: centerY - newHeight / 2,
+                              width: newWidth,
+                              height: newHeight,
+                            };
+                          });
                         }}
                         className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
                       />
                       <div className="flex justify-between items-center">
                         <button
                           onClick={() => {
-                            applyHeightChange((area) => Math.max(SIZE_SLIDER_MIN, area.height - 5));
+                            const newHeight = Math.max(20, cropArea.height - 5);
+                            setCropArea(prev => {
+                              // Calculate center point (stays fixed during resize)
+                              const centerX = prev.x + prev.width / 2;
+                              const centerY = prev.y + prev.height / 2;
+                              
+                              if (hasFixedSizes && availableSizes.length > 0) {
+                                const size = availableSizes[selectedSizeIndex];
+                                const aspectRatio = size.width / size.height;
+                                const newWidth = newHeight * aspectRatio;
+                                return {
+                                  ...prev,
+                                  x: centerX - newWidth / 2,
+                                  y: centerY - newHeight / 2,
+                                  width: newWidth,
+                                  height: newHeight,
+                                };
+                              }
+                              const currentAspectRatio = prev.width / prev.height;
+                              const newWidth = newHeight * currentAspectRatio;
+                              return {
+                                ...prev,
+                                x: centerX - newWidth / 2,
+                                y: centerY - newHeight / 2,
+                                width: newWidth,
+                                height: newHeight,
+                              };
+                            });
                           }}
                           className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
                         >
@@ -635,7 +1165,34 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         </button>
                         <button
                           onClick={() => {
-                            applyHeightChange((area) => Math.min(SIZE_SLIDER_MAX, area.height + 5));
+                            const newHeight = Math.min(80, cropArea.height + 5);
+                            setCropArea(prev => {
+                              // Calculate center point (stays fixed during resize)
+                              const centerX = prev.x + prev.width / 2;
+                              const centerY = prev.y + prev.height / 2;
+                              
+                              if (hasFixedSizes && availableSizes.length > 0) {
+                                const size = availableSizes[selectedSizeIndex];
+                                const aspectRatio = size.width / size.height;
+                                const newWidth = newHeight * aspectRatio;
+                                return {
+                                  ...prev,
+                                  x: centerX - newWidth / 2,
+                                  y: centerY - newHeight / 2,
+                                  width: newWidth,
+                                  height: newHeight,
+                                };
+                              }
+                              const currentAspectRatio = prev.width / prev.height;
+                              const newWidth = newHeight * currentAspectRatio;
+                              return {
+                                ...prev,
+                                x: centerX - newWidth / 2,
+                                y: centerY - newHeight / 2,
+                                width: newWidth,
+                                height: newHeight,
+                              };
+                            });
                           }}
                           className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
                         >
@@ -728,15 +1285,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
                         </svg>
                         Rotate ↻
-                      </button>
-                      <button
-                        onClick={handleDuplicate}
-                        className="rounded-lg bg-[#1F1F1F] border border-white/20 px-3 py-2 text-white text-sm hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                        Duplicate
                       </button>
                       <button
                         onClick={() => {

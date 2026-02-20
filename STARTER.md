@@ -26,10 +26,52 @@
 
 ---
 
-## Current Status (2026-02-18)
+## Current Status (2026-02-20)
+
+### ✅ Recent Changes (February 20, 2026)
+1. **Add Your Image Feature - Image Placement & Crop System (IN PROGRESS)**
+   - **3D Image Rendering on Headstone**:
+     - Cropped images now render as masked textures on 3D headstone model
+     - Uses canvas-based masking pipeline: draw image → apply mask with `destination-in` compositing
+     - Images positioned via `ImageModel.tsx` component (similar to MotifModel)
+     - Draggable positioning on headstone surface with pointer interaction
+     - Selection outline with corner handles (matching motif/inscription UX)
+   
+   - **Image Panel & Controls**:
+     - New "Images" panel in sidebar navigation (matches Motifs/Additions layout)
+     - Shows selected image details: type, size options, duplicate/delete actions
+     - Size selection via discrete variants from XML catalog (not continuous slider)
+     - Fixed sizes per image type (e.g., Ceramic Oval: 40×60mm to 180×240mm in 9 sizes)
+     - Granite images support free-form sizing (no fixed variants)
+   
+   - **Aspect Ratio & Mask Alignment Fixes**:
+     - Fixed oval mask SVG padding issue (10% internal padding on left/right)
+     - Compensated for viewBox offset with `effectiveAspect = targetAspect × 1.25` for ovals
+     - Final canvas dimensions now match visible mask area in crop screen
+     - Image texture properly fills selection box width on headstone
+     - Selection outline corners align with actual image edges
+   
+   - **Crop Canvas Improvements**:
+     - Removed "Duplicate" button from crop interface (per user request)
+     - Mask overlay and drag handlers properly aligned
+     - Size slider keeps crop centered during adjustments
+     - Corner drag handlers visible and functional (50% outside crop area)
+   
+   - **Known Issues**:
+     - Initial crop handler positioning sometimes misaligned on first load (fixed after slider use)
+     - Selection outline needs fine-tuning for all mask shapes (currently optimized for oval)
+   
+   - Files: `components/ImageSelector.tsx`, `components/CropCanvas.tsx`, `components/three/ImageModel.tsx`, `components/ImagePanel.tsx` (new), `lib/headstone-store.ts`
+
+### ⚠️ Known Issues (February 20, 2026)
+- **Image Drag Movement**: Images not yet draggable on headstone despite pointer handlers
+- **Crop Handler Initial Position**: Handlers occasionally misaligned on first render (fixed after slider interaction)
+- **Size Variant Loading**: Need to wire XML size variants into image panel controls
+
+## Previous Status (2026-02-18)
 
 ### ✅ Recent Changes (February 18, 2026)
-1. **Add Your Image Feature (IN PROGRESS)**
+1. **Add Your Image Feature (INITIAL IMPLEMENTATION)**
    - New "Add Your Image" section in left sidebar navigation (02 Design group)
    - Image type selection panel matching motif selector layout
    - Five image types supported:

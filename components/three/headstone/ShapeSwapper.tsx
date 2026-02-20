@@ -460,7 +460,17 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             meshProps={{
               name: 'headstone',
               onClick: (e) => {
+                console.log('[ShapeSwapper] Headstone onClick, event object:', e.object.name);
                 e.stopPropagation();
+                
+                // Don't select headstone if clicking on an image
+                // Images have renderOrder 999, headstone has lower/default
+                if (e.object.renderOrder === 999) {
+                  console.log('[ShapeSwapper] Ignoring click - it was on an image');
+                  return;
+                }
+                
+                console.log('[ShapeSwapper] Headstone clicked');
                 setSelected('headstone');
                 setEditingObject('headstone');
                 setSelectedInscriptionId(null);

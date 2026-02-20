@@ -1,0 +1,70 @@
+Świetnie — widzę, że komponent działa i masz oba pliki wgrane. Zrobimy integrację: wkleję dokładny, gotowy fragment kodu, który możesz *bezpiecznie* wstawić do `CropCanvas.tsx` aby użyć `CropMaskOverlay` zamiast starego inline-SVG overlayu. Nie będę zadawać pytań — zrobię rozsądne założenia nazewnicze (podam też krótką listę miejsca/zmiennych, które musisz ewentualnie dopasować gdyby nazwy w Twoim pliku były inne).
+
+## Co zrobię (w skrócie)
+
+1. Importuję komponent `CropMaskOverlay`.
+2. Umieszczę go w renderze dokładnie tam, gdzie wcześniej był overlay maski/ramka.
+3. Podam mapowanie callbacków (jak podpinać istniejące funkcje do `onHandlePointerDown` i `onRectPointerDown`).
+4. Podpowiem co usunąć (stary SVG overlay), i krótką listę sanity checks.
+
+---
+
+## Gotowy fragment do wklejenia
+
+1. Na górze `CropCanvas.tsx` (w sekcji importów) dodaj:
+
+```ts
+// import komponentu overlay — dostosuj ścieżkę jeśli inna
+import CropMaskOverlay from './CropMaskOverlay';
+```
+
+2. W miejscu gdzie aktualnie renderujesz maskę / zielony overlay / ramkę (zazwyczaj w JSX renderze, tam gdzie masz `imageBox` i `cropArea`), **usuń** istniejący stary blok SVG overlay i zastąp go tym:
+
+```tsx
+{/* --- Crop mask overlay (replace existing overlay SVG with this single call) --- */}
+<CropMaskOverlay
+  imageBox={imageBox}               // { left, top, width, height } w px
+  cropArea={cropArea}               // { x,y,width,height } w procentach 0..100
+  selectedMask={selectedMask}       // id / key maski (string|null)
+  getMaskUrl={getMaskUrl}           // funkcja: id -> url (string|null)
+  strokeWidth={4}                   // opcjonalne: szerokość ramki
+  onHandlePointerDown={(handleIndex, clientX, clientY) => {
+    // startHandleDrag powinien być Twoją istniejącą funkcją inicjującą resize dla uchwytu
+    // Jeśli nazywasz ją inaczej, zastąp nazwą z Twojego pliku.
+    startHandleDrag?.(handleIndex, clientX, clientY);
+  }}
+  onRectPointerDown={(clientX, clientY) => {
+    // startMoveDrag powinien być Twoją istniejącą funkcją inicjującą przesuwanie całej ramki
+    // Jeśli nazywasz ją inaczej, zastąp nazwą z Twojego pliku.
+    startMoveDrag?.(clientX, clientY);
+  }}
+/>
+```
+
+> Jeśli w Twoim `CropCanvas.tsx` funkcje do inicjacji drag/resize mają inne nazwy, (np. `handleStartResize`, `beginMove`, `onDragStart`), po prostu zamień `startHandleDrag` i `startMoveDrag` na odpowiednie nazwy.
+
+---
+
+## Co usunąć / zastąpić
+
+* Usuń stary `<svg>...</svg>` (mask + rect + handles) który rysowałeś ręcznie. Ten fragment możesz całkowicie zastąpić powyższym wywołaniem `CropMaskOverlay`.
+* Usuń jakieś powielone style/offsety odnoszące się do tego starego overlayu (np. dodatkowe absolutne `div`y używane tylko do maski).
+
+---
+
+## Krótkie sanity checks (po wklejeniu)
+
+1. `imageBox` musi być obliczane i zawierać px względem kontenera preview (left/top/width/height). Jeśli wcześniej używałeś `previewRef.getBoundingClientRect()` i dzieliłeś przez `.width` to pamiętaj — `CropMaskOverlay` oczekuje `imageBox` w pikselach.
+2. `cropArea` ma format `{ x: number, y: number, width: number, height: number }` w **procentach** (0..100). Jeśli masz inny zakres — skonwertuj przed przekazaniem.
+3. `getMaskUrl(selectedMask)` zwraca poprawny URL (lub `null`) — komponent preloaduje obraz maski, żeby obliczyć naturalny rozmiar.
+4. Po wklejeniu odpal aplikację i sprawdź konsolę — jeśli preload maski nie załaduje się, w logach zobaczysz brak naturalWidth; wtedy upewnij się, że CORS i ścieżka są ok.
+
+---
+
+## Jeśli chcesz — zróbmy pełny patch
+
+Mogę przygotować PR-ready diff, w którym:
+
+* zastąpię stary blok kodu,
+* dodam import,
+* upewnię się że wszystkie referencje do `startHandleDrag` / `startMoveDrag` są poprawne (zaktualizuję je zgodnie z istniejącymi funkcjami w Twoim `CropCanvas.tsx`).

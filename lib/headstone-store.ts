@@ -140,6 +140,7 @@ type HeadstoneState = {
     xPos: number;
     yPos: number;
     rotationZ: number;
+    sizeVariant?: number;
   }>;
   addImage: (image: {
     id: string;
@@ -151,10 +152,13 @@ type HeadstoneState = {
     xPos: number;
     yPos: number;
     rotationZ: number;
+    sizeVariant?: number;
   }) => void;
   removeImage: (id: string) => void;
+  duplicateImage: (id: string) => void;
   updateImagePosition: (id: string, xPos: number, yPos: number) => void;
   updateImageSize: (id: string, widthMm: number, heightMm: number) => void;
+  updateImageSizeVariant: (id: string, sizeVariant: number) => void;
   updateImageRotation: (id: string, rotationZ: number) => void;
 
   productId: string | null;
@@ -254,6 +258,11 @@ type HeadstoneState = {
   >;
 
   selectedMotifId: string | null;
+  setSelectedMotifId: (id: string | null) => void;
+  
+  selectedImageId: string | null;
+  setSelectedImageId: (id: string | null) => void;
+  
   motifRefs: Record<string, React.RefObject<Group | null>>;
   motifOffsets: Record<
     string,
@@ -339,6 +348,20 @@ type HeadstoneState = {
   openSizePanel: () => void;
   openAdditionsPanel: () => void;
   closeInscriptions: () => void;
+
+  cropCanvasData: {
+    uploadedImage: string;
+    selectedMask: string;
+    cropColorMode: string;
+    cropScale: number;
+    cropRotation: number;
+    flipX: boolean;
+    flipY: boolean;
+    cropArea: { x: number; y: number; width: number; height: number };
+    hasFixedSizes: boolean;
+    updateCropArea: (area: { x: number; y: number; width: number; height: number }) => void;
+  } | null;
+  setCropCanvasData: (data: HeadstoneState['cropCanvasData']) => void;
 
   resetDesign: () => void;
 };
@@ -590,19 +613,47 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   removeImage: (id) => {
     set((s) => ({
       selectedImages: s.selectedImages.filter((img) => img.id !== id),
+      selectedImageId: s.selectedImageId === id ? null : s.selectedImageId,
     }));
   },
+  duplicateImage: (id) => {
+    set((s) => {
+      const original = s.selectedImages.find((img) => img.id === id);
+      if (!original) return s;
+
+      const newImage = {
+        ...original,
+        id: `img-${Date.now()}`,
+        xPos: original.xPos + 20,
+        yPos: original.yPos + 20,
+      };
+
+      return {
+        selectedImages: [...s.selectedImages, newImage],
+        selectedImageId: newImage.id,
+      };
+    });
+  },
   updateImagePosition: (id, xPos, yPos) => {
+    console.log('[Store] updateImagePosition called:', { id, xPos, yPos });
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
         img.id === id ? { ...img, xPos, yPos } : img
       ),
     }));
+    console.log('[Store] Updated selectedImages:', get().selectedImages);
   },
   updateImageSize: (id, widthMm, heightMm) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
         img.id === id ? { ...img, widthMm, heightMm } : img
+      ),
+    }));
+  },
+  updateImageSizeVariant: (id, sizeVariant) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.map((img) =>
+        img.id === id ? { ...img, sizeVariant } : img
       ),
     }));
   },
@@ -1104,6 +1155,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedAdditionId: null,
         selectedInscriptionId: null,
         selectedMotifId: null,
+        selectedImageId: null, // Also clear image selection when headstone is selected
       });
     } else {
       set({ selected: p });
@@ -1189,6 +1241,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   additionOffsets: {},
 
   selectedMotifId: null,
+  selectedImageId: null,
   motifRefs: {},
   // Sample template: Pre-positioned motif
   // motifOffsets: {
@@ -1486,6 +1539,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'motif',
         selectedInscriptionId: null, // Deselect any inscription
         selectedAdditionId: null, // Deselect any addition
+        selectedImageId: null, // Deselect any image
         selected: null, // Deselect headstone/base
       });
       // Navigate to select-motifs page only on mobile to keep canvas visible on desktop
@@ -1496,6 +1550,26 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           navTo('/select-motifs');
         }
       }
+    } else {
+      // If deselecting and this is the active panel, close it
+      const state = get();
+      if (state.activePanel === 'motif') {
+        set({ activePanel: null });
+      }
+    }
+  },
+
+  setSelectedImageId: (id) => {
+    set({ selectedImageId: id });
+    if (id) {
+      // Close other panels when selecting an image
+      // Note: We don't set activePanel='image' because images use fullscreen panel 'select-images'
+      set({
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedMotifId: null,
+        selected: null,
+      });
     }
   },
   setMotifRef: (id, ref) =>

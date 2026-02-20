@@ -36,6 +36,9 @@ export default function ImageModel({
   const pathname = usePathname();
   
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
+  const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
+  const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
+  const setSelected = useHeadstoneStore((s) => s.setSelected);
   const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
   const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
@@ -43,11 +46,11 @@ export default function ImageModel({
   
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
-  const [selected, setSelected] = React.useState(false);
+  const selected = selectedImageId === id;
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
   
-  const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
+  const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), -2.0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
   const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.Texture; aspect: number } | null>(null);
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
@@ -74,6 +77,16 @@ export default function ImageModel({
 
         activeTexture = texture;
         const aspect = texture.image.width / texture.image.height || 1;
+        
+        console.log('[ImageModel] Texture loaded:', {
+          id,
+          textureWidth: texture.image.width,
+          textureHeight: texture.image.height,
+          textureAspect: aspect,
+          meshWidthMm: widthMm,
+          meshHeightMm: heightMm,
+          meshAspect: widthMm / heightMm,
+        });
 
         setTextureInfo({ texture, aspect });
       } catch (error) {
@@ -94,23 +107,48 @@ export default function ImageModel({
   // Click handler
   const handlePointerDown = React.useCallback(
     (e: any) => {
+      console.log('[ImageModel] Pointer down on image:', id);
       e.stopPropagation();
+      e.nativeEvent?.stopImmediatePropagation?.();
+      
+      if (!headstone?.mesh?.current || !gl?.domElement) return;
+      
+      // Select this image AND deselect headstone explicitly
+      console.log('[ImageModel] Setting selectedImageId to:', id);
+      setSelectedImageId(id);
+      setSelected(null); // Explicitly deselect headstone
+      
+      console.log('[ImageModel] Starting drag');
       setDragging(true);
-      setSelected(true);
       
       if (controls) {
         (controls as any).enabled = false;
       }
 
+      // Get initial mouse position on headstone surface
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+
+      const rect = gl.domElement.getBoundingClientRect();
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
       raycaster.setFromCamera(mouse, camera);
-      const intersection = new THREE.Vector3();
-      raycaster.ray.intersectPlane(dragPlane, intersection);
-      dragPositionRef.current = { xPos: intersection.x, yPos: intersection.y };
+      const targetMesh = headstone.mesh.current as THREE.Mesh;
+      const intersects = raycaster.intersectObject(targetMesh, false);
+
+      if (intersects.length > 0) {
+        const worldPoint = intersects[0].point.clone();
+        const localPt = targetMesh.worldToLocal(worldPoint);
+        dragPositionRef.current = { xPos: localPt.x, yPos: localPt.y };
+        console.log('[ImageModel] Initial drag position:', dragPositionRef.current);
+      }
     },
-    [controls, camera, raycaster, mouse, dragPlane]
+    [controls, camera, raycaster, mouse, gl, headstone, id, setSelectedImageId, setSelected]
   );
 
   const handlePointerUp = React.useCallback(() => {
+    console.log('[ImageModel] Pointer up - stopping drag');
     setDragging(false);
     dragPositionRef.current = null;
     
@@ -126,39 +164,52 @@ export default function ImageModel({
 
   const handlePointerMove = React.useCallback(
     (e: any) => {
-      if (!dragging || !dragPositionRef.current) return;
+      if (!dragging || !dragPositionRef.current || !headstone?.mesh?.current || !gl?.domElement) return;
 
+      console.log('[ImageModel] Pointer move while dragging');
       e.stopPropagation();
 
       const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
       const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
 
-      mouse.x = (clientX / gl.domElement.clientWidth) * 2 - 1;
-      mouse.y = -(clientY / gl.domElement.clientHeight) * 2 + 1;
+      const rect = gl.domElement.getBoundingClientRect();
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const intersection = new THREE.Vector3();
-      const hit = raycaster.ray.intersectPlane(dragPlane, intersection);
 
-      if (hit) {
-        const deltaX = intersection.x - dragPositionRef.current.xPos;
-        const deltaY = intersection.y - dragPositionRef.current.yPos;
+      const targetMesh = headstone.mesh.current as THREE.Mesh;
+      const intersects = raycaster.intersectObject(targetMesh, false);
 
-        const newXPos = xPos + deltaX;
-        const newYPos = yPos + deltaY;
+      let worldPoint: THREE.Vector3 | null = null;
+
+      if (intersects.length > 0) {
+        worldPoint = intersects[0].point.clone();
+      } else {
+        dragPlane.normal.set(0, 0, 1);
+        dragPlane.constant = -(headstone.frontZ ?? 0);
+        if (raycaster.ray.intersectPlane(dragPlane, fallbackIntersection)) {
+          worldPoint = fallbackIntersection.clone();
+        }
+      }
+
+      if (worldPoint) {
+        const localPt = targetMesh.worldToLocal(worldPoint);
+
+        console.log('[ImageModel] Local point:', localPt.x, localPt.y);
 
         if (animationFrameRef.current !== null) {
           cancelAnimationFrame(animationFrameRef.current);
         }
 
         animationFrameRef.current = requestAnimationFrame(() => {
-          updateImagePosition(id, newXPos, newYPos);
-          dragPositionRef.current = { xPos: intersection.x, yPos: intersection.y };
+          console.log('[ImageModel] Updating position to:', localPt.x, localPt.y);
+          updateImagePosition(id, localPt.x, localPt.y);
           animationFrameRef.current = null;
         });
       }
     },
-    [dragging, xPos, yPos, gl, camera, raycaster, mouse, dragPlane, id, updateImagePosition]
+    [dragging, gl, camera, raycaster, mouse, dragPlane, fallbackIntersection, headstone, id, updateImagePosition]
   );
 
   React.useEffect(() => {
@@ -183,13 +234,20 @@ export default function ImageModel({
   const { texture, aspect } = textureInfo;
   const width = widthMm;
   const height = heightMm;
+  
+  console.log('[ImageModel] Rendering with dimensions:', { id, width, height, aspect: width/height });
 
   return (
-    <group ref={ref} position={[xPos, yPos, 0.5]} rotation={[0, 0, rotationZ]}>
+    <group ref={ref} position={[xPos, yPos, 2.0]} rotation={[0, 0, rotationZ]}>
       <mesh
         onPointerDown={handlePointerDown}
+        onClick={(e) => {
+          console.log('[ImageModel] onClick handler');
+          e.stopPropagation();
+        }}
         geometry={planeGeometry}
         scale={[width, height, 1]}
+        renderOrder={999}
       >
         <meshBasicMaterial 
           map={texture} 
