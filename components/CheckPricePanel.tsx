@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
-
-type DetailModalType = 'inscriptions' | 'motifs' | 'additions' | null;
+import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -20,15 +19,43 @@ export default function CheckPricePanel() {
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
+  const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
-  const [detailModal, setDetailModal] = useState<DetailModalType>(null);
+  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
+  const [imagePricingLoading, setImagePricingLoading] = useState(false);
+  const [imagePricingError, setImagePricingError] = useState<string | null>(null);
 
   const isOpen = activePanel === 'checkprice';
+
+  useEffect(() => {
+    let mounted = true;
+    setImagePricingLoading(true);
+    fetchImagePricing()
+      .then((data) => {
+        if (!mounted) return;
+        setImagePricingData(data);
+        setImagePricingError(null);
+      })
+      .catch(() => {
+        if (mounted) {
+          setImagePricingError('Unable to load image pricing');
+        }
+      })
+      .finally(() => {
+        if (mounted) {
+          setImagePricingLoading(false);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleClose = useCallback(() => {
     setActivePanel(null);
@@ -139,10 +166,42 @@ export default function CheckPricePanel() {
     });
   }, [selectedAdditions]);
 
+  const imageItems = useMemo(() => {
+    if (!selectedImages.length) return [];
+
+    return selectedImages.map((img) => {
+      const product = imagePricingData?.[String(img.typeId)];
+      const price = product
+        ? calculateImagePrice(product, img.widthMm, img.heightMm, img.colorMode)
+        : 0;
+
+      const colorDisplay = img.colorMode === 'bw'
+        ? 'Black & White'
+        : img.colorMode === 'sepia'
+          ? 'Sepia'
+          : 'Full Color';
+
+      return {
+        id: img.id,
+        typeId: img.typeId,
+        baseName: product?.name || img.typeName || 'Image',
+        typeName: img.typeName,
+        widthMm: img.widthMm,
+        heightMm: img.heightMm,
+        colorDisplay,
+        price,
+      };
+    });
+  }, [selectedImages, imagePricingData]);
+
+  const imagePriceTotal = useMemo(() => {
+    return imageItems.reduce((sum, item) => sum + item.price, 0);
+  }, [imageItems]);
+
   // Calculate total
   const totalPrice = useMemo(() => {
-    return headstonePrice + basePrice + inscriptionCost + motifCost + additionsPrice;
-  }, [headstonePrice, basePrice, inscriptionCost, motifCost, additionsPrice]);
+    return headstonePrice + basePrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal;
+  }, [headstonePrice, basePrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal]);
 
   // Get detailed motif items
   const motifItems = useMemo(() => {
@@ -309,88 +368,184 @@ export default function CheckPricePanel() {
                 </tr>
               )}
 
-              {/* Inscriptions - Summary row with clickable count */}
-              {inscriptions.length > 0 && (
-                <tr className="border-b border-gray-200">
-                  <td className="px-6 py-4">
-                    <div className="text-sm">
-                      <p className="font-semibold text-gray-900 mb-1">
-                        Inscriptions
-                      </p>
-                      <button
-                        onClick={() => setDetailModal('inscriptions')}
-                        className="text-blue-600 hover:text-blue-800 underline text-left"
-                      >
-                        {inscriptions.length} inscription{inscriptions.length !== 1 ? 's' : ''}
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-900">
-                    {inscriptions.length}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
-                    ${(inscriptionCost / inscriptions.length).toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
-                    ${inscriptionCost.toFixed(2)}
-                  </td>
-                </tr>
+              {/* Inscriptions */}
+              {inscriptionItems.length > 0 && (
+                <React.Fragment>
+                  <tr className="border-b border-gray-200">
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <p className="font-semibold text-gray-900 mb-1">Inscriptions</p>
+                        <p className="text-gray-600">
+                          {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                      {inscriptionItems.length}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      ${(inscriptionCost / inscriptionItems.length).toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      ${inscriptionCost.toFixed(2)}
+                    </td>
+                  </tr>
+                  {inscriptionItems.map((item) => (
+                    <tr key={`ins-${item.id}`} className="border-b border-gray-100 bg-gray-50">
+                      <td className="px-8 py-3 text-sm text-gray-900">
+                        <p className="font-medium text-gray-900">{item.text || 'Inscription Text'}</p>
+                        <p className="text-xs text-gray-600">Font: {item.font} · Size: {item.sizeMm}mm</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                          <span>Color: {item.colorName}</span>
+                          <span
+                            className="inline-block w-3 h-3 rounded border border-gray-300"
+                            style={{ backgroundColor: item.color }}
+                          />
+                        </div>
+                      </td>
+                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        ${item.price.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        ${item.price.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               )}
 
-              {/* Decorative Motifs - Summary row with clickable count */}
-              {selectedMotifs.length > 0 && (
-                <tr className="border-b border-gray-200">
-                  <td className="px-6 py-4">
-                    <div className="text-sm">
-                      <p className="font-semibold text-gray-900 mb-1">
-                        Decorative Motifs
-                      </p>
-                      <button
-                        onClick={() => setDetailModal('motifs')}
-                        className="text-blue-600 hover:text-blue-800 underline text-left"
-                      >
-                        {selectedMotifs.length} motif{selectedMotifs.length !== 1 ? 's' : ''}
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-900">
-                    {selectedMotifs.length}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
-                    ${selectedMotifs.length > 0 ? (motifCost / selectedMotifs.length).toFixed(2) : '0.00'}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
-                    ${motifCost.toFixed(2)}
-                  </td>
-                </tr>
+              {/* Decorative Motifs */}
+              {motifItems.length > 0 && (
+                <React.Fragment>
+                  <tr className="border-b border-gray-200">
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <p className="font-semibold text-gray-900 mb-1">Decorative Motifs</p>
+                        <p className="text-gray-600">
+                          {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                      {motifItems.length}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      ${(motifCost / motifItems.length).toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      ${motifCost.toFixed(2)}
+                    </td>
+                  </tr>
+                  {motifItems.map((item) => (
+                    <tr key={`motif-${item.id}`} className="border-b border-gray-100 bg-gray-50">
+                      <td className="px-8 py-3 text-sm text-gray-900">
+                        <p className="font-medium text-gray-900 capitalize">{item.name}</p>
+                        <p className="text-xs text-gray-600">Height: {item.heightMm}mm</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                          <span>{item.colorDisplay}</span>
+                          <span
+                            className="inline-block w-3 h-3 rounded border border-gray-300"
+                            style={{ backgroundColor: item.color }}
+                          />
+                        </div>
+                      </td>
+                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        ${item.price.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        ${item.price.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               )}
 
-              {/* 3D Additions - Summary row with clickable count */}
+              {/* Images */}
+              {imageItems.length > 0 && (
+                <React.Fragment>
+                  <tr className="border-b border-gray-200">
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <p className="font-semibold text-gray-900 mb-1">Ceramic & Photo Images</p>
+                        <p className="text-gray-600">
+                          {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
+                        </p>
+                        {imagePricingError && (
+                          <p className="text-xs text-red-600 mt-1">{imagePricingError}</p>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                      {imageItems.length}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      {imagePricingLoading ? 'Loading…' : `$${(imagePriceTotal / imageItems.length).toFixed(2)}`}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      {imagePricingLoading ? 'Loading…' : `$${imagePriceTotal.toFixed(2)}`}
+                    </td>
+                  </tr>
+                  {!imagePricingLoading && imageItems.map((item) => (
+                    <tr key={`img-${item.id}`} className="border-b border-gray-100 bg-gray-50">
+                      <td className="px-8 py-3 text-sm text-gray-900">
+                        <p className="font-medium text-gray-900">{item.baseName}</p>
+                        <p className="text-xs text-gray-600">Type: {item.typeName || 'Image'}</p>
+                        <p className="text-xs text-gray-600">Size: {item.widthMm}mm × {item.heightMm}mm</p>
+                        <p className="text-xs text-gray-600">Color Mode: {item.colorDisplay}</p>
+                      </td>
+                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        ${item.price.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        ${item.price.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
+              )}
+
+              {/* 3D Additions */}
               {additionItems.length > 0 && (
-                <tr className="border-b border-gray-200">
-                  <td className="px-6 py-4">
-                    <div className="text-sm">
-                      <p className="font-semibold text-gray-900 mb-1">
-                        3D Additions
-                      </p>
-                      <button
-                        onClick={() => setDetailModal('additions')}
-                        className="text-blue-600 hover:text-blue-800 underline text-left"
-                      >
-                        {additionItems.length} addition{additionItems.length !== 1 ? 's' : ''}
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-900">
-                    {additionItems.length}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
-                    ${(additionsPrice / additionItems.length).toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
-                    ${additionsPrice.toFixed(2)}
-                  </td>
-                </tr>
+                <React.Fragment>
+                  <tr className="border-b border-gray-200">
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <p className="font-semibold text-gray-900 mb-1">3D Additions</p>
+                        <p className="text-gray-600">
+                          {additionItems.length} addition{additionItems.length !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                      {additionItems.length}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      ${(additionsPrice / additionItems.length).toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                      ${additionsPrice.toFixed(2)}
+                    </td>
+                  </tr>
+                  {additionItems.map((item) => (
+                    <tr key={`addition-${item.id}`} className="border-b border-gray-100 bg-gray-50">
+                      <td className="px-8 py-3 text-sm text-gray-900">
+                        <p className="font-medium text-gray-900">{item.name}</p>
+                        <p className="text-xs text-gray-600">Type: {item.type}</p>
+                        <p className="text-xs text-gray-500">Reference: {item.baseId}</p>
+                      </td>
+                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        $75.00
+                      </td>
+                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                        $75.00
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               )}
 
               {/* Total Row */}
@@ -424,144 +579,6 @@ export default function CheckPricePanel() {
       </div>
     </div>
 
-    {/* Detail Modal for Inscriptions, Motifs, and Additions */}
-    {detailModal && (
-      <div 
-        className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/60 p-4"
-        onClick={() => setDetailModal(null)}
-      >
-          <div 
-            className="relative w-full max-w-4xl max-h-[85vh] overflow-hidden bg-white shadow-2xl rounded-lg"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="bg-[#a8d5ba] px-6 py-4 flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-gray-800">
-                {detailModal === 'inscriptions' && 'Inscription Details'}
-                {detailModal === 'motifs' && 'Motif Details'}
-                {detailModal === 'additions' && '3D Addition Details'}
-              </h3>
-              <button
-                onClick={() => setDetailModal(null)}
-                className="text-gray-600 hover:text-gray-900 text-2xl leading-none"
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Modal Content - Scrollable Table */}
-            <div className="max-h-[calc(85vh-140px)] overflow-y-auto bg-white">
-              <table className="w-full border-collapse">
-                <thead className="bg-gray-50 sticky top-0">
-                  <tr>
-                    <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
-                      Name
-                    </th>
-                    <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
-                      Size
-                    </th>
-                    <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
-                      Color
-                    </th>
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Inscription Details */}
-                  {detailModal === 'inscriptions' && inscriptionItems.map((item) => (
-                    <tr key={item.id} className="border-b border-gray-200 hover:bg-gray-50">
-                      <td className="px-4 py-3 text-sm text-gray-900">
-                        <div className="font-medium">{item.text}</div>
-                        <div className="text-xs text-gray-500 mt-1">{item.font}</div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
-                        {item.sizeMm}mm
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-4 h-4 rounded border border-gray-300"
-                            style={{ backgroundColor: item.color }}
-                          />
-                          <span>{item.colorName}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-900 text-right">
-                        ${item.price.toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-
-                  {/* Motif Details */}
-                  {detailModal === 'motifs' && motifItems.map((item) => (
-                    <tr key={item.id} className="border-b border-gray-200 hover:bg-gray-50">
-                      <td className="px-4 py-3 text-sm text-gray-900">
-                        <a
-                          href={item.svgPath}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 underline font-medium"
-                        >
-                          {item.name}
-                        </a>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
-                        {item.heightMm}mm
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-900">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-4 h-4 rounded border border-gray-300"
-                            style={{ backgroundColor: item.color }}
-                          />
-                          <span>{item.colorDisplay}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-900 text-right">
-                        ${item.price.toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-
-                  {/* Addition Details */}
-                  {detailModal === 'additions' && additionItems.map((item) => {
-                    const itemPrice = 75;
-                    return (
-                      <tr key={item.id} className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          <div className="font-medium">{item.name}</div>
-                          <div className="text-xs text-gray-500 mt-1">ID: {item.baseId}</div>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          <span className="capitalize">{item.type}</span>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          -
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900 text-right">
-                          ${itemPrice.toFixed(2)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="bg-gray-50 px-6 py-3 flex justify-end border-t border-gray-300">
-              <button
-                onClick={() => setDetailModal(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

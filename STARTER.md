@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-18  
+**Last Updated:** 2026-02-21  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -26,7 +26,63 @@
 
 ---
 
-## Current Status (2026-02-20)
+## Current Status (2026-02-22)
+
+### ✅ Recent Changes (February 22, 2026)
+1. **Image Crop Canvas Aspect Ratio Fix - COMPLETED**
+   - **Root Cause Fixed**: Oval crop canvas was being scaled incorrectly (1.25× compensation made it square)
+   - **Issue**: Canvas dimensions were `1.0` (square) instead of `0.8` for oval_vertical (portrait)
+   - **Solution**: Removed incorrect `effectiveAspect = targetMaskAspect * 1.25` compensation
+   - **Result**: 
+     - Oval portrait now correctly: width 80mm, height 100mm (0.8 aspect ratio)
+     - Heart maintains correct proportions
+     - All mask shapes preserve their intended aspect ratios
+   - Files: `components/ImageSelector.tsx`
+
+2. **3D Ceramic/Enamel Base Improvements - COMPLETED**
+   - **Photo Material Update**: Changed from `meshBasicMaterial` to `meshStandardMaterial`
+     - Better lighting response (roughness 0.8, metalness 0)
+     - More realistic appearance under scene lighting
+     - Fixes oval photo visibility issues
+   
+   - **Z-Positioning Refined**:
+     - Photo positioned at `actualCeramicDepthInUnits + 0.5mm` above ceramic surface
+     - Prevents z-fighting and ensures visibility from all camera angles
+     - Photo stays clearly on top during orbit camera rotations
+   
+   - **Ceramic Scaling Fix - Uses Crop Canvas Logic**:
+     - Added `getMaskShapeBounds()` function (same as CropCanvas)
+     - Scale based on actual mask bounds within 500×500 SVG viewBox
+     - Example: Oval vertical uses 400×500 area, not full 500×500
+     - Formula: `scaleX/Y = width/maskBounds.width * (1 + borderPercentage)`
+   
+   - **Border Sizing**:
+     - Heart: 7% border (looks perfect)
+     - Oval: 3% border (smaller, more appropriate for oval shapes)
+     - Ceramic shape now perfectly matches the masked photo outline
+   
+   - **Transparency & Masking**:
+     - Photo material: `transparent={true}` with `alphaTest={0.5}`
+     - Black mask areas rendered transparent
+     - Only visible photo content shows (heart/oval shaped)
+     - No black rectangular remnants
+   
+   - Files: `components/three/ImageModel.tsx`, `components/ImageSelector.tsx`
+
+### ✅ Recent Changes (February 21, 2026)
+1. **3D Ceramic/Enamel Base Feature - COMPLETED**
+   - Ceramic, Vitreous Enamel, and Premium Plana images render with 3D ceramic base
+   - SVG mask shape loaded and extruded to create actual 3D geometry
+   - White glossy ceramic material (roughness 0.2, metalness 0.05)
+   - Very thin 1mm depth for realistic appearance
+   - Applied to: Ceramic (ID 7), Vitreous Enamel (ID 2300), Premium Plana (ID 2400)
+   - NOT applied to: Granite Image (ID 21) and YAG Laser (ID 135)
+   - Files: `components/three/ImageModel.tsx`, `components/three/headstone/ShapeSwapper.tsx`
+
+### ⚠️ Known Issues (February 22, 2026)
+- None currently reported
+
+## Previous Status (2026-02-20)
 
 ### ✅ Recent Changes (February 20, 2026)
 1. **Add Your Image Feature - Image Placement & Crop System (IN PROGRESS)**

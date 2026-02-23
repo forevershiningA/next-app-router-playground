@@ -4,6 +4,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { AdditionData } from '#/lib/xml-parser';
 import Image from 'next/image';
+import { fetchMaskMetrics, type MaskMetrics } from '#/lib/mask-metrics';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -61,6 +62,29 @@ const IMAGE_SIZE_CONFIGS: Record<string, { sizes: Array<{ width: number; height:
 
 type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
 
+const MASK_URL_MAP: Record<string, string> = {
+  oval: '/shapes/masks/oval_vertical.svg',
+  'horizontal-oval': '/shapes/masks/oval_horizontal.svg',
+  square: '/shapes/masks/rectangle_vertical.svg',
+  rectangle: '/shapes/masks/rectangle_horizontal.svg',
+  heart: '/shapes/masks/heart.svg',
+  teardrop: '/shapes/masks/teardrop.svg',
+  triangle: '/shapes/masks/triangle.svg',
+};
+
+const MASK_ASPECT_FALLBACK: Record<MaskShape, number> = {
+  oval: 0.8,
+  'horizontal-oval': 1.25,
+  square: 0.8,
+  rectangle: 1.25,
+  heart: 640 / 600,
+  teardrop: 0.71,
+  triangle: 1.16,
+};
+
+const getMaskUrl = (mask: string) => MASK_URL_MAP[mask];
+const getMaskAspectRatio = (mask: string): number => MASK_ASPECT_FALLBACK[mask as MaskShape] ?? 0.8;
+
 export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   // Store hooks
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
@@ -87,121 +111,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [cropRotation, setCropRotation] = useState(0);
   const [flipX, setFlipX] = useState(false);
   const [flipY, setFlipY] = useState(false);
-  
-  // Crop area state (in percentage of preview container)
-  // Default for oval (portrait): 0.8:1 aspect ratio (400/500)
-  const [cropArea, setCropArea] = useState({
-    x: 26, // left position as % - centered for 48% width
-    y: 20, // top position as %
-    width: 48, // width as % - 0.8 aspect ratio
-    height: 60, // height as % (portrait aspect)
-  });
-  
-  // Adjust crop area dimensions when mask changes or on initial load
-  useEffect(() => {
-    // Determine mask orientation
-    const isLandscapeMask = selectedMask === 'horizontal-oval' || selectedMask === 'rectangle';
-    
-    // If we don't have imageDimensions yet, set initial crop area based on mask
-    if (!imageDimensions) {
-      if (isLandscapeMask) {
-        const height = 50;
-        const width = height * 1.25; // 1.25:1 for horizontal masks
-        setCropArea({
-          x: (100 - width) / 2,
-          y: (100 - height) / 2,
-          width,
-          height,
-        });
-      } else {
-        const height = 60;
-        const width = height * 0.8; // 0.8:1 for vertical masks
-        setCropArea({
-          x: (100 - width) / 2,
-          y: (100 - height) / 2,
-          width,
-          height,
-        });
-      }
-      return;
-    }
-    
-    const isGraniteImage = selectedType?.id === 21 || selectedType?.id === 135;
-    const imgWidth = imageDimensions.width;
-    const imgHeight = imageDimensions.height;
-    const imgType = imgWidth === imgHeight ? 'SQUARE' : (imgWidth > imgHeight ? 'LANDSCAPE' : 'PORTRAIT');
-    
-    if (isGraniteImage) {
-      // For Granite Image - size varies based on image orientation
-      let width = 50; // default %
-      let height = 50; // default %
-      
-      if (imgType === 'PORTRAIT' || imgType === 'SQUARE') {
-        const ratio = imgWidth / imgHeight;
-        width = 50;
-        height = (50 * ratio) * 0.7;
-      } else {
-        // Landscape image
-        width = 50;
-        height = 50;
-      }
-      
-      setCropArea(prev => ({
-        ...prev,
-        x: (100 - width) / 2,
-        y: (100 - height) / 2,
-        width,
-        height,
-      }));
-    } else {
-      // Fixed size for Ceramic, Vitreous, Premium Plana
-      // They maintain fixed aspect ratio based on mask orientation
-      if (isLandscapeMask) {
-        // Landscape masks: wider than tall
-        // horizontal-oval mask: 500 wide × 400 tall = 1.25:1 aspect ratio
-        const height = 50; // Base height
-        const width = height * 1.25; // 62.5% width to maintain 1.25:1 ratio
-        setCropArea(prev => ({
-          ...prev,
-          x: (100 - width) / 2,  // Center horizontally
-          y: (100 - height) / 2, // Center vertically
-          width,
-          height,
-        }));
-      } else {
-        // Portrait masks: taller than wide
-        // oval mask: 400 wide × 500 tall = 0.8:1 aspect ratio
-        const height = 60; // Base height
-        const width = height * 0.8; // 48% width to maintain 0.8:1 ratio
-        setCropArea(prev => ({
-          ...prev,
-          x: (100 - width) / 2,  // Center horizontally
-          y: (100 - height) / 2, // Center vertically
-          width,
-          height,
-        }));
-      }
-    }
-  }, [selectedMask, imageDimensions, selectedType]);
-  
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragHandle, setDragHandle] = useState<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const previewRef = useRef<HTMLDivElement>(null);
+  const [maskMetrics, setMaskMetrics] = useState<MaskMetrics | null>(null);
   
   // Get available sizes for selected image type
   const availableSizes = useMemo(() => {
     if (!selectedType) return [];
     
-    // Check if this is Granite Image (ID 21) - free scaling
     if (selectedType.id === '21') {
-      return null; // null means free scaling
+      return null;
     }
     
-    // For other types (Ceramic 7, Vitreous 2300, Plana 2400), return fixed sizes
-    // These would come from XML parsing - for now, hardcode based on ID
     const fixedSizes: Record<string, Array<{width: number, height: number, name: string}>> = {
-      '7': [ // Ceramic Photo
+      '7': [
         { width: 40, height: 60, name: '40 × 60 mm' },
         { width: 50, height: 70, name: '50 × 70 mm' },
         { width: 60, height: 80, name: '60 × 80 mm' },
@@ -213,7 +134,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         { width: 180, height: 240, name: '180 × 240 mm' },
         { width: 240, height: 300, name: '240 × 300 mm' },
       ],
-      '2300': [ // Vitreous Enamel
+      '2300': [
         { width: 50, height: 70, name: '50 × 70 mm' },
         { width: 60, height: 80, name: '60 × 80 mm' },
         { width: 70, height: 90, name: '70 × 90 mm' },
@@ -223,7 +144,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         { width: 130, height: 180, name: '130 × 180 mm' },
         { width: 180, height: 240, name: '180 × 240 mm' },
       ],
-      '2400': [ // Premium Plana
+      '2400': [
         { width: 55, height: 75, name: '55 × 75 mm' },
         { width: 60, height: 80, name: '60 × 80 mm' },
         { width: 70, height: 90, name: '70 × 90 mm' },
@@ -235,9 +156,108 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     
     return fixedSizes[selectedType.id] || [];
   }, [selectedType]);
+  const hasFixedSizes = useMemo(() => availableSizes !== null && availableSizes.length > 0, [availableSizes]);
+  
+  // Crop area state (in percentage of preview container)
+  // Default for oval (portrait): 0.8:1 aspect ratio (400/500)
+  const [cropArea, setCropArea] = useState({
+    x: 26, // left position as % - centered for 48% width
+    y: 20, // top position as %
+    width: 48, // width as % - 0.8 aspect ratio
+    height: 60, // height as % (portrait aspect)
+  });
 
+  useEffect(() => {
+    let cancelled = false;
+    const maskUrl = getMaskUrl(selectedMask);
+    if (!maskUrl) {
+      setMaskMetrics(null);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    fetchMaskMetrics(maskUrl)
+      .then((metrics) => {
+        if (!cancelled) {
+          setMaskMetrics(metrics);
+        }
+      })
+      .catch((error) => {
+        console.error('[ImageSelector] Failed to load mask metrics:', error);
+        if (!cancelled) {
+          setMaskMetrics(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedMask]);
+  
+  // Adjust crop area dimensions when mask changes or on initial load
+  useEffect(() => {
+    const maskAspect = maskMetrics?.aspect ?? getMaskAspectRatio(selectedMask);
+    const isGraniteImage = selectedType?.id === 21 || selectedType?.id === 135;
+
+    const centerCrop = (width: number, height: number) => {
+      const clampedWidth = Math.min(95, Math.max(width, 10));
+      const clampedHeight = Math.min(95, Math.max(height, 10));
+      setCropArea({
+        x: (100 - clampedWidth) / 2,
+        y: (100 - clampedHeight) / 2,
+        width: clampedWidth,
+        height: clampedHeight,
+      });
+    };
+
+    if (!imageDimensions || hasFixedSizes) {
+      const portraitPreferred = maskAspect < 1;
+      const baseHeight = portraitPreferred ? 60 : 50;
+      centerCrop(baseHeight * maskAspect, baseHeight);
+      return;
+    }
+
+    if (isGraniteImage) {
+      const imgWidth = imageDimensions.width;
+      const imgHeight = imageDimensions.height;
+      const imgType = imgWidth === imgHeight ? 'SQUARE' : imgWidth > imgHeight ? 'LANDSCAPE' : 'PORTRAIT';
+
+      let width = 50;
+      let height = 50;
+
+      if (imgType === 'PORTRAIT' || imgType === 'SQUARE') {
+        const ratio = imgWidth / imgHeight;
+        width = 50;
+        height = (50 * ratio) * 0.7;
+      }
+
+      centerCrop(width, height);
+      return;
+    }
+
+    const portraitPreferred = maskAspect < 1;
+    const baseHeight = portraitPreferred ? 60 : 50;
+    centerCrop(baseHeight * maskAspect, baseHeight);
+  }, [selectedMask, imageDimensions, selectedType, hasFixedSizes, maskMetrics]);
+  
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragHandle, setDragHandle] = useState<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const previewRef = useRef<HTMLDivElement>(null);
+  
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
-  const hasFixedSizes = availableSizes !== null && availableSizes.length > 0;
+
+  useEffect(() => {
+    if (!hasFixedSizes || !availableSizes?.length) {
+      setSelectedSizeIndex(0);
+      return;
+    }
+    setSelectedSizeIndex((idx) => Math.min(Math.max(idx, 0), availableSizes.length - 1));
+  }, [hasFixedSizes, availableSizes?.length]);
+
+  const activeSizeIndex = hasFixedSizes && availableSizes?.length ? Math.min(selectedSizeIndex, availableSizes.length - 1) : 0;
+  const activeSize = hasFixedSizes && availableSizes?.length ? availableSizes[activeSizeIndex] : null;
 
   const catalog = useHeadstoneStore((s) => s.catalog);
   const addImage = useHeadstoneStore((s) => s.addImage);
@@ -261,12 +281,13 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         flipY,
         cropArea,
         hasFixedSizes,
+        maskMetrics,
         updateCropArea: updateCropAreaCallback,
       });
     } else {
       setCropCanvasData(null);
     }
-  }, [showCropSection, uploadedImage, selectedMask, cropColorMode, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, setCropCanvasData]);
+  }, [showCropSection, uploadedImage, selectedMask, cropColorMode, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, maskMetrics, setCropCanvasData]);
 
   // Filter catalog additions to get only image types
   const imageTypes = useMemo(() => {
@@ -314,11 +335,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const handleCropImage = async () => {
     if (!selectedType || !uploadedImage || !addImage) return;
 
-    console.log('[handleCropImage] Starting image processing...');
-    console.log('cropArea:', cropArea);
-    console.log('selectedMask:', selectedMask);
-    console.log('cropRotation:', cropRotation);
-    console.log('cropScale:', cropScale);
+    const maskUrl = getMaskUrl(selectedMask);
+    let resolvedMaskMetrics = maskMetrics;
+
+    if (!resolvedMaskMetrics && maskUrl) {
+      try {
+        resolvedMaskMetrics = await fetchMaskMetrics(maskUrl);
+      } catch (error) {
+        console.error('[handleCropImage] Failed to load mask metrics on demand:', error);
+      }
+    }
 
     try {
       // 1. Create canvas for processing
@@ -337,14 +363,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         img.onload = resolve;
         img.onerror = reject;
       });
-      console.log('[handleCropImage] Image loaded:', img.width, 'x', img.height);
+
 
       // 3. Calculate crop area in actual image pixels
       const cropX = (cropArea.x / 100) * img.width;
       const cropY = (cropArea.y / 100) * img.height;
       const cropW = (cropArea.width / 100) * img.width;
       const cropH = (cropArea.height / 100) * img.height;
-      console.log('[handleCropImage] Crop dimensions:', { cropX, cropY, cropW, cropH });
+
 
       // 4. Set canvas size to crop dimensions
       canvas.width = cropW;
@@ -364,7 +390,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         -cropW / 2, -cropH / 2, cropW, cropH
       );
       ctx.restore();
-      console.log('[handleCropImage] Image drawn to canvas');
+
 
       // 7. Apply color mode filter
       if (cropColorMode === 'bw') {
@@ -375,7 +401,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           data[i] = data[i + 1] = data[i + 2] = gray;
         }
         ctx.putImageData(imageData, 0, 0);
-        console.log('[handleCropImage] B&W filter applied');
+
       } else if (cropColorMode === 'sepia') {
         const imageData = ctx.getImageData(0, 0, cropW, cropH);
         const data = imageData.data;
@@ -386,26 +412,54 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           data[i + 2] = Math.min(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
         }
         ctx.putImageData(imageData, 0, 0);
-        console.log('[handleCropImage] Sepia filter applied');
+
       }
 
       // 8. Apply mask shape using compositing
-      const maskUrl = getMaskUrl(selectedMask);
-      console.log('[handleCropImage] Loading mask:', maskUrl);
-      
+      const imageCanvas = document.createElement('canvas');
+      imageCanvas.width = cropW;
+      imageCanvas.height = cropH;
+      const imageCtx = imageCanvas.getContext('2d');
+      if (!imageCtx) {
+        console.error('[handleCropImage] Failed to create image canvas context');
+        return;
+      }
+      imageCtx.drawImage(canvas, 0, 0);
+
+      const targetMaskAspect = resolvedMaskMetrics?.aspect ?? getMaskAspectRatio(selectedMask);
+      const canvasAspect = cropW / cropH;
+
+      let maskDrawWidth = cropW;
+      let maskDrawHeight = cropH;
+      let maskDrawX = 0;
+      let maskDrawY = 0;
+
+      if (canvasAspect > targetMaskAspect) {
+        maskDrawHeight = cropH;
+        maskDrawWidth = cropH * targetMaskAspect;
+        maskDrawX = (cropW - maskDrawWidth) / 2;
+      } else {
+        maskDrawWidth = cropW;
+        maskDrawHeight = cropW / targetMaskAspect;
+        maskDrawY = (cropH - maskDrawHeight) / 2;
+      }
+
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = Math.round(maskDrawWidth);
+      finalCanvas.height = Math.round(maskDrawHeight);
+      const finalCtx = finalCanvas.getContext('2d');
+      if (!finalCtx) {
+        console.error('[handleCropImage] Failed to create final canvas context');
+        return;
+      }
+
+      finalCtx.drawImage(
+        imageCanvas,
+        maskDrawX, maskDrawY, maskDrawWidth, maskDrawHeight,
+        0, 0, finalCanvas.width, finalCanvas.height
+      );
+
       if (maskUrl) {
-        // Instead of loading SVG as image, we'll use canvas compositing
-        // Save current canvas content
-        const imageCanvas = document.createElement('canvas');
-        imageCanvas.width = cropW;
-        imageCanvas.height = cropH;
-        const imageCtx = imageCanvas.getContext('2d');
-        if (!imageCtx) return;
-        
-        // Copy current image to temp canvas
-        imageCtx.drawImage(canvas, 0, 0);
-        
-        // Load mask SVG
         const maskImg = new window.Image();
         maskImg.crossOrigin = 'anonymous';
         maskImg.src = maskUrl;
@@ -416,118 +470,108 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             reject(e);
           };
         });
-        console.log('[handleCropImage] Mask loaded:', maskImg.width, 'x', maskImg.height);
 
-        // Get the expected aspect ratio for this mask shape
-        const getMaskAspectRatio = (mask: string): number => {
-          const boundsMap: Record<string, { width: number; height: number }> = {
-            'oval': { width: 400, height: 500 },            // 0.8:1 (portrait)
-            'horizontal-oval': { width: 500, height: 400 }, // 1.25:1 (landscape)
-            'square': { width: 400, height: 500 },          // 0.8:1
-            'rectangle': { width: 500, height: 400 },       // 1.25:1
-            'heart': { width: 500, height: 470 },           // ~1.06:1
-            'teardrop': { width: 340, height: 480 },        // ~0.71:1
-            'triangle': { width: 440, height: 380 },        // ~1.16:1
-          };
-          const bounds = boundsMap[mask] || { width: 100, height: 150 };
-          return bounds.width / bounds.height;
-        };
+        finalCtx.globalCompositeOperation = 'destination-in';
 
-        const targetMaskAspect = getMaskAspectRatio(selectedMask);
-        
-        // For oval masks, the SVG has 10% padding on left/right (80% effective width)
-        // So the actual visible shape is narrower than the aspect ratio suggests
-        // We need to scale width by 1.25 (1/0.8) to compensate
-        const effectiveAspect = selectedMask === 'oval' ? targetMaskAspect * 1.25 : targetMaskAspect;
-        
-        const canvasAspect = cropW / cropH;
-        
-        let maskDrawWidth, maskDrawHeight, maskDrawX, maskDrawY;
-        
-        if (canvasAspect > effectiveAspect) {
-          // Canvas is wider - fit mask to height
-          maskDrawHeight = cropH;
-          maskDrawWidth = cropH * effectiveAspect;
-          maskDrawX = (cropW - maskDrawWidth) / 2;
-          maskDrawY = 0;
+        if (resolvedMaskMetrics) {
+          const nativeWidth = maskImg.naturalWidth || maskImg.width || resolvedMaskMetrics.naturalWidth;
+          const nativeHeight = maskImg.naturalHeight || maskImg.height || resolvedMaskMetrics.naturalHeight;
+          const sourceX = resolvedMaskMetrics.normalizedBounds.left * nativeWidth;
+          const sourceY = resolvedMaskMetrics.normalizedBounds.top * nativeHeight;
+          const sourceWidth = resolvedMaskMetrics.normalizedBounds.width * nativeWidth;
+          const sourceHeight = resolvedMaskMetrics.normalizedBounds.height * nativeHeight;
+
+          finalCtx.drawImage(
+            maskImg,
+            sourceX,
+            sourceY,
+            sourceWidth,
+            sourceHeight,
+            0,
+            0,
+            finalCanvas.width,
+            finalCanvas.height
+          );
         } else {
-          // Canvas is taller - fit mask to width
-          maskDrawWidth = cropW;
-          maskDrawHeight = cropW / effectiveAspect;
-          maskDrawX = 0;
-          maskDrawY = (cropH - maskDrawHeight) / 2;
+          finalCtx.drawImage(
+            maskImg,
+            0,
+            0,
+            maskImg.naturalWidth || maskImg.width || finalCanvas.width,
+            maskImg.naturalHeight || maskImg.height || finalCanvas.height,
+            0,
+            0,
+            finalCanvas.width,
+            finalCanvas.height
+          );
         }
 
-        console.log('[handleCropImage] Mask drawing dims:', { 
-          maskDrawWidth, maskDrawHeight, maskDrawX, maskDrawY,
-          targetMaskAspect, canvasAspect 
-        });
-
-        // Create final output canvas with exact mask dimensions
-        const finalCanvas = document.createElement('canvas');
-        finalCanvas.width = Math.round(maskDrawWidth);
-        finalCanvas.height = Math.round(maskDrawHeight);
-        const finalCtx = finalCanvas.getContext('2d');
-        if (!finalCtx) return;
-        
-        console.log('[handleCropImage] Creating final canvas:', finalCanvas.width, 'x', finalCanvas.height);
-        
-        // Draw the FULL cropped image, scaled to fill the final canvas
-        finalCtx.drawImage(
-          imageCanvas,
-          0, 0, cropW, cropH,                              // source: full crop area
-          0, 0, finalCanvas.width, finalCanvas.height      // dest: fill final canvas
-        );
-        
-        // Use destination-in to clip image to mask shape
-        finalCtx.globalCompositeOperation = 'destination-in';
-        
-        // Draw mask - this will clip the image to the mask shape
-        finalCtx.drawImage(maskImg, 0, 0, finalCanvas.width, finalCanvas.height);
-        
         finalCtx.globalCompositeOperation = 'source-over';
-        
-        console.log('[handleCropImage] Mask applied to final canvas');
-        
-        // Replace main canvas with final masked version
-        canvas.width = finalCanvas.width;
-        canvas.height = finalCanvas.height;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(finalCanvas, 0, 0);
       }
 
       // 9. Export as data URL
-      const processedImageUrl = canvas.toDataURL('image/png');
+      const processedImageUrl = finalCanvas.toDataURL('image/png');
       console.log('[handleCropImage] Canvas exported:', {
-        canvasWidth: canvas.width,
-        canvasHeight: canvas.height,
-        canvasAspect: canvas.width / canvas.height,
+        canvasWidth: finalCanvas.width,
+        canvasHeight: finalCanvas.height,
+        canvasAspect: finalCanvas.width / finalCanvas.height,
         selectedMask,
       });
-      console.log('[handleCropImage] Image exported, length:', processedImageUrl.length);
+
 
       // 10. Calculate dimensions based on trimmed canvas aspect ratio
       // After trimming, the canvas matches the mask's visible bounds exactly
-      const trimmedAspectRatio = canvas.width / canvas.height;
-      
-      // Use a base height and calculate width to maintain the trimmed aspect ratio
-      const baseHeightMm = 100;
-      const calculatedWidthMm = baseHeightMm * trimmedAspectRatio;
+      const trimmedAspectRatio = finalCanvas.width / finalCanvas.height;
+
+      let targetWidthMm = trimmedAspectRatio * 100;
+      let targetHeightMm = 100;
+
+      if (activeSize) {
+        const preferredHeight = activeSize.height;
+        let preferredWidth = preferredHeight * trimmedAspectRatio;
+
+        if (preferredWidth > activeSize.width) {
+          preferredWidth = activeSize.width;
+          targetHeightMm = preferredWidth / trimmedAspectRatio;
+          targetWidthMm = preferredWidth;
+        } else {
+          targetWidthMm = preferredWidth;
+          targetHeightMm = preferredHeight;
+        }
+      }
+
+      const sizeVariantValue = activeSize ? activeSizeIndex + 1 : undefined;
+      const canonicalAspectRatio = targetWidthMm / targetHeightMm;
 
       // 11. Add to 3D scene with trimmed aspect ratio
+      // Convert selectedMask to SVG filename format
+      const maskShapeMap: Record<string, string> = {
+        'oval': 'oval_vertical',
+        'horizontal-oval': 'oval_horizontal',
+        'square': 'rectangle_vertical',
+        'rectangle': 'rectangle_horizontal',
+        'heart': 'heart',
+        'teardrop': 'teardrop',
+        'triangle': 'triangle',
+      };
+      const maskShapeFilename = maskShapeMap[selectedMask] || 'oval_vertical';
+
       addImage({
         id: `img-${Date.now()}`,
         typeId: parseInt(selectedType.id),
         typeName: selectedType.name,
         imageUrl: processedImageUrl,
-        widthMm: calculatedWidthMm,
-        heightMm: baseHeightMm,
+        widthMm: targetWidthMm,
+        heightMm: targetHeightMm,
         xPos: 0,
         yPos: 100, // Start higher up on the headstone
         rotationZ: 0,
-        sizeVariant: 1, // Start at size 1
+        sizeVariant: sizeVariantValue ?? 1,
+        croppedAspectRatio: canonicalAspectRatio,
+        maskShape: maskShapeFilename, // Pass the SVG filename (e.g., 'rectangle_horizontal')
+        colorMode: cropColorMode,
       });
-      console.log('[handleCropImage] Image added to scene with trimmed aspect ratio:', trimmedAspectRatio);
+
 
       // 12. Reset and close crop UI
       setUploadedImage(null);
@@ -542,7 +586,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       
       // Clear crop canvas
       setCropCanvasData(null);
-      console.log('[handleCropImage] Cleanup complete');
+
       
     } catch (error) {
       console.error('[handleCropImage] Error processing image:', error);
@@ -550,19 +594,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     }
   };
 
-  // Helper function to get mask URL
-  const getMaskUrl = (mask: string) => {
-    const maskMap: Record<string, string> = {
-      'oval': '/shapes/masks/oval_vertical.svg',
-      'horizontal-oval': '/shapes/masks/oval_horizontal.svg',
-      'square': '/shapes/masks/rectangle_vertical.svg',
-      'rectangle': '/shapes/masks/rectangle_horizontal.svg',
-      'heart': '/shapes/masks/heart.svg',
-      'teardrop': '/shapes/masks/teardrop.svg',
-      'triangle': '/shapes/masks/triangle.svg',
-    };
-    return maskMap[mask];
-  };
 
   const handleFlipX = () => setFlipX(!flipX);
   const handleFlipY = () => setFlipY(!flipY);
@@ -647,6 +678,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const handleBackToImageTypes = () => {
     setSelectedType(null);
     setUploadedImage(null);
+    selectImageForEditing(null); // Deselect any selected image when going back
   };
 
   // Get selected image data
@@ -739,7 +771,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     updateImageSizeVariant(selectedImageId, newSize);
                     if (hasFixedSizes) {
                       const dims = sizeConfig.sizes[newSize - 1];
-                      updateImageSize(selectedImageId, dims.width, dims.height);
+                      const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                      const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                      // Scale to fit within the frame dimensions while preserving aspect ratio
+                      const scaledHeight = dims.height;
+                      const scaledWidth = scaledHeight * aspectRatio;
+                      updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                     }
                   }}
                   className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
@@ -761,7 +798,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       updateImageSizeVariant(selectedImageId, val);
                       if (hasFixedSizes) {
                         const dims = sizeConfig.sizes[val - 1];
-                        updateImageSize(selectedImageId, dims.width, dims.height);
+                        const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                        const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                        const scaledHeight = dims.height;
+                        const scaledWidth = scaledHeight * aspectRatio;
+                        updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                       }
                     }
                   }}
@@ -771,13 +812,21 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       updateImageSizeVariant(selectedImageId, 1);
                       if (hasFixedSizes) {
                         const dims = sizeConfig.sizes[0];
-                        updateImageSize(selectedImageId, dims.width, dims.height);
+                        const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                        const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                        const scaledHeight = dims.height;
+                        const scaledWidth = scaledHeight * aspectRatio;
+                        updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                       }
                     } else if (val > maxSize) {
                       updateImageSizeVariant(selectedImageId, maxSize);
                       if (hasFixedSizes) {
                         const dims = sizeConfig.sizes[maxSize - 1];
-                        updateImageSize(selectedImageId, dims.width, dims.height);
+                        const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                        const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                        const scaledHeight = dims.height;
+                        const scaledWidth = scaledHeight * aspectRatio;
+                        updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                       }
                     }
                   }}
@@ -790,7 +839,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     updateImageSizeVariant(selectedImageId, newSize);
                     if (hasFixedSizes) {
                       const dims = sizeConfig.sizes[newSize - 1];
-                      updateImageSize(selectedImageId, dims.width, dims.height);
+                      const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                      const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                      const scaledHeight = dims.height;
+                      const scaledWidth = scaledHeight * aspectRatio;
+                      updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                     }
                   }}
                   className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
@@ -814,7 +867,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   updateImageSizeVariant(selectedImageId, newSize);
                   if (hasFixedSizes) {
                     const dims = sizeConfig.sizes[newSize - 1];
-                    updateImageSize(selectedImageId, dims.width, dims.height);
+                    const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                    const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                    const scaledHeight = dims.height;
+                    const scaledWidth = scaledHeight * aspectRatio;
+                    updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                   }
                 }}
                 className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
@@ -1098,9 +1155,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                             const centerY = prev.y + prev.height / 2;
                             
                             // Maintain aspect ratio if fixed sizes
-                            if (hasFixedSizes && availableSizes.length > 0) {
-                              const size = availableSizes[selectedSizeIndex];
-                              const aspectRatio = size.width / size.height;
+                            if (hasFixedSizes && activeSize) {
+                              const aspectRatio = activeSize.width / activeSize.height;
                               const newWidth = newHeight * aspectRatio;
                               return {
                                 ...prev,
@@ -1133,9 +1189,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                               const centerX = prev.x + prev.width / 2;
                               const centerY = prev.y + prev.height / 2;
                               
-                              if (hasFixedSizes && availableSizes.length > 0) {
-                                const size = availableSizes[selectedSizeIndex];
-                                const aspectRatio = size.width / size.height;
+                              if (hasFixedSizes && activeSize) {
+                                const aspectRatio = activeSize.width / activeSize.height;
                                 const newWidth = newHeight * aspectRatio;
                                 return {
                                   ...prev,
@@ -1171,9 +1226,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                               const centerX = prev.x + prev.width / 2;
                               const centerY = prev.y + prev.height / 2;
                               
-                              if (hasFixedSizes && availableSizes.length > 0) {
-                                const size = availableSizes[selectedSizeIndex];
-                                const aspectRatio = size.width / size.height;
+                              if (hasFixedSizes && activeSize) {
+                                const aspectRatio = activeSize.width / activeSize.height;
                                 const newWidth = newHeight * aspectRatio;
                                 return {
                                   ...prev,

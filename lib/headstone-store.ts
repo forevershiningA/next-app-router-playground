@@ -10,6 +10,7 @@ import {
   calculatePrice,
   fetchAndParseInscriptionDetails,
 } from '#/lib/xml-parser';
+import type { MaskMetrics } from '#/lib/mask-metrics';
 import { data } from '#/app/_internal/_data';
 import {
   fetchAndParseMotifPricing,
@@ -90,6 +91,7 @@ export type PanelName =
   | 'addition'
   | 'motifs'
   | 'motif'
+  | 'image'
   | 'checkprice'
   | 'designs'
   | null;
@@ -141,6 +143,9 @@ type HeadstoneState = {
     yPos: number;
     rotationZ: number;
     sizeVariant?: number;
+    croppedAspectRatio?: number;
+    maskShape?: string;
+    colorMode?: 'full' | 'bw' | 'sepia';
   }>;
   addImage: (image: {
     id: string;
@@ -153,6 +158,9 @@ type HeadstoneState = {
     yPos: number;
     rotationZ: number;
     sizeVariant?: number;
+    maskShape?: string;
+    croppedAspectRatio?: number;
+    colorMode?: 'full' | 'bw' | 'sepia';
   }) => void;
   removeImage: (id: string) => void;
   duplicateImage: (id: string) => void;
@@ -359,6 +367,7 @@ type HeadstoneState = {
     flipY: boolean;
     cropArea: { x: number; y: number; width: number; height: number };
     hasFixedSizes: boolean;
+    maskMetrics?: MaskMetrics | null;
     updateCropArea: (area: { x: number; y: number; width: number; height: number }) => void;
   } | null;
   setCropCanvasData: (data: HeadstoneState['cropCanvasData']) => void;

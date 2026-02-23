@@ -184,7 +184,8 @@ export default function DesignerNav() {
       if (
         activeFullscreenPanel === 'inscriptions' ||
         activeFullscreenPanel === 'select-additions' ||
-        activeFullscreenPanel === 'select-motifs'
+        activeFullscreenPanel === 'select-motifs' ||
+        activeFullscreenPanel === 'select-images'
       ) {
         setActivePanel(null);
       }
@@ -347,7 +348,8 @@ export default function DesignerNav() {
         if (
           activeFullscreenPanel === 'inscriptions' ||
           activeFullscreenPanel === 'select-additions' ||
-          activeFullscreenPanel === 'select-motifs'
+          activeFullscreenPanel === 'select-motifs' ||
+          activeFullscreenPanel === 'select-images'
         ) {
           setActivePanel(null);
         }
@@ -380,7 +382,8 @@ export default function DesignerNav() {
         if (
           activeFullscreenPanel === 'inscriptions' ||
           activeFullscreenPanel === 'select-additions' ||
-          activeFullscreenPanel === 'select-motifs'
+          activeFullscreenPanel === 'select-motifs' ||
+          activeFullscreenPanel === 'select-images'
         ) {
           setActivePanel(null);
         }
@@ -1046,12 +1049,12 @@ export default function DesignerNav() {
     }
   }, [isSelectSizePage, editingObject, selected, setSelected]);
 
-  // Auto-open image panel when an image is selected
+  // Auto-open image panel when an image is selected and activePanel is 'image'
   useEffect(() => {
-    if (selectedImageId && activeFullscreenPanel !== 'select-images') {
+    if (selectedImageId && activePanel === 'image' && activeFullscreenPanel !== 'select-images') {
       setActiveFullscreenPanel('select-images');
     }
-  }, [selectedImageId, activeFullscreenPanel]);
+  }, [selectedImageId, activePanel, activeFullscreenPanel]);
 
   let quantity = widthMm * heightMm;
   if (catalog) {

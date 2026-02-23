@@ -577,6 +577,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       xPos={image.xPos}
                       yPos={image.yPos}
                       rotationZ={image.rotationZ}
+                      typeId={image.typeId}
+                      maskShape={image.maskShape}
                       headstone={api}
                       index={i}
                     />

@@ -492,7 +492,7 @@ export default function SelectionBox({
           lineWidth={outlineLineWidth}
           renderOrder={1001}
           depthWrite={false}
-          depthTest={false}
+          depthTest={true}
           transparent
           opacity={outlineOpacity}
           raycast={disableRaycast}
@@ -518,7 +518,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -539,7 +539,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -560,7 +560,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -581,7 +581,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -599,7 +599,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -617,7 +617,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -635,7 +635,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
 
@@ -653,7 +653,7 @@ export default function SelectionBox({
               transparent
               opacity={handleOpacity}
               depthWrite={false}
-              depthTest={false}
+              depthTest={true}
             />
           </mesh>
         </>

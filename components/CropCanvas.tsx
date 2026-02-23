@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
+type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
+
 export default function CropCanvas() {
   const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
   const [dragState, setDragState] = useState({
@@ -31,6 +33,7 @@ export default function CropCanvas() {
     flipY,
     cropArea,
     hasFixedSizes,
+    maskMetrics,
     updateCropArea,
   } = cropCanvasData;
 
@@ -48,29 +51,33 @@ export default function CropCanvas() {
     return maskMap[mask];
   };
 
-  // Get mask shape bounds within the 500x500 SVG coordinate system
-  const getMaskShapeBounds = (mask: string) => {
-    // Fast-path map for common masks (avoids DOM operations)
-    // These values are approximate bounds within a 500x500 viewBox
-    const boundsMap: Record<string, {left: number, top: number, width: number, height: number}> = {
-      'oval': { left: 50, top: 0, width: 400, height: 500 },           // Oval vertical path: x:50-450, y:0-500
-      'horizontal-oval': { left: 0, top: 50, width: 500, height: 400 }, // Horizontal oval: x:0-500, y:50-450
-      'square': { left: 50, top: 0, width: 400, height: 500 },          // Square: x:50-450, y:0-500
-      'rectangle': { left: 0, top: 50, width: 500, height: 400 },       // Rectangle: x:0-500, y:50-450
-      'heart': { left: 0, top: 0, width: 500, height: 470 },            // Heart: approximately full width, ~470 height
-      'teardrop': { left: 80, top: 0, width: 340, height: 480 },        // Teardrop: offset and narrower
-      'triangle': { left: 30, top: 60, width: 440, height: 380 },       // Triangle: centered triangle shape
-    };
-    
-    return boundsMap[mask] || { left: 0, top: 0, width: 500, height: 500 };
+  const FALLBACK_BOUNDS: Record<MaskShape, { left: number; top: number; width: number; height: number; viewWidth: number; viewHeight: number }> = {
+    oval: { left: 50, top: 0, width: 400, height: 500, viewWidth: 500, viewHeight: 500 },
+    'horizontal-oval': { left: 0, top: 50, width: 500, height: 400, viewWidth: 500, viewHeight: 500 },
+    square: { left: 50, top: 0, width: 400, height: 500, viewWidth: 500, viewHeight: 500 },
+    rectangle: { left: 0, top: 50, width: 500, height: 400, viewWidth: 500, viewHeight: 500 },
+    heart: { left: 0, top: 0, width: 500, height: 470, viewWidth: 640, viewHeight: 600 },
+    teardrop: { left: 80, top: 0, width: 340, height: 480, viewWidth: 400, viewHeight: 400 },
+    triangle: { left: 30, top: 60, width: 340, height: 280, viewWidth: 400, viewHeight: 400 },
   };
 
-  // Calculate effective bounds based on mask's actual shape within 500x500 viewBox
-  // All masks now fill their containers - no offset needed
-  const getMaskEffectiveBounds = (mask: string) => {
-    // Return no offset - golden rectangle should match crop area exactly
-    return { xOffset: 0, yOffset: 0, widthScale: 1, heightScale: 1 };
+  const fallback = FALLBACK_BOUNDS[selectedMask as MaskShape];
+  const maskBoundsPx = maskMetrics?.bounds ?? fallback;
+  const naturalWidth = maskMetrics?.naturalWidth ?? fallback.viewWidth;
+  const naturalHeight = maskMetrics?.naturalHeight ?? fallback.viewHeight;
+
+  const normalizedMaskBounds = maskMetrics?.normalizedBounds ?? {
+    left: maskBoundsPx.left / naturalWidth,
+    top: maskBoundsPx.top / naturalHeight,
+    width: maskBoundsPx.width / naturalWidth,
+    height: maskBoundsPx.height / naturalHeight,
   };
+
+  const maskViewBox = `0 0 ${naturalWidth} ${naturalHeight}`;
+  const maskRectWidth = naturalWidth;
+  const maskRectHeight = naturalHeight;
+  const maskImageWidth = naturalWidth;
+  const maskImageHeight = naturalHeight;
 
   const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
     e.preventDefault();
@@ -112,68 +119,73 @@ export default function CropCanvas() {
         const centerX = initialCropArea.x + initialCropArea.width / 2;
         const centerY = initialCropArea.y + initialCropArea.height / 2;
 
-        // Calculate deltas based on handle direction
-        // Multiply by 2 because we're scaling from center (both sides change)
-        const deltaWidth = handle.includes('w') ? -deltaX * 2 : deltaX * 2;
-        const deltaHeight = handle.includes('n') ? -deltaY * 2 : deltaY * 2;
-
-        // Calculate new dimensions based on which direction has larger change
-        const widthCandidate = initialCropArea.width + deltaWidth;
-        const heightCandidate = initialCropArea.height + deltaHeight;
-
-        // Use the dimension with larger change to maintain aspect ratio
-        const widthChange = Math.abs(widthCandidate - initialCropArea.width);
-        const heightChange = Math.abs(heightCandidate - initialCropArea.height);
-        const useWidth = widthChange >= heightChange;
-
-        let nextWidth = useWidth ? widthCandidate : heightCandidate * aspectRatio;
-        let nextHeight = useWidth ? nextWidth / aspectRatio : heightCandidate;
-
-        // Ensure we're using aspect ratio correctly
-        if (!useWidth) {
-          nextWidth = nextHeight * aspectRatio;
+        // Use diagonal distance for uniform scaling
+        const dragDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        // Determine sign based on handle direction
+        let sign = 1;
+        if (handle === 'nw') {
+          sign = (deltaX < 0 || deltaY < 0) ? 1 : -1;
+        } else if (handle === 'ne') {
+          sign = (deltaX > 0 || deltaY < 0) ? 1 : -1;
+        } else if (handle === 'sw') {
+          sign = (deltaX < 0 || deltaY > 0) ? 1 : -1;
+        } else if (handle === 'se') {
+          sign = (deltaX > 0 || deltaY > 0) ? 1 : -1;
         }
+        
+        const dragDelta = sign * dragDistance;
+        
+        // Calculate scale based on the diagonal
+        const baseDimension = Math.sqrt(initialCropArea.width * initialCropArea.width + initialCropArea.height * initialCropArea.height);
+        const scale = Math.max(minSize / baseDimension, 1 + (dragDelta / baseDimension));
+
+        // Scale dimensions uniformly
+        let nextWidth = initialCropArea.width * scale;
+        let nextHeight = initialCropArea.height * scale;
 
         // Apply minimum size constraint
         nextWidth = Math.max(minSize, nextWidth);
         nextHeight = Math.max(minSize, nextHeight);
+
+        // Ensure aspect ratio is maintained after min size constraint
+        if (nextWidth < minSize) {
+          nextWidth = minSize;
+          nextHeight = nextWidth / aspectRatio;
+        }
+        if (nextHeight < minSize) {
+          nextHeight = minSize;
+          nextWidth = nextHeight * aspectRatio;
+        }
 
         // Calculate new position centered around the original center point
         let nextX = centerX - nextWidth / 2;
         let nextY = centerY - nextHeight / 2;
 
         // Clamp to bounds while maintaining center and aspect ratio
-        const clampHorizontal = () => {
-          if (nextX < 0) {
-            nextX = 0;
-            nextWidth = centerX * 2; // Max width that keeps center
-            nextHeight = Math.max(minSize, nextWidth / aspectRatio);
-            nextY = centerY - nextHeight / 2;
-          } else if (nextX + nextWidth > 100) {
-            nextWidth = (100 - centerX) * 2; // Max width that keeps center
-            nextX = centerX - nextWidth / 2;
-            nextHeight = Math.max(minSize, nextWidth / aspectRatio);
-            nextY = centerY - nextHeight / 2;
-          }
-        };
+        if (nextX < 0) {
+          nextX = 0;
+          nextWidth = Math.min(centerX * 2, 100);
+          nextHeight = nextWidth / aspectRatio;
+          nextY = centerY - nextHeight / 2;
+        } else if (nextX + nextWidth > 100) {
+          nextWidth = Math.min((100 - centerX) * 2, 100);
+          nextX = centerX - nextWidth / 2;
+          nextHeight = nextWidth / aspectRatio;
+          nextY = centerY - nextHeight / 2;
+        }
 
-        const clampVertical = () => {
-          if (nextY < 0) {
-            nextY = 0;
-            nextHeight = centerY * 2; // Max height that keeps center
-            nextWidth = Math.max(minSize, nextHeight * aspectRatio);
-            nextX = centerX - nextWidth / 2;
-          } else if (nextY + nextHeight > 100) {
-            nextHeight = (100 - centerY) * 2; // Max height that keeps center
-            nextY = centerY - nextHeight / 2;
-            nextWidth = Math.max(minSize, nextHeight * aspectRatio);
-            nextX = centerX - nextWidth / 2;
-          }
-        };
-
-        // Apply clamping
-        clampHorizontal();
-        clampVertical();
+        if (nextY < 0) {
+          nextY = 0;
+          nextHeight = Math.min(centerY * 2, 100);
+          nextWidth = nextHeight * aspectRatio;
+          nextX = centerX - nextWidth / 2;
+        } else if (nextY + nextHeight > 100) {
+          nextHeight = Math.min((100 - centerY) * 2, 100);
+          nextY = centerY - nextHeight / 2;
+          nextWidth = nextHeight * aspectRatio;
+          nextX = centerX - nextWidth / 2;
+        }
 
         // Update crop area if sizes are valid
         if (nextWidth >= minSize && nextHeight >= minSize) {
@@ -262,26 +274,26 @@ export default function CropCanvas() {
             >
               <svg
                 className="w-full h-full"
-                viewBox="0 0 500 500"
+                viewBox={maskViewBox}
                 preserveAspectRatio="xMidYMid meet"
               >
                 <defs>
                   <mask id={`crop-mask-${selectedMask}`}>
-                    <rect width="500" height="500" fill="black" />
+                    <rect width={maskRectWidth} height={maskRectHeight} fill="black" />
                     <image
                       href={getMaskUrl(selectedMask) || ''}
                       x="0"
                       y="0"
-                      width="500"
-                      height="500"
-                      preserveAspectRatio="xMidYMid meet"
+                      width={maskImageWidth}
+                      height={maskImageHeight}
+                      preserveAspectRatio="none"
                       style={{ filter: 'invert(1)' }}
                     />
                   </mask>
                 </defs>
                 <rect
-                  width="500"
-                  height="500"
+                  width={maskRectWidth}
+                  height={maskRectHeight}
                   fill="rgba(0, 255, 0, 0.5)"
                   mask={`url(#crop-mask-${selectedMask})`}
                 />
@@ -302,85 +314,29 @@ export default function CropCanvas() {
           >
             {/* Bounding box rectangle with connecting lines - aligned to mask bounds */}
             {(() => {
-              const shapeBounds = getMaskShapeBounds(selectedMask);
-              
-              // The SVG viewBox="0 0 500 500" gets scaled to fit the crop area
-              // We need to use the SAME transform for both the rectangle and handlers
-              // Simply use SVG coordinates directly - SVG will handle the transform
+              const boundingStyle = {
+                left: `${normalizedMaskBounds.left * 100}%`,
+                top: `${normalizedMaskBounds.top * 100}%`,
+                width: `${normalizedMaskBounds.width * 100}%`,
+                height: `${normalizedMaskBounds.height * 100}%`,
+              };
+
+              const handleConfigs: Array<{ corner: 'nw' | 'ne' | 'se' | 'sw'; cursor: string; left: number; top: number }> = [
+                { corner: 'nw', cursor: 'nwse-resize', left: normalizedMaskBounds.left * 100, top: normalizedMaskBounds.top * 100 },
+                { corner: 'ne', cursor: 'nesw-resize', left: (normalizedMaskBounds.left + normalizedMaskBounds.width) * 100, top: normalizedMaskBounds.top * 100 },
+                { corner: 'se', cursor: 'nwse-resize', left: (normalizedMaskBounds.left + normalizedMaskBounds.width) * 100, top: (normalizedMaskBounds.top + normalizedMaskBounds.height) * 100 },
+                { corner: 'sw', cursor: 'nesw-resize', left: normalizedMaskBounds.left * 100, top: (normalizedMaskBounds.top + normalizedMaskBounds.height) * 100 },
+              ];
               
               return (
                 <>
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" style={{ pointerEvents: 'none', overflow: 'visible' }}>
-                    <rect 
-                      x={shapeBounds.left}
-                      y={shapeBounds.top}
-                      width={shapeBounds.width}
-                      height={shapeBounds.height}
-                      fill="none" 
-                      stroke="#D7B356" 
-                      strokeWidth="2"
-                      style={{ pointerEvents: 'none' }}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div
+                      className="absolute border-2 border-[#D7B356] rounded"
+                      style={boundingStyle}
                     />
-                    {/* Handlers as SVG circles in the same coordinate system */}
-                    <circle
-                      cx={shapeBounds.left}
-                      cy={shapeBounds.top}
-                      r="8"
-                      fill="#D7B356"
-                      stroke="#FFFFFF"
-                      strokeWidth="2"
-                      className="cursor-nw-resize"
-                      style={{ pointerEvents: 'auto' }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        handleMouseDown(e as any, 'nw');
-                      }}
-                    />
-                    <circle
-                      cx={shapeBounds.left + shapeBounds.width}
-                      cy={shapeBounds.top}
-                      r="8"
-                      fill="#D7B356"
-                      stroke="#FFFFFF"
-                      strokeWidth="2"
-                      className="cursor-ne-resize"
-                      style={{ pointerEvents: 'auto' }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        handleMouseDown(e as any, 'ne');
-                      }}
-                    />
-                    <circle
-                      cx={shapeBounds.left + shapeBounds.width}
-                      cy={shapeBounds.top + shapeBounds.height}
-                      r="8"
-                      fill="#D7B356"
-                      stroke="#FFFFFF"
-                      strokeWidth="2"
-                      className="cursor-se-resize"
-                      style={{ pointerEvents: 'auto' }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        handleMouseDown(e as any, 'se');
-                      }}
-                    />
-                    <circle
-                      cx={shapeBounds.left}
-                      cy={shapeBounds.top + shapeBounds.height}
-                      r="8"
-                      fill="#D7B356"
-                      stroke="#FFFFFF"
-                      strokeWidth="2"
-                      className="cursor-sw-resize"
-                      style={{ pointerEvents: 'auto' }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        handleMouseDown(e as any, 'sw');
-                      }}
-                    />
-                  </svg>
-                  
-                  {/* Draggable area for moving (covers the whole mask area) */}
+                  </div>
+
                   <div
                     className="absolute cursor-move"
                     style={{ 
@@ -392,6 +348,21 @@ export default function CropCanvas() {
                     }}
                     onMouseDown={(e) => handleMouseDown(e, 'move')}
                   />
+
+                  {handleConfigs.map(({ corner, cursor, left, top }) => (
+                    <button
+                      key={corner}
+                      type="button"
+                      className="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#D7B356] shadow"
+                      style={{
+                        left: `${left}%`,
+                        top: `${top}%`,
+                        cursor,
+                        pointerEvents: 'auto',
+                      }}
+                      onMouseDown={(e) => handleMouseDown(e, corner)}
+                    />
+                  ))}
                 </>
               );
             })()}

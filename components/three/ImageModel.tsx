@@ -3,6 +3,7 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import SelectionBox from '../SelectionBox';
@@ -16,6 +17,8 @@ type Props = {
   xPos: number;
   yPos: number;
   rotationZ: number;
+  typeId?: number;
+  maskShape?: string;
   headstone?: HeadstoneAPI;
   index?: number;
 };
@@ -27,7 +30,9 @@ export default function ImageModel({
   heightMm, 
   xPos, 
   yPos, 
-  rotationZ, 
+  rotationZ,
+  typeId,
+  maskShape = 'oval_horizontal',
   headstone, 
   index = 0 
 }: Props) {
@@ -39,6 +44,7 @@ export default function ImageModel({
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
   const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
@@ -50,9 +56,14 @@ export default function ImageModel({
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
   
-  const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), -2.0), []);
+  const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
   const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.Texture; aspect: number } | null>(null);
+  const [ceramicBaseData, setCeramicBaseData] = React.useState<{
+    geometry: THREE.ExtrudeGeometry;
+    svgWidth: number;
+    svgHeight: number;
+  } | null>(null);
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
 
   React.useEffect(() => () => planeGeometry.dispose(), [planeGeometry]);
@@ -77,16 +88,6 @@ export default function ImageModel({
 
         activeTexture = texture;
         const aspect = texture.image.width / texture.image.height || 1;
-        
-        console.log('[ImageModel] Texture loaded:', {
-          id,
-          textureWidth: texture.image.width,
-          textureHeight: texture.image.height,
-          textureAspect: aspect,
-          meshWidthMm: widthMm,
-          meshHeightMm: heightMm,
-          meshAspect: widthMm / heightMm,
-        });
 
         setTextureInfo({ texture, aspect });
       } catch (error) {
@@ -104,21 +105,91 @@ export default function ImageModel({
     };
   }, [imageUrl]);
 
+  // Load SVG mask shape for ceramic base with high-quality extrusion
+  React.useEffect(() => {
+    const needsCeramicBase = typeId !== 21 && typeId !== 135;
+    if (!needsCeramicBase || !maskShape) {
+      setCeramicBaseData(null);
+      return;
+    }
+
+    let disposed = false;
+    let geometry: THREE.ExtrudeGeometry | null = null;
+
+    async function loadMaskShape() {
+      try {
+        const svgPath = `/shapes/masks/${maskShape}.svg`;
+        const response = await fetch(svgPath);
+        const svgText = await response.text();
+        
+        if (disposed) return;
+
+        const loader = new SVGLoader();
+        const svgData = loader.parse(svgText);
+        const paths = svgData.paths;
+
+        if (paths.length === 0) return;
+
+        // Get the first path (mask outline)
+        const path = paths[0];
+        const shapes = SVGLoader.createShapes(path);
+
+        if (shapes.length === 0) return;
+
+        // HIGH-QUALITY extrusion settings for smooth edges
+        const extrudeSettings = {
+          depth: 2,
+          bevelEnabled: true,
+          bevelThickness: 0.3,  // Increased for smoother bevels
+          bevelSize: 0.3,       // Increased for smoother bevels
+          bevelSegments: 8,     // Much higher for smooth curves (was 1)
+          curveSegments: 64,    // Much higher for smooth SVG curves (default is 12)
+        };
+
+        geometry = new THREE.ExtrudeGeometry(shapes, extrudeSettings);
+        
+        // Get SVG dimensions BEFORE centering
+        geometry.computeBoundingBox();
+        const bbox = geometry.boundingBox!;
+        const svgWidth = bbox.max.x - bbox.min.x;
+        const svgHeight = bbox.max.y - bbox.min.y;
+        
+        // Center the geometry
+        const centerX = (bbox.min.x + bbox.max.x) / 2;
+        const centerY = (bbox.min.y + bbox.max.y) / 2;
+        geometry.translate(-centerX, -centerY, 0);
+
+        if (!disposed) {
+          setCeramicBaseData({ geometry, svgWidth, svgHeight });
+        }
+      } catch (error) {
+        console.error('[ImageModel] Failed to load mask shape:', error);
+      }
+    }
+
+    loadMaskShape();
+
+    return () => {
+      disposed = true;
+      if (geometry) {
+        geometry.dispose();
+      }
+    };
+  }, [typeId, maskShape]);
+
   // Click handler
   const handlePointerDown = React.useCallback(
     (e: any) => {
-      console.log('[ImageModel] Pointer down on image:', id);
       e.stopPropagation();
       e.nativeEvent?.stopImmediatePropagation?.();
       
       if (!headstone?.mesh?.current || !gl?.domElement) return;
       
       // Select this image AND deselect headstone explicitly
-      console.log('[ImageModel] Setting selectedImageId to:', id);
       setSelectedImageId(id);
       setSelected(null); // Explicitly deselect headstone
+      setActivePanel('image'); // Set active panel to 'image'
       
-      console.log('[ImageModel] Starting drag');
       setDragging(true);
       
       if (controls) {
@@ -141,14 +212,12 @@ export default function ImageModel({
         const worldPoint = intersects[0].point.clone();
         const localPt = targetMesh.worldToLocal(worldPoint);
         dragPositionRef.current = { xPos: localPt.x, yPos: localPt.y };
-        console.log('[ImageModel] Initial drag position:', dragPositionRef.current);
       }
     },
-    [controls, camera, raycaster, mouse, gl, headstone, id, setSelectedImageId, setSelected]
+    [controls, camera, raycaster, mouse, gl, headstone, id, setSelectedImageId, setSelected, setActivePanel]
   );
 
   const handlePointerUp = React.useCallback(() => {
-    console.log('[ImageModel] Pointer up - stopping drag');
     setDragging(false);
     dragPositionRef.current = null;
     
@@ -166,7 +235,6 @@ export default function ImageModel({
     (e: any) => {
       if (!dragging || !dragPositionRef.current || !headstone?.mesh?.current || !gl?.domElement) return;
 
-      console.log('[ImageModel] Pointer move while dragging');
       e.stopPropagation();
 
       const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
@@ -196,14 +264,27 @@ export default function ImageModel({
       if (worldPoint) {
         const localPt = targetMesh.worldToLocal(worldPoint);
 
-        console.log('[ImageModel] Local point:', localPt.x, localPt.y);
+        // Constrain to headstone bounds (same as motifs)
+        const geometry = targetMesh.geometry;
+        geometry.computeBoundingBox();
+        const bbox = geometry.boundingBox!;
+
+        const inset = 0.01; // 1cm inset from edges
+        const spanY = bbox.max.y - bbox.min.y;
+        
+        const minX = bbox.min.x + inset;
+        const maxX = bbox.max.x - inset;
+        const minY = bbox.min.y + inset + 0.04 * spanY;
+        const maxY = bbox.max.y - inset;
+
+        localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
+        localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
         if (animationFrameRef.current !== null) {
           cancelAnimationFrame(animationFrameRef.current);
         }
 
         animationFrameRef.current = requestAnimationFrame(() => {
-          console.log('[ImageModel] Updating position to:', localPt.x, localPt.y);
           updateImagePosition(id, localPt.x, localPt.y);
           animationFrameRef.current = null;
         });
@@ -235,36 +316,89 @@ export default function ImageModel({
   const width = widthMm;
   const height = heightMm;
   
-  console.log('[ImageModel] Rendering with dimensions:', { id, width, height, aspect: width/height });
+  // Get headstone frontZ position (same as motifs/inscriptions)
+  const frontZ = headstone?.frontZ ?? 0;
+  
+  // Determine if this image needs a ceramic/enamel base (all except Granite Image ID 21)
+  const needsCeramicBase = typeId !== 21 && typeId !== 135; // Granite Image (21) and YAG Laser (135) are flat
+  
+  // Ceramic base parameters
+  const ceramicDepthMm = 1; // Very thin ceramic layer - just 1mm depth
+  const borderPercentage = 0.05; // 5% border around photo
+  
+  // Calculate correct scale for ceramic base to match image dimensions
+  let ceramicScaleX = 1;
+  let ceramicScaleY = 1;
+  let ceramicScaleZ = 1;
+  let actualCeramicDepthInUnits = ceramicDepthMm;
+  
+  if (ceramicBaseData) {
+    // Scale ceramic to be LARGER than the photo to create visible border
+    // Ceramic = photo size + border
+    ceramicScaleX = (width * (1 + borderPercentage)) / ceramicBaseData.svgWidth;
+    ceramicScaleY = (height * (1 + borderPercentage)) / ceramicBaseData.svgHeight;
+    
+    // Z scale to get actual 1mm depth
+    const avgScale = (ceramicScaleX + ceramicScaleY) / 2;
+    ceramicScaleZ = avgScale * (ceramicDepthMm / 2);
+    
+    actualCeramicDepthInUnits = 2 * ceramicScaleZ;
+  }
 
   return (
-    <group ref={ref} position={[xPos, yPos, 2.0]} rotation={[0, 0, rotationZ]}>
+    <group ref={ref} position={[xPos, yPos, frontZ]} rotation={[0, 0, rotationZ]}>
+      
+      {/* White ceramic/enamel base - 3D extruded SVG shape with smooth edges */}
+      {needsCeramicBase && ceramicBaseData && (
+        <mesh
+          geometry={ceramicBaseData.geometry}
+          position={[0, 0, 0]} // Back face at z=0 (parent is at frontZ)
+          scale={[ceramicScaleX, -ceramicScaleY, ceramicScaleZ]} // Negative Y to flip SVG coordinate system
+          rotation={[0, 0, 0]}
+          renderOrder={997}
+        >
+          <meshStandardMaterial 
+            color="#ffffff"
+            roughness={0.2}
+            metalness={0.05}
+            flatShading={false}
+          />
+        </mesh>
+      )}
+      
+      {/* Photo texture on top (ABOVE ceramic base, flush with ceramic surface) */}
       <mesh
         onPointerDown={handlePointerDown}
         onClick={(e) => {
-          console.log('[ImageModel] onClick handler');
           e.stopPropagation();
         }}
+        position={[0, 0, actualCeramicDepthInUnits + 0.1]} // Photo slightly above ceramic surface
         geometry={planeGeometry}
         scale={[width, height, 1]}
         renderOrder={999}
+        visible={true}
       >
         <meshBasicMaterial 
           map={texture} 
           transparent={true}
           side={THREE.DoubleSide}
+          opacity={1.0}
+          depthTest={true}
+          depthWrite={true}
         />
       </mesh>
       
       {selected && (
         <SelectionBox
           objectId={id}
-          position={new THREE.Vector3(0, 0, 0)}
+          position={new THREE.Vector3(0, 0, actualCeramicDepthInUnits + 0.5)}
           bounds={{ width, height }}
           rotation={rotationZ}
           unitsPerMeter={1}
           currentSizeMm={widthMm}
           objectType="motif"
+          animateOnShow={true}
+          animationDuration={520}
           onUpdate={(data) => {
             if (data.xPos !== undefined && data.yPos !== undefined) {
               updateImagePosition(id, data.xPos, data.yPos);

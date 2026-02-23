@@ -7,19 +7,21 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculatePrice } from '#/lib/xml-parser';
-
-type DetailModalType = 'inscriptions' | 'motifs' | 'additions' | null;
+import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 
 export default function CheckPriceGrid() {
   const router = useRouter();
-  const [detailModal, setDetailModal] = useState<DetailModalType>(null);
   const [returnPath, setReturnPath] = useState('/select-size');
+  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
+  const [imagePricingLoading, setImagePricingLoading] = useState(false);
+  const [imagePricingError, setImagePricingError] = useState<string | null>(null);
   const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
+  const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
@@ -43,6 +45,31 @@ export default function CheckPriceGrid() {
       }
     }
     setReturnPath('/select-size');
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    setImagePricingLoading(true);
+    fetchImagePricing()
+      .then((data) => {
+        if (!mounted) return;
+        setImagePricingData(data);
+        setImagePricingError(null);
+      })
+      .catch(() => {
+        if (mounted) {
+          setImagePricingError('Unable to load image pricing');
+        }
+      })
+      .finally(() => {
+        if (mounted) {
+          setImagePricingLoading(false);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const handleClosePage = () => {
@@ -137,7 +164,39 @@ export default function CheckPriceGrid() {
     return validInscriptions.length * pricePerInscription;
   }, [inscriptions]);
 
-  const subtotal = headstonePrice + basePrice + additionsPrice + motifsPrice + inscriptionPrice;
+  const imageItems = useMemo(() => {
+    if (!selectedImages.length) return [];
+
+    return selectedImages.map((img) => {
+      const product = imagePricingData?.[String(img.typeId)];
+      const price = product
+        ? calculateImagePrice(product, img.widthMm, img.heightMm, img.colorMode)
+        : 0;
+
+      const colorDisplay = img.colorMode === 'bw'
+        ? 'Black & White'
+        : img.colorMode === 'sepia'
+          ? 'Sepia'
+          : 'Full Color';
+
+      return {
+        id: img.id,
+        typeId: img.typeId,
+        baseName: product?.name || img.typeName || 'Image',
+        typeName: img.typeName,
+        widthMm: img.widthMm,
+        heightMm: img.heightMm,
+        colorDisplay,
+        price,
+      };
+    });
+  }, [selectedImages, imagePricingData]);
+
+  const imagePriceTotal = useMemo(() => {
+    return imageItems.reduce((sum, item) => sum + item.price, 0);
+  }, [imageItems]);
+
+  const subtotal = headstonePrice + basePrice + additionsPrice + motifsPrice + inscriptionPrice + imagePriceTotal;
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + tax;
 
@@ -158,7 +217,7 @@ export default function CheckPriceGrid() {
       };
     });
   }, [selectedAdditions]);
-
+  
   // Get detailed motif items
   const motifItems = useMemo(() => {
     return selectedMotifs.map((motif) => {
@@ -286,61 +345,118 @@ export default function CheckPriceGrid() {
             
             <div className="space-y-4">
               {/* Additions */}
-              <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <div>
-                  <p className="text-sm text-gray-400">Additions</p>
-                  {selectedAdditions.length > 0 ? (
-                    <button
-                      onClick={() => setDetailModal('additions')}
-                      className="text-lg text-white hover:text-[#cfac6c] underline text-left transition-colors cursor-pointer"
-                    >
-                      {selectedAdditions.length} item{selectedAdditions.length !== 1 ? 's' : ''}
-                    </button>
-                  ) : (
-                    <p className="text-lg text-white">0 items</p>
-                  )}
+              <div className="border-b border-white/5 pb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">Additions</p>
+                    <p className="text-lg text-white">
+                      {additionItems.length} item{additionItems.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <p className="text-xl text-white font-semibold">${additionsPrice.toFixed(2)}</p>
                 </div>
-                <p className="text-xl text-white font-semibold">${additionsPrice}</p>
+                {additionItems.length > 0 && (
+                  <ul className="mt-3 space-y-2 text-sm text-gray-300">
+                    {additionItems.map((item) => (
+                      <li key={item.id} className="flex items-center justify-between">
+                        <div>
+                          <p className="text-white font-medium">{item.name}</p>
+                          <p className="text-xs text-gray-400 capitalize">{item.type}</p>
+                        </div>
+                        <p className="text-white font-semibold">$75.00</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               {/* Motifs */}
-              <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <div>
-                  <p className="text-sm text-gray-400">
-                    Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
-                  </p>
-                  {selectedMotifs.length > 0 ? (
-                    <button
-                      onClick={() => setDetailModal('motifs')}
-                      className="text-lg text-white hover:text-[#cfac6c] underline text-left transition-colors cursor-pointer"
-                    >
-                      {selectedMotifs.length} motif{selectedMotifs.length !== 1 ? 's' : ''}
-                    </button>
-                  ) : (
-                    <p className="text-lg text-white">0 motifs</p>
-                  )}
+              <div className="border-b border-white/5 pb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">
+                      Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
+                    </p>
+                    <p className="text-lg text-white">
+                      {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <p className="text-xl text-white font-semibold">${motifsPrice.toFixed(2)}</p>
                 </div>
-                <p className="text-xl text-white font-semibold">${motifsPrice}</p>
+                {motifItems.length > 0 && (
+                  <div className="mt-3 space-y-2 text-sm text-gray-300">
+                    {motifItems.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-white font-medium capitalize">{item.name}</p>
+                          <p className="text-xs text-gray-400">Height: {item.heightMm}mm · Color: {item.colorName}</p>
+                        </div>
+                        <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Images */}
+              <div className="border-b border-white/5 pb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">Ceramic & Photo Images</p>
+                    <p className="text-lg text-white">
+                      {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
+                    </p>
+                    {imagePricingError && (
+                      <p className="text-sm text-red-400">{imagePricingError}</p>
+                    )}
+                  </div>
+                  <p className="text-xl text-white font-semibold">
+                    {imagePricingLoading ? 'Loading…' : `$${imagePriceTotal.toFixed(2)}`}
+                  </p>
+                </div>
+                {!imagePricingLoading && imageItems.length > 0 && (
+                  <div className="mt-3 space-y-2 text-sm text-gray-300">
+                    {imageItems.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-white font-medium">{item.baseName}</p>
+                          <p className="text-xs text-gray-400">Type: {item.typeName || 'Image'}</p>
+                          <p className="text-xs text-gray-400">Size: {item.widthMm}mm × {item.heightMm}mm</p>
+                          <p className="text-xs text-gray-400">Color Mode: {item.colorDisplay}</p>
+                        </div>
+                        <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Inscriptions */}
-              <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <div>
-                  <p className="text-sm text-gray-400">
-                    Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
-                  </p>
-                  {(inscriptions || []).filter(line => line.text?.trim()).length > 0 ? (
-                    <button
-                      onClick={() => setDetailModal('inscriptions')}
-                      className="text-lg text-white hover:text-[#cfac6c] underline text-left transition-colors cursor-pointer"
-                    >
-                      {(inscriptions || []).filter(line => line.text?.trim()).length} inscription{(inscriptions || []).filter(line => line.text?.trim()).length !== 1 ? 's' : ''}
-                    </button>
-                  ) : (
-                    <p className="text-lg text-white">0 inscriptions</p>
-                  )}
+              <div className="border-b border-white/5 pb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">
+                      Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
+                    </p>
+                    <p className="text-lg text-white">
+                      {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <p className="text-xl text-white font-semibold">${inscriptionPrice.toFixed(2)}</p>
                 </div>
-                <p className="text-xl text-white font-semibold">${inscriptionPrice}</p>
+                {inscriptionItems.length > 0 && (
+                  <div className="mt-3 space-y-2 text-sm text-gray-300">
+                    {inscriptionItems.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-white font-medium">{item.text}</p>
+                          <p className="text-xs text-gray-400">Font: {item.font} · Size: {item.sizeMm}mm · Color: {item.colorName}</p>
+                        </div>
+                        <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -419,159 +535,6 @@ export default function CheckPriceGrid() {
         </div>
       </div>
 
-      {/* Detail Modal for Inscriptions, Motifs, and Additions */}
-      {detailModal && (
-        <div 
-          className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setDetailModal(null)}
-        >
-          <div 
-            className="relative w-full max-w-4xl max-h-[85vh] overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-2xl rounded-2xl border border-white/10"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="bg-gradient-to-r from-[#cfac6c]/20 to-[#cfac6c]/10 px-6 py-4 flex items-center justify-between border-b border-white/10">
-              <h3 className="text-2xl font-serif font-light text-white">
-                {detailModal === 'inscriptions' && 'Inscription Details'}
-                {detailModal === 'motifs' && 'Motif Details'}
-                {detailModal === 'additions' && '3D Addition Details'}
-              </h3>
-              <button
-                onClick={() => setDetailModal(null)}
-                className="text-gray-400 hover:text-white text-3xl leading-none transition-colors"
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Modal Content - Scrollable Table */}
-            <div className="max-h-[calc(85vh-140px)] overflow-y-auto bg-gradient-to-br from-gray-800/50 to-gray-900/50">
-              <table className="w-full">
-                <thead className="bg-gray-900/80 sticky top-0 backdrop-blur-sm">
-                  <tr>
-                    <th className="text-left px-4 py-3 text-sm font-semibold text-gray-300 border-b border-white/10">
-                      {detailModal === 'inscriptions' ? 'Name' : 'Motif'}
-                    </th>
-                    <th className="text-left px-4 py-3 text-sm font-semibold text-gray-300 border-b border-white/10">
-                      {detailModal === 'inscriptions' ? 'Qty' : 'Size'}
-                    </th>
-                    <th className="text-left px-4 py-3 text-sm font-semibold text-gray-300 border-b border-white/10">
-                      {detailModal === 'inscriptions' ? 'Size' : 'Color'}
-                    </th>
-                    {detailModal === 'inscriptions' && (
-                      <th className="text-left px-4 py-3 text-sm font-semibold text-gray-300 border-b border-white/10">
-                        Color
-                      </th>
-                    )}
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-gray-300 border-b border-white/10">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Inscription Details */}
-                  {detailModal === 'inscriptions' && inscriptionItems.map((item) => (
-                    <tr key={item.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                      <td className="px-4 py-3 text-sm text-white">
-                        <div className="font-medium">{item.text}</div>
-                        <div className="text-xs text-gray-400 mt-1">{item.font}</div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-300">
-                        {item.text.length} char{item.text.length !== 1 ? 's' : ''}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-300">
-                        {item.sizeMm}mm
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-300">
-                        <div className="flex flex-col gap-1">
-                          <span>{item.colorName}</span>
-                          <span className="text-xs text-gray-500">{item.color}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-white text-right font-semibold">
-                        ${item.price.toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-
-                  {/* Motif Details */}
-                  {detailModal === 'motifs' && motifItems.map((item) => (
-                    <tr key={item.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                      <td className="px-4 py-3 text-sm text-white">
-                        <a
-                          href={item.svgPath}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block w-24 h-24"
-                        >
-                          <div className="w-24 h-24 flex items-center justify-center">
-                            <img
-                              src={item.svgPath}
-                              alt={item.name}
-                              title={item.name}
-                              className="w-20 h-20 object-contain cursor-pointer"
-                              style={{ 
-                                filter: 'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(90%)'
-                              }}
-                            />
-                          </div>
-                        </a>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-300">
-                        {item.heightMm}mm
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-300">
-                        <div className="flex flex-col gap-1">
-                          <span>{item.colorName}</span>
-                          <span className="text-xs text-gray-500">{item.color}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-white text-right font-semibold">
-                        ${item.price.toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-
-                  {/* Addition Details */}
-                  {detailModal === 'additions' && additionItems.map((item) => {
-                    const itemPrice = 75;
-                    return (
-                      <tr key={item.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                        <td className="px-4 py-3 text-sm text-white">
-                          <div className="font-medium">{item.name}</div>
-                          <div className="text-xs text-gray-400 mt-1">ID: {item.baseId}</div>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-300">
-                          <span className="capitalize">{item.type}</span>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-400">
-                          -
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-400">
-                          -
-                        </td>
-                        <td className="px-4 py-3 text-sm text-white text-right font-semibold">
-                          ${itemPrice.toFixed(2)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="bg-gray-900/80 px-6 py-3 flex justify-end border-t border-white/10">
-              <button
-                onClick={() => setDetailModal(null)}
-                className="px-6 py-2 text-sm font-medium text-white bg-white/10 border border-white/20 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
