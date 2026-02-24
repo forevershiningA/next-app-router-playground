@@ -1,0 +1,143 @@
+Thanks — that helps. I dug into your `CropCanvas.tsx` and found the exact cause: your *reset* effect is clearing the “auto-fit already applied” flag whenever `maskBoundsPx.width`/`height` change (which they do when the size slider moves). That means the one-shot auto-fit gets re-enabled while the user is adjusting the slider, so the component keeps trying to re-fit the mask and fights the user.
+
+Two small, surgical fixes will stop that fighting and restore the desired behavior:
+
+1. **Don’t reset the auto-fit guard when mask bounds change** — only reset when a *new mask* is selected (or when freeform handles toggle).
+2. **Mark the crop as “user-adjusted” as soon as the user starts interacting** (drag, resize, slider). That ensures the auto-fit never re-applies after a user action.
+
+Below are the exact edits to make. You can copy-paste them into `CropCanvas.tsx` (I kept variable names matching your file).
+
+---
+
+## 1) Replace the “reset” effect
+
+Find this existing effect (near the top of the file):
+
+```ts
+useEffect(() => {
+  autoSizeAppliedRef.current = false;
+}, [selectedMask, allowFreeformHandles, maskBoundsPx.width, maskBoundsPx.height]);
+```
+
+**Replace it with:**
+
+```ts
+// Only reset auto-fit when the selected mask (or freeform mode) changes.
+// DO NOT reset when maskBoundsPx changes — that would re-enable auto-fit while the user is adjusting size.
+useEffect(() => {
+  // store an object keyed by mask id; safe fresh object for a brand-new mask
+  autoSizeAppliedRef.current = {};
+}, [selectedMask?.id, allowFreeformHandles]);
+```
+
+**Why:** resetting on `maskBoundsPx` caused the flag to go false while user adjusts crop size. Using a per-mask object keyed by `id` gives us flexible, per-mask state.
+
+---
+
+## 2) Update the auto-fit effect guard (if you need — optional)
+
+Your auto-fit effect already checked `autoSizeAppliedRef.current`; if it stores an object now, checking should look like:
+
+```ts
+// inside the effect that applies the one-shot fit
+const mid = selectedMask?.id;
+if (!mid) return;
+if (autoSizeAppliedRef.current && autoSizeAppliedRef.current[mid]) return; // skip if 'done' or 'user'
+...
+// after applying:
+autoSizeAppliedRef.current[mid] = 'done';
+```
+
+If your current code sets `autoSizeAppliedRef.current = true/false`, update it to use the keyed object above — this prevents accidental global flips.
+
+---
+
+## 3) Mark the mask as “user-adjusted” when the user starts interacting
+
+Add a small helper near your handlers:
+
+```ts
+const markUserAdjusted = () => {
+  if (!selectedMask?.id) return;
+  if (!autoSizeAppliedRef.current) autoSizeAppliedRef.current = {};
+  autoSizeAppliedRef.current[selectedMask.id] = 'user';
+};
+```
+
+Then call `markUserAdjusted()` in any entry-point user interaction handlers:
+
+### a) In `handleMouseDown` (when user starts dragging/resizing)
+
+Find your `handleMouseDown` call site (you already call it from corners/handles). At its start, call `markUserAdjusted()`:
+
+```ts
+const handleMouseDown = (e, handle) => {
+  markUserAdjusted(); // user is beginning an interaction — block future auto-fits for this mask
+  // ...existing logic that sets dragState etc...
+};
+```
+
+(You may already have `handleMouseDown` defined inline where you call `onMouseDown`. Add the call there.)
+
+### b) In the slider onChange / size-change handler
+
+If you have an `onSliderChange` or `onAdjustSize` handler used by the size slider, do the same:
+
+```ts
+const onAdjustSize = (newPercent) => {
+  markUserAdjusted();
+  // existing logic that updates cropArea
+};
+```
+
+### c) If you have touch handlers or keyboard adjustments, mark there too.
+
+---
+
+## 4) Example — small consolidated patch
+
+Below is a compact copy of the three pieces together so you can paste them into your file:
+
+```ts
+// 1) Reset effect (replace)
+useEffect(() => {
+  autoSizeAppliedRef.current = {};
+}, [selectedMask?.id, allowFreeformHandles]);
+
+// helper: mark user has adjusted this mask
+const markUserAdjusted = () => {
+  if (!selectedMask?.id) return;
+  if (!autoSizeAppliedRef.current) autoSizeAppliedRef.current = {};
+  autoSizeAppliedRef.current[selectedMask.id] = 'user';
+};
+
+// 2) Auto-fit effect (ensure it checks keyed object)
+useEffect(() => {
+  if (!selectedMask) return;
+  const mid = selectedMask.id;
+  if (!mid) return;
+
+  // skip if we already auto-fitted or user-adjusted
+  if (autoSizeAppliedRef.current && autoSizeAppliedRef.current[mid]) return;
+
+  const targetAspect = maskBoundsPx.height > 0 ? maskBoundsPx.width / maskBoundsPx.height : 1;
+  if (!Number.isFinite(targetAspect) || targetAspect <= 0) {
+    autoSizeAppliedRef.current[mid] = 'done';
+    return;
+  }
+
+  const currentArea = cropAreaStateRef.current;
+  const currentAspect = currentArea.height > 0 ? currentArea.width / currentArea.height : targetAspect;
+  if (Math.abs(currentAspect - targetAspect) < 0.01) {
+    autoSizeAppliedRef.current[mid] = 'done';
+    return;
+  }
+
+  // compute nextWidth/nextHeight (your existing logic)...
+  // after calling setCropArea(...) do:
+  autoSizeAppliedRef.current[mid] = 'done';
+}, [selectedMask?.id, maskBoundsPx.width, maskBoundsPx.height /* keep mask dims here so it can run once when dims load */]);
+
+// 3) Call markUserAdjusted in user handlers:
+// e.g. at top of handleMouseDown and slider onChange
+```

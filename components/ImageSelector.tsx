@@ -5,6 +5,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { AdditionData } from '#/lib/xml-parser';
 import Image from 'next/image';
 import { fetchMaskMetrics, type MaskMetrics } from '#/lib/mask-metrics';
+import { getFlexibleImageBounds, getImageSizeOptions, isFlexibleImageType } from '#/lib/image-size-config';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -13,51 +14,10 @@ interface ImageSelectorProps {
 // Map image IDs to their thumbnail paths
 const IMAGE_THUMBNAILS: Record<string, string> = {
   '7': '/jpg/photos/product-ceramic-image.jpg',
-  '21': '/jpg/photos/m.jpg',
+  '21': '/jpg/photos/m/granite-image.jpg',
   '135': '/jpg/photos/m.jpg',
   '2300': '/jpg/photos/product-vitreous-enamel-image.jpg',
   '2400': '/jpg/photos/plana.jpg',
-};
-
-// Size configurations for different image products (from images.xml)
-const IMAGE_SIZE_CONFIGS: Record<string, { sizes: Array<{ width: number; height: number }> }> = {
-  '7': { // Ceramic Images - 9 sizes
-    sizes: [
-      { width: 40, height: 60 },   // Size 1
-      { width: 50, height: 70 },   // Size 2
-      { width: 60, height: 80 },   // Size 3
-      { width: 70, height: 90 },   // Size 4
-      { width: 80, height: 100 },  // Size 5
-      { width: 90, height: 120 },  // Size 6
-      { width: 110, height: 150 }, // Size 7
-      { width: 130, height: 180 }, // Size 8
-      { width: 180, height: 240 }, // Size 9
-    ],
-  },
-  '2300': { // Vitreous Enamel - 9 sizes (similar)
-    sizes: [
-      { width: 40, height: 60 },
-      { width: 50, height: 70 },
-      { width: 60, height: 80 },
-      { width: 70, height: 90 },
-      { width: 80, height: 100 },
-      { width: 90, height: 120 },
-      { width: 110, height: 150 },
-      { width: 130, height: 180 },
-      { width: 180, height: 240 },
-    ],
-  },
-  '2400': { // Premium Plana - 4 sizes
-    sizes: [
-      { width: 60, height: 80 },
-      { width: 90, height: 120 },
-      { width: 110, height: 150 },
-      { width: 130, height: 180 },
-    ],
-  },
-  // Products without fixed sizes (flexible sizing)
-  '21': { sizes: [] }, // Granite Image - laser etched, flexible size
-  '135': { sizes: [] }, // YAG Lasered - flexible size
 };
 
 type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
@@ -116,47 +76,30 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   // Get available sizes for selected image type
   const availableSizes = useMemo(() => {
     if (!selectedType) return [];
-    
-    if (selectedType.id === '21') {
+    if (isFlexibleImageType(selectedType.id)) {
       return null;
     }
-    
-    const fixedSizes: Record<string, Array<{width: number, height: number, name: string}>> = {
-      '7': [
-        { width: 40, height: 60, name: '40 × 60 mm' },
-        { width: 50, height: 70, name: '50 × 70 mm' },
-        { width: 60, height: 80, name: '60 × 80 mm' },
-        { width: 70, height: 90, name: '70 × 90 mm' },
-        { width: 80, height: 100, name: '80 × 100 mm' },
-        { width: 90, height: 120, name: '90 × 120 mm' },
-        { width: 110, height: 150, name: '110 × 150 mm' },
-        { width: 130, height: 180, name: '130 × 180 mm' },
-        { width: 180, height: 240, name: '180 × 240 mm' },
-        { width: 240, height: 300, name: '240 × 300 mm' },
-      ],
-      '2300': [
-        { width: 50, height: 70, name: '50 × 70 mm' },
-        { width: 60, height: 80, name: '60 × 80 mm' },
-        { width: 70, height: 90, name: '70 × 90 mm' },
-        { width: 80, height: 100, name: '80 × 100 mm' },
-        { width: 90, height: 120, name: '90 × 120 mm' },
-        { width: 110, height: 150, name: '110 × 150 mm' },
-        { width: 130, height: 180, name: '130 × 180 mm' },
-        { width: 180, height: 240, name: '180 × 240 mm' },
-      ],
-      '2400': [
-        { width: 55, height: 75, name: '55 × 75 mm' },
-        { width: 60, height: 80, name: '60 × 80 mm' },
-        { width: 70, height: 90, name: '70 × 90 mm' },
-        { width: 80, height: 100, name: '80 × 100 mm' },
-        { width: 90, height: 120, name: '90 × 120 mm' },
-        { width: 110, height: 150, name: '110 × 150 mm' },
-      ],
-    };
-    
-    return fixedSizes[selectedType.id] || [];
+    return getImageSizeOptions(selectedType.id);
   }, [selectedType]);
-  const hasFixedSizes = useMemo(() => availableSizes !== null && availableSizes.length > 0, [availableSizes]);
+  const hasFixedSizes = useMemo(
+    () => Array.isArray(availableSizes) && availableSizes.length > 0,
+    [availableSizes],
+  );
+
+  const selectedTypeId = selectedType ? String(selectedType.id) : '';
+  const isGraniteImage = selectedTypeId === '21' || selectedTypeId === '135';
+
+  const allowFreeformHandles = useMemo(() => {
+    if (!selectedType) return false;
+    const normalizedName = selectedType.name?.toLowerCase() ?? '';
+    return isGraniteImage || normalizedName.includes('granite');
+  }, [selectedType, isGraniteImage]);
+  
+  useEffect(() => {
+    if (isGraniteImage && cropColorMode !== 'bw') {
+      setCropColorMode('bw');
+    }
+  }, [isGraniteImage, cropColorMode]);
   
   // Crop area state (in percentage of preview container)
   // Default for oval (portrait): 0.8:1 aspect ratio (400/500)
@@ -198,7 +141,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   // Adjust crop area dimensions when mask changes or on initial load
   useEffect(() => {
     const maskAspect = maskMetrics?.aspect ?? getMaskAspectRatio(selectedMask);
-    const isGraniteImage = selectedType?.id === 21 || selectedType?.id === 135;
 
     const centerCrop = (width: number, height: number) => {
       const clampedWidth = Math.min(95, Math.max(width, 10));
@@ -239,7 +181,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     const portraitPreferred = maskAspect < 1;
     const baseHeight = portraitPreferred ? 60 : 50;
     centerCrop(baseHeight * maskAspect, baseHeight);
-  }, [selectedMask, imageDimensions, selectedType, hasFixedSizes, maskMetrics]);
+  }, [selectedMask, imageDimensions, hasFixedSizes, maskMetrics, isGraniteImage]);
   
   const [isDragging, setIsDragging] = useState(false);
   const [dragHandle, setDragHandle] = useState<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null);
@@ -281,13 +223,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         flipY,
         cropArea,
         hasFixedSizes,
+        allowFreeformHandles,
         maskMetrics,
         updateCropArea: updateCropAreaCallback,
       });
     } else {
       setCropCanvasData(null);
     }
-  }, [showCropSection, uploadedImage, selectedMask, cropColorMode, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, maskMetrics, setCropCanvasData]);
+  }, [showCropSection, uploadedImage, selectedMask, cropColorMode, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, allowFreeformHandles, maskMetrics, setCropCanvasData]);
 
   // Filter catalog additions to get only image types
   const imageTypes = useMemo(() => {
@@ -678,7 +621,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const handleBackToImageTypes = () => {
     setSelectedType(null);
     setUploadedImage(null);
-    selectImageForEditing(null); // Deselect any selected image when going back
+    setSelectedImageId(null);
   };
 
   // Get selected image data
@@ -715,10 +658,33 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     const imageRotationDeg = selectedImage.rotationZ || 0;
     
     // Get size configuration for this image type
-    const sizeConfig = IMAGE_SIZE_CONFIGS[selectedImage.typeId.toString()] || { sizes: [] };
-    const hasFixedSizes = sizeConfig.sizes.length > 0;
+    const sizeOptions = getImageSizeOptions(selectedImage.typeId);
+    const hasFixedSizes = sizeOptions.length > 0;
     const currentSizeVariant = selectedImage.sizeVariant || 1;
-    const maxSize = hasFixedSizes ? sizeConfig.sizes.length : 4;
+    const maxSize = hasFixedSizes ? sizeOptions.length : 4;
+    const flexibleBounds = hasFixedSizes ? null : getFlexibleImageBounds(selectedImage.typeId);
+    const flexibleMinHeight = flexibleBounds?.minHeight ?? 30;
+    const flexibleMaxHeight = flexibleBounds?.maxHeight ?? 1200;
+    const flexibleInitHeight = flexibleBounds?.initHeight ?? 50;
+    const currentFlexibleHeight = Math.min(
+      flexibleMaxHeight,
+      Math.max(flexibleMinHeight, Math.round(selectedImage.heightMm || flexibleInitHeight))
+    );
+    const aspectRatio =
+      selectedImage.croppedAspectRatio ||
+      (selectedImage.widthMm && selectedImage.heightMm
+        ? selectedImage.widthMm / selectedImage.heightMm
+        : 1) ||
+      1;
+
+    const applyFlexibleHeight = (nextHeight: number) => {
+      const clampedHeight = Math.min(
+        flexibleMaxHeight,
+        Math.max(flexibleMinHeight, Math.round(nextHeight))
+      );
+      const derivedWidth = Math.max(1, Math.round(clampedHeight * aspectRatio));
+      updateImageSize(selectedImageId, derivedWidth, clampedHeight);
+    };
     
     return (
       <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
@@ -761,126 +727,195 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         <div className="space-y-4">
           {/* Size Slider */}
           <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Size</label>
-              <div className="flex items-center gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newSize = Math.max(1, currentSizeVariant - 1);
-                    updateImageSizeVariant(selectedImageId, newSize);
-                    if (hasFixedSizes) {
-                      const dims = sizeConfig.sizes[newSize - 1];
-                      const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                      const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
-                      // Scale to fit within the frame dimensions while preserving aspect ratio
-                      const scaledHeight = dims.height;
-                      const scaledWidth = scaledHeight * aspectRatio;
-                      updateImageSize(selectedImageId, scaledWidth, scaledHeight);
-                    }
-                  }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Decrease size"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                  </svg>
-                </button>
-                <input
-                  type="number"
-                  min={1}
-                  max={maxSize}
-                  step={1}
-                  value={currentSizeVariant}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value);
-                    if (!isNaN(val) && val >= 1 && val <= maxSize) {
-                      updateImageSizeVariant(selectedImageId, val);
+            {hasFixedSizes ? (
+              <>
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-sm font-medium text-gray-200 w-20">Size</label>
+                  <div className="flex items-center gap-2 justify-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSize = Math.max(1, currentSizeVariant - 1);
+                        updateImageSizeVariant(selectedImageId, newSize);
+                        if (hasFixedSizes) {
+                          const dims = sizeOptions[newSize - 1];
+                          const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                          const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                          const scaledHeight = dims.height;
+                          const scaledWidth = scaledHeight * aspectRatio;
+                          updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                        }
+                      }}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Decrease size"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      min={1}
+                      max={maxSize}
+                      step={1}
+                      value={currentSizeVariant}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        if (!isNaN(val) && val >= 1 && val <= maxSize) {
+                          updateImageSizeVariant(selectedImageId, val);
+                          if (hasFixedSizes) {
+                            const dims = sizeOptions[val - 1];
+                            const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                            const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                            const scaledHeight = dims.height;
+                            const scaledWidth = scaledHeight * aspectRatio;
+                            updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                          }
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const val = parseInt(e.target.value);
+                        if (isNaN(val) || val < 1) {
+                          updateImageSizeVariant(selectedImageId, 1);
+                          if (hasFixedSizes) {
+                            const dims = sizeOptions[0];
+                            const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                            const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                            const scaledHeight = dims.height;
+                            const scaledWidth = scaledHeight * aspectRatio;
+                            updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                          }
+                        } else if (val > maxSize) {
+                          updateImageSizeVariant(selectedImageId, maxSize);
+                          if (hasFixedSizes) {
+                            const dims = sizeOptions[maxSize - 1];
+                            const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                            const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                            const scaledHeight = dims.height;
+                            const scaledWidth = scaledHeight * aspectRatio;
+                            updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                          }
+                        }
+                      }}
+                      className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSize = Math.min(maxSize, currentSizeVariant + 1);
+                        updateImageSizeVariant(selectedImageId, newSize);
+                        if (hasFixedSizes) {
+                          const dims = sizeOptions[newSize - 1];
+                          const selectedImg = selectedImages.find(img => img.id === selectedImageId);
+                          const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                          const scaledHeight = dims.height;
+                          const scaledWidth = scaledHeight * aspectRatio;
+                          updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                        }
+                      }}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Increase size"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={1}
+                    max={maxSize}
+                    step={1}
+                    value={currentSizeVariant}
+                    onChange={(e) => {
+                      const newSize = parseInt(e.target.value);
+                      updateImageSizeVariant(selectedImageId, newSize);
                       if (hasFixedSizes) {
-                        const dims = sizeConfig.sizes[val - 1];
+                        const dims = sizeOptions[newSize - 1];
                         const selectedImg = selectedImages.find(img => img.id === selectedImageId);
                         const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
                         const scaledHeight = dims.height;
                         const scaledWidth = scaledHeight * aspectRatio;
                         updateImageSize(selectedImageId, scaledWidth, scaledHeight);
                       }
-                    }
-                  }}
-                  onBlur={(e) => {
-                    const val = parseInt(e.target.value);
-                    if (isNaN(val) || val < 1) {
-                      updateImageSizeVariant(selectedImageId, 1);
-                      if (hasFixedSizes) {
-                        const dims = sizeConfig.sizes[0];
-                        const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                        const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
-                        const scaledHeight = dims.height;
-                        const scaledWidth = scaledHeight * aspectRatio;
-                        updateImageSize(selectedImageId, scaledWidth, scaledHeight);
-                      }
-                    } else if (val > maxSize) {
-                      updateImageSizeVariant(selectedImageId, maxSize);
-                      if (hasFixedSizes) {
-                        const dims = sizeConfig.sizes[maxSize - 1];
-                        const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                        const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
-                        const scaledHeight = dims.height;
-                        const scaledWidth = scaledHeight * aspectRatio;
-                        updateImageSize(selectedImageId, scaledWidth, scaledHeight);
-                      }
-                    }
-                  }}
-                  className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newSize = Math.min(maxSize, currentSizeVariant + 1);
-                    updateImageSizeVariant(selectedImageId, newSize);
-                    if (hasFixedSizes) {
-                      const dims = sizeConfig.sizes[newSize - 1];
-                      const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                      const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
-                      const scaledHeight = dims.height;
-                      const scaledWidth = scaledHeight * aspectRatio;
-                      updateImageSize(selectedImageId, scaledWidth, scaledHeight);
-                    }
-                  }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Increase size"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="relative">
-              <input
-                type="range"
-                min={1}
-                max={maxSize}
-                step={1}
-                value={currentSizeVariant}
-                onChange={(e) => {
-                  const newSize = parseInt(e.target.value);
-                  updateImageSizeVariant(selectedImageId, newSize);
-                  if (hasFixedSizes) {
-                    const dims = sizeConfig.sizes[newSize - 1];
-                    const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                    const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
-                    const scaledHeight = dims.height;
-                    const scaledWidth = scaledHeight * aspectRatio;
-                    updateImageSize(selectedImageId, scaledWidth, scaledHeight);
-                  }
-                }}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                <span>Size 1</span>
-                <span>Size {maxSize}</span>
-              </div>
-            </div>
+                    }}
+                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                    <span>Size 1</span>
+                    <span>Size {maxSize}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-between gap-2">
+                  <label className="text-sm font-medium text-gray-200 w-32">Height</label>
+                  <div className="flex items-center gap-2 justify-end">
+                    <button
+                      type="button"
+                      onClick={() => applyFlexibleHeight(currentFlexibleHeight - 10)}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Decrease height"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      min={flexibleMinHeight}
+                      max={flexibleMaxHeight}
+                      step={1}
+                      value={currentFlexibleHeight}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        if (!Number.isNaN(val)) {
+                          applyFlexibleHeight(val);
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const val = Number(e.target.value);
+                        if (Number.isNaN(val)) {
+                          applyFlexibleHeight(flexibleInitHeight);
+                        } else {
+                          applyFlexibleHeight(val);
+                        }
+                      }}
+                      className="w-20 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
+                    />
+                    <span className="text-sm font-medium text-gray-300">mm</span>
+                    <button
+                      type="button"
+                      onClick={() => applyFlexibleHeight(currentFlexibleHeight + 10)}
+                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                      aria-label="Increase height"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={flexibleMinHeight}
+                    max={flexibleMaxHeight}
+                    step={1}
+                    value={currentFlexibleHeight}
+                    onChange={(e) => applyFlexibleHeight(Number(e.target.value))}
+                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                    <span>{flexibleMinHeight} mm</span>
+                    <span>{flexibleMaxHeight} mm</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           
           {/* Rotation Slider */}
@@ -1126,12 +1161,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     <select
                       value={cropColorMode}
                       onChange={(e) => setCropColorMode(e.target.value as 'full' | 'bw' | 'sepia')}
-                      className="w-full rounded-lg border border-white/20 bg-[#1F1F1F] px-3 py-2 text-sm text-white"
+                      disabled={isGraniteImage}
+                      className={`w-full rounded-lg border border-white/20 bg-[#1F1F1F] px-3 py-2 text-sm text-white ${
+                        isGraniteImage ? 'opacity-60 cursor-not-allowed' : ''
+                      }`}
                     >
                       <option value="full">Full color</option>
                       <option value="bw">Black & White</option>
                       <option value="sepia">Sepia</option>
                     </select>
+                    {isGraniteImage && (
+                      <div className="mt-2 text-xs text-white/60">
+                        Granite images are laser etched and limited to Black & White.
+                      </div>
+                    )}
                   </div>
 
                   {/* Step 3: Position and Resize */}

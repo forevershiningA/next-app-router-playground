@@ -1,0 +1,467 @@
+Here is the corrected and fully fixed CropCanvas.tsx component.
+
+Summary of Fixes:
+
+Mask Misalignment & Overflow Fix: The visual bug (the green mask overflowing the yellow crop box or appearing awkwardly squished inside) was due to the crop area tracking the full 500x500 viewBox (or SVG background) rather than the tight bounding box of the actual shape (e.g., 400x500 for the oval). We've updated the maskFit logic to calculate scaling and offset strictly against the shape's tight dimensions, so the crop handles will now perfectly encase the mask.
+
+Aspect Ratio Preservation Fix: In allowFreeformHandles = false mode (where aspect ratio is locked), dragging towards an image edge would previously forcefully overwrite width/height using a rigid boundary clamp on lines 237-238, which completely destroyed the crop ratio. We implemented a robust boundary-aware clamped resizing algorithm that stops sizing accurately once it touches an edge without losing the aspect ratio.
+
+Smoother Scaling: Fixed corner resizing logic by projecting the cursor vector onto the diagonal direction (projection / Math.SQRT2), making corner dragging feel incredibly natural compared to the previous boolean check.
+
+Updated Code:
+code
+Tsx
+download
+content_copy
+expand_less
+--- START OF FILE CropCanvas.tsx ---
+
+'use client';
+
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+
+type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
+
+export default function CropCanvas() {
+  const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
+  const [dragState, setDragState] = useState({
+    isDragging: false,
+    handle: null as 'move' | 'nw' | 'ne' | 'sw' | 'se' | null,
+    startX: 0,
+    startY: 0,
+    initialCropArea: { x: 0, y: 0, width: 0, height: 0 },
+  });
+
+  const previewRef = useRef<HTMLDivElement>(null);
+  const cropAreaRef = useRef<HTMLDivElement>(null);
+  const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
+
+  if (!cropCanvasData) {
+    return null;
+  }
+
+  const {
+    uploadedImage,
+    selectedMask,
+    cropColorMode,
+    cropScale,
+    cropRotation,
+    flipX,
+    flipY,
+    cropArea,
+    hasFixedSizes,
+    allowFreeformHandles = false,
+    maskMetrics,
+    updateCropArea,
+  } = cropCanvasData;
+
+  // Map mask names to SVG files
+  const getMaskUrl = (mask: string) => {
+    const maskMap: Record<string, string> = {
+      'oval': '/shapes/masks/oval_vertical.svg',
+      'horizontal-oval': '/shapes/masks/oval_horizontal.svg',
+      'square': '/shapes/masks/rectangle_vertical.svg',
+      'rectangle': '/shapes/masks/rectangle_horizontal.svg',
+      'heart': '/shapes/masks/heart.svg',
+      'teardrop': '/shapes/masks/teardrop.svg',
+      'triangle': '/shapes/masks/triangle.svg',
+    };
+    return maskMap[mask];
+  };
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (!previewRef.current) return;
+      const rect = previewRef.current.getBoundingClientRect();
+      setPreviewSize({ width: rect.width || 0, height: rect.height || 0 });
+    };
+
+    updateSize();
+
+    if (!previewRef.current) return;
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => updateSize()) : null;
+    observer?.observe(previewRef.current);
+    window.addEventListener('resize', updateSize);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', updateSize);
+    };
+  }, []);
+
+  const FALLBACK_BOUNDS: Record<MaskShape, { left: number; top: number; width: number; height: number; viewWidth: number; viewHeight: number }> = {
+    oval: { left: 50, top: 0, width: 400, height: 500, viewWidth: 500, viewHeight: 500 },
+    'horizontal-oval': { left: 0, top: 50, width: 500, height: 400, viewWidth: 500, viewHeight: 500 },
+    square: { left: 50, top: 0, width: 400, height: 500, viewWidth: 500, viewHeight: 500 },
+    rectangle: { left: 0, top: 50, width: 500, height: 400, viewWidth: 500, viewHeight: 500 },
+    heart: { left: 0, top: 0, width: 500, height: 470, viewWidth: 640, viewHeight: 600 },
+    teardrop: { left: 80, top: 0, width: 340, height: 480, viewWidth: 400, viewHeight: 400 },
+    triangle: { left: 30, top: 60, width: 340, height: 280, viewWidth: 400, viewHeight: 400 },
+  };
+
+  const fallback = FALLBACK_BOUNDS[selectedMask as MaskShape];
+
+  const cropPx = useMemo(() => {
+    if (!previewSize.width || !previewSize.height) {
+      return { x: 0, y: 0, width: 0, height: 0 };
+    }
+
+    return {
+      x: (cropArea.x / 100) * previewSize.width,
+      y: (cropArea.y / 100) * previewSize.height,
+      width: (cropArea.width / 100) * previewSize.width,
+      height: (cropArea.height / 100) * previewSize.height,
+    };
+  }, [cropArea, previewSize.height, previewSize.width]);
+
+  const maskFit = useMemo(() => {
+    const sw = fallback.width;
+    const sh = fallback.height;
+    const sl = fallback.left;
+    const st = fallback.top;
+    const vw = fallback.viewWidth;
+    const vh = fallback.viewHeight;
+
+    const boxW = cropPx.width || 1;
+    const boxH = cropPx.height || 1;
+
+    // By comparing the aspect ratio of the bounding box vs the tight mask shape,
+    // we determine which edge is touching the bounds to lock scaling perfectly.
+    const shapeAspect = sw / sh;
+    const boxAspect = boxW / boxH;
+
+    let scale: number;
+    if (boxAspect > shapeAspect) {
+      scale = boxH / sh; // Fit shape's height cleanly to bounding box's height
+    } else {
+      scale = boxW / sw; // Fit shape's width cleanly to bounding box's width
+    }
+
+    const drawnW = vw * scale;
+    const drawnH = vh * scale;
+
+    const offsetX = (boxW - sw * scale) / 2;
+    const offsetY = (boxH - sh * scale) / 2;
+
+    const drawX = cropPx.x + offsetX - sl * scale;
+    const drawY = cropPx.y + offsetY - st * scale;
+
+    return { drawX, drawY, drawnW, drawnH, scale, mw: vw, mh: vh };
+  }, [cropPx.height, cropPx.width, cropPx.x, cropPx.y, fallback]);
+
+  const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setDragState({
+      isDragging: true,
+      handle,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialCropArea: { ...cropArea },
+    });
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!dragState.isDragging || !previewRef.current) return;
+
+      const rect = previewRef.current.getBoundingClientRect();
+      const deltaX = ((e.clientX - dragState.startX) / rect.width) * 100;
+      const deltaY = ((e.clientY - dragState.startY) / rect.height) * 100;
+
+      const { initialCropArea, handle } = dragState;
+      const fallbackMetrics = FALLBACK_BOUNDS[selectedMask as MaskShape];
+
+      let newCropArea = { ...initialCropArea };
+
+      if (handle === 'move') {
+        // Move the entire crop area safely bounded
+        newCropArea.x = Math.max(0, Math.min(100 - initialCropArea.width, initialCropArea.x + deltaX));
+        newCropArea.y = Math.max(0, Math.min(100 - initialCropArea.height, initialCropArea.y + deltaY));
+      } else {
+        if (!handle) return;
+
+        const minSize = 10;
+
+        if (allowFreeformHandles) {
+          let nextX = initialCropArea.x;
+          let nextY = initialCropArea.y;
+          let nextWidth = initialCropArea.width;
+          let nextHeight = initialCropArea.height;
+
+          if (handle.includes('w')) {
+            const proposedX = initialCropArea.x + deltaX;
+            const maxX = initialCropArea.x + initialCropArea.width - minSize;
+            const clampedX = Math.max(0, Math.min(proposedX, maxX));
+            nextWidth = initialCropArea.width + (initialCropArea.x - clampedX);
+            nextX = clampedX;
+          }
+
+          if (handle.includes('e')) {
+            const proposedWidth = initialCropArea.width + deltaX;
+            nextWidth = Math.max(minSize, Math.min(100 - initialCropArea.x, proposedWidth));
+          }
+
+          if (handle.includes('n')) {
+            const proposedY = initialCropArea.y + deltaY;
+            const maxY = initialCropArea.y + initialCropArea.height - minSize;
+            const clampedY = Math.max(0, Math.min(proposedY, maxY));
+            nextHeight = initialCropArea.height + (initialCropArea.y - clampedY);
+            nextY = clampedY;
+          }
+
+          if (handle.includes('s')) {
+            const proposedHeight = initialCropArea.height + deltaY;
+            nextHeight = Math.max(minSize, Math.min(100 - initialCropArea.y, proposedHeight));
+          }
+
+          newCropArea = {
+            x: nextX,
+            y: nextY,
+            width: Math.max(minSize, nextWidth),
+            height: Math.max(minSize, nextHeight),
+          };
+        } else {
+          // Resize from corners while strictly enforcing exact Aspect Ratio and bounds
+          const maskAspect = fallbackMetrics.width / fallbackMetrics.height;
+          const aspectRatio = maskAspect;
+
+          const centerX = initialCropArea.x + initialCropArea.width / 2;
+          const centerY = initialCropArea.y + initialCropArea.height / 2;
+
+          // Projection vector length along the handle's diagonal path
+          let projection = 0;
+          if (handle === 'nw') projection = -deltaX - deltaY;
+          else if (handle === 'ne') projection = deltaX - deltaY;
+          else if (handle === 'sw') projection = -deltaX + deltaY;
+          else if (handle === 'se') projection = deltaX + deltaY;
+          
+          const dragDelta = projection / Math.SQRT2;
+          
+          const baseDimension = Math.sqrt(initialCropArea.width * initialCropArea.width + initialCropArea.height * initialCropArea.height);
+          const scale = Math.max(minSize / baseDimension, 1 + (dragDelta / baseDimension));
+
+          let nextWidth = initialCropArea.width * scale;
+          let nextHeight = initialCropArea.height * scale;
+
+          nextHeight = nextWidth / aspectRatio; // Solidify the lock 
+
+          if (nextWidth < minSize || nextHeight < minSize) {
+             if (aspectRatio > 1) {
+                nextHeight = minSize;
+                nextWidth = nextHeight * aspectRatio;
+             } else {
+                nextWidth = minSize;
+                nextHeight = nextWidth / aspectRatio;
+             }
+          }
+
+          // Compute max dimensions maintaining absolute center coordinate
+          const maxW = Math.min(centerX, 100 - centerX) * 2;
+          const maxH = Math.min(centerY, 100 - centerY) * 2;
+
+          let finalMaxW = maxW;
+          let finalMaxH = finalMaxW / aspectRatio;
+
+          if (finalMaxH > maxH) {
+              finalMaxH = maxH;
+              finalMaxW = finalMaxH * aspectRatio;
+          }
+
+          if (nextWidth > finalMaxW) {
+              nextWidth = finalMaxW;
+              nextHeight = finalMaxH;
+          }
+
+          newCropArea = {
+            x: centerX - nextWidth / 2,
+            y: centerY - nextHeight / 2,
+            width: nextWidth,
+            height: nextHeight,
+          };
+        }
+      }
+
+      // Safe clamp ensuring X and Y remain strictly within screen constraints 
+      // Do not carelessly truncate width/height down here, it will break aspect ratios
+      newCropArea.x = Math.max(0, Math.min(100 - newCropArea.width, newCropArea.x));
+      newCropArea.y = Math.max(0, Math.min(100 - newCropArea.height, newCropArea.y));
+
+      updateCropArea(newCropArea);
+    };
+
+    const handleMouseUp = () => {
+      setDragState({ 
+        isDragging: false, 
+        handle: null, 
+        startX: 0, 
+        startY: 0,
+        initialCropArea: { x: 0, y: 0, width: 0, height: 0 },
+      });
+    };
+
+    if (dragState.isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragState, hasFixedSizes, allowFreeformHandles, selectedMask, updateCropArea]);
+
+  return (
+    <div className="absolute inset-0 bg-[#0A0A0A] flex items-center justify-center">
+      <div className="w-full h-full max-w-6xl max-h-[90vh] p-8">
+        {/* Interactive Crop Preview */}
+        <div className="relative w-full h-full bg-gray-900 rounded-lg overflow-hidden" ref={previewRef}>
+          {/* Uploaded Image */}
+          <Image
+            src={uploadedImage}
+            alt="Preview"
+            fill
+            className={`object-contain ${
+              cropColorMode === 'bw' ? 'grayscale' : 
+              cropColorMode === 'sepia' ? 'sepia' : ''
+            }`}
+            style={{
+              transform: `scale(${cropScale / 100}) rotate(${cropRotation}deg) scaleX(${flipX ? -1 : 1}) scaleY(${flipY ? -1 : 1})`,
+            }}
+            unoptimized
+          />
+          
+          {/* Green Semi-Transparent Mask Overlay */}
+          {previewSize.width > 0 && previewSize.height > 0 && cropPx.width > 0 && cropPx.height > 0 && (
+            <svg
+              className="absolute inset-0 pointer-events-none"
+              width="100%"
+              height="100%"
+              viewBox={`0 0 ${Math.max(previewSize.width, 1)} ${Math.max(previewSize.height, 1)}`}
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <mask id={`crop-mask-${selectedMask || 'default'}`}>
+                  <rect width={maskFit.mw} height={maskFit.mh} fill="black" />
+                  <image
+                    href={getMaskUrl(selectedMask || '') || ''}
+                    x="0"
+                    y="0"
+                    width={maskFit.mw}
+                    height={maskFit.mh}
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ filter: 'invert(1)' }}
+                  />
+                </mask>
+              </defs>
+
+              <g transform={`translate(${maskFit.drawX}, ${maskFit.drawY}) scale(${maskFit.scale})`}>
+                <rect
+                  width={maskFit.mw}
+                  height={maskFit.mh}
+                  fill="rgba(0, 255, 0, 0.45)"
+                  mask={`url(#crop-mask-${selectedMask || 'default'})`}
+                />
+              </g>
+
+              <rect
+                x={cropPx.x}
+                y={cropPx.y}
+                width={cropPx.width}
+                height={cropPx.height}
+                fill="none"
+                stroke="#D7B356"
+                strokeWidth={2}
+                rx={4}
+              />
+
+              <ellipse
+                cx={cropPx.x + cropPx.width / 2}
+                cy={cropPx.y + cropPx.height / 2}
+                rx={cropPx.width / 2}
+                ry={cropPx.height / 2}
+                fill="none"
+                stroke="#D7B356"
+                strokeWidth={1.5}
+              />
+            </svg>
+          )}
+
+          {/* Crop Area Rectangle with Handles */}
+          <div
+            ref={cropAreaRef}
+            className="absolute"
+            style={{
+              left: `${cropArea.x}%`,
+              top: `${cropArea.y}%`,
+              width: `${cropArea.width}%`,
+              height: `${cropArea.height}%`,
+            }}
+          >
+            {/* Bounding box rectangle with connecting lines - aligned to mask bounds */}
+            {(() => {
+              const boundingStyle = { left: '0%', top: '0%', width: '100%', height: '100%' };
+
+              const handleConfigs: Array<{ corner: 'nw' | 'ne' | 'se' | 'sw'; cursor: string; left: number; top: number }> = allowFreeformHandles
+                ? [
+                    { corner: 'nw', cursor: 'nwse-resize', left: 0, top: 0 },
+                    { corner: 'ne', cursor: 'nesw-resize', left: 100, top: 0 },
+                    { corner: 'se', cursor: 'nwse-resize', left: 100, top: 100 },
+                    { corner: 'sw', cursor: 'nesw-resize', left: 0, top: 100 },
+                  ]
+                : [
+                    { corner: 'nw', cursor: 'nwse-resize', left: 0, top: 0 },
+                    { corner: 'ne', cursor: 'nesw-resize', left: 100, top: 0 },
+                    { corner: 'se', cursor: 'nwse-resize', left: 100, top: 100 },
+                    { corner: 'sw', cursor: 'nesw-resize', left: 0, top: 100 },
+                  ];
+              
+              return (
+                <>
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div
+                      className="absolute border-2 border-[#D7B356] rounded"
+                      style={boundingStyle}
+                    />
+                  </div>
+
+                  <div
+                    className="absolute cursor-move"
+                    style={{ 
+                      left: '0',
+                      top: '0',
+                      width: '100%',
+                      height: '100%',
+                      pointerEvents: 'auto',
+                    }}
+                    onMouseDown={(e) => handleMouseDown(e, 'move')}
+                  />
+
+                  {handleConfigs.map(({ corner, cursor, left, top }) => (
+                    <button
+                      key={corner}
+                      type="button"
+                      className="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#D7B356] shadow"
+                      style={{
+                        left: `${left}%`,
+                        top: `${top}%`,
+                        cursor,
+                        pointerEvents: 'auto',
+                      }}
+                      onMouseDown={(e) => handleMouseDown(e, corner)}
+                    />
+                  ))}
+                </>
+              );
+            })()}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+--- END OF FILE CropCanvas.tsx ---

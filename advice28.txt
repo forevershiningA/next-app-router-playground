@@ -1,0 +1,187 @@
+Thanks — that extra info nails it: your slider path runs the correct transform math, but the initial render path does not. The robust fix is to *compute the mask transform on every render (synchronously)* from the mask’s natural/viewBox dims and the current crop rectangle, and apply it directly to the SVG (or mask `<g>`/`<image>`) via a `transform` (or `preserveAspectRatio`) — instead of relying on a state update triggered only by the slider. Doing the math *in render* guarantees the mask will look correct on first paint, and the one-shot `useLayoutEffect` / `autoFitRef` approach protects the stateful crop box from being re-written while the user is dragging the slider.
+
+Below are concrete, copy-paste changes you can make in `CropCanvas.tsx`. They do three things:
+
+1. compute the proper scale + translate for the mask at render time (so first paint is correct);
+2. set `preserveAspectRatio` as a defensive fallback;
+3. keep the “user-adjusted” guard and mark it on pointer/slider start so auto-fit never fights the user.
+
+---
+
+## 1) Render-time mask transform (replace the mask rendering block)
+
+Find the JSX where you render the mask overlay (something like `<svg ...>{/* mask*/}</svg>` or a `<g>`/`<image>` inside). Replace that with the pattern below.
+
+Paste this in place of the mask element:
+
+```tsx
+// ensure these imports at top if not present
+import React, { useMemo } from "react";
+
+/* -------------------------
+   Compute mask transform in render
+   ------------------------- */
+const maskTransform = useMemo(() => {
+  // selectedMask must expose its natural width/height or viewBox dims
+  const mw = selectedMask?.naturalWidth ?? selectedMask?.viewBoxWidth ?? 1;
+  const mh = selectedMask?.naturalHeight ?? selectedMask?.viewBoxHeight ?? 1;
+
+  // cropArea must be in same coordinate system (pixels or percent) used by render
+  const cw = cropArea?.width ?? 1;
+  const ch = cropArea?.height ?? 1;
+  const cx = cropArea?.x ?? 0;
+  const cy = cropArea?.y ?? 0;
+
+  // If any dimension missing, return identity
+  if (!mw || !mh || !cw || !ch) {
+    return { sx: 1, sy: 1, tx: cx, ty: cy, scale: 1 };
+  }
+
+  // compute scale that contains the mask inside the crop box (contain)
+  const scale = Math.min(cw / mw, ch / mh);
+
+  // computed (mask drawn at its natural size, scaled by `scale`)
+  const drawnW = mw * scale;
+  const drawnH = mh * scale;
+
+  // center inside crop rectangle
+  const tx = cx + (cw - drawnW) / 2;
+  const ty = cy + (ch - drawnH) / 2;
+
+  // Return transform values in the same units as cropArea (usually px)
+  return { mw, mh, cw, ch, tx, ty, scale, drawnW, drawnH };
+}, [selectedMask?.id, selectedMask?.naturalWidth, selectedMask?.naturalHeight,
+    selectedMask?.viewBoxWidth, selectedMask?.viewBoxHeight,
+    cropArea?.x, cropArea?.y, cropArea?.width, cropArea?.height]);
+
+/* -------------------------
+   JSX where the mask is rendered:
+   - Use preserveAspectRatio as defensive
+   - Use transform attr to place+scale mask content
+   ------------------------- */
+
+{ /* outer container that occupies the crop rectangle */ }
+<svg
+  x={cropArea.x}
+  y={cropArea.y}
+  width={cropArea.width}
+  height={cropArea.height}
+  viewBox={`0 0 ${maskTransform.mw} ${maskTransform.mh}`}
+  preserveAspectRatio="xMidYMid meet"     // defensive — browser will contain the mask naturally
+  style={{ overflow: "visible", pointerEvents: "none" }}
+  aria-hidden
+>
+  {/* Option A — if you load mask shapes as <image> or raster: */}
+  <image
+    href={selectedMask.url /* or id / dataUrl */}
+    x="0"
+    y="0"
+    width={maskTransform.mw}
+    height={maskTransform.mh}
+    preserveAspectRatio="xMidYMid meet"
+    transform={`translate(${(maskTransform.cw - maskTransform.drawnW)/2}, ${(maskTransform.ch - maskTransform.drawnH)/2}) scale(${maskTransform.scale})`}
+    style={{ pointerEvents: "none" }}
+  />
+
+  {/* Option B — if mask content is inline SVG shapes, wrap them in a group and transform */}
+  <g transform={`translate(${maskTransform.tx}, ${maskTransform.ty}) scale(${maskTransform.scale})`}>
+    { /* paste or render your inline mask SVG contents here at their natural size (0..mw, 0..mh) */ }
+    {/* ... mask paths ... */}
+  </g>
+</svg>
+```
+
+**Why this works**
+
+* You compute `scale` and `tx/ty` synchronously (via `useMemo`) from `selectedMask` dims and `cropArea`. That means initial paint uses the correct aspect; no intermediate stretched frame.
+* `preserveAspectRatio="xMidYMid meet"` is present for safety when the mask is an external SVG/image.
+* This approach avoids updating `cropArea` state during initial render — it keeps the visual transform local and purely presentational, so user interactions are never overridden.
+
+---
+
+## 2) Keep the one-shot auto-fit but don’t include `cropArea`/`maskBoundsPx` in its dependencies
+
+You may still want the one-shot auto-shape of the *crop rectangle* itself (so the handles/outline initially match mask aspect). Keep that, but make sure its dependency list **does not** include `cropArea` or `maskBoundsPx` (these change during user adjustments and will re-trigger the auto-fit). Example:
+
+```tsx
+useLayoutEffect(() => {
+  if (!selectedMask) return;
+  const mid = selectedMask.id;
+  if (!mid) return;
+  if (autoFitRef.current[mid] === "done" || autoFitRef.current[mid] === "user") return;
+
+  const maskAspect = (selectedMask.viewBoxWidth && selectedMask.viewBoxHeight)
+    ? selectedMask.viewBoxWidth / selectedMask.viewBoxHeight
+    : (selectedMask.naturalWidth && selectedMask.naturalHeight) ? (selectedMask.naturalWidth / selectedMask.naturalHeight) : null;
+  if (!maskAspect) return;
+
+  const cw = initialCrop.width; // initialCrop = the default crop rectangle you want to fit into
+  const ch = initialCrop.height;
+  let nextW, nextH;
+  if (cw / ch > maskAspect) { nextH = ch; nextW = ch * maskAspect; } else { nextW = cw; nextH = cw / maskAspect; }
+  const nextX = initialCrop.x + (cw - nextW)/2;
+  const nextY = initialCrop.y + (ch - nextH)/2;
+
+  // apply once
+  setCropArea(prev => ({ ...prev, x: nextX, y: nextY, width: nextW, height: nextH }));
+  autoFitRef.current[mid] = 'done';
+}, [
+  selectedMask?.id,
+  selectedMask?.viewBoxWidth, selectedMask?.viewBoxHeight,
+  selectedMask?.naturalWidth, selectedMask?.naturalHeight,
+  allowFreeformHandles // optional
+]);
+```
+
+Important: **do not** include `cropArea.width` or `maskBoundsPx.height` in the dependency array — that was the cause of the auto-fit re-firing while users dragged the slider.
+
+---
+
+## 3) Ensure you mark user interaction immediately
+
+Make sure every start-of-interaction marks the mask as user-adjusted so the auto-fit won't reapply:
+
+```tsx
+const markUserAdjusted = () => {
+  if (!selectedMask?.id) return;
+  autoFitRef.current[selectedMask.id] = 'user';
+};
+
+// call at the start of handlers:
+const handlePointerDown = (ev) => {
+  markUserAdjusted();
+  // existing pointer-down logic...
+}
+
+const handleSliderStart = () => {
+  markUserAdjusted();
+}
+```
+
+Call `markUserAdjusted()` in pointerdown for drag handles, touchstart, slider mousedown/touchstart, keyboard start handlers, etc.
+
+---
+
+## 4) Debugging logs (temporary) — verify the values
+
+Temporarily add these logs to confirm values at runtime (then remove when fixed):
+
+```ts
+console.log("maskTransform", maskTransform);
+console.log("render cropArea", cropArea);
+console.log("selectedMask dims", selectedMask?.naturalWidth, selectedMask?.naturalHeight, selectedMask?.viewBoxWidth, selectedMask?.viewBoxHeight);
+```
+
+If you see `scale` correct immediately on first render, but the visual is still wrong, check the DOM inspector:
+
+* Does the `<svg>` element have `preserveAspectRatio`?
+* Does the applied `transform` appear on the correct element (the `<g>` or `<image>` that contains the mask shapes)?
+* Are units consistent — cropArea in px vs mask dims in px? If one set is percent and the other px, convert one to the other first.
+
+---
+
+## Why this change fixes the *exact* symptom you see
+
+* Previously: initial render used the crop rectangle to size the mask element and the browser stretched the mask because no aspect-preserving transform was applied until the slider handler recalculated scale and updated something. Result: square-ish mask → slider fixes it.
+* With this change: render-time transform (or `preserveAspectRatio`) ensures the mask is *contained and centered* inside the crop rect on first paint. The slider still works and updates `cropArea` and the computed transform re-calculates on the next render — but you never see an intermediate stretched frame.
+

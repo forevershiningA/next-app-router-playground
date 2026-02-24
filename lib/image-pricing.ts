@@ -1,5 +1,3 @@
-'use client';
-
 export type ImagePriceTier = {
   id: string;
   nr: string;
@@ -33,6 +31,105 @@ export type ImagePricingMap = Record<string, ImageProduct>;
 const DEFAULT_LOCALE = 'en_EN';
 let pricingCache: ImagePricingMap | null = null;
 let pricingPromise: Promise<ImagePricingMap> | null = null;
+
+type DomParserInstance = {
+  parseFromString: (xml: string, mimeType: string) => Document;
+};
+type DomParserConstructor = new () => DomParserInstance;
+
+const XML_PARSER_ERROR_TAG = 'parsererror';
+let serverDomParserCtor: DomParserConstructor | null = null;
+
+async function loadImagesXml(locale: string): Promise<string> {
+  if (typeof window === 'undefined') {
+    const [{ readFile }, pathModule] = await Promise.all([
+      import('fs/promises'),
+      import('path'),
+    ]);
+    const xmlPath = pathModule.join(process.cwd(), 'public', 'xml', locale, 'images.xml');
+    return readFile(xmlPath, 'utf-8');
+  }
+
+  const response = await fetch(`/xml/${locale}/images.xml`);
+  if (!response.ok) {
+    throw new Error('Failed to load image pricing');
+  }
+  return response.text();
+}
+
+async function getDomParser(): Promise<DomParserInstance> {
+  if (typeof window !== 'undefined' && typeof DOMParser !== 'undefined') {
+    return new DOMParser();
+  }
+
+  if (!serverDomParserCtor) {
+    const { DOMParser } = await import('@xmldom/xmldom');
+    serverDomParserCtor = DOMParser as unknown as DomParserConstructor;
+  }
+
+  return new serverDomParserCtor();
+}
+
+function extractImagePricingMap(xmlDoc: Document): ImagePricingMap {
+  const products = Array.from(xmlDoc.getElementsByTagName('product'));
+  const result: ImagePricingMap = {};
+
+  for (const productEl of products) {
+    const id = productEl.getAttribute('id');
+    if (!id) continue;
+
+    const priceModelEl = productEl.getElementsByTagName('price_model')[0];
+    if (!priceModelEl) continue;
+
+    const priceNodes = Array.from(priceModelEl.getElementsByTagName('price'));
+    if (!priceNodes.length) continue;
+
+    const prices = priceNodes.map((priceEl) => ({
+      id: priceEl.getAttribute('id') || '',
+      nr: priceEl.getAttribute('nr') || '',
+      name: priceEl.getAttribute('name') || '',
+      code: priceEl.getAttribute('code') || '',
+      model: priceEl.getAttribute('model') || '0',
+      startQuantity: parseFloat(priceEl.getAttribute('start_quantity') || '0'),
+      endQuantity: parseFloat(priceEl.getAttribute('end_quantity') || '0'),
+      retailMultiplier: parseFloat(priceEl.getAttribute('retail_multiplier') || '1'),
+      note: (priceEl.getAttribute('note') || '').toLowerCase(),
+    }));
+
+    result[id] = {
+      id,
+      code: productEl.getAttribute('code') || '',
+      name: productEl.getAttribute('name') || '',
+      type: productEl.getAttribute('type') || '',
+      priceModel: {
+        code: priceModelEl.getAttribute('code') || '',
+        name: priceModelEl.getAttribute('name') || '',
+        currency: priceModelEl.getAttribute('currency') || 'USD',
+        quantityType: priceModelEl.getAttribute('quantity_type') || 'Width + Height',
+        prices,
+      },
+    };
+  }
+
+  return result;
+}
+
+async function buildImagePricingMap(locale: string): Promise<ImagePricingMap> {
+  const xmlText = await loadImagesXml(locale);
+  if (xmlText.includes('<!ENTITY')) {
+    throw new Error('Invalid XML: External entities are not allowed');
+  }
+
+  const parser = await getDomParser();
+  const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+  const parserErrors = xmlDoc.getElementsByTagName(XML_PARSER_ERROR_TAG);
+
+  if (parserErrors.length > 0) {
+    throw new Error('Failed to parse image pricing XML');
+  }
+
+  return extractImagePricingMap(xmlDoc);
+}
 
 function evaluatePriceFormula(formula: string, value: number): number {
   try {
@@ -104,60 +201,16 @@ export async function fetchImagePricing(locale: string = DEFAULT_LOCALE): Promis
   if (pricingCache) return pricingCache;
   if (pricingPromise) return pricingPromise;
 
-  pricingPromise = (async () => {
-    const response = await fetch(`/xml/${locale}/images.xml`);
-    if (!response.ok) {
-      throw new Error('Failed to load image pricing');
-    }
-
-    const xmlText = await response.text();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-
-    const productElements = Array.from(xmlDoc.querySelectorAll('product'));
-    const result: ImagePricingMap = {};
-
-    for (const productEl of productElements) {
-      const id = productEl.getAttribute('id');
-      const priceModelEl = productEl.querySelector('price_model');
-      if (!id || !priceModelEl) continue;
-
-      const prices = Array.from(priceModelEl.querySelectorAll('price')).map((priceEl) => ({
-        id: priceEl.getAttribute('id') || '',
-        nr: priceEl.getAttribute('nr') || '',
-        name: priceEl.getAttribute('name') || '',
-        code: priceEl.getAttribute('code') || '',
-        model: priceEl.getAttribute('model') || '0',
-        startQuantity: parseFloat(priceEl.getAttribute('start_quantity') || '0'),
-        endQuantity: parseFloat(priceEl.getAttribute('end_quantity') || '0'),
-        retailMultiplier: parseFloat(priceEl.getAttribute('retail_multiplier') || '1'),
-        note: (priceEl.getAttribute('note') || '').toLowerCase(),
-      }));
-
-      if (!prices.length) continue;
-
-      result[id] = {
-        id,
-        code: productEl.getAttribute('code') || '',
-        name: productEl.getAttribute('name') || '',
-        type: productEl.getAttribute('type') || '',
-        priceModel: {
-          code: priceModelEl.getAttribute('code') || '',
-          name: priceModelEl.getAttribute('name') || '',
-          currency: priceModelEl.getAttribute('currency') || 'USD',
-          quantityType: priceModelEl.getAttribute('quantity_type') || 'Width + Height',
-          prices,
-        },
-      };
-    }
-
-    pricingCache = result;
-    pricingPromise = null;
-    return result;
-  })().catch((error) => {
-    pricingPromise = null;
-    throw error;
-  });
+  pricingPromise = buildImagePricingMap(locale)
+    .then((map) => {
+      pricingCache = map;
+      pricingPromise = null;
+      return map;
+    })
+    .catch((error) => {
+      pricingPromise = null;
+      throw error;
+    });
 
   return pricingPromise;
 }

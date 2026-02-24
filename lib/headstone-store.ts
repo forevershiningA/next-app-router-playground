@@ -367,6 +367,7 @@ type HeadstoneState = {
     flipY: boolean;
     cropArea: { x: number; y: number; width: number; height: number };
     hasFixedSizes: boolean;
+    allowFreeformHandles?: boolean;
     maskMetrics?: MaskMetrics | null;
     updateCropArea: (area: { x: number; y: number; width: number; height: number }) => void;
   } | null;

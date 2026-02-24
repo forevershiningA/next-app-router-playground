@@ -1,6 +1,20 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+
+type GridExpandableSection = 'additions' | 'motifs' | 'images' | 'inscriptions';
+const GRID_SECTION_COLLAPSED_STATE: Record<GridExpandableSection, boolean> = {
+  additions: false,
+  motifs: false,
+  images: false,
+  inscriptions: false,
+};
+const GRID_SECTION_EXPANDED_STATE: Record<GridExpandableSection, boolean> = {
+  additions: true,
+  motifs: true,
+  images: true,
+  inscriptions: true,
+};
 import { useRouter } from 'next/navigation';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
@@ -8,13 +22,21 @@ import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculatePrice } from '#/lib/xml-parser';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
+import { getImageSizeOption } from '#/lib/image-size-config';
 
-export default function CheckPriceGrid() {
+type CheckPriceGridProps = {
+  initialImagePricing?: ImagePricingMap | null;
+};
+
+export default function CheckPriceGrid({ initialImagePricing = null }: CheckPriceGridProps) {
   const router = useRouter();
   const [returnPath, setReturnPath] = useState('/select-size');
-  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
-  const [imagePricingLoading, setImagePricingLoading] = useState(false);
+  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(initialImagePricing);
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Record<GridExpandableSection, boolean>>({
+    ...GRID_SECTION_COLLAPSED_STATE,
+  });
+  const isMountedRef = useRef(true);
   const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
@@ -23,6 +45,17 @@ export default function CheckPriceGrid() {
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
+
+  const toggleSection = useCallback((section: GridExpandableSection) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  }, []);
+
+  const expandAllSections = useCallback(() => {
+    setExpandedSections({ ...GRID_SECTION_EXPANDED_STATE });
+  }, []);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
@@ -48,29 +81,38 @@ export default function CheckPriceGrid() {
   }, []);
 
   useEffect(() => {
-    let mounted = true;
-    setImagePricingLoading(true);
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.addEventListener('beforeprint', expandAllSections);
+    return () => {
+      window.removeEventListener('beforeprint', expandAllSections);
+    };
+  }, [expandAllSections]);
+
+  const loadImagePricing = useCallback(() => {
+    setImagePricingError(null);
     fetchImagePricing()
       .then((data) => {
-        if (!mounted) return;
+        if (!isMountedRef.current) return;
         setImagePricingData(data);
         setImagePricingError(null);
       })
       .catch(() => {
-        if (mounted) {
+        if (isMountedRef.current) {
           setImagePricingError('Unable to load image pricing');
         }
-      })
-      .finally(() => {
-        if (mounted) {
-          setImagePricingLoading(false);
-        }
       });
-
-    return () => {
-      mounted = false;
-    };
   }, []);
+
+  useEffect(() => {
+    if (initialImagePricing) return;
+    loadImagePricing();
+  }, [initialImagePricing, loadImagePricing]);
 
   const handleClosePage = () => {
     router.push(returnPath || '/select-size');
@@ -169,8 +211,14 @@ export default function CheckPriceGrid() {
 
     return selectedImages.map((img) => {
       const product = imagePricingData?.[String(img.typeId)];
+      const sizeOption = getImageSizeOption(img.typeId, img.sizeVariant);
+      const fallbackWidth = Math.max(0, Math.round(img.widthMm || 0));
+      const fallbackHeight = Math.max(0, Math.round(img.heightMm || 0));
+      const widthMm = sizeOption?.width ?? fallbackWidth;
+      const heightMm = sizeOption?.height ?? fallbackHeight;
+      const sizeLabel = sizeOption?.label ?? `${widthMm} mm × ${heightMm} mm`;
       const price = product
-        ? calculateImagePrice(product, img.widthMm, img.heightMm, img.colorMode)
+        ? calculateImagePrice(product, widthMm, heightMm, img.colorMode)
         : 0;
 
       const colorDisplay = img.colorMode === 'bw'
@@ -182,10 +230,12 @@ export default function CheckPriceGrid() {
       return {
         id: img.id,
         typeId: img.typeId,
+        productId: product?.id ?? String(img.typeId),
         baseName: product?.name || img.typeName || 'Image',
         typeName: img.typeName,
-        widthMm: img.widthMm,
-        heightMm: img.heightMm,
+        widthMm,
+        heightMm,
+        sizeLabel,
         colorDisplay,
         price,
       };
@@ -279,7 +329,7 @@ export default function CheckPriceGrid() {
       <button
         type="button"
         onClick={handleClosePage}
-        className="fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        className="check-price-grid__close-button fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         aria-label="Close check price"
       >
         <XMarkIcon className="h-5 w-5" aria-hidden="true" />
@@ -305,7 +355,7 @@ export default function CheckPriceGrid() {
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[60%_40%]">
           {/* Left Column - Design Summary */}
-          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
+          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
             <h2 className="text-2xl font-serif font-light text-white mb-6">Your Design</h2>
             
             {/* Product Details */}
@@ -345,45 +395,74 @@ export default function CheckPriceGrid() {
             
             <div className="space-y-4">
               {/* Additions */}
-              <div className="border-b border-white/5 pb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-400">Additions</p>
-                    <p className="text-lg text-white">
-                      {additionItems.length} item{additionItems.length !== 1 ? 's' : ''}
-                    </p>
+              {additionItems.length > 0 && (
+                <div className="border-b border-white/5 pb-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={() => toggleSection('additions')}
+                      aria-expanded={expandedSections.additions}
+                      className="flex flex-col text-left text-white"
+                    >
+                      <p className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                          {expandedSections.additions ? '−' : '+'}
+                        </span>
+                        Additions
+                      </p>
+                      <p className="text-lg">
+                        {additionItems.length} item{additionItems.length !== 1 ? 's' : ''}
+                      </p>
+                    </button>
+                    <p className="text-xl text-white font-semibold">${additionsPrice.toFixed(2)}</p>
                   </div>
-                  <p className="text-xl text-white font-semibold">${additionsPrice.toFixed(2)}</p>
+                  {expandedSections.additions && (
+                    <ul className="mt-3 space-y-2 text-sm text-gray-300">
+                      {additionItems.map((item) => (
+                        <li key={item.id} className="flex items-center justify-between">
+                          <div>
+                            <p className="text-white font-medium">{item.name}</p>
+                            <p className="text-xs text-gray-400 capitalize">{item.type}</p>
+                          </div>
+                          <p className="text-white font-semibold">$75.00</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {additionItems.length > 0 && (
-                  <ul className="mt-3 space-y-2 text-sm text-gray-300">
-                    {additionItems.map((item) => (
-                      <li key={item.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="text-white font-medium">{item.name}</p>
-                          <p className="text-xs text-gray-400 capitalize">{item.type}</p>
-                        </div>
-                        <p className="text-white font-semibold">$75.00</p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              )}
 
               {/* Motifs */}
               <div className="border-b border-white/5 pb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-400">
-                      Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
-                    </p>
-                    <p className="text-lg text-white">
-                      {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
-                    </p>
-                  </div>
+                <div className="flex items-center justify-between gap-4">
+                  {motifItems.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleSection('motifs')}
+                      aria-expanded={expandedSections.motifs}
+                      className="flex flex-col text-left text-white"
+                    >
+                      <p className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                          {expandedSections.motifs ? '−' : '+'}
+                        </span>
+                        Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
+                      </p>
+                      <p className="text-lg">
+                        {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
+                      </p>
+                    </button>
+                  ) : (
+                    <div>
+                      <p className="text-sm text-gray-400">
+                        Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
+                      </p>
+                      <p className="text-lg text-white">0 motifs</p>
+                    </div>
+                  )}
                   <p className="text-xl text-white font-semibold">${motifsPrice.toFixed(2)}</p>
                 </div>
-                {motifItems.length > 0 && (
+                {expandedSections.motifs && motifItems.length > 0 && (
                   <div className="mt-3 space-y-2 text-sm text-gray-300">
                     {motifItems.map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-4">
@@ -399,52 +478,89 @@ export default function CheckPriceGrid() {
               </div>
 
               {/* Images */}
-              <div className="border-b border-white/5 pb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-400">Ceramic & Photo Images</p>
-                    <p className="text-lg text-white">
-                      {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
-                    </p>
-                    {imagePricingError && (
-                      <p className="text-sm text-red-400">{imagePricingError}</p>
-                    )}
+              {imageItems.length > 0 && (
+                <div className="border-b border-white/5 pb-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={() => toggleSection('images')}
+                      aria-expanded={expandedSections.images}
+                      className="flex flex-col text-left text-white"
+                    >
+                      <p className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                          {expandedSections.images ? '−' : '+'}
+                        </span>
+                        Ceramic & Photo Images
+                      </p>
+                      <p className="text-lg">
+                        {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
+                      </p>
+                    </button>
+                    <div className="text-right">
+                      <p className="text-xl text-white font-semibold">
+                        {imagePricingData ? `$${imagePriceTotal.toFixed(2)}` : '—'}
+                      </p>
+                      {imagePricingError && (
+                        <p className="mt-1 text-xs text-red-400" role="status" aria-live="assertive">
+                          {imagePricingError}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-xl text-white font-semibold">
-                    {imagePricingLoading ? 'Loading…' : `$${imagePriceTotal.toFixed(2)}`}
-                  </p>
-                </div>
-                {!imagePricingLoading && imageItems.length > 0 && (
-                  <div className="mt-3 space-y-2 text-sm text-gray-300">
-                    {imageItems.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between gap-4">
-                        <div>
-                          <p className="text-white font-medium">{item.baseName}</p>
-                          <p className="text-xs text-gray-400">Type: {item.typeName || 'Image'}</p>
-                          <p className="text-xs text-gray-400">Size: {item.widthMm}mm × {item.heightMm}mm</p>
-                          <p className="text-xs text-gray-400">Color Mode: {item.colorDisplay}</p>
+                  {expandedSections.images && (
+                    <div className="mt-3 space-y-2 text-sm text-gray-300">
+                      {imageItems.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between gap-4">
+                          <div>
+                            <p className="text-white font-medium">
+                              Product ID: {item.productId} - {item.baseName}
+                            </p>
+                            <p className="text-xs text-gray-400">Type: {item.typeName || 'Image'}</p>
+                            <p className="text-xs text-gray-400">Size: {item.sizeLabel}</p>
+                            <p className="text-xs text-gray-400">Color Mode: {item.colorDisplay}</p>
+                          </div>
+                          <p className="text-white font-semibold">
+                            {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
+                          </p>
                         </div>
-                        <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Inscriptions */}
               <div className="border-b border-white/5 pb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-400">
-                      Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
-                    </p>
-                    <p className="text-lg text-white">
-                      {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
-                    </p>
-                  </div>
+                <div className="flex items-center justify-between gap-4">
+                  {inscriptionItems.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleSection('inscriptions')}
+                      aria-expanded={expandedSections.inscriptions}
+                      className="flex flex-col text-left text-white"
+                    >
+                      <p className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                          {expandedSections.inscriptions ? '−' : '+'}
+                        </span>
+                        Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
+                      </p>
+                      <p className="text-lg">
+                        {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
+                      </p>
+                    </button>
+                  ) : (
+                    <div>
+                      <p className="text-sm text-gray-400">
+                        Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
+                      </p>
+                      <p className="text-lg text-white">0 inscriptions</p>
+                    </div>
+                  )}
                   <p className="text-xl text-white font-semibold">${inscriptionPrice.toFixed(2)}</p>
                 </div>
-                {inscriptionItems.length > 0 && (
+                {expandedSections.inscriptions && inscriptionItems.length > 0 && (
                   <div className="mt-3 space-y-2 text-sm text-gray-300">
                     {inscriptionItems.map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-4">
@@ -462,7 +578,7 @@ export default function CheckPriceGrid() {
           </div>
 
           {/* Right Column - Price Summary */}
-          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
+          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
             <h2 className="text-2xl font-serif font-light text-white mb-6">Price Summary</h2>
             
             <div className="space-y-6">
@@ -483,9 +599,10 @@ export default function CheckPriceGrid() {
                 <p className="text-white font-bold">Total</p>
                 <p className="text-[#cfac6c] font-bold">${total.toFixed(2)}</p>
               </div>
+              <p className="text-right text-xs text-gray-500">Prices shown in USD. Tax is estimated at 10% for preview purposes.</p>
 
               {/* Action Buttons */}
-              <div className="space-y-4 pt-6">
+              <div className="check-price-grid__actions space-y-4 pt-6">
                 <button
                   className="w-full rounded-full bg-[#cfac6c] px-8 py-4 text-base font-semibold text-slate-900 shadow-lg shadow-[#cfac6c]/20 transition-all hover:scale-105 hover:shadow-[#cfac6c]/30"
                 >
@@ -535,6 +652,21 @@ export default function CheckPriceGrid() {
         </div>
       </div>
 
+      <style>
+        {`
+          @media print {
+            .check-price-grid__close-button,
+            .check-price-grid__actions {
+              display: none !important;
+            }
+            .check-price-grid__card {
+              background: #fff !important;
+              border-color: #d1d5db !important;
+              box-shadow: none !important;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }

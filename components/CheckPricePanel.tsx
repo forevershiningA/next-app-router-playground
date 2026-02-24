@@ -1,10 +1,19 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+type ExpandableSection = 'inscriptions' | 'motifs' | 'images' | 'additions';
+const SECTION_DEFAULT_STATE: Record<ExpandableSection, boolean> = {
+  inscriptions: true,
+  motifs: true,
+  images: true,
+  additions: true,
+};
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
+import { getImageSizeOption } from '#/lib/image-size-config';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -27,35 +36,57 @@ export default function CheckPricePanel() {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
 
   const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
-  const [imagePricingLoading, setImagePricingLoading] = useState(false);
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Record<ExpandableSection, boolean>>({
+    ...SECTION_DEFAULT_STATE,
+  });
+  const isMountedRef = useRef(true);
 
   const isOpen = activePanel === 'checkprice';
 
+  const toggleSection = useCallback((section: ExpandableSection) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  }, []);
+
+  const expandAllSections = useCallback(() => {
+    setExpandedSections({ ...SECTION_DEFAULT_STATE });
+  }, []);
+
   useEffect(() => {
-    let mounted = true;
-    setImagePricingLoading(true);
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.addEventListener('beforeprint', expandAllSections);
+    return () => {
+      window.removeEventListener('beforeprint', expandAllSections);
+    };
+  }, [expandAllSections]);
+
+  const loadImagePricing = useCallback(() => {
+    setImagePricingError(null);
     fetchImagePricing()
       .then((data) => {
-        if (!mounted) return;
+        if (!isMountedRef.current) return;
         setImagePricingData(data);
         setImagePricingError(null);
       })
       .catch(() => {
-        if (mounted) {
+        if (isMountedRef.current) {
           setImagePricingError('Unable to load image pricing');
         }
-      })
-      .finally(() => {
-        if (mounted) {
-          setImagePricingLoading(false);
-        }
       });
-
-    return () => {
-      mounted = false;
-    };
   }, []);
+
+  useEffect(() => {
+    loadImagePricing();
+  }, [loadImagePricing]);
 
   const handleClose = useCallback(() => {
     setActivePanel(null);
@@ -171,8 +202,14 @@ export default function CheckPricePanel() {
 
     return selectedImages.map((img) => {
       const product = imagePricingData?.[String(img.typeId)];
+      const sizeOption = getImageSizeOption(img.typeId, img.sizeVariant);
+      const fallbackWidth = Math.max(0, Math.round(img.widthMm || 0));
+      const fallbackHeight = Math.max(0, Math.round(img.heightMm || 0));
+      const widthMm = sizeOption?.width ?? fallbackWidth;
+      const heightMm = sizeOption?.height ?? fallbackHeight;
+      const sizeLabel = sizeOption?.label ?? `${widthMm} mm × ${heightMm} mm`;
       const price = product
-        ? calculateImagePrice(product, img.widthMm, img.heightMm, img.colorMode)
+        ? calculateImagePrice(product, widthMm, heightMm, img.colorMode)
         : 0;
 
       const colorDisplay = img.colorMode === 'bw'
@@ -184,10 +221,12 @@ export default function CheckPricePanel() {
       return {
         id: img.id,
         typeId: img.typeId,
+        productId: product?.id ?? String(img.typeId),
         baseName: product?.name || img.typeName || 'Image',
         typeName: img.typeName,
-        widthMm: img.widthMm,
-        heightMm: img.heightMm,
+        widthMm,
+        heightMm,
+        sizeLabel,
         colorDisplay,
         price,
       };
@@ -275,11 +314,11 @@ export default function CheckPricePanel() {
   return (
     <>
       <div 
-        className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 p-4"
+        className="check-price-panel__overlay fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 p-4"
         onClick={handleClose}
       >
         <div 
-          className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white shadow-2xl rounded-lg"
+          className="check-price-panel__modal relative w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white shadow-2xl rounded-lg"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with green background */}
@@ -290,8 +329,8 @@ export default function CheckPricePanel() {
           </div>
 
           {/* Content - Table */}
-          <div className="max-h-[calc(90vh-180px)] overflow-y-auto overflow-x-auto bg-white">
-          <table className="w-full border-collapse">
+          <div className="check-price-panel__table max-h-[calc(90vh-180px)] overflow-y-auto overflow-x-auto bg-white">
+            <table className="w-full border-collapse">
             <thead className="bg-gray-50 sticky top-0">
               <tr>
                 <th className="text-left px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
@@ -371,34 +410,48 @@ export default function CheckPricePanel() {
               {/* Inscriptions */}
               {inscriptionItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200">
+                  <tr className="border-b border-gray-200 bg-gray-50/70">
                     <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <p className="font-semibold text-gray-900 mb-1">Inscriptions</p>
-                        <p className="text-gray-600">
-                          {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
-                        </p>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleSection('inscriptions')}
+                        aria-expanded={expandedSections.inscriptions}
+                        className="flex w-full items-center gap-3 text-left text-gray-900"
+                      >
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                          {expandedSections.inscriptions ? '−' : '+'}
+                        </span>
+                        <span>
+                          <span className="block font-semibold">Inscriptions</span>
+                          <span className="block text-xs text-gray-600">
+                            {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
+                          </span>
+                        </span>
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-center text-sm text-gray-900">
                       {inscriptionItems.length}
                     </td>
                     <td className="px-6 py-4 text-right text-sm text-gray-900">
-                      ${(inscriptionCost / inscriptionItems.length).toFixed(2)}
+                      ${(
+                        inscriptionItems.length > 0
+                          ? inscriptionCost / inscriptionItems.length
+                          : 0
+                      ).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
                       ${inscriptionCost.toFixed(2)}
                     </td>
                   </tr>
-                  {inscriptionItems.map((item) => (
+                  {expandedSections.inscriptions && inscriptionItems.map((item) => (
                     <tr key={`ins-${item.id}`} className="border-b border-gray-100 bg-gray-50">
                       <td className="px-8 py-3 text-sm text-gray-900">
                         <p className="font-medium text-gray-900">{item.text || 'Inscription Text'}</p>
                         <p className="text-xs text-gray-600">Font: {item.font} · Size: {item.sizeMm}mm</p>
-                        <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
                           <span>Color: {item.colorName}</span>
                           <span
-                            className="inline-block w-3 h-3 rounded border border-gray-300"
+                            className="inline-block h-3 w-3 rounded border border-gray-300"
                             style={{ backgroundColor: item.color }}
                           />
                         </div>
@@ -418,14 +471,24 @@ export default function CheckPricePanel() {
               {/* Decorative Motifs */}
               {motifItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200">
+                  <tr className="border-b border-gray-200 bg-gray-50/70">
                     <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <p className="font-semibold text-gray-900 mb-1">Decorative Motifs</p>
-                        <p className="text-gray-600">
-                          {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
-                        </p>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleSection('motifs')}
+                        aria-expanded={expandedSections.motifs}
+                        className="flex w-full items-center gap-3 text-left text-gray-900"
+                      >
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                          {expandedSections.motifs ? '−' : '+'}
+                        </span>
+                        <span>
+                          <span className="block font-semibold">Decorative Motifs</span>
+                          <span className="block text-xs text-gray-600">
+                            {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
+                          </span>
+                        </span>
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-center text-sm text-gray-900">
                       {motifItems.length}
@@ -433,19 +496,19 @@ export default function CheckPricePanel() {
                     <td className="px-6 py-4 text-right text-sm text-gray-900">
                       ${(motifCost / motifItems.length).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
                       ${motifCost.toFixed(2)}
                     </td>
                   </tr>
-                  {motifItems.map((item) => (
+                  {expandedSections.motifs && motifItems.map((item) => (
                     <tr key={`motif-${item.id}`} className="border-b border-gray-100 bg-gray-50">
                       <td className="px-8 py-3 text-sm text-gray-900">
                         <p className="font-medium text-gray-900 capitalize">{item.name}</p>
                         <p className="text-xs text-gray-600">Height: {item.heightMm}mm</p>
-                        <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
                           <span>{item.colorDisplay}</span>
                           <span
-                            className="inline-block w-3 h-3 rounded border border-gray-300"
+                            className="inline-block h-3 w-3 rounded border border-gray-300"
                             style={{ backgroundColor: item.color }}
                           />
                         </div>
@@ -465,42 +528,59 @@ export default function CheckPricePanel() {
               {/* Images */}
               {imageItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200">
+                  <tr className="border-b border-gray-200 bg-gray-50/70">
                     <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <p className="font-semibold text-gray-900 mb-1">Ceramic & Photo Images</p>
-                        <p className="text-gray-600">
-                          {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
+                      <button
+                        type="button"
+                        onClick={() => toggleSection('images')}
+                        aria-expanded={expandedSections.images}
+                        className="flex w-full items-start justify-between text-left text-gray-900"
+                      >
+                        <span className="flex items-center gap-3">
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                            {expandedSections.images ? '−' : '+'}
+                          </span>
+                          <span>
+                            <span className="block font-semibold">Ceramic & Photo Images</span>
+                            <span className="block text-xs text-gray-600">
+                              {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
+                            </span>
+                          </span>
+                        </span>
+                        <span className="text-xs uppercase text-gray-500">Subtotal</span>
+                      </button>
+                      {imagePricingError && (
+                        <p className="mt-2 text-xs text-red-600" role="status" aria-live="assertive">
+                          {imagePricingError}
                         </p>
-                        {imagePricingError && (
-                          <p className="text-xs text-red-600 mt-1">{imagePricingError}</p>
-                        )}
-                      </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center text-sm text-gray-900">
                       {imageItems.length}
                     </td>
                     <td className="px-6 py-4 text-right text-sm text-gray-900">
-                      {imagePricingLoading ? 'Loading…' : `$${(imagePriceTotal / imageItems.length).toFixed(2)}`}
+                      {imagePricingData ? `$${(imagePriceTotal / imageItems.length).toFixed(2)}` : '—'}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
-                      {imagePricingLoading ? 'Loading…' : `$${imagePriceTotal.toFixed(2)}`}
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                      {imagePricingData ? `$${imagePriceTotal.toFixed(2)}` : '—'}
                     </td>
                   </tr>
-                  {!imagePricingLoading && imageItems.map((item) => (
+                  {expandedSections.images && imageItems.map((item) => (
                     <tr key={`img-${item.id}`} className="border-b border-gray-100 bg-gray-50">
                       <td className="px-8 py-3 text-sm text-gray-900">
-                        <p className="font-medium text-gray-900">{item.baseName}</p>
+                        <p className="font-medium text-gray-900">
+                          Product ID: {item.productId} - {item.baseName}
+                        </p>
                         <p className="text-xs text-gray-600">Type: {item.typeName || 'Image'}</p>
-                        <p className="text-xs text-gray-600">Size: {item.widthMm}mm × {item.heightMm}mm</p>
+                        <p className="text-xs text-gray-600">Size: {item.sizeLabel}</p>
                         <p className="text-xs text-gray-600">Color Mode: {item.colorDisplay}</p>
                       </td>
                       <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
                       <td className="px-6 py-3 text-right text-sm text-gray-900">
-                        ${item.price.toFixed(2)}
+                        {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
                       </td>
                       <td className="px-6 py-3 text-right text-sm text-gray-900">
-                        ${item.price.toFixed(2)}
+                        {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
                       </td>
                     </tr>
                   ))}
@@ -510,14 +590,24 @@ export default function CheckPricePanel() {
               {/* 3D Additions */}
               {additionItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200">
+                  <tr className="border-b border-gray-200 bg-gray-50/70">
                     <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <p className="font-semibold text-gray-900 mb-1">3D Additions</p>
-                        <p className="text-gray-600">
-                          {additionItems.length} addition{additionItems.length !== 1 ? 's' : ''}
-                        </p>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleSection('additions')}
+                        aria-expanded={expandedSections.additions}
+                        className="flex w-full items-center gap-3 text-left text-gray-900"
+                      >
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                          {expandedSections.additions ? '−' : '+'}
+                        </span>
+                        <span>
+                          <span className="block font-semibold">3D Additions</span>
+                          <span className="block text-xs text-gray-600">
+                            {additionItems.length} addition{additionItems.length !== 1 ? 's' : ''}
+                          </span>
+                        </span>
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-center text-sm text-gray-900">
                       {additionItems.length}
@@ -525,11 +615,11 @@ export default function CheckPricePanel() {
                     <td className="px-6 py-4 text-right text-sm text-gray-900">
                       ${(additionsPrice / additionItems.length).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
                       ${additionsPrice.toFixed(2)}
                     </td>
                   </tr>
-                  {additionItems.map((item) => (
+                  {expandedSections.additions && additionItems.map((item) => (
                     <tr key={`addition-${item.id}`} className="border-b border-gray-100 bg-gray-50">
                       <td className="px-8 py-3 text-sm text-gray-900">
                         <p className="font-medium text-gray-900">{item.name}</p>
@@ -549,29 +639,29 @@ export default function CheckPricePanel() {
               )}
 
               {/* Total Row */}
-              <tr className="border-t-2 border-gray-300">
+              <tr className="border-t-4 border-[#cfac6c] bg-[#fdf8f0]">
                 <td className="px-6 py-4"></td>
                 <td className="px-6 py-4"></td>
-                <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">Total</td>
-                <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">${totalPrice.toFixed(2)}</td>
+                <td className="px-6 py-4 text-right text-base font-semibold text-gray-900 uppercase tracking-wide">Total</td>
+                <td className="px-6 py-4 text-right text-base font-bold text-gray-900">${totalPrice.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         {/* Footer with green background */}
-        <div className="flex items-center justify-end gap-3 bg-[#a8d5ba] px-6 py-4">
+        <div className="check-price-panel__actions flex items-center justify-end gap-3 bg-[#a8d5ba] px-6 py-4">
           <button
             onClick={() => {
               // TODO: Implement PDF download
             }}
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-gray-800 hover:bg-gray-900 transition-colors uppercase"
+            className="rounded-full bg-[#cfac6c] px-6 py-2.5 text-sm font-semibold uppercase text-slate-900 shadow hover:brightness-95"
           >
             Download PDF
           </button>
           <button
             onClick={handleClose}
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-gray-800 hover:bg-gray-900 transition-colors uppercase"
+            className="rounded-full border border-[#cfac6c] px-6 py-2.5 text-sm font-semibold uppercase text-slate-900 hover:bg-[#fdf8f0]"
           >
             Close
           </button>
@@ -579,6 +669,30 @@ export default function CheckPricePanel() {
       </div>
     </div>
 
+      <style>
+        {`
+          @media print {
+            .check-price-panel__overlay {
+              position: static !important;
+              inset: auto !important;
+              background: transparent !important;
+              padding: 0 !important;
+            }
+            .check-price-panel__modal {
+              box-shadow: none !important;
+              border: none !important;
+              max-height: none !important;
+            }
+            .check-price-panel__table {
+              max-height: none !important;
+              overflow: visible !important;
+            }
+            .check-price-panel__actions {
+              display: none !important;
+            }
+          }
+        `}
+      </style>
     </>
   );
 }

@@ -318,6 +318,8 @@ export default function ImageModel({
   
   // Get headstone frontZ position (same as motifs/inscriptions)
   const frontZ = headstone?.frontZ ?? 0;
+  const stackOffset = (index ?? 0) * 0.2; // Slight Z lift per image to prevent z-fighting when overlapping
+  const groupZ = frontZ + stackOffset;
   
   // Determine if this image needs a ceramic/enamel base (all except Granite Image ID 21)
   const needsCeramicBase = typeId !== 21 && typeId !== 135; // Granite Image (21) and YAG Laser (135) are flat
@@ -346,7 +348,7 @@ export default function ImageModel({
   }
 
   return (
-    <group ref={ref} position={[xPos, yPos, frontZ]} rotation={[0, 0, rotationZ]}>
+    <group ref={ref} position={[xPos, yPos, groupZ]} rotation={[0, 0, rotationZ]}>
       
       {/* White ceramic/enamel base - 3D extruded SVG shape with smooth edges */}
       {needsCeramicBase && ceramicBaseData && (

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-21  
+**Last Updated:** 2026-02-24  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
 
 ---
@@ -25,6 +25,36 @@
 17. [Development Workflow](#development-workflow)
 
 ---
+
+## Current Status (2026-02-24)
+
+### ✅ Recent Changes (February 24, 2026)
+1. **Image Crop Overlay Alignment - COMPLETED**
+   - `components/CropCanvas.tsx` now measures the rendered preview with `ResizeObserver`, converts the canonical percent-based crop into live pixel coordinates, and renders mask, fill, and handles inside a single SVG overlay so everything remains 1:1 aligned.
+   - The mask renderer uses the precise mask bounds (`maskMetrics.bounds`) to compute translations/scales, ensuring Oval Landscape, Rectangle Landscape, Heart, Triangle, and freeform granite/YAG crops display the correct shape immediately on load (no more slider tap to fix aspect ratio).
+   - Drag handles for fixed-size masks follow the mask’s tight bounding box, while freeform granite/YAG still get full-rect handles; all duplicate outlines and legacy ellipses were removed to avoid confusing second borders.
+
+2. **Granite/YAG Crop Stability**
+   - Resolved the regression where the “Adjust Size” slider snap-back fought user input by eliminating the auto-resize effect after load; granite/YAG products continue to respect flexible height sliders while keeping the new mask-fit math.
+
+### ⚠️ Known Issues (February 24, 2026)
+- None currently reported.
+
+## Current Status (2026-02-23)
+
+### ✅ Recent Changes (February 23, 2026)
+1. **Mask-Aware Image Cropping Pipeline - COMPLETED**
+   - Added `lib/mask-metrics.ts` to parse each SVG mask’s true bounds (width, height, offsets) and thread that data through `ImageSelector`, the store, and `CropCanvas`.
+   - Crop UI now seeds aspect ratios directly from mask metrics (instead of hardcoded oval math), and on export the new pipeline crops to the exact mask footprint before compositing so triangle/heart masks match production references.
+   - `ImageModel` and Check Price now consume canonical size metadata via `image-size-config`, ensuring pricing, thumbnails, and final renderings all share the same millimeter dimensions.
+
+2. **Granite Image Freeform + B&W Enforcement - COMPLETED**
+   - Granite and YAG laser image types (IDs 21 & 135) detect automatically, forcing crop color mode to Black & White, disabling the Step 2 selector, and showing an explanatory note.
+   - Their crop handles ignore mask bounds (full-rectangle resizing + movement) so users can define any freeform cutout before the image is etched directly onto granite.
+   - Updated thumbnail references to `/jpg/photos/m/granite-image.jpg` and ensured Check Price rows display "Product ID" plus human-readable size labels sourced from the XML tiers.
+
+### ⚠️ Known Issues (February 23, 2026)
+- None currently reported.
 
 ## Current Status (2026-02-22)
 
@@ -295,6 +325,18 @@
    - Front-facing logic now uses a real clipping plane derived from the active camera normal (via R3F local clipping) instead of heuristic dot products, which keeps bottom edges visible while allowing the renderer to trim any geometry physically behind the headstone.
 
 ### ⚠️ Known Issues (February 7, 2026)
+- None currently reported.
+
+## Current Status (2026-02-23)
+
+### ✅ Recent Changes (February 23, 2026)
+1. **Granite Image Flexible Sizing UI**
+   - Granite/YAG image products (IDs 21, 135, 136, 137) now detect their `min_height`, `max_height`, and `init_height` directly from `public/xml/*/images.xml` via the new `getFlexibleImageBounds()` helper.
+   - `ImageSelector` switches from the discrete “Size 1-4” variant slider to a millimeter-based height slider/input when a flexible product is selected, clamping values to the XML bounds (30–1200 mm for Granite) and auto-deriving width from the stored aspect ratio.
+   - Fixed-size ceramic/vitreous items keep the existing variant slider, so established workflows remain unchanged.
+   - Files: `lib/image-size-config.ts`, `components/ImageSelector.tsx`.
+
+### ⚠️ Known Issues (February 23, 2026)
 - None currently reported.
 
 ## Current Status (2026-02-06)

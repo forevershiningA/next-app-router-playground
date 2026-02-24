@@ -1,0 +1,118 @@
+Thanks — the symptom now is clear: the mask (green oval) is being correctly aspect-fitted inside the crop box, but the visible outline/handles are still being drawn from the *cropArea* rectangle instead of the mask’s drawn bounds. Previously the slider triggered code that recomputed both the mask transform *and* the outline; after switching to a render-time mask transform the outline no longer follows the mask. In short: mask transform and outline are out of sync.
+
+Below are two practical fixes (with copy-pasteable snippets). Pick the one that matches the desired UX:
+
+* **Option 1 — Outline follows the *mask* (recommended)**
+  The outline and handles are driven from the mask’s computed drawn bounds (so the green shape and the yellow handles always match). This is what your screenshots suggest you want: when the mask is oval the outline becomes an oval/rect that hugs it.
+
+* **Option 2 — Outline follows the cropArea (legacy behavior)**
+  Keep the outline driven by cropArea, but when the slider changes update the cropArea so it matches the mask transform (this preserves the "slider fixes outline" semantics). Use this if cropArea must remain the canonical box for downstream logic.
+
+I think you want **Option 1**, so I’ll lead with that and then show Option 2.
+
+---
+
+## Option 1 — Render the outline from the computed mask transform (makes outline match mask instantly)
+
+1. Compute the mask transform (same `useMemo` from before) so you have:
+
+   * `maskTransform.tx, maskTransform.ty` (top-left of drawn mask inside crop rect)
+   * `maskTransform.drawnW, maskTransform.drawnH` (size of drawn mask after scaling)
+
+2. Render the outline using those values:
+
+   * For a rectangular outline that hugs the drawn mask, use `<rect>`.
+   * For an oval outline that matches the mask shape exactly, use `<ellipse>` centered at the mask center.
+
+### Snippet (insert into your render where you paint outline/handles)
+
+```tsx
+// assume maskTransform computed as in previous messages
+const outlineX = maskTransform.tx;
+const outlineY = maskTransform.ty;
+const outlineW = maskTransform.drawnW;
+const outlineH = maskTransform.drawnH;
+
+// Rect outline that hugs the drawn mask
+<rect
+  x={outlineX}
+  y={outlineY}
+  width={outlineW}
+  height={outlineH}
+  rx={8} // rounded corners if you want
+  fill="none"
+  stroke="#E8C86A"
+  strokeWidth={2}
+  pointerEvents="none"
+/>
+
+// OR — ellipse outline that matches oval mask exactly
+<ellipse
+  cx={outlineX + outlineW / 2}
+  cy={outlineY + outlineH / 2}
+  rx={outlineW / 2}
+  ry={outlineH / 2}
+  fill="none"
+  stroke="#E8C86A"
+  strokeWidth={2}
+  pointerEvents="none"
+/>
+```
+
+3. Make the drag/handle hit-testing operate on this outline bounds:
+
+   * If you already have handle code keyed to `cropArea` you can translate it to use `outlineX/outlineY/outlineW/outlineH` for initial positions.
+   * On drag, update `cropArea` or update a separate `outlineArea` (see below) and recompute `maskTransform`.
+
+4. Keep `markUserAdjusted()` called at the start of interactions so your one-shot auto-fit won’t fight the user.
+
+**Pros:** Always visually correct on first paint; slider/handles reflect the mask; no flashes or jumps.
+**Cons:** If other logic relies on `cropArea` being canonical, you may need to keep `cropArea` in sync or convert it when saving.
+
+---
+
+## Option 2 — Keep outline driven by `cropArea`, but update `cropArea` when the slider runs
+
+If `cropArea` must remain the single source of truth (for saving, exporting, etc.), then make the slider handler update `cropArea` to match the mask fit each time the slider moves. That is, on slider change compute the mask transform for the new cropArea and set `cropArea` to the mask’s drawn bounding box.
+
+### Slider handler example:
+
+```tsx
+const onSizeSliderChange = (newSizePercent) => {
+  markUserAdjusted();
+
+  // compute new cropArea from slider percent (your existing logic)
+  const newCrop = computeCropFromSlider(newSizePercent); // returns {x,y,width,height}
+
+  // compute mask aspect and scale to contain inside newCrop
+  const mw = selectedMask?.naturalWidth ?? selectedMask?.viewBoxWidth ?? 1;
+  const mh = selectedMask?.naturalHeight ?? selectedMask?.viewBoxHeight ?? 1;
+  const cw = newCrop.width;
+  const ch = newCrop.height;
+  const scale = Math.min(cw / mw, ch / mh);
+  const drawnW = mw * scale;
+  const drawnH = mh * scale;
+  const tx = newCrop.x + (cw - drawnW) / 2;
+  const ty = newCrop.y + (ch - drawnH) / 2;
+
+  // Update cropArea so outline matches mask
+  setCropArea({
+    x: tx,
+    y: ty,
+    width: drawnW,
+    height: drawnH,
+  });
+};
+```
+
+**Pros:** Keeps `cropArea` canonical.
+**Cons:** Slider now “snaps” to mask bounding box behavior — may feel different if you want the crop area to be larger than the mask.
+
+---
+
+## Important coordinate-space notes (read these — mismatches are the usual source of trouble)
+
+* **Units must match.** If `mask natural dims` are in SVG viewBox units and `cropArea` is in pixels, convert so both are in pixels before computing `scale`. If cropArea is percent-based, multiply by canvas size first.
+* **Which rect is used to place the SVG element?** If you wrap mask inside an `<svg x={cropArea.x} y={cropArea.y} width={cropArea.width} height={cropArea.height} viewBox="0 0 mw mh">`, then `maskTransform.drawnW` computed using `scale = min(cw/mw, ch/mh)` will be in the crop-box coordinate system (pixels — consistent).
+* If mask dims arrive asynchronously, ensure `maskTransform` recalculates once those dims are present. Use `selectedMask.viewBoxWidth/Height` or `naturalWidth/Height` in the dependency list for the `useMemo` that builds `maskTransform`.
+

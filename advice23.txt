@@ -1,0 +1,130 @@
+Nice reproduction — thanks for the clear description and screenshot. Below is a compact, safe pattern you can drop into `CropCanvas.tsx` (or wherever `selectedMask` and `cropArea` state live) to perform a *one-shot* “fit cropArea to mask aspect” when a mask is loaded, but **never** reapply after the user manually changes the crop (slider/drag/resize).
+
+The idea:
+
+* Run an effect only when the mask changes.
+* Wait for the mask to have its aspect info (viewBox / natural size).
+* Compute a best-fit width/height that preserves the mask aspect and fits inside the current crop rectangle.
+* Center the newly sized crop rectangle inside the previous box.
+* Record (in a `ref`) that we already auto-fitted this mask so we won't auto-fit it again.
+* When the user adjusts the slider / drags / resizes, mark the mask as *user-adjusted* so the auto-fit never runs again for that mask.
+
+---
+
+# Implementation (TypeScript / React)
+
+Add these helpers and effect to your component (adjust variable names to match your file):
+
+```tsx
+import { useEffect, useRef } from "react";
+
+type Mask = {
+  id: string;
+  // either a viewBox or natural dimensions — adapt to your mask model
+  viewBoxWidth?: number;
+  viewBoxHeight?: number;
+  naturalWidth?: number;
+  naturalHeight?: number;
+};
+
+const CropCanvas = (props) => {
+  const { selectedMask, cropArea, setCropArea /* your state setters */, /* ... */ } = props;
+
+  // record which mask we've already auto-fitted (or flagged as user-adjusted)
+  const autoFitStateRef = useRef<Record<string, 'done' | 'user'> | null>({});
+
+  // helper to obtain mask aspect ratio safely
+  const getMaskAspect = (mask?: Mask): number | null => {
+    if (!mask) return null;
+    if (mask.viewBoxWidth && mask.viewBoxHeight) return mask.viewBoxWidth / mask.viewBoxHeight;
+    if (mask.naturalWidth && mask.naturalHeight) return mask.naturalWidth / mask.naturalHeight;
+    return null;
+  };
+
+  // effect: run once for each mask id to fit aspect into the existing crop box
+  useEffect(() => {
+    if (!selectedMask) return;
+    const mid = selectedMask.id;
+    if (!autoFitStateRef.current) autoFitStateRef.current = {};
+
+    // if we've already done auto-fit or user changed it, skip
+    const prev = autoFitStateRef.current[mid];
+    if (prev === 'done' || prev === 'user') return;
+
+    const maskAspect = getMaskAspect(selectedMask);
+    if (!maskAspect) {
+      // if mask hasn't loaded dimensions yet, bail out — you can re-run when it becomes available.
+      return;
+    }
+
+    // current box (these are assumed to be in the same coordinate system as cropArea)
+    const boxW = cropArea.width;
+    const boxH = cropArea.height;
+
+    // fit mask aspect inside the box (no overflow). You can flip logic if you prefer cover instead of contain.
+    let nextW: number;
+    let nextH: number;
+    if (boxW / boxH > maskAspect) {
+      // box is wider than mask -> limit by height
+      nextH = boxH;
+      nextW = boxH * maskAspect;
+    } else {
+      // box is taller (or equal) -> limit by width
+      nextW = boxW;
+      nextH = boxW / maskAspect;
+    }
+
+    // keep centered inside previous crop area
+    const nextX = cropArea.x + (boxW - nextW) / 2;
+    const nextY = cropArea.y + (boxH - nextH) / 2;
+
+    // Apply update once
+    setCropArea((prevArea) => ({
+      ...prevArea,
+      x: nextX,
+      y: nextY,
+      width: nextW,
+      height: nextH,
+    }));
+
+    // flag as auto-fitted so effect doesn't reapply the next time selectedMask is same id
+    autoFitStateRef.current[mid] = 'done';
+  }, [selectedMask?.id /* optionally include selectedMask dimensions if loaded async */]);
+
+  // === Important: when user adjusts the slider / drags / resizes, mark user-adjusted ===
+  // Example handler for the slider (you likely already have one)
+  const onUserAdjustCrop = (newCropArea) => {
+    setCropArea(newCropArea);
+    if (!selectedMask) return;
+    // mark as 'user' to disable future auto-fit for this mask
+    if (!autoFitStateRef.current) autoFitStateRef.current = {};
+    autoFitStateRef.current[selectedMask.id] = 'user';
+  };
+
+  // make sure all user-driven handlers (drag, resize handlers) call onUserAdjustCrop(...)
+  // e.g., onDragEnd, onResize, onSliderChange -> call onUserAdjustCrop(updatedArea)
+
+  return (
+    // ... your JSX ...
+  );
+};
+```
+
+---
+
+# Notes & edge cases
+
+* If mask dimensions (viewBox/natural size) are loaded asynchronously, you must re-run the effect when those become available. Add something like `selectedMask.viewBoxWidth` to the effect dependency list so it runs once the dimensions exist — but the `autoFitStateRef` guard ensures it only applies once per mask id.
+* The code above uses *contain* logic (fit inside existing crop box). If you want the mask to *cover* the crop box (i.e., crop fills and mask overflows), flip the comparison and compute accordingly.
+* If you want to auto-fit only on initial open (not on every mask load), you can also store a component-level `hasEverAutoFitted` ref and skip if `true`. Current approach is per-mask and more flexible.
+* Ensure all manual handlers call the `onUserAdjustCrop` wrapper so user interaction permanently disables further auto-fits for that mask.
+* If you have an explicit “reset to default crop” action, clear `autoFitStateRef.current[selectedMask.id]` there to allow re-auto-fitting.
+
+---
+
+# Quick testing checklist
+
+1. Open crop UI with a landscape (horizontal-oval) mask: crop area should immediately re-shape to match mask aspect and remain centered.
+2. Move slider / drag handles: crop changes — subsequent mask swaps should still auto-fit the *new* mask, but the current mask won't auto-reapply.
+3. Switch back to a mask you've already adjusted manually — verify it never auto-resizes again for that mask.
+4. Confirm behavior when mask dimensions arrive async (simulate delayed `viewBoxWidth`): auto-fit runs once after the dimensions appear.
