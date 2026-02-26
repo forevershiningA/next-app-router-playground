@@ -1,7 +1,7 @@
 import '#/styles/globals.css';
 
 import db from '#/lib/db';
-import Byline from '#/ui/byline';
+import { catalog } from '#/lib/catalog-db';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import ErrorBoundary from '#/components/ErrorBoundary';
@@ -12,6 +12,15 @@ import ConditionalCanvas from '#/components/ConditionalCanvas';
 import ConditionalNav from '#/components/ConditionalNav';
 import MaterialsLoader from '#/components/MaterialsLoader';
 import DefaultDesignLoader from '#/components/DefaultDesignLoader';
+import ShapesLoader from '#/components/ShapesLoader';
+import BordersLoader from '#/components/BordersLoader';
+import MotifsLoader from '#/components/MotifsLoader';
+import {
+  mapMaterialRecord,
+  mapShapeRecord,
+  mapBorderRecord,
+  mapMotifRecord,
+} from '#/lib/catalog-mappers';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -44,7 +53,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const demos = db.demo.findMany();
-  const materials = await db.material.findMany({ limit: 100 });
+
+  let rawMaterials: Awaited<ReturnType<typeof catalog.materials.findMany>> = [];
+  let rawShapes: Awaited<ReturnType<typeof catalog.shapes.findMany>> = [];
+  let rawBorders: Awaited<ReturnType<typeof catalog.borders.findMany>> = [];
+  let rawMotifs: Awaited<ReturnType<typeof catalog.motifs.findMany>> = [];
+
+  try {
+    [rawMaterials, rawShapes, rawBorders, rawMotifs] = await Promise.all([
+      catalog.materials.findMany({ where: { isActive: true }, limit: 200 }),
+      catalog.shapes.findMany({ where: { isActive: true }, limit: 200 }),
+      catalog.borders.findMany({ where: { isActive: true }, limit: 200 }),
+      catalog.motifs.findMany({ where: { isActive: true }, limit: 500 }),
+    ]);
+  } catch (error) {
+    console.error('Failed to load catalog data, using empty fallbacks', error);
+  }
+
+  const materials = rawMaterials.map(mapMaterialRecord);
+  const shapes = rawShapes.map(mapShapeRecord);
+  const borders = rawBorders.map(mapBorderRecord);
+  const motifs = rawMotifs.map(mapMotifRecord);
   
   return (
     <html lang="en" className="[color-scheme:dark]">
@@ -56,6 +85,9 @@ export default async function RootLayout({
           <RouterBinder /> {/* ← mount once, early */}
           <DefaultDesignLoader />
           <MaterialsLoader materials={materials} />
+          <ShapesLoader shapes={shapes} />
+          <BordersLoader borders={borders} />
+          <MotifsLoader motifs={motifs} />
           <MobileHeader />
           <ConditionalNav items={demos} />
           <MainContent>

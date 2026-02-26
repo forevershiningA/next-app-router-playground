@@ -1,0 +1,276 @@
+Great question — this screen actually looks polished visually, but the *cognitive load is high*.
+Right now users must **interpret the interface** instead of simply *reading it*.
+Clarity improves when the UI answers 3 questions instantly:
+
+> 1. Where am I?
+> 2. What can I do?
+> 3. What needs my attention?
+
+Below is a focused breakdown of what’s causing friction and how to fix it.
+
+---
+
+## 1) Top Area: “Account Menu” feels like a dashboard *and* navigation
+
+### Problem
+
+Those 6 cards behave like navigation, but visually they look like content widgets.
+
+So users pause to decide:
+
+> Are these shortcuts, status indicators, or actions?
+
+Also “Production window opens Mar 12” floats alone — unclear relevance.
+
+### Improve
+
+Turn it into a **true navigation bar**, not a card grid.
+
+**Do this:**
+
+* Convert the 6 cards into tabs or segmented navigation
+* Move “Production window opens…” inside Orders section
+* Highlight current section clearly
+
+**Example structure**
+
+**My Account**
+
+* Designs (active)
+* Orders
+* Billing
+* Account Details
+* Privacy
+
+Right now:
+🧠 Users scan → interpret → decide
+After fix:
+👁 Users scan → understand immediately
+
+---
+
+## 2) Page Identity: “Saved Designs” is weakly anchored
+
+### Problem
+
+The page header competes with the cards above it.
+The user doesn’t instantly feel they entered a *new section*.
+
+### Improve
+
+Make the section unmistakable:
+
+**Add a page header zone**
+
+```
+MY ACCOUNT
+Saved Designs
+Manage and approve your memorial concepts
+[ + New Design ]   [ Export ]
+```
+
+Increase vertical spacing above it.
+This visually resets context.
+
+---
+
+## 3) Design Cards: Too much mixed hierarchy
+
+Currently each card contains:
+
+* status
+* title
+* product
+* description
+* timestamp
+* price
+* preview
+* 5 buttons
+
+Users must scan in Z-pattern twice.
+
+### Key issue
+
+You’re mixing **information density with decision density**.
+
+Users want to know:
+
+> Do I need to act on this?
+
+But the UI shows everything equally.
+
+---
+
+## Fix the Card Structure
+
+### Current mental effort:
+
+> read → decode → locate actions → compare → remember
+
+### New structure:
+
+Separate into 3 zones:
+
+---
+
+### A) Status Row (most important)
+
+Make this bold and colored — this is the user's priority filter.
+
+Instead of:
+`DESIGN PROOF`
+
+Use:
+
+* Awaiting Approval
+* Ready to Order
+* In Production
+* Completed
+
+Add color indicator dot.
+
+---
+
+### B) Content Summary (scannable)
+
+Reduce text dramatically.
+
+**Before**
+Paragraph biography text = noise in list view.
+
+**After**
+Show only essentials:
+
+```
+Mother Memorial
+Black Granite Headstone
+Last edited: Oct 30, 05:03
+```
+
+Full description belongs inside detail page.
+
+---
+
+### C) Actions (primary vs secondary)
+
+Right now:
+`EDIT | BUY | EMAIL | MORE`
+
+All equal weight = hesitation.
+
+Make ONE primary action.
+
+Example rules:
+
+* Awaiting approval → **Review Proof**
+* Ready → **Order**
+* Ordered → **Track**
+
+Everything else → inside overflow menu (⋯)
+
+---
+
+## 4) Preview Image Dominates Decision Area
+
+The preview is large but not actionable.
+
+### Problem
+
+The eye goes to the image first — but the user cannot act from it.
+
+### Improve
+
+* Reduce preview size
+* Make it clickable to open proof modal
+* Put actions near title (not bottom row)
+
+This cuts scanning time in half.
+
+---
+
+## 5) Sidebar Steps Cause Context Conflict
+
+The left panel shows **design builder steps** while user is in **account management**.
+
+So the brain asks:
+
+> Am I editing or managing?
+
+This is a major clarity leak.
+
+### Fix
+
+When inside My Account:
+
+* Collapse builder steps
+* Replace with account navigation
+
+Builder steps should only appear inside the editor.
+
+---
+
+## 6) Dates & Time
+
+`Updated 30-10-2025 05:03`
+
+For most users:
+
+* unreadable format
+* not meaningful
+
+### Improve
+
+Use human language:
+
+* Updated 2 hours ago
+* Yesterday
+* Oct 30
+
+---
+
+## 7) Missing Filtering (Huge clarity gain)
+
+Users with many designs will struggle fast.
+
+Add filters:
+
+* Status
+* Recently edited
+* Ready for approval
+* Ordered
+
+This dramatically reduces scanning fatigue.
+
+---
+
+## 8) Visual Priority Map (what the eye should see)
+
+Current:
+Logo → cards → image → buttons → title → status
+
+Desired:
+Status → Title → Primary action → preview → details
+
+---
+
+## Biggest Impact Changes (Do these first)
+
+If you only implement 5 improvements, choose these:
+
+1. Convert top card grid into navigation tabs
+2. Replace “Design Proof” with real statuses
+3. One primary action per design
+4. Remove description text from list view
+5. Hide builder steps in account area
+
+These alone will make the page feel 3× clearer.
+
+---
+
+## Quick Clarity Test
+
+After redesign, a new user should answer in under 3 seconds:
+
+> “I have 2 designs waiting for approval and I can review them here.”
+
+Right now they must *study* the interface to understand that.

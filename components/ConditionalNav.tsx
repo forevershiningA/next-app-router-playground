@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { GlobalNav } from '#/ui/global-nav';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import DesignerNav from '#/components/DesignerNav';
+import AccountNav from '#/components/AccountNav';
 import { type DemoCategory } from '#/lib/db';
 import clsx from 'clsx';
 import { XMarkIcon } from '@heroicons/react/24/outline';
@@ -52,6 +53,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
                          pathname?.startsWith('/select-') || 
                          pathname?.startsWith('/inscriptions') ||
                          pathname?.startsWith('/check-price');
+  const accountRoutePrefixes = ['/my-account', '/orders', '/account', '/privacy'];
+  const isAccountRoute = accountRoutePrefixes.some((prefix) => (pathname ? pathname.startsWith(prefix) : false));
   
   if (isDesignsRoute) {
     return (
@@ -59,6 +62,10 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
         <DesignsTreeNav />
       </div>
     );
+  }
+  
+  if (isAccountRoute) {
+    return <AccountNav />;
   }
   
   if (isDesignerRoute) {

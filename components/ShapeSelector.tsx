@@ -3,17 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useHeadstoneStore } from '#/lib/headstone-store';
-
-type Shape = {
-  id: string;
-  name: string;
-  image: string;
-  category: string;
-};
+import { useHeadstoneStore, type ShapeOption } from '#/lib/headstone-store';
 
 type ShapeSelectorProps = {
-  shapes: Shape[];
+  shapes: ShapeOption[];
   disableInternalScroll?: boolean;
 };
 
@@ -23,8 +16,20 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const hasBorder = useHeadstoneStore((s) => s.catalog?.product?.border === '1');
 
-  const handleShapeSelect = (shape: Shape) => {
-    const shapeUrl = `/shapes/headstones/${shape.image}`;
+  const getShapeUrl = (shape: ShapeOption) => {
+    if (shape.image) {
+      return shape.image.startsWith('/')
+        ? shape.image
+        : `/shapes/headstones/${shape.image}`;
+    }
+    return shape.previewUrl ?? null;
+  };
+
+  const handleShapeSelect = (shape: ShapeOption) => {
+    const shapeUrl = getShapeUrl(shape);
+    if (!shapeUrl) {
+      return;
+    }
     setShapeUrl(shapeUrl);
     if (hasBorder) {
       router.push('/select-border');
@@ -44,22 +49,24 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
         {shapes.map((shape) => {
-          const shapeUrl = `/shapes/headstones/${shape.image}`;
-          const isSelected = currentShapeUrl === shapeUrl;
-          
+          const shapeUrl = getShapeUrl(shape);
+          const isSelected = shapeUrl ? currentShapeUrl === shapeUrl : false;
+          const coverSrc = shapeUrl ?? '/shapes/headstones/square.svg';
+
           return (
             <button
               key={shape.id}
               onClick={() => handleShapeSelect(shape)}
-              className="group relative cursor-pointer"
+              className="group relative cursor-pointer disabled:cursor-not-allowed"
               title={shape.name}
+              disabled={!shapeUrl}
             >
               {/* Shape Image */}
               <div className={`relative aspect-square transition-all ${
                 isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent group-hover:border-[#D7B356]'
               }`}>
                 <Image
-                  src={shapeUrl}
+                  src={coverSrc}
                   alt={shape.name}
                   fill
                   className="object-contain"
@@ -69,7 +76,7 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
               
               {/* Shape Name */}
               <div className="p-2 h-12 flex items-center justify-center">
-                <div className="text-xs text-slate-200 text-center line-clamp-2">
+                <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
                   {shape.name}
                 </div>
               </div>

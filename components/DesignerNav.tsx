@@ -17,6 +17,8 @@ import {
   ChevronUpIcon,
   RectangleStackIcon,
   PhotoIcon,
+  UserCircleIcon,
+  CloudArrowUpIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
@@ -31,6 +33,7 @@ import BorderSelector from './BorderSelector';
 import AdditionSelector from './AdditionSelector';
 import MotifSelectorPanel from './MotifSelectorPanel';
 import ImageSelector from './ImageSelector';
+import SaveDesignModal from './SaveDesignModal';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -52,6 +55,13 @@ const menuGroups = [
       { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
       { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
       { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      { slug: 'my-account', name: 'My Account', icon: UserCircleIcon },
+      { slug: 'save-design', name: 'Save Design', icon: CloudArrowUpIcon },
     ],
   },
 ];
@@ -132,6 +142,8 @@ export default function DesignerNav() {
   const [forceAdditionCatalog, setForceAdditionCatalog] = React.useState(false);
   const [forceMotifCatalog, setForceMotifCatalog] = React.useState(false);
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
+  const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
+  const [isSavingDesign, setIsSavingDesign] = React.useState(false);
   const activeFullscreenPanelRef = React.useRef<string | null>(null);
   activeFullscreenPanelRef.current = activeFullscreenPanel;
 
@@ -306,17 +318,14 @@ export default function DesignerNav() {
   
   // Get materials and shapes from store
   const materials = useHeadstoneStore((s) => s.materials);
+  const shapes = useHeadstoneStore((s) => s.shapes);
+  const borders = useHeadstoneStore((s) => s.borders);
+  const motifCatalog = useHeadstoneStore((s) => s.motifsCatalog);
   const products = React.useMemo(() => {
     return data.products || [];
   }, []);
-  const shapes = React.useMemo(() => {
-    return data.shapes || [];
-  }, []);
   const additionsList = React.useMemo(() => {
     return data.additions || [];
-  }, []);
-  const motifCategories = React.useMemo(() => {
-    return data.motifs || [];
   }, []);
   
   // Show Select Size panel when on select-size page
@@ -1025,7 +1034,7 @@ export default function DesignerNav() {
 
         {showMotifCatalog && (
           <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
-            <MotifSelectorPanel motifs={motifCategories} />
+            <MotifSelectorPanel motifs={motifCatalog} />
           </div>
         )}
       </div>
@@ -1108,6 +1117,119 @@ export default function DesignerNav() {
     if (slug === 'check-price') {
       e.preventDefault();
       router.push('/check-price');
+    }
+
+    if (slug === 'save-design') {
+      e.preventDefault();
+      setShowSaveDesignModal(true);
+    }
+  };
+
+  const handleSaveDesign = async (designName: string) => {
+    setIsSavingDesign(true);
+    try {
+      // Capture screenshot from the 3D canvas
+      let screenshotDataUrl: string | null = null;
+      try {
+        const canvas = document.querySelector('canvas');
+        if (canvas) {
+          screenshotDataUrl = canvas.toDataURL('image/png');
+        }
+      } catch (error) {
+        console.warn('Failed to capture canvas screenshot:', error);
+      }
+
+      // Get all state from store
+      const state = useHeadstoneStore.getState();
+      
+      // Prepare design state matching DesignerSnapshot schema
+      const designState = {
+        version: 1,
+        productId: state.productId,
+        shapeUrl: state.shapeUrl,
+        materialUrl: state.materialUrl,
+        headstoneMaterialUrl: state.headstoneMaterialUrl,
+        baseMaterialUrl: state.baseMaterialUrl,
+        widthMm: state.widthMm,
+        heightMm: state.heightMm,
+        uprightThickness: state.uprightThickness,
+        slantThickness: state.slantThickness,
+        headstoneStyle: state.headstoneStyle,
+        baseFinish: state.baseFinish,
+        baseWidthMm: state.baseWidthMm,
+        baseHeightMm: state.baseHeightMm,
+        baseThickness: state.baseThickness,
+        borderName: state.borderName,
+        showBase: state.showBase,
+        inscriptions: state.inscriptions.map(insc => ({
+          id: insc.id,
+          text: insc.text,
+          font: insc.font,
+          sizeMm: insc.sizeMm,
+          color: insc.color,
+          xPos: insc.xPos,
+          yPos: insc.yPos,
+          rotationDeg: insc.rotationDeg,
+          target: insc.target,
+          baseWidthMm: insc.baseWidthMm,
+          baseHeightMm: insc.baseHeightMm,
+        })),
+        selectedMotifs: state.selectedMotifs.map(motif => ({
+          id: motif.id,
+          svgPath: motif.svgPath,
+          color: motif.color,
+        })),
+        motifOffsets: state.motifOffsets,
+        selectedAdditions: state.selectedAdditions,
+        additionOffsets: state.additionOffsets,
+        selectedImages: state.selectedImages,
+        metadata: {
+          currentProjectId: state.currentProjectId,
+          currentProjectTitle: state.currentProjectTitle,
+          screenshot: screenshotDataUrl,
+        },
+      };
+
+      // Use the existing projects API endpoint
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: designName,
+          designState,
+          status: 'draft',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error('Save design failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          result,
+        });
+        throw new Error(result.message || 'Failed to save design');
+      }
+
+      console.log('Design saved successfully:', result);
+
+      // Success - close modal and redirect to My Account
+      setShowSaveDesignModal(false);
+      
+      // Redirect to My Account
+      router.push('/my-account');
+      
+    } catch (error) {
+      console.error('Error saving design:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
+    } finally {
+      setIsSavingDesign(false);
     }
   };
 
@@ -1655,7 +1777,7 @@ export default function DesignerNav() {
               <div className="space-y-6">
                 <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-220px)] overflow-hidden">
                   <div className="h-full overflow-y-auto pr-1">
-                    <BorderSelector disableInternalScroll />
+                    <BorderSelector borders={borders} disableInternalScroll />
                   </div>
                 </div>
               </div>
@@ -1885,7 +2007,7 @@ export default function DesignerNav() {
                       
                       {isActive && !selectedMotifId && !selectedAdditionId && (
                         <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
-                          <BorderSelector />
+                          <BorderSelector borders={borders} />
                         </div>
                       )}
                     </>
@@ -1961,6 +2083,21 @@ export default function DesignerNav() {
               );
             }
             
+            // Special handling for Save Design - always a button, never navigate
+            if (item.slug === 'save-design') {
+              return (
+                <React.Fragment key={item.slug}>
+                  <button
+                    onClick={(e) => handleMenuClick(item.slug, e)}
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20"
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span>{item.name}</span>
+                  </button>
+                </React.Fragment>
+              );
+            }
+            
             // Determine if step should be disabled (steps 3-10 need a product selected)
             // Exception: Check Price is always enabled (users can see base price even with empty headstone)
             const needsProduct = index >= 2 && item.slug !== 'check-price';
@@ -2026,6 +2163,14 @@ export default function DesignerNav() {
       </div>
         </>
       )}
+
+      {/* Save Design Modal */}
+      <SaveDesignModal
+        isOpen={showSaveDesignModal}
+        onClose={() => setShowSaveDesignModal(false)}
+        onSave={handleSaveDesign}
+        isSaving={isSavingDesign}
+      />
     </nav>
   );
 }

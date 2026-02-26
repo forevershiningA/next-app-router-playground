@@ -1,0 +1,47 @@
+# MontePython parameter file for Active Screen Gravity (ASG) model
+# Compatible with MontePython v3.5 + CLASS v3.2
+
+#------Experiments to test (separated with commas)-----
+data.experiments=['Planck_highl_TTTEEE', 'Planck_lowl_EE', 'Planck_lowl_TT', 'Planck_lensing', 'bao_boss_dr12', 'bao_smallz_2014']
+
+#------ Cosmological parameters list ------
+# ASG-specific parameters
+data.parameters['beta']           = [0.05,   0.001,  0.5,    0.01,  1, 'cosmo']  # Coupling strength (log-uniform)
+data.parameters['Delta']          = [1.0,    0.2,    2.0,    0.1,   1, 'cosmo']  # Screen thickness [M_Pl]
+data.parameters['chi_0']          = [5.5,    4.0,    7.0,    0.2,   1, 'cosmo']  # Initial field value [M_Pl]
+
+# Standard ΛCDM parameters
+data.parameters['omega_b']        = [2.2383, 0.005,  0.1,    0.016, 0.01, 'cosmo']
+data.parameters['omega_cdm']      = [0.1201, 0.001,  0.99,   0.0027,1,    'cosmo']
+data.parameters['100*theta_s']    = [1.04110, 0.5,   10,     0.00030,1,   'cosmo']
+data.parameters['tau_reio']       = [0.0543, 0.01,   0.8,    0.0073,1,    'cosmo']
+data.parameters['ln10^{10}A_s']   = [3.0447, 1.61,   3.91,   0.015, 1,    'cosmo']
+data.parameters['n_s']            = [0.9649, 0.8,    1.2,    0.0042,1,    'cosmo']
+
+# Nuisance parameters for Planck
+data.parameters['A_planck']       = [1.0,    0.9,    1.1,    0.0025,1,    'nuisance']
+
+#------ Derived parameters ------
+data.parameters['H0']             = [0, None, None, 0,     1,   'derived']
+data.parameters['Omega_m']        = [0, None, None, 0,     1,   'derived']
+data.parameters['sigma8']         = [0, None, None, 0,     1,   'derived']
+data.parameters['r']              = [0, None, None, 0,     1,   'derived']  # Tensor-to-scalar ratio
+
+#------ MCMC parameters ------
+data.N=10
+data.write_step=5
+data.over_sampling=[1, 4]  # Oversample nuisance parameters
+
+#------ Cosmological code ------
+data.cosmo_arguments['output'] = 'tCl,pCl,lCl,mPk'
+data.cosmo_arguments['lensing'] = 'yes'
+data.cosmo_arguments['P_k_max_h/Mpc'] = 1.0
+data.cosmo_arguments['z_max_pk'] = 2.0
+
+# ASG-specific CLASS modifications (require modified CLASS code)
+data.cosmo_arguments['ASG_model'] = 'active_screen'
+data.cosmo_arguments['ASG_approx'] = 'sudden_transition'
+
+#------ Parameter constraints from priors ------
+# Log-uniform prior on beta
+data.prior_beta = 'log'

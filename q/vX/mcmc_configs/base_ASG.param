@@ -1,0 +1,23 @@
+# ASG model parameters - priors (placeholder ranges)
+beta log [0.001, 0.5] 0.01
+Delta uniform [0.2, 2.0] 1.0
+chi0 uniform [4.0, 7.0] 5.5
+
+# LCDM parameters (marginalized)
+omega_b log [0.019, 0.025] 0.0224
+omega_cdm log [0.09, 0.15] 0.12
+H0 uniform [60, 80] 67.4
+tau uniform [0.01, 0.2] 0.054
+ln10As log [2.5, 3.5] 3.044
+ns uniform [0.9, 1.0] 0.965
+
+# Derived observables
+r derived
+As derived
+
+# Likelihoods (Planck 2018 + BAO)
+data.AS = Planck_highl_TTTEEE_lowl_lowE_lensing_BAO
+
+# Additional settings
+output = mPk
+P_k_max_hMpc = 10

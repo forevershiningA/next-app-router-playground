@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import MaterialSelectionGrid from './_ui/MaterialSelectionGrid';
-import db from '#/lib/db';
+import { catalog } from '#/lib/catalog-db';
+import { mapMaterialRecord } from '#/lib/catalog-mappers';
 
 export const metadata: Metadata = {
   title: 'Granite & Marble for Headstones – Colours & Finishes | Forever Shining',
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const materials = await db.material.findMany({ limit: 100 });
+  const rawMaterials = await catalog.materials.findMany({ where: { isActive: true }, limit: 200 });
+  const materials = rawMaterials.map(mapMaterialRecord);
 
   return (
     <Suspense fallback={null}>

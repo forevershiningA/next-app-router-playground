@@ -4,8 +4,7 @@ import { useState, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useHeadstoneStore } from '#/lib/headstone-store';
-import { Material } from '#/lib/db';
+import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import { bronzes } from '#/app/_internal/_data';
 
 type MaterialCategory = {
@@ -32,7 +31,7 @@ const materialCategories: MaterialCategory[] = [
   },
 ];
 
-export default function MaterialSelectionGrid({ materials }: { materials: Material[] }) {
+export default function MaterialSelectionGrid({ materials }: { materials: MaterialOption[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const router = useRouter();
   const pathname = usePathname();
@@ -50,6 +49,30 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
 
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
+
+  const resolveAssetPath = (value: string | null | undefined, basePath: string) => {
+    if (!value) return null;
+    if (value.startsWith('http')) return value;
+    if (value.startsWith('/')) return value;
+    return `${basePath}${value}`;
+  };
+
+  const buildTextureUrl = (material: MaterialOption) => {
+    const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
+    return (
+      resolveAssetPath(material.textureUrl, basePath) ??
+      resolveAssetPath(material.image, basePath)
+    );
+  };
+
+  const buildThumbnailUrl = (material: MaterialOption, textureUrl: string | null) => {
+    const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
+    return (
+      resolveAssetPath(material.thumbnailUrl, '/') ??
+      textureUrl ??
+      resolveAssetPath(material.image, basePath)
+    );
+  };
   
   // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
   const displayMaterials = useMemo(() => {
@@ -74,11 +97,12 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     return null;
   }
 
-  const handleMaterialSelect = (material: Material) => {
-    // Use phoenix textures for Bronze Plaque, forever textures for others
-    const materialUrl = isBronzePlaque
-      ? `/textures/phoenix/l/${material.image}`
-      : `/textures/forever/l/${material.image}`;
+  const handleMaterialSelect = (material: MaterialOption) => {
+    const materialUrl = buildTextureUrl(material);
+    if (!materialUrl) {
+      return;
+    }
+
     setIsMaterialChange(true);
     const targetSelection = isPlaque ? 'headstone' : selected ?? 'headstone';
 
@@ -91,7 +115,6 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     setEditingObject(targetSelection);
 
     setTimeout(() => setIsMaterialChange(false), 100);
-    // Navigate to select-size to show 3D preview with the new material
     router.push('/select-size');
   };
 
@@ -163,20 +186,16 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {filteredMaterials.map((material) => {
-                // Use phoenix textures for Bronze Plaque, forever textures for others
-                const materialUrl = isBronzePlaque
-                  ? `/textures/phoenix/l/${material.image}`
-                  : `/textures/forever/l/${material.image}`;
-                // Use phoenix thumbnails for Bronze Plaque display
-                const thumbnailUrl = isBronzePlaque
-                  ? `/textures/phoenix/m/${material.image}`
-                  : `/textures/forever/l/${material.image}`;
-                const isSelected = currentMaterialUrl === materialUrl;
+                const materialUrl = buildTextureUrl(material);
+                const thumbnailUrl = buildThumbnailUrl(material, materialUrl);
+                const isSelected = materialUrl ? currentMaterialUrl === materialUrl : false;
+                const coverSrc = thumbnailUrl ?? '/textures/forever/l/Imperial-Red.webp';
                 return (
                   <button
                     key={material.id}
-                    onClick={() => handleMaterialSelect(material)}
-                    className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
+                    onClick={() => materialUrl && handleMaterialSelect(material)}
+                    disabled={!materialUrl}
+                    className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 disabled:cursor-not-allowed ${
                       isSelected
                         ? 'border-[#cfac6c]/70 bg-gradient-to-br from-[#cfac6c]/20 to-gray-900/50 shadow-lg shadow-[#cfac6c]/20'
                         : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/60 hover:to-gray-800/60 hover:border-[#cfac6c]/30'
@@ -191,7 +210,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                   {/* Material Image */}
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 ring-1 ring-white/10">
                     <Image
-                      src={thumbnailUrl}
+                      src={coverSrc}
                       alt={material.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -79,9 +79,38 @@ export type AdditionKind = 'statue' | 'vase' | 'application';
 export type Material = {
   id: string;
   name: string;
-  image: string;
+  image?: string | null;
   category: string;
+  textureUrl?: string | null;
+  thumbnailUrl?: string | null;
 };
+
+export type ShapeOption = {
+  id: string;
+  name: string;
+  image?: string | null;
+  category: string;
+  previewUrl?: string | null;
+  maskKey?: string | null;
+};
+
+export type BorderOption = {
+  id: string;
+  name: string;
+  image?: string | null;
+  category: string;
+  svgUrl?: string | null;
+};
+
+export type MotifCatalogItem = {
+  id: string;
+  name: string;
+  category: string;
+  svgUrl?: string | null;
+  previewUrl?: string | null;
+  priceCents?: number | null;
+};
+
 export type PanelName =
   | 'shape'
   | 'size'
@@ -110,6 +139,15 @@ type HeadstoneState = {
 
   materials: Material[];
   setMaterials: (materials: Material[]) => void;
+
+  shapes: ShapeOption[];
+  setShapes: (shapes: ShapeOption[]) => void;
+
+  borders: BorderOption[];
+  setBorders: (borders: BorderOption[]) => void;
+
+  motifsCatalog: MotifCatalogItem[];
+  setMotifsCatalog: (motifs: MotifCatalogItem[]) => void;
 
   minWidthMm: number;
   maxWidthMm: number;
@@ -171,6 +209,10 @@ type HeadstoneState = {
 
   productId: string | null;
   setProductId: (id: string) => void;
+
+  currentProjectId: string | null;
+  currentProjectTitle: string | null;
+  setProjectMeta: (meta: { projectId?: string | null; title?: string | null }) => void;
 
   showBase: boolean;
   setShowBase: (showBase: boolean) => void;
@@ -325,11 +367,10 @@ type HeadstoneState = {
   ) => void;
   duplicateAddition: (id: string) => void;
 
-  setSelectedMotifId: (id: string | null) => void;
   setMotifRef: (id: string, ref: React.RefObject<Group | null>) => void;
   setMotifOffset: (
     id: string,
-    offset: { xPos: number; yPos: number; scale: number; rotationZ: number; heightMm: number },
+    offset: Partial<MotifOffset>,
   ) => void;
   duplicateMotif: (id: string) => void;
 
@@ -375,6 +416,9 @@ type HeadstoneState = {
 
   resetDesign: () => void;
 };
+
+type AdditionOffset = HeadstoneState['additionOffsets'][string];
+type MotifOffset = HeadstoneState['motifOffsets'][string];
 
 const MIN_SURFACE_DIMENSION_MM = 1;
 
@@ -454,6 +498,21 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ materials });
   },
 
+  shapes: [],
+  setShapes(shapes) {
+    set({ shapes });
+  },
+
+  borders: [],
+  setBorders(borders) {
+    set({ borders });
+  },
+
+  motifsCatalog: [],
+  setMotifsCatalog(motifsCatalog) {
+    set({ motifsCatalog });
+  },
+
   minWidthMm: MIN_HEADSTONE_DIM,
   maxWidthMm: MAX_HEADSTONE_DIM,
   minHeightMm: MIN_HEADSTONE_DIM,
@@ -474,7 +533,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const instanceId = `${id}_${Date.now()}`;
     set((s) => {
       const targetSurface: 'headstone' | 'base' = s.selected === 'base' ? 'base' : 'headstone';
-      const defaultOffset = withOffsetSurfaceDimensions(
+      const defaultOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           scale: 1,
           rotationZ: 0,
@@ -555,7 +614,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     
     set((s) => {
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
-      const defaultOffset = withOffsetSurfaceDimensions(
+      const defaultOffset = withOffsetSurfaceDimensions<MotifOffset>(
         {
           xPos: 0,
           yPos: 0,
@@ -1010,6 +1069,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     } catch (error) {
       console.error('Failed to load or parse catalog XML:', error);
     }
+  },
+
+  currentProjectId: null,
+  currentProjectTitle: null,
+  setProjectMeta: (meta: { projectId?: string | null; title?: string | null }) => {
+    set({
+      currentProjectId: meta.projectId ?? null,
+      currentProjectTitle: meta.title ?? null,
+    });
   },
 
   showBase: true,
@@ -1484,7 +1552,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         offset.yPos !== undefined ||
         !previous.baseWidthMm ||
         !previous.baseHeightMm;
-      const nextOffset = withOffsetSurfaceDimensions(
+      const nextOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           ...previous,
           ...offset,
@@ -1521,7 +1589,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
     set((s) => {
       const surface = currentOffset.targetSurface ?? 'headstone';
-      const duplicatedOffset = withOffsetSurfaceDimensions(
+      const duplicatedOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           ...currentOffset,
           xPos: (currentOffset.xPos ?? 0) + deltaX,
@@ -1586,19 +1654,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({ motifRefs: { ...s.motifRefs, [id]: ref } })),
   setMotifOffset: (
     id: string,
-    offset: {
-      xPos: number;
-      yPos: number;
-      scale: number;
-      rotationZ: number;
-      heightMm: number;
-      target?: 'headstone' | 'base';
-      coordinateSpace?: 'absolute' | 'offset';
-      baseWidthMm?: number;
-      baseHeightMm?: number;
-      flipX?: boolean;
-      flipY?: boolean;
-    },
+    offset: Partial<MotifOffset>,
   ) => {
     set((s) => {
       const previous = s.motifOffsets[id];
@@ -1609,7 +1665,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         offset.yPos !== undefined ||
         !previous?.baseWidthMm ||
         !previous?.baseHeightMm;
-      const nextOffset = withOffsetSurfaceDimensions(
+      const nextOffset = withOffsetSurfaceDimensions<MotifOffset>(
         {
           ...previous,
           ...offset,
@@ -1645,7 +1701,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     if (currentOffset) {
       set((s) => {
         const surface = currentOffset.target ?? 'headstone';
-        const duplicatedOffset = withOffsetSurfaceDimensions(
+        const duplicatedOffset = withOffsetSurfaceDimensions<MotifOffset>(
           {
             ...currentOffset,
             xPos: currentOffset.xPos + 30,
@@ -1801,6 +1857,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       selectedAdditionId: null,
       selectedMotifId: null,
       activePanel: null,
+      currentProjectId: null,
+      currentProjectTitle: null,
       // Reset to default dimensions
       widthMm: 900,
       heightMm: 900,

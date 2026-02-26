@@ -1,7 +1,7 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-24  
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS
+**Last Updated:** 2026-02-26  
+**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL
 
 ---
 
@@ -19,12 +19,103 @@
 11. [Slant Headstone Feature](#slant-headstone-feature)
 12. [Design Gallery & SEO](#design-gallery--seo)
 13. [Check Price Feature](#check-price-feature)
-14. [Performance Considerations](#performance-considerations)
-15. [Memory Management](#memory-management)
-16. [Common Issues & Solutions](#common-issues--solutions)
-17. [Development Workflow](#development-workflow)
+14. [Save Design Feature](#save-design-feature)
+15. [My Account System](#my-account-system)
+16. [File Storage System](#file-storage-system)
+17. [Performance Considerations](#performance-considerations)
+18. [Memory Management](#memory-management)
+19. [Common Issues & Solutions](#common-issues--solutions)
+20. [Development Workflow](#development-workflow)
 
 ---
+
+## Current Status (2026-02-26)
+
+### ✅ Recent Changes (February 26, 2026)
+1. **Save Design Feature - Complete Implementation**
+   - Added "Save Design" button in main menu (after My Account link)
+   - Redirects to My Account login if user is not authenticated
+   - When logged in, shows centered modal popup asking for design name
+   - Saves design to database with automatic screenshot generation from canvas
+   - Generates and stores multiple file formats:
+     - **JSON**: Complete design state (`/public/saved-designs/json/{yyyy}/{mm}/{designId}.json`)
+     - **XML**: Legacy format for compatibility (`/public/saved-designs/xml/{yyyy}/{mm}/{designId}.xml`)
+     - **HTML**: Price quote/design details (`/public/saved-designs/html/{yyyy}/{mm}/{designId}.html`)
+     - **Screenshot**: Canvas capture (`/public/saved-designs/screenshots/{yyyy}/{mm}/{designId}.png`)
+     - **P3D**: Binary format for design data (`/public/saved-designs/p3d/{yyyy}/{mm}/{designId}.p3d`)
+   - After successful save, automatically redirects to My Account page
+   - All folders auto-created with year/month structure (e.g., `2026/02/`)
+
+2. **File Storage System - Organized by Date**
+   - Implemented date-based folder structure for all saved designs
+   - Upload directory: `/public/upload/{yyyy}/{mm}/` for original images
+   - Saved designs directory: `/public/saved-designs/` with subdirectories:
+     - `html/` - Price quotes and design details
+     - `json/` - Design state data
+     - `screenshots/` - Design preview images
+     - `xml/` - Legacy XML format
+     - `p3d/` - Binary design files
+   - Auto-creates directories if they don't exist
+   - Files: `lib/file-storage.ts`, `app/api/save-design/route.ts`
+
+3. **My Account - Full Implementation**
+   - **Saved Designs List**: Grid view with design thumbnails, names, creation dates
+   - **Design Actions**: Each design has Edit, Buy, Email, More buttons (gold #D4A84F with black text)
+   - **More Modal**: Popup with design preview, price, quote HTML
+     - Share options: Email, URL, Facebook, Twitter/X, LinkedIn (with text labels)
+     - Actions: PDF download, Edit, Buy, Delete, Close
+     - Compact layout with 3 share buttons per row
+     - Image preview at top (optimized size to avoid scrollbar)
+   - **Delete Functionality**: Confirmation dialog before deleting design
+   - **Account Navigation**: 
+     - Saved Designs (default view)
+     - Orders, Account Details, Invoices, Privacy
+     - Back to Designer (returns to main designer)
+     - Logout
+   - Files: `app/my-account/page.tsx`, `components/AccountNav.tsx`
+
+4. **UI/UX Enhancements**
+   - Save Design modal centered over entire window (not just sidebar)
+   - Consistent gold color (#D4A84F) for primary action buttons with black text
+   - All interactive buttons have cursor:pointer (hand icon)
+   - Horizontal padding (40px) added to saved designs container
+   - Social media share buttons show text labels for better UX
+
+5. **Database Integration**
+   - Designs saved to `designs` table with user association
+   - Stores design name, canvas state, file paths, timestamps
+   - Screenshot path stored with proper year/month structure
+   - Design ID used in all file names for easy retrieval
+   - Supports CRUD operations via API routes
+
+6. **Image Upload System**
+   - Original images stored in `/public/upload/{yyyy}/{mm}/`
+   - Resized images for designer use
+   - Cropped images stored separately
+   - Automatic directory creation with date structure
+
+### ⚠️ Known Issues (February 26, 2026)
+- None currently reported.
+
+---
+
+## Current Status (2026-02-25)
+
+### ✅ Recent Changes (February 25, 2026)
+1. **My Account Admin Hub Refresh**
+   - Rebuilt `app/my-account/page.tsx` so the account dashboard matches the designer’s premium aesthetic: the content column now mirrors the main canvas styling (dark gradient backdrop, metric chips, saved-design grid) while the Saved Designs list focuses on proof details, created/updated timestamps, and primary call-to-actions without any status badges or hover affordances.
+   - Tab-level navigation (New Design, Saved Designs, Orders, Account Details, Invoices, Privacy) moved into the global left rail using the same “01 Setup” card style, and the Saved Designs feed permanently filters out `awaiting-approval` cards so the page only highlights actionable work plus fallback cards for ready/in-production/completed concepts.
+
+2. **Forever Shining Sidebar Integration**
+   - Updated `components/AccountNav.tsx` to render inside the persistent left sidebar with the Forever Shining logo lockup, gold-accented cards, signed-in admin block, and contextual help footer so visiting `/my-account` inherits the same navigation patterns as the designer steps.
+   - The left rail now mirrors the designer menu’s gradient, spacing, and typography, giving the account workspace the same premium look as “01 Setup” while keeping quick-enquiry entry points.
+
+3. **Admin Seed & Postgres Guardrails**
+   - Seeded a default admin record (`admin@forevershining.com` / `admin`) directly in Postgres so QA can log into the rebuilt My Account hub immediately, pairing it with a profile row for future role-based features.
+   - Hardened `app/layout.tsx` catalog calls by wrapping the materials/shapes/borders/motifs fetch Promise in a try/catch so local dev keeps running even when the Postgres catalog tables are empty or offline (logs the error and falls back to empty arrays).
+
+### ⚠️ Known Issues (February 25, 2026)
+- My Account remains a statically rendered dashboard; logging in as admin does not yet unlock role-based controls or an actual project workflow beyond the saved-design summaries.
 
 ## Current Status (2026-02-24)
 
@@ -37,8 +128,24 @@
 2. **Granite/YAG Crop Stability**
    - Resolved the regression where the “Adjust Size” slider snap-back fought user input by eliminating the auto-resize effect after load; granite/YAG products continue to respect flexible height sliders while keeping the new mask-fit math.
 
+3. **Postgres Schema + Env Template**
+   - Added `sql/postgres-schema.sql`, a clean start-from-scratch schema for accounts, projects, catalog reference tables (materials/shapes/borders/motifs), orders, payments, and audit logs; includes seed rows so the designer panels have data immediately after bootstrap.
+   - `.env.local.example` now ships with a default `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner`; create the database via `psql -U postgres -c "CREATE DATABASE headstonesdesigner;"` and then run `psql -U postgres -d headstonesdesigner -f sql/postgres-schema.sql`.
+
+4. **Drizzle ORM Data Layer**
+   - Installed `drizzle-orm`, `postgres`, `drizzle-kit`, and `tsx`, then defined the full 15-table schema in `lib/db/schema.ts`, connection helpers in `lib/db/index.ts`, and a typed catalog API in `lib/catalog-db.ts` with matching docs (`DRIZZLE_SETUP.md`, `DRIZZLE_IMPLEMENTATION.md`).
+   - Added `drizzle.config.ts`, generated migrations, and wired npm scripts (`drizzle:push`, `drizzle:studio`) so local dev and Vercel builds share the same type-safe queries.
+
+5. **Sidebar Selectors on Live Postgres Data**
+   - `app/layout.tsx` now fetches catalog datasets server-side, maps them through `lib/catalog-mappers.ts`, and hydrates the designer store so `MaterialSelector`, `ShapeSelector`, `BorderSelector`, and `MotifSelector` pull live rows instead of JSON mocks.
+   - Selector components gained graceful asset fallbacks, loading states, and category segmentation; `SIDEBAR_INTEGRATION_COMPLETE.md` documents the pipeline from Next.js layout → mappers → Zustand store → 3D canvas.
+
+6. **Catalog Seed Expansion (40 Items)**
+   - Populated 10 materials, 8 shapes, 7 borders, and 15 motifs via `sql/seed-data.sql`, matching realistic pricing tiers, metadata, and tag sets for filtering; `SEED_DATA_EXPANSION.md` captures the dataset.
+   - Verified queries via `npm run drizzle:test` (catalog harness) and ensured `.env.local` points to `postgresql://postgres:postgres@localhost:5432/headstonesdesigner` for immediate local usage.
+
 ### ⚠️ Known Issues (February 24, 2026)
-- None currently reported.
+- Legacy Three.js/image panel files still emit pre-existing TypeScript errors unrelated to the new catalog pipeline; they need a dedicated cleanup pass but do not block dev server usage.
 
 ## Current Status (2026-02-23)
 

@@ -23,6 +23,7 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculatePrice } from '#/lib/xml-parser';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
+import ProjectActions from '#/components/ProjectActions';
 
 type CheckPriceGridProps = {
   initialImagePricing?: ImagePricingMap | null;
@@ -249,6 +250,18 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const subtotal = headstonePrice + basePrice + additionsPrice + motifsPrice + inscriptionPrice + imagePriceTotal;
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + tax;
+
+  const projectPricing = {
+    headstonePrice,
+    basePrice,
+    additionsPrice,
+    motifsPrice,
+    inscriptionPrice,
+    imagePriceTotal,
+    subtotal,
+    tax,
+    total,
+  };
 
   // Get detailed addition items
   const additionItems = useMemo(() => {
@@ -608,9 +621,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                 >
                   Request Quote
                 </button>
-                <button className="w-full rounded-full border-2 border-white/20 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-white/10 hover:border-[#cfac6c]/50">
-                  Save Design
-                </button>
+                <ProjectActions pricing={projectPricing} />
               </div>
 
               {/* Notes */}

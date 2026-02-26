@@ -59,3 +59,7 @@ text.txt
 
 # Large SEO template backups (excluded from build for performance)
 /lib/.backup/**/*.bak
+
+# Database exports (contain sensitive data)
+/database-exports/
+*.sql

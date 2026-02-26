@@ -2,19 +2,12 @@
 
 import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
 import { bronzes } from '#/app/_internal/_data';
 
-type Material = {
-  id: string;
-  name: string;
-  image: string;
-  category: string;
-};
-
 type MaterialSelectorProps = {
-  materials: Material[];
+  materials: MaterialOption[];
   disableInternalScroll?: boolean;
 };
 
@@ -32,6 +25,29 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const productId = useHeadstoneStore((s) => s.productId);
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
+
+  const resolveAssetPath = (value: string | null | undefined, basePath: string) => {
+    if (!value) return null;
+    if (value.startsWith('http')) return value;
+    if (value.startsWith('/')) return value;
+    return `${basePath}${value}`;
+  };
+
+  const buildTextureUrl = (material: MaterialOption) => {
+    const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
+    return (
+      resolveAssetPath(material.textureUrl, basePath) ??
+      resolveAssetPath(material.image, basePath)
+    );
+  };
+
+  const buildThumbnailUrl = (material: MaterialOption, fallbackTexture: string | null) => {
+    const thumb = resolveAssetPath(material.thumbnailUrl, '/');
+    if (thumb) {
+      return thumb;
+    }
+    return fallbackTexture;
+  };
 
   // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
   const displayMaterials = useMemo(() => {
@@ -64,13 +80,13 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   // Determine current material URL based on what's being edited
   const currentMaterialUrl = editingObject === 'base' ? currentBaseMaterialUrl : currentHeadstoneMaterialUrl;
 
-  const handleMaterialSelect = (material: Material) => {
-    // Use phoenix textures for Bronze Plaque, forever textures for others
-    const materialUrl = isBronzePlaque 
-      ? `/textures/phoenix/l/${material.image}`
-      : `/textures/forever/l/${material.image}`;
+  const handleMaterialSelect = (material: MaterialOption) => {
+    const materialUrl = buildTextureUrl(material);
+    if (!materialUrl) {
+      return;
+    }
+
     setIsMaterialChange(true);
-    
     const targetObject = isPlaque ? 'headstone' : editingObject;
 
     if (targetObject === 'base') {
@@ -81,7 +97,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
     setSelected(targetObject);
     setEditingObject(targetObject);
-    
+
     setTimeout(() => setIsMaterialChange(false), 100);
   };
 
@@ -107,35 +123,33 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
         {displayMaterials.map((material) => {
-          // Use phoenix textures for Bronze Plaque, forever textures for others
-          const materialUrl = isBronzePlaque
-            ? `/textures/phoenix/l/${material.image}`
-            : `/textures/forever/l/${material.image}`;
-          const isSelected = currentMaterialUrl === materialUrl;
-          
+          const textureUrl = buildTextureUrl(material);
+          const thumbnailUrl = buildThumbnailUrl(material, textureUrl);
+          const isSelected = textureUrl ? currentMaterialUrl === textureUrl : false;
+          const coverSrc = thumbnailUrl ?? '/textures/forever/l/Imperial-Red.webp';
+
           return (
             <button
               key={material.id}
-              onClick={() => handleMaterialSelect(material)}
-              className="relative overflow-hidden cursor-pointer"
+              onClick={() => textureUrl && handleMaterialSelect(material)}
+              className="relative overflow-hidden cursor-pointer disabled:cursor-not-allowed"
               title={material.name}
+              disabled={!textureUrl}
             >
               {/* Material Image */}
-              <div className="relative aspect-square overflow-hidden">
+              <div className={`relative aspect-square overflow-hidden ${isSelected ? 'ring-2 ring-[#D7B356]' : ''}`}>
                 <Image
-                  src={materialUrl}
+                  src={coverSrc}
                   alt={material.name}
                   fill
-                  className={`object-cover ${
-                    isSelected ? 'border-2 border-[#D7B356]' : ''
-                  }`}
+                  className="object-cover"
                   sizes="100px"
                 />
               </div>
               
               {/* Material Name */}
               <div className="p-2 h-12 flex items-center justify-center">
-                <div className="text-xs text-slate-200 text-center line-clamp-2">
+                <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
                   {material.name}
                 </div>
               </div>

@@ -49,6 +49,9 @@ export default function ConditionalCanvas() {
   // Hide canvas on check-price page
   const isCheckPricePage = pathname === '/check-price';
   
+  // Hide canvas on my-account page
+  const isMyAccountPage = pathname === '/my-account';
+  
   // Show canvas on select-size page
   const isSelectSizePage = pathname === '/select-size';
   
@@ -57,7 +60,7 @@ export default function ConditionalCanvas() {
   
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage) {
+    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage) {
       hideOverlay();
     }
   }, [
@@ -71,12 +74,13 @@ export default function ConditionalCanvas() {
     isSelectMotifsPage,
     isSelectBorderPage,
     isCheckPricePage,
+    isMyAccountPage,
     isSelectSizePage,
     isInscriptionsPage,
     hideOverlay,
   ]);
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage) {
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage) {
     return null;
   }
 
