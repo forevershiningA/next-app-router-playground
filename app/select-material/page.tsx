@@ -9,13 +9,24 @@ export const metadata: Metadata = {
   description: 'Choose from premium granite and marble in various colours and finishes. Each stone selected for durability and lasting beauty.',
 };
 
-export default async function Page() {
-  const rawMaterials = await catalog.materials.findMany({ where: { isActive: true }, limit: 200 });
-  const materials = rawMaterials.map(mapMaterialRecord);
+export const dynamic = 'force-dynamic';
 
-  return (
-    <Suspense fallback={null}>
-      <MaterialSelectionGrid materials={materials} />
-    </Suspense>
-  );
+export default async function Page() {
+  try {
+    const rawMaterials = await catalog.materials.findMany({ where: { isActive: true }, limit: 200 });
+    const materials = rawMaterials.map(mapMaterialRecord);
+
+    return (
+      <Suspense fallback={null}>
+        <MaterialSelectionGrid materials={materials} />
+      </Suspense>
+    );
+  } catch (error) {
+    console.error('Failed to load materials:', error);
+    return (
+      <div className="p-8 text-center">
+        <p>Unable to load materials. Please try again later.</p>
+      </div>
+    );
+  }
 }

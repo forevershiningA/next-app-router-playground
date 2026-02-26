@@ -28,6 +28,11 @@ const catalog = {
   materials: {
     // Find single material
     find: async (options: MaterialFindOptions): Promise<Material | null> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return null;
+      }
+
       const conditions = [];
       
       if (options.where?.id !== undefined) {
@@ -54,6 +59,11 @@ const catalog = {
 
     // Find all materials matching criteria
     findMany: async (options: MaterialFindOptions = {}): Promise<Material[]> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return [];
+      }
+
       const conditions = [];
       
       if (options.where?.category !== undefined) {
@@ -79,6 +89,11 @@ const catalog = {
   shapes: {
     // Find single shape
     find: async (options: ShapeFindOptions): Promise<Shape | null> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return null;
+      }
+
       const conditions = [];
       
       if (options.where?.id !== undefined) {
@@ -105,6 +120,11 @@ const catalog = {
 
     // Find all shapes matching criteria
     findMany: async (options: ShapeFindOptions = {}): Promise<Shape[]> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return [];
+      }
+
       const conditions = [];
       
       if (options.where?.section !== undefined) {
@@ -130,6 +150,11 @@ const catalog = {
   borders: {
     // Find single border
     find: async (options: BorderFindOptions): Promise<Border | null> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return null;
+      }
+
       const conditions = [];
       
       if (options.where?.id !== undefined) {
@@ -156,6 +181,11 @@ const catalog = {
 
     // Find all borders matching criteria
     findMany: async (options: BorderFindOptions = {}): Promise<Border[]> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return [];
+      }
+
       const conditions = [];
       
       if (options.where?.category !== undefined) {
@@ -181,6 +211,11 @@ const catalog = {
   motifs: {
     // Find single motif
     find: async (options: MotifFindOptions): Promise<Motif | null> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return null;
+      }
+
       const conditions = [];
       
       if (options.where?.id !== undefined) {
@@ -207,6 +242,11 @@ const catalog = {
 
     // Find all motifs matching criteria
     findMany: async (options: MotifFindOptions = {}): Promise<Motif[]> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return [];
+      }
+
       const conditions = [];
       
       if (options.where?.category !== undefined) {
