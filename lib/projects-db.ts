@@ -7,6 +7,13 @@ const GUEST_PASSWORD_PLACEHOLDER = 'guest-placeholder';
 
 let cachedGuestAccountId: string | null = null;
 
+function ensureDb() {
+  if (!db) {
+    throw new Error('Database not configured. Please set DATABASE_URL environment variable.');
+  }
+  return db;
+}
+
 const toSummary = (record: typeof projects.$inferSelect): ProjectSummary => ({
   id: record.id,
   title: record.title,
@@ -28,11 +35,13 @@ const withState = (record: typeof projects.$inferSelect): ProjectRecordWithState
 });
 
 async function ensureGuestAccount() {
+  const database = ensureDb();
+  
   if (cachedGuestAccountId) {
     return cachedGuestAccountId;
   }
 
-  const existing = await db.query.accounts.findFirst({
+  const existing = await database.query.accounts.findFirst({
     where: eq(accounts.email, GUEST_ACCOUNT_EMAIL),
   });
 
@@ -41,7 +50,7 @@ async function ensureGuestAccount() {
     return existing.id;
   }
 
-  const [created] = await db
+  const [created] = await database
     .insert(accounts)
     .values({
       email: GUEST_ACCOUNT_EMAIL,
@@ -70,6 +79,7 @@ type SaveProjectInput = {
 };
 
 export async function saveProjectRecord(input: SaveProjectInput): Promise<ProjectSummary> {
+  const database = ensureDb();
   const accountId = await ensureGuestAccount();
   const title = input.title?.trim() || 'Untitled Design';
   const status = input.status ?? 'draft';
@@ -78,7 +88,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
   const totalPriceCents = typeof input.totalPriceCents === 'number' ? input.totalPriceCents : null;
 
   if (input.projectId) {
-    const [updated] = await db
+    const [updated] = await database
       .update(projects)
       .set({
         accountId,
@@ -104,7 +114,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
     return toSummary(updated);
   }
 
-  const [created] = await db
+  const [created] = await database
     .insert(projects)
     .values({
       accountId,
@@ -125,7 +135,8 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
 }
 
 export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]> {
-  const results = await db
+  const database = ensureDb();
+  const results = await database
     .select({
       id: projects.id,
       title: projects.title,
@@ -153,7 +164,8 @@ export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]
 }
 
 export async function getProjectRecord(projectId: string): Promise<ProjectRecordWithState | null> {
-  const record = await db.query.projects.findFirst({
+  const database = ensureDb();
+  const record = await database.query.projects.findFirst({
     where: eq(projects.id, projectId),
   });
 
@@ -165,7 +177,8 @@ export async function getProjectRecord(projectId: string): Promise<ProjectRecord
 }
 
 export async function deleteProjectRecord(projectId: string): Promise<boolean> {
-  const result = await db
+  const database = ensureDb();
+  const result = await database
     .delete(projects)
     .where(eq(projects.id, projectId))
     .returning();
