@@ -21,9 +21,19 @@ const nextConfig = {
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
   outputFileTracingExcludes: {
     '*': [
-      'public/ml/**/*',     // Exclude from function bundles (still publicly accessible via .vercelignore rules)
+      'public/ml/**/*',
       'public/shapes/**/*',
       'public/additions/**/*',
+      'public/png/**/*',           // 343 MB motifs + 34 MB emblems
+      'public/emblems/**/*',       // 33 MB
+      'public/hdri/**/*',          // 27 MB HDR files
+      'public/saved-designs/**/*', // 20 MB screenshots
+      'public/textures/**/*',      // 17 MB
+      'public/json/firstnames_*.json', // 15 MB
+      'public/backgrounds/**/*',   // Large background images
+      'public/xml/**/*',           // Large XML files
+      'public/data/**/*',          // Design data
+      'node_modules/@img/**/*',    // Sharp dependencies (32 MB)
     ],
   },
   turbopack: { root: process.cwd() },
