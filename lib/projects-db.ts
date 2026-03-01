@@ -21,6 +21,7 @@ const toSummary = (record: typeof projects.$inferSelect): ProjectSummary => ({
   totalPriceCents: record.totalPriceCents ?? null,
   currency: record.currency ?? 'AUD',
   screenshotPath: record.screenshotPath ?? null,
+  thumbnailPath: record.thumbnailPath ?? null,
   updatedAt: record.updatedAt.toISOString(),
   createdAt: record.createdAt.toISOString(),
 });
@@ -74,6 +75,7 @@ type SaveProjectInput = {
   shapeId?: number | null;
   borderId?: number | null;
   screenshotPath?: string | null;
+  thumbnailPath?: string | null;
   designState: DesignerSnapshot;
   pricingBreakdown?: PricingBreakdown | null;
 };
@@ -100,6 +102,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
         shapeId: input.shapeId ?? null,
         borderId: input.borderId ?? null,
         screenshotPath: input.screenshotPath ?? null,
+        thumbnailPath: input.thumbnailPath ?? null,
         designState: input.designState,
         pricingBreakdown,
         updatedAt: new Date(),
@@ -126,6 +129,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
       shapeId: input.shapeId ?? null,
       borderId: input.borderId ?? null,
       screenshotPath: input.screenshotPath ?? null,
+      thumbnailPath: input.thumbnailPath ?? null,
       designState: input.designState,
       pricingBreakdown,
     })
@@ -144,6 +148,7 @@ export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]
       totalPriceCents: projects.totalPriceCents,
       currency: projects.currency,
       screenshotPath: projects.screenshotPath,
+      thumbnailPath: projects.thumbnailPath,
       updatedAt: projects.updatedAt,
       createdAt: projects.createdAt,
     })
@@ -158,6 +163,7 @@ export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]
     totalPriceCents: row.totalPriceCents ?? null,
     currency: row.currency ?? 'AUD',
     screenshotPath: row.screenshotPath ?? null,
+    thumbnailPath: row.thumbnailPath ?? null,
     updatedAt: row.updatedAt.toISOString(),
     createdAt: row.createdAt.toISOString(),
   }));

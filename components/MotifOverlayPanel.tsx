@@ -14,6 +14,7 @@ export default function MotifOverlayPanel() {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const productId = useHeadstoneStore((s) => s.productId);
   const addMotif = useHeadstoneStore((s) => s.addMotif);
+  const motifsCatalog = useHeadstoneStore((s) => s.motifsCatalog);
   
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -184,14 +185,14 @@ export default function MotifOverlayPanel() {
 
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
-    if (!searchQuery) return data.motifs;
+    const categories = motifsCatalog.length > 0 ? motifsCatalog : data.motifs;
+    if (!searchQuery) return categories;
     
     const query = searchQuery.toLowerCase();
-    return data.motifs.filter(motif => 
-      motif.name.toLowerCase().includes(query) ||
-      motif.src.toLowerCase().includes(query)
+    return categories.filter(motif => 
+      motif.name.toLowerCase().includes(query)
     );
-  }, [searchQuery]);
+  }, [searchQuery, motifsCatalog]);
 
   if (!isOpen) {
     return null;
@@ -216,7 +217,7 @@ export default function MotifOverlayPanel() {
                 }`}
               >
                 <h1 className="text-base leading-none font-semibold">
-                  {viewMode === 'categories' ? 'Select Motif Category' : `Motifs: ${selectedCategoryIndex !== null ? getMotifCategoryName(data.motifs[selectedCategoryIndex].name) : ''}`}
+                  {viewMode === 'categories' ? 'Select Motif Category' : `Motifs: ${selectedCategoryIndex !== null ? getMotifCategoryName((motifsCatalog.length > 0 ? motifsCatalog : data.motifs)[selectedCategoryIndex].name) : ''}`}
                 </h1>
               </div>
 
@@ -310,9 +311,10 @@ export default function MotifOverlayPanel() {
             <div className="grid grid-cols-3 gap-2">
               {filteredCategories.map((motif, index) => {
                 // Find the actual index in the full array
-                const actualIndex = data.motifs.indexOf(motif);
-                // Get thumbnail path from shapes/motifs/s/ instead of /motifs/
-                const thumbnailPath = motif.img.replace('/motifs/', '/shapes/motifs/s/');
+                const fullArray = motifsCatalog.length > 0 ? motifsCatalog : data.motifs;
+                const actualIndex = fullArray.indexOf(motif);
+                // Get thumbnail path from png/motifs/s/
+                const thumbnailPath = motif.thumbnailPath || motif.previewUrl || motif.img?.replace('/motifs/', '/png/motifs/s/');
                 
                 return (
                   <button

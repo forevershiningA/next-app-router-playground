@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Quote - test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .quote-container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .quote-date {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    .mdc-data-table__content {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .mdc-data-table__content th {
+      background: #f0f0f0;
+      padding: 12px;
+      text-align: left;
+      font-weight: bold;
+      border-bottom: 2px solid #ddd;
+    }
+    .mdc-data-table__content td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+    .mdc-data-table__content tr:hover {
+      background: #f9f9f9;
+    }
+    .mdc-data-table__content p {
+      margin: 0;
+      line-height: 1.6;
+    }
+    .mdc-data-table__content strong {
+      color: #333;
+    }
+    .table-header-for-mobile {
+      display: none;
+      font-weight: bold;
+      color: #666;
+    }
+    .total-flex {
+      font-weight: bold;
+      background: #f9f9f9;
+    }
+    .total-title {
+      text-align: right;
+      font-size: 18px;
+    }
+    .empty-cell {
+      border: none;
+    }
+    @media (max-width: 768px) {
+      .mdc-data-table__content thead {
+        display: none;
+      }
+      .mdc-data-table__content tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+      }
+      .mdc-data-table__content td {
+        display: block;
+        text-align: right;
+        border: none;
+        padding: 8px 12px;
+      }
+      .table-header-for-mobile {
+        display: inline;
+        float: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quote-container">
+    <h1>Design Quote</h1>
+    <p class="quote-date">Design "test" - 27.02.2026</p>
+    
+    <table class="mdc-data-table__content">
+      <thead>
+        <tr>
+          <th width="55%">Product</th>
+          <th width="15%">Qty</th>
+          <th width="15%">Price</th>
+          <th width="15%">Item Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr>
+      <td>
+        <span class="table-header-for-mobile">Product</span>
+        <p>
+          <strong>Product ID: 124 - test</strong><br>
+          Shape: curved gable<br>
+          Material: Imperial Red<br>
+          Size: 24″ x 24″
+        </p>
+      </td>
+      <td><span class="table-header-for-mobile">Qty</span>1</td>
+      <td><span class="table-header-for-mobile">Price</span>$2180.95</td>
+      <td><span class="table-header-for-mobile">Item Total</span>$2180.95</td>
+    </tr>
+  
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_155_13<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_154_15<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_184_13<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_129_03<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_129_03<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_016_05<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: 1_154_15<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="table-header-for-mobile">Product</span>
+          <p>
+            <strong>Motif (included)</strong><br>
+            File: cross_001<br>
+            Color: #000000
+          </p>
+        </td>
+        <td><span class="table-header-for-mobile">Qty</span>1</td>
+        <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+        <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+      </tr>
+    
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              KLEIN<br>
+              3.0″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>5</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              MAY 13, 1927<br>
+              0.7″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>12</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              FEB 2, 2024<br>
+              0.7″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>11</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              OCT 2, 1933<br>
+              0.7″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>11</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              SEPT 18, 2022<br>
+              0.7″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>13</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              May Heaven&#039;s eternal happiness be thine.<br>
+              1.0″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>40</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              TERESA ISABELLA<br>
+              1.0″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>15</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              ISABEL WADE<br>
+              0.9″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>11</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr>
+          <td>
+            <span class="table-header-for-mobile">Product</span>
+            <p>
+              <strong>Inscription (included)</strong><br>
+              MIGUEL THOMPSON<br>
+              0.9″ Garamond, color: #000000
+            </p>
+          </td>
+          <td><span class="table-header-for-mobile">Qty</span>15</td>
+          <td><span class="table-header-for-mobile">Price</span>$0.00</td>
+          <td><span class="table-header-for-mobile">Item Total</span>$0.00</td>
+        </tr>
+      
+        <tr class="total-flex">
+          <td class="empty-cell"></td>
+          <td class="empty-cell"></td>
+          <td class="total-title">Total</td>
+          <td>$2180.95</td>
+        </tr>
+        <tr>
+          <td style="display:block">Price is in US dollars. Shipping inclusive</td>
+          <td class="empty-cell"></td>
+          <td class="empty-cell"></td>
+          <td class="empty-cell"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

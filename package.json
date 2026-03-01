@@ -20,7 +20,8 @@
     "db:setup": "node scripts/setup-database.js",
     "db:verify": "node scripts/verify-database.js",
     "db:export": "node scripts/export-database.js",
-    "db:import": "node scripts/import-to-neon.js"
+    "db:import": "node scripts/import-to-neon.js",
+    "db:sync": "node scripts/sync-to-neon.js"
   },
   "dependencies": {
     "@heroicons/react": "2.2.0",

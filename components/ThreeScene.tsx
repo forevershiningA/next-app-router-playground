@@ -302,7 +302,7 @@ export default function ThreeScene() {
               dpr={[1, 2]}
               gl={{ 
                 alpha: true,
-                preserveDrawingBuffer: false,
+                preserveDrawingBuffer: true,
                 antialias: true,
                 powerPreference: 'high-performance',
                 failIfMajorPerformanceCaveat: false,

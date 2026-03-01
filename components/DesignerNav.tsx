@@ -493,105 +493,141 @@ export default function DesignerNav() {
             </div>
             
             <div className="space-y-4">
-              {/* Size Slider - Discrete size options */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <label className="text-sm font-medium text-gray-200 w-20">Size</label>
-                  <div className="flex items-center gap-2 justify-end">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const currentSize = Math.round(activeAdditionOffset.sizeVariant ?? 1);
-                        const newVal = Math.max(1, currentSize - 1);
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          sizeVariant: newVal,
-                        });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Decrease size"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      min={1}
-                      max={4}
-                      step={1}
-                      value={Math.round(activeAdditionOffset?.sizeVariant ?? 1)}
-                      onChange={(e) => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const val = parseInt(e.target.value);
-                        if (!isNaN(val)) {
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            sizeVariant: val,
-                          });
-                        }
-                      }}
-                      onBlur={(e) => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const val = parseInt(e.target.value);
-                        if (isNaN(val) || val < 1) {
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            sizeVariant: 1,
-                          });
-                        } else if (val > 4) {
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            sizeVariant: 4,
-                          });
-                        }
-                      }}
-                      className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const currentSize = Math.round(activeAdditionOffset.sizeVariant ?? 1);
-                        const newVal = Math.min(4, currentSize + 1);
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          sizeVariant: newVal,
-                        });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Increase size"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
+              {/* Size Slider - Discrete size options (only show if addition has multiple sizes) */}
+              {(() => {
+                const hasSizeData = activeAddition?.sizes && activeAddition.sizes.length > 0;
+                const maxSize = activeAddition?.sizes?.length ?? 1;
+                
+                // If no size data at all, show info message
+                if (!hasSizeData) {
+                  return (
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <label className="text-sm font-medium text-gray-200">Size</label>
+                        <div className="text-sm text-gray-400">Default size</div>
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // If only 1 size, show a readonly display instead of slider
+                if (maxSize === 1) {
+                  const singleSize = activeAddition.sizes[0];
+                  return (
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <label className="text-sm font-medium text-gray-200">Size</label>
+                        <div className="text-sm text-gray-400">
+                          {`${singleSize.width}×${singleSize.height}mm`}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // Show slider for multiple sizes
+                return (
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-sm font-medium text-gray-200 w-20">Size</label>
+                      <div className="flex items-center gap-2 justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!selectedAdditionId || !activeAdditionOffset) return;
+                            const currentSize = Math.round(activeAdditionOffset.sizeVariant ?? 1);
+                            const newVal = Math.max(1, currentSize - 1);
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              sizeVariant: newVal,
+                            });
+                          }}
+                          className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                          aria-label="Decrease size"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                          </svg>
+                        </button>
+                        <input
+                          type="number"
+                          min={1}
+                          max={maxSize}
+                          step={1}
+                          value={Math.round(activeAdditionOffset?.sizeVariant ?? 1)}
+                          onChange={(e) => {
+                            if (!selectedAdditionId || !activeAdditionOffset) return;
+                            const val = parseInt(e.target.value);
+                            if (!isNaN(val)) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeAdditionOffset,
+                                sizeVariant: val,
+                              });
+                            }
+                          }}
+                          onBlur={(e) => {
+                            if (!selectedAdditionId || !activeAdditionOffset) return;
+                            const val = parseInt(e.target.value);
+                            if (isNaN(val) || val < 1) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeAdditionOffset,
+                                sizeVariant: 1,
+                              });
+                            } else if (val > maxSize) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeAdditionOffset,
+                                sizeVariant: maxSize,
+                              });
+                            }
+                          }}
+                          className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!selectedAdditionId || !activeAdditionOffset) return;
+                            const currentSize = Math.round(activeAdditionOffset.sizeVariant ?? 1);
+                            const newVal = Math.min(maxSize, currentSize + 1);
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              sizeVariant: newVal,
+                            });
+                          }}
+                          className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                          aria-label="Increase size"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="range"
+                        min={1}
+                        max={maxSize}
+                        step={1}
+                        value={Math.round(activeAdditionOffset?.sizeVariant ?? 1)}
+                        onChange={(e) => {
+                          if (selectedAdditionId && activeAdditionOffset) {
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              sizeVariant: parseInt(e.target.value),
+                            });
+                          }
+                        }}
+                        className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                        <span>{activeAddition?.sizes?.[0] ? `${activeAddition.sizes[0].width}×${activeAddition.sizes[0].height}mm` : 'Size 1'}</span>
+                        <span>{activeAddition?.sizes?.[maxSize - 1] ? `${activeAddition.sizes[maxSize - 1].width}×${activeAddition.sizes[maxSize - 1].height}mm` : `Size ${maxSize}`}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min={1}
-                    max={4}
-                    step={1}
-                    value={Math.round(activeAdditionOffset?.sizeVariant ?? 1)}
-                    onChange={(e) => {
-                      if (selectedAdditionId && activeAdditionOffset) {
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          sizeVariant: parseInt(e.target.value),
-                        });
-                      }
-                    }}
-                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                    <span>Size 1</span>
-                    <span>Size 4</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })()}
+              
               
               {/* Rotation Slider - Only shown for applications, not for statues/vases */}
               {!isStatueOrVase && (
@@ -1142,6 +1178,23 @@ export default function DesignerNav() {
       // Get all state from store
       const state = useHeadstoneStore.getState();
       
+      // Calculate current price
+      const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
+      const basePrice = state.showBase && catalog?.product?.basePriceModel 
+        ? calculatePrice(catalog.product.basePriceModel, baseQuantity) 
+        : 0;
+      
+      // Calculate motif prices
+      let motifsPrice = 0;
+      if (state.selectedMotifs && state.selectedMotifs.length > 0) {
+        motifsPrice = state.selectedMotifs.reduce((total, motif) => {
+          return total + calculateMotifPrice(motif, catalog?.product);
+        }, 0);
+      }
+      
+      const totalPrice = headstonePrice + basePrice + motifsPrice;
+      const totalPriceCents = Math.round(totalPrice * 100);
+      
       // Prepare design state matching DesignerSnapshot schema
       const designState = {
         version: 1,
@@ -1200,6 +1253,11 @@ export default function DesignerNav() {
           title: designName,
           designState,
           status: 'draft',
+          totalPriceCents,
+          currency: 'AUD',
+          materialId: catalog?.material?.id || null,
+          shapeId: catalog?.shape?.id || null,
+          borderId: catalog?.border?.id || null,
         }),
       });
 

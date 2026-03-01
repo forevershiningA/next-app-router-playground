@@ -2,8 +2,33 @@ import { NextRequest, NextResponse } from 'next/server';
 import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/lib/projects-db';
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { saveDesignFiles, designToXML, designToP3D, generatePriceQuoteHTML } from '#/lib/fileStorage';
+import { writeFile } from 'fs/promises';
+import path from 'path';
 
 const MAX_LIST_LIMIT = 50;
+
+// Helper function to remove base64 encoded images from design state
+function cleanDesignState(designState: DesignerSnapshot): DesignerSnapshot {
+  const cleaned = { ...designState };
+  
+  // Remove screenshot from metadata
+  if (cleaned.metadata?.screenshot) {
+    cleaned.metadata = {
+      ...cleaned.metadata,
+      screenshot: undefined,
+    };
+  }
+  
+  // Remove base64 data from selected images if they exist
+  if (cleaned.selectedImages && Array.isArray(cleaned.selectedImages)) {
+    cleaned.selectedImages = cleaned.selectedImages.map((img: any) => ({
+      ...img,
+      data: img.url || img.data, // Keep URL, remove base64 data
+    }));
+  }
+  
+  return cleaned;
+}
 
 export async function GET(request: NextRequest) {
   const limitParam = request.nextUrl.searchParams.get('limit');
@@ -41,8 +66,10 @@ export async function POST(request: NextRequest) {
       ? Math.round(body.totalPriceCents)
       : null;
 
-    // Save design files first to get the screenshot path
+    // Save design files first to get the screenshot and thumbnail paths
     let screenshotPath: string | null = null;
+    let thumbnailPath: string | null = null;
+    let tempSummary: any = null;
     
     try {
       const screenshotDataUrl = body.designState.metadata?.screenshot;
@@ -55,8 +82,9 @@ export async function POST(request: NextRequest) {
         screenshotBuffer = Buffer.from('');
       }
 
+      console.log('[api/projects] Creating temporary project record...');
       // Create temporary project to get ID
-      const tempSummary = await saveProjectRecord({
+      tempSummary = await saveProjectRecord({
         projectId: body.projectId,
         title: body.title ?? 'Untitled Design',
         status: body.status ?? 'draft',
@@ -68,6 +96,7 @@ export async function POST(request: NextRequest) {
         designState: body.designState,
         pricingBreakdown: body.pricingBreakdown ?? null,
       });
+      console.log('[api/projects] Temporary project created:', tempSummary.id);
 
       const designData = {
         id: tempSummary.id,
@@ -94,13 +123,47 @@ export async function POST(request: NextRequest) {
       );
       
       screenshotPath = filePaths.screenshot;
+      thumbnailPath = filePaths.thumbnail;
+
+      // Now create clean design data with URLs instead of base64
+      const cleanDesignData = {
+        id: tempSummary.id,
+        name: tempSummary.title,
+        productId: body.designState.productId,
+        price: totalPriceCents ? totalPriceCents / 100 : 0,
+        quote: `Design "${tempSummary.title}" - ${new Date().toLocaleDateString()}`,
+        createdAt: tempSummary.createdAt,
+        screenshot: filePaths.screenshot,
+        thumbnail: filePaths.thumbnail,
+        data: cleanDesignState(body.designState),
+      };
+
+      // Regenerate files with clean data (URLs instead of base64)
+      const cleanXmlData = designToXML(cleanDesignData);
+      const cleanHtmlData = generatePriceQuoteHTML(cleanDesignData);
+      const cleanP3dData = designToP3D(cleanDesignData);
+
+      // Overwrite the files with clean versions
+      await Promise.all([
+        writeFile(path.join(process.cwd(), 'public', filePaths.json.substring(1)), JSON.stringify(cleanDesignData, null, 2)),
+        writeFile(path.join(process.cwd(), 'public', filePaths.xml.substring(1)), cleanXmlData),
+        writeFile(path.join(process.cwd(), 'public', filePaths.html.substring(1)), cleanHtmlData),
+        writeFile(path.join(process.cwd(), 'public', filePaths.p3d.substring(1)), cleanP3dData),
+      ]);
     } catch (fileError) {
       console.error('[api/projects] Failed to save design files:', fileError);
+      console.error('[api/projects] Error details:', fileError instanceof Error ? fileError.message : fileError);
+      console.error('[api/projects] Stack:', fileError instanceof Error ? fileError.stack : 'No stack trace');
     }
 
-    // Now update with screenshot path
+    // Ensure we have a tempSummary
+    if (!tempSummary) {
+      throw new Error('Failed to create project record');
+    }
+
+    // Now update with screenshot and thumbnail paths
     const summary = await saveProjectRecord({
-      projectId: body.projectId,
+      projectId: tempSummary.id, // Use the temp project ID to update it
       title: body.title ?? 'Untitled Design',
       status: body.status ?? 'draft',
       totalPriceCents,
@@ -109,6 +172,7 @@ export async function POST(request: NextRequest) {
       shapeId: body.shapeId ?? null,
       borderId: body.borderId ?? null,
       screenshotPath,
+      thumbnailPath,
       designState: body.designState,
       pricingBreakdown: body.pricingBreakdown ?? null,
     });

@@ -80,6 +80,7 @@ export const mapMotifRecord = (motif: any): MotifCatalogItem => {
     id: motif.sku,
     name: motif.name,
     category: motif.category,
+    categoryName: motif.categoryName ?? motif.name,
     svgUrl,
     previewUrl: motif.previewUrl ?? (attrs.previewUrl as string | undefined) ?? svgUrl,
     priceCents: motif.priceCents ?? null,

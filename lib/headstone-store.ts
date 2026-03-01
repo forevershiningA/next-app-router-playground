@@ -106,6 +106,7 @@ export type MotifCatalogItem = {
   id: string;
   name: string;
   category: string;
+  categoryName?: string;
   svgUrl?: string | null;
   previewUrl?: string | null;
   priceCents?: number | null;

@@ -1,7 +1,7 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-26  
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL
+**Last Updated:** 2026-02-28  
+**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
 
@@ -28,6 +28,109 @@
 20. [Development Workflow](#development-workflow)
 
 ---
+
+## Current Status (2026-02-28)
+
+### ✅ Recent Changes (February 28, 2026)
+1. **Additions Migration to PostgreSQL - COMPLETE**
+   - **XML Parsing System**: Created custom regex-based parser for `public/xml/en_EN/motifs-biondan.xml`
+     - Extracts all product data including size variants, dimensions, pricing
+     - Handles duplicate IDs by appending suffixes (e.g., `B2581S_2`, `B2581S_3`)
+     - Outputs structured JSON with all addition metadata
+   
+   - **Database Schema**: Added `additions` table to PostgreSQL
+     - Columns: id, name, type, categoryId, categoryName, thumbnailUrl, model3dUrl
+     - **sizes**: JSONB column storing array of size variants with:
+       - variant (1-4), code, width/height/depth (mm), weight (kg)
+       - availability flag, wholesale/retail pricing, notes
+     - Indexes and timestamps for efficient querying
+   
+   - **Migration Scripts**: Created automated seeding pipeline
+     - `scripts/parse-additions-xml.ts`: XML → JSON converter
+     - `scripts/seed-additions.ts`: PostgreSQL seeder with direct connection
+     - Seeded 82 additions across 5 categories
+   
+   - **Data Statistics**:
+     - **Total**: 82 additions migrated
+     - **Categories**: Biondan Bronze (24), Crosses (13), Roses (24), Statues (11), Vases (10)
+     - **Size Variants**: 60 single-size (73%), 22 multi-size (27%), max 4 variants
+     - **Example**: B2225 has 2 sizes (100×100×20mm @ $131.74, 140×140×20mm @ $162.79)
+   
+   - **Next Steps**: Update DesignerNav size slider to:
+     - Fetch selected addition's data from database
+     - Show only available size variants (not generic 1-4)
+     - Display actual dimensions (e.g., "100×100mm", "140×140mm")
+     - Update pricing based on selected size variant
+   
+   - **Files Created**:
+     - `scripts/parse-additions-xml.ts`, `scripts/seed-additions.ts`
+     - `data/additions-parsed.json` (82 additions with full metadata)
+     - `ADDITIONS_MIGRATION_COMPLETE.md` (comprehensive documentation)
+   
+   - **Files Modified**:
+     - `lib/db/schema.ts`: Added additions table schema
+     - `drizzle/0001_kind_wide_pack.sql`: Migration SQL
+
+### ✅ Recent Changes (February 27, 2026)
+1. **My Account Page - Complete Redesign**
+   - **Redesigned More Popup** - Comprehensive design quote modal
+     - Wider layout (max-w-4xl) for better content display
+     - Clickable thumbnail preview opens full-resolution image in separate modal
+     - Embedded HTML quote iframe showing detailed product table
+     - Share options at top (Email, URL, Facebook, Twitter/X, LinkedIn) in horizontal bar
+     - Action buttons: Export PDF, Edit Design, Buy Now, Delete, Close (all in one row)
+     - Modal height reduced by 15% for more compact display
+     - Delete button moved after Buy Now, Close button at end with ml-auto
+     - No backdrop blur (changed to simple 90% black overlay for performance)
+   
+   - **Thumbnail Display** - Real-size thumbnails in list and modals
+     - Thumbnails show at natural size (no oversizing/stretching)
+     - List view uses `thumbnailPath` field from database
+     - Full screenshot displayed only in preview modal
+     - Centered thumbnail in More popup with hover effect
+   
+   - **HTML Quote Generation** - Detailed product breakdown
+     - **NO screenshots** in HTML - only product table
+     - Main product row: Product ID, name, shape, material, size
+     - Motif rows: Each motif with file name, color (marked as included)
+     - Image rows: Each photo/ceramic with size
+     - Inscription rows: Each text with font, size, color, character count
+     - Total row with final price sum
+     - Dark gradient background matching popup (`linear-gradient(to bottom right, #1a1410, #0f0a07)`)
+     - White text throughout for consistency with app theme
+     - Responsive table design with mobile-friendly styles
+   
+   - **Screenshot Generation System**
+     - Canvas screenshot captured during save
+     - Thumbnail generated (300x200px max) using Sharp library
+     - Both stored in year/month directory structure
+     - Paths: `/saved-designs/screenshots/{yyyy}/{mm}/design_{id}.png`
+     - Thumbnails: `/saved-designs/thumbnails/{yyyy}/{mm}/design_{id}_thumb.png`
+   
+   - **Database Integration**
+     - Added `thumbnailPath` field to projects table
+     - Updated `listProjectSummaries()` to SELECT thumbnailPath
+     - Product name extracted from `designState.productId`
+     - Price stored as `totalPriceCents` (integer cents)
+   
+   - **Save Design Fixes**
+     - Fixed variable scope bug: `tempSummary` declared outside try block
+     - Removed duplicate saves by using `tempSummary.id` for update
+     - Added safety check before using tempSummary
+     - Console logging for debugging product name lookup
+   
+   - **Performance Optimizations**
+     - Removed `backdrop-blur-sm` from modals (causes slowness)
+     - Modal backgrounds use simple `bg-black/90` instead
+     - More popup height reduced by 15% (iframe: 450px → 380px)
+     - Tighter spacing throughout (mb-6 → mb-4, mb-3)
+
+2. **File Export System**
+   - **Clean Export Files** - No embedded images in exports
+     - XML, JSON, P3D files use URL references instead of base64 screenshots
+     - Reduces file size dramatically
+     - Example: `screenshot: "/saved-designs/screenshots/2026/02/design_{id}.png"`
+     - Function: `cleanDesignState()` removes embedded image data
 
 ## Current Status (2026-02-26)
 

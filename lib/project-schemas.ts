@@ -110,6 +110,7 @@ export type ProjectSummary = {
   totalPriceCents: number | null;
   currency: string;
   screenshotPath: string | null;
+  thumbnailPath: string | null;
   updatedAt: string;
   createdAt: string;
 };

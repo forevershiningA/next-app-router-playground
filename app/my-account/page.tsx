@@ -6,6 +6,7 @@ import { UserCircleIcon } from '@heroicons/react/24/outline';
 
 import { getAllSavedDesigns, SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { generateDesignPDF } from '#/lib/pdf-generator';
+import { data } from '#/app/_internal/_data';
 
 type DesignStatus = 'awaiting-approval' | 'ready-to-order' | 'in-production' | 'completed' | 'draft';
 
@@ -42,11 +43,13 @@ type AccountDesignCard = {
   createdLabel: string;
   relativeUpdated: string;
   preview: string;
+  fullScreenshot: string;
   description: string;
   productName: string;
   status: DesignStatus;
   primaryActionLabel: string;
   destinationUrl: string;
+  htmlQuotePath?: string;
 };
 
 // Share functions
@@ -70,8 +73,22 @@ export default function MyAccountPage() {
   const [savedProjects, setSavedProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [moreModalOpen, setMoreModalOpen] = useState(false);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [selectedDesign, setSelectedDesign] = useState<AccountDesignCard | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [quoteHtml, setQuoteHtml] = useState<string>('');
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (moreModalOpen || imagePreviewOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [moreModalOpen, imagePreviewOpen]);
 
   useEffect(() => {
     async function fetchSavedProjects() {
@@ -208,10 +225,6 @@ export default function MyAccountPage() {
   };
 
   const handleDeleteDesign = async (designId: string) => {
-    if (!confirm('Are you sure you want to delete this design? This action cannot be undone.')) {
-      return;
-    }
-
     setIsDeleting(true);
     try {
       const response = await fetch(`/api/projects?id=${designId}`, {
@@ -225,10 +238,8 @@ export default function MyAccountPage() {
       // Remove the deleted project from the list
       setSavedProjects(prev => prev.filter(p => p.id !== designId));
       setMoreModalOpen(false);
-      alert('Design deleted successfully!');
     } catch (error) {
       console.error('Error deleting design:', error);
-      alert('Failed to delete design. Please try again.');
     } finally {
       setIsDeleting(false);
     }
@@ -356,133 +367,143 @@ export default function MyAccountPage() {
             )}
           </div>
 
-          {/* More Options Modal */}
+          {/* More Options Modal - Redesigned */}
           {moreModalOpen && selectedDesign && (
-            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-              <div className="relative w-full max-w-md mx-4 rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-4 shadow-2xl">
-                {/* Header */}
-                <div className="mb-2">
-                  <h3 className="text-base font-semibold text-white">Share & Manage</h3>
-                  <p className="text-xs text-white/60 truncate">{selectedDesign.title}</p>
-                </div>
-
-                {/* Design Preview Image - Smaller */}
-                <div className="mb-2">
-                  <div className="relative h-32 w-full overflow-hidden rounded-lg bg-black/40">
-                    <img
-                      src={selectedDesign.preview}
-                      alt={selectedDesign.title}
-                      className="h-full w-full object-cover"
-                    />
+            <div className="fixed inset-0 z-[9999] bg-black/90 overflow-y-auto">
+              <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="relative w-full max-w-4xl rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-4 shadow-2xl">
+                  {/* Header */}
+                  <div className="mb-4">
+                    <h2 className="text-xl font-semibold text-white">{selectedDesign.title}</h2>
+                    <p className="mt-1 text-xs text-white/60">Created: {selectedDesign.createdLabel}</p>
                   </div>
-                </div>
 
-                {/* Price & Quote Info - Compact */}
-                <div className="mb-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-white/70">Price:</span>
-                    <span className="font-semibold text-white">{selectedDesign.priceLabel}</span>
+                  {/* Share Options - Single row at top */}
+                  <div className="mb-4 flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+                    <span className="text-xs font-medium text-white/80">Share:</span>
+                    <div className="flex flex-wrap gap-2">
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="share-method" className="h-3 w-3 cursor-pointer" onChange={() => alert('Email share coming soon')} />
+                        <span className="text-xs text-white">Email</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="share-method" className="h-3 w-3 cursor-pointer" onChange={handleCopyUrl} />
+                        <span className="text-xs text-white">URL</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="share-method" className="h-3 w-3 cursor-pointer" onChange={handleShareToFacebook} />
+                        <span className="text-xs text-white">Facebook</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="share-method" className="h-3 w-3 cursor-pointer" onChange={handleShareToTwitter} />
+                        <span className="text-xs text-white">Twitter/X</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input type="radio" name="share-method" className="h-3 w-3 cursor-pointer" onChange={handleShareToLinkedIn} />
+                        <span className="text-xs text-white">LinkedIn</span>
+                      </label>
+                    </div>
                   </div>
-                </div>
 
-                {/* Share Options - Compact with labels */}
-                <div className="mb-2">
-                  <p className="mb-1.5 text-xs font-medium text-white/80">Share via:</p>
-                  
-                  <div className="grid grid-cols-3 gap-1.5 mb-1.5">
+                  {/* Clickable Thumbnail Preview */}
+                  <div className="mb-4 flex justify-center">
                     <button
-                      className="flex flex-col items-center gap-0.5 rounded-lg border border-white/20 bg-white/5 px-2 py-1.5 text-center text-xs text-white transition hover:bg-white/10 cursor-pointer"
-                      onClick={() => alert('Email share coming soon')}
+                      onClick={() => setImagePreviewOpen(true)}
+                      className="relative overflow-hidden rounded-lg bg-black/40 transition hover:opacity-90 cursor-pointer"
                     >
-                      <span className="text-sm">📧</span>
-                      <span className="text-[10px]">Email</span>
+                      <img
+                        src={selectedDesign.preview}
+                        alt={selectedDesign.title}
+                        className="max-w-full h-auto"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition bg-black/50">
+                        <span className="text-white text-sm font-medium">Click to view full resolution</span>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Quote HTML Iframe */}
+                  {selectedDesign.htmlQuotePath && (
+                    <div className="mb-3">
+                      <iframe
+                        src={selectedDesign.htmlQuotePath}
+                        className="w-full h-[380px] rounded-lg border border-white/20 bg-white"
+                        title="Design Quote"
+                      />
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    <button
+                      className="rounded-lg px-4 py-2 text-xs font-medium text-black transition disabled:opacity-50 cursor-pointer"
+                      style={{ backgroundColor: '#D4A84F' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#C49940')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4A84F')}
+                      onClick={handleExportPDF}
+                    >
+                      Export PDF
+                    </button>
+                    
+                    <Link
+                      href={selectedDesign.destinationUrl}
+                      className="rounded-lg px-4 py-2 text-center text-xs font-medium text-black transition cursor-pointer"
+                      style={{ backgroundColor: '#D4A84F' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#C49940')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4A84F')}
+                      onClick={() => setMoreModalOpen(false)}
+                    >
+                      Edit Design
+                    </Link>
+                    
+                    <button
+                      className="rounded-lg px-4 py-2 text-xs font-medium text-black transition cursor-pointer"
+                      style={{ backgroundColor: '#D4A84F' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#C49940')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4A84F')}
+                      onClick={() => alert('Buy functionality coming soon')}
+                    >
+                      Buy Now
                     </button>
                     
                     <button
-                      className="flex flex-col items-center gap-0.5 rounded-lg border border-white/20 bg-white/5 px-2 py-1.5 text-center text-xs text-white transition hover:bg-white/10 cursor-pointer"
-                      onClick={handleCopyUrl}
+                      className="rounded-lg bg-red-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-red-500 disabled:opacity-50 cursor-pointer"
+                      onClick={() => handleDeleteDesign(selectedDesign.id)}
+                      disabled={isDeleting}
                     >
-                      <span className="text-sm">🔗</span>
-                      <span className="text-[10px]">URL</span>
+                      {isDeleting ? 'Deleting...' : 'Delete'}
                     </button>
                     
                     <button
-                      className="flex flex-col items-center gap-0.5 rounded-lg border border-white/20 bg-white/5 px-2 py-1.5 text-center text-xs text-white transition hover:bg-white/10 cursor-pointer"
-                      onClick={handleShareToFacebook}
+                      onClick={() => setMoreModalOpen(false)}
+                      className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/10 cursor-pointer ml-auto"
                     >
-                      <span className="text-sm">📘</span>
-                      <span className="text-[10px]">Facebook</span>
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <button
-                      className="flex flex-col items-center gap-0.5 rounded-lg border border-white/20 bg-white/5 px-2 py-1.5 text-center text-xs text-white transition hover:bg-white/10 cursor-pointer"
-                      onClick={handleShareToTwitter}
-                    >
-                      <span className="text-sm">🐦</span>
-                      <span className="text-[10px]">Twitter/X</span>
-                    </button>
-                    
-                    <button
-                      className="flex flex-col items-center gap-0.5 rounded-lg border border-white/20 bg-white/5 px-2 py-1.5 text-center text-xs text-white transition hover:bg-white/10 cursor-pointer"
-                      onClick={handleShareToLinkedIn}
-                    >
-                      <span className="text-sm">💼</span>
-                      <span className="text-[10px]">LinkedIn</span>
+                      Close
                     </button>
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
 
-                {/* Action Buttons - 2x2 grid */}
-                <div className="grid grid-cols-2 gap-1.5 mb-2">
+          {/* Full Resolution Image Preview Modal */}
+          {imagePreviewOpen && selectedDesign && (
+            <div className="fixed inset-0 z-[10000] bg-black/95 overflow-y-auto" onClick={() => setImagePreviewOpen(false)}>
+              <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="relative max-w-7xl w-full">
                   <button
-                    className="rounded-lg px-3 py-2 text-xs font-medium text-black transition disabled:opacity-50 cursor-pointer"
-                    style={{ backgroundColor: '#D4A84F' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#C49940')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4A84F')}
-                    onClick={handleExportPDF}
+                    onClick={() => setImagePreviewOpen(false)}
+                    className="absolute top-4 right-4 z-10 rounded-lg bg-black/80 p-3 text-white hover:bg-black transition"
                   >
-                    PDF
+                    ✕ Close
                   </button>
-                  
-                  <Link
-                    href={selectedDesign.destinationUrl}
-                    className="rounded-lg px-3 py-2 text-center text-xs font-medium text-black transition cursor-pointer"
-                    style={{ backgroundColor: '#D4A84F' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#C49940')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4A84F')}
-                    onClick={() => setMoreModalOpen(false)}
-                  >
-                    Edit
-                  </Link>
-                  
-                  <button
-                    className="rounded-lg px-3 py-2 text-xs font-medium text-black transition cursor-pointer"
-                    style={{ backgroundColor: '#D4A84F' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#C49940')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#D4A84F')}
-                    onClick={() => alert('Buy functionality coming soon')}
-                  >
-                    Buy
-                  </button>
-                  
-                  <button
-                    className="rounded-lg bg-red-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-500 disabled:opacity-50 cursor-pointer"
-                    onClick={() => handleDeleteDesign(selectedDesign.id)}
-                    disabled={isDeleting}
-                  >
-                    {isDeleting ? 'Deleting...' : 'Delete'}
-                  </button>
+                  <img
+                    src={selectedDesign.fullScreenshot}
+                    alt={selectedDesign.title}
+                    className="w-full h-auto rounded-lg shadow-2xl"
+                    onClick={(e) => e.stopPropagation()}
+                  />
                 </div>
-
-                {/* Close Button */}
-                <button
-                  onClick={() => setMoreModalOpen(false)}
-                  className="w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-xs font-medium text-white transition hover:bg-white/10 cursor-pointer"
-                >
-                  Close
-                </button>
               </div>
             </div>
           )}
@@ -496,19 +517,31 @@ function buildProjectCard(project: any): AccountDesignCard {
   const createdDate = new Date(project.createdAt);
   const updatedDate = new Date(project.updatedAt);
   
-  // Get screenshot from metadata if available
-  const screenshot = project.screenshotPath;
+  // Get screenshot and thumbnail paths
+  const thumbnail = project.thumbnailPath || project.screenshotPath || '/screen.png';
+  const fullScreenshot = project.screenshotPath || '/screen.png';
+  
+  // Get product name from productId
+  const productId = project.designState?.productId;
+  console.log('Full designState:', project.designState);
+  console.log('Product lookup:', { productId, hasProducts: !!data.products, productsCount: data.products?.length });
+  const product = productId ? data.products.find(p => p.id === productId) : null;
+  console.log('Found product:', product);
+  const productName = product?.name || 'Custom memorial design';
+  console.log('Final productName:', productName);
   
   return {
     id: project.id,
     title: project.title || 'Untitled Design',
-    productName: project.designState?.productId || 'Custom Design',
+    productName: productName,
     priceLabel: project.totalPriceCents 
       ? currencyFormatter.format(project.totalPriceCents / 100)
       : 'Price TBD',
     createdLabel: formatDate(createdDate),
     relativeUpdated: formatRelativeTime(updatedDate),
-    preview: screenshot || '/screen.png',
+    preview: thumbnail,
+    fullScreenshot: fullScreenshot,
+    htmlQuotePath: `/saved-designs/html/${new Date(project.createdAt).getFullYear()}/${String(new Date(project.createdAt).getMonth() + 1).padStart(2, '0')}/design_${project.id}.html`,
     description: buildProjectDescription(project),
     status: (project.status || 'draft') as DesignStatus,
     primaryActionLabel: statusMeta[(project.status || 'draft') as DesignStatus].primaryAction,

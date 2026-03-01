@@ -64,7 +64,7 @@ export default async function RootLayout({
       catalog.materials.findMany({ where: { isActive: true }, limit: 200 }),
       catalog.shapes.findMany({ where: { isActive: true }, limit: 200 }),
       catalog.borders.findMany({ where: { isActive: true }, limit: 200 }),
-      catalog.motifs.findMany({ where: { isActive: true }, limit: 500 }),
+      catalog.motifs.findMany({ where: { isActive: true }, limit: 10000 }),
     ]);
   } catch (error) {
     console.error('Failed to load catalog data, using empty fallbacks', error);

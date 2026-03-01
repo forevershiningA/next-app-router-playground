@@ -123,6 +123,23 @@ export const motifs = pgTable('motifs', {
   svgUrl: text('svg_url'),
   attributes: jsonb('attributes').notNull().default({}),
   isActive: boolean('is_active').notNull().default(true),
+  sortOrder: integer('sort_order'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+// Additions (3D bronze applications, statues, vases, etc.)
+export const additions = pgTable('additions', {
+  id: text('id').primaryKey(), // e.g., "B2225", "K0320"
+  name: text('name').notNull(),
+  type: text('type').notNull(), // 'application' or 'vase'
+  categoryId: text('category_id').notNull(), // '3001', '3002', etc.
+  categoryName: text('category_name').notNull(),
+  thumbnailUrl: text('thumbnail_url'),
+  model3dUrl: text('model_3d_url'),
+  sizes: jsonb('sizes').notNull().default('[]'), // Array of size variants with dimensions and prices
+  isActive: boolean('is_active').notNull().default(true),
+  sortOrder: integer('sort_order'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
@@ -141,6 +158,7 @@ export const projects = pgTable('projects', {
   totalPriceCents: integer('total_price_cents'),
   currency: text('currency').notNull().default('AUD'),
   screenshotPath: text('screenshot_path'),
+  thumbnailPath: text('thumbnail_path'),
   designState: jsonb('design_state').notNull().default({}),
   pricingBreakdown: jsonb('pricing_breakdown').notNull().default({}),
   submittedAt: timestamp('submitted_at', { withTimezone: true }),

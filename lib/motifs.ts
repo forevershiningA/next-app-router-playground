@@ -31,28 +31,27 @@ export async function getMotifCategory(
     throw new Error(`Motif category not found at index ${categoryIndex}`);
   }
 
-  // Determine which file list to load based on formula
-  let fileName = 'files.txt'; // Default for all products
-  
-  // Uncomment to use different files per formula:
-  // if (formula) {
-  //   switch (formula) {
-  //     case 'Bronze':
-  //       fileName = 'bronze-files.txt';
-  //       break;
-  //     case 'Laser':
-  //       fileName = 'laser-files.txt';
-  //       break;
-  //     case 'Engraved':
-  //       fileName = 'engraved-files.txt';
-  //       break;
-  //     case 'Enamel':
-  //       fileName = 'enamel-files.txt';
-  //       break;
-  //   }
-  // }
+  // Try to load from database first
+  try {
+    const response = await fetch(`/api/motifs/db?category=${encodeURIComponent(category.class)}`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      const allFiles = data.motifs.map((m: any) => m.name);
+      const files = limit > 0 ? allFiles.slice(0, limit) : allFiles;
+      
+      return {
+        files,
+        totalCount: allFiles.length,
+        hasMore: allFiles.length > limit,
+      };
+    }
+  } catch (error) {
+    console.warn(`Database API failed for ${category.name}, falling back to files.txt:`, error);
+  }
 
-  const url = `/motifs/${category.src}/${fileName}`;
+  // Fallback to files.txt approach
+  const url = `/motifs/${category.src}/files.txt`;
 
   try {
     const response = await fetch(url);

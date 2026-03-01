@@ -255,11 +255,36 @@ const catalog = {
       if (options.where?.isActive !== undefined) {
         conditions.push(eq(motifs.isActive, options.where.isActive));
       }
+      
+      // Exclude category records (they have MOTIF-CAT- prefix)
+      conditions.push(sql`${motifs.sku} NOT LIKE 'MOTIF-CAT-%'`);
 
       const baseQuery = db
-        .select()
+        .select({
+          id: motifs.id,
+          sku: motifs.sku,
+          name: motifs.name,
+          category: motifs.category,
+          tags: motifs.tags,
+          priceCents: motifs.priceCents,
+          previewUrl: motifs.previewUrl,
+          svgUrl: motifs.svgUrl,
+          attributes: motifs.attributes,
+          isActive: motifs.isActive,
+          createdAt: motifs.createdAt,
+          updatedAt: motifs.updatedAt,
+          sortOrder: motifs.sortOrder,
+          // Fetch category name from the category record using a correlated subquery
+          categoryName: sql<string>`(
+            SELECT cat.name FROM motifs AS cat 
+            WHERE LOWER(cat.category) = LOWER(motifs.category)
+            AND cat.sku LIKE 'MOTIF-CAT-%' 
+            LIMIT 1
+          )`.as('categoryName'),
+        })
         .from(motifs)
-        .where(conditions.length > 0 ? and(...conditions) : undefined);
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(sql`COALESCE(sort_order, 999)`, motifs.name);
 
       if (options.limit) {
         return await baseQuery.limit(options.limit);

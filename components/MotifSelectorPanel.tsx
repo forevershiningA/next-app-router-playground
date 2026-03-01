@@ -28,14 +28,24 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
       if (!categoryMap.has(categoryId)) {
         categoryMap.set(categoryId, {
           id: categoryId,
-          name: categoryId,
+          name: motif.categoryName ?? categoryId,
           previewUrl: motif.previewUrl ?? motif.svgUrl ?? null,
           motifs: [],
         });
       }
       categoryMap.get(categoryId)!.motifs.push(motif);
     });
-    return Array.from(categoryMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+    // Return categories in the order they appear in the motifs array (preserves database sort_order)
+    const seen = new Set<string>();
+    return motifs
+      .map(m => m.category ?? 'uncategorized')
+      .filter(cat => {
+        if (seen.has(cat)) return false;
+        seen.add(cat);
+        return true;
+      })
+      .map(cat => categoryMap.get(cat)!)
+      .filter(Boolean);
   }, [motifs]);
 
   const selectedCategory = categories.find((category) => category.id === selectedCategoryId) ?? null;
@@ -81,7 +91,9 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
           </div>
           <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 p-1">
-              {categories.map((category) => (
+              {categories.map((category) => {
+                const categoryImgSrc = category.previewUrl || '/ico/forever-transparent-logo.png';
+                return (
                 <button
                   key={category.id}
                   type="button"
@@ -95,8 +107,8 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                           className="absolute inset-4"
                           style={{
                             backgroundColor: BRONZE_HEX,
-                            WebkitMaskImage: `url(${category.previewUrl ?? '/ico/forever-transparent-logo.png'})`,
-                            maskImage: `url(${category.previewUrl ?? '/ico/forever-transparent-logo.png'})`,
+                            WebkitMaskImage: `url(${categoryImgSrc})`,
+                            maskImage: `url(${categoryImgSrc})`,
                             WebkitMaskRepeat: 'no-repeat',
                             maskRepeat: 'no-repeat',
                             WebkitMaskSize: 'contain',
@@ -107,7 +119,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                         />
                       ) : (
                         <img
-                          src={category.previewUrl ?? '/ico/forever-transparent-logo.png'}
+                          src={categoryImgSrc}
                           alt={getMotifCategoryName(category.name)}
                           className="max-h-full max-w-full object-contain filter brightness-0 invert"
                           loading="lazy"
@@ -124,7 +136,8 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                     </p>
                   </div>
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
         </>
@@ -154,7 +167,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                 {individualMotifs.map((motif, index) => {
                   const svgPath = motif.svgUrl ?? motif.previewUrl;
                   const isSelected = svgPath ? selectedMotifs.some((m) => m.svgPath === svgPath) : false;
-                  const coverSrc = svgPath ?? '/ico/forever-transparent-logo.png';
+                  const coverSrc = svgPath || '/ico/forever-transparent-logo.png';
 
                   return (
                     <button
@@ -170,7 +183,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                     >
                       <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/40 to-gray-900/40">
                         <div className="absolute inset-0 flex items-center justify-center p-4">
-                          {allowsColor ? (
+                          {allowsColor && coverSrc ? (
                             <div
                               className="absolute inset-4"
                               style={{
@@ -185,14 +198,14 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                                 maskPosition: 'center',
                               }}
                             />
-                          ) : (
+                          ) : coverSrc ? (
                             <img
                               src={coverSrc}
                               alt={motif.name}
                               className="max-h-full max-w-full object-contain filter brightness-0 invert"
                               loading="lazy"
                             />
-                          )}
+                          ) : null}
                         </div>
                         {isSelected && (
                           <div className="absolute right-2 top-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black">
