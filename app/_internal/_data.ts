@@ -3,7 +3,15 @@
 // a relational database like PostgreSQL or MySQL, accessed through
 // a database client or ORM.
 
-import { loadAdditionsWithSizes } from './_additions-loader';
+// Lazy load additions to avoid build-time overhead
+let additionsCache: Addition[] | null = null;
+function getAdditions(): Addition[] {
+  if (!additionsCache) {
+    const { loadAdditionsWithSizes } = require('./_additions-loader');
+    additionsCache = loadAdditionsWithSizes();
+  }
+  return additionsCache;
+}
 
 export type Product = {
   id: string;
@@ -502,8 +510,8 @@ const motifs: Motif[] = [
   { id: 48, class: c, name: "1 Colour Motifs", src: "1ColRaisedMotif", img: p + "f1_1.png", traditional: false, ss: false, col2: false, col1: true }
 ];
 
-// Load additions with complete size data merged from JSON
-const additions: Addition[] = loadAdditionsWithSizes();
+// Load additions lazily to improve build performance
+const additions: Addition[] = getAdditions();
 
 const demos = [
   {

@@ -7,13 +7,14 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: {
-    inlineCss: true,
-    cacheComponents: false,
-    useCache: true,
-    clientSegmentCache: true,
-    viewTransition: true,
-    prerenderEarlyExit: false,
-    routerBFCache: true,
+    // Temporarily disabled for faster builds
+    // inlineCss: true,
+    // cacheComponents: false,
+    // useCache: true,
+    // clientSegmentCache: true,
+    // viewTransition: true,
+    // prerenderEarlyExit: false,
+    // routerBFCache: true,
   },
   // Exclude large static assets from serverless functions
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
