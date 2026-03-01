@@ -57,7 +57,7 @@ async function backupLocalDatabase() {
   console.log(`   Output: ${exportFile}\n`);
 
   const env = { ...process.env, PGPASSWORD: LOCAL_CONFIG.password };
-  const command = `pg_dump -h ${LOCAL_CONFIG.host} -p ${LOCAL_CONFIG.port} -U ${LOCAL_CONFIG.user} -d ${LOCAL_CONFIG.database} --clean --if-exists --no-owner --no-acl -f "${exportFile}"`;
+  const command = `pg_dump -h ${LOCAL_CONFIG.host} -p ${LOCAL_CONFIG.port} -U ${LOCAL_CONFIG.user} -d ${LOCAL_CONFIG.database} --clean --if-exists --no-owner --no-acl --column-inserts --rows-per-insert=100 -f "${exportFile}"`;
 
   return new Promise((resolve, reject) => {
     exec(command, { env }, (error, stdout, stderr) => {
@@ -146,6 +146,27 @@ async function importToNeon(exportFile) {
   const sqlContent = fs.readFileSync(exportFile, 'utf8');
   console.log(`✅ Loaded ${(sqlContent.length / 1024).toFixed(2)} KB of SQL\n`);
 
+  // Clean SQL content - remove problematic backslash commands
+  console.log('🧹 Cleaning SQL content...');
+  const cleanedSql = sqlContent
+    .split('\n')
+    .filter(line => {
+      const trimmed = line.trim();
+      // Remove \restrict and other unknown backslash commands (PostgreSQL 17+ security feature)
+      if (trimmed.startsWith('\\restrict') || trimmed.startsWith('\\unrestrict')) {
+        console.log(`   Removed: ${trimmed.substring(0, 60)}...`);
+        return false;
+      }
+      // Also remove empty backslash-only lines
+      if (trimmed === '\\' || trimmed.match(/^\\\.+$/)) {
+        console.log(`   Removed: ${trimmed}`);
+        return false;
+      }
+      return true;
+    })
+    .join('\n');
+  console.log('✅ SQL cleaned\n');
+
   const client = new Client({
     connectionString: NEON_CONFIG.connectionString,
     ssl: {
@@ -165,7 +186,7 @@ async function importToNeon(exportFile) {
     console.log('🚀 Executing SQL dump...');
     console.log('   This may take a minute...\n');
     
-    await client.query(sqlContent);
+    await client.query(cleanedSql);
     
     console.log('✅ Import completed!\n');
 

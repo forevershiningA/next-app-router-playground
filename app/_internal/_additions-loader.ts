@@ -1,8 +1,9 @@
-// Load additions with size data from parsed JSON
-import additionsData from '#/data/additions-parsed.json';
+// Load additions with size data
+// Note: For performance, we use hardcoded fallback data instead of loading the full JSON
 import type { Addition } from './_data';
 
-// Fallback size data for additions not in JSON (extracted from XML)
+// Size data for common additions (extracted from XML)
+// TODO: For full data, integrate with PostgreSQL additions table or load from JSON dynamically
 const FALLBACK_SIZES: Record<string, Array<{ variant: number; code: string; width: number; height: number; depth: number; weight: number; availability: boolean; wholesalePrice: number; retailPrice: number; notes: string }>> = {
   'B1134S': [{ variant: 1, code: 'B1134/S', width: 90, height: 180, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
   'B1134D': [{ variant: 1, code: 'B1134/D', width: 90, height: 180, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
@@ -10,6 +11,13 @@ const FALLBACK_SIZES: Record<string, Array<{ variant: number; code: string; widt
   'B2074D': [{ variant: 1, code: 'B2074/D', width: 70, height: 120, depth: 20, weight: 0, availability: true, wholesalePrice: 47.87, retailPrice: 124.46, notes: '' }],
   'B2497S': [{ variant: 1, code: 'B2497/S', width: 95, height: 150, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
   'B2497D': [{ variant: 1, code: 'B2497/D', width: 95, height: 150, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
+  'B2225': [
+    { variant: 1, code: 'B2225', width: 100, height: 100, depth: 20, weight: 0, availability: true, wholesalePrice: 50.67, retailPrice: 131.74, notes: '' },
+    { variant: 2, code: 'B2226', width: 140, height: 140, depth: 20, weight: 0, availability: true, wholesalePrice: 62.61, retailPrice: 162.79, notes: '' }
+  ],
+  'B4599': [{ variant: 1, code: 'B4599', width: 190, height: 95, depth: 20, weight: 0, availability: true, wholesalePrice: 90.68, retailPrice: 235.77, notes: '' }],
+  'B4597': [{ variant: 1, code: 'B4597', width: 185, height: 110, depth: 20, weight: 0, availability: true, wholesalePrice: 90.68, retailPrice: 235.77, notes: '' }],
+  'B2600': [{ variant: 1, code: 'B2600', width: 160, height: 290, depth: 20, weight: 0, availability: true, wholesalePrice: 307.36, retailPrice: 799.14, notes: '' }],
 };
 
 // Existing additions with file paths - we'll merge with size data from JSON
@@ -121,43 +129,19 @@ const existingAdditions: Partial<Addition>[] = [
   { id: 'K2180', file: "2180/2180.glb", image: '_2180.webp', category: '2', type: 'vase' },
 ];
 
-// Create a map of JSON data by ID for quick lookup
-const sizeDataMap = new Map(
-  additionsData.map((item) => [
-    item.id,
-    {
-      name: item.name,
-      type: item.type as 'application' | 'vase' | 'statue',
-      sizes: item.sizes.map((size: any) => ({
-        variant: size.variant,
-        code: size.code,
-        width: size.width_mm,
-        height: size.height_mm,
-        depth: size.depth_mm,
-        weight: 0,
-        availability: size.available,
-        wholesalePrice: size.price_wholesale,
-        retailPrice: size.price_retail,
-        notes: '',
-      })),
-    },
-  ])
-);
-
-// Merge existing additions (with file paths) with size data from JSON
+// Merge existing additions (with file paths) with size data from fallback
 export function loadAdditionsWithSizes(): Addition[] {
   return existingAdditions.map((existing) => {
-    const sizeData = sizeDataMap.get(existing.id!);
     const fallbackSize = FALLBACK_SIZES[existing.id!];
     
     return {
       id: existing.id!,
-      name: sizeData?.name || '[to-be-delivered]',
+      name: '[to-be-delivered]', // TODO: Load from database
       image: existing.image!,
-      type: sizeData?.type || existing.type || 'application',
+      type: existing.type || 'application',
       category: existing.category!,
       file: existing.file,
-      sizes: sizeData?.sizes || fallbackSize || [],
+      sizes: fallbackSize || [],
     };
   });
 }

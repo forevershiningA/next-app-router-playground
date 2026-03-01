@@ -49,7 +49,7 @@ async function exportDatabase() {
   const env = { ...process.env, PGPASSWORD: dbConfig.password };
 
   // Build pg_dump command
-  const command = `pg_dump -h ${dbConfig.host} -p ${dbConfig.port} -U ${dbConfig.user} -d ${dbConfig.database} --clean --if-exists --no-owner --no-acl -f "${exportFile}"`;
+  const command = `pg_dump -h ${dbConfig.host} -p ${dbConfig.port} -U ${dbConfig.user} -d ${dbConfig.database} --clean --if-exists --no-owner --no-acl --column-inserts --rows-per-insert=100 -f "${exportFile}"`;
 
   return new Promise((resolve, reject) => {
     exec(command, { env }, (error, stdout, stderr) => {
