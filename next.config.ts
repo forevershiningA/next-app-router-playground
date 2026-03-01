@@ -7,10 +7,11 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: {
-    // Temporarily disabled for faster builds
+    // Re-enabled useCache as it's required by 'use cache' directives in code
+    useCache: true,
+    // Other experimental features disabled for faster builds
     // inlineCss: true,
     // cacheComponents: false,
-    // useCache: true,
     // clientSegmentCache: true,
     // viewTransition: true,
     // prerenderEarlyExit: false,
