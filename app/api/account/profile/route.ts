@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from '#/lib/auth/session';
-import { db } from '#/lib/db';
+import { db } from '#/lib/db/index';
 import { profiles, accounts } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';

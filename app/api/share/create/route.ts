@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '#/lib/db';
+import { db } from '#/lib/db/index';
 import { sharedDesigns, projects } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
