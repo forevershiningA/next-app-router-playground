@@ -59,19 +59,33 @@ export default async function RootLayout({
   let rawShapes: Awaited<ReturnType<typeof catalog.shapes.findMany>> = [];
   let rawMotifs: Awaited<ReturnType<typeof catalog.motifs.findMany>> = [];
 
-  try {
-    [rawMaterials, rawShapes, rawMotifs] = await Promise.all([
-      catalog.materials.findMany({ where: { isActive: true }, limit: 200 }),
-      catalog.shapes.findMany({ where: { isActive: true }, limit: 200 }),
-      catalog.motifs.findMany({ where: { isActive: true }, limit: 10000 }),
-    ]);
-  } catch (error) {
-    console.error('Failed to load catalog data, using empty fallbacks', error);
+  // Check if database is configured
+  const hasDatabase = Boolean(process.env.DATABASE_URL);
+
+  if (hasDatabase) {
+    try {
+      [rawMaterials, rawShapes, rawMotifs] = await Promise.all([
+        catalog.materials.findMany({ where: { isActive: true }, limit: 200 }),
+        catalog.shapes.findMany({ where: { isActive: true }, limit: 200 }),
+        catalog.motifs.findMany({ where: { isActive: true }, limit: 10000 }),
+      ]);
+    } catch (error) {
+      console.error('Failed to load catalog data from database, using fallbacks from _data.ts', error);
+    }
   }
 
-  const materials = rawMaterials.map(mapMaterialRecord);
-  const shapes = rawShapes.map(mapShapeRecord);
-  const motifs = rawMotifs.map(mapMotifRecord);
+  // Map database records or use empty arrays
+  const materials = rawMaterials.length > 0 
+    ? rawMaterials.map(mapMaterialRecord)
+    : internalData.materials.map(m => ({ id: m.id, name: m.name, category: m.category, image: m.image }));
+  
+  const shapes = rawShapes.length > 0
+    ? rawShapes.map(mapShapeRecord)
+    : internalData.shapes.map(s => ({ id: s.id, name: s.name, category: s.category, image: s.image }));
+  
+  const motifs = rawMotifs.length > 0
+    ? rawMotifs.map(mapMotifRecord)
+    : []; // Motifs will be loaded separately
   
   // Use borders from _data.ts (bronze borders for Bronze Plaque)
   const borders = internalData.borders.map((border) => ({
