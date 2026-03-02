@@ -177,18 +177,25 @@ export default function ThreeScene() {
   const hasPlayedSelectSizeFade = useRef(false);
 
 
-  // Only play the /select-size fade the first time we visit it per session
+  // Fade in/out on /select-size page
   useEffect(() => {
+    console.log('[ThreeScene] Path changed to:', pathname, 'hasPlayedFade:', hasPlayedSelectSizeFade.current, 'sceneReady:', sceneReady);
+    
     if (pathname === '/select-size') {
+      // Always show scene on select-size without fade after first time
       if (!hasPlayedSelectSizeFade.current) {
+        console.log('[ThreeScene] First visit to /select-size - starting fade animation');
         hasPlayedSelectSizeFade.current = true;
         setShouldAnimateFade(true);
         setSceneReady(false);
       } else {
+        console.log('[ThreeScene] Subsequent visit to /select-size - showing immediately');
         setShouldAnimateFade(false);
         setSceneReady(true);
       }
     } else {
+      console.log('[ThreeScene] Not on /select-size, stopping animation');
+      // When navigating away from select-size, just stop animating
       setShouldAnimateFade(false);
     }
 
