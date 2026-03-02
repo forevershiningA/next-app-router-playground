@@ -21,7 +21,9 @@
     "db:verify": "node scripts/verify-database.js",
     "db:export": "node scripts/export-database.js",
     "db:import": "node scripts/import-to-neon.js",
-    "db:sync": "node scripts/sync-to-neon.js"
+    "db:sync": "node scripts/sync-to-neon.js",
+    "db:seed-materials": "tsx scripts/seed-materials.ts",
+    "db:seed-shapes": "tsx scripts/seed-shapes.ts"
   },
   "dependencies": {
     "@heroicons/react": "2.2.0",

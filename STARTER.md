@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-02-28  
+**Last Updated:** 2026-03-02  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -22,14 +22,74 @@
 14. [Save Design Feature](#save-design-feature)
 15. [My Account System](#my-account-system)
 16. [File Storage System](#file-storage-system)
-17. [Performance Considerations](#performance-considerations)
-18. [Memory Management](#memory-management)
-19. [Common Issues & Solutions](#common-issues--solutions)
-20. [Development Workflow](#development-workflow)
+17. [Database & Catalog System](#database--catalog-system)
+18. [Performance Considerations](#performance-considerations)
+19. [Memory Management](#memory-management)
+20. [Common Issues & Solutions](#common-issues--solutions)
+21. [Development Workflow](#development-workflow)
 
 ---
 
-## Current Status (2026-02-28)
+## Current Status (2026-03-02)
+
+### ✅ Recent Changes (March 2, 2026)
+1. **Materials Database Migration - COMPLETE**
+   - **Issue Fixed**: Database contained wrong placeholder materials (Polished Black Granite, Luka Grey, etc.)
+   - **Solution**: Replaced with correct 29 granite materials from `app/_internal/_data.ts`
+   - **Texture Paths**: All materials now point to `/textures/forever/l/*.webp`
+   - **Seeding Script**: `scripts/seed-materials.ts` with dotenv loading
+   - **Materials Seeded**:
+     - African Black, African Red, Australian Calca, Australian Grandee
+     - Balmoral Green, Balmoral Red, Blue Pearl, Chinese Calca
+     - Darwin Brown, Emerald Pearl, English Brown
+     - G439, G623, G633, G654, G788, G9426
+     - Glory Gold Spots, Glory Black
+     - Imperial Red, Marron Brown, Multicolour Red
+     - Noble Black, Noble Red, Paradiso, Sandstone
+     - Sapphire Brown, Visage Blue, White Carrara
+   - **Database Schema**:
+     ```typescript
+     materials {
+       id: serial
+       slug: text (unique)
+       name: text
+       category: 'granite'
+       finish: 'polished'
+       thumbnailUrl: text
+       attributes: jsonb ({ textureUrl: '...' })
+       isActive: boolean
+     }
+     ```
+   - **Files Created**:
+     - `scripts/seed-materials.ts`
+     - `MATERIALS_DATABASE_FIX.md`
+   - **NPM Script**: `npm run db:seed-materials`
+
+2. **Shapes Database Migration - COMPLETE**
+   - **Issue Fixed**: Database contained wrong placeholder shapes (Oval Landscape, Heart Classic, etc.)
+   - **Solution**: Replaced with correct 55 headstone shapes from `app/_internal/_data.ts`
+   - **Shape Paths**: All shapes now point to `/shapes/headstones/*.svg`
+   - **Seeding Script**: `scripts/seed-shapes.ts` with dotenv loading
+   - **Shapes Seeded**:
+     - **Traditional (11)**: Cropped Peak, Curved Gable, Curved Peak, Curved Top, Half Round, Gable, Left Wave, Peak, Right Wave, Serpentine, Square
+     - **Modern (44)**: Headstone 1-39, Guitar 1-5 (guitar-shaped memorials)
+   - **Database Schema**:
+     ```typescript
+     shapes {
+       id: serial
+       slug: text (unique)
+       name: text
+       section: text ('traditional' | 'modern')
+       maskKey: text (filename without .svg)
+       previewUrl: text
+       attributes: jsonb ({ svgPath: '...', category: '...' })
+       isActive: boolean
+     }
+     ```
+   - **Files Created**:
+     - `scripts/seed-shapes.ts`
+     - `SHAPES_DATABASE_FIX.md`
+   - **NPM Script**: `npm run db:seed-shapes`
 
 ### ✅ Recent Changes (February 28, 2026)
 1. **Additions Migration to PostgreSQL - COMPLETE**
@@ -2375,6 +2435,128 @@ const motifItems = useMemo(() => {
 
 ---
 
+## Database & Catalog System
+
+### PostgreSQL Schema (Drizzle ORM)
+
+The application uses PostgreSQL with Drizzle ORM for type-safe database access.
+
+**Core Tables:**
+```typescript
+// Accounts & Authentication
+accounts { id, email, passwordHash, role, status }
+profiles { accountId, firstName, lastName, phone, address }
+accountSessions { id, accountId, refreshTokenHash, expiresAt }
+
+// Catalog Data
+materials { id, slug, name, category, finish, thumbnailUrl, attributes }
+shapes { id, slug, name, section, maskKey, previewUrl, attributes }
+borders { id, slug, name, category, svgUrl, attributes }
+motifs { id, sku, name, category, tags, priceCents, previewUrl, svgUrl }
+additions { id, name, type, categoryId, thumbnailUrl, model3dUrl, sizes }
+
+// Design Data
+projects { id, accountId, name, designState, screenshotPath, totalPriceCents }
+
+// Orders & Payments
+orders { id, accountId, status, totalCents }
+orderItems { id, orderId, itemType, itemData, priceCents }
+payments { id, orderId, method, status, amountCents }
+```
+
+### Database Seeding Scripts
+
+**Materials Seeding:**
+```bash
+npm run db:seed-materials
+```
+- Seeds 29 granite materials from `app/_internal/_data.ts`
+- Texture paths: `/textures/forever/l/*.webp`
+- Categories: granite, finish: polished
+- Script: `scripts/seed-materials.ts`
+- Documentation: `MATERIALS_DATABASE_FIX.md`
+
+**Shapes Seeding:**
+```bash
+npm run db:seed-shapes
+```
+- Seeds 55 headstone shapes from `app/_internal/_data.ts`
+- Traditional (11): Cropped Peak, Curved Gable, etc.
+- Modern (44): Headstone 1-39, Guitar 1-5
+- SVG paths: `/shapes/headstones/*.svg`
+- Script: `scripts/seed-shapes.ts`
+- Documentation: `SHAPES_DATABASE_FIX.md`
+
+**Additions Seeding:**
+```bash
+npm run db:seed-additions
+```
+- Seeds 82 additions from XML parser
+- Categories: Biondan Bronze, Crosses, Roses, Statues, Vases
+- Includes size variants with dimensions and pricing
+- Script: `scripts/seed-additions.ts`
+- Documentation: `ADDITIONS_MIGRATION_COMPLETE.md`
+
+### Catalog Mappers
+
+**Material Mapper** (`lib/catalog-mappers.ts`):
+```typescript
+function mapMaterialFromDB(dbMaterial) {
+  return {
+    id: dbMaterial.id.toString(),
+    name: dbMaterial.name,
+    image: dbMaterial.thumbnailUrl,
+    category: dbMaterial.category,
+  };
+}
+```
+
+**Shape Mapper**:
+```typescript
+function mapShapeFromDB(dbShape) {
+  return {
+    id: dbShape.id.toString(),
+    name: dbShape.name,
+    image: dbShape.previewUrl,
+    category: dbShape.section, // 'traditional' or 'modern'
+  };
+}
+```
+
+### Database Configuration
+
+**Local Development:**
+```bash
+# .env.local
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
+```
+
+**Drizzle Commands:**
+```bash
+npm run db:generate  # Generate migrations
+npm run db:push      # Push schema to database
+npm run db:studio    # Open Drizzle Studio (GUI)
+```
+
+### Data Flow
+
+1. **Server-side**: `app/layout.tsx` fetches catalog data from PostgreSQL
+2. **Mappers**: `lib/catalog-mappers.ts` transforms DB records to UI format
+3. **Store**: `lib/headstone-store.ts` receives mapped catalog data
+4. **Components**: Selectors render materials/shapes from store
+
+**Example:**
+```typescript
+// app/layout.tsx
+const materials = await getMaterials();
+const mappedMaterials = materials.map(mapMaterialFromDB);
+
+// components/MaterialSelector.tsx
+const materials = useHeadstoneStore(state => state.materials);
+```
+
+---
+
 ## Performance Considerations
 
 ### Texture Optimization
@@ -3109,6 +3291,20 @@ gl.domElement.addEventListener('webglcontextrestored', handler);
 ```bash
 npm install
 npm run dev
+```
+
+### Database Setup
+```bash
+# Push schema to local PostgreSQL
+npm run db:push
+
+# Seed catalog data
+npm run db:seed-materials  # 29 granite materials
+npm run db:seed-shapes     # 55 headstone shapes
+npm run db:seed-additions  # 82 additions (vases, statues, etc.)
+
+# Open Drizzle Studio (database GUI)
+npm run db:studio
 ```
 
 ### Building for Production
@@ -4185,3 +4381,73 @@ For questions or issues:
   - **Implementation**: Used `useState` for modal state, `useMemo` for item processing
 
 - **2026-01-31 (Afternoon)**: Homepage Visual Refinements & Motif System (Production-Ready)
+
+---
+
+## Database Seeding Reference (March 2026)
+
+### Quick Reference
+
+| Command | What it does | Count | Status |
+|---------|-------------|-------|--------|
+| `npm run db:seed-materials` | Seeds granite materials | 29 | ✅ Complete |
+| `npm run db:seed-shapes` | Seeds headstone shapes | 55 | ✅ Complete |
+| `npm run db:seed-additions` | Seeds additions (vases, statues) | 82 | ✅ Complete |
+
+### Materials (29 total)
+- **Source**: `app/_internal/_data.ts`
+- **Path**: `/textures/forever/l/*.webp`
+- **Script**: `scripts/seed-materials.ts`
+- **Docs**: `MATERIALS_DATABASE_FIX.md`
+- **Categories**: All granite, polished finish
+- **Examples**: African Black, Blue Pearl, Imperial Red, Noble Black, Paradiso
+
+### Shapes (55 total)
+- **Source**: `app/_internal/_data.ts`
+- **Path**: `/shapes/headstones/*.svg`
+- **Script**: `scripts/seed-shapes.ts`
+- **Docs**: `SHAPES_DATABASE_FIX.md`
+- **Traditional (11)**: Cropped Peak, Curved Gable, Curved Peak, Curved Top, Half Round, Gable, Left Wave, Peak, Right Wave, Serpentine, Square
+- **Modern (44)**: Headstone 1-39, Guitar 1-5
+
+### Additions (82 total)
+- **Source**: `public/xml/en_EN/motifs-biondan.xml`
+- **Path**: `/models/*.glb`, `/images/*.webp`
+- **Script**: `scripts/seed-additions.ts`
+- **Docs**: `ADDITIONS_MIGRATION_COMPLETE.md`
+- **Categories**: 
+  - Biondan Bronze (24)
+  - Crosses (13)
+  - Roses (24)
+  - Statues (11)
+  - Vases (10)
+- **Size Variants**: 60 single-size (73%), 22 multi-size (27%)
+
+### Database Commands
+
+`ash
+# Development
+npm run db:push              # Push schema to database
+npm run db:studio            # Open Drizzle Studio (GUI)
+
+# Seeding (re-run as needed)
+npm run db:seed-materials    # Replace all materials
+npm run db:seed-shapes       # Replace all shapes  
+npm run db:seed-additions    # Replace all additions
+
+# Production deployment
+npm run db:migrate           # Run migrations on production
+`
+
+### Environment Setup
+
+`ash
+# .env.local
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
+`
+
+**Note**: All seeding scripts use dotenv to read `.env.local` automatically.
+
+---
+
+*End of STARTER.md - Last updated: March 2, 2026*

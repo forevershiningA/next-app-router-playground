@@ -1,73 +1,100 @@
-# STARTER.md Updated - 2026-01-26
+# STARTER.md Update Summary - March 2, 2026
 
-## What Was Updated
+## Changes Made
 
-Updated STARTER.md with comprehensive documentation of the canonical design conversion system enhancements.
+### 1. Updated Header
+- Changed "Last Updated" from 2026-02-28 to 2026-03-02
+- Added new section 17: "Database & Catalog System" to table of contents
 
-## Key Sections Added/Updated
+### 2. Added Current Status Section (March 2, 2026)
 
-### 1. Version History (Line ~2030)
-- Added detailed entry for 2026-01-26 canonical design conversion enhancements
-- Documented Phase 1 (Base Offset Fix) and Phase 2 (Intelligent Sizing/Positioning)
-- Included all algorithms, formulas, and results
-- Added asset sync warning
+**Materials Database Migration - COMPLETE**
+- Fixed wrong placeholder materials (Polished Black Granite → correct granite materials)
+- 29 granite materials seeded from `_data.ts`
+- Texture paths: `/textures/forever/l/*.webp`
+- Script: `scripts/seed-materials.ts`
+- NPM command: `npm run db:seed-materials`
+- Documentation: `MATERIALS_DATABASE_FIX.md`
 
-### 2. Saved Designs & Canonical Format (Line ~1659)
-- **Complete rewrite** reflecting current working state
-- Updated coordinate system documentation with component-relative explanation
-- Added conversion script usage examples
-- Documented all intelligent algorithms (text sizing, motif sizing, positioning)
-- Added asset management section
-- Updated status from "broken" to "working" ✅
-- Removed outdated workaround documentation
+**Shapes Database Migration - COMPLETE**
+- Fixed wrong placeholder shapes (Oval Landscape → correct headstone shapes)
+- 55 headstone shapes seeded from `_data.ts`
+- Traditional (11) + Modern (44)
+- SVG paths: `/shapes/headstones/*.svg`
+- Script: `scripts/seed-shapes.ts`
+- NPM command: `npm run db:seed-shapes`
+- Documentation: `SHAPES_DATABASE_FIX.md`
 
-### 3. JSON Structure Examples
-- Updated with real examples from working canonical designs
-- Added complete inscription and motif examples
-- Included assets section
+### 3. Added New Section: Database & Catalog System
 
-## Key Information Now in STARTER.md
+**PostgreSQL Schema Overview**
+- Core tables documented (accounts, materials, shapes, borders, motifs, additions, projects, orders)
+- Database seeding scripts with npm commands
+- Catalog mappers explained
+- Database configuration and Drizzle commands
+- Data flow from DB → Mappers → Store → Components
 
-### Coordinate System
-- Component-relative coordinates (NOT stage-relative)
-- Base offset formula: yMm = yMm - (baseHeight / 2)
-- Y-axis: Positive = UP, Negative = DOWN
-- Origin at component center
+### 4. Updated Development Workflow
 
-### Conversion Script Algorithms
-1. Text sizing (4 tiers by original size)
-2. Motif sizing (4 tiers by size)
-3. Horizontal centering (±100mm)
-4. Vertical compression (+130mm)
-5. Center figure prominence (+100mm)
-6. Bottom motif visibility (+100mm)
+**Added Database Setup Section**
+```bash
+npm run db:push              # Push schema
+npm run db:seed-materials    # Seed materials
+npm run db:seed-shapes       # Seed shapes
+npm run db:seed-additions    # Seed additions
+npm run db:studio            # Open GUI
+```
 
-### Asset Management
-- SVG files must match production
-- Local/production sync required
-- Asset content mismatch troubleshooting
+### 5. Added Database Seeding Reference (Appendix)
 
-### Current Status
-- ✅ All working as of Jan 26, 2026
-- ✅ 99% conversion accuracy
-- ✅ No manual editing needed
-- ❌ Only known issues: asset sync, name privacy, font rendering
+**Quick Reference Table**
+- All seeding commands in one place
+- Material, shape, and addition counts
+- Source paths and documentation links
+- Environment setup instructions
 
 ## Files Referenced
 
-Documentation now links to:
-- CONVERSION_SCRIPT_ENHANCED.md
-- CANONICAL_POSITIONING_FIX_SUMMARY.md
-- CANONICAL_DESIGN_PRODUCTION_FINAL.md
-- CANONICAL_VISUAL_VERIFICATION.md
+### Created Today (March 2, 2026)
+1. `scripts/seed-materials.ts` - Materials seeding script
+2. `scripts/seed-shapes.ts` - Shapes seeding script
+3. `MATERIALS_DATABASE_FIX.md` - Materials migration docs
+4. `SHAPES_DATABASE_FIX.md` - Shapes migration docs
+5. `STARTER_UPDATE_SUMMARY.md` - This file
 
-## Summary
+### Modified
+1. `package.json` - Added `db:seed-materials` and `db:seed-shapes` scripts
+2. `STARTER.md` - Comprehensive update with database sections
 
-STARTER.md is now the authoritative reference for:
-1. How canonical design conversion works
-2. What coordinate system is used
-3. How to regenerate designs
-4. Known limitations and solutions
-5. Complete algorithm documentation
+### Previously Created (Feb 28, 2026)
+1. `scripts/seed-additions.ts` - Additions seeding script
+2. `ADDITIONS_MIGRATION_COMPLETE.md` - Additions migration docs
 
-New developers can now read STARTER.md and understand the entire canonical design system without needing to review individual markdown files.
+## Key Improvements
+
+1. ✅ **Complete Database Documentation** - All catalog tables explained
+2. ✅ **Seeding Scripts Documented** - Clear instructions for materials, shapes, additions
+3. ✅ **Quick Reference** - Single table with all commands
+4. ✅ **Data Flow Explained** - DB → Mappers → Store → Components
+5. ✅ **Environment Setup** - `.env.local` configuration documented
+
+## Status
+
+✅ **COMPLETE** - STARTER.md now fully documents:
+- Materials database migration (March 2)
+- Shapes database migration (March 2)
+- Additions database migration (Feb 28)
+- PostgreSQL schema and seeding
+- Development workflow with database commands
+
+## Next Steps
+
+When new catalog tables are added:
+1. Update PostgreSQL Schema section with new table
+2. Add seeding script documentation
+3. Update Quick Reference table
+4. Add npm script to Development Workflow
+
+---
+
+*Document created: March 2, 2026*

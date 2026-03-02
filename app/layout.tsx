@@ -59,7 +59,7 @@ export default async function RootLayout({
   let rawShapes: Awaited<ReturnType<typeof catalog.shapes.findMany>> = [];
   let rawMotifs: Awaited<ReturnType<typeof catalog.motifs.findMany>> = [];
 
-  // Check if database is configured
+  // Check if database is configured (skip in development without DATABASE_URL)
   const hasDatabase = Boolean(process.env.DATABASE_URL);
 
   if (hasDatabase) {
@@ -70,11 +70,14 @@ export default async function RootLayout({
         catalog.motifs.findMany({ where: { isActive: true }, limit: 10000 }),
       ]);
     } catch (error) {
-      console.error('Failed to load catalog data from database, using fallbacks from _data.ts', error);
+      // Database query failed, will use _data.ts fallbacks below
+      console.warn('Database unavailable, using local data from _data.ts');
     }
+  } else {
+    console.log('DATABASE_URL not set, using local data from _data.ts');
   }
 
-  // Map database records or use empty arrays
+  // Map database records or use fallbacks from _data.ts
   const materials = rawMaterials.length > 0 
     ? rawMaterials.map(mapMaterialRecord)
     : internalData.materials.map(m => ({ id: m.id, name: m.name, category: m.category, image: m.image }));

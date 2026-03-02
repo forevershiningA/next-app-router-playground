@@ -1,43 +1,6 @@
 // Load additions with size data
 import type { Addition } from './_data';
 
-// Load addition names from parsed JSON file
-let additionNamesMap: Map<string, string> | null = null;
-
-function loadAdditionNames(): Map<string, string> {
-  if (additionNamesMap) return additionNamesMap;
-  
-  try {
-    // Only load on server side
-    if (typeof window === 'undefined') {
-      const fs = require('fs');
-      const path = require('path');
-      
-      const jsonPath = path.join(process.cwd(), 'data', 'additions-parsed.json');
-      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-      additionNamesMap = new Map();
-      
-      if (Array.isArray(data)) {
-        data.forEach((item: any) => {
-          if (item.id && item.name) {
-            additionNamesMap!.set(item.id, item.name);
-          }
-        });
-      }
-      
-      console.log(`[Additions] Loaded ${additionNamesMap.size} addition names from JSON`);
-    } else {
-      // On client side, return empty map (names will be set from server-rendered data)
-      additionNamesMap = new Map();
-    }
-    
-    return additionNamesMap;
-  } catch (error) {
-    console.error('[Additions] Failed to load names from JSON:', error);
-    return new Map();
-  }
-}
-
 // Size data for common additions (extracted from XML)
 const FALLBACK_SIZES: Record<string, Array<{ variant: number; code: string; width: number; height: number; depth: number; weight: number; availability: boolean; wholesalePrice: number; retailPrice: number; notes: string }>> = {
   'B1134S': [{ variant: 1, code: 'B1134/S', width: 90, height: 180, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
@@ -55,110 +18,105 @@ const FALLBACK_SIZES: Record<string, Array<{ variant: number; code: string; widt
   'B2600': [{ variant: 1, code: 'B2600', width: 160, height: 290, depth: 20, weight: 0, availability: true, wholesalePrice: 307.36, retailPrice: 799.14, notes: '' }],
 };
 
-// Existing additions with file paths - we'll merge with size data from JSON
+// Existing additions with file paths - complete list with proper names and image extensions
 const existingAdditions: Partial<Addition>[] = [
-  { id: 'B2497S', file: "2497/Art2497.glb", image: '_2497.webp', category: '1' },
-  { id: 'B2497D', file: "2497/Art2497.glb", image: '_2497.webp', category: '1' },
-  { id: 'B2225', file: "2225/Art2225.glb", image: '_2225.webp', category: '1' },
-  { id: 'B2074S', file: "207/Art207.glb", image: '_207.webp', category: '1' },
-  { id: 'B2074D', file: "207/Art207.glb", image: '_207.webp', category: '1' },
-  { id: 'B1134S', file: "1134/Art1134.glb", image: '_1134.webp', category: '1' },
-  { id: 'B1134D', file: "1134/Art1134.glb", image: '_1134.webp', category: '1' },
-  { id: 'B4599', file: "4599/Art4599.glb", image: '_4599.webp', category: '1' },
-  { id: 'B4597', file: "4597/Art4597.glb", image: '_4597.webp', category: '1' },
-  { id: 'B2600', file: "2600/Art2600.glb", image: '_2600.webp', category: '1' },
-  { id: 'B558', file: "558/558.glb", image: '_558.webp', category: '1' },
-  { id: 'B1154', file: "1154/Art1154.glb", image: '_1154.webp', category: '1' },
-  { id: 'B1212', file: "1212/Art1212.glb", image: '_1212.webp', category: '1' },
-  { id: 'B1334', file: "1334-1/1334-1.glb", image: '_1334-1.webp', category: '1' },
-  { id: 'B1343D', file: "1343/Art1343.glb", image: '_1343.webp', category: '1' },
-  { id: 'B1343S', file: "1343D/Art1343D.glb", image: '_1343D.webp', category: '1' },
-  { id: 'B1375', file: "1375/Art1375.glb", image: '_1375.webp', category: '1' },
-  { id: 'B1396', file: "1396/Art1396.glb", image: '_1396.webp', category: '1' },
-  { id: 'B1423D', file: "1423/Art1423.glb", image: '_1423.webp', category: '1' },
-  { id: 'B1423S', file: "1423D/Art1423D.glb", image: '_1423D.webp', category: '1' },
-  { id: 'B1454', file: "1454/Art1454.glb", image: '_1454.webp', category: '1' },
-  { id: 'B1467', file: "1467/Art1467.glb", image: '_1467.webp', category: '1' },
-  { id: 'B1480', file: "1480/Art1480.glb", image: '_1480.webp', category: '1' },
-  { id: 'B1490', file: "1490/Art1490.glb", image: '_1490.webp', category: '1' },
-  { id: 'B1535', file: "1535/Art1535.glb", image: '_1535.webp', category: '1' },
-  { id: 'B1566', file: "1566/Art1566.glb", image: '_1566.webp', category: '1' },
-  { id: 'B1650', file: "1650/Art1650.glb", image: '_1650.webp', category: '1' },
-  { id: 'B1656', file: "1656/1656.glb", image: '_1656.webp', category: '1' },
-  { id: 'B1657', file: "1657/1657.glb", image: '_1657.webp', category: '1' },
-  { id: 'B1664', file: "1664/Art1664.glb", image: '_1664.webp', category: '1' },
-  { id: 'B1668', file: "1668/Art1668.glb", image: '_1668.webp', category: '1' },
-  { id: 'B1675', file: "1675/Art1675.glb", image: '_1675.webp', category: '1' },
-  { id: 'B1688', file: "1688/Art1688.glb", image: '_1688.webp', category: '1' },
-  { id: 'B1690', file: "1690/Art1690.glb", image: '_1690.webp', category: '1' },
-  { id: 'B1780', file: "1780/Art1780.glb", image: '_1780.webp', category: '1' },
-  { id: 'B1906', file: "1906/Art1906.glb", image: '_1906.webp', category: '1' },
-  { id: 'B1966', file: "1966/Art1966.glb", image: '_1966.webp', category: '1' },
-  { id: 'B1990', file: "1990/Art1990.glb", image: '_1990.webp', category: '1' },
-  { id: 'B2009', file: "2009/Art2009.glb", image: '_2009.webp', category: '1' },
-  { id: 'B2020', file: "2020/Art2020.glb", image: '_2020.webp', category: '1' },
-  { id: 'B2140', file: "2140/Art2140.glb", image: '_2140.webp', category: '1' },
-  { id: 'B2152', file: "2152/Art2152.glb", image: '_2152.webp', category: '1' },
-  { id: 'B2174S', file: "217/Art217.glb", image: '_217.webp', category: '1' },
-  { id: 'B2174D', file: "217/Art217.glb", image: '_217.webp', category: '1' },
-  { id: 'B2206', file: "2206/Art2206.glb", image: '_2206.webp', category: '1' },
-  { id: 'B2245', file: "2245/Art2245.glb", image: '_2245.webp', category: '1' },
-  { id: 'B2332', file: "2332/Art2332.glb", image: '_2332.webp', category: '1' },
-  { id: 'B2127', file: "2127/Art2127.glb", image: '_2127.webp', category: '3' },
-  { id: 'B2128', file: "2128/Art2128.glb", image: '_2128.webp', category: '3' },
-  { id: 'B2128D', file: "2128/Art2128D.glb", image: '_2128D.webp', category: '3' },
-  { id: 'B2130', file: "2130/Art2130.glb", image: '_2130.webp', category: '3' },
-  { id: 'B2131', file: "2131/Art2131.glb", image: '_2131.webp', category: '3' },
-  { id: 'B2141', file: "2141/Art2141.glb", image: '_2141.webp', category: '3' },
-  { id: 'B2142', file: "2142/Art2142.glb", image: '_2142.webp', category: '3' },
-  { id: 'B2145', file: "2145/Art2145.glb", image: '_2145.webp', category: '3' },
-  { id: 'B2153', file: "2153/Art2153.glb", image: '_2153.webp', category: '3' },
-  { id: 'B2169', file: "2169/Art2169.glb", image: '_2169.webp', category: '3' },
-  { id: 'B2261', file: "2261/Art2261.glb", image: '_2261.webp', category: '3' },
-  { id: 'B2265', file: "2265/Art2265.glb", image: '_2265.webp', category: '3' },
-  { id: 'B2296', file: "2296/Art2296.glb", image: '_2296.webp', category: '3' },
-  { id: 'B1988', file: "1988/Art1988.glb", image: '_1988.webp', category: '4' },
-  { id: 'B2016', file: "2016/Art2016.glb", image: '_2016.webp', category: '4' },
-  { id: 'B2017', file: "2017/Art2017.glb", image: '_2017.webp', category: '4' },
-  { id: 'B2018', file: "2018/Art2018.glb", image: '_2018.webp', category: '4' },
-  { id: 'B2019', file: "2019/Art2019.glb", image: '_2019.webp', category: '4' },
-  { id: 'B2029', file: "2029/Art2029.glb", image: '_2029.webp', category: '4' },
-  { id: 'B2032', file: "2032/Art2032.glb", image: '_2032.webp', category: '4' },
-  { id: 'B2043', file: "2043/Art2043.glb", image: '_2043.webp', category: '4' },
-  { id: 'B2048', file: "2048/Art2048.glb", image: '_2048.webp', category: '4' },
-  { id: 'B2050', file: "2050/Art2050.glb", image: '_2050.webp', category: '4' },
-  { id: 'B2066', file: "2066/Art2066.glb", image: '_2066.webp', category: '4' },
-  { id: 'B2068', file: "2068/Art2068.glb", image: '_2068.webp', category: '4' },
-  { id: 'B2103', file: "2103/Art2103.glb", image: '_2103.webp', category: '4' },
-  { id: 'B2111', file: "2111/Art2111.glb", image: '_2111.webp', category: '4' },
-  { id: 'B2172', file: "2172/Art2172.glb", image: '_2172.webp', category: '4' },
-  { id: 'B2193', file: "2193/Art2193.glb", image: '_2193.webp', category: '4' },
-  { id: 'B2203', file: "2203/Art2203.glb", image: '_2203.webp', category: '4' },
-  { id: 'B2205', file: "2205/Art2205.glb", image: '_2205.webp', category: '4' },
-  { id: 'B2208', file: "2208/Art2208.glb", image: '_2208.webp', category: '4' },
-  { id: 'B2210', file: "2210/Art2210.glb", image: '_2210.webp', category: '4' },
-  { id: 'B2223', file: "2223/Art2223.glb", image: '_2223.webp', category: '4' },
-  { id: 'B2227', file: "2227/Art2227.glb", image: '_2227.webp', category: '4' },
-  { id: 'B2251', file: "2251/Art2251.glb", image: '_2251.webp', category: '4' },
-  { id: 'B2302', file: "2302/Art2302.glb", image: '_2302.webp', category: '4' },
-  // NOTE: Vases (K-prefixed, category '2') and Statues (K-prefixed, category '5') 
-  // are commented out until their image/3D files are uploaded to public/additions/
-  // { id: 'K0320', file: "0320/Art0320.glb", image: '_0320.webp', category: '5', type: 'statue' },
-  // { id: 'K0404', file: "0404/Art0404.glb", image: '_0404.webp', category: '5', type: 'statue' },
-  // ... etc
+  // Applications (parent="3001" - Biondan_Emblems)
+  { id: 'B2497S', file: "2497/Art2497.glb", name: 'Applicazione Preghiera', image: '_2497.jpg', type: 'application', category: '1' },
+  { id: 'B2497D', file: "2497/Art2497.glb", name: 'Applicazione Preghiera', image: '_2497.jpg', type: 'application', category: '1' },
+  { id: 'B2225', file: "2225/Art2225.glb", name: 'Let Romano Spazzolato', image: '_2225.jpg', type: 'application', category: '1' },
+  { id: 'B2074S', file: "207/Art207.glb", name: 'Applicazione Angelo', image: '_207.jpg', type: 'application', category: '1' },
+  { id: 'B2074D', file: "207/Art207.glb", name: 'Applicazione Angelo', image: '_207.jpg', type: 'application', category: '1' },
+  { id: 'B1134S', file: "1134/Art1134.glb", name: 'Applicazione Angelo', image: '_1134.jpg', type: 'application', category: '1' },
+  { id: 'B1134D', file: "1134/Art1134.glb", name: 'Applicazione Angelo', image: '_1134.jpg', type: 'application', category: '1' },
+  { id: 'B4599', file: "4599/Art4599.glb", name: 'Applicazione Cacciatore', image: '_4599.jpg', type: 'application', category: '1' },
+  { id: 'B4597', file: "4597/Art4597.glb", name: 'Applicazione Sachetto Pescatore', image: '_4597.jpg', type: 'application', category: '1' },
+  { id: 'B2600', file: "2600/Art2600.glb", name: 'Applicazione Madonna', image: '_2600.jpg', type: 'application', category: '1' },
+  { id: 'B558', file: "558/558.glb", name: '[to-be-delivered]', image: '_558.jpg', type: 'application', category: '1' },
+  { id: 'B1154', file: "1154/Art1154.glb", name: '[to-be-delivered]', image: '_1154.jpg', type: 'application', category: '1' },
+  { id: 'B1212', file: "1212/Art1212.glb", name: 'Applicazione Madonna Bambino', image: '_1212.jpg', type: 'application', category: '1' },
+  { id: 'B1334-1', file: "1334-1/1334-1.glb", name: '[to-be-delivered]', image: '_1334-1.jpg', type: 'application', category: '1' },
+  { id: 'B1334-2', file: "1334-2/Art1334-2.glb", name: '[to-be-delivered]', image: '_1334-2.jpg', type: 'application', category: '1' },
+  { id: 'B1343D', file: "1343/Art1343.glb", name: 'Applicazione Madonna', image: '_1343.jpg', type: 'application', category: '1' },
+  { id: 'B1343S', file: "1343D/Art1343D.glb", name: 'Applicazione Madonna', image: '_1343D.jpg', type: 'application', category: '1' },
+  { id: 'B1539', file: "1539/art1539.glb", name: '[to-be-delivered]', image: '_1539.jpg', type: 'application', category: '1' },
+  { id: 'B1648', file: "1648/1648.glb", name: '[to-be-delivered]', image: '_1648.jpg', type: 'application', category: '1' },
+  { id: 'B1649', file: "1649/Art1649.glb", name: 'Applicazione Fiore', image: '_1649.jpg', type: 'application', category: '1' },
+  { id: 'B1774', file: "1774/art1774.glb", name: 'Croce PAR', image: '_1774.jpg', type: 'application', category: '1' },
+  { id: 'B7076', file: "1827/Art1827.glb", name: 'Applicazione Madonna', image: '_1827.jpg', type: 'application', category: '1' },
+  { id: 'B1834', file: "1834/Art1834.glb", name: 'Applicazione Madonna', image: '_1834.jpg', type: 'application', category: '1' },
+  { id: 'B1837', file: "1837/Art1837.glb", name: 'Applicazione Cristo', image: '_1837.jpg', type: 'application', category: '1' },
+  { id: 'B1881', file: "1881/Art1881.glb", name: 'Applicazione Fiore', image: '_1881.jpg', type: 'application', category: '1' },
+  { id: 'B1990', file: "1990/Art1990.glb", name: 'Applicazione Cristo', image: '_1990.jpg', type: 'application', category: '1' },
+  { id: 'B2046', file: "2046/2046.glb", name: '[to-be-delivered]', image: '_2046.jpg', type: 'application', category: '1' },
+  { id: 'B2097', file: "2097/Art2097.glb", name: 'Applicazione Cristo', image: '_2097.jpg', type: 'application', category: '1' },
+  { id: 'B2098S', file: "2098/Art2098.glb", name: 'Applicazione Madonna', image: '_2098.jpg', type: 'application', category: '1' },
+  { id: 'B2127', file: "2127/Art2127.glb", name: 'Croce PAR', image: '_2127.jpg', type: 'application', category: '1' },
+  { id: 'B2251', file: "2251/Art2251.glb", name: 'Applicazione Cristo', image: '_2251.jpg', type: 'application', category: '1' },
+  { id: 'B2304S', file: "2304/Art2304.glb", name: 'Applicazione Madonna', image: '_2304.jpg', type: 'application', category: '1' },
+  { id: 'B2375S', file: "2375/Art2375.glb", name: 'Applicazione Fiore', image: '_2375.jpg', type: 'application', category: '1' },
+  { id: 'B2381', file: "2381/Art2381.glb", name: 'Applicazione Fiore', image: '_2381.jpg', type: 'application', category: '1' },
+  { id: 'B2413', file: "2413/art2413.glb", name: 'Croce PAR', image: '_2413.jpg', type: 'application', category: '1' },
+  { id: 'B2434', file: "2434/Art2434.glb", name: 'Applicazione Fiore', image: '_2434.jpg', type: 'application', category: '1' },
+  { id: 'B2438', file: "2438/art2438.glb", name: 'Croce PAR', image: '_2438.jpg', type: 'application', category: '1' },
+  { id: 'B2441', file: "2441/Art2441.glb", name: 'Croce PAR', image: '_2441.jpg', type: 'application', category: '1' },
+  { id: 'B2471', file: "2471/Art2471.glb", name: 'Applicazione Fiore', image: '_2471.jpg', type: 'application', category: '1' },
+  { id: 'B2473', file: "2473/Art2473.glb", name: 'Applicazione Fiore', image: '_2473.jpg', type: 'application', category: '1' },
+  { id: 'B2537', file: "2537/Art2537.glb", name: 'Croce PAR', image: '_2537.jpg', type: 'application', category: '1' },
+  { id: 'B2581D', file: "2581/Art2581.glb", name: 'Applicazione Fiore', image: '_2581.jpg', type: 'application', category: '1' },
+  { id: 'B2581S', file: "2581s/Art2581s.glb", name: 'Applicazione Fiore', image: '_2581s.jpg', type: 'application', category: '1' },
+  { id: 'B2649', file: "2649/Art2649.glb", name: 'Applicazione Fiore', image: '_2649.jpg', type: 'application', category: '1' },
+  { id: 'B2650', file: "2650/Art2650.glb", name: 'Applicazione Fiore', image: '_2650.jpg', type: 'application', category: '1' },
+  { id: 'B2652', file: "2652/Art2652.glb", name: 'Applicazione Fiore', image: '_2652.jpg', type: 'application', category: '1' },
+  { id: 'B2653', file: "2653/Art2653.glb", name: 'Applicazione Fiore', image: '_2653.jpg', type: 'application', category: '1' },
+  { id: 'B2669', file: "2669/Art2669.glb", name: 'Applicazione Fiore', image: '_2669.jpg', type: 'application', category: '1' },
+  { id: 'B2675', file: "2675/Art2675.glb", name: 'Applicazione Pieta', image: '_2675.jpg', type: 'application', category: '1' },
+  { id: 'B2735', file: "2735/Art2735.glb", name: 'Applicazione Madonna', image: '_2735.jpg', type: 'application', category: '1' },
+  { id: 'B2830', file: "2830/Art2830.glb", name: 'Applicazione Cristo', image: '_2830.jpg', type: 'application', category: '1' },
+  { id: 'B4118', file: "4118/Art4118.glb", name: 'Applicazione Fiore', image: '_4118.jpg', type: 'application', category: '1' },
+  { id: 'B4131', file: "4131/4131.glb", name: 'Applicazione Uccello Su Note', image: '_4131.jpg', type: 'application', category: '1' },
+  { id: 'B4640', file: "4640/4640.glb", name: 'Applicazione Lanterna', image: '_4640.jpg', type: 'application', category: '1' },
+  { id: 'B4641', file: "4641/4641.glb", name: 'Applicazione Chiave', image: '_4641.jpg', type: 'application', category: '1' },
+  { id: 'B4814', file: "4814/Art4814.glb", name: 'Croce PAR', image: '_4814.jpg', type: 'application', category: '1' },
+  { id: 'B4831', file: "4816/Art4816.glb", name: 'Croce PAR', image: '_4816.jpg', type: 'application', category: '1' },
+  { id: 'B4824', file: "4824/4824.glb", name: 'Applicazione Scrittore', image: '_4824.jpg', type: 'application', category: '1' },
+  { id: 'B4841', file: "4841/Art4841.glb", name: 'Croce PAR', image: '_4841.jpg', type: 'application', category: '1' },
+  { id: 'B4844', file: "4844/4844.glb", name: 'Applicazione Candela', image: '_4844.jpg', type: 'application', category: '1' },
+  { id: 'A4862', file: "4862/4862.glb", name: '[to-be-delivered]', image: '4862.jpg', type: 'application', category: '1' },
+  { id: 'B4866', file: "4866/Art4866.glb", name: 'Croce PAR', image: '_4866.jpg', type: 'application', category: '1' },
+  { id: 'B4882', file: "4882/4882.glb", name: 'Applicazione Lanterna', image: '_4882.jpg', type: 'application', category: '1' },
+  { id: 'B7647', file: "7647/Art7647.glb", name: 'Croce PAR', image: '_7647.jpg', type: 'application', category: '1' },
+
+  // Statues (parent="3004" - treated as statues for base mounting)
+  { id: 'K0320', file: "320/320.glb", name: 'Statue Angel', image: '_320.jpg', type: 'statue', category: '3' },
+  { id: 'K2064', file: "2064/2064.glb", name: 'Statue Angel', image: '_2064.jpg', type: 'statue', category: '3' },
+  { id: 'K0096', file: "96/96.glb", name: 'Statue Madonna', image: '_96.jpg', type: 'statue', category: '3' },
+  { id: 'K2011', file: "307/307.glb", name: 'Statue Madonna', image: '_307.jpg', type: 'statue', category: '3' },
+  { id: 'K0083', file: "83/83.glb", name: 'Statue Angel', image: '_83.jpg', type: 'statue', category: '3' },
+  { id: 'K0146', file: "146/146.glb", name: 'Statue Christs', image: '_146.jpg', type: 'statue', category: '3' },
+  { id: 'K0383', file: "383/383.glb", name: 'Statue Angel', image: '_383.jpg', type: 'statue', category: '3' },
+  { id: 'K0397', file: "397/397.glb", name: 'Statue Angel', image: '_397.jpg', type: 'statue', category: '3' },
+  
+  // Vases (parent="3005" - base mounted)
+  { id: 'K2213', file: "2213/2213.glb", name: 'Vase Tedesche Base Mounted', image: '_2213.jpg', type: 'vase', category: '2' },
+  { id: 'K2254', file: "2254/2254.glb", name: 'Vase Tedesche Base Mounted', image: '_2254.jpg', type: 'vase', category: '2' },
+  { id: 'K2638', file: "2638/2638.glb", name: 'Vase Table Mounted', image: '_2638.jpg', type: 'vase', category: '2' },
+  { id: 'K2975', file: "2975/2975.glb", name: 'Vase Floris Base Mounted', image: '_2975.jpg', type: 'vase', category: '2' },
+  { id: 'K7248', file: "7248/7248.glb", name: 'Vase Floris Base Mounted', image: '_7248.jpg', type: 'vase', category: '2' },
+  { id: 'K4405', file: "4405/4405.glb", name: 'Vase Floris Base Mounted', image: '_4405.jpg', type: 'vase', category: '2' },
+  { id: 'K7262', file: "7262/7262.glb", name: 'Lampada Cero Ter', image: '_7262.jpg', type: 'vase', category: '2' },
+  { id: 'K7252', file: "7252/7252.glb", name: 'Lampada Cero Rose', image: '_7252.jpg', type: 'vase', category: '2' },
+  { id: 'K4404', file: "4404/4404.glb", name: 'Lampada Cero Rose', image: '_4404.jpg', type: 'vase', category: '2' },
+  { id: 'K2180', file: "2180/2180.glb", name: 'Lampada Cero Rose', image: '_2180.jpg', type: 'vase', category: '2' },
 ];
 
 // Merge existing additions (with file paths) with size data from fallback
 export function loadAdditionsWithSizes(): Addition[] {
-  const namesMap = loadAdditionNames();
-  
   return existingAdditions.map((existing) => {
     const fallbackSize = FALLBACK_SIZES[existing.id!];
-    const name = namesMap.get(existing.id!) || existing.id || 'Unknown Addition';
     
     return {
       id: existing.id!,
-      name: name,
+      name: existing.name || existing.id || 'Unknown Addition',
       image: existing.image!,
       type: existing.type || 'application',
       category: existing.category!,
