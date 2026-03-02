@@ -17,8 +17,6 @@ const FALLBACK_BORDERS: BorderOption[] = [
   { id: '10', name: 'Border 10', image: 'border10.svg', category: 'bronze' },
 ];
 
-const NO_BORDER_OPTION: BorderOption = { id: 'no-border', name: 'No Border', category: 'none' };
-
 const BRONZE_HEX = '#CD7F32';
 
 type BorderSelectorProps = {
@@ -31,14 +29,12 @@ export default function BorderSelector({ borders, disableInternalScroll = false 
   const currentBorderName = useHeadstoneStore((s) => s.borderName);
 
   const borderOptions = React.useMemo(() => {
-    const base = borders && borders.length > 0 ? borders : FALLBACK_BORDERS;
-    return base.some((border) => border.id === 'no-border')
-      ? base
-      : [...base, NO_BORDER_OPTION];
+    return borders && borders.length > 0 ? borders : FALLBACK_BORDERS;
   }, [borders]);
 
   const handleBorderSelect = (border: BorderOption) => {
-    setBorderName(border.id === 'no-border' ? null : border.name);
+    // Border 0 is "No Border", so treat it as null
+    setBorderName(border.id === '0' ? null : border.name);
   };
 
   const getBorderAsset = (border: BorderOption) => {
@@ -60,7 +56,7 @@ export default function BorderSelector({ borders, disableInternalScroll = false 
       <div className={`grid grid-cols-3 gap-2 pl-1 pr-2 py-1 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}>
         {borderOptions.map((border) => {
           const isSelected = currentBorderName === border.name || 
-                           (border.id === 'no-border' && !currentBorderName);
+                           (border.id === '0' && !currentBorderName);
           const baseCardClasses = isSelected
             ? 'ring-2 ring-offset-2 ring-offset-[#0f0a07] ring-[#CD7F32]'
             : 'border border-white/10';
