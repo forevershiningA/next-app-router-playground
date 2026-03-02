@@ -1,9 +1,36 @@
 // Load additions with size data
-// Note: For performance, we use hardcoded fallback data instead of loading the full JSON
 import type { Addition } from './_data';
+import fs from 'fs';
+import path from 'path';
+
+// Load addition names from parsed JSON file
+let additionNamesMap: Map<string, string> | null = null;
+
+function loadAdditionNames(): Map<string, string> {
+  if (additionNamesMap) return additionNamesMap;
+  
+  try {
+    const jsonPath = path.join(process.cwd(), 'data', 'additions-parsed.json');
+    const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+    additionNamesMap = new Map();
+    
+    if (Array.isArray(data)) {
+      data.forEach((item: any) => {
+        if (item.id && item.name) {
+          additionNamesMap!.set(item.id, item.name);
+        }
+      });
+    }
+    
+    console.log(`[Additions] Loaded ${additionNamesMap.size} addition names from JSON`);
+    return additionNamesMap;
+  } catch (error) {
+    console.error('[Additions] Failed to load names from JSON:', error);
+    return new Map();
+  }
+}
 
 // Size data for common additions (extracted from XML)
-// TODO: For full data, integrate with PostgreSQL additions table or load from JSON dynamically
 const FALLBACK_SIZES: Record<string, Array<{ variant: number; code: string; width: number; height: number; depth: number; weight: number; availability: boolean; wholesalePrice: number; retailPrice: number; notes: string }>> = {
   'B1134S': [{ variant: 1, code: 'B1134/S', width: 90, height: 180, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
   'B1134D': [{ variant: 1, code: 'B1134/D', width: 90, height: 180, depth: 20, weight: 0, availability: true, wholesalePrice: 61.87, retailPrice: 160.86, notes: '' }],
@@ -131,12 +158,15 @@ const existingAdditions: Partial<Addition>[] = [
 
 // Merge existing additions (with file paths) with size data from fallback
 export function loadAdditionsWithSizes(): Addition[] {
+  const namesMap = loadAdditionNames();
+  
   return existingAdditions.map((existing) => {
     const fallbackSize = FALLBACK_SIZES[existing.id!];
+    const name = namesMap.get(existing.id!) || existing.id || 'Unknown Addition';
     
     return {
       id: existing.id!,
-      name: '[to-be-delivered]', // TODO: Load from database
+      name: name,
       image: existing.image!,
       type: existing.type || 'application',
       category: existing.category!,
