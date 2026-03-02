@@ -2,6 +2,7 @@ import '#/styles/globals.css';
 
 import db from '#/lib/db';
 import { catalog } from '#/lib/catalog-db';
+import { data as internalData } from '#/app/_internal/_data';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import ErrorBoundary from '#/components/ErrorBoundary';
@@ -56,14 +57,12 @@ export default async function RootLayout({
 
   let rawMaterials: Awaited<ReturnType<typeof catalog.materials.findMany>> = [];
   let rawShapes: Awaited<ReturnType<typeof catalog.shapes.findMany>> = [];
-  let rawBorders: Awaited<ReturnType<typeof catalog.borders.findMany>> = [];
   let rawMotifs: Awaited<ReturnType<typeof catalog.motifs.findMany>> = [];
 
   try {
-    [rawMaterials, rawShapes, rawBorders, rawMotifs] = await Promise.all([
+    [rawMaterials, rawShapes, rawMotifs] = await Promise.all([
       catalog.materials.findMany({ where: { isActive: true }, limit: 200 }),
       catalog.shapes.findMany({ where: { isActive: true }, limit: 200 }),
-      catalog.borders.findMany({ where: { isActive: true }, limit: 200 }),
       catalog.motifs.findMany({ where: { isActive: true }, limit: 10000 }),
     ]);
   } catch (error) {
@@ -72,8 +71,15 @@ export default async function RootLayout({
 
   const materials = rawMaterials.map(mapMaterialRecord);
   const shapes = rawShapes.map(mapShapeRecord);
-  const borders = rawBorders.map(mapBorderRecord);
   const motifs = rawMotifs.map(mapMotifRecord);
+  
+  // Use borders from _data.ts (bronze borders for Bronze Plaque)
+  const borders = internalData.borders.map((border) => ({
+    id: border.id,
+    name: border.name,
+    category: border.category,
+    image: border.image,
+  }));
   
   return (
     <html lang="en" className="[color-scheme:dark]">

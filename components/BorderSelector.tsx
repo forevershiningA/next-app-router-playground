@@ -4,13 +4,17 @@ import React from 'react';
 import { useHeadstoneStore, type BorderOption } from '#/lib/headstone-store';
 
 const FALLBACK_BORDERS: BorderOption[] = [
-  { id: 'border-001', name: 'Raised Bronze Border', image: 'border1a.svg', category: 'bronze', svgUrl: '/svg/borders/bronze-raised.svg' },
-  { id: 'border-002', name: 'Inlay Granite Border', image: 'border2a.svg', category: 'granite', svgUrl: '/svg/borders/granite-inlay.svg' },
-  { id: 'border-003', name: 'Floral Bronze Frame', image: 'border3a.svg', category: 'bronze', svgUrl: '/svg/borders/bronze-floral.svg' },
-  { id: 'border-004', name: 'Simple Granite Line', image: 'border4a.svg', category: 'granite', svgUrl: '/svg/borders/granite-simple.svg' },
-  { id: 'border-005', name: 'Ornate Gold Leaf', image: 'border5a.svg', category: 'bronze', svgUrl: '/svg/borders/gold-ornate.svg' },
-  { id: 'border-006', name: 'Double Line Classic', image: 'border6a.svg', category: 'granite', svgUrl: '/svg/borders/double-line.svg' },
-  { id: 'border-007', name: 'Art Deco Bronze', image: 'border7a.svg', category: 'bronze', svgUrl: '/svg/borders/art-deco.svg' },
+  { id: '0', name: 'No Border', image: 'border0.svg', category: 'bronze' },
+  { id: '1', name: 'Border 1', image: 'border1.svg', category: 'bronze' },
+  { id: '2', name: 'Border 2', image: 'border2.svg', category: 'bronze' },
+  { id: '3', name: 'Border 3', image: 'border3.svg', category: 'bronze' },
+  { id: '4', name: 'Border 4', image: 'border4.svg', category: 'bronze' },
+  { id: '5', name: 'Border 5', image: 'border5.svg', category: 'bronze' },
+  { id: '6', name: 'Border 6', image: 'border6.svg', category: 'bronze' },
+  { id: '7', name: 'Border 7', image: 'border7.svg', category: 'bronze' },
+  { id: '8', name: 'Border 8', image: 'border8.svg', category: 'bronze' },
+  { id: '9', name: 'Border 9', image: 'border9.svg', category: 'bronze' },
+  { id: '10', name: 'Border 10', image: 'border10.svg', category: 'bronze' },
 ];
 
 const NO_BORDER_OPTION: BorderOption = { id: 'no-border', name: 'No Border', category: 'none' };
