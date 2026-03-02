@@ -1,0 +1,59 @@
+index.js:642 Uncaught Error: Module not found: Can't resolve 'fs'
+  1 | // Load additions with size data
+  2 | import type { Addition } from './_data';
+> 3 | import fs from 'fs';
+    | ^
+  4 | import path from 'path';
+  5 |
+  6 | // Load addition names from parsed JSON file
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./app/_internal/_data.ts
+./components/MobileHeader.tsx
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at getNotFoundError (file://C:\Users\polcr\Documents\GitHub\next-app-router-playground\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\build\webpack\plugins\wellknown-errors-plugin\parseNotFoundError.js:140:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async getModuleBuildError (file://C:\Users\polcr\Documents\GitHub\next-app-router-playground\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\build\webpack\plugins\wellknown-errors-plugin\webpackModuleError.js:103:27)
+    at async (file://C:\Users\polcr\Documents\GitHub\next-app-router-playground\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\build\webpack\plugins\wellknown-errors-plugin\index.js:29:49)
+    at async (file://C:\Users\polcr\Documents\GitHub\next-app-router-playground\node_modules\.pnpm\next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2\node_modules\next\dist\build\webpack\plugins\wellknown-errors-plugin\index.js:27:21)
+getServerError @ node-stack-frames.js:41
+eval @ index.js:642
+setTimeout
+hydrate @ index.js:620
+await in hydrate
+pageBootstrap @ page-bootstrap.js:28
+eval @ next-dev.js:24
+Promise.then
+eval @ next-dev.js:22
+(pages-dir-browser)/./node_modules/.pnpm/next@15.5.7_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/next-dev.js @ main.js:314
+options.factory @ webpack.js:1
+__webpack_require__ @ webpack.js:1
+__webpack_exec__ @ main.js:1546
+(anonimowa) @ main.js:1547
+webpackJsonpCallback @ webpack.js:1
+(anonimowa) @ main.js:9
+websocket.js:46 [HMR] connected
+hook.js:608 ./app/_internal/_additions-loader.ts:3:1
+Module not found: Can't resolve 'fs'
+  1 | // Load additions with size data
+  2 | import type { Addition } from './_data';
+> 3 | import fs from 'fs';
+    | ^
+  4 | import path from 'path';
+  5 |
+  6 | // Load addition names from parsed JSON file
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./app/_internal/_data.ts
+./components/MobileHeader.tsx
+overrideMethod @ hook.js:608
+nextJsHandleConsoleError @ pages-dev-overlay-setup.js:77
+handleErrors @ hot-reloader-pages.js:164
+processMessage @ hot-reloader-pages.js:228
+eval @ hot-reloader-pages.js:72
+handleMessage @ websocket.js:69
+index.js:1631 {file: {…}}

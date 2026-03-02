@@ -1,7 +1,5 @@
 // Load additions with size data
 import type { Addition } from './_data';
-import fs from 'fs';
-import path from 'path';
 
 // Load addition names from parsed JSON file
 let additionNamesMap: Map<string, string> | null = null;
@@ -10,19 +8,29 @@ function loadAdditionNames(): Map<string, string> {
   if (additionNamesMap) return additionNamesMap;
   
   try {
-    const jsonPath = path.join(process.cwd(), 'data', 'additions-parsed.json');
-    const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-    additionNamesMap = new Map();
-    
-    if (Array.isArray(data)) {
-      data.forEach((item: any) => {
-        if (item.id && item.name) {
-          additionNamesMap!.set(item.id, item.name);
-        }
-      });
+    // Only load on server side
+    if (typeof window === 'undefined') {
+      const fs = require('fs');
+      const path = require('path');
+      
+      const jsonPath = path.join(process.cwd(), 'data', 'additions-parsed.json');
+      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+      additionNamesMap = new Map();
+      
+      if (Array.isArray(data)) {
+        data.forEach((item: any) => {
+          if (item.id && item.name) {
+            additionNamesMap!.set(item.id, item.name);
+          }
+        });
+      }
+      
+      console.log(`[Additions] Loaded ${additionNamesMap.size} addition names from JSON`);
+    } else {
+      // On client side, return empty map (names will be set from server-rendered data)
+      additionNamesMap = new Map();
     }
     
-    console.log(`[Additions] Loaded ${additionNamesMap.size} addition names from JSON`);
     return additionNamesMap;
   } catch (error) {
     console.error('[Additions] Failed to load names from JSON:', error);
