@@ -6,9 +6,15 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  // Optimize production build
+  swcMinify: true,
+  reactStrictMode: true,
+  poweredByHeader: false,
   experimental: {
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
+    // Optimize for faster builds
+    optimizePackageImports: ['@react-three/drei', '@react-three/fiber', 'three'],
     // Other experimental features disabled for faster builds
     // inlineCss: true,
     // cacheComponents: false,
@@ -34,6 +40,10 @@ const nextConfig = {
       'public/xml/**/*',           // Large XML files
       'public/data/**/*',          // Design data
       'node_modules/@img/**/*',    // Sharp dependencies (32 MB)
+      'node_modules/@swc/**/*',    // SWC compiler binaries
+      'node_modules/three/**/*',   // Three.js source (compiled separately)
+      'node_modules/esbuild/**/*', // esbuild binaries
+      '.next/cache/**/*',          // Build cache
     ],
   },
   turbopack: { root: process.cwd() },
