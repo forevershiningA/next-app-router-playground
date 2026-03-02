@@ -141,27 +141,11 @@ const existingAdditions: Partial<Addition>[] = [
   { id: 'B2227', file: "2227/Art2227.glb", image: '_2227.webp', category: '4' },
   { id: 'B2251', file: "2251/Art2251.glb", image: '_2251.webp', category: '4' },
   { id: 'B2302', file: "2302/Art2302.glb", image: '_2302.webp', category: '4' },
-  { id: 'K0320', file: "0320/Art0320.glb", image: '_0320.webp', category: '5', type: 'statue' },
-  { id: 'K0404', file: "0404/Art0404.glb", image: '_0404.webp', category: '5', type: 'statue' },
-  { id: 'K0406', file: "0406/Art0406.glb", image: '_0406.webp', category: '5', type: 'statue' },
-  { id: 'K0407', file: "0407/Art0407.glb", image: '_0407.webp', category: '5', type: 'statue' },
-  { id: 'K0468', file: "0468/Art0468.glb", image: '_0468.webp', category: '5', type: 'statue' },
-  { id: 'K0469', file: "0469/Art0469.glb", image: '_0469.webp', category: '5', type: 'statue' },
-  { id: 'K0661', file: "0661/Art0661.glb", image: '_0661.webp', category: '5', type: 'statue' },
-  { id: 'K0662', file: "0662/Art0662.glb", image: '_0662.webp', category: '5', type: 'statue' },
-  { id: 'K0663', file: "0663/Art0663.glb", image: '_0663.webp', category: '5', type: 'statue' },
-  { id: 'K0695', file: "0695/Art0695.glb", image: '_0695.webp', category: '5', type: 'statue' },
-  { id: 'K0696', file: "0696/Art0696.glb", image: '_0696.webp', category: '5', type: 'statue' },
-  { id: 'K0096', file: "0096/Art0096.glb", image: '_0096.webp', category: '2', type: 'vase' },
-  { id: 'K0200', file: "0200/Art0200.glb", image: '_0200.webp', category: '2', type: 'vase' },
-  { id: 'K0322', file: "0322/Art0322.glb", image: '_0322.webp', category: '2', type: 'vase' },
-  { id: 'K0338', file: "0338/Art0338.glb", image: '_0338.webp', category: '2', type: 'vase' },
-  { id: 'K0509', file: "0509/Art0509.glb", image: '_0509.webp', category: '2', type: 'vase' },
-  { id: 'K0587', file: "0587/Art0587.glb", image: '_0587.webp', category: '2', type: 'vase' },
-  { id: 'K7262', file: "7262/7262.glb", image: '_7262.webp', category: '2', type: 'vase' },
-  { id: 'K7252', file: "7252/7252.glb", image: '_7252.webp', category: '2', type: 'vase' },
-  { id: 'K4404', file: "4404/4404.glb", image: '_4404.webp', category: '2', type: 'vase' },
-  { id: 'K2180', file: "2180/2180.glb", image: '_2180.webp', category: '2', type: 'vase' },
+  // NOTE: Vases (K-prefixed, category '2') and Statues (K-prefixed, category '5') 
+  // are commented out until their image/3D files are uploaded to public/additions/
+  // { id: 'K0320', file: "0320/Art0320.glb", image: '_0320.webp', category: '5', type: 'statue' },
+  // { id: 'K0404', file: "0404/Art0404.glb", image: '_0404.webp', category: '5', type: 'statue' },
+  // ... etc
 ];
 
 // Merge existing additions (with file paths) with size data from fallback
