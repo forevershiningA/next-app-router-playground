@@ -8,6 +8,13 @@ export async function GET(
 ) {
   try {
     const { path: categoryPathArray } = await params;
+
+    // Sanitize each segment — reject traversal attempts
+    const SAFE_SEGMENT = /^[a-zA-Z0-9_\-]+$/;
+    if (!categoryPathArray.every((seg) => SAFE_SEGMENT.test(seg))) {
+      return NextResponse.json({ motifs: [] }, { status: 400 });
+    }
+
     const categoryPath = categoryPathArray.join('/');
     
     // Motif files are organized in category subdirectories under public/motifs/
@@ -16,7 +23,6 @@ export async function GET(
     
     // Check if category directory and files.txt exist
     if (!fs.existsSync(categoryDir) || !fs.existsSync(filesListPath)) {
-      console.log(`Category not found: ${categoryPath}`);
       return NextResponse.json({ motifs: [] });
     }
     

@@ -1,5 +1,55 @@
 @import 'tailwindcss';
 
+/* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
+*, *::before, *::after {
+  caret-color: transparent !important;
+}
+
+input, textarea, [contenteditable="true"] {
+  caret-color: auto !important;
+  cursor: text !important;
+}
+
+/* Prevent text cursor on non-editable elements */
+*:not(input):not(textarea):not([contenteditable="true"]):not(button):not(a):not([role="button"]) {
+  cursor: default !important;
+}
+
+/* Ensure images, buttons, links show pointer cursor */
+img, svg, [role="img"], button, a, [role="button"] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  cursor: pointer !important;
+  caret-color: transparent !important;
+}
+
+/* Absolutely prevent caret on divs and spans */
+div, span, p, h1, h2, h3, h4, h5, h6, header, footer, nav, section {
+  caret-color: transparent !important;
+}
+
+/* Prevent focus outline from triggering caret */
+button:focus,
+a:focus,
+[role="button"]:focus {
+  outline: none;
+  caret-color: transparent !important;
+}
+
+/* Prevent mousedown from creating text selection on buttons */
+button,
+a,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Custom Fonts */
 @font-face {
   font-family: 'Dobkin';

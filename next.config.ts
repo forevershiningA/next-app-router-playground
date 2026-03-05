@@ -7,7 +7,6 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   // Optimize production build
-  swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {

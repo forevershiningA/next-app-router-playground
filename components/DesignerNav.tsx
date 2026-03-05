@@ -303,6 +303,7 @@ export default function DesignerNav() {
   // State for Select Size expansion (keep for backward compatibility)
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
+  const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
   
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
@@ -349,6 +350,16 @@ export default function DesignerNav() {
   const shouldShowBackToListButton =
     (activeFullscreenPanel === 'select-additions' && !isAdditionCatalogVisible) ||
     (activeFullscreenPanel === 'select-motifs' && !isMotifCatalogVisible);
+
+  // Add loading state when pathname changes
+  useEffect(() => {
+    setIsLoadingPanel(true);
+    const timer = setTimeout(() => {
+      setIsLoadingPanel(false);
+    }, 300); // Show loader for minimum 300ms
+    
+    return () => clearTimeout(timer);
+  }, [pathname, activeFullscreenPanel]);
   
   // Close fullscreen panel if user navigates away from its route or when canvas is hidden
   useEffect(() => {
@@ -1139,7 +1150,7 @@ export default function DesignerNav() {
   }, [catalog, productId]);
   const dimensionLabel = widthMm > 0 && heightMm > 0 ? `${widthMm} × ${heightMm} mm` : 'Select dimensions';
 
-  const handleMenuClick = (slug: string, e: React.MouseEvent) => {
+  const handleMenuClick = async (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
       const keepCanvasVisibleForShape = slug === 'select-shape' && isCanvasVisible;
@@ -1157,6 +1168,11 @@ export default function DesignerNav() {
 
     if (slug === 'save-design') {
       e.preventDefault();
+      const res = await fetch('/api/auth/session');
+      if (!res.ok) {
+        router.push('/my-account');
+        return;
+      }
       setShowSaveDesignModal(true);
     }
   };
@@ -1324,9 +1340,9 @@ export default function DesignerNav() {
     const shapeUrl = useHeadstoneStore.getState().shapeUrl;
     const materialUrl = useHeadstoneStore.getState().materialUrl;
     
-    if (slug === 'select-product' && !productId) return 'incomplete';
-    if (slug === 'select-shape' && !shapeUrl) return 'incomplete';
-    if (slug === 'select-material' && !materialUrl) return 'incomplete';
+    if (slug === 'select-product') return productId ? 'complete' : 'incomplete';
+    if (slug === 'select-shape') return shapeUrl ? 'complete' : 'incomplete';
+    if (slug === 'select-material') return materialUrl ? 'complete' : 'incomplete';
     if (slug === 'select-size' && (widthMm > 0 && heightMm > 0)) return 'complete';
     if (slug === 'inscriptions' && inscriptions.length > 0) return 'complete';
     if (slug === 'select-additions' && selectedAdditions.length > 0) return 'complete';
@@ -1822,32 +1838,95 @@ export default function DesignerNav() {
             {/* Render content based on activeFullscreenPanel */}
             {activeFullscreenPanel === 'select-size' && renderSelectSizePanel()}
             {activeFullscreenPanel === 'select-shape' && (
-              <div className="space-y-6">
-                <ShapeSelector shapes={shapes} />
-              </div>
-            )}
-            {activeFullscreenPanel === 'select-material' && (
-              <div className="space-y-6">
-                <MaterialSelector materials={materials} />
-              </div>
-            )}
-            {activeFullscreenPanel === 'select-border' && (
-              <div className="space-y-6">
-                <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-220px)] overflow-hidden">
-                  <div className="h-full overflow-y-auto pr-1">
-                    <BorderSelector borders={borders} disableInternalScroll />
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading shapes...</p>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-6">
+                  <ShapeSelector shapes={shapes} />
+                </div>
+              )
+            )}
+            {activeFullscreenPanel === 'select-material' && (
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading materials...</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <MaterialSelector materials={materials} />
+                </div>
+              )
+            )}
+            {activeFullscreenPanel === 'select-border' && (
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading borders...</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-220px)] overflow-hidden">
+                    <div className="h-full overflow-y-auto pr-1">
+                      <BorderSelector borders={borders} disableInternalScroll />
+                    </div>
+                  </div>
+                </div>
+              )
             )}
             {activeFullscreenPanel === 'inscriptions' && (
-              <div className="space-y-6">
-                <InscriptionEditPanel />
-              </div>
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading inscriptions...</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <InscriptionEditPanel />
+                </div>
+              )
             )}
-            {activeFullscreenPanel === 'select-additions' && renderSelectAdditionsPanel()}
-            {activeFullscreenPanel === 'select-images' && renderSelectImagesPanel()}
-            {activeFullscreenPanel === 'select-motifs' && renderSelectMotifsPanel()}
+            {activeFullscreenPanel === 'select-additions' && (
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading additions...</p>
+                  </div>
+                </div>
+              ) : renderSelectAdditionsPanel()
+            )}
+            {activeFullscreenPanel === 'select-images' && (
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading images...</p>
+                  </div>
+                </div>
+              ) : renderSelectImagesPanel()
+            )}
+            {activeFullscreenPanel === 'select-motifs' && (
+              isLoadingPanel ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading motifs...</p>
+                  </div>
+                </div>
+              ) : renderSelectMotifsPanel()
+            )}
           </div>
         </div>
       ) : (
@@ -2023,6 +2102,8 @@ export default function DesignerNav() {
                     type="button"
                     data-section={item.slug}
                     onClick={(e) => handleMenuClick(item.slug, e)}
+                    onMouseDown={(e) => e.preventDefault()}
+                    style={{ caretColor: 'transparent', userSelect: 'none' }}
                     className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                       highlightActive
                         ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm'
@@ -2030,7 +2111,7 @@ export default function DesignerNav() {
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
-                    <span>{item.name}</span>
+                    <span className="select-none" style={{ caretColor: 'transparent' }}>{item.name}</span>
                   </button>
 
                   {shouldRenderInlinePanel && renderSelectSizePanel('mt-3')}
@@ -2053,6 +2134,8 @@ export default function DesignerNav() {
                             router.push('/select-border');
                           }
                         }}
+                        onMouseDown={(e) => e.preventDefault()}
+                        style={{ caretColor: 'transparent', userSelect: 'none' }}
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
                           isActive
                             ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
@@ -2103,6 +2186,8 @@ export default function DesignerNav() {
                             router.push('/select-material');
                           }
                         }}
+                        onMouseDown={(e) => e.preventDefault()}
+                        style={{ caretColor: 'transparent', userSelect: 'none' }}
                         className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
                           isActive
                             ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
@@ -2110,7 +2195,7 @@ export default function DesignerNav() {
                         }`}
                       >
                         <Icon className="h-5 w-5 flex-shrink-0" />
-                        <span>{item.name}</span>
+                        <span className="select-none" style={{ caretColor: 'transparent' }}>{item.name}</span>
                       </button>
                       
                       {isActive && !selectedMotifId && !selectedAdditionId && materials.length > 0 && (
@@ -2177,8 +2262,8 @@ export default function DesignerNav() {
                     onClick={(e) => handleMenuClick(item.slug, e)}
                     className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                       isActive 
-                        ? `text-white bg-white/15 shadow-lg border backdrop-blur-sm ${statusClasses}` 
-                        : `hover:bg-white/10 border hover:border-white/20 ${statusClasses}`
+                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
+                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
                     }`}
                   >
                     <div className="flex items-center gap-3">

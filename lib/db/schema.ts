@@ -9,6 +9,7 @@ import {
   integer,
   numeric,
   inet,
+  index,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
@@ -60,7 +61,9 @@ export const accountSessions = pgTable('account_sessions', {
   ipAddress: inet('ip_address'),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  accountIdIdx: index('account_sessions_account_id_idx').on(t.accountId),
+}));
 
 export const passwordResets = pgTable('password_resets', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -165,7 +168,9 @@ export const projects = pgTable('projects', {
   approvedAt: timestamp('approved_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  accountIdIdx: index('projects_account_id_idx').on(t.accountId),
+}));
 
 export const projectAssets = pgTable('project_assets', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -179,7 +184,9 @@ export const projectAssets = pgTable('project_assets', {
   heightMm: numeric('height_mm', { precision: 8, scale: 2 }),
   metadata: jsonb('metadata').notNull().default({}),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  projectIdIdx: index('project_assets_project_id_idx').on(t.projectId),
+}));
 
 export const projectEvents = pgTable('project_events', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -190,7 +197,10 @@ export const projectEvents = pgTable('project_events', {
   eventType: text('event_type').notNull(),
   payload: jsonb('payload').notNull().default({}),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  projectIdIdx: index('project_events_project_id_idx').on(t.projectId),
+  actorIdIdx: index('project_events_actor_id_idx').on(t.actorId),
+}));
 
 // Commerce
 export const orders = pgTable('orders', {
@@ -209,7 +219,10 @@ export const orders = pgTable('orders', {
   invoiceNumber: text('invoice_number').unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  projectIdIdx: index('orders_project_id_idx').on(t.projectId),
+  accountIdIdx: index('orders_account_id_idx').on(t.accountId),
+}));
 
 export const orderItems = pgTable('order_items', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -220,7 +233,10 @@ export const orderItems = pgTable('order_items', {
   quantity: integer('quantity').notNull().default(1),
   unitPriceCents: integer('unit_price_cents').notNull().default(0),
   metadata: jsonb('metadata').notNull().default({}),
-});
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, (t) => ({
+  orderIdIdx: index('order_items_order_id_idx').on(t.orderId),
+}));
 
 export const payments = pgTable('payments', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -234,7 +250,9 @@ export const payments = pgTable('payments', {
   status: text('status').notNull().default('pending'),
   receivedAt: timestamp('received_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  orderIdIdx: index('payments_order_id_idx').on(t.orderId),
+}));
 
 // Audit log
 export const auditLog = pgTable('audit_log', {
@@ -245,7 +263,9 @@ export const auditLog = pgTable('audit_log', {
   targetId: text('target_id'),
   metadata: jsonb('metadata').notNull().default({}),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => ({
+  accountIdIdx: index('audit_log_account_id_idx').on(t.accountId),
+}));
 
 // Shared designs (for social sharing)
 export const sharedDesigns = pgTable('shared_designs', {
@@ -270,4 +290,7 @@ export const enquiries = pgTable('enquiries', {
   status: text('status').notNull().default('new'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   respondedAt: timestamp('responded_at', { withTimezone: true }),
-});
+}, (t) => ({
+  projectIdIdx: index('enquiries_project_id_idx').on(t.projectId),
+  accountIdIdx: index('enquiries_account_id_idx').on(t.accountId),
+}));

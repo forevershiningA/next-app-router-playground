@@ -652,9 +652,7 @@ export default function CheckPricePanel() {
         {/* Footer with green background */}
         <div className="check-price-panel__actions flex items-center justify-end gap-3 bg-[#a8d5ba] px-6 py-4">
           <button
-            onClick={() => {
-              // TODO: Implement PDF download
-            }}
+            onClick={() => window.print()}
             className="rounded-full bg-[#cfac6c] px-6 py-2.5 text-sm font-semibold uppercase text-slate-900 shadow hover:brightness-95"
           >
             Download PDF

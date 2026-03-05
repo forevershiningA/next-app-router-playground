@@ -347,16 +347,21 @@ export default function HomeSplash() {
       <div className="relative min-h-screen flex flex-col overflow-hidden" role="banner">
         
         {/* Responsive Header - Absolute top */}
-        <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+        <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4" style={{ caretColor: 'transparent' }}>
           {/* Logo - Responsive width, centered on mobile */}
-          <div className="w-52 sm:w-56 md:w-72 transition-all mx-auto md:mx-0">
+          <div 
+            className="w-52 sm:w-56 md:w-72 transition-all mx-auto md:mx-0 select-none pointer-events-none" 
+            style={{ caretColor: 'transparent', userSelect: 'none' }}
+          >
             <Image 
               src="/ico/forever-transparent-logo.png" 
               alt="Forever Shining - Design Online" 
               width={320}
               height={100}
-              className="w-full h-auto"
+              className="w-full h-auto select-none"
               priority
+              draggable={false}
+              style={{ userSelect: 'none', pointerEvents: 'none' }}
             />
           </div>
 
@@ -364,13 +369,13 @@ export default function HomeSplash() {
           <nav className="hidden md:flex items-center gap-6">
             <Link 
               href="/select-product" 
-              className="rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-5 py-2 text-sm font-semibold text-slate-900 shadow-md transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#cfac6c]/30 hover:from-[#d4af37] hover:to-[#cfac6c]"
+              className="rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-5 py-2 text-sm font-semibold text-slate-900 shadow-md transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#cfac6c]/30 hover:from-[#d4af37] hover:to-[#cfac6c] cursor-pointer"
             >
               Start Designing
             </Link>
             <Link 
               href="/designs" 
-              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors"
+              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors cursor-pointer"
             >
               Browse Designs
             </Link>
@@ -501,7 +506,7 @@ export default function HomeSplash() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                 <Link
                   href="/select-product"
-                  className="w-full sm:w-auto text-center group rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] px-10 py-4 text-base font-semibold tracking-wide text-slate-900 shadow-[0_20px_45px_rgba(238,178,31,0.45)] transition-all hover:scale-105 hover:shadow-[0_0_55px_rgba(238,178,31,0.65)]"
+                  className="w-full sm:w-auto text-center group rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] px-10 py-4 text-base font-semibold tracking-wide text-slate-900 shadow-[0_20px_45px_rgba(238,178,31,0.45)] transition-all hover:scale-105 hover:shadow-[0_0_55px_rgba(238,178,31,0.65)] cursor-pointer"
                   aria-label="Start your free design"
                   style={{ letterSpacing: '0.05em' }}
                 >
@@ -541,7 +546,7 @@ export default function HomeSplash() {
             <div className="mt-6 flex justify-center lg:justify-start">
               <Link
                 href="/select-product"
-                className="rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] border border-[#f3c049]/40 px-8 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-[0_20px_35px_rgba(240,178,31,0.35)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(240,178,31,0.55)]"
+                className="rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] border border-[#f3c049]/40 px-8 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-[0_20px_35px_rgba(240,178,31,0.35)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(240,178,31,0.55)] cursor-pointer"
               >
                 Start Designing Now
               </Link>
@@ -650,7 +655,7 @@ export default function HomeSplash() {
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto sm:justify-start">
               <Link
                 href="/select-product"
-                className="w-full sm:w-auto rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] px-10 py-4 text-base font-semibold text-slate-900 shadow-[0_20px_45px_rgba(238,178,31,0.45)] transition-all hover:scale-105 hover:shadow-[0_0_55px_rgba(238,178,31,0.65)] text-center"
+                className="w-full sm:w-auto rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] px-10 py-4 text-base font-semibold text-slate-900 shadow-[0_20px_45px_rgba(238,178,31,0.45)] transition-all hover:scale-105 hover:shadow-[0_0_55px_rgba(238,178,31,0.65)] text-center cursor-pointer"
               >
                 Start Your Free Design
               </Link>
@@ -659,7 +664,7 @@ export default function HomeSplash() {
                 onClick={handleHashLink('contact')}
                 role="button"
                 aria-haspopup="dialog"
-                className="w-full sm:w-auto rounded-full border-2 border-[#d4af37]/60 bg-gradient-to-r from-[#d4af37]/10 to-[#d4af37]/5 px-10 py-4 text-base font-semibold text-white shadow-[0_8px_24px_rgba(212,175,55,0.2)] hover:border-[#d4af37] hover:bg-[#d4af37]/15 hover:shadow-[0_12px_32px_rgba(212,175,55,0.35)] transition-all hover:scale-105 text-center"
+                className="w-full sm:w-auto rounded-full border-2 border-[#d4af37]/60 bg-gradient-to-r from-[#d4af37]/10 to-[#d4af37]/5 px-10 py-4 text-base font-semibold text-white shadow-[0_8px_24px_rgba(212,175,55,0.2)] hover:border-[#d4af37] hover:bg-[#d4af37]/15 hover:shadow-[0_12px_32px_rgba(212,175,55,0.35)] transition-all hover:scale-105 text-center cursor-pointer"
               >
                 Request a Designer's Help
               </Link>
@@ -702,13 +707,13 @@ export default function HomeSplash() {
                 Crafting lasting tributes for families around the world since 2005.
               </p>
               <div className="mt-6 flex items-center gap-3 text-sm">
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors">
+                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">
                   IG
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors">
+                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">
                   FB
                 </a>
-                <a href="https://pinterest.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors">
+                <a href="https://pinterest.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">
                   PI
                 </a>
               </div>
@@ -717,31 +722,31 @@ export default function HomeSplash() {
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Memorials</p>
               <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li><a href="#headstones" onClick={handleHashLink('headstones')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Headstones</a></li>
-                <li><a href="#plaques" onClick={handleHashLink('plaques')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Plaques</a></li>
-                <li><a href="#urns" onClick={handleHashLink('urns')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Urns</a></li>
-                <li><a href="#monuments" onClick={handleHashLink('monuments')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Full Monuments</a></li>
-                <li><a href="#pets" onClick={handleHashLink('pets')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Pet Memorials</a></li>
+                <li><a href="#headstones" onClick={handleHashLink('headstones')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Headstones</a></li>
+                <li><a href="#plaques" onClick={handleHashLink('plaques')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Plaques</a></li>
+                <li><a href="#urns" onClick={handleHashLink('urns')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Urns</a></li>
+                <li><a href="#monuments" onClick={handleHashLink('monuments')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Full Monuments</a></li>
+                <li><a href="#pets" onClick={handleHashLink('pets')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Pet Memorials</a></li>
               </ul>
             </div>
 
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Help & Guides</p>
               <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li><a href="#how-it-works" onClick={handleHashLink('how-it-works')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">How it Works</a></li>
-                <li><a href="#pricing" onClick={handleHashLink('pricing')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Pricing Guide</a></li>
-                <li><a href="#materials" onClick={handleHashLink('materials')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Material Guide</a></li>
-                <li><a href="#faq" onClick={handleHashLink('faq')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#contact" onClick={handleHashLink('contact')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Contact Us</a></li>
+                <li><a href="#how-it-works" onClick={handleHashLink('how-it-works')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">How it Works</a></li>
+                <li><a href="#pricing" onClick={handleHashLink('pricing')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Pricing Guide</a></li>
+                <li><a href="#materials" onClick={handleHashLink('materials')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Material Guide</a></li>
+                <li><a href="#faq" onClick={handleHashLink('faq')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">FAQ</a></li>
+                <li><a href="#contact" onClick={handleHashLink('contact')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Contact Us</a></li>
               </ul>
             </div>
 
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Get in Touch</p>
               <div className="mt-4 space-y-3 text-sm text-white/80">
-                <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors">(+1) 647 388 0931</a>
+                <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer">(+1) 647 388 0931</a>
                 <p className="text-white/70">
-                  <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors">admin@bronze-plaque.com</a>
+                  <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors cursor-pointer">admin@bronze-plaque.com</a>
                 </p>
                 <p className="text-white/70 leading-relaxed">
                   1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
@@ -753,22 +758,22 @@ export default function HomeSplash() {
           <div className="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
             <p>© 2025 Forever Shining. All rights reserved.</p>
             <div className="flex items-center gap-4 text-white/70 text-sm">
-              <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Privacy Policy</a>
               <span className="text-white/40">|</span>
-              <a href="#terms" onClick={handleHashLink('terms')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#terms" onClick={handleHashLink('terms')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Terms of Service</a>
               <span className="text-white/40">|</span>
-              <a href="#sitemap" onClick={handleHashLink('sitemap')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors">Sitemap</a>
+              <a href="#sitemap" onClick={handleHashLink('sitemap')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Sitemap</a>
             </div>
           </div>
 
           <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-white/45">
             <div className="flex items-center flex-wrap gap-2">
               <span className="text-white/55">Partners:</span>
-              <a href="https://www.bronze-plaque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Bronze-Plaque.com</a>
+              <a href="https://www.bronze-plaque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">Bronze-Plaque.com</a>
               <span>•</span>
-              <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white">HeadstonesDesigner.com</a>
+              <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">HeadstonesDesigner.com</a>
               <span>•</span>
-              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Forever Shining Australia</a>
+              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">Forever Shining Australia</a>
             </div>
             <div className="flex items-center gap-3 text-white/55">
               <span className="tracking-widest">VISA</span>
@@ -794,7 +799,7 @@ export default function HomeSplash() {
             <button
               type="button"
               onClick={closeModal}
-              className="absolute right-4 top-4 rounded-full border border-white/20 p-1 text-white/70 hover:text-white hover:border-white transition-colors"
+              className="absolute right-4 top-4 rounded-full border border-white/20 p-1 text-white/70 hover:text-white hover:border-white transition-colors cursor-pointer"
               aria-label="Close dialog"
             >
               <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -1063,7 +1068,7 @@ function DesignPossibilitiesSection() {
             <div className="mt-8 flex justify-center">
               <Link
                 href="/select-product"
-                className="rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] border border-[#f3c049]/40 px-10 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-[0_20px_35px_rgba(240,178,31,0.35)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(240,178,31,0.55)]"
+                className="rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] border border-[#f3c049]/40 px-10 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-[0_20px_35px_rgba(240,178,31,0.35)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(240,178,31,0.55)] cursor-pointer"
               >
                 Start Customizing This Design
               </Link>
@@ -1085,7 +1090,7 @@ function DesignPossibilitiesSection() {
                         setActiveStep(item.stage);
                       }}
                       aria-pressed={isActive}
-                      className={`group w-full text-left rounded-2xl border px-5 py-5 transition-all duration-300 ${
+                      className={`group w-full text-left rounded-2xl border px-5 py-5 transition-all duration-300 cursor-pointer ${
                         isActive
                           ? 'border-[#d4af37]/30 bg-gradient-to-b from-[#2a1f15]/80 to-[#1a120c]/90 text-white shadow-[0_12px_40px_rgba(212,175,55,0.2)] backdrop-blur-sm'
                           : 'border-white/15 bg-gradient-to-b from-[#1a120c]/40 to-[#0f0804]/30 text-white/70 hover:border-[#d4af37]/40 hover:from-[#1a120c]/60 hover:to-[#0f0804]/50 hover:text-white/90 backdrop-blur-sm'
@@ -1119,7 +1124,7 @@ function DesignPossibilitiesSection() {
                               key={shape.name}
                               onClick={() => setShapeIndex(idx)}
                               aria-pressed={shapeIndex === idx}
-                              className={`relative flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-200 border ${
+                              className={`relative flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-200 border cursor-pointer ${
                                 shapeIndex === idx
                                   ? 'border-[#d4af37]/60 bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/10 shadow-[0_4px_16px_rgba(212,175,55,0.3)]'
                                   : 'border-white/20 bg-gradient-to-br from-white/10 to-white/5 hover:border-[#d4af37]/40 hover:from-[#d4af37]/15 hover:to-[#d4af37]/8 shadow-md'
@@ -1154,7 +1159,7 @@ function DesignPossibilitiesSection() {
                               key={mat.name}
                               onClick={() => setMaterialIndex(idx)}
                               aria-pressed={materialIndex === idx}
-                              className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-200 ${
+                              className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-200 cursor-pointer ${
                                 materialIndex === idx
                                   ? 'ring-2 ring-[#d4af37]'
                                   : 'ring-1 ring-white/20 hover:ring-white/40'
@@ -1184,7 +1189,7 @@ function DesignPossibilitiesSection() {
                               key={motif.name}
                               onClick={() => setMotifIndex(idx)}
                               aria-pressed={motifIndex === idx}
-                              className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-200 ${
+                              className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-200 cursor-pointer ${
                                 motifIndex === idx
                                   ? 'ring-2 ring-[#d4af37]'
                                   : 'ring-1 ring-white/20 hover:ring-white/40'

@@ -23,9 +23,13 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
-    // Get cache path
-    const timestamp = parseInt(designId);
+
+    // Validate designId is a numeric timestamp only — prevents path traversal
+    const timestamp = parseInt(designId, 10);
+    if (isNaN(timestamp) || timestamp <= 0 || String(timestamp) !== String(designId).trim()) {
+      return NextResponse.json({ error: 'Invalid designId' }, { status: 400 });
+    }
+    const safeFilename = `${timestamp}.svg`;
     const date = new Date(timestamp);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -35,7 +39,7 @@ export async function POST(request: NextRequest) {
       CACHE_DIR,
       String(year),
       month,
-      `${designId}.svg`
+      safeFilename
     );
     
     // Ensure directory exists
@@ -45,11 +49,9 @@ export async function POST(request: NextRequest) {
     // Write SVG file
     await fs.writeFile(cachePath, svg, 'utf-8');
     
-    console.log(`✅ Cached SVG saved: ${cachePath}`);
-    
     return NextResponse.json({
       success: true,
-      path: `${year}/${month}/${designId}.svg`
+      path: `${year}/${month}/${safeFilename}`
     });
     
   } catch (error) {

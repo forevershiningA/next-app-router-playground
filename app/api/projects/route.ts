@@ -82,7 +82,6 @@ export async function POST(request: NextRequest) {
         screenshotBuffer = Buffer.from('');
       }
 
-      console.log('[api/projects] Creating temporary project record...');
       // Create temporary project to get ID
       tempSummary = await saveProjectRecord({
         projectId: body.projectId,
@@ -96,7 +95,6 @@ export async function POST(request: NextRequest) {
         designState: body.designState,
         pricingBreakdown: body.pricingBreakdown ?? null,
       });
-      console.log('[api/projects] Temporary project created:', tempSummary.id);
 
       const designData = {
         id: tempSummary.id,

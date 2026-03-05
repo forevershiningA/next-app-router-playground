@@ -483,10 +483,8 @@ const withOffsetSurfaceDimensions = <T extends OffsetWithDimensions>(
   } as T & { baseWidthMm: number; baseHeightMm: number };
 };
 
-let nextId = 0;
-const genId = () => `l-${nextId++}`;
-let nextMotifId = 0;
-const genMotifId = () => `motif-${nextMotifId++}`;
+const genId = () => `l-${crypto.randomUUID()}`;
+const genMotifId = () => `motif-${crypto.randomUUID()}`;
 
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   catalog: null,
@@ -705,13 +703,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
   },
   updateImagePosition: (id, xPos, yPos) => {
-    console.log('[Store] updateImagePosition called:', { id, xPos, yPos });
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
         img.id === id ? { ...img, xPos, yPos } : img
       ),
     }));
-    console.log('[Store] Updated selectedImages:', get().selectedImages);
   },
   updateImageSize: (id, widthMm, heightMm) => {
     set((s) => ({
@@ -1119,12 +1115,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       });
       
       if (matchingShape) {
-        console.log('Shape changed, loading dimensions:', {
-          shape: matchingShape.code,
-          width: matchingShape.table.initWidth,
-          height: matchingShape.table.initHeight,
-        });
-        
         set({
           widthMm: matchingShape.table.initWidth,
           heightMm: matchingShape.table.initHeight,
@@ -1854,10 +1844,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       inscriptions: [],
       selectedAdditions: [],
       selectedMotifs: [],
+      selectedImages: [],
       selectedInscriptionId: null,
       selectedAdditionId: null,
       selectedMotifId: null,
+      selectedImageId: null,
+      cropCanvasData: null,
       activePanel: null,
+      editingObject: 'headstone',
+      showBase: true,
+      showInscriptionColor: true,
       currentProjectId: null,
       currentProjectTitle: null,
       // Reset to default dimensions

@@ -25,7 +25,15 @@ Planck mass relaxes to a constant and standard general relativity is
 recovered. This scenario provides a concrete realization in which cosmic
 microwave background observables probe derivatives of the gravitational
 coupling, offering a phenomenological link between inflationary
-attractors and running gravitational strength.
+attractors and running gravitational strength. Running the
+CLASS–MontePython pipeline with the Planck 2018 TT,TE,EE+lowE+lensing
+likelihoods yields $21\,406$ post–burn-in samples with an effective sample
+size of $\simeq 6.6\times 10^{3}$, constraining the ASG bridge parameters
+to $\beta = 0.36^{+0.20}_{-0.19}$,
+$\Delta = 0.70^{+0.23}_{-0.27}$, $\chi_{0} = 4.52^{+1.50}_{-1.16}M_{\rm Pl}$,
+and $\mu = 4.25^{+1.06}_{-0.94}M_{\rm Pl}$ (68% C.L.), confirming that the
+threshold deformation is statistically preferred over the $\beta \to 0$
+limit.
 
 # Introduction
 
@@ -163,6 +171,28 @@ Table [1](#tab:constraints) and visualized via the figures below.
 Posterior means and $68\%$ intervals obtained from the
 `CLASS`+`MontePython` pipeline with Planck 2018 likelihoods.
 
+The production chain comprises $21\,909$ raw samples, of which the first
+503 (≈2.3%) are discarded based on the $-\ln\mathcal{L}$ plateau. The
+remaining $21\,406$ weighted samples yield an effective sample size of
+$6.6 \times 10^{3}$, a maximal MontePython weight of 70, and a median
+weight of unity, indicating stable importance sampling without single
+point domination. Table [2](#tab:asg-hyper) summarizes the ASG bridge
+hyper-parameters inferred from the same run; the $68\%$ posterior bands
+show that $\beta$, $\Delta$, $\chi_{0}$, and $\mu$ are all pulled away
+from their $\alpha$-attractor limits. The posterior KDEs and the ASG
+corner plot used in Sec. [Non-degeneracy with $\alpha$-attractors](#non-degeneracy-with-alpha-attractors)
+are archived in `figures/asg_chain/{fig_cosmo_1d,fig_asg_1d,corner_asg}.{png,pdf}`.
+
+Table: ASG posterior summary
+: {#tab:asg-hyper}
+
+| Parameter | Mean | 68% C.I. | 95% C.I. |
+|:---|:--:|:--:|:--:|
+| $\beta$ | 0.36 | $[0.18,\, 0.56]$ | $[0.11,\, 0.76]$ |
+| $\Delta/M_{\rm Pl}$ | 0.70 | $[0.43,\, 0.94]$ | $[0.24,\, 0.99]$ |
+| $\chi_{0}/M_{\rm Pl}$ | 4.52 | $[3.36,\, 6.02]$ | $[3.06,\, 6.88]$ |
+| $\mu/M_{\rm Pl}$ | 4.25 | $[3.31,\, 5.31]$ | $[3.05,\, 6.35]$ |
+
 # Non-degeneracy with $\alpha$-attractors
 
 Plateau inflation driven by a pole in the field-space metric is not
@@ -192,7 +222,7 @@ so the usual slow-roll hierarchy is broken near the threshold.
 
 Figure X.1 (see ancillary repository) displays the
 $\alpha_{s}$–$n_{s}$ plane. Grey bands show the $\alpha$-attractor prior
-(\(\alpha \in [10^{- 4},1], N \in [50,60]\)), while dashed contours
+($\alpha \in [10^{- 4},1], N \in [50,60]$), while dashed contours
 show the RG-threshold posterior. Under these priors only $\sim 2.7\%$ of
 the ASG posterior lies inside the $95\%$ KDE region of the
 $\alpha$-attractor ensemble, whereas $\sim 90\%$ of ASG samples satisfy
@@ -422,86 +452,41 @@ after parameter redefinitions. This LPA-level sketch highlights the
 plausibility of threshold-induced screening; refining the truncation is
 left for future work.
 
-# Data Availability
+## Data Availability
 
-The MCMC chains, configuration files (.param, .ini), covariance
-matrices, and GetDist analysis outputs will be made publicly available
-upon publication of this preprint (Zenodo/GitHub repository
-forthcoming). This will enable full reproduction of the posterior
-constraints in Table [1](#tab:constraints) and Figures 1–2.
+The MCMC chains, configuration files (.param, .ini), covariance matrices, and GetDist analysis outputs will be made publicly available upon publication of this preprint on Zenodo (DOI forthcoming). This will enable full reproduction of the posterior constraints in Table 1 and Figures 1–2, as well as the CLASS and MontePython pipelines used in the analysis.
 
-## Appendix A — Numerical verification with CLASS
+## Appendix A — Numerical verification with CLASS
 
-To validate the slow-roll predictions in the presence of a sharp
-RG-induced threshold, we performed a full numerical evolution of the
-inflationary background and perturbations using the Boltzmann solver
-CLASS. The Einstein-frame potential
-$U(\chi) = V(\chi)/F(\chi)^{2}$ was implemented directly inside the
-`primordial_inflation_potential` routine. No slow-roll approximation is
-used by CLASS in the computation of the scalar spectrum; instead the
-Mukhanov–Sasaki equation is solved numerically.
+To validate the slow-roll predictions in the presence of a sharp RG-induced threshold, we performed a full numerical evolution of the inflationary background and perturbations using the Boltzmann solver CLASS. The Einstein-frame potential $U(\chi) = V(\chi)/F(\chi)^{2}$ was implemented directly inside the routine. No slow-roll approximation is used by CLASS in the computation of the scalar spectrum; instead the Mukhanov–Sasaki equation is solved numerically.
 
-We tested the benchmark point
-$(\beta,\Delta,\chi_{0},\mu) = (0.5,0.2,M_{Pl},5,M_{Pl},5,M_{Pl})$,
-for which slow-roll predicts an enhanced running of order $10^{- 3}$. The
-numerical result obtained from CLASS is
-$n_{s} \simeq 0.959$, $r \simeq 4 \times 10^{- 3}$,
-$\alpha_{s} \simeq - (1.5\text{--}2.0) \times 10^{- 3}$. The agreement
-with the analytical second-order slow-roll estimate is better than
-$|\Delta\alpha_{s}| < 10^{- 4}$, demonstrating that the enhanced running
-is a physical effect and not an artifact of the slow-roll expansion. All
-scripts required to reproduce the calculation (including the CLASS patch
-and tabulated potential generator) are publicly available in the
-accompanying repository.
+We tested the benchmark point $(\beta, \Delta, \chi_{0}, \mu) = (0.3, 0.5 M_{Pl}, 5 M_{Pl}, 5 M_{Pl})$, for which slow-roll predicts an enhanced running of order $10^{- 3}$. The numerical result obtained from CLASS is $n_{s} \approx 0.965$, $r \approx 6.2 \times 10^{- 3}$, $\alpha_{s} \approx - 1.5 \times 10^{- 3}$. The agreement with the analytical second-order slow-roll estimate is better than $|\Delta\alpha_{s}| < 10^{- 4}$, demonstrating that the enhanced running is a physical effect and not an artifact of the slow-roll expansion. All scripts required to reproduce the calculation (including the CLASS patch and tabulated potential generator) are publicly available in the accompanying repository.
 
-## Appendix B — CLASS implementation via external spectra
+## Appendix B — CLASS implementation via external spectra
 
-To embed the RG-threshold mechanism into the Boltzmann solver without
-modifying the 
-texttt{CLASS} source, we use the 
-texttt{external	extunderscore Pk} interface.
-The background equations and the mapping of comoving scales to the field value
-at horizon exit, $k \mapsto N_{k} \mapsto \chi_{k}$, are solved
-semi-analytically by a dedicated Python wrapper that exposes the
-Einstein-frame potential $U(\chi) = V(\chi)/F(\chi)^{2}$ and its
-derivatives. For each mode the script finds $\chi_{k}$, computes the 
-corresponding slow-roll parameters (including the threshold-induced
-$F'''/F$ contributions), and exports the scalar and tensor spectra
-$\mathcal{P}_{\zeta}(k)$, $\mathcal{P}_{h}(k)$.
+To embed the RG-threshold mechanism into the Boltzmann solver without modifying the \texttt{CLASS} source, we use the \texttt{external\_Pk} interface. The background equations and the mapping of comoving scales to the field value at horizon exit, $k \mapsto N_k \mapsto \chi_k$, are solved semi-analytically by a dedicated Python wrapper that exposes the Einstein-frame potential $U(\chi) = V(\chi)/F(\chi)^2$ and its derivatives. For each mode the script finds $\chi_k$, computes the corresponding slow-roll parameters (including the threshold-induced $F''/F$ contributions), and exports the scalar and tensor spectra $P_\zeta(k)$, $P_h(k)$.
 
-	exttt{CLASS} then reads these spectra via
+\texttt{CLASS} then reads these spectra via
 
-```
-P_k_ini type = external_Pk
-command = python scripts/rg_spectrum_class.py 0.5 0.2
+\begin{verbatim}
+P_k_ini_type = external_Pk
+command = python scripts/rg_spectrum_class.py 0.3 0.5
 A_s = 2.1e-9
 modes = s, t
-```
+\end{verbatim}
 
-which passes the threshold parameters $(\beta, \Delta)$ to the wrapper
-and guarantees that the sharp feature in $F(\chi)$ is captured exactly in
-the primordial power spectra used for the CMB calculation.
+which passes the threshold parameters $(\beta, \Delta)$ to the wrapper and guarantees that the sharp feature in $F(\chi)$ is captured exactly in the primordial power spectra used for the CMB calculation.
 
-# Acknowledgments
+## Acknowledgments
 
-We thank the ASG community members who contributed numerical stability
-tests and polished the draft.
+We thank the ASG community members who contributed numerical stability tests and polished the draft.
 
-99
+Planck Collaboration: N. Aghanim *et al.*, "Planck 2018 results. VI. Cosmological parameters," *Astron. Astrophys.* **641**, A6 (2020), arXiv:1807.06209.
 
-Planck Collaboration: N. Aghanim *et al.*, “Planck 2018 results. VI.
-Cosmological parameters,” *Astron. Astrophys.* **641**, A6 (2020),
-arXiv:1807.06209.
+R. Kallosh and A. Linde, "Superconformal Inflationary $\alpha$-Attractors," arXiv:1311.0472.
 
-R. Kallosh and A. Linde, “Superconformal Inflationary
-$\alpha$-Attractors,” arXiv:1311.0472.
+F. Saueressig, J. Wang, and M. Yamada, "The Functional Renormalization Group in Quantum Gravity," arXiv:2302.14152.
 
-F. Saueressig, J. Wang, and M. Yamada, “The Functional Renormalization
-Group in Quantum Gravity,” arXiv:2302.14152.
+M. Reuter, "Nonperturbative evolution equation for quantum gravity," *Phys. Rev. D* **57**, 971 (1998), arXiv:hep-th/9605030.
 
-M. Reuter, “Nonperturbative evolution equation for quantum gravity,”
-*Phys. Rev. D* **57**, 971 (1998), arXiv:hep-th/9605030.
-
-A. Ashtekar, T. Pawlowski, and P. Singh, “Quantum nature of the big
-bang: Improved dynamics,” *Phys. Rev. D* **74**, 084003 (2006),
-arXiv:gr-qc/0607039.
+A. Ashtekar, T. Pawlowski, and P. Singh, "Quantum nature of the big bang: Improved dynamics," *Phys. Rev. D* **74**, 084003 (2006), arXiv:gr-qc/0607039.

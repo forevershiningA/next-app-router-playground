@@ -1,4 +1,6 @@
+import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 
 export type Session = {
   accountId: string;
@@ -6,38 +8,64 @@ export type Session = {
   role: string;
 } | null;
 
+const COOKIE_NAME = 'session';
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+
+function getSecret(): Uint8Array {
+  const secret = process.env.SESSION_SECRET;
+  if (!secret) throw new Error('SESSION_SECRET env var is not set');
+  return new TextEncoder().encode(secret);
+}
+
 export async function getServerSession(): Promise<Session> {
   try {
     const cookieStore = await cookies();
-    
-    // Check for session cookie (adjust cookie name to match your auth implementation)
-    const sessionCookie = cookieStore.get('session');
-    
-    if (!sessionCookie?.value) {
-      return null;
-    }
+    const token = cookieStore.get(COOKIE_NAME)?.value;
+    if (!token) return null;
+    const { payload } = await jwtVerify(token, getSecret());
+    return {
+      accountId: payload.accountId as string,
+      email: payload.email as string,
+      role: payload.role as string,
+    };
+  } catch {
+    return null;
+  }
+}
 
-    // For now, return a mock session for development
-    // TODO: Replace with actual JWT verification or session lookup
-    // This is a placeholder - in production, you should verify the session token
-    
-    try {
-      const sessionData = JSON.parse(sessionCookie.value);
-      return {
-        accountId: sessionData.accountId || 'mock-account-id',
-        email: sessionData.email || 'admin@forevershining.com',
-        role: sessionData.role || 'client',
-      };
-    } catch {
-      // If parsing fails, return mock data for development
-      return {
-        accountId: 'mock-account-id',
-        email: 'admin@forevershining.com',
-        role: 'client',
-      };
-    }
-  } catch (error) {
-    console.error('Error getting session:', error);
+export async function createSessionToken(session: NonNullable<Session>): Promise<string> {
+  return new SignJWT({ ...session })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(getSecret());
+}
+
+export function setSessionCookie(response: NextResponse, token: string): void {
+  response.cookies.set(COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: COOKIE_MAX_AGE,
+    path: '/',
+  });
+}
+
+export function clearSessionCookie(response: NextResponse): void {
+  response.cookies.set(COOKIE_NAME, '', { maxAge: 0, path: '/' });
+}
+
+export async function verifySessionFromRequest(request: NextRequest): Promise<Session> {
+  try {
+    const token = request.cookies.get(COOKIE_NAME)?.value;
+    if (!token) return null;
+    const { payload } = await jwtVerify(token, getSecret());
+    return {
+      accountId: payload.accountId as string,
+      email: payload.email as string,
+      role: payload.role as string,
+    };
+  } catch {
     return null;
   }
 }

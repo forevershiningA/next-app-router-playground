@@ -26,36 +26,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Implement actual email sending
-    // This is a placeholder - you would integrate with SendGrid, Resend, or similar
-    console.log('Would send email to:', recipients);
-    console.log('Project:', project.title);
-    console.log('Message:', message);
-    console.log('Sender:', senderName);
-
-    // For now, just return success
-    // In production, you'd call an email service here
-    /*
-    const emailService = new EmailService();
-    for (const email of recipients) {
-      await emailService.send({
-        to: email,
-        subject: `${senderName} shared a memorial design with you`,
-        html: `
-          <p>${message}</p>
-          <h3>${project.title}</h3>
-          <img src="${project.screenshot}" alt="Design preview" />
-          <a href="${shareUrl}">View Design</a>
-        `
-      });
-    }
-    */
-
-    return NextResponse.json({
-      success: true,
-      message: 'Email sent successfully',
-      recipientCount: recipients.length,
-    });
+    // Email sending is not yet implemented.
+    // Integrate with SendGrid, Resend, or similar before enabling.
+    return NextResponse.json(
+      { error: 'Email sharing is not yet available.' },
+      { status: 501 }
+    );
   } catch (error) {
     console.error('Error sending email:', error);
     return NextResponse.json(

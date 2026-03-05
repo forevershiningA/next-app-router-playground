@@ -49,8 +49,8 @@ export default function ConditionalCanvas() {
   // Hide canvas on check-price page
   const isCheckPricePage = pathname === '/check-price';
   
-  // Hide canvas on my-account page
-  const isMyAccountPage = pathname === '/my-account';
+  // Hide canvas on my-account page and all sub-pages
+  const isMyAccountPage = pathname === '/my-account' || pathname?.startsWith('/my-account/');
   
   // Show canvas on select-size page
   const isSelectSizePage = pathname === '/select-size';

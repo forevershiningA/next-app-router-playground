@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { ComponentType } from 'react';
 import {
   SparklesIcon,
@@ -12,16 +12,9 @@ import {
   ShieldCheckIcon,
   ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 const accountLinks = [
-  {
-    label: 'New Design',
-    href: '/designs',
-    icon: SparklesIcon,
-    description: 'Launch a fresh memorial concept',
-    tone: 'primary' as const,
-    meta: 'Start from template or blank',
-  },
   {
     label: 'Saved Designs',
     href: '/my-account',
@@ -38,13 +31,13 @@ const accountLinks = [
   },
   {
     label: 'Account Details',
-    href: '/account/details',
+    href: '/my-account/details',
     icon: UserCircleIcon,
     description: 'Manage contact & billing info',
   },
   {
     label: 'Invoice Details',
-    href: '/account/invoices',
+    href: '/my-account/invoice',
     icon: DocumentDuplicateIcon,
     description: 'Download statements & receipts',
   },
@@ -60,16 +53,23 @@ const accountLinks = [
     icon: ArrowLeftIcon,
     description: 'Return to the design studio',
   },
-  {
-    label: 'Logout',
-    href: '/logout',
-    icon: ShieldCheckIcon,
-    description: 'Logout of your account',
-  },
 ];
 
 export default function AccountNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const resetDesign = useHeadstoneStore((s) => s.resetDesign);
+
+  function handleNewDesign() {
+    resetDesign();
+    router.push('/select-size');
+  }
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.dispatchEvent(new Event('session-changed'));
+    router.push('/my-account');
+  }
 
   return (
     <aside className="fixed top-0 left-0 z-20 hidden h-full w-[400px] flex-col border-r border-[#3f2a1b]/80 bg-[#120804] text-white shadow-[0_45px_120px_rgba(0,0,0,0.85)] lg:flex">
@@ -96,9 +96,33 @@ export default function AccountNav() {
         <nav aria-label="Account menu" className="flex-1 overflow-y-auto px-5 py-6">
           <p className="text-[12px] uppercase tracking-[0.4em] text-white/40">Account menu</p>
           <div className="mt-4 space-y-3">
+            {/* New Design — special button that resets design state */}
+            <button
+              onClick={handleNewDesign}
+              className="w-full flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border border-white/12 text-white/75 hover:border-white/30 hover:bg-white/5"
+            >
+              <div className="flex items-center gap-4">
+                <SparklesIcon className="h-5 w-5" />
+                <div className="flex-1">
+                  <p className="text-[16px] text-white/45">New Design</p>
+                </div>
+              </div>
+            </button>
             {accountLinks.map((link) => (
               <AccountNavLink key={link.label} {...link} isActive={pathname === link.href} />
             ))}
+            {/* Logout button */}
+            <button
+              onClick={handleLogout}
+              className="w-full flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border border-white/12 text-white/75 hover:border-red-400/30 hover:bg-red-400/5 hover:text-red-300"
+            >
+              <div className="flex items-center gap-4">
+                <ShieldCheckIcon className="h-5 w-5" />
+                <div className="flex-1">
+                  <p className="text-[16px]">Logout</p>
+                </div>
+              </div>
+            </button>
           </div>
           <div className="mt-8 rounded-2xl border border-white/12 bg-white/5 px-4 py-4 text-sm text-white/75 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
             <p className="text-[12px] uppercase tracking-[0.4em] text-white/45">Signed in as</p>
