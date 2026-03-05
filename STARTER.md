@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-02  
+**Last Updated:** 2026-03-05  
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -21,12 +21,73 @@
 13. [Check Price Feature](#check-price-feature)
 14. [Save Design Feature](#save-design-feature)
 15. [My Account System](#my-account-system)
-16. [File Storage System](#file-storage-system)
-17. [Database & Catalog System](#database--catalog-system)
-18. [Performance Considerations](#performance-considerations)
-19. [Memory Management](#memory-management)
-20. [Common Issues & Solutions](#common-issues--solutions)
-21. [Development Workflow](#development-workflow)
+16. [Authentication System](#authentication-system)
+17. [File Storage System](#file-storage-system)
+18. [Database & Catalog System](#database--catalog-system)
+19. [Performance Considerations](#performance-considerations)
+20. [Memory Management](#memory-management)
+21. [Common Issues & Solutions](#common-issues--solutions)
+22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-05)
+
+### ✅ Recent Changes (March 5, 2026)
+1. **Authentication System - COMPLETE**
+   - **Real JWT auth** replacing mocked auth: `lib/auth/session.ts` fully rewritten using `jose` (edge-compatible JWT library, v6.2.0)
+   - **Session cookie**: httpOnly, secure in prod, sameSite lax, 7-day max age, cookie name `session`
+   - **`SESSION_SECRET`** env var required (added to `.env.local` and `.env.local.example`)
+   - **API endpoints**:
+     - `POST /api/auth/login` — bcrypt password verify, JWT cookie set, `lastLoginAt` updated
+     - `POST /api/auth/logout` — clears session cookie
+     - `GET /api/auth/session` — returns `{ session }` or 401
+   - **Test user**: `admin@forevershining.com` / `admin123` (role: admin) — seeded via `scripts/seed-test-user.mjs`
+   - **Middleware** (`middleware.ts`): Protects only `/api/account/*` and `/api/orders/*`; `/my-account` pages handle auth inline
+   - **Files**: `lib/auth/session.ts`, `app/api/auth/login/route.ts`, `app/api/auth/logout/route.ts`, `app/api/auth/session/route.ts`, `scripts/seed-test-user.mjs`
+
+2. **My Account Auth Gate**
+   - `/my-account` page shows **login/register tabs** when not logged in (no redirect)
+   - When logged in, shows Saved Designs content with session email in header
+   - Session state: `undefined` = loading, `null` = not logged in, object = logged in
+   - Logout redirects back to `/my-account` which then shows the login/register gate
+   - `session-changed` custom event triggers re-check without page reload (sidebar + page stay in sync)
+   - **Save Design** button checks auth before opening modal; redirects to `/my-account` if not logged in
+   - **Files**: `app/my-account/page.tsx`, `components/DesignerNav.tsx`
+
+3. **Context-Aware Sidebar Navigation**
+   - `ConditionalNav.tsx` fetches `/api/auth/session` when on account routes
+   - Not logged in on `/my-account` → shows `DesignerNav` (same as designer mode)
+   - Logged in → shows `AccountNav`
+   - Switches instantly on login/logout via `session-changed` event (no page reload)
+   - **Files**: `components/ConditionalNav.tsx`
+
+4. **Security Audit Fixes**
+   - **Path traversal**: Segment sanitization in `/api/motifs/[...path]/route.ts`; integer-only `designId` in `/api/cache-svg/route.ts`
+   - **Share email**: Returns 501 Not Implemented instead of fake 200
+   - **ID collisions**: `genId`/`genMotifId` in headstone-store now use `crypto.randomUUID()`
+   - **DB indexes**: Added 11 indexes on FK columns in `lib/db/schema.ts`
+   - **Console.logs**: Removed unguarded debug logs from store and API routes
+   - **404 page**: `app/not-found.tsx` replaced with proper dark-themed page
+   - **resetDesign()**: Now resets all fields including `editingObject`, `showBase`, `showInscriptionColor`, `selectedImageId`, `cropCanvasData`, `selectedImages`
+
+5. **PDF Generator Redesign**
+   - Dark-themed PDF matching View Details page aesthetics
+   - `generateDesignPDF({ title, screenshot, priceLabel, createdLabel, description, productName })`
+   - Must be called client-side only (uses DOM APIs)
+   - **File**: `lib/pdf-generator.ts`
+
+6. **AccountNav Improvements**
+   - **New Design** button calls `resetDesign()` then navigates to `/select-size` (canvas reset, last product kept)
+   - **Logout** calls `/api/auth/logout` then dispatches `session-changed` event and pushes to `/my-account`
+   - **File**: `components/AccountNav.tsx`
+
+### ⚠️ Known Gaps (March 5, 2026)
+- **Register endpoint**: `AuthGate` has a register tab but `/api/auth/register` route not yet created
+- **Sub-page auth gates**: `/my-account/details`, `/my-account/invoice`, `/my-account/designs/[id]`, etc. don't guard against unauthenticated access
+- **Email sharing**: Returns 501 — needs real SendGrid/Resend implementation
+- **Orders page**: `/my-account/orders` linked from AccountNav but page doesn't exist yet
+- **AccountNav "Signed in as"**: Should use dynamic session email (currently works; email passed from page state)
 
 ---
 
@@ -3285,6 +3346,56 @@ gl.domElement.addEventListener('webglcontextrestored', handler);
 
 ---
 
+## Authentication System
+
+### Overview
+JWT-based authentication using the `jose` library (edge-compatible, v6.2.0). Session stored as an httpOnly cookie named `session`.
+
+### Environment Variable
+```
+SESSION_SECRET=<random-64-char-string>   # required in .env.local
+```
+
+### Session API
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/api/auth/login` | POST | Verify credentials, set JWT cookie |
+| `/api/auth/logout` | POST | Clear session cookie |
+| `/api/auth/session` | GET | Return `{ session }` or 401 |
+
+### Auth Flow
+1. User visits `/my-account` — page fetches `/api/auth/session` on mount
+2. **Not logged in** (`session = null`): `AuthGate` component renders login/register tabs inline; sidebar shows `DesignerNav`
+3. **Logged in** (`session = { email, role, ... }`): Saved Designs content renders; sidebar shows `AccountNav`
+4. **Login**: `AuthGate` POSTs to `/api/auth/login` → on success dispatches `session-changed` event → page + sidebar re-render
+5. **Logout**: `AccountNav` POSTs to `/api/auth/logout` → dispatches `session-changed` → page shows gate again, sidebar shows DesignerNav
+
+### `session-changed` Event
+Custom DOM event (`window.dispatchEvent(new Event('session-changed'))`) fired on login and logout. Both `app/my-account/page.tsx` and `components/ConditionalNav.tsx` listen for it to update without a page reload.
+
+### Save Design Auth Check
+`DesignerNav.tsx` checks `/api/auth/session` before opening the Save Design modal. If not logged in, redirects to `/my-account`.
+
+### Middleware
+`middleware.ts` only protects `/api/account/*` and `/api/orders/*` with JWT verification. All page routes and `/my-account/*` are public — pages handle auth inline to show the gate UI rather than a hard redirect.
+
+### Core Auth Module (`lib/auth/session.ts`)
+```typescript
+createSessionToken(payload)       // Signs JWT
+setSessionCookie(res, token)      // Sets httpOnly cookie
+clearSessionCookie(res)           // Expires cookie
+verifySessionFromRequest(req)     // For middleware/API routes (uses req.cookies)
+getServerSession()                // For Server Components (uses next/headers cookies())
+```
+
+### Test Credentials
+- Email: `admin@forevershining.com`
+- Password: `admin123`
+- Role: `admin`
+- Seed: `node --env-file=.env.local scripts/seed-test-user.mjs`
+
+---
+
 ## Development Workflow
 
 ### Starting Development
@@ -3302,6 +3413,9 @@ npm run db:push
 npm run db:seed-materials  # 29 granite materials
 npm run db:seed-shapes     # 55 headstone shapes
 npm run db:seed-additions  # 82 additions (vases, statues, etc.)
+
+# Seed test user (admin@forevershining.com / admin123)
+node --env-file=.env.local scripts/seed-test-user.mjs
 
 # Open Drizzle Studio (database GUI)
 npm run db:studio
