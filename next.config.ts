@@ -14,13 +14,17 @@ const nextConfig = {
     useCache: true,
     // Optimize for faster builds
     optimizePackageImports: ['@react-three/drei', '@react-three/fiber', 'three'],
-    // Other experimental features disabled for faster builds
-    // inlineCss: true,
-    // cacheComponents: false,
-    // clientSegmentCache: true,
-    // viewTransition: true,
-    // prerenderEarlyExit: false,
-    // routerBFCache: true,
+  },
+  webpack: (config, { isServer }) => {
+    // Reduce memory usage during build
+    config.cache = false;
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        minimize: true,
+      };
+    }
+    return config;
   },
   // Exclude large static assets from serverless functions
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
