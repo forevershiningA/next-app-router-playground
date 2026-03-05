@@ -16,14 +16,8 @@ const nextConfig = {
     optimizePackageImports: ['@react-three/drei', '@react-three/fiber', 'three'],
   },
   webpack: (config, { isServer }) => {
-    // Reduce memory usage during build
-    config.cache = false;
-    if (!isServer) {
-      config.optimization = {
-        ...config.optimization,
-        minimize: true,
-      };
-    }
+    // Limit parallel compilation to reduce peak memory on Vercel's 8 GB container
+    config.parallelism = 2;
     return config;
   },
   // Exclude large static assets from serverless functions
