@@ -262,7 +262,8 @@ export default function MyAccountPage() {
     setOpenMenuId(null);
   };
 
-  // Convert API projects to design cardsconst projectCards = savedProjects.map((project) => buildProjectCard(project));
+  // Convert API projects to design cards
+  const projectCards = savedProjects.map((project) => buildProjectCard(project));
   
   // Merge with static designs
   const designCards = buildDesignCards(allDesigns);
