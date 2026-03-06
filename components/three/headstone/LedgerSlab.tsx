@@ -11,7 +11,6 @@ import { TEX_BASE, DEFAULT_TEX, LERP_FACTOR, EPSILON } from '#/lib/headstone-con
 
 type LedgerSlabProps = {
   onClick?: (e: any) => void;
-  zOffset?: number;
 };
 
 function LedgerMesh({
@@ -20,7 +19,6 @@ function LedgerMesh({
   ledgerHeightMm,
   ledgerDepthMm,
   uprightThickness,
-  zOffset,
   onClick,
   meshRef,
 }: {
@@ -29,10 +27,9 @@ function LedgerMesh({
   ledgerHeightMm: number;
   ledgerDepthMm: number;
   uprightThickness: number;
-  zOffset: number;
   onClick?: (e: any) => void;
   meshRef: React.RefObject<THREE.Mesh | null>;
-}){
+}) {
   const texture = useTexture(texUrl);
 
   useLayoutEffect(() => {
@@ -62,10 +59,7 @@ function LedgerMesh({
   const d = ledgerDepthMm / 1000;
   const standBackZ = -(uprightThickness / 1000) / 2;
 
-  const zOffsetRef = useRef(zOffset);
-  zOffsetRef.current = zOffset;
-
-  const targetPos = useRef(new THREE.Vector3(0, h / 2 + EPSILON, standBackZ + d / 2 + zOffset));
+  const targetPos = useRef(new THREE.Vector3(0, h / 2 + EPSILON, standBackZ + d / 2));
   const targetScale = useRef(new THREE.Vector3(w, h, d));
 
   useFrame(() => {
@@ -74,7 +68,7 @@ function LedgerMesh({
     const newH = ledgerHeightMm / 1000;
     const newD = ledgerDepthMm / 1000;
     const newStandBackZ = -(uprightThickness / 1000) / 2;
-    targetPos.current.set(0, newH / 2 + EPSILON, newStandBackZ + newD / 2 + zOffsetRef.current);
+    targetPos.current.set(0, newH / 2 + EPSILON, newStandBackZ + newD / 2);
     targetScale.current.set(newW, newH, newD);
     meshRef.current.position.lerp(targetPos.current, LERP_FACTOR);
     meshRef.current.scale.lerp(targetScale.current, LERP_FACTOR);
@@ -91,7 +85,7 @@ function LedgerMesh({
   );
 }
 
-const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({ onClick, zOffset = 0 }, ref) {
+const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({ onClick }, ref) {
   const internalRef = useRef<THREE.Mesh>(null!);
   useImperativeHandle(ref, () => internalRef.current);
 
@@ -115,7 +109,6 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
         ledgerHeightMm={ledgerHeightMm}
         ledgerDepthMm={ledgerDepthMm}
         uprightThickness={uprightThickness}
-        zOffset={zOffset}
         onClick={onClick}
         meshRef={internalRef}
       />
