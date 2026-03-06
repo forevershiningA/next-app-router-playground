@@ -1,17 +1,11 @@
 import type { Metadata } from 'next';
-import { SAVED_DESIGNS } from '#/lib/saved-designs-data';
+import { PRODUCT_STATS, CATEGORY_STATS } from '#/lib/saved-designs-data';
 import DesignsPageClient from './DesignsPageClient';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const allDesigns = Object.values(SAVED_DESIGNS);
-  const totalDesigns = allDesigns.length;
-  
-  // Group by product type
-  const productTypes = new Set(allDesigns.map(d => d.productSlug));
-  const productCount = productTypes.size;
-  
-  // Get top categories
-  const categoryCount = new Set(allDesigns.map(d => d.category || 'uncategorized')).size;
+  const totalDesigns = Object.values(PRODUCT_STATS).reduce((sum, n) => sum + n, 0);
+  const productCount = Object.keys(PRODUCT_STATS).length;
+  const categoryCount = Object.keys(CATEGORY_STATS).length;
   
   const title = 'Memorial Designs - Headstones, Plaques & Monuments | Forever Shining';
   const description = `Explore ${totalDesigns.toLocaleString()} premium memorial designs including traditional headstones, laser-etched monuments, and bronze plaques. Customize with inscriptions, granite colors, and motifs. View in 3D before ordering.`;

@@ -3,6 +3,8 @@ import { getAllSavedDesigns, DESIGN_CATEGORIES, PRODUCT_STATS } from '#/lib/save
 
 const BASE_URL = 'https://forevershining.org';
 
+// Generate at request time — the 3114-design dataset is too large to bundle into SSG workers
+export const dynamic = 'force-dynamic';
 export default function sitemap(): MetadataRoute.Sitemap {
   const designs = getAllSavedDesigns();
 
