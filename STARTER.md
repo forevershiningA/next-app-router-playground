@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-05  
+**Last Updated:** 2026-03-05 (evening)
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -79,15 +79,41 @@
 
 6. **AccountNav Improvements**
    - **New Design** button calls `resetDesign()` then navigates to `/select-size` (canvas reset, last product kept)
-   - **Logout** calls `/api/auth/logout` then dispatches `session-changed` event and pushes to `/my-account`
+   - **Logout** dispatches `session-changed` event only — no `router.push` (avoids race condition where navigation would skip the event listener). Page and sidebar update in-place.
    - **File**: `components/AccountNav.tsx`
+
+7. **Logout Race Condition Fix**
+   - **Problem**: After logout, the Saved Designs list stayed visible instead of switching to login/register gate.
+   - **Root cause**: `router.push('/my-account')` fired immediately after `session-changed`, causing a navigation that potentially bypassed the event listener on the page.
+   - **Fix**: Removed `router.push` from `handleLogout`. Since the user is already on `/my-account`, the `session-changed` event alone triggers `checkSession()` → sets `session = null` → renders `AuthGate`.
+   - **File**: `components/AccountNav.tsx`
+
+8. **Vercel Build Fixes**
+   - **pnpm lockfile out of sync**: `jose@6.2.0` was installed but not in `pnpm-lock.yaml`. Fixed by running `pnpm install` locally and committing the updated lockfile.
+   - **OOM (Out of Memory) build kill**: Build container ran out of 8 GB RAM. Fixed by adding `NODE_OPTIONS='--max-old-space-size=4096'` to the build script in `package.json`.
+   - **38-minute build**: After OOM fix, `config.cache = false` (added to reduce memory) backfired — it disabled webpack's filesystem cache, forcing full recompilation of Three.js/R3F/etc. on every build. Fixed by removing `cache = false` and instead setting `config.parallelism = 2` to limit concurrent module compilation.
+   - **Files**: `package.json`, `next.config.ts`, `pnpm-lock.yaml`
+
+9. **Neon Production Database Setup**
+   - **Problem**: `db:sync` (copies local → Neon) ran correctly but the admin user was missing from Neon's `accounts` table.
+   - **Schema pushed to Neon**: Used `drizzle.neon.config.ts` (bypasses `.env.local` dotenv override) to push schema changes (indexes, column defaults) directly to Neon.
+   - **Search path issue**: Neon pooler endpoint requires `SET search_path TO public` before DML queries — without it, `INSERT INTO accounts` fails with "relation does not exist" even though the table exists in `information_schema`.
+   - **Admin user seeded**: Upserted via direct pg client with explicit `SET search_path TO public`.
+   - **`SESSION_SECRET` required on Vercel**: Must be set as a Vercel environment variable. Without it, `lib/auth/session.ts`'s `getSecret()` throws and login returns 500.
 
 ### ⚠️ Known Gaps (March 5, 2026)
 - **Register endpoint**: `AuthGate` has a register tab but `/api/auth/register` route not yet created
 - **Sub-page auth gates**: `/my-account/details`, `/my-account/invoice`, `/my-account/designs/[id]`, etc. don't guard against unauthenticated access
 - **Email sharing**: Returns 501 — needs real SendGrid/Resend implementation
 - **Orders page**: `/my-account/orders` linked from AccountNav but page doesn't exist yet
-- **AccountNav "Signed in as"**: Should use dynamic session email (currently works; email passed from page state)
+- **Neon seeding after `db:sync`**: Running `db:sync` overwrites Neon. Must re-run admin seed after every sync. Consider adding it to the sync script's post-step.
+- **`drizzle.neon.config.ts`**: Temporary file used for Neon schema push — contains hardcoded credentials, should not be committed. Currently deleted after use.
+
+### 🔑 Vercel Environment Variables Required
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `SESSION_SECRET` | JWT signing secret (any long random string) |
 
 ---
 
@@ -3392,7 +3418,15 @@ getServerSession()                // For Server Components (uses next/headers co
 - Email: `admin@forevershining.com`
 - Password: `admin123`
 - Role: `admin`
-- Seed: `node --env-file=.env.local scripts/seed-test-user.mjs`
+- Seed locally: `node --env-file=.env.local scripts/seed-test-user.mjs`
+- Seed on Neon (after every `db:sync`): Run a script using direct pg client with `SET search_path TO public` before INSERT. The Neon pooler endpoint requires explicit search_path — without it, `INSERT INTO accounts` fails even though the table exists.
+
+### ⚠️ Neon Pooler Search Path Gotcha
+When connecting to Neon via the pooler (`*-pooler.*.neon.tech`), always run:
+```sql
+SET search_path TO public;
+```
+before any DML. Otherwise tables appear in `information_schema` but fail on direct access. This does NOT affect the app at runtime because Drizzle/postgres.js handle it automatically.
 
 ---
 
@@ -3414,12 +3448,28 @@ npm run db:seed-materials  # 29 granite materials
 npm run db:seed-shapes     # 55 headstone shapes
 npm run db:seed-additions  # 82 additions (vases, statues, etc.)
 
-# Seed test user (admin@forevershining.com / admin123)
+# Seed test user locally (admin@forevershining.com / admin123)
 node --env-file=.env.local scripts/seed-test-user.mjs
+
+# Sync local DB to Neon (production)
+npm run db:sync
+# ⚠️ After db:sync, re-seed the admin user on Neon (db:sync overwrites everything):
+# Run seed-test-user.mjs with DATABASE_URL pointed at Neon connection string
 
 # Open Drizzle Studio (database GUI)
 npm run db:studio
 ```
+
+### Neon / Production Notes
+- **`SESSION_SECRET`** must be set as a Vercel environment variable (JWT signing fails without it → login returns 500)
+- **`DATABASE_URL`** on Vercel must point to the Neon connection string
+- **Neon pooler search path**: When connecting via pooler endpoint (`*-pooler.*.neon.tech`), run `SET search_path TO public` before DML queries or they'll fail with "relation does not exist"
+- **After `db:sync`**: The admin user in `accounts` is included IF it exists locally. Always verify after sync.
+
+### Build Notes
+- Build script: `NODE_OPTIONS='--max-old-space-size=4096' next build` — caps heap at 4 GB (Vercel container has 8 GB)
+- `webpack.parallelism = 2` — limits concurrent module compilation to prevent OOM
+- **Do NOT set `config.cache = false`** — disabling webpack cache causes 30+ minute builds (Three.js/R3F must recompile from scratch every time)
 
 ### Building for Production
 ```bash

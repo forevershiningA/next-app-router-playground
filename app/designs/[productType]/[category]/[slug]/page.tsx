@@ -137,37 +137,52 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
   // Determine product type for title
   const productTypeDisplay = design.productType === 'headstone' ? 'Headstone' : 
                             design.productType === 'plaque' ? 'Plaque' : 'Monument';
-  
-  // Build enhanced title
-  // Format: "Mother Memorial – Laser-Etched Black Granite Headstone | Forever Shining"
-  const pageTitle = `${categoryTitle} – ${simplifiedProduct} ${productTypeDisplay} | Forever Shining`;
-  
-  // Get shape name if available
-  const shapeName = design.id ? await getDesignShape(design.id, design.mlDir) : null;
-  
+
+  // Use shapeName directly from design metadata (no extra fetch needed)
+  const shapeDisplay = design.shapeName
+    ? design.shapeName.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    : null;
+
+  // Extract the unique verse/phrase from the slug by stripping the shape prefix
+  // e.g. "curved-gable-may-heavens-eternal-happiness-be-thine" → "May Heavens Eternal Happiness Be Thine"
+  const shapeSlugPrefix = design.shapeName
+    ? design.shapeName.toLowerCase().replace(/\s+/g, '-') + '-'
+    : '';
+  const phraseFromSlug = slug.startsWith(shapeSlugPrefix) && shapeSlugPrefix
+    ? formatSlugForDisplay(slug.slice(shapeSlugPrefix.length))
+    : null;
+
+  // Design-specific page title
+  // e.g. "Curved Gable – May Heavens Eternal Happiness Be Thine | Forever Shining"
+  const pageTitle = shapeDisplay && phraseFromSlug
+    ? `${shapeDisplay} – ${phraseFromSlug} | Forever Shining`
+    : shapeDisplay
+    ? `${shapeDisplay} ${categoryTitle} – ${simplifiedProduct} | Forever Shining`
+    : `${categoryTitle} – ${simplifiedProduct} ${productTypeDisplay} | Forever Shining`;
+
+  // Fetch shapeName for structured data (falls back to shapeDisplay if already available)
+  const shapeName = shapeDisplay || (design.id ? await getDesignShape(design.id, design.mlDir) : null);
+
   // Build H1 equivalent (used in OpenGraph)
-  // Format: "Mother Memorial – Laser-Etched Black Granite (Heart)"
-  const h1Title = `${categoryTitle} – ${simplifiedProduct}${shapeName ? ` (${shapeName})` : ''}`;
-  
-  // Build meta description (140-160 chars)
-  // Format: "Design a heart-shaped Mother Memorial in laser-etched black granite. Add name, verse, motifs and preview live. Fast proofing & delivery."
-  let description = `Design a ${categoryTitle.toLowerCase()} in ${simplifiedProduct.toLowerCase()}.`;
-  
-  // Add features based on design content
-  const features: string[] = [];
-  if (design.inscriptionCount > 0) features.push('inscriptions');
-  if (design.hasMotifs) features.push('motifs');
-  if (design.hasPhoto) features.push('photos');
-  
-  if (features.length > 0) {
-    description += ` Add ${features.join(', ')}.`;
-  } else {
-    description += ' Fully customizable.';
-  }
-  
-  description += ' Preview live. Fast proofing & delivery.';
-  
-  // Ensure description is within 140-160 chars
+  const h1Title = shapeDisplay
+    ? `${shapeDisplay} ${categoryTitle} – ${simplifiedProduct}`
+    : `${categoryTitle} – ${simplifiedProduct}${shapeName ? ` (${shapeName})` : ''}`;
+
+  // Design-specific meta description using shape, motifs and verse from slug
+  const motifList = design.motifNames?.length > 0
+    ? design.motifNames.slice(0, 3).join(', ').replace(/,([^,]*)$/, ' and$1')
+    : null;
+
+  let description = shapeDisplay
+    ? `${shapeDisplay} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`
+    : `${categoryTitle} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`;
+
+  if (motifList) description += ` with ${motifList}`;
+  description += '.';
+  if (phraseFromSlug) description += ` '${phraseFromSlug}.'`;
+  description += ' Personalise online with live preview.';
+
+  // Ensure description is within 160 chars
   if (description.length > 160) {
     description = description.substring(0, 157) + '...';
   }

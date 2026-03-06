@@ -67,8 +67,10 @@ export default function AccountNav() {
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });
+    // Dispatch session-changed so the page and sidebar update immediately.
+    // router.push is intentionally omitted — we're already on /my-account and
+    // navigating away then back would skip the event listener.
     window.dispatchEvent(new Event('session-changed'));
-    router.push('/my-account');
   }
 
   return (
