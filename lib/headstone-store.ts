@@ -218,8 +218,32 @@ type HeadstoneState = {
   showBase: boolean;
   setShowBase: (showBase: boolean) => void;
 
-  editingObject: 'headstone' | 'base';
-  setEditingObject: (obj: 'headstone' | 'base') => void;
+  showLedger: boolean;
+  setShowLedger: (v: boolean) => void;
+
+  showKerbset: boolean;
+  setShowKerbset: (v: boolean) => void;
+
+  ledgerWidthMm: number;
+  setLedgerWidthMm: (v: number) => void;
+
+  ledgerHeightMm: number;
+  setLedgerHeightMm: (v: number) => void;
+
+  ledgerDepthMm: number;
+  setLedgerDepthMm: (v: number) => void;
+
+  kerbWidthMm: number;
+  setKerbWidthMm: (v: number) => void;
+
+  kerbHeightMm: number;
+  setKerbHeightMm: (v: number) => void;
+
+  kerbDepthMm: number;
+  setKerbDepthMm: (v: number) => void;
+
+  editingObject: 'headstone' | 'base' | 'ledger' | 'kerbset';
+  setEditingObject: (obj: 'headstone' | 'base' | 'ledger' | 'kerbset') => void;
 
   showInscriptionColor: boolean;
   inscriptionPriceModel: PriceModel | null;
@@ -779,9 +803,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const isPlaque = productType === 'plaque';
       const isHeadstoneLike =
         productType === 'headstone' || productType === 'mini-headstone';
-      const showBase = isHeadstoneLike || productType === 'monument';
+      const showBase = isHeadstoneLike || productType === 'monument' || productType === 'full-monument';
+      const isFullMonument = productType === 'full-monument';
       const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
       set({ showBase, showInscriptionColor });
+      if (isFullMonument !== undefined) {
+        set({ showLedger: isFullMonument, showKerbset: isFullMonument });
+      }
       const hasBase = showBase;
       const prevProductType = prevSnapshot.catalog?.product?.type;
       const prevProductWasPlaque =
@@ -919,6 +947,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           uprightThickness: clampedTabletThickness,
           slantThickness: clampedTabletThickness,
         });
+
+        if (isFullMonument) {
+          set({
+            ledgerWidthMm: shape.lid?.initWidth || 950,
+            ledgerHeightMm: shape.lid?.initHeight || 60,
+            ledgerDepthMm: shape.lid?.initDepth || 2030,
+            kerbWidthMm: shape.kerb?.initWidth || 1200,
+            kerbHeightMm: shape.kerb?.initHeight || 300,
+            kerbDepthMm: shape.kerb?.initDepth || 2150,
+          });
+        }
 
         if (shape.table.color) {
           // Fix texture path - ensure it starts with /
@@ -1079,6 +1118,30 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   showBase: true,
   setShowBase: (showBase) => set({ showBase }),
+
+  showLedger: false,
+  setShowLedger: (v) => set({ showLedger: v }),
+
+  showKerbset: false,
+  setShowKerbset: (v) => set({ showKerbset: v }),
+
+  ledgerWidthMm: 950,
+  setLedgerWidthMm: (v) => set({ ledgerWidthMm: v }),
+
+  ledgerHeightMm: 60,
+  setLedgerHeightMm: (v) => set({ ledgerHeightMm: v }),
+
+  ledgerDepthMm: 2030,
+  setLedgerDepthMm: (v) => set({ ledgerDepthMm: v }),
+
+  kerbWidthMm: 1200,
+  setKerbWidthMm: (v) => set({ kerbWidthMm: v }),
+
+  kerbHeightMm: 300,
+  setKerbHeightMm: (v) => set({ kerbHeightMm: v }),
+
+  kerbDepthMm: 2150,
+  setKerbDepthMm: (v) => set({ kerbDepthMm: v }),
 
   editingObject: 'headstone',
   setEditingObject: (obj) => set({ editingObject: obj }),
@@ -1853,6 +1916,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       activePanel: null,
       editingObject: 'headstone',
       showBase: true,
+      showLedger: false,
+      showKerbset: false,
       showInscriptionColor: true,
       currentProjectId: null,
       currentProjectTitle: null,

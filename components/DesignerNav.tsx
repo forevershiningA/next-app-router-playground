@@ -92,6 +92,18 @@ export default function DesignerNav() {
   const setBaseHeightMm = useHeadstoneStore((s) => s.setBaseHeightMm);
   const baseFinish = useHeadstoneStore((s) => s.baseFinish);
   const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
+  const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const setLedgerWidthMm = useHeadstoneStore((s) => s.setLedgerWidthMm);
+  const ledgerHeightMm = useHeadstoneStore((s) => s.ledgerHeightMm);
+  const setLedgerHeightMm = useHeadstoneStore((s) => s.setLedgerHeightMm);
+  const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
+  const setLedgerDepthMm = useHeadstoneStore((s) => s.setLedgerDepthMm);
+  const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
+  const setKerbWidthMm = useHeadstoneStore((s) => s.setKerbWidthMm);
+  const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
+  const setKerbHeightMm = useHeadstoneStore((s) => s.setKerbHeightMm);
+  const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
+  const setKerbDepthMm = useHeadstoneStore((s) => s.setKerbDepthMm);
   const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const setHeadstoneStyle = useHeadstoneStore((s) => s.setHeadstoneStyle);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
@@ -1100,8 +1112,9 @@ export default function DesignerNav() {
 
   // Sync canvas selection with editingObject on select-size page
   useEffect(() => {
-    if (isSelectSizePage && selected !== editingObject) {
-      setSelected(editingObject);
+    const partValue = editingObject === 'base' ? 'base' : 'headstone';
+    if (isSelectSizePage && selected !== partValue) {
+      setSelected(partValue);
     }
   }, [isSelectSizePage, editingObject, selected, setSelected]);
 
@@ -1361,22 +1374,97 @@ export default function DesignerNav() {
   // Render Select Size panel content
   const renderSelectSizePanel = (extraClassName = '') => {
     const firstShape = catalog?.product?.shapes?.[0];
-    const currentWidthMm = editingObject === 'base' ? baseWidthMm : widthMm;
-    const currentHeightMm = editingObject === 'base' ? baseHeightMm : heightMm;
-    const setCurrentWidthMm = editingObject === 'base' ? setBaseWidthMm : setWidthMm;
-    const setCurrentHeightMm = editingObject === 'base' ? setBaseHeightMm : setHeightMm;
-    
-    const minWidth = editingObject === 'base' ? widthMm : (firstShape?.table?.minWidth ?? 40);
-    const maxWidth = editingObject === 'base' ? 2000 : (firstShape?.table?.maxWidth ?? 1200);
-    const minHeight = editingObject === 'base' ? 50 : (firstShape?.table?.minHeight ?? 40);
-    const maxHeight = editingObject === 'base' ? 200 : (firstShape?.table?.maxHeight ?? 1200);
-    
-    const minThickness = editingObject === 'base' 
-      ? (firstShape?.stand?.minDepth ?? 100)
-      : (firstShape?.table?.minDepth ?? 100);
-    const maxThickness = editingObject === 'base'
-      ? (firstShape?.stand?.maxDepth ?? 300)
-      : (firstShape?.table?.maxDepth ?? 300);
+    const isFullMonument = catalog?.product?.type === 'full-monument';
+
+    const currentWidthMm =
+      editingObject === 'base'
+        ? baseWidthMm
+        : editingObject === 'ledger'
+          ? ledgerWidthMm
+          : editingObject === 'kerbset'
+            ? kerbWidthMm
+            : widthMm;
+    const currentHeightMm =
+      editingObject === 'base'
+        ? baseHeightMm
+        : editingObject === 'ledger'
+          ? ledgerHeightMm
+          : editingObject === 'kerbset'
+            ? kerbHeightMm
+            : heightMm;
+    const setCurrentWidthMm =
+      editingObject === 'base'
+        ? setBaseWidthMm
+        : editingObject === 'ledger'
+          ? setLedgerWidthMm
+          : editingObject === 'kerbset'
+            ? setKerbWidthMm
+            : setWidthMm;
+    const setCurrentHeightMm =
+      editingObject === 'base'
+        ? setBaseHeightMm
+        : editingObject === 'ledger'
+          ? setLedgerHeightMm
+          : editingObject === 'kerbset'
+            ? setKerbHeightMm
+            : setHeightMm;
+
+    const minWidth =
+      editingObject === 'base'
+        ? widthMm
+        : editingObject === 'ledger' || editingObject === 'kerbset'
+          ? 300
+          : (firstShape?.table?.minWidth ?? 40);
+    const maxWidth =
+      editingObject === 'base'
+        ? 2000
+        : editingObject === 'ledger' || editingObject === 'kerbset'
+          ? 2000
+          : (firstShape?.table?.maxWidth ?? 1200);
+    const minHeight =
+      editingObject === 'base'
+        ? 50
+        : editingObject === 'ledger'
+          ? 30
+          : editingObject === 'kerbset'
+            ? 100
+            : (firstShape?.table?.minHeight ?? 40);
+    const maxHeight =
+      editingObject === 'base'
+        ? 200
+        : editingObject === 'ledger'
+          ? 150
+          : editingObject === 'kerbset'
+            ? 500
+            : (firstShape?.table?.maxHeight ?? 1200);
+
+    const minThickness =
+      editingObject === 'base'
+        ? (firstShape?.stand?.minDepth ?? 100)
+        : editingObject === 'ledger' || editingObject === 'kerbset'
+          ? 500
+          : (firstShape?.table?.minDepth ?? 100);
+    const maxThickness =
+      editingObject === 'base'
+        ? (firstShape?.stand?.maxDepth ?? 300)
+        : editingObject === 'ledger' || editingObject === 'kerbset'
+          ? 3000
+          : (firstShape?.table?.maxDepth ?? 300);
+
+    const currentDepthMm = editingObject === 'ledger' ? ledgerDepthMm : editingObject === 'kerbset' ? kerbDepthMm : null;
+    const setCurrentDepthMm = editingObject === 'ledger' ? setLedgerDepthMm : editingObject === 'kerbset' ? setKerbDepthMm : null;
+
+    const sizeTabOptions = isFullMonument
+      ? [
+          { label: 'Headstone', value: 'headstone' },
+          { label: 'Base', value: 'base' },
+          { label: 'Ledger', value: 'ledger' },
+          { label: 'Kerbset', value: 'kerbset' },
+        ]
+      : [
+          { label: 'Headstone', value: 'headstone' },
+          { label: 'Base', value: 'base' },
+        ];
 
     return (
       <div className={`fs-size-panel space-y-5 rounded-2xl p-4 shadow-xl backdrop-blur-sm ${extraClassName}`}>
@@ -1384,16 +1472,15 @@ export default function DesignerNav() {
           <SegmentedControl
             value={editingObject}
             onChange={(value) => {
-              setEditingObject(value as 'headstone' | 'base');
-              setSelected(value as 'headstone' | 'base');
+              setEditingObject(value as 'headstone' | 'base' | 'ledger' | 'kerbset');
+              if (value === 'headstone' || value === 'base') {
+                setSelected(value as 'headstone' | 'base');
+              }
               if (value === 'base') {
                 setShowBase(true);
               }
             }}
-            options={[
-              { label: 'Headstone', value: 'headstone' },
-              { label: 'Base', value: 'base' },
-            ]}
+            options={sizeTabOptions}
           />
         )}
 
@@ -1778,6 +1865,61 @@ export default function DesignerNav() {
                 value={baseThickness}
                 onChange={(e) => setBaseThickness(Number(e.target.value))}
                 className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)]"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                <span>{minThickness}mm</span>
+                <span>{maxThickness}mm</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {(editingObject === 'ledger' || editingObject === 'kerbset') && currentDepthMm !== null && setCurrentDepthMm && (
+          <div className="space-y-1">
+            <div className="flex items-center justify-between gap-2">
+              <label className="text-sm font-medium text-gray-200 w-20">Length</label>
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setCurrentDepthMm(Math.max(minThickness, currentDepthMm - 10))}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Decrease length by 10mm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  min={minThickness}
+                  max={maxThickness}
+                  step={10}
+                  value={currentDepthMm}
+                  onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
+                  className="w-16 rounded border border-[#5A5A5A] px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 focus:border-[#D7B356] focus:ring-[#D7B356]/30 transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setCurrentDepthMm(Math.min(maxThickness, currentDepthMm + 10))}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Increase length by 10mm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                <span className="text-sm font-medium text-gray-300">mm</span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min={minThickness}
+                max={maxThickness}
+                step={10}
+                value={currentDepthMm}
+                onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
                 <span>{minThickness}mm</span>

@@ -1,3 +1,9 @@
+export interface ShapeDims {
+  initWidth: number;
+  initHeight: number;
+  initDepth: number;
+}
+
 export interface ShapeData {
   name: string;
   code?: string;  // Shape code from XML (e.g., "Oval Landscape", "Portrait")
@@ -26,6 +32,9 @@ export interface ShapeData {
     initHeight: number;
     color?: string;
   };
+  // Full-monument component dimensions (used for pricing display)
+  kerb?: ShapeDims;
+  lid?: ShapeDims;
 }
 
 export interface AdditionData {
@@ -67,7 +76,9 @@ export interface CatalogData {
     shapes: ShapeData[];
     additions: AdditionData[];
     priceModel: PriceModel;
-    basePriceModel?: PriceModel; // Base/stand price model
+    basePriceModel?: PriceModel;     // Base/stand price model (product type="base")
+    ledgerPriceModel?: PriceModel;   // Ledger price model (product type="ledger")
+    kerbsetPriceModel?: PriceModel;  // Kerbset price model (product type="kerbset")
   };
 }
 
@@ -326,10 +337,10 @@ export async function parseCatalogXML(
   const color = productElement.getAttribute('color') || undefined;
   const defaultColor = productElement.getAttribute('default-color') || undefined;
 
-  // Parse shapes
+  // Parse shapes (headstone, plaque, and full-monument types)
   const shapes: ShapeData[] = [];
   const shapeElements = xmlDoc.querySelectorAll(
-    'shape[type="headstone"], shape[type="plaque"]',
+    'shape[type="headstone"], shape[type="plaque"], shape[type="full-monument"]',
   );
   shapeElements.forEach((shapeEl) => {
     const name = shapeEl.getAttribute('name') || '';
@@ -337,6 +348,8 @@ export async function parseCatalogXML(
     const url = shapeEl.getAttribute('url') || undefined;
     const standEl = shapeEl.querySelector('file[type="stand"]');
     const tableEl = shapeEl.querySelector('file[type="table"]');
+    const kerbEl = shapeEl.querySelector('file[type="kerb"]');
+    const lidEl = shapeEl.querySelector('file[type="lid"]');
 
     if (standEl && tableEl) {
       const stand = {
@@ -365,7 +378,19 @@ export async function parseCatalogXML(
         color: tableEl.getAttribute('color') || undefined,
       };
 
-      shapes.push({ name, code, url, stand, table });
+      const kerb: ShapeDims | undefined = kerbEl ? {
+        initWidth: parseInt(kerbEl.getAttribute('init_width') || '0'),
+        initHeight: parseInt(kerbEl.getAttribute('init_height') || '0'),
+        initDepth: parseInt(kerbEl.getAttribute('init_depth') || '0'),
+      } : undefined;
+
+      const lid: ShapeDims | undefined = lidEl ? {
+        initWidth: parseInt(lidEl.getAttribute('init_width') || '0'),
+        initHeight: parseInt(lidEl.getAttribute('init_height') || '0'),
+        initDepth: parseInt(lidEl.getAttribute('init_depth') || '0'),
+      } : undefined;
+
+      shapes.push({ name, code, url, stand, table, kerb, lid });
     }
   });
 
@@ -433,7 +458,23 @@ export async function parseCatalogXML(
     }
   }
 
-  const catalogData = { product: { id, name, type, laser, border, color, defaultColor, shapes, additions, priceModel, basePriceModel } };
+  // Parse ledger price model
+  let ledgerPriceModel: PriceModel | undefined = undefined;
+  const ledgerProductEl = xmlDoc.querySelector('product[type="ledger"]');
+  if (ledgerProductEl) {
+    const el = ledgerProductEl.querySelector('price_model');
+    if (el) ledgerPriceModel = parsePriceModel(el);
+  }
+
+  // Parse kerbset price model
+  let kerbsetPriceModel: PriceModel | undefined = undefined;
+  const kerbsetProductEl = xmlDoc.querySelector('product[type="kerbset"]');
+  if (kerbsetProductEl) {
+    const el = kerbsetProductEl.querySelector('price_model');
+    if (el) kerbsetPriceModel = parsePriceModel(el);
+  }
+
+  const catalogData = { product: { id, name, type, laser, border, color, defaultColor, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
   catalogCache.set(productId, catalogData);
   return catalogData;
 }

@@ -6,6 +6,8 @@ import * as THREE from 'three';
 
 import ShapeSwapper from './ShapeSwapper';
 import HeadstoneBaseAuto from './HeadstoneBaseAuto';
+import LedgerSlab from './LedgerSlab';
+import KerbsetBorder from './KerbsetBorder';
 import RotatingBoxOutline from '../RotatingBoxOutline';
 import SelectionBox from '../SelectionBox';
 import { useHeadstoneStore } from '#/lib/headstone-store';
@@ -24,6 +26,8 @@ export default function HeadstoneAssembly() {
   );
   const loading = useHeadstoneStore((s) => s.loading);
   const showBase = useHeadstoneStore((s) => s.showBase);
+  const showLedger = useHeadstoneStore((s) => s.showLedger);
+  const showKerbset = useHeadstoneStore((s) => s.showKerbset);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
@@ -55,6 +59,8 @@ export default function HeadstoneAssembly() {
   const tabletRef = useRef<THREE.Object3D>(null!);
   const baseRef = useRef<THREE.Mesh>(null!);
   const headstoneMeshRef = useRef<THREE.Mesh>(null!);
+  const ledgerRef = useRef<THREE.Mesh>(null!);
+  const kerbsetRef = useRef<THREE.Group>(null!);
 
   const selectedInscription = inscriptions.find(
     (inscription) => inscription.id === selectedInscriptionId,
@@ -121,6 +127,30 @@ export default function HeadstoneAssembly() {
           />
         )}
       </group>
+
+      {showLedger && (
+        <LedgerSlab
+          ref={ledgerRef}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelected('headstone');
+            setEditingObject('ledger');
+            setSelectedInscriptionId(null);
+          }}
+        />
+      )}
+
+      {showKerbset && (
+        <KerbsetBorder
+          ref={kerbsetRef}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelected('headstone');
+            setEditingObject('kerbset');
+            setSelectedInscriptionId(null);
+          }}
+        />
+      )}
     </>
   );
 }

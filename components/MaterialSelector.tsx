@@ -66,7 +66,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   // Ensure canvas selection matches editingObject when component mounts
   useEffect(() => {
     if (selected !== editingObject) {
-      setSelected(editingObject);
+      setSelected(editingObject === 'base' ? 'base' : 'headstone');
     }
   }, [editingObject, selected, setSelected]);
 
@@ -88,6 +88,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
     setIsMaterialChange(true);
     const targetObject = isPlaque ? 'headstone' : editingObject;
+    const targetPart = targetObject === 'base' ? 'base' : 'headstone';
 
     if (targetObject === 'base') {
       setBaseMaterialUrl(materialUrl);
@@ -95,8 +96,8 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       setHeadstoneMaterialUrl(materialUrl);
     }
 
-    setSelected(targetObject);
-    setEditingObject(targetObject);
+    setSelected(targetPart);
+    setEditingObject(targetPart);
 
     setTimeout(() => setIsMaterialChange(false), 100);
   };

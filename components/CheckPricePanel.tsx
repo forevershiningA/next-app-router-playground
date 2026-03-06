@@ -14,6 +14,7 @@ import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
+import { calculatePrice } from '#/lib/xml-parser';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -22,6 +23,7 @@ export default function CheckPricePanel() {
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
@@ -100,6 +102,12 @@ export default function CheckPricePanel() {
     return filename.replace('.svg', '').replace(/-/g, ' ');
   }, [shapeUrl]);
 
+  // Find the currently selected shape in the catalog (matched by URL)
+  const selectedShape = useMemo(() => {
+    if (!catalog || !shapeUrl) return null;
+    return catalog.product.shapes.find((s) => s.url === shapeUrl) ?? catalog.product.shapes[0] ?? null;
+  }, [catalog, shapeUrl]);
+
   // Bronze material name mapping
   const BRONZE_MATERIALS: Record<string, string> = {
     '01': 'Black',
@@ -160,17 +168,45 @@ export default function CheckPricePanel() {
     return whole > 0 ? `${whole} ${num}/${den}"` : `${num}/${den}"`;
   };
 
-  // Calculate headstone price (placeholder - would need actual catalog pricing)
+  // Whether this is a full-monument product (has ledger + kerbset components)
+  const isFullMonument = catalog?.product.type === 'full-monument';
+
+  // Calculate headstone price from catalog price model
+  // Most headstone price models use quantity_type="Width + Height"
   const headstonePrice = useMemo(() => {
-    // This would come from catalog pricing based on size, shape, material
-    return 2565.95; // Placeholder
+    if (!catalog) return 0;
+    const pm = catalog.product.priceModel;
+    const quantity = pm.quantityType === 'Width + Height'
+      ? widthMm + heightMm
+      : pm.quantityType === 'Height'
+      ? heightMm
+      : widthMm;
+    return calculatePrice(pm, quantity);
   }, [catalog, widthMm, heightMm]);
 
-  // Calculate base price (placeholder)
+  // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {
-    if (!showBase) return 0;
-    return 650.00; // Placeholder
-  }, [showBase]);
+    if (!showBase || !catalog?.product.basePriceModel) return 0;
+    const pm = catalog.product.basePriceModel;
+    const quantity = baseWidthMm || selectedShape?.stand?.initWidth || widthMm;
+    return calculatePrice(pm, quantity);
+  }, [showBase, catalog, baseWidthMm, selectedShape, widthMm]);
+
+  // Calculate ledger price (full-monument only)
+  const ledgerPrice = useMemo(() => {
+    if (!isFullMonument || !catalog?.product.ledgerPriceModel) return 0;
+    const pm = catalog.product.ledgerPriceModel;
+    const quantity = selectedShape?.lid?.initWidth || widthMm;
+    return calculatePrice(pm, quantity);
+  }, [isFullMonument, catalog, selectedShape, widthMm]);
+
+  // Calculate kerbset price (full-monument only)
+  const kerbsetPrice = useMemo(() => {
+    if (!isFullMonument || !catalog?.product.kerbsetPriceModel) return 0;
+    const pm = catalog.product.kerbsetPriceModel;
+    const quantity = selectedShape?.kerb?.initWidth || widthMm;
+    return calculatePrice(pm, quantity);
+  }, [isFullMonument, catalog, selectedShape, widthMm]);
 
   // Calculate additions price
   const additionsPrice = useMemo(() => {
@@ -239,8 +275,8 @@ export default function CheckPricePanel() {
 
   // Calculate total
   const totalPrice = useMemo(() => {
-    return headstonePrice + basePrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal;
-  }, [headstonePrice, basePrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal]);
+    return headstonePrice + basePrice + ledgerPrice + kerbsetPrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal;
+  }, [headstonePrice, basePrice, ledgerPrice, kerbsetPrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal]);
 
   // Get detailed motif items
   const motifItems = useMemo(() => {
@@ -356,13 +392,11 @@ export default function CheckPricePanel() {
                       Product ID: {catalog?.product.id || 'N/A'} - {catalog?.product.name || 'Headstone'}
                     </p>
                     <p className="text-gray-600">
-                      Bronze colour: {getMaterialName(headstoneMaterialUrl)}
+                      Shape: {shapeName}
                       <br />
-                      Border: {shapeName}
+                      Material: {getMaterialName(headstoneMaterialUrl)}
                       <br />
-                      Size: {widthMm} mm x {heightMm} mm
-                      <br />
-                      Fastening Type: Lugs with Studs
+                      Size: {mmToInches(widthMm)} × {mmToInches(heightMm)}
                     </p>
                   </div>
                 </td>
@@ -380,29 +414,86 @@ export default function CheckPricePanel() {
               {/* Base */}
               {showBase && basePrice > 0 && (
                 <tr className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Product</span>
+                  <td className="px-6 py-4 text-sm text-gray-900">
                     <p>
-                      <strong>Headstone Base</strong>
+                      <strong>
+                        {(() => {
+                          const a = catalog?.product.additions.find(a => a.type === 'base');
+                          return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Base'}`;
+                        })()}
+                      </strong>
                       <br />
                       Shape: Rectangle
                       <br />
                       Material: {getMaterialName(baseMaterialUrl)}
                       <br />
-                      Size: {widthMm + 100} mm x 100 mm x 250 mm
+                      Size: {mmToInches(selectedShape?.stand?.initWidth ?? (widthMm + 100))} × {mmToInches(selectedShape?.stand?.initHeight ?? 100)} × {mmToInches(selectedShape?.stand?.initDepth ?? 250)}
                     </p>
                   </td>
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Qty</span>
-                    1
-                  </td>
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Price</span>
+                  <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-gray-900">
                     ${basePrice.toFixed(2)}
                   </td>
-                  <td className="px-4 py-3 text-gray-900">
-                    <span className="font-semibold text-sm text-gray-500 md:hidden block mb-1">Item Total</span>
+                  <td className="px-6 py-4 text-right text-sm text-gray-900">
                     ${basePrice.toFixed(2)}
+                  </td>
+                </tr>
+              )}
+
+              {/* Ledger (full-monument only) */}
+              {isFullMonument && ledgerPrice > 0 && (
+                <tr className="border-b border-gray-200 hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-900">
+                    <p>
+                      <strong>
+                        {(() => {
+                          const a = catalog?.product.additions.find(a => a.type === 'ledger');
+                          return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Ledger'}`;
+                        })()}
+                      </strong>
+                      <br />
+                      Shape: Rectangle
+                      <br />
+                      Material: {getMaterialName(headstoneMaterialUrl)}
+                      <br />
+                      Size: {mmToInches(selectedShape?.lid?.initWidth ?? 0)} × {mmToInches(selectedShape?.lid?.initHeight ?? 0)} × {mmToInches(selectedShape?.lid?.initDepth ?? 0)}
+                    </p>
+                  </td>
+                  <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    ${ledgerPrice.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    ${ledgerPrice.toFixed(2)}
+                  </td>
+                </tr>
+              )}
+
+              {/* Kerbset (full-monument only) */}
+              {isFullMonument && kerbsetPrice > 0 && (
+                <tr className="border-b border-gray-200 hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-900">
+                    <p>
+                      <strong>
+                        {(() => {
+                          const a = catalog?.product.additions.find(a => a.type === 'kerbset');
+                          return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Kerbset'}`;
+                        })()}
+                      </strong>
+                      <br />
+                      Shape: Rectangle
+                      <br />
+                      Material: {getMaterialName(headstoneMaterialUrl)}
+                      <br />
+                      Size: {mmToInches(selectedShape?.kerb?.initWidth ?? 0)} × {mmToInches(selectedShape?.kerb?.initHeight ?? 0)} × {mmToInches(selectedShape?.kerb?.initDepth ?? 0)}
+                    </p>
+                  </td>
+                  <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    ${kerbsetPrice.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    ${kerbsetPrice.toFixed(2)}
                   </td>
                 </tr>
               )}
