@@ -59,7 +59,7 @@ export default function HeadstoneAssembly() {
 
   // Center the whole monument on Z: shift everything so the kerbset midpoint is at Z=0
   const standBackZ = -(uprightThickness / 1000) / 2;
-  const zOffset = showKerbset ? -(standBackZ + kerbDepthMm / 2000) : 0;
+  const zOffset = showKerbset ? (standBackZ + kerbDepthMm / 2000) : 0;
 
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(null!);
