@@ -29,6 +29,8 @@ export default function HeadstoneAssembly() {
   const showLedger = useHeadstoneStore((s) => s.showLedger);
   const showKerbset = useHeadstoneStore((s) => s.showKerbset);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
+  const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
@@ -55,6 +57,10 @@ export default function HeadstoneAssembly() {
   // Convert base height from mm to meters
   const baseHeightMeters = baseHeightMm / 1000;
 
+  // Center the whole monument on Z: shift everything so the kerbset midpoint is at Z=0
+  const standBackZ = -(uprightThickness / 1000) / 2;
+  const zOffset = showKerbset ? -(standBackZ + kerbDepthMm / 2000) : 0;
+
   const assemblyRef = useRef<THREE.Group>(null!);
   const tabletRef = useRef<THREE.Object3D>(null!);
   const baseRef = useRef<THREE.Mesh>(null!);
@@ -68,7 +74,7 @@ export default function HeadstoneAssembly() {
 
   return (
     <>
-      <group ref={assemblyRef} position={[0, baseHeightMeters, 0]}>
+      <group ref={assemblyRef} position={[0, baseHeightMeters, zOffset]}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
         {/* Elegant Selection Indicators - Viewfinder Corners */}
@@ -131,6 +137,7 @@ export default function HeadstoneAssembly() {
       {showLedger && (
         <LedgerSlab
           ref={ledgerRef}
+          zOffset={zOffset}
           onClick={(e) => {
             e.stopPropagation();
             setSelected('headstone');
@@ -143,6 +150,7 @@ export default function HeadstoneAssembly() {
       {showKerbset && (
         <KerbsetBorder
           ref={kerbsetRef}
+          zOffset={zOffset}
           onClick={(e) => {
             e.stopPropagation();
             setSelected('headstone');

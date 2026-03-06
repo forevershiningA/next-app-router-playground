@@ -10,6 +10,7 @@ import { TEX_BASE, DEFAULT_TEX, LERP_FACTOR, EPSILON } from '#/lib/headstone-con
 
 type KerbsetBorderProps = {
   onClick?: (e: any) => void;
+  zOffset?: number;
 };
 
 const WALL_MM = 100;
@@ -20,6 +21,7 @@ function KerbMesh({
   kerbHeightMm,
   kerbDepthMm,
   uprightThickness,
+  zOffset,
   onClick,
   groupRef,
 }: {
@@ -28,9 +30,10 @@ function KerbMesh({
   kerbHeightMm: number;
   kerbDepthMm: number;
   uprightThickness: number;
+  zOffset: number;
   onClick?: (e: any) => void;
   groupRef: React.RefObject<THREE.Group | null>;
-}) {
+}){
   const texture = useTexture(texUrl);
 
   useLayoutEffect(() => {
@@ -61,11 +64,14 @@ function KerbMesh({
   const kD = kerbDepthMm / 1000;
   const wall = WALL_MM / 1000;
   const standBackZ = -(uprightThickness / 1000) / 2;
-  const kerbCenterZ = standBackZ + kD / 2;
+  const kerbCenterZ = standBackZ + kD / 2 + zOffset;
   const centerY = kH / 2 + EPSILON;
 
   // Inner depth (between the two end bars)
   const innerDepth = kD - wall * 2;
+
+  const zOffsetRef = useRef(zOffset);
+  zOffsetRef.current = zOffset;
 
   const targetGroupY = useRef(centerY);
   const targetGroupZ = useRef(kerbCenterZ);
@@ -76,7 +82,7 @@ function KerbMesh({
     const newKH = kerbHeightMm / 1000;
     const newStandBackZ = -(uprightThickness / 1000) / 2;
     targetGroupY.current = newKH / 2 + EPSILON;
-    targetGroupZ.current = newStandBackZ + newKD / 2;
+    targetGroupZ.current = newStandBackZ + newKD / 2 + zOffsetRef.current;
     groupRef.current.position.lerp(
       new THREE.Vector3(0, targetGroupY.current, targetGroupZ.current),
       LERP_FACTOR,
@@ -123,9 +129,9 @@ function KerbMesh({
 }
 
 const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function KerbsetBorder(
-  { onClick },
+  { onClick, zOffset = 0 },
   ref,
-) {
+){
   const internalRef = useRef<THREE.Group>(null!);
   useImperativeHandle(ref, () => internalRef.current as unknown as THREE.Group);
 
@@ -149,6 +155,7 @@ const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function Kerbs
         kerbHeightMm={kerbHeightMm}
         kerbDepthMm={kerbDepthMm}
         uprightThickness={uprightThickness}
+        zOffset={zOffset}
         onClick={onClick}
         groupRef={internalRef}
       />
