@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getDesignsByCategory, type SavedDesignMetadata } from '#/lib/saved-designs-data';
+import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
@@ -130,13 +130,15 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
 
   useEffect(() => {
     // Get designs for this category
-    const categoryDesigns = getDesignsByCategory(category as any);
-    // Filter by product slug and sort alphabetically by formatted title
-    const filtered = categoryDesigns
-      .filter(d => d.productSlug === productSlug)
-      .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
-    setDesigns(filtered);
-    setLoading(false);
+    import('#/lib/saved-designs-data').then(({ getDesignsByCategory }) => {
+      const categoryDesigns = getDesignsByCategory(category as any);
+      // Filter by product slug and sort alphabetically by formatted title
+      const filtered = categoryDesigns
+        .filter(d => d.productSlug === productSlug)
+        .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
+      setDesigns(filtered);
+      setLoading(false);
+    });
   }, [category, productSlug]);
 
   // Fetch prices for all designs

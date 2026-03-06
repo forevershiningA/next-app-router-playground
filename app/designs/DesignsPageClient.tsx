@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { SAVED_DESIGNS, type SavedDesignMetadata } from '#/lib/saved-designs-data';
+import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import MobileNavToggle from '#/components/MobileNavToggle';
@@ -12,20 +12,22 @@ export default function DesignsPageClient() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const allDesigns = Object.values(SAVED_DESIGNS);
+    import('#/lib/saved-designs-data').then(({ SAVED_DESIGNS }) => {
+      const allDesigns = Object.values(SAVED_DESIGNS);
     
-    // Group by product type
-    const grouped = allDesigns.reduce((acc, design) => {
-      const type = design.productSlug;
-      if (!acc[type]) {
-        acc[type] = [];
-      }
-      acc[type].push(design);
-      return acc;
-    }, {} as Record<string, SavedDesignMetadata[]>);
+      // Group by product type
+      const grouped = allDesigns.reduce((acc, design) => {
+        const type = design.productSlug;
+        if (!acc[type]) {
+          acc[type] = [];
+        }
+        acc[type].push(design);
+        return acc;
+      }, {} as Record<string, SavedDesignMetadata[]>);
     
-    setGroupedDesigns(grouped);
-    setLoading(false);
+      setGroupedDesigns(grouped);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {

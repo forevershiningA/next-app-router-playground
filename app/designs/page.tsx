@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { PRODUCT_STATS, CATEGORY_STATS } from '#/lib/saved-designs-data';
 import DesignsPageClient from './DesignsPageClient';
 
+// The client component loads the full design dataset; skip SSG to avoid OOM in build workers
+export const dynamic = 'force-dynamic';
 export async function generateMetadata(): Promise<Metadata> {
   const totalDesigns = Object.values(PRODUCT_STATS).reduce((sum, n) => sum + n, 0);
   const productCount = Object.keys(PRODUCT_STATS).length;

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAllSavedDesigns, type SavedDesignMetadata } from '#/lib/saved-designs-data';
+import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
@@ -18,10 +18,12 @@ export default function ProductPageClient({ productSlug }: ProductPageClientProp
 
   useEffect(() => {
     // Get all designs and filter by product slug
-    const allDesigns = getAllSavedDesigns();
-    const filtered = allDesigns.filter(d => d.productSlug === productSlug);
-    setDesigns(filtered);
-    setLoading(false);
+    import('#/lib/saved-designs-data').then(({ getAllSavedDesigns }) => {
+      const allDesigns = getAllSavedDesigns();
+      const filtered = allDesigns.filter(d => d.productSlug === productSlug);
+      setDesigns(filtered);
+      setLoading(false);
+    });
   }, [productSlug]);
 
   if (loading) {
