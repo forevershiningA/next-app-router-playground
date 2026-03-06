@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import ProductPageClient from './ProductPageClient';
 
 interface ProductPageProps {
@@ -63,6 +62,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const { productType: productSlug } = await params;
   
   const productInfo = getProductMetadata(productSlug);
+  const { getAllSavedDesigns } = await import('#/lib/saved-designs-data');
   const allDesigns = getAllSavedDesigns();
   const designs = allDesigns.filter(d => d.productSlug === productSlug);
   

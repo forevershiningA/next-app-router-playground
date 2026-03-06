@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 
-import { getAllSavedDesigns, SavedDesignMetadata } from '#/lib/saved-designs-data';
+import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 
@@ -171,6 +171,7 @@ export default function MyAccountPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
+  const [allDesigns, setAllDesigns] = useState<SavedDesignMetadata[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
 
   async function handleEdit(cardId: string) {
@@ -246,7 +247,13 @@ export default function MyAccountPage() {
     else if (session === null) setIsLoading(false);
   }, [session]);
 
-  const handleDeleteCard = async (cardId: string) => {
+  useEffect(() => {
+    import('#/lib/saved-designs-data').then(({ getAllSavedDesigns }) => {
+      setAllDesigns(getAllSavedDesigns());
+    });
+  }, []);
+
+  const handleDeleteCard= async (cardId: string) => {
     if (!confirm('Delete this design? This cannot be undone.')) return;
     try {
       const res = await fetch(`/api/projects?id=${cardId}`, { method: 'DELETE' });
@@ -255,10 +262,7 @@ export default function MyAccountPage() {
     setOpenMenuId(null);
   };
 
-  const allDesigns = getAllSavedDesigns();
-  
-  // Convert API projects to design cards
-  const projectCards = savedProjects.map((project) => buildProjectCard(project));
+  // Convert API projects to design cardsconst projectCards = savedProjects.map((project) => buildProjectCard(project));
   
   // Merge with static designs
   const designCards = buildDesignCards(allDesigns);

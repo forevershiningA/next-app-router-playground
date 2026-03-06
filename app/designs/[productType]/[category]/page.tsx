@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getDesignsByCategory, DESIGN_CATEGORIES, type DesignCategory } from '#/lib/saved-designs-data';
+import type { DesignCategory } from '#/lib/saved-designs-data';
 import CategoryPageClient from './CategoryPageClient';
 
 interface CategoryPageProps {
@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
                      'Traditional Engraved';
 
   // Get designs count
+  const { getDesignsByCategory, DESIGN_CATEGORIES } = await import('#/lib/saved-designs-data');
   const categoryDesigns = getDesignsByCategory(category as DesignCategory);
   const designs = categoryDesigns.filter(d => d.productSlug === productSlug);
   const designCount = designs.length;

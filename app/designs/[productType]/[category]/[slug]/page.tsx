@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { getSavedDesign, getDesignFromSlug, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
 import { getProductFromId } from '#/lib/product-utils';
 import DesignPageClient from './DesignPageClient';
 
@@ -118,6 +117,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
   const { productType: productSlug, category, slug } = await params;
 
   // Try new slug lookup first, then fall back to old format
+  const { getDesignFromSlug, DESIGN_CATEGORIES } = await import('#/lib/saved-designs-data');
   let design = getDesignFromSlug(slug);
 
   if (!design) {
@@ -234,6 +234,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const { productType: productSlug, category, slug } = await params;
 
   // Lookup design by clean slug
+  const { getDesignFromSlug, DESIGN_CATEGORIES } = await import('#/lib/saved-designs-data');
   const design = getDesignFromSlug(slug);
   
   if (!design) {
