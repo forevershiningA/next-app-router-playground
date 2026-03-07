@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '#/lib/db';
+import { db } from '#/lib/db/index';
 import { materials } from '#/lib/db/schema';
 
 const graniteMaterials = [

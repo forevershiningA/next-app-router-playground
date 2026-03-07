@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-05 (evening)
+**Last Updated:** 2026-03-06 (evening)
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -28,6 +28,47 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-06)
+
+### ✅ Recent Changes (March 6, 2026)
+
+1. **Full Monument — Base / Ledger / Kerbset Now Rendering - COMPLETE**
+   - **Root cause**: `showBase` was gating on `productType === 'monument'`, which excluded `'full-monument'`. Fixed in `lib/headstone-store.ts` to accept both values.
+   - **New components**:
+     - `components/three/headstone/LedgerSlab.tsx` — flat granite slab rendered on the ground plane at the correct Z position relative to the headstone's back face
+     - `components/three/headstone/KerbsetBorder.tsx` — hollow rectangular frame rendered around the kerbset perimeter
+   - **Store extensions** (`lib/headstone-store.ts`):
+     - `editingObject` type now accepts `'ledger'` and `'kerbset'` in addition to `'headstone'` and `'base'`
+     - New fields: `ledgerWidthMm`, `ledgerDepthMm`, `ledgerHeightMm`, `kerbWidthMm`, `kerbDepthMm`, `kerbHeightMm`, `kerbThicknessMm`
+     - `setProductId()` reads the `<lid>` and `<kerb>` XML elements and seeds the initial dimensions
+   - **HeadstoneAssembly.tsx**: Conditionally renders `<LedgerSlab>` and `<KerbsetBorder>` outside the upright stone group at world Y=0
+   - **DesignerNav.tsx**: When `productType === 'full-monument'`, shows 4 tabs — Headstone, Base, Ledger, Kerbset — each controlling the relevant dimensions
+   - **XML mapping** (catalog-id-100.xml): `table` = headstone, `stand` = base, `lid` = ledger, `kerb` = kerbset, `base` = deprecated (all 1s)
+
+2. **Vercel Build OOM Fix — `saved-designs-data` Dynamic Import Refactor - COMPLETE**
+   - **Root cause**: `lib/saved-designs-data.ts` is a 2.7 MB static TypeScript module with 3,114 designs. During `next build`'s static page generation phase, multiple SSG workers are spawned. Any route whose module (or its SSR-rendered client components) has a **top-level static import** of `saved-designs-data.ts` forces every SSG worker to load the full dataset into RAM. With 4 parallel workers on Vercel's 8 GB container, this triggers an OOM SIGKILL.
+   - **Fix applied to all affected files** — static `import { ... } from '#/lib/saved-designs-data'` replaced with `await import('#/lib/saved-designs-data')` inside async function bodies (server components) or `import('#/lib/saved-designs-data').then(...)` inside `useEffect` (client components):
+     - `app/designs/page.tsx` — added `export const dynamic = 'force-dynamic'`; uses `PRODUCT_STATS`/`CATEGORY_STATS` (lightweight, not the full array)
+     - `app/designs/DesignsPageClient.tsx` — dynamic import inside `useEffect`
+     - `app/designs/[productType]/page.tsx` — `await import()` inside `generateMetadata`
+     - `app/designs/[productType]/ProductPageClient.tsx` — dynamic import inside `useEffect`
+     - `app/designs/[productType]/[category]/page.tsx` — `await import()` inside `generateMetadata`
+     - `app/designs/[productType]/[category]/CategoryPageClient.tsx` — dynamic import inside `useEffect`
+     - `app/designs/[productType]/[category]/[slug]/page.tsx` — `await import()` inside both `generateMetadata` and the default export function
+     - `app/my-account/page.tsx` — `import type { SavedDesignMetadata }` (type-only, zero runtime cost) + `import().then()` inside `useEffect` to populate state
+   - **Also fixed**: `public/sitemap.xml` deleted (conflicted with `app/sitemap.ts`); `app/sitemap.ts` now has `export const dynamic = 'force-dynamic'`
+
+3. **Vercel Build Prerender Fix — my-account `projectCards` Error**
+   - An edit that removed the `getAllSavedDesigns()` call from the render body accidentally concatenated a `// comment` with `const projectCards = ...` onto one line, making `projectCards` a comment and causing `ReferenceError: projectCards is not defined` during SSR prerendering.
+   - Fixed by restoring the newline separator. The page now prerenders cleanly with `allDesigns` starting as `[]` and populating client-side via the `useEffect` dynamic import.
+
+### ⚠️ Known Gaps (March 6, 2026)
+- **`app/api/seed-materials/route.ts`**: Emits a build warning — `'db' is not exported from '#/lib/db'`. Non-fatal (dev utility route only), doesn't block the build.
+- **Full Monument designer tabs**: Ledger and Kerbset size tabs appear but dimensions are not yet connected to pricing.
+- **Register endpoint**: `/api/auth/register` not yet created (AuthGate register tab present).
 
 ---
 
