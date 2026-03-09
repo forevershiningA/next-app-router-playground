@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-06 (evening)
+**Last Updated:** 2026-03-07 (afternoon)
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -28,6 +28,25 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-07)
+
+### ✅ Recent Changes (March 7, 2026)
+1. **Seed Materials API Route Import Fix - COMPLETE**
+   - **Root cause**: `next build` on Vercel escalated the long-standing warning in `app/api/seed-materials/route.ts` into a hard failure because webpack couldn't resolve `db` from the bare alias `#/lib/db`.
+   - **Fix**: Updated the route to import from `#/lib/db/index`, matching every other API route that uses the Drizzle connection exported there.
+   - **Verification**: Local `pnpm run build` now passes and Vercel no longer aborts during the API bundling stage.
+
+2. **Cross-Platform Build Script Update - COMPLETE**
+   - **Root cause**: The build script relied on the POSIX-only syntax `NODE_OPTIONS='--max-old-space-size=4096' next build`, which fails on Windows shells.
+   - **Fix**: Added `cross-env` as a dev dependency and switched the script to `cross-env NODE_OPTIONS=--max-old-space-size=4096 next build` so the environment variable is set consistently across operating systems.
+   - **Verification**: `pnpm run build` succeeds on Windows (and Linux/macOS) while still honoring the 4 GB heap cap that prevents OOMs on Vercel.
+
+### ⚠️ Known Gaps (March 7, 2026)
+- **Full Monument designer tabs**: Ledger and Kerbset dimension tabs still aren't wired into the pricing logic.
+- **Register endpoint**: `/api/auth/register` remains unimplemented even though the AuthGate exposes the register tab.
 
 ---
 
@@ -66,7 +85,7 @@
    - Fixed by restoring the newline separator. The page now prerenders cleanly with `allDesigns` starting as `[]` and populating client-side via the `useEffect` dynamic import.
 
 ### ⚠️ Known Gaps (March 6, 2026)
-- **`app/api/seed-materials/route.ts`**: Emits a build warning — `'db' is not exported from '#/lib/db'`. Non-fatal (dev utility route only), doesn't block the build.
+- **`app/api/seed-materials/route.ts`**: Emits a build warning — `'db' is not exported from '#/lib/db'`. Non-fatal (dev utility route only), doesn't block the build. _(Resolved March 7 — see Current Status above.)_
 - **Full Monument designer tabs**: Ledger and Kerbset size tabs appear but dimensions are not yet connected to pricing.
 - **Register endpoint**: `/api/auth/register` not yet created (AuthGate register tab present).
 
@@ -131,7 +150,8 @@
 
 8. **Vercel Build Fixes**
    - **pnpm lockfile out of sync**: `jose@6.2.0` was installed but not in `pnpm-lock.yaml`. Fixed by running `pnpm install` locally and committing the updated lockfile.
-   - **OOM (Out of Memory) build kill**: Build container ran out of 8 GB RAM. Fixed by adding `NODE_OPTIONS='--max-old-space-size=4096'` to the build script in `package.json`.
+    - **OOM (Out of Memory) build kill**: Build container ran out of 8 GB RAM. Fixed by adding `NODE_OPTIONS='--max-old-space-size=4096'` to the build script in `package.json`.
+      - _Update (March 7, 2026):_ `cross-env` now wraps the build script so Windows developers can set `NODE_OPTIONS` identically.
    - **38-minute build**: After OOM fix, `config.cache = false` (added to reduce memory) backfired — it disabled webpack's filesystem cache, forcing full recompilation of Three.js/R3F/etc. on every build. Fixed by removing `cache = false` and instead setting `config.parallelism = 2` to limit concurrent module compilation.
    - **Files**: `package.json`, `next.config.ts`, `pnpm-lock.yaml`
 

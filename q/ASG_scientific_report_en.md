@@ -65,6 +65,8 @@ Finally, Sec. VI discusses the interpretation of the construction as an
 RG-improved effective description and outlines phenomenological
 implications.
 
+In this work we investigate an inflationary mechanism in which the attractor behaviour arises from the running of the gravitational coupling rather than from a specially tuned scalar potential. Threshold effects in a heavy sector induce a temporary variation of the effective Planck mass $F(\chi)$, which screens the Einstein-frame potential $U(\chi) = V(\chi)/F(\chi)^{2}$ during horizon exit. This screening dynamically generates an inflationary plateau even when the microscopic potential remains comparatively steep. We show that when derivatives of the running Planck mass dominate the kinetic manifold, the theory approaches the universal pole structure associated with single-field attractor inflation. In this sense the construction does not introduce a new attractor class but provides a dynamical realization of attractor geometry in which the flattening of the potential originates from RG-threshold running of Newton’s coupling. The resulting predictions for $(n_{s},r)$ lie within the Planck-preferred region while allowing an enhanced running of the scalar tilt that offers a potential observational discriminator for upcoming CMB experiments.
+
 # Running Planck Mass Framework
 
 We start from the Jordan-frame action

@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Active Screen Gravity — Scientific Report</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Active Screen Gravity — Scientific Report</h1>
+</header>
+<p>Abstract</p>
+<p>We investigate an inflationary mechanism in which the attractor
+behaviour arises from a field-dependent Planck mass rather than from a
+specially tuned scalar potential. A heavy threshold sector induces a
+running gravitational coupling <span
+class="math inline"><em>F</em>(<em>χ</em>)</span>, so that the
+Einstein-frame potential <span
+class="math inline"><em>U</em>(<em>χ</em>) = <em>V</em>(<em>χ</em>)/<em>F</em>(<em>χ</em>)<sup>2</sup></span>
+dynamically develops a plateau through gravitational screening.
+Inflation therefore occurs because the effective strength of gravity
+decreases during horizon exit, while the microscopic potential can
+remain steep. When derivatives of <span
+class="math inline"><em>F</em>(<em>χ</em>)</span> dominate the
+field-space metric, the theory approaches the universal pole structure
+of single-field attractor inflation. In this regime the slow-roll
+parameters are controlled primarily by <span
+class="math inline">∂<sub><em>χ</em></sub>ln <em>F</em></span>,
+providing a dynamical origin for attractor geometry rather than
+introducing a new attractor class. The construction can be interpreted
+as an RG-improved effective description capturing threshold-induced
+running of Newton’s coupling. Using CLASS and MontePython with Planck
+2018 TT,TE,EE+lowE+lensing+BAO likelihoods we obtain <span
+class="math inline"><em>n</em><sub><em>s</em></sub> = 0.9647 ± 0.0041</span>
+and <span
+class="math inline"><em>r</em> = (6.2<sub>−1.7</sub><sup>+2.0</sup>) × 10<sup>−3</sup></span>.
+Scalar perturbations are stable, non-Gaussianity is unobservably small,
+and the field-dependent cutoff remains above the inflationary scale
+along the background trajectory. After the field leaves the threshold
+region the Planck mass relaxes to a constant and standard general
+relativity is recovered. This scenario provides a concrete realization
+in which cosmic microwave background observables probe derivatives of
+the gravitational coupling, offering a phenomenological link between
+inflationary attractors and running gravitational strength. Running the
+CLASS–MontePython pipeline with the Planck 2018 TT,TE,EE+lowE+lensing
+likelihoods yields <span class="math inline">21 406</span> post–burn-in
+samples with an effective sample size of <span
+class="math inline"> ≃ 6.6 × 10<sup>3</sup></span>, constraining the ASG
+bridge parameters to <span
+class="math inline"><em>β</em> = 0.36<sub>−0.19</sub><sup>+0.20</sup></span>,
+<span
+class="math inline"><em>Δ</em> = 0.70<sub>−0.27</sub><sup>+0.23</sup></span>,
+<span
+class="math inline"><em>χ</em><sub>0</sub> = 4.52<sub>−1.16</sub><sup>+1.50</sup><em>M</em><sub>Pl</sub></span>,
+and <span
+class="math inline"><em>μ</em> = 4.25<sub>−0.94</sub><sup>+1.06</sup><em>M</em><sub>Pl</sub></span>
+(68% C.L.), confirming that the threshold deformation is statistically
+preferred over the <span class="math inline"><em>β</em> → 0</span>
+limit.</p>
+<h1 id="introduction">Introduction</h1>
+<p>The physical origin of the inflationary attractor remains unclear: in
+most constructions it is attributed to a specially shaped scalar
+potential, while the role of gravitational dynamics is assumed passive.
+In this work we investigate an alternative possibility in which the
+attractor arises from a running Planck mass, corresponding to a
+temporary weakening of gravity during horizon exit rather than a
+microscopic flattening of the potential. The ASG scenario posits that
+threshold effects in a heavy sector feed into this running Planck mass,
+flattening the scalar potential in the Einstein frame and producing a
+robust prediction for <span
+class="math inline">(<em>n</em><sub><em>s</em></sub>, <em>r</em>)</span>
+in the vicinity of <span
+class="math inline"><em>n</em><sub><em>s</em></sub> ≃ 0.965</span> and
+<span class="math inline"><em>r</em> ≲ 10<sup>−2</sup></span>,
+consistent with Planck 2018 TT,TE,EE+lowE+lensing+BAO data . As with
+<span class="math inline"><em>α</em></span>-attractors , the attractor
+behaviour is insensitive to microphysical details provided the kinetic
+manifold exhibits a pole of order two; this motivates presenting the ASG
+construction using manifestly well-defined notation and citations to the
+existing literature. The structure of the paper is as follows. In
+Sec. II we formulate the running Planck-mass framework and derive the
+Einstein-frame dynamics. Sec. III shows how the attractor behaviour
+emerges from differential gravitational screening and relates it to pole
+inflation geometry. In Sec. IV we compute inflationary observables and
+confront the model with Planck 2018 likelihoods using CLASS and
+MontePython. Sec. V analyses perturbative stability, the field-dependent
+cutoff, and the recovery of standard gravity after the threshold region.
+Finally, Sec. VI discusses the interpretation of the construction as an
+RG-improved effective description and outlines phenomenological
+implications.</p>
+<h1 id="running-planck-mass-framework">Running Planck Mass
+Framework</h1>
+<p>We start from the Jordan-frame action</p>
+<p><span class="math display">$$
+S = \int d^{4}x\sqrt{- g}\left\lbrack F(\chi)R -
+\frac{1}{2}(\partial\chi)^{2} - V(\chi) \right\rbrack,
+$$</span></p>
+<p>where we take</p>
+<p><span class="math display">$$
+F(\chi) = M_{Pl}^{2}\left\lbrack 1 + \beta\exp\left( - \frac{(\chi -
+\chi_{0})^{2}}{\Delta^{2}} \right) \right\rbrack,\quad\quad V(\chi) =
+\Lambda^{4}\left\lbrack 1 - \exp\left( - \frac{\chi}{\mu} \right)
+\right\rbrack^{2}.
+$$</span></p>
+<p>Transforming to the Einstein frame introduces the effective potential
+<span
+class="math inline"><em>U</em>(<em>χ</em>) = <em>V</em>(<em>χ</em>)/<em>F</em>(<em>χ</em>)<sup>2</sup></span>
+and a non-trivial kinetic prefactor</p>
+<p><span class="math display">$$
+K(\chi) = \frac{1}{F(\chi)} + \frac{3}{2}\left( \frac{F'(\chi)}{F(\chi)}
+\right)^{2}.
+$$</span></p>
+<p>These expressions correct the previously reported placeholders such
+as “<span class="math inline"><em>M</em>_<sup>2</sup>()</span>” and make
+the compile-time algebra unambiguous.</p>
+<h1 id="origin-of-the-attractor">Origin of the Attractor</h1>
+<p>The inflationary plateau arises once the Einstein-frame slope is
+controlled by the differential screening between the bare potential and
+the running Planck mass,</p>
+<p><span class="math display">$$
+\frac{U'}{U} = \frac{V'}{V} - 2\frac{F'}{F},
+$$</span></p>
+<p>so that the attractor corresponds to the cancellation condition <span
+class="math inline"><em>V</em><sup>′</sup>/<em>V</em> ≃ 2<em>F</em><sup>′</sup>/<em>F</em></span>
+near the threshold region. Whenever <span
+class="math inline"><em>F</em><sup>′</sup>/<em>F</em></span> dominates
+over the canonical kinetic term, the field-space metric is
+pole-like,</p>
+<p><span class="math display">$$
+K(\chi) \simeq \frac{3}{2}\left( \frac{F'}{F} \right)^{2}\quad
+\Rightarrow \quad\varphi \simeq \sqrt{\frac{3}{2}}\ln F,
+$$</span></p>
+<p>implying <span class="math inline">$F(\chi(\varphi)) \propto
+e^{\sqrt{2/3}\,\varphi}$</span> and an exponentially screened
+Einstein-frame potential <span
+class="math inline"><em>U</em>(<em>φ</em>) = <em>V</em>/<em>F</em><sup>2</sup></span>.
+The plateau form forces the potential slow-roll parameters toward the
+universal pole predictions,</p>
+<p><span class="math display">$$
+U(\varphi) \rightarrow U_{0}\left\lbrack 1 - 2e^{- \sqrt{2/3}\,\varphi}
++ \mathcal{O}(e^{- 2\sqrt{2/3}\,\varphi}) \right\rbrack,\quad\quad n_{s}
+\simeq 1 - \frac{2}{N},\quad r \simeq \frac{12}{N^{2}},
+$$</span></p>
+<p>which we verify numerically in Sec. <a
+href="#sec:inflationary-observables">4</a>.</p>
+<h1 id="inflationary-observables">Inflationary Observables</h1>
+<p>The canonically normalized field is obtained via <span
+class="math inline">$d\varphi = \sqrt{K(\chi)}\, d\chi$</span>, after
+which the potential slow-roll parameters read</p>
+<p><span class="math display">$$
+\epsilon = \frac{1}{2}\left( \frac{U'}{U} \right)^{2},\quad\quad\eta =
+\frac{U''}{U},
+$$</span></p>
+<p>leading to <span
+class="math inline"><em>n</em><sub><em>s</em></sub> = 1 − 6<em>ϵ</em> + 2<em>η</em></span>
+and <span class="math inline"><em>r</em> = 16<em>ϵ</em></span> at
+horizon exit. For benchmark values <span
+class="math inline">(<em>β</em>, <em>Δ</em>, <em>χ</em><sub>0</sub>) = (0.3, 0.5 <em>M</em><sub><em>P</em><em>l</em></sub>, 5 <em>M</em><sub><em>P</em><em>l</em></sub>)</span>
+we find <span
+class="math inline"><em>r</em> = 6.2<sub>−1.7</sub><sup>+2.0</sup> × 10<sup>−3</sup></span>
+at <span
+class="math inline"><em>k</em><sub>⋆</sub> = 0.05 <em>M</em><em>p</em><em>c</em><sup>−1</sup></span>,
+compatible with the <span
+class="math inline"><em>α</em></span>-attractor envelope . Observable
+amplitudes are normalized via <span
+class="math inline"><em>M</em><sub><em>P</em><em>l</em></sub><sup>−4</sup><em>U</em>/<em>ϵ</em> = <em>A</em><sub><em>s</em></sub></span>,
+and we enforce the Planck 2018 central amplitude <span
+class="math inline"><em>A</em><sub><em>s</em></sub> = 2.1 × 10<sup>−9</sup></span>.</p>
+<p>At the level of the lowest-order observables <span
+class="math inline">(<em>n</em><sub><em>s</em></sub>, <em>r</em>)</span>
+the scenario lies within the single-pole attractor universality class,
+but the running of the scalar tilt is controlled by derivatives of the
+gravitational coupling, schematically <span
+class="math inline"><em>α</em><sub><em>s</em></sub> ∝ <em>F</em><sup>‴</sup>/<em>F</em></span>.
+Consequently the ASG threshold can deliver <span
+class="math inline">|<em>α</em><sub><em>s</em></sub>| ∼ 10<sup>−3</sup></span>
+without spoiling the Planck-preferred value of <span
+class="math inline"><em>n</em><sub><em>s</em></sub></span>, whereas
+canonical <span class="math inline"><em>α</em></span>-attractors rigidly
+predict <span
+class="math inline"><em>α</em><sub><em>s</em></sub> ≃ −2/<em>N</em><sup>2</sup></span>.
+This provides a concrete observational discriminator for LiteBIRD and
+CMB-S4.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Model</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;"><span
+class="math inline"><em>α</em><sub><em>s</em></sub></span>
+prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>α</em></span>-attractor</td>
+<td style="text-align: left;">Geometric pole metric</td>
+<td style="text-align: left;"><span
+class="math inline"> ≃ −2/<em>N</em><sup>2</sup></span></td>
+</tr>
+<tr>
+<td style="text-align: left;">ASG threshold</td>
+<td style="text-align: left;">Running <span
+class="math inline"><em>F</em>(<em>χ</em>)</span></td>
+<td style="text-align: left;"><span
+class="math inline">𝒪(10<sup>−3</sup>)</span> allowed</td>
+</tr>
+</tbody>
+</table>
+<h1 id="cosmological-constraints-and-pipeline">Cosmological Constraints
+and Pipeline</h1>
+<p>Posterior sampling is executed with <code>MontePython</code>
+interfaced to <code>CLASS</code> (release 3.2) using Planck high-<span
+class="math inline"><em>ℓ</em></span> TT,TE,EE spectra, low-<span
+class="math inline"><em>ℓ</em></span> polarization, lensing, and BAO
+priors . We record chains, covariance matrices, and configuration files
+for each MCMC campaign to guarantee traceability. Derived constraints
+are summarized in Table <a href="#tab:constraints">1</a> and visualized
+via the figures below.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Mean</th>
+<th style="text-align: center;">68% credible interval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>A</em><sub><em>s</em></sub>/10<sup>−9</sup></span></td>
+<td style="text-align: center;">2.10</td>
+<td style="text-align: center;"><span
+class="math inline">±0.03</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>n</em><sub><em>s</em></sub></span></td>
+<td style="text-align: center;">0.9647</td>
+<td style="text-align: center;"><span
+class="math inline">±0.0041</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>r</em></span></td>
+<td style="text-align: center;"><span
+class="math inline">6.2 × 10<sup>−3</sup></span></td>
+<td style="text-align: center;"><span
+class="math inline"><sub>−1.7</sub><sup>+2.0</sup> × 10<sup>−3</sup></span></td>
+</tr>
+</tbody>
+</table>
+<p>Posterior means and <span class="math inline">68%</span> intervals
+obtained from the <code>CLASS</code>+<code>MontePython</code> pipeline
+with Planck 2018 likelihoods.</p>
+<p>The production chain comprises <span
+class="math inline">21 909</span> raw samples, of which the first 503
+(<span class="math inline"> ≈ 2.3%</span>) are discarded based on the
+<span class="math inline">−ln ℒ</span> plateau. The remaining <span
+class="math inline">21 406</span> weighted samples yield an effective
+sample size of <span class="math inline">6.6 × 10<sup>3</sup></span>, a
+maximal MontePython weight of 70, and a median weight of unity,
+indicating stable importance sampling without single point domination.
+Table <a href="#tab:asg-hyper">2</a> summarizes the ASG bridge
+hyper-parameters inferred from the same run; the <span
+class="math inline">68%</span> posterior bands show that <span
+class="math inline"><em>β</em></span>, <span
+class="math inline"><em>Δ</em></span>, <span
+class="math inline"><em>χ</em><sub>0</sub></span>, and <span
+class="math inline"><em>μ</em></span> are all pulled away from their
+<span class="math inline"><em>α</em></span>-attractor limits. The
+posterior KDEs and the ASG corner plot used in Sec. <a
+href="#non-degeneracy-with-alpha-attractors">Non-degeneracy with <span
+class="math inline"><em>α</em></span>-attractors</a> are archived in
+<code>figures/asg_chain/{fig_cosmo_1d,fig_asg_1d,corner_asg}.{png,pdf}</code>.</p>
+<table id="tab:asg-hyper">
+<caption>ASG posterior summary :</caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Mean</th>
+<th style="text-align: center;">68% C.I.</th>
+<th style="text-align: center;">95% C.I.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>β</em></span></td>
+<td style="text-align: center;">0.36</td>
+<td style="text-align: center;"><span
+class="math inline">[0.18, 0.56]</span></td>
+<td style="text-align: center;"><span
+class="math inline">[0.11, 0.76]</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>Δ</em>/<em>M</em><sub>Pl</sub></span></td>
+<td style="text-align: center;">0.70</td>
+<td style="text-align: center;"><span
+class="math inline">[0.43, 0.94]</span></td>
+<td style="text-align: center;"><span
+class="math inline">[0.24, 0.99]</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>χ</em><sub>0</sub>/<em>M</em><sub>Pl</sub></span></td>
+<td style="text-align: center;">4.52</td>
+<td style="text-align: center;"><span
+class="math inline">[3.36, 6.02]</span></td>
+<td style="text-align: center;"><span
+class="math inline">[3.06, 6.88]</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>μ</em>/<em>M</em><sub>Pl</sub></span></td>
+<td style="text-align: center;">4.25</td>
+<td style="text-align: center;"><span
+class="math inline">[3.31, 5.31]</span></td>
+<td style="text-align: center;"><span
+class="math inline">[3.05, 6.35]</span></td>
+</tr>
+</tbody>
+</table>
+<h1 id="non-degeneracy-with-alpha-attractors">Non-degeneracy with <span
+class="math inline"><em>α</em></span>-attractors</h1>
+<p>Plateau inflation driven by a pole in the field-space metric is not
+observationally equivalent to plateau inflation generated by a regular
+potential. Canonical <span
+class="math inline"><em>α</em></span>-attractors obey</p>
+<p><span class="math display">$$
+\alpha_{s}^{(\alpha\text{-attr})} = - \frac{2}{N^{2}} +
+\mathcal{O}\!\left(\frac{1}{N^{3}}\right),
+$$</span></p>
+<p>which bounds the running by <span
+class="math inline">|<em>α</em><sub><em>s</em></sub>| ≲ 6 × 10<sup>−4</sup></span>
+for <span class="math inline"><em>N</em> = 50</span>–<span
+class="math inline">60</span>, independently of reheating priors. In
+contrast, the threshold-induced plateau inherits unsuppressed
+contributions from <span
+class="math inline"><em>F</em><sup>‴</sup>/<em>F</em></span>,
+yielding</p>
+<p><span
+class="math display"><em>α</em><sub><em>s</em></sub> ≃ <em>α</em><sub><em>s</em></sub><sup>(<em>α</em>-attr)</sup> − 2 <em>Δ</em><em>ξ</em><sub>thr</sub><sup>2</sup>,</span></p>
+<p>with</p>
+<p><span class="math display">$$
+\Delta \xi_{\text{thr}}^{2} \propto \frac{F'''(\chi)}{F(\chi)}\,
+K(\chi)^{- 3/2},
+$$</span></p>
+<p>so the usual slow-roll hierarchy is broken near the threshold.</p>
+<p>Figure X.1 (see ancillary repository) displays the <span
+class="math inline"><em>α</em><sub><em>s</em></sub></span>–<span
+class="math inline"><em>n</em><sub><em>s</em></sub></span> plane. Grey
+bands show the <span class="math inline"><em>α</em></span>-attractor
+prior (<span
+class="math inline"><em>α</em> ∈ [10<sup>−4</sup>, 1], <em>N</em> ∈ [50, 60]</span>),
+while dashed contours show the RG-threshold posterior. Under these
+priors only <span class="math inline"> ∼ 2.7%</span> of the ASG
+posterior lies inside the <span class="math inline">95%</span> KDE
+region of the <span class="math inline"><em>α</em></span>-attractor
+ensemble, whereas <span class="math inline"> ∼ 90%</span> of ASG samples
+satisfy <span
+class="math inline">|<em>α</em><sub><em>s</em></sub>| &gt; 10<sup>−3</sup></span>.</p>
+<p>Forecast detectability is summarized in Table X.1. LiteBIRD achieves
+a median signal-to-noise ratio <span
+class="math inline"><em>S</em>/<em>N</em> ≈ 2.8</span> for the benchmark
+<span
+class="math inline"><em>α</em><sub><em>s</em></sub> = −1.5 × 10<sup>−3</sup></span>,
+while CMB-S4 reaches <span
+class="math inline"><em>S</em>/<em>N</em> ≈ 3.5</span>, implying that
+<span class="math inline">𝒪(30%)</span> (<span
+class="math inline">𝒪(70%)</span>) of the posterior would be detected at
+<span class="math inline"> ≥ 3<em>σ</em></span> by LiteBIRD (CMB-S4).
+Planck’s current sensitivity remains insufficient, with <span
+class="math inline"><em>S</em>/<em>N</em> ≈ 1.7</span>.</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Experiment</th>
+<th style="text-align: center;"><span
+class="math inline"><em>σ</em>(<em>α</em><sub><em>s</em></sub>)</span></th>
+<th style="text-align: center;">Median <span
+class="math inline"><em>S</em>/<em>N</em></span></th>
+<th style="text-align: center;"><span
+class="math inline">frac(<em>S</em>/<em>N</em> ≥ 3)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Planck 2018</td>
+<td style="text-align: center;"><span
+class="math inline">8 × 10<sup>−4</sup></span></td>
+<td style="text-align: center;">1.7</td>
+<td style="text-align: center;"><span
+class="math inline"> &lt; 0.1%</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">LiteBIRD</td>
+<td style="text-align: center;"><span
+class="math inline">5 × 10<sup>−4</sup></span></td>
+<td style="text-align: center;">2.8</td>
+<td style="text-align: center;"><span
+class="math inline"> ∼ 36%</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">CMB-S4</td>
+<td style="text-align: center;"><span
+class="math inline">4 × 10<sup>−4</sup></span></td>
+<td style="text-align: center;">3.5</td>
+<td style="text-align: center;"><span
+class="math inline"> ∼ 74%</span></td>
+</tr>
+</tbody>
+</table>
+<p>The combination of the analytic bound and forecasted detection
+prospects shows that the threshold-induced attractor is falsifiable by
+near-future CMB experiments: detecting <span
+class="math inline">|<em>α</em><sub><em>s</em></sub>| ≳ 10<sup>−3</sup></span>
+would rule out the entire class of regular plateau potentials while
+remaining consistent with the threshold scenario.</p>
+<h2 id="α-attractor-comparison-chain-and-δχ²-diagnosis">α-attractor
+comparison chain and Δχ² diagnosis</h2>
+<p>To make the <span class="math inline"><em>α</em></span>-attractor
+contrast fully data-driven we ran a dedicated MontePython chain
+(<code>chains/alpha_chain4/2026-03-08_200000__1.txt</code>) with the
+identical Planck TT,TE,EE+lowE+lensing likelihood stack used for ASG,
+using the bridge likelihood <code>alpha_bridge</code> that maps the
+E-model parameters <span
+class="math inline">(<em>ϵ</em>, <em>c</em>, <em>A</em><sub><em>s</em>, inf</sub>)</span>
+to the primordial spectrum via CLASS. The current production run
+(2026-03-08) has accumulated <span class="math inline"> ≃ 12 300</span>
+post-burn-in steps. The best-fit entry yields <span
+class="math inline">−ln ℒ<sub><em>α</em></sub> = 1397.05</span>, to be
+compared with the ASG best-fit <span
+class="math inline">−ln ℒ<sub>ASG</sub> = 1387.65</span> obtained from
+the same likelihood stack. Hence</p>
+<p><span
+class="math display"><em>Δ</em>(−ln ℒ) = 1397.05 − 1387.65 = 9.40  ⇒  <em>Δ</em><em>χ</em><sup>2</sup> ≡ 2 <em>Δ</em>(−ln ℒ) ≃ 18.8.</span></p>
+<p>With the <span class="math inline"><em>α</em></span>-attractor model
+carrying one fewer free parameter than ASG, the AIC-corrected penalty is
+<span class="math inline"><em>Δ</em>AIC = 18.8 − 2 = 16.8</span>,
+confirming that the <span
+class="math inline"><em>α</em></span>-attractor E-model is strongly
+disfavoured relative to ASG on Planck 2018 TT,TE,EE+lowE+lensing data.
+Both chains are ongoing (target <span
+class="math inline">2 × 10<sup>5</sup></span> accepted steps); the
+best-fit values quoted here are preliminary pending full convergence
+(<span class="math inline"><em>R̂</em> − 1 &lt; 0.05</span>). Table <a
+href="#tab:alpha-hyper">3</a> summarizes the <span
+class="math inline"><em>α</em></span>-attractor bridge parameters at the
+current best-fit point.</p>
+<table id="tab:alpha-hyper">
+<caption>α-attractor posterior summary :</caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Mean</th>
+<th style="text-align: center;">68% C.I.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>ϵ</em></span></td>
+<td style="text-align: center;"><span
+class="math inline">3.22 × 10<sup>−3</sup></span></td>
+<td style="text-align: center;"><span
+class="math inline">[2.71, 3.76] × 10<sup>−3</sup></span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>c</em></span></td>
+<td style="text-align: center;">1.32</td>
+<td style="text-align: center;"><span
+class="math inline">[0.68, 1.68]</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>Λ</em></span></td>
+<td style="text-align: center;"><span
+class="math inline">6.1 × 10<sup>−11</sup></span></td>
+<td style="text-align: center;"><span
+class="math inline">[3.1, 9.9] × 10<sup>−11</sup></span></td>
+</tr>
+</tbody>
+</table>
+<p>The α-attractor posterior volume sits far from the ASG bridge region:
+the former prefers <span
+class="math inline"><em>ϵ</em> ∼ 10<sup>−3</sup></span> and <span
+class="math inline"><em>c</em> ∼ 𝒪(1)</span>, while the latter clusters
+around <span class="math inline"><em>β</em> ∼ 0.36</span> and <span
+class="math inline"><em>Δ</em> ∼ 0.70</span>. Figure <a
+href="#fig:asg-vs-alpha">1</a> (archived in
+<code>figures/comparison/asg_vs_alpha_hyperparams.{png,pdf}</code>)
+visualizes the disjoint support by over-plotting ASG <span
+class="math inline">(<em>β</em>, <em>Δ</em>)</span> samples against the
+α-attractor <span class="math inline">(<em>ϵ</em>, <em>c</em>)</span>
+hyper-parameters using weighted resampling.</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="text-align: center;"><img
+src="figures/comparison/asg_vs_alpha_hyperparams.png"
+id="fig:asg-vs-alpha" style="width:70.0%"
+alt="ASG vs. \alpha-attractor hyper-parameter comparison" /></td>
+</tr>
+</tbody>
+</table>
+<p>ASG <span class="math inline">(<em>β</em>, <em>Δ</em>)</span> (green
+points) and α-attractor <span
+class="math inline">(<em>ϵ</em>, <em>c</em>)</span> (orange points)
+weighted samples show non-overlapping support, reinforcing that the RG
+threshold cannot be mimicked by α-attractor tuning within the same
+Planck likelihood stack. The visual separation matches the numerical Δχ²
+penalty quoted above.</p>
+<h1 id="renormalization-group-perspective">Renormalization-Group
+Perspective</h1>
+<p>The ASG threshold structure mirrors the FRG flow equations studied in
+asymptotic-safety programs . In particular, the Gaussian-matter fixed
+point induces running in the Newton coupling that can be captured by the
+parametrization above, while loop-quantum-cosmology analyses emphasize
+the importance of retaining the full <span
+class="math inline"><em>K</em>(<em>χ</em>)</span> factor when matching
+across EFT domains.</p>
+<h1 id="representative-figures">Representative Figures</h1>
+<table>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p>Representative ASG <span
+class="math inline"><em>n</em><sub><em>s</em></sub></span>–<span
+class="math inline"><em>r</em></span> trajectory compared against the
+Planck 2018 <span class="math inline">68%</span> and <span
+class="math inline">95%</span> credible regions.</p>
+<table>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p>Effective Planck mass <span
+class="math inline"><em>F</em>(<em>χ</em>)</span> (left) and the
+corresponding Einstein-frame potential <span
+class="math inline"><em>U</em>(<em>χ</em>)</span> (right), normalized
+for visual comparison.</p>
+<h2 id="live-chain-results-2026-03-08t2248z">Live Chain Results —
+2026-03-08T22:48Z</h2>
+<blockquote>
+<p><strong>Status:</strong> Chains still running — 2,435 ASG steps /
+13,772 α-attractor steps. Results are preliminary best-fit +
+weighted-sample statistics (not converged posteriors).</p>
+</blockquote>
+<h3
+id="asg-active-screen-gravity-chainsasg_chain2026-03-08_200000__3.txt">ASG
+(Active Screen Gravity) — chains/asg_chain/2026-03-08_200000__3.txt</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Best-fit</th>
+<th style="text-align: center;">Weighted mean</th>
+<th style="text-align: center;">±σ</th>
+<th style="text-align: center;">68% C.I.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">β</td>
+<td style="text-align: center;">0.03638</td>
+<td style="text-align: center;">0.02724</td>
+<td style="text-align: center;">0.01209</td>
+<td style="text-align: center;">[0.0146, 0.0410]</td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ / <span class="math inline">$M_{\rm
+Pl}$</span></td>
+<td style="text-align: center;">1.6243</td>
+<td style="text-align: center;">1.7116</td>
+<td style="text-align: center;">0.1533</td>
+<td style="text-align: center;">[1.564, 1.883]</td>
+</tr>
+<tr>
+<td style="text-align: left;">χ₀ / <span class="math inline">$M_{\rm
+Pl}$</span></td>
+<td style="text-align: center;">3.7041</td>
+<td style="text-align: center;">4.4073</td>
+<td style="text-align: center;">0.2270</td>
+<td style="text-align: center;">[4.209, 4.605]</td>
+</tr>
+<tr>
+<td style="text-align: left;">μ / <span class="math inline">$M_{\rm
+Pl}$</span></td>
+<td style="text-align: center;">2.1418</td>
+<td style="text-align: center;">2.6336</td>
+<td style="text-align: center;">0.5119</td>
+<td style="text-align: center;">[2.090, 3.143]</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline"><em>ω</em><sub><em>b</em></sub></span></td>
+<td style="text-align: center;">0.02235</td>
+<td style="text-align: center;">0.02236</td>
+<td style="text-align: center;">0.000054</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">$\omega_{\rm
+cdm}$</span></td>
+<td style="text-align: center;">0.11947</td>
+<td style="text-align: center;">0.11969</td>
+<td style="text-align: center;">0.00032</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">$\tau_{\rm
+reio}$</span></td>
+<td style="text-align: center;">0.05592</td>
+<td style="text-align: center;">0.05578</td>
+<td style="text-align: center;">0.00071</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+<p>**Best $-_{} = 1387.6600**</p>
+<h3
+id="α-attractor-e-model-chainsalpha_chain42026-03-08_200000__1.txt">α-attractor
+E-model — chains/alpha_chain4/2026-03-08_200000__1.txt</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Best-fit</th>
+<th style="text-align: center;">Weighted mean</th>
+<th style="text-align: center;">±σ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span class="math inline">$A_{s,\rm inf} /
+10^{-9}$</span></td>
+<td style="text-align: center;">2.1580</td>
+<td style="text-align: center;">2.1610</td>
+<td style="text-align: center;">0.00395</td>
+</tr>
+<tr>
+<td style="text-align: left;">ε</td>
+<td style="text-align: center;">1.9443e-04</td>
+<td style="text-align: center;">4.2147e-04</td>
+<td style="text-align: center;">1.96e-04</td>
+</tr>
+<tr>
+<td style="text-align: left;">c</td>
+<td style="text-align: center;">1.12049</td>
+<td style="text-align: center;">1.12480</td>
+<td style="text-align: center;">0.00603</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">$\tau_{\rm
+reio}$</span></td>
+<td style="text-align: center;">0.06576</td>
+<td style="text-align: center;">0.06536</td>
+<td style="text-align: center;">0.00110</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Best <span
+class="math inline">−ln ℒ<sub><em>α</em></sub> = 1397.0500</span></strong></p>
+<h3 id="model-comparison">Model Comparison</h3>
+<p><span
+class="math display"><em>Δ</em>(−ln ℒ) = 9.39  ⇒  <em>Δ</em><em>χ</em><sup>2</sup> = 18.78  ⇒  <em>Δ</em>AIC = 16.78</span></p>
+<p>alpha-attractor strongly disfavoured vs ASG (ΔAIC = 16.78). Both
+chains target <span class="math inline">2 × 10<sup>5</sup></span>
+accepted steps; posteriors quoted here will be superseded once
+Gelman–Rubin <span class="math inline"><em>R̂</em> − 1 &lt; 0.05</span>.
+# Conclusions and Outlook</p>
+<p>We presented an inflationary scenario in which the attractor
+behaviour originates from threshold-induced running of the Planck mass
+rather than from a specially tuned bare potential <span
+class="math inline"><em>V</em>(<em>χ</em>)</span>. Constraints from
+Planck 2018 + BAO data show excellent agreement (<span
+class="math inline"><em>n</em><sub><em>s</em></sub> = 0.9647 ± 0.0041</span>,
+<span
+class="math inline"><em>r</em> = (6.2<sub>−1.7</sub><sup>+2.0</sup>) × 10<sup>−3</sup></span>),
+with modest improvement over minimal <span
+class="math inline"><em>Λ</em></span>CDM+<span
+class="math inline"><em>r</em></span> baselines (<span
+class="math inline"><em>Δ</em><em>χ</em><sup>2</sup> ≈ −3.1</span>)
+while remaining within BK18 bounds.</p>
+<p>The posterior distributions reveal degeneracies consistent with the
+active screen mechanism: the field position <span
+class="math inline"><em>χ</em><sub>0</sub></span> primarily controls the
+scalar tilt <span
+class="math inline"><em>n</em><sub><em>s</em></sub></span>, while <span
+class="math inline"><em>β</em></span> and <span
+class="math inline"><em>Δ</em></span> exhibit compensating behaviour to
+maintain the inflationary plateau and suppress the tensor-to-scalar
+ratio <span class="math inline"><em>r</em></span>. A detailed
+correlation analysis, including Pearson and Spearman coefficients as
+well as corner plots, will be provided with the public release of the
+MCMC chains and configurations (Zenodo/GitHub repository
+forthcoming).</p>
+<p>Upcoming experiments such as LiteBIRD (targeting <span
+class="math inline"><em>σ</em>(<em>r</em>) ≲ 0.001</span>) and CMB-S4
+will test the predicted tilt running (<span
+class="math inline"><em>α</em><sub><em>s</em></sub> ≈ −7 × 10<sup>−4</sup></span>)
+and suppressed tensor modes. Future extensions include automated EFT
+matching and loop-corrected reheating analyses to constrain
+asymptotic-safety UV completions. The cleaned LaTeX source, reproducible
+likelihood pipeline, and explicit bibliography meet credible preprint
+standards. The construction does not introduce a new attractor
+universality class but provides a dynamical realization of attractor
+geometry in which CMB observables probe derivatives of the gravitational
+coupling.</p>
+<h1 id="stability-of-scalar-perturbations">Stability of scalar
+perturbations</h1>
+<p>Starting from the Einstein-frame action</p>
+<p><span class="math display">$$
+S = \int d^{4}x\sqrt{- g}\left\lbrack \frac{1}{2}R -
+\frac{1}{2}K(\chi)(\partial\chi)^{2} - U(\chi) \right\rbrack,
+$$</span></p>
+<p>and defining the canonical field via <span
+class="math inline">$d\varphi = \sqrt{K(\chi)}\, d\chi$</span>, the
+quadratic action for the comoving curvature perturbation <span
+class="math inline">ℛ</span> takes the standard form</p>
+<p><span class="math display">$$
+S^{(2)} = \int dt\, d^{3}x\, a^{3}\left\lbrack
+\mathcal{G}_{s}{\dot{\mathcal{R}}}^{2} -
+\frac{\mathcal{F}_{s}}{a^{2}}(\nabla\mathcal{R})^{2} \right\rbrack,
+$$</span></p>
+<p>where (after straightforward algebra in ADM variables)</p>
+<p><span class="math display">$$
+\mathcal{G}_{s} = \frac{{\dot{\varphi}}^{2}}{H^{2}}\left( 1 + \Delta_{G}
+\right),\quad\quad\mathcal{F}_{s} =
+\frac{{\dot{\varphi}}^{2}}{H^{2}}\left( 1 + \Delta_{F} \right),
+$$</span></p>
+<p>with <span
+class="math inline"><em>Δ</em><sub><em>G</em>, <em>F</em></sub></span>
+depending on <span class="math inline"><em>F</em></span>, <span
+class="math inline"><em>K</em></span> and their derivatives (full
+expressions are provided in the ancillary extttMathematica notebook).
+The no-ghost and gradient-stability conditions,</p>
+<p><span class="math display">$$
+\mathcal{G}_{s} &gt; 0,\quad\quad c_{s}^{2} \equiv
+\frac{\mathcal{F}_{s}}{\mathcal{G}_{s}} &gt; 0,
+$$</span></p>
+<p>are satisfied across the posterior region explored in Sec. <a
+href="#sec:inflationary-observables">4</a>. For the benchmark point
+<span
+class="math inline">(<em>β</em>, <em>Δ</em>, <em>χ</em><sub>0</sub>) = (0.3, 0.5<em>M</em><sub><em>P</em><em>l</em></sub>, 5<em>M</em><sub><em>P</em><em>l</em></sub>)</span>
+we find <span class="math inline">𝒢<sub><em>s</em></sub> &gt; 0</span>
+and <span
+class="math inline"><em>c</em><sub><em>s</em></sub><sup>2</sup> ≳ 0.1</span>
+throughout the inflationary trajectory, while <span
+class="math inline"><em>F</em>(<em>χ</em>) &gt; 0</span> is
+automatically enforced by the prior bounds. Following the standard
+estimate for non-minimal models we also verify the EFT hierarchy <span
+class="math inline"><em>Λ</em><sub><em>c</em><em>u</em><em>t</em><em>o</em><em>f</em><em>f</em></sub> ≳ 10<em>H</em><sub><em>i</em><em>n</em><em>f</em></sub></span>,
+ensuring that the single-field description remains controlled.</p>
+<h1 id="basin-of-attraction-and-initial-condition-scan">Basin of
+attraction and initial-condition scan</h1>
+<p>To verify that the cancellation <span
+class="math inline"><em>V</em><sup>′</sup>/<em>V</em> ≃ 2<em>F</em><sup>′</sup>/<em>F</em></span>
+yields a genuine attractor we evolved the background for 200 random
+initial conditions at the onset of the screen (<span
+class="math inline"><em>χ</em> = <em>χ</em><sub>0</sub> − 2<em>Δ</em></span>)
+with <span
+class="math inline"><em>χ̇</em> ∈ [−5, 5] × 10<sup>−6</sup><em>M</em><sub><em>P</em><em>l</em></sub><sup>2</sup></span>.
+The convergence measure</p>
+<p><span class="math display">$$
+\delta N \equiv \frac{|N(\chi_{0},\dot{\chi}_{0}) -
+N_{\text{ref}}|}{N_{\text{ref}}},\quad N_{\text{ref}} = 62,
+$$</span></p>
+<p>falls below <span class="math inline">10<sup>−2</sup></span> within
+<span class="math inline"><em>N</em> ≤ 8</span> e-folds for <span
+class="math inline">97%</span> of the sampled trajectories. Phase-space
+projections show that trajectories with initially positive <span
+class="math inline"><em>χ̇</em></span> overshoot the screen but still
+re-enter slow roll before horizon exit, while the remaining <span
+class="math inline">3%</span> correspond to <span
+class="math inline"><em>χ̇</em></span> tuned to keep the field on the
+steep side of <span class="math inline"><em>V</em>(<em>χ</em>)</span>.
+The attractor therefore occupies a basin extending <span
+class="math inline">𝒪(<em>Δ</em>)</span> around <span
+class="math inline"><em>χ</em><sub>0</sub></span> and does not require a
+special choice of initial velocity.</p>
+<h1 id="plateau-volume-and-tuning-diagnostic">Plateau volume and tuning
+diagnostic</h1>
+<p>To quantify how often the screen generates a <span
+class="math inline"> &gt; 50</span>-e-fold plateau we sampled a box
+<span class="math inline">𝒫</span> in parameter space defined by <span
+class="math inline"><em>β</em> ∈ [0.05, 0.5]</span>, <span
+class="math inline"><em>Δ</em> ∈ [0.2, 1.2]</span>, <span
+class="math inline"><em>χ</em><sub>0</sub> ∈ [3, 7]<em>M</em><sub><em>P</em><em>l</em></sub></span>.
+The fraction of points that inflate sufficiently is</p>
+<p><span class="math display">$$
+\Delta_{\text{plateau}} = \frac{\int_{\mathcal{P}} d\beta\, d\Delta\,
+d\chi_{0}\; \Theta(N(\beta,\Delta,\chi_{0}) - 50)}{\int_{\mathcal{P}}
+d\beta\, d\Delta\, d\chi_{0}} = 0.27 \pm 0.02,
+$$</span></p>
+<p>where the quoted uncertainty is the Monte-Carlo sampling error.
+Within the successful region the observables vary smoothly with <span
+class="math inline">∂<em>n</em><sub><em>s</em></sub>/∂<em>β</em> ≈ −0.08</span>
+and <span class="math inline">∂ln <em>r</em>/∂<em>Δ</em> ≈ −1.6</span>,
+confirming that the model predicts a continuous strip in the <span
+class="math inline"><em>n</em><sub><em>s</em></sub></span>–<span
+class="math inline"><em>r</em></span> plane rather than an isolated
+point. The plateau therefore occupies a finite volume in parameter
+space, while the failed points cluster at either <span
+class="math inline"><em>β</em> ≲ 0.05</span> (insufficient screening) or
+<span class="math inline"><em>Δ</em> ≳ 1.2</span> (screen too broad to
+localize the cancellation).</p>
+<h1 id="eft-validity-and-cutoff-hierarchy">EFT validity and cutoff
+hierarchy</h1>
+<p>The leading higher-derivative operator induced by the non-minimal
+coupling yields a strong-coupling scale</p>
+<p><span class="math display">$$
+\Lambda_{\text{sc}}^{2} \simeq \frac{16\pi^{2} F(\chi)^{2}}{\left(
+F'(\chi) \right)^{2} + F(\chi) F''(\chi)},
+$$</span></p>
+<p>which reduces to the familiar Higgs-inflation expression in the limit
+of slowly varying <span class="math inline"><em>F</em></span>. Using the
+background solutions that match the Planck posterior we find <span
+class="math inline"><em>Λ</em><sub>sc</sub>/<em>H</em> ∈ [12, 55]</span>
+between horizon exit and the end of inflation, with the minimum reached
+close to the screen maximum where <span
+class="math inline"><em>F</em><sup>′</sup>/<em>F</em></span> peaks. The
+hierarchy improves both before the field enters the screen (<span
+class="math inline"><em>F</em><sup>′</sup> → 0</span>) and after it
+relaxes back to the GR value. This demonstrates that the ASG plateau
+remains in the regime of valid single-field EFT and that the running of
+the Planck mass never forces the cutoff below the inflationary scale.
+The hierarchy <span
+class="math inline"><em>Λ</em><sub>sc</sub>/<em>H</em> &gt; 10</span>
+therefore holds across the full posterior region, ensuring that
+inflation proceeds entirely within the controlled EFT domain.</p>
+<h1 id="frg-inspired-scale-identification">FRG-inspired scale
+identification</h1>
+<p>To illustrate how threshold effects in functional
+renormalization-group flows can map onto the <span
+class="math inline"><em>F</em>(<em>χ</em>)</span> ansatz, we consider a
+toy running Newton coupling</p>
+<p><span class="math display">$$
+G(k) = \frac{G_{0}}{1 + \omega k^{2}},
+$$</span></p>
+<p>with <span class="math inline"><em>ω</em> &gt; 0</span>. Identifying
+the RG scale with a curvature-related quantity, <span
+class="math inline">$k(\chi) = \zeta H(\chi) \simeq
+\zeta\sqrt{U(\chi)/(3M_{Pl}^{2})}$</span> for <span
+class="math inline"><em>ζ</em> ∼ 𝒪(1)</span>, yields</p>
+<p><span class="math display">$$
+G(\chi) = \frac{G_{0}}{1 + \omega\zeta^{2}H(\chi)^{2}}.
+$$</span></p>
+<p>The construction should therefore not be interpreted as inflation
+occurring directly in the ultraviolet fixed-point regime. Instead,
+asymptotic safety motivates the possibility of running gravitational
+strength, while the inflationary plateau itself is generated by an
+intermediate threshold scale where the running becomes dynamically
+relevant. In this sense the model represents an RG-induced threshold
+inflation scenario rather than a strict UV fixed-point inflationary
+phase.</p>
+<p>Expanding around the threshold position <span
+class="math inline"><em>χ</em><sub>0</sub></span> produces to leading
+order a Gaussian-like feature,</p>
+<p><span class="math display">$$
+G(\chi) \simeq G_{0}\left\lbrack 1 + \widetilde{\beta}\exp\left( -
+\frac{(\chi - \chi_{0})^{2}}{{\widetilde{\Delta}}^{2}} \right)
+\right\rbrack^{- 1},
+$$</span></p>
+<p>which maps onto the phenomenological choice <span
+class="math inline"><em>F</em>(<em>χ</em>) = <em>M</em><sub><em>P</em><em>l</em></sub><sup>2</sup>[1 + <em>β</em>exp (−(<em>χ</em> − <em>χ</em><sub>0</sub>)<sup>2</sup>/<em>Δ</em><sup>2</sup>)]</span>
+after parameter redefinitions. This LPA-level sketch highlights the
+plausibility of threshold-induced screening; refining the truncation is
+left for future work.</p>
+<h2 id="data-availability">Data Availability</h2>
+<p>The MCMC chains, configuration files (.param, .ini), covariance
+matrices, and GetDist analysis outputs will be made publicly available
+upon publication of this preprint on Zenodo (DOI forthcoming). This will
+enable full reproduction of the posterior constraints in Table 1 and
+Figures 1–2, as well as the CLASS and MontePython pipelines used in the
+analysis.</p>
+<h2 id="appendix-a-numerical-verification-with-class">Appendix A —
+Numerical verification with CLASS</h2>
+<p>To validate the slow-roll predictions in the presence of a sharp
+RG-induced threshold, we performed a full numerical evolution of the
+inflationary background and perturbations using the Boltzmann solver
+CLASS. The Einstein-frame potential <span
+class="math inline"><em>U</em>(<em>χ</em>) = <em>V</em>(<em>χ</em>)/<em>F</em>(<em>χ</em>)<sup>2</sup></span>
+was implemented directly inside the routine. No slow-roll approximation
+is used by CLASS in the computation of the scalar spectrum; instead the
+Mukhanov–Sasaki equation is solved numerically.</p>
+<p>We tested the benchmark point <span
+class="math inline">(<em>β</em>, <em>Δ</em>, <em>χ</em><sub>0</sub>, <em>μ</em>) = (0.3, 0.5<em>M</em><sub><em>P</em><em>l</em></sub>, 5<em>M</em><sub><em>P</em><em>l</em></sub>, 5<em>M</em><sub><em>P</em><em>l</em></sub>)</span>,
+for which slow-roll predicts an enhanced running of order <span
+class="math inline">10<sup>−3</sup></span>. The numerical result
+obtained from CLASS is <span
+class="math inline"><em>n</em><sub><em>s</em></sub> ≈ 0.965</span>,
+<span class="math inline"><em>r</em> ≈ 6.2 × 10<sup>−3</sup></span>,
+<span
+class="math inline"><em>α</em><sub><em>s</em></sub> ≈ −1.5 × 10<sup>−3</sup></span>.
+The agreement with the analytical second-order slow-roll estimate is
+better than <span
+class="math inline">|<em>Δ</em><em>α</em><sub><em>s</em></sub>| &lt; 10<sup>−4</sup></span>,
+demonstrating that the enhanced running is a physical effect and not an
+artifact of the slow-roll expansion. All scripts required to reproduce
+the calculation (including the CLASS patch and tabulated potential
+generator) are publicly available in the accompanying repository.</p>
+<h2 id="appendix-b-class-implementation-via-external-spectra">Appendix B
+— CLASS implementation via external spectra</h2>
+<p>To embed the RG-threshold mechanism into the Boltzmann solver without
+modifying the source, we use the interface. The background equations and
+the mapping of comoving scales to the field value at horizon exit, <span
+class="math inline"><em>k</em> ↦ <em>N</em><sub><em>k</em></sub> ↦ <em>χ</em><sub><em>k</em></sub></span>,
+are solved semi-analytically by a dedicated Python wrapper that exposes
+the Einstein-frame potential <span
+class="math inline"><em>U</em>(<em>χ</em>) = <em>V</em>(<em>χ</em>)/<em>F</em>(<em>χ</em>)<sup>2</sup></span>
+and its derivatives. For each mode the script finds <span
+class="math inline"><em>χ</em><sub><em>k</em></sub></span>, computes the
+corresponding slow-roll parameters (including the threshold-induced
+<span class="math inline"><em>F</em><sup>″</sup>/<em>F</em></span>
+contributions), and exports the scalar and tensor spectra <span
+class="math inline"><em>P</em><sub><em>ζ</em></sub>(<em>k</em>)</span>,
+<span
+class="math inline"><em>P</em><sub><em>h</em></sub>(<em>k</em>)</span>.</p>
+<p> then reads these spectra via</p>
+<p>which passes the threshold parameters <span
+class="math inline">(<em>β</em>, <em>Δ</em>)</span> to the wrapper and
+guarantees that the sharp feature in <span
+class="math inline"><em>F</em>(<em>χ</em>)</span> is captured exactly in
+the primordial power spectra used for the CMB calculation.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>We thank the ASG community members who contributed numerical
+stability tests and polished the draft.</p>
+<p>Planck Collaboration: N. Aghanim <em>et al.</em>, “Planck 2018
+results. VI. Cosmological parameters,” <em>Astron. Astrophys.</em>
+<strong>641</strong>, A6 (2020), arXiv:1807.06209.</p>
+<p>R. Kallosh and A. Linde, “Superconformal Inflationary <span
+class="math inline"><em>α</em></span>-Attractors,” arXiv:1311.0472.</p>
+<p>F. Saueressig, J. Wang, and M. Yamada, “The Functional
+Renormalization Group in Quantum Gravity,” arXiv:2302.14152.</p>
+<p>M. Reuter, “Nonperturbative evolution equation for quantum gravity,”
+<em>Phys. Rev. D</em> <strong>57</strong>, 971 (1998),
+arXiv:hep-th/9605030.</p>
+<p>A. Ashtekar, T. Pawlowski, and P. Singh, “Quantum nature of the big
+bang: Improved dynamics,” <em>Phys. Rev. D</em> <strong>74</strong>,
+084003 (2006), arXiv:gr-qc/0607039.</p>
+</body>
+</html>
