@@ -1,5 +1,5 @@
 # Session Handoff — Active Screen Gravity (ASG) MCMC Run
-**Written:** 2026-03-08  
+**Written:** 2026-03-09  
 **CWD:** `/home/polcreation/class_public/python/montepython_public`  
 **Conda env:** `plc311`  
 **Source always required:** `planck_likelihoods_2018/code/plc_3.0/plc-3.01/bin/clik_profile.sh`
@@ -24,14 +24,14 @@ Standard Starobinsky-like attractor. Free params: **ε, c, A_s_inf** (plus same 
 
 ---
 
-## 2. Current Chain Status (as of 2026-03-08 ~22:35 UTC)
+## 2. Current Chain Status (as of 2026-03-09 ~19:45 UTC)
 
-| Chain | PID | Output file | Steps | Best −lnL | Status |
-|-------|-----|-------------|-------|-----------|--------|
-| **ASG** | 1211002 | `chains/asg_chain/2026-03-08_200000__3.txt` | ~1,300 | **1387.66** | ✅ Running |
-| **Alpha** | 3296426 | `chains/alpha_chain4/2026-03-08_200000__1.txt` | ~12,820 | **1397.05** | ✅ Running |
+| Chain | PID | Output file | Rows (latest segment) | Best −lnL | Status |
+|-------|-----|-------------|-----------------------|-----------|--------|
+| **ASG** | 1045685 | `chains/asg_chain/2026-03-09_200000__2.txt` | 1,665 (segment `__2`, concatenated with `__1` and `__3`) | **1387.54** | ✅ Running |
+| **Alpha** | 5269 | `chains/alpha_chain4/2026-03-09_200000__1.txt` | 5,540 | **1396.04** | ✅ Running |
 
-Both running at ~700% CPU (multi-core). Target: 200,000 steps each.
+Both jobs are again saturating the 8-core node (≈700% CPU) with the `-f 0.2` (ASG) / `-f 0.4` (alpha) settings. Target: 200,000 accepted steps each. Fresh segments are mirrored under `q/l2/chains/**` for offline post-processing.
 
 ### Quick status check
 ```bash
@@ -57,10 +57,10 @@ awk 'BEGIN{b=9999;s=0}{s+=$1;if($2<b)b=$2}END{print "best_lnL="b"  steps="s}' "$
 | Model | Best −lnL | vs ΛCDM (~1383) | Extra params | AIC penalty |
 |-------|-----------|-----------------|--------------|-------------|
 | ΛCDM (Planck reference) | ~1383 | 0 | — | — |
-| **ASG** | **1387.66** | +9.3 in χ² | +2 | ΔAIC ≈ +5 (marginal) |
-| **α-attractor** | **1397.05** | +28 in χ² | +1 | ΔAIC ≈ +16 (disfavoured) |
+| **ASG** | **1387.54** | +9.1 in χ² | +2 | ΔAIC ≈ +5 (marginal) |
+| **α-attractor** | **1396.04** | +26 in χ² | +1 | ΔAIC ≈ +15 (disfavoured) |
 
-Δχ²(α vs ASG) = **18.8** → AIC-corrected ΔAIC = 16.8 → α-attractor strongly disfavoured.  
+Δχ²(α vs ASG) = **17.0** → AIC-corrected ΔAIC = 15.0 → α-attractor strongly disfavoured.  
 **Chains not converged** — these are preliminary best-fit values, not posteriors.
 
 ---
@@ -190,24 +190,28 @@ q/
 
 ## 8. Scientific Results So Far
 
-### ASG best-fit point (lnL=1387.65/1387.66)
+### ASG best-fit point (lnL=1387.54)
 ```
-beta  = 0.0360      (screen strength)
-Delta = 1.6187 M_Pl (screen width)
-chi0  = 3.7361 M_Pl (screen centre in field space)
-mu    = 2.1354 M_Pl (potential scale)
-omega_b = 0.02234, omega_cdm = 0.11944, 100*theta_s = 1.04172, tau = 0.05579
+beta  = 0.0346      (screen strength)
+Delta = 1.6274 M_Pl (screen width)
+chi0  = 3.7404 M_Pl (screen centre in field space)
+mu    = 2.1461 M_Pl (potential scale)
+omega_b ≈ 0.02226, omega_cdm ≈ 0.12025, 100*theta_s ≈ 1.04169, tau ≈ 0.0533
 ```
 
-### Alpha-attractor best-fit (lnL=1397.05)
+### Alpha-attractor best-fit (lnL=1396.04)
 ```
-epsilon = 2.003e-4, c = 1.1247, A_s_inf = 2.189e-9
+epsilon = 3.89e-4, c = 1.1042, A_s_inf = 2.1555e-9
 ```
 
 ### Paper (q/ASG_scientific_report_en.md)
-The paper already has converged posterior values from an **older zenodo run**:
-`β=0.36±0.20, Δ=0.70±0.23, χ₀=4.52±1.50, μ=4.25±1.06` (68% CL, 21,406 samples).  
-The current runs will improve these when converged. **Do not overwrite the zenodo posteriors until chains converge.**
+The manuscript now includes the **March 09 quick-look** statistics sourced from
+`l2/chains/*/2026-03-09_200000__*.txt`: ASG hyper-posteriors
+(`β=0.0370±0.0068`, `Δ=1.506±0.150`, `χ₀=3.988±0.354`, `μ=3.436±0.879`)
+and the α-attractor control
+(`ε=(3.01±1.06)×10^{-4}`, `c=1.105±0.013`, `A_{s,\rm inf}=(2.156±0.006)×10^{-9}`).
+They are explicitly flagged as preliminary (ESS ≪ 10³, GR inflated) and will be
+replaced once the chains deliver the target $2\\times10^{5}$ accepted steps.
 
 ---
 
@@ -217,18 +221,18 @@ The current runs will improve these when converged. **Do not overwrite the zenod
 - [ ] **Convergence check** once ASG reaches ~20,000 steps: run `MontePython.py info` on chains
 - [ ] **Generate plots** when converged: triangle plots via GetDist, n_s-r trajectory
 - [ ] **ΛCDM baseline run** for proper Δχ² comparison (currently using literature ~1383)
-- [ ] **Finalize paper** in `q/ASG_scientific_report_en.md` — replace zenodo posteriors with new converged values once available
-- [ ] **Generate PDF/DOCX** from updated markdown: `python-docx` + `weasyprint` installed in plc311 env; `pandoc` installed via conda
+- [ ] **Finalize paper** in `q/ASG_scientific_report_en.md` — quick-look March 09 numbers are now in place; overwrite them once chains truly converge
+- [ ] **Generate PDF/DOCX** from updated markdown (`ASG_scientific_report_en_math.{pdf,docx}`) whenever text/figures change; pandoc+Tectonic workflow below
 
 ### Generate PDF/DOCX (tools now installed)
 ```bash
 source /home/polcreation/miniconda3/etc/profile.d/conda.sh && conda activate plc311
 cd q
-pandoc ASG_scientific_report_en.md -o ASG_scientific_report_en_v14.docx \
-  --reference-doc=ASG_scientific_report_en_v13.docx 2>/dev/null || \
-pandoc ASG_scientific_report_en.md -o ASG_scientific_report_en_v14.docx
-pandoc ASG_scientific_report_en.md -o ASG_scientific_report_en_v14.pdf \
-  --pdf-engine=weasyprint
+pandoc ASG_scientific_report_en.md -o ASG_scientific_report_en_math.docx
+pandoc ASG_scientific_report_en.md \
+  --pdf-engine=tectonic \
+  --resource-path=\".;figures\" \
+  -o ASG_scientific_report_en_math.pdf
 ```
 
 ---

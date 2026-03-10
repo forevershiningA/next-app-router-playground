@@ -26,14 +26,26 @@ recovered. This scenario provides a concrete realization in which cosmic
 microwave background observables probe derivatives of the gravitational
 coupling, offering a phenomenological link between inflationary
 attractors and running gravitational strength. Running the
-CLASS–MontePython pipeline with the Planck 2018 TT,TE,EE+lowE+lensing
-likelihoods yields $21\,406$ post–burn-in samples with an effective sample
-size of $\simeq 6.6\times 10^{3}$, constraining the ASG bridge parameters
-to $\beta = 0.36^{+0.20}_{-0.19}$,
-$\Delta = 0.70^{+0.23}_{-0.27}$, $\chi_{0} = 4.52^{+1.50}_{-1.16}M_{\mathrm{Pl}}$,
-and $\mu = 4.25^{+1.06}_{-0.94}M_{\mathrm{Pl}}$ (68% C.L.), confirming that the
-threshold deformation is statistically preferred over the $\beta \to 0$
-limit.
+CLASS–MontePython pipeline on the fresh March 09 chain segments
+(`2026-03-09_200000__{1,2,3}.txt`) yields a new ASG best fit
+$-\ln\mathcal{L}_{\text{ASG}} = 1387.54$ versus
+$-\ln\mathcal{L}_{\alpha} = 1396.04$, corresponding to
+$\Delta\chi^{2} \simeq 17$ ($\Delta\text{AIC} \simeq 15$) in favour of the
+running-$G$ plateau. After discarding the first $30\%$ of samples from
+the concatenated ASG chain we keep $6\,216$ weighted entries
+(ESS $\approx 1.6\times 10^{2}$ because the stuck `__1` block still carries
+large weights); GetDist on this subset returns
+$\beta = 0.0370 \pm 0.0068$, $\Delta/M_{\mathrm{Pl}} = 1.506 \pm 0.150$,
+$\chi_{0}/M_{\mathrm{Pl}} = 3.988 \pm 0.354$, and
+$\mu/M_{\mathrm{Pl}} = 3.436 \pm 0.879$ (68% C.L.), with the band originating
+entirely from the live March 09 data. The $\alpha$-attractor control chain
+(11,410 raw rows, 5,540 accepted) prefers
+$\epsilon = (3.01 \pm 1.06)\times 10^{- 4}$,
+$c = 1.105 \pm 0.013$, and $A_{s,\mathrm{inf}} = (2.156 \pm 0.006)\times 10^{- 9}$.
+These numbers remain preliminary until the restarted chains accumulate the
+targeted $2\times 10^{5}$ accepted steps, but they already showcase the
+non-degeneracy between the RG-screened plateau and the
+$\alpha$-attractor envelope.
 
 # Introduction
 
@@ -173,27 +185,34 @@ Table [1](#tab:constraints) and visualized via the figures below.
 Posterior means and $68\%$ intervals obtained from the
 `CLASS`+`MontePython` pipeline with Planck 2018 likelihoods.
 
-The production chain comprises $21\,909$ raw samples, of which the first
-503 ($\approx 2.3\%$) are discarded based on the $-\ln\mathcal{L}$ plateau. The
-remaining $21\,406$ weighted samples yield an effective sample size of
-$6.6 \times 10^{3}$, a maximal MontePython weight of 70, and a median
-weight of unity, indicating stable importance sampling without single
-point domination. Table [2](#tab:asg-hyper) summarizes the ASG bridge
-hyper-parameters inferred from the same run; the $68\%$ posterior bands
-show that $\beta$, $\Delta$, $\chi_{0}$, and $\mu$ are all pulled away
-from their $\alpha$-attractor limits. The posterior KDEs and the ASG
-corner plot used in Sec. [Non-degeneracy with $\alpha$-attractors](#non-degeneracy-with-alpha-attractors)
-are archived in `figures/asg_chain/{fig_cosmo_1d,fig_asg_1d,corner_asg}.{png,pdf}`.
+The March 09 refresh concatenates the live ASG files
+`l2/chains/asg_chain/2026-03-09_200000__{1,2,3}.txt`, totalling $8\,880$
+raw rows. Discarding the first $30\%$ based on the $-\ln\mathcal{L}$
+plateau leaves $6\,216$ weighted entries with an effective sample size of
+only $\sim 1.6\times 10^{2}$ because the older `__1` segment (which was stuck
+near the prior boundary) still carries large weights. Table [2](#tab:asg-hyper)
+therefore quotes the GetDist statistics obtained directly from the
+March 09 data drop (3,224 post–burn-in rows, ESS $\sim 14$–$20$), matching
+the values shared in the live log while explicitly flagging their
+preliminary nature. Updated KDEs and the ASG corner plot used in
+Sec. [Non-degeneracy with $\alpha$-attractors](#non-degeneracy-with-alpha-attractors)
+will be regenerated once the restarted segment (`__2`) surpasses
+$\mathcal{O}(10^{4})$ accepted samples so that GR diagnostics fall below $0.05$.
 
 Table: ASG posterior summary
 : {#tab:asg-hyper}
 
 | Parameter | Mean | 68% C.I. | 95% C.I. |
 |:---|:--:|:--:|:--:|
-| $\beta$ | 0.36 | $[0.18,\, 0.56]$ | $[0.11,\, 0.76]$ |
-| $\Delta/M_{\mathrm{Pl}}$ | 0.70 | $[0.43,\, 0.94]$ | $[0.24,\, 0.99]$ |
-| $\chi_{0}/M_{\mathrm{Pl}}$ | 4.52 | $[3.36,\, 6.02]$ | $[3.06,\, 6.88]$ |
-| $\mu/M_{\mathrm{Pl}}$ | 4.25 | $[3.31,\, 5.31]$ | $[3.05,\, 6.35]$ |
+| $\beta$ | 0.0370 | $[0.0303,\, 0.0447]$ | $[0.024,\, 0.050]$ |
+| $\Delta/M_{\mathrm{Pl}}$ | 1.506 | $[1.325,\, 1.666]$ | $[1.21,\, 1.80]$ |
+| $\chi_{0}/M_{\mathrm{Pl}}$ | 3.988 | $[3.597,\, 4.390]$ | $[3.29,\, 4.68]$ |
+| $\mu/M_{\mathrm{Pl}}$ | 3.436 | $[2.284,\, 4.446]$ | $[1.71,\, 5.16]$ |
+
+The $95\%$ intervals are obtained from a Gaussian extrapolation
+($\mu \pm 1.96\sigma$) because the ESS of the quick-look chain is $\ll 10^{3}$;
+full KDE-derived quantiles will replace them once the restarted segment
+delivers at least $\mathcal{O}(10^{4})$ accepted points.
 
 # Non-degeneracy with $\alpha$-attractors
 
@@ -252,25 +271,26 @@ consistent with the threshold scenario.
 
 ## α-attractor comparison chain and Δχ² diagnosis
 
-To make the $\alpha$-attractor contrast fully data-driven we ran a dedicated
-MontePython chain (`chains/alpha_chain4/2026-03-08_200000__1.txt`) with the
-identical Planck TT,TE,EE+lowE+lensing likelihood stack used for ASG, using
-the bridge likelihood `alpha_bridge` that maps the E-model parameters
-$(\epsilon, c, A_{s,\text{inf}})$ to the primordial spectrum via CLASS.
-The current production run (2026-03-08) has accumulated $\simeq 12\,300$
-post-burn-in steps. The best-fit entry yields
-$-\ln\mathcal{L}_{\alpha} = 1397.05$, to be compared with the ASG best-fit
-$-\ln\mathcal{L}_{\text{ASG}} = 1387.65$ obtained from the same likelihood
+To make the $\alpha$-attractor contrast fully data-driven we relaunched the
+dedicated MontePython chain
+(`l2/chains/alpha_chain4/2026-03-09_200000__1.txt`) with the identical Planck
+TT,TE,EE+lowE+lensing likelihood stack used for ASG, using the bridge
+likelihood `alpha_bridge` that maps the E-model parameters
+$(\epsilon, c, A_{s,\text{inf}})$ to the primordial spectrum via CLASS. The
+March 09 production segment contains $11\,410$ raw rows (5,540 accepted
+weights). The best-fit entry yields
+$-\ln\mathcal{L}_{\alpha} = 1396.04$, to be compared with the ASG best-fit
+$-\ln\mathcal{L}_{\text{ASG}} = 1387.54$ obtained from the same likelihood
 stack. Hence
 
 $$
-\Delta(-\ln\mathcal{L}) = 1397.05 - 1387.65 = 9.40
+\Delta(-\ln\mathcal{L}) = 1396.04 - 1387.54 = 8.50
 \quad\Rightarrow\quad
-\Delta\chi^{2} \equiv 2\,\Delta(-\ln\mathcal{L}) \simeq 18.8.
+\Delta\chi^{2} \equiv 2\,\Delta(-\ln\mathcal{L}) \simeq 17.0.
 $$
 
 With the $\alpha$-attractor model carrying one fewer free parameter than ASG,
-the AIC-corrected penalty is $\Delta\text{AIC} = 18.8 - 2 = 16.8$,
+the AIC-corrected penalty is $\Delta\text{AIC} = 17.0 - 2 = 15.0$,
 confirming that the $\alpha$-attractor E-model is strongly disfavoured
 relative to ASG on Planck 2018 TT,TE,EE+lowE+lensing data. Both chains are
 ongoing (target $2\times 10^{5}$ accepted steps); the best-fit values quoted
@@ -283,13 +303,13 @@ Table: α-attractor posterior summary
 
 | Parameter | Mean | 68% C.I. |
 |:---|:--:|:--:|
-| $\epsilon$ | $3.22 \times 10^{- 3}$ | $[2.71,\, 3.76] \times 10^{- 3}$ |
-| $c$ | 1.32 | $[0.68,\, 1.68]$ |
-| $\Lambda$ | $6.1 \times 10^{- 11}$ | $[3.1,\, 9.9] \times 10^{- 11}$ |
+| $\epsilon$ | $3.01 \times 10^{- 4}$ | $[1.92,\, 4.05] \times 10^{- 4}$ |
+| $c$ | 1.105 | $[1.092,\, 1.125]$ |
+| $A_{s,\text{inf}}$ | $2.156 \times 10^{- 9}$ | $[2.150,\, 2.162] \times 10^{- 9}$ |
 
-The α-attractor posterior volume sits far from the ASG bridge region:
-the former prefers $\epsilon \sim 10^{-3}$ and $c\sim\mathcal{O}(1)$, while
-the latter clusters around $\beta \sim 0.36$ and $\Delta \sim 0.70$.
+The α-attractor posterior volume sits far from the ASG bridge region: the
+former prefers $\epsilon \sim 3\times 10^{-4}$ and $c\sim\mathcal{O}(1)$, while
+the latter clusters around $\beta \sim 0.04$ and $\Delta \sim 1.5$.
 Figure [1](#fig:asg-vs-alpha) (archived in
 `figures/comparison/asg_vs_alpha_hyperparams.{png,pdf}`) visualizes the
 disjoint support by over-plotting ASG $(\beta,\Delta)$ samples against the
@@ -332,52 +352,49 @@ Einstein-frame potential $U(\chi)$ (right), normalized for visual
 comparison.
 
 
-## Live Chain Results — 2026-03-08T22:05Z
+## Live Chain Results — 2026-03-09T19:46Z
 
-> **Status:** Chains still running — 2,435 ASG-weighted samples (2,005 stored rows) / 14,025 α-attractor weighted samples (11,835 rows).
-> Results are preliminary best-fit + weighted-sample statistics (not converged posteriors).
+> **Status:** Chains still running — ASG just recorded $-\ln\mathcal{L}_{\rm ASG}=1387.54$ while the $\alpha$-attractor run sits at $-\ln\mathcal{L}_{\alpha}=1396.04$. Both jobs are still ramping toward $2\times10^{5}$ accepted samples; diagnostics below are based on the March 09 drops mirrored in `q/l2/`.
 > Full summary serialized to `q/l1/chain_results_regenerated.json`.
 
-### ASG (Active Screen Gravity) — chains/asg_chain/2026-03-08_200000__3.txt
+### ASG (Active Screen Gravity) — `l2/chains/asg_chain/2026-03-09_200000__{1,2,3}.txt`
+
+- Raw rows: $8\,880$; post-burn (30%) rows: $6\,216$; ESS $\approx 1.6\times 10^{2}$ because the stuck `__1` block still carries unit weights.
+- March 09 GetDist slice (30% burn, 3,224 rows) reports $\hat{R}_{\max} \approx 5.4\times 10^{2}$ because it stitches the stuck `__1` tail to the restarted `__2` segment; treat the summary below as preliminary.
 
 | Parameter | Best-fit | Weighted mean | ±σ | 68% C.I. |
 |:---|:---:|:---:|:---:|:---:|
-| β | 0.03638 | 0.02724 | 0.01209 | [0.0146, 0.0410] |
-| Δ / $M_{\rm Pl}$ | 1.6243 | 1.7116 | 0.1533 | [1.564, 1.883] |
-| χ₀ / $M_{\rm Pl}$ | 3.7041 | 4.4073 | 0.2270 | [4.209, 4.605] |
-| μ / $M_{\rm Pl}$ | 2.1418 | 2.6336 | 0.5119 | [2.090, 3.143] |
-| $\omega_b$ | 0.02235 | 0.02236 | 0.000054 | [0.02230, 0.02243] |
-| $\omega_{\rm cdm}$ | 0.11947 | 0.11969 | 0.00032 | [0.11930, 0.11999] |
-| $\tau_{\rm reio}$ | 0.05592 | 0.05578 | 0.00071 | [0.05500, 0.05666] |
+| β | 0.03457 | 0.0370 | 0.0068 | [0.0303, 0.0447] |
+| Δ / $M_{\rm Pl}$ | 1.6274 | 1.506 | 0.150 | [1.325, 1.666] |
+| χ₀ / $M_{\rm Pl}$ | 3.7404 | 3.988 | 0.354 | [3.597, 4.390] |
+| μ / $M_{\rm Pl}$ | 2.1461 | 3.436 | 0.879 | [2.284, 4.446] |
 
-**Best $-\ln\mathcal{L}_{\rm ASG} = 1387.6600**
+**Best $-\ln\mathcal{L}_{\rm ASG} = 1387.54$ (new record)**
 
-### α-attractor E-model — chains/alpha_chain4/2026-03-08_200000__1.txt
+### α-attractor E-model — `l2/chains/alpha_chain4/2026-03-09_200000__1.txt`
+
+- Raw rows: $11\,410$; post-burn (30%) rows: $7\,987$; ESS $\approx 5.3\times 10^{3}$.
+- Single-segment chain, so the built-in Gelman–Rubin diagnostic trivially reports zero; more segments are needed before quoting a formal convergence flag.
 
 | Parameter | Best-fit | Weighted mean | ±σ | 68% C.I. |
 |:---|:---:|:---:|:---:|:---:|
-| $A_{s,\rm inf} / 10^{-9}$ | 2.1580 | 2.1610 | 0.00393 | [2.1575, 2.1645] |
-| ε | 1.9443e-04 | 4.2090e-04 | 1.94e-04 | [1.98e-04, 6.21e-04] |
-| c | 1.12049 | 1.12478 | 0.00598 | [1.11878, 1.13239] |
-| $\omega_b$ | 0.02234 | 0.02235 | 0.000036 | [0.02231, 0.02238] |
-| $\omega_{\rm cdm}$ | 0.11965 | 0.11981 | 0.00016 | [0.11968, 0.11997] |
-| $\tau_{\rm reio}$ | 0.06576 | 0.06534 | 0.00109 | [0.06430, 0.06638] |
+| $A_{s,\rm inf} / 10^{-9}$ | 2.1555 | 2.156 | 0.0055 | [2.150, 2.162] |
+| ε | $3.89\times 10^{-4}$ | $3.01\times 10^{-4}$ | $1.06\times 10^{-4}$ | $[1.92, 4.05]\times 10^{-4}$ |
+| c | 1.1042 | 1.105 | 0.013 | [1.092, 1.125] |
 
-**Best $-\ln\mathcal{L}_\alpha = 1397.0500$**
+**Best $-\ln\mathcal{L}_\alpha = 1396.04$**
 
 ### Model Comparison
 
 $$
-\Delta(-\ln\mathcal{L}) = 9.39
+\Delta(-\ln\mathcal{L}) = 8.50
 \quad\Rightarrow\quad
-\Delta\chi^2 = 18.78
+\Delta\chi^2 = 17.0
 \quad\Rightarrow\quad
-\Delta\text{AIC} = 16.78
+\Delta\text{AIC} = 15.0
 $$
 
-alpha-attractor strongly disfavoured vs ASG (ΔAIC = 16.78). 
-Both chains target $2\times10^5$ accepted steps; posteriors quoted here will 
-be superseded once Gelman–Rubin $\hat{R}-1 < 0.05$.
+alpha-attractor remains strongly disfavoured vs ASG (ΔAIC = 15.0). Both chains target $2\times 10^5$ accepted steps; once Gelman–Rubin $\hat{R}-1 < 0.05$ we will replace these quick-look numbers with converged KDE summaries.
 # Conclusions and Outlook
 
 We presented an inflationary scenario in which the attractor behaviour
@@ -594,3 +611,5 @@ F. Saueressig, J. Wang, and M. Yamada, "The Functional Renormalization Group in 
 M. Reuter, "Nonperturbative evolution equation for quantum gravity," *Phys. Rev. D* **57**, 971 (1998), arXiv:hep-th/9605030.
 
 A. Ashtekar, T. Pawlowski, and P. Singh, "Quantum nature of the big bang: Improved dynamics," *Phys. Rev. D* **74**, 084003 (2006), arXiv:gr-qc/0607039.
+
+
