@@ -66,9 +66,11 @@ export default function SelectionBox({
                      objectType === 'motif' || 
                      (objectType === 'addition' && additionType === 'application');
 
-  // Visual constants
-  // Fixed handle sizes - don't scale with object, act as separate overlay layer
-  const fixedHandleSize = 5.0;  // Fixed 5.0 units for ALL types - constant size like overlay
+  // Visual constants (scale handle size to local units so ledger surfaces stay reasonable)
+  const safeUnitsPerMeter = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
+  const mmToUnits = safeUnitsPerMeter / 1000;
+  const baseHandleSizeMm = 50; // ~5cm handles regardless of scene scale
+  const fixedHandleSize = Math.max(baseHandleSizeMm * mmToUnits, 0.002);
     
   // Thickness - proportional to handle size
   const handleThickness = fixedHandleSize * 0.15;  // 15% of handle size for depth

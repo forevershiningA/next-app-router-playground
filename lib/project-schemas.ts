@@ -1,3 +1,5 @@
+import type { AdditionKind } from './headstone-store';
+
 export type SavedAdditionOffset = {
   xPos?: number;
   yPos?: number;
@@ -5,8 +7,8 @@ export type SavedAdditionOffset = {
   scale?: number;
   rotationZ?: number;
   sizeVariant?: number;
-  targetSurface?: 'headstone' | 'base';
-  additionType?: string;
+  targetSurface?: 'headstone' | 'base' | 'ledger';
+  additionType?: AdditionKind;
   assetFile?: string;
   sourceId?: string;
   additionName?: string;
@@ -22,7 +24,7 @@ export type SavedMotifOffset = {
   scale: number;
   rotationZ: number;
   heightMm: number;
-  target?: 'headstone' | 'base';
+  target?: 'headstone' | 'base' | 'ledger';
   coordinateSpace?: 'absolute' | 'offset';
   flipX?: boolean;
   flipY?: boolean;
@@ -44,6 +46,7 @@ export type SavedImage = {
   croppedAspectRatio?: number;
   maskShape?: string;
   colorMode?: 'full' | 'bw' | 'sepia';
+  target?: 'headstone' | 'base' | 'ledger';
 };
 
 export type SavedInscription = {
@@ -55,7 +58,7 @@ export type SavedInscription = {
   xPos: number;
   yPos: number;
   rotationDeg: number;
-  target?: 'headstone' | 'base';
+  target?: 'headstone' | 'base' | 'ledger';
   baseWidthMm?: number;
   baseHeightMm?: number;
 };
@@ -78,6 +81,14 @@ export type DesignerSnapshot = {
   uprightThickness: number;
   slantThickness: number;
   showBase: boolean;
+  showLedger: boolean;
+  showKerbset: boolean;
+  ledgerWidthMm: number;
+  ledgerHeightMm: number;
+  ledgerDepthMm: number;
+  kerbWidthMm: number;
+  kerbHeightMm: number;
+  kerbDepthMm: number;
   selectedAdditions: string[];
   additionOffsets: Record<string, SavedAdditionOffset>;
   selectedMotifs: Array<{ id: string; svgPath: string; color: string }>;
@@ -94,6 +105,8 @@ export type DesignerSnapshot = {
 export type PricingBreakdown = {
   headstonePrice?: number;
   basePrice?: number;
+  ledgerPrice?: number;
+  kerbsetPrice?: number;
   additionsPrice?: number;
   motifsPrice?: number;
   inscriptionPrice?: number;

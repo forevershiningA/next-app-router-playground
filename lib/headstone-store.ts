@@ -69,7 +69,7 @@ export type Line = {
   xPos: number;
   yPos: number;
   rotationDeg: number;
-  target?: 'headstone' | 'base'; // Which object the inscription is on
+  target?: 'headstone' | 'base' | 'ledger'; // Which object the inscription is on
   baseWidthMm?: number;
   baseHeightMm?: number;
   ref: React.RefObject<Group | null>; // ✅ allow null
@@ -185,6 +185,7 @@ type HeadstoneState = {
     croppedAspectRatio?: number;
     maskShape?: string;
     colorMode?: 'full' | 'bw' | 'sepia';
+    target?: 'headstone' | 'base' | 'ledger';
   }>;
   addImage: (image: {
     id: string;
@@ -200,6 +201,7 @@ type HeadstoneState = {
     maskShape?: string;
     croppedAspectRatio?: number;
     colorMode?: 'full' | 'bw' | 'sepia';
+    target?: 'headstone' | 'base' | 'ledger';
   }) => void;
   removeImage: (id: string) => void;
   duplicateImage: (id: string) => void;
@@ -320,7 +322,7 @@ type HeadstoneState = {
       scale?: number;
       rotationZ?: number;
       sizeVariant?: number;
-      targetSurface?: 'headstone' | 'base';
+       targetSurface?: 'headstone' | 'base' | 'ledger';
       additionType?: AdditionKind;
       assetFile?: string;
       sourceId?: string;
@@ -347,7 +349,7 @@ type HeadstoneState = {
       scale: number;
       rotationZ: number;
       heightMm: number;
-      target?: 'headstone' | 'base';
+       target?: 'headstone' | 'base' | 'ledger';
       coordinateSpace?: 'absolute' | 'offset';
       flipX?: boolean;
       flipY?: boolean;
@@ -381,7 +383,7 @@ type HeadstoneState = {
       scale?: number;
       rotationZ?: number;
       sizeVariant?: number;
-      targetSurface?: 'headstone' | 'base';
+      targetSurface?: 'headstone' | 'base' | 'ledger';
       additionType?: AdditionKind;
       assetFile?: string;
       sourceId?: string;
@@ -448,12 +450,20 @@ type MotifOffset = HeadstoneState['motifOffsets'][string];
 const MIN_SURFACE_DIMENSION_MM = 1;
 
 const resolveSurfaceDimensions = (
-  state: Pick<HeadstoneState, 'widthMm' | 'heightMm' | 'baseWidthMm' | 'baseHeightMm'>,
-  surface: 'headstone' | 'base',
+  state: Pick<
+    HeadstoneState,
+    'widthMm' | 'heightMm' | 'baseWidthMm' | 'baseHeightMm' | 'ledgerWidthMm' | 'ledgerDepthMm'
+  >,
+  surface: 'headstone' | 'base' | 'ledger',
 ) => {
   if (surface === 'base') {
     const widthMm = state.baseWidthMm || state.widthMm || MIN_SURFACE_DIMENSION_MM;
     const heightMm = state.baseHeightMm || state.heightMm || MIN_SURFACE_DIMENSION_MM;
+    return { widthMm, heightMm };
+  }
+  if (surface === 'ledger') {
+    const widthMm = state.ledgerWidthMm || MIN_SURFACE_DIMENSION_MM;
+    const heightMm = state.ledgerDepthMm || MIN_SURFACE_DIMENSION_MM;
     return { widthMm, heightMm };
   }
   return {
@@ -464,7 +474,7 @@ const resolveSurfaceDimensions = (
 
 const withLineSurfaceDimensions = (
   line: Line,
-  surface: 'headstone' | 'base',
+  surface: 'headstone' | 'base' | 'ledger',
   state: HeadstoneState,
   force = false,
 ): Line => {
@@ -483,7 +493,11 @@ const normalizeLineDimensions = (lines: Line[], state: HeadstoneState) =>
   lines.map((line) =>
     withLineSurfaceDimensions(
       line,
-      line.target === 'base' ? 'base' : 'headstone',
+      line.target === 'base'
+        ? 'base'
+        : line.target === 'ledger'
+          ? 'ledger'
+          : 'headstone',
       state,
       !line.baseWidthMm || !line.baseHeightMm,
     ),
@@ -493,7 +507,7 @@ type OffsetWithDimensions = { baseWidthMm?: number; baseHeightMm?: number };
 
 const withOffsetSurfaceDimensions = <T extends OffsetWithDimensions>(
   offset: T,
-  surface: 'headstone' | 'base',
+  surface: 'headstone' | 'base' | 'ledger',
   state: HeadstoneState,
   force = false,
 ): T & { baseWidthMm: number; baseHeightMm: number } => {
@@ -555,7 +569,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
     set((s) => {
-      const targetSurface: 'headstone' | 'base' = s.selected === 'base' ? 'base' : 'headstone';
+      const targetSurface: 'headstone' | 'base' | 'ledger' =
+        s.selected === 'base' ? 'base' : s.selected === 'ledger' ? 'ledger' : 'headstone';
       const defaultOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           scale: 1,
@@ -633,7 +648,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const defaultColor = catalog?.product.defaultColor || (isLaser ? '#ffffff' : '#c99d44');
     
     // Set target based on currently selected object (headstone or base)
-    const target: 'base' | 'headstone' = selected === 'base' ? 'base' : 'headstone';
+    const target: 'base' | 'headstone' | 'ledger' =
+      selected === 'base' ? 'base' : selected === 'ledger' ? 'ledger' : 'headstone';
     
     set((s) => {
       const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
@@ -697,8 +713,21 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   cropCanvasData: null, // Stores the crop canvas state when user is cropping
   setCropCanvasData: (data) => set({ cropCanvasData: data }),
   addImage: (image) => {
+    const state = get();
+    const defaultTarget: 'headstone' | 'base' | 'ledger' =
+      state.selected === 'base'
+        ? 'base'
+        : state.selected === 'ledger'
+          ? 'ledger'
+          : 'headstone';
     set((s) => ({
-      selectedImages: [...s.selectedImages, image],
+      selectedImages: [
+        ...s.selectedImages,
+        {
+          ...image,
+          target: image.target ?? defaultTarget,
+        },
+      ],
       cropCanvasData: null, // Clear crop canvas after adding
     }));
   },
@@ -713,11 +742,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const original = s.selectedImages.find((img) => img.id === id);
       if (!original) return s;
 
+      const targetSurface = original.target ?? 'headstone';
+      const ledgerShiftX = Math.max(Math.min(((s.ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.15), 0.02);
+      const ledgerShiftZ = Math.max(Math.min(((s.ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.15), 0.02);
+      const deltaX = targetSurface === 'ledger' ? ledgerShiftX : 20;
+      const deltaY = targetSurface === 'ledger' ? ledgerShiftZ : 20;
       const newImage = {
         ...original,
         id: `img-${Date.now()}`,
-        xPos: original.xPos + 20,
-        yPos: original.yPos + 20,
+        xPos: (original.xPos ?? 0) + deltaX,
+        yPos: (original.yPos ?? 0) + deltaY,
       };
 
       return {
@@ -1087,7 +1121,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
                 color: productDefaultColor,
               })),
               motifOffsets: scaledOffsets,
-            };
+            } as Partial<HeadstoneState>;
           });
           setTimeout(() => get().calculateMotifCost(), 0);
         }
@@ -1414,7 +1448,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     }
     
     // Set target based on currently selected object (headstone or base)
-    const target = state.selected === 'base' ? 'base' : 'headstone';
+    const target: 'headstone' | 'base' | 'ledger' =
+      state.selected === 'base'
+        ? 'base'
+        : state.selected === 'ledger'
+          ? 'ledger'
+          : 'headstone';
 
     const newLine: Line = {
       id,
@@ -1586,7 +1625,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       scale?: number;
       rotationZ?: number;
       sizeVariant?: number;
-      targetSurface?: 'headstone' | 'base';
+      targetSurface?: 'headstone' | 'base' | 'ledger';
       additionType?: AdditionKind;
       assetFile?: string;
       sourceId?: string;
@@ -1634,15 +1673,18 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const baseId = hasTimestampSuffix ? parts.slice(0, -1).join('_') : id;
     const instanceId = `${baseId}_${Date.now()}`;
 
-    const isBase = currentOffset.targetSurface === 'base';
+    const surface = currentOffset.targetSurface ?? 'headstone';
+    const isBase = surface === 'base';
+    const isLedger = surface === 'ledger';
     const footprintWidth = currentOffset.footprintWidth;
     const widthDelta = footprintWidth && footprintWidth > 0 ? footprintWidth : isBase ? 120 : 30;
     const margin = isBase ? Math.max(widthDelta * 0.25, 20) : 0;
-    const deltaX = isBase ? widthDelta + margin : 30;
-    const deltaY = isBase ? 0 : 30;
+    const ledgerShiftX = Math.max(Math.min(((get().ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.2), 0.02);
+    const ledgerShiftZ = Math.max(Math.min(((get().ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.2), 0.02);
+    const deltaX = isLedger ? ledgerShiftX : isBase ? widthDelta + margin : 30;
+    const deltaY = isLedger ? ledgerShiftZ : isBase ? 0 : 30;
 
     set((s) => {
-      const surface = currentOffset.targetSurface ?? 'headstone';
       const duplicatedOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           ...currentOffset,
@@ -1755,11 +1797,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     if (currentOffset) {
       set((s) => {
         const surface = currentOffset.target ?? 'headstone';
+        const ledgerShiftX = Math.max(Math.min(((s.ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.15), 0.02);
+        const ledgerShiftZ = Math.max(Math.min(((s.ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.15), 0.02);
+        const deltaX = surface === 'ledger' ? ledgerShiftX : 30;
+        const deltaY = surface === 'ledger' ? ledgerShiftZ : 30;
         const duplicatedOffset = withOffsetSurfaceDimensions<MotifOffset>(
           {
             ...currentOffset,
-            xPos: currentOffset.xPos + 30,
-            yPos: currentOffset.yPos + 30,
+            xPos: (currentOffset.xPos ?? 0) + deltaX,
+            yPos: (currentOffset.yPos ?? 0) + deltaY,
           },
           surface,
           s,

@@ -21,6 +21,7 @@ type Props = {
   maskShape?: string;
   headstone?: HeadstoneAPI;
   index?: number;
+  surface?: 'headstone' | 'base' | 'ledger';
 };
 
 export default function ImageModel({ 
@@ -34,7 +35,8 @@ export default function ImageModel({
   typeId,
   maskShape = 'oval_horizontal',
   headstone, 
-  index = 0 
+  index = 0,
+  surface = 'headstone',
 }: Props) {
   const { gl, camera, controls } = useThree();
   const router = useRouter();
@@ -49,14 +51,18 @@ export default function ImageModel({
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
   const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
   const removeImage = useHeadstoneStore((s) => s.removeImage);
+  const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   const selected = selectedImageId === id;
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
+  const pointerCaptureTargetRef = React.useRef<HTMLElement | null>(null);
   
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
+  const ledgerPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
   const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.Texture; aspect: number } | null>(null);
   const [ceramicBaseData, setCeramicBaseData] = React.useState<{
@@ -70,6 +76,7 @@ export default function ImageModel({
 
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
+  const isLedgerSurface = surface === 'ledger';
 
   // Load image texture
   React.useEffect(() => {
@@ -177,70 +184,12 @@ export default function ImageModel({
     };
   }, [typeId, maskShape]);
 
-  // Click handler
-  const handlePointerDown = React.useCallback(
-    (e: any) => {
-      e.stopPropagation();
-      e.nativeEvent?.stopImmediatePropagation?.();
-      
+  const placeOnVerticalSurface = React.useCallback(
+    (clientX: number, clientY: number) => {
       if (!headstone?.mesh?.current || !gl?.domElement) return;
-      
-      // Select this image AND deselect headstone explicitly
-      setSelectedImageId(id);
-      setSelected(null); // Explicitly deselect headstone
-      setActivePanel('image'); // Set active panel to 'image'
-      
-      setDragging(true);
-      
-      if (controls) {
-        (controls as any).enabled = false;
-      }
 
-      // Get initial mouse position on headstone surface
-      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
-      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-
-      const rect = gl.domElement.getBoundingClientRect();
-      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const targetMesh = headstone.mesh.current as THREE.Mesh;
-      const intersects = raycaster.intersectObject(targetMesh, false);
-
-      if (intersects.length > 0) {
-        const worldPoint = intersects[0].point.clone();
-        const localPt = targetMesh.worldToLocal(worldPoint);
-        dragPositionRef.current = { xPos: localPt.x, yPos: localPt.y };
-      }
-    },
-    [controls, camera, raycaster, mouse, gl, headstone, id, setSelectedImageId, setSelected, setActivePanel]
-  );
-
-  const handlePointerUp = React.useCallback(() => {
-    setDragging(false);
-    dragPositionRef.current = null;
-    
-    if (animationFrameRef.current !== null) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-    
-    if (controls) {
-      (controls as any).enabled = true;
-    }
-  }, [controls]);
-
-  const handlePointerMove = React.useCallback(
-    (e: any) => {
-      if (!dragging || !dragPositionRef.current || !headstone?.mesh?.current || !gl?.domElement) return;
-
-      e.stopPropagation();
-
-      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
-      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-
-      const rect = gl.domElement.getBoundingClientRect();
+      const canvas = gl.domElement;
+      const rect = canvas.getBoundingClientRect();
       mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
@@ -261,60 +210,229 @@ export default function ImageModel({
         }
       }
 
-      if (worldPoint) {
-        const localPt = targetMesh.worldToLocal(worldPoint);
+      if (!worldPoint) return;
 
-        // Constrain to headstone bounds (same as motifs)
-        const geometry = targetMesh.geometry;
-        geometry.computeBoundingBox();
-        const bbox = geometry.boundingBox!;
+      const localPt = targetMesh.worldToLocal(worldPoint);
 
-        const inset = 0.01; // 1cm inset from edges
-        const spanY = bbox.max.y - bbox.min.y;
-        
-        const minX = bbox.min.x + inset;
-        const maxX = bbox.max.x - inset;
-        const minY = bbox.min.y + inset + 0.04 * spanY;
-        const maxY = bbox.max.y - inset;
+      if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+      const bbox = targetMesh.geometry.boundingBox!;
 
-        localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
-        localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
+      const inset = 0.01;
+      const spanY = bbox.max.y - bbox.min.y;
+      const minX = bbox.min.x + inset;
+      const maxX = bbox.max.x - inset;
+      const minY = bbox.min.y + inset + 0.04 * spanY;
+      const maxY = bbox.max.y - inset;
 
-        if (animationFrameRef.current !== null) {
-          cancelAnimationFrame(animationFrameRef.current);
+      localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
+      localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
+
+      dragPositionRef.current = { xPos: localPt.x, yPos: localPt.y };
+
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+
+      animationFrameRef.current = requestAnimationFrame(() => {
+        updateImagePosition(id, localPt.x, localPt.y);
+        animationFrameRef.current = null;
+      });
+    },
+    [
+      camera,
+      dragPlane,
+      fallbackIntersection,
+      gl,
+      headstone,
+      id,
+      mouse,
+      raycaster,
+      updateImagePosition,
+    ],
+  );
+
+  const placeOnLedgerSurface = React.useCallback(
+    (clientX: number, clientY: number) => {
+      if (!isLedgerSurface) return;
+      if (!headstone?.mesh?.current || !gl?.domElement) return;
+
+      const canvas = gl.domElement;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const targetMesh = headstone.mesh.current as THREE.Mesh;
+      const hits = raycaster.intersectObject(targetMesh, true);
+      let hit =
+        hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ?? hits[0];
+
+      if (!hit) {
+        if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+        const topY = targetMesh.geometry.boundingBox?.max.y ?? 0;
+        ledgerPlane.set(new THREE.Vector3(0, 1, 0), -topY);
+        if (raycaster.ray.intersectPlane(ledgerPlane, fallbackIntersection)) {
+          hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
         }
+      }
 
-        animationFrameRef.current = requestAnimationFrame(() => {
-          updateImagePosition(id, localPt.x, localPt.y);
-          animationFrameRef.current = null;
-        });
+      if (!hit) return;
+
+      const localPt = targetMesh.worldToLocal(hit.point.clone());
+      if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+      const bbox = targetMesh.geometry.boundingBox!;
+      const centerX = (bbox.min.x + bbox.max.x) / 2;
+      const centerZ = (bbox.min.z + bbox.max.z) / 2;
+
+      const widthUnits =
+        (ledgerWidthMm ?? (bbox.max.x - bbox.min.x) * 1000) / 1000;
+      const depthUnits =
+        (ledgerDepthMm ?? (bbox.max.z - bbox.min.z) * 1000) / 1000;
+
+      const halfWidth = Math.max(widthUnits / 2 - 0.005, 0.001);
+      const halfDepth = Math.max(depthUnits / 2 - 0.005, 0.001);
+
+      const minX = centerX - halfWidth;
+      const maxX = centerX + halfWidth;
+      const minZ = centerZ - halfDepth;
+      const maxZ = centerZ + halfDepth;
+
+      const clampedX = Math.max(minX, Math.min(maxX, localPt.x));
+      const clampedZ = Math.max(minZ, Math.min(maxZ, localPt.z));
+
+      const relativeX = clampedX - centerX;
+      const relativeZ = clampedZ - centerZ;
+
+      dragPositionRef.current = { xPos: relativeX, yPos: relativeZ };
+
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+
+      animationFrameRef.current = requestAnimationFrame(() => {
+        updateImagePosition(id, relativeX, relativeZ);
+        animationFrameRef.current = null;
+      });
+    },
+    [
+      camera,
+      fallbackIntersection,
+      gl,
+      headstone,
+      id,
+      isLedgerSurface,
+      ledgerDepthMm,
+      ledgerPlane,
+      ledgerWidthMm,
+      mouse,
+      raycaster,
+      updateImagePosition,
+    ],
+  );
+
+  const placeFromClientXY = React.useCallback(
+    (clientX: number, clientY: number) => {
+      if (isLedgerSurface) {
+        placeOnLedgerSurface(clientX, clientY);
+      } else {
+        placeOnVerticalSurface(clientX, clientY);
       }
     },
-    [dragging, gl, camera, raycaster, mouse, dragPlane, fallbackIntersection, headstone, id, updateImagePosition]
+    [isLedgerSurface, placeOnLedgerSurface, placeOnVerticalSurface],
+  );
+
+  // Click handler
+  const handlePointerDown = React.useCallback(
+    (e: any) => {
+      e.stopPropagation();
+      e.nativeEvent?.stopImmediatePropagation?.();
+
+      if (!headstone?.mesh?.current || !gl?.domElement) return;
+
+      setSelectedImageId(id);
+      setSelected(null);
+      setActivePanel('image');
+
+      setDragging(true);
+      const targetElement = e.target as HTMLElement | null;
+      if (targetElement?.setPointerCapture && e.pointerId !== undefined) {
+        targetElement.setPointerCapture(e.pointerId);
+        pointerCaptureTargetRef.current = targetElement;
+      }
+
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+      placeFromClientXY(clientX, clientY);
+      document.body.style.cursor = 'grabbing';
+    },
+    [
+      gl,
+      headstone,
+      id,
+      placeFromClientXY,
+      setActivePanel,
+      setSelected,
+      setSelectedImageId,
+    ],
   );
 
   React.useEffect(() => {
-    const canvas = gl.domElement;
-    canvas.addEventListener('pointermove', handlePointerMove);
-    canvas.addEventListener('pointerup', handlePointerUp);
-    canvas.addEventListener('touchmove', handlePointerMove);
-    canvas.addEventListener('touchend', handlePointerUp);
+    if (!dragging) return;
+
+    const onMove = (event: PointerEvent) => {
+      event.preventDefault();
+      placeFromClientXY(event.clientX, event.clientY);
+    };
+
+    const onUp = (event: PointerEvent) => {
+      event.preventDefault();
+
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+
+      dragPositionRef.current = null;
+      setDragging(false);
+      document.body.style.cursor = 'auto';
+      if (controls) {
+        (controls as any).enabled = true;
+      }
+
+      if (pointerCaptureTargetRef.current && event.pointerId !== undefined) {
+        pointerCaptureTargetRef.current.releasePointerCapture?.(event.pointerId);
+        pointerCaptureTargetRef.current = null;
+      }
+    };
+
+    if (controls) {
+      (controls as any).enabled = false;
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp, { once: true });
 
     return () => {
-      canvas.removeEventListener('pointermove', handlePointerMove);
-      canvas.removeEventListener('pointerup', handlePointerUp);
-      canvas.removeEventListener('touchmove', handlePointerMove);
-      canvas.removeEventListener('touchend', handlePointerUp);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      if (controls) {
+        (controls as any).enabled = true;
+      }
+      document.body.style.cursor = 'auto';
+      pointerCaptureTargetRef.current = null;
     };
-  }, [gl, handlePointerMove, handlePointerUp]);
+  }, [controls, dragging, placeFromClientXY]);
 
   if (!textureInfo) {
     return null;
   }
 
   const { texture, aspect } = textureInfo;
-  const width = widthMm;
-  const height = heightMm;
+  const safeUnitsPerMeter =
+    Math.abs(headstone.unitsPerMeter) > 1e-6 ? Math.abs(headstone.unitsPerMeter) : 1000;
+  const mmToLocalUnits = safeUnitsPerMeter / 1000;
+  const width = widthMm * mmToLocalUnits;
+  const height = heightMm * mmToLocalUnits;
   
   // Get headstone frontZ position (same as motifs/inscriptions)
   const frontZ = headstone?.frontZ ?? 0;
@@ -327,12 +445,13 @@ export default function ImageModel({
   // Ceramic base parameters
   const ceramicDepthMm = 1; // Very thin ceramic layer - just 1mm depth
   const borderPercentage = 0.05; // 5% border around photo
+  const ceramicDepthUnits = ceramicDepthMm * mmToLocalUnits;
   
   // Calculate correct scale for ceramic base to match image dimensions
   let ceramicScaleX = 1;
   let ceramicScaleY = 1;
   let ceramicScaleZ = 1;
-  let actualCeramicDepthInUnits = ceramicDepthMm;
+  let actualCeramicDepthInUnits = ceramicDepthUnits;
   
   if (ceramicBaseData) {
     // Scale ceramic to be LARGER than the photo to create visible border
@@ -342,13 +461,43 @@ export default function ImageModel({
     
     // Z scale to get actual 1mm depth
     const avgScale = (ceramicScaleX + ceramicScaleY) / 2;
-    ceramicScaleZ = avgScale * (ceramicDepthMm / 2);
+    ceramicScaleZ = avgScale * (ceramicDepthUnits / 2);
     
     actualCeramicDepthInUnits = 2 * ceramicScaleZ;
   }
 
+  const stone = headstone?.mesh?.current as THREE.Mesh | null;
+  if (!headstone || !stone) {
+    return null;
+  }
+
+  if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
+  const bbox = stone.geometry.boundingBox!.clone();
+  const centerX = (bbox.min.x + bbox.max.x) / 2;
+  const centerY = (bbox.min.y + bbox.max.y) / 2;
+  const ledgerCenterZ = (bbox.min.z + bbox.max.z) / 2;
+  const ledgerTopY = bbox.max.y;
+  const safeX = xPos ?? 0;
+  const safeY = yPos ?? 0;
+
+  let groupPosition: [number, number, number];
+  let groupRotation: [number, number, number];
+
+  if (isLedgerSurface) {
+    const offsetX = xPos ?? 0;
+    const offsetZ = yPos ?? 0;
+    const displayX = centerX + offsetX;
+    const displayZ = ledgerCenterZ + offsetZ;
+    const ledgerLift = 0.001 + (index ?? 0) * 0.001;
+    groupPosition = [displayX, ledgerTopY + ledgerLift, displayZ];
+    groupRotation = [-Math.PI / 2, rotationZ || 0, 0];
+  } else {
+    groupPosition = [safeX, safeY, groupZ];
+    groupRotation = [0, 0, rotationZ];
+  }
+
   return (
-    <group ref={ref} position={[xPos, yPos, groupZ]} rotation={[0, 0, rotationZ]}>
+    <group ref={ref} position={groupPosition} rotation={groupRotation}>
       
       {/* White ceramic/enamel base - 3D extruded SVG shape with smooth edges */}
       {needsCeramicBase && ceramicBaseData && (
@@ -395,15 +544,21 @@ export default function ImageModel({
           objectId={id}
           position={new THREE.Vector3(0, 0, actualCeramicDepthInUnits + 0.5)}
           bounds={{ width, height }}
-          rotation={rotationZ}
-          unitsPerMeter={1}
+          rotation={isLedgerSurface ? 0 : rotationZ}
+          unitsPerMeter={headstone?.unitsPerMeter ?? 1}
           currentSizeMm={widthMm}
           objectType="motif"
           animateOnShow={true}
           animationDuration={520}
           onUpdate={(data) => {
             if (data.xPos !== undefined && data.yPos !== undefined) {
-              updateImagePosition(id, data.xPos, data.yPos);
+              if (isLedgerSurface) {
+                const relativeX = data.xPos - centerX;
+                const relativeZ = data.yPos - ledgerCenterZ;
+                updateImagePosition(id, relativeX, relativeZ);
+              } else {
+                updateImagePosition(id, data.xPos, data.yPos);
+              }
             }
             if (data.rotationDeg !== undefined) {
               updateImageRotation(id, (data.rotationDeg * Math.PI) / 180);

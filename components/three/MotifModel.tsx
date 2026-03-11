@@ -15,11 +15,19 @@ type Props = {
   color: string; // motif color
   headstone?: HeadstoneAPI;
   index?: number;
+  surface?: 'headstone' | 'base' | 'ledger';
 };
 
 const MAX_TEXTURE_DIMENSION = 2048;
 
-export default function MotifModel({ id, svgPath, color, headstone, index = 0 }: Props) {
+export default function MotifModel({
+  id,
+  svgPath,
+  color,
+  headstone,
+  index = 0,
+  surface = 'headstone',
+}: Props) {
   const { gl, camera, controls } = useThree();
   const router = useRouter();
   const pathname = usePathname();
@@ -38,21 +46,29 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
-  const baseOffsetDefaults = React.useMemo(() => ({
-    xPos: 0,
-    yPos: 0,
-    scale: 1,
-    rotationZ: 0,
-    heightMm: 100,
-  }), []);
+  const baseOffsetDefaults = React.useMemo(
+    () => ({
+      xPos: 0,
+      yPos: 0,
+      scale: 1,
+      rotationZ: 0,
+      heightMm: 100,
+    }),
+    [],
+  );
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
   const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.CanvasTexture; aspect: number } | null>(null);
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
+  const pointerCaptureTargetRef = React.useRef<HTMLElement | null>(null);
+  const isLedgerSurface = surface === 'ledger';
+  const isBaseSurface = surface === 'base';
 
   React.useEffect(() => () => planeGeometry.dispose(), [planeGeometry]);
 
@@ -72,7 +88,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         const svgText = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
-        const svgElement = doc.documentElement as SVGSVGElement;
+        const svgElement = doc.documentElement as unknown as SVGSVGElement;
         const viewBoxAttr = svgElement.getAttribute('viewBox');
         let width = parseFloat(svgElement.getAttribute('width') || '');
         let height = parseFloat(svgElement.getAttribute('height') || '');
@@ -180,8 +196,9 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   }, [svgPath, gl]);
 
 
-  const placeFromClientXY = React.useCallback(
+  const placeOnVerticalSurface = React.useCallback(
     (clientX: number, clientY: number) => {
+      if (isLedgerSurface) return;
       if (!headstone?.mesh?.current || !gl?.domElement) return;
 
       const canvas = gl.domElement;
@@ -206,61 +223,165 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         }
       }
 
-      if (worldPoint) {
-        const localPt = targetMesh.worldToLocal(worldPoint);
+      if (!worldPoint) return;
 
-        // Apply bounds checking
-        if (!targetMesh.geometry.boundingBox)
-          targetMesh.geometry.computeBoundingBox();
-        const bbox = targetMesh.geometry.boundingBox!;
-        const inset = 0.01;
-        const spanY = bbox.max.y - bbox.min.y;
-        const minX = bbox.min.x + inset;
-        const maxX = bbox.max.x - inset;
-        const minY = bbox.min.y + inset + 0.04 * spanY;
-        const maxY = bbox.max.y - inset;
+      const localPt = targetMesh.worldToLocal(worldPoint);
 
-        localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
-        localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
+      if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+      const bbox = targetMesh.geometry.boundingBox!;
+      const inset = 0.01;
+      const spanY = bbox.max.y - bbox.min.y;
+      const minX = bbox.min.x + inset;
+      const maxX = bbox.max.x - inset;
+      const minY = bbox.min.y + inset + 0.04 * spanY;
+      const maxY = bbox.max.y - inset;
 
-        // Get current offset to check if it's canonical format
-        const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
-        const coordinateSpace = currentOffset.coordinateSpace
-          ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
-        const isCanonical = coordinateSpace === 'absolute';
-        
-        if (isCanonical) {
-          // Canonical format: store absolute world coordinates
-          dragPositionRef.current = {
-            xPos: localPt.x,
-            yPos: localPt.y,
-          };
-        } else {
-          // Legacy format: store as offset from center (Y-down)
-          const centerX = (bbox.min.x + bbox.max.x) / 2;
-          const centerY = (bbox.min.y + bbox.max.y) / 2;
-          dragPositionRef.current = {
-            xPos: localPt.x - centerX,
-            yPos: -(localPt.y - centerY),
-          };
-        }
-        
-        // Request animation frame to update store (throttled)
-        if (animationFrameRef.current === null) {
-          animationFrameRef.current = requestAnimationFrame(() => {
-            if (dragPositionRef.current) {
-              setMotifOffset(id, {
-                ...currentOffset,
-                ...dragPositionRef.current,
-                coordinateSpace: isCanonical ? 'absolute' : 'offset',
-              });
-            }
-            animationFrameRef.current = null;
-          });
-        }
+      localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
+      localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
+
+      const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
+      const coordinateSpace = currentOffset.coordinateSpace ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
+      const isCanonical = coordinateSpace === 'absolute';
+
+      if (isCanonical) {
+        dragPositionRef.current = {
+          xPos: localPt.x,
+          yPos: localPt.y,
+        };
+      } else {
+        const centerX = (bbox.min.x + bbox.max.x) / 2;
+        const centerY = (bbox.min.y + bbox.max.y) / 2;
+        dragPositionRef.current = {
+          xPos: localPt.x - centerX,
+          yPos: -(localPt.y - centerY),
+        };
+      }
+
+      if (animationFrameRef.current === null) {
+        animationFrameRef.current = requestAnimationFrame(() => {
+          if (dragPositionRef.current) {
+            setMotifOffset(id, {
+              ...currentOffset,
+              ...dragPositionRef.current,
+              coordinateSpace: isCanonical ? 'absolute' : 'offset',
+              target: surface,
+            });
+          }
+          animationFrameRef.current = null;
+        });
       }
     },
-    [headstone, gl, camera, raycaster, mouse, id, motifOffsets, setMotifOffset, baseOffsetDefaults, dragPlane, fallbackIntersection]
+    [
+      baseOffsetDefaults,
+      camera,
+      dragPlane,
+      fallbackIntersection,
+      gl,
+      headstone,
+      id,
+      isLedgerSurface,
+      mouse,
+      motifOffsets,
+      raycaster,
+      setMotifOffset,
+      surface,
+    ],
+  );
+
+  const placeOnLedgerSurface = React.useCallback(
+    (clientX: number, clientY: number) => {
+      if (!isLedgerSurface) return;
+      if (!headstone?.mesh?.current || !gl?.domElement) return;
+
+      const canvas = gl.domElement;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const targetMesh = headstone.mesh.current as THREE.Mesh;
+      const hits = raycaster.intersectObject(targetMesh, true);
+      let hit =
+        hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ?? hits[0];
+
+      if (!hit) {
+        if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+        const bb = targetMesh.geometry.boundingBox;
+        const topY = bb?.max.y ?? 0;
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -topY);
+        if (raycaster.ray.intersectPlane(plane, fallbackIntersection)) {
+          hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
+        }
+      }
+
+      if (!hit) return;
+
+      const localPt = targetMesh.worldToLocal(hit.point.clone());
+      if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+      const bbox = targetMesh.geometry.boundingBox!;
+      const spanX = bbox.max.x - bbox.min.x;
+      const spanZ = bbox.max.z - bbox.min.z;
+      const insetX = Math.min(spanX * 0.02, 0.01);
+      const insetZ = Math.min(spanZ * 0.02, 0.01);
+      const minX = bbox.min.x + insetX;
+      const maxX = bbox.max.x - insetX;
+      const minZ = bbox.min.z + insetZ;
+      const maxZ = bbox.max.z - insetZ;
+
+      localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
+      localPt.z = Math.max(minZ, Math.min(maxZ, localPt.z));
+
+      const centerX = (bbox.min.x + bbox.max.x) / 2;
+      const centerZ = (bbox.min.z + bbox.max.z) / 2;
+
+      dragPositionRef.current = {
+        xPos: localPt.x - centerX,
+        yPos: localPt.z - centerZ,
+      };
+
+      if (animationFrameRef.current === null) {
+        animationFrameRef.current = requestAnimationFrame(() => {
+          if (dragPositionRef.current) {
+            const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
+            setMotifOffset(id, {
+              ...currentOffset,
+              ...dragPositionRef.current,
+              target: 'ledger',
+              coordinateSpace: 'offset',
+              baseWidthMm: ledgerWidthMm,
+              baseHeightMm: ledgerDepthMm,
+            });
+          }
+          animationFrameRef.current = null;
+        });
+      }
+    },
+    [
+      baseOffsetDefaults,
+      camera,
+      gl,
+      headstone,
+      id,
+      isLedgerSurface,
+      ledgerDepthMm,
+      ledgerWidthMm,
+      mouse,
+      motifOffsets,
+      raycaster,
+      setMotifOffset,
+    ],
+  );
+
+  const placeFromClientXY = React.useCallback(
+    (clientX: number, clientY: number) => {
+      if (isLedgerSurface) {
+        placeOnLedgerSurface(clientX, clientY);
+      } else {
+        placeOnVerticalSurface(clientX, clientY);
+      }
+    },
+    [isLedgerSurface, placeOnLedgerSurface, placeOnVerticalSurface],
   );
 
   const handleClick = React.useCallback(
@@ -279,6 +400,11 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
     setDragging(true);
+    const targetElement = e.target as HTMLElement | null;
+    if (targetElement && typeof targetElement.setPointerCapture === 'function' && e.pointerId !== undefined) {
+      targetElement.setPointerCapture(e.pointerId);
+      pointerCaptureTargetRef.current = targetElement;
+    }
   }, []);
 
   const handlePointerOver = React.useCallback(() => {
@@ -318,21 +444,36 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
       // Final update with drag position
       if (dragPositionRef.current) {
         const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
-        const coordinateSpace = currentOffset.coordinateSpace
-          ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
-        const isCanonical = coordinateSpace === 'absolute';
-        
-        setMotifOffset(id, {
-          ...currentOffset,
-          ...dragPositionRef.current,
-          coordinateSpace: isCanonical ? 'absolute' : 'offset',
-        });
+        if (isLedgerSurface) {
+          setMotifOffset(id, {
+            ...currentOffset,
+            ...dragPositionRef.current,
+            target: 'ledger',
+            coordinateSpace: 'offset',
+            baseWidthMm: ledgerWidthMm,
+            baseHeightMm: ledgerDepthMm,
+          });
+        } else {
+          const coordinateSpace =
+            currentOffset.coordinateSpace ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
+          const isCanonical = coordinateSpace === 'absolute';
+          setMotifOffset(id, {
+            ...currentOffset,
+            ...dragPositionRef.current,
+            coordinateSpace: isCanonical ? 'absolute' : 'offset',
+            target: surface,
+          });
+        }
         dragPositionRef.current = null;
       }
       
       setDragging(false);
       if (controls) (controls as any).enabled = true;
       document.body.style.cursor = 'auto';
+      if (pointerCaptureTargetRef.current && e.pointerId !== undefined) {
+        pointerCaptureTargetRef.current.releasePointerCapture?.(e.pointerId);
+        pointerCaptureTargetRef.current = null;
+      }
     };
 
     if (controls) (controls as any).enabled = false;
@@ -349,7 +490,20 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
         animationFrameRef.current = null;
       }
     };
-  }, [dragging, gl, controls, placeFromClientXY, id, motifOffsets, setMotifOffset, baseOffsetDefaults]);
+  }, [
+    baseOffsetDefaults,
+    controls,
+    dragging,
+    gl,
+    id,
+    isLedgerSurface,
+    ledgerDepthMm,
+    ledgerWidthMm,
+    motifOffsets,
+    placeFromClientXY,
+    setMotifOffset,
+    surface,
+  ]);
 
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
   if (!headstone || !stone || !textureInfo) {
@@ -363,6 +517,8 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
   const centerZ = headstone.frontZ + 0.02;
+  const ledgerCenterZ = (bbox.min.z + bbox.max.z) / 2;
+  const ledgerTopY = bbox.max.y;
 
   const inset = 0.01;
   const spanY = bbox.max.y - bbox.min.y;
@@ -416,20 +572,30 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
   //    - Uses: displayY = yPos
   //
   // Detection: explicit coordinateSpace flag (fallback to legacy heuristic)
-  const coordinateSpace = offset.coordinateSpace
-    ?? (offset.target !== undefined ? 'absolute' : 'offset');
+  const coordinateSpace =
+    offset.coordinateSpace ?? (offset.target !== undefined ? 'absolute' : 'offset');
   const isCanonical = coordinateSpace === 'absolute';
-  
-  const displayX = isCanonical ? scaledOffsetX : centerX + scaledOffsetX;
-  const displayY = isCanonical ? scaledOffsetY : centerY - scaledOffsetY;
+
+  let groupPosition: [number, number, number];
+  let groupRotation: [number, number, number];
+
+  if (isLedgerSurface) {
+    const displayLedgerX = centerX + scaledOffsetX;
+    const displayLedgerZ = ledgerCenterZ + scaledOffsetY;
+    const ledgerLift = 0.001;
+    groupPosition = [displayLedgerX, ledgerTopY + ledgerLift, displayLedgerZ];
+    groupRotation = [-Math.PI / 2, offset.rotationZ || 0, 0];
+  } else {
+    const displayX = isCanonical ? scaledOffsetX : centerX + scaledOffsetX;
+    const displayY = isCanonical ? scaledOffsetY : centerY - scaledOffsetY;
+    groupPosition = [displayX, displayY, centerZ];
+    groupRotation = [0, 0, offset.rotationZ || 0];
+  }
 
   return (
     <>
       {/* Parent group for positioning - same coordinate system as inscriptions */}
-      <group
-        position={[displayX, displayY, centerZ]}
-        rotation={[0, 0, offset.rotationZ || 0]}
-      >
+      <group position={groupPosition} rotation={groupRotation}>
         {/* Motif mesh rendered as textured plane */}
         <mesh
           ref={ref}
@@ -476,6 +642,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
                 setMotifOffset(id, {
                   ...offset,
                   heightMm: clampedHeight,
+                  target: surface,
                 });
               }
               if (data.rotationDeg !== undefined) {
@@ -484,6 +651,7 @@ export default function MotifModel({ id, svgPath, color, headstone, index = 0 }:
                 setMotifOffset(id, {
                   ...offset,
                   rotationZ: newRotation,
+                  target: surface,
                 });
               }
             }}

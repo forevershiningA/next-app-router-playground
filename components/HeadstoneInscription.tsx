@@ -32,6 +32,7 @@ type Props = {
   onSelectInscription?: () => void;
   /** tiny Z offset to disambiguate picking when items overlap in Z */
   zBump?: number;
+  surface?: 'headstone' | 'base' | 'ledger';
 };
 
 /* ------------------------------------------------------------------ */
@@ -55,6 +56,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       approxHeight,
       onSelectInscription,
       zBump = 0,
+      surface = 'headstone',
     },
     ref,
   ) => {
@@ -64,12 +66,16 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     // Check if this is a Traditional Engraved product (sandblasted effect)
     const productId = useHeadstoneStore((s) => s.productId);
     const catalog = useHeadstoneStore((s) => s.catalog);
+    const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+    const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
     const product = React.useMemo(() => {
       if (!productId) return null;
       return data.products.find(p => p.id === productId);
     }, [productId]);
     const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
     const isPlaque = catalog?.product.type === 'plaque';
+    const isLedgerSurface = surface === 'ledger';
+    const isBaseSurface = surface === 'base';
 
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
@@ -77,10 +83,24 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
     const helperRef = React.useRef<THREE.BoxHelper | null>(null);
     const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
+    type SurfaceBounds = {
+      centerX: number;
+      centerY: number;
+      centerZ: number;
+      minX: number;
+      maxX: number;
+      minY: number;
+      maxY: number;
+      minZ: number;
+      maxZ: number;
+      topY: number;
+    };
+    const [surfaceBounds, setSurfaceBounds] = React.useState<SurfaceBounds | null>(null);
 
     // tools reused during pointer placement - memoized to prevent recreating
     const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
     const mouse = React.useMemo(() => new THREE.Vector2(), []);
+    const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
 
     const units = headstone.unitsPerMeter;
     const mmToLocalUnits = React.useMemo(() => {
@@ -122,29 +142,110 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         g.computeBoundingBox();
         const bb = g.boundingBox;
         if (!bb) return;
-        const centerY = (bb.min.y + bb.max.y) / 2;
-        // Only update pos for initial inscriptions (xPos=0)
-        if (xPos === 0) {
-          setPos(
-            new THREE.Vector3(
-              (bb.min.x + bb.max.x) / 2,
-              centerY,
-              headstone.frontZ + liftLocal,
-            ),
-          );
+        const bounds: SurfaceBounds = {
+          centerX: (bb.min.x + bb.max.x) / 2,
+          centerY: (bb.min.y + bb.max.y) / 2,
+          centerZ: (bb.min.z + bb.max.z) / 2,
+          minX: bb.min.x,
+          maxX: bb.max.x,
+          minY: bb.min.y,
+          maxY: bb.max.y,
+          minZ: bb.min.z,
+          maxZ: bb.max.z,
+          topY: bb.max.y,
+        };
+        setSurfaceBounds(bounds);
+        if (isLedgerSurface) {
+          setPos(new THREE.Vector3(bounds.centerX, bounds.topY + liftLocal, bounds.centerZ));
+        } else if (xPos === 0 && yPos === 0) {
+          setPos(new THREE.Vector3(bounds.centerX, bounds.centerY, headstone.frontZ + liftLocal));
         }
       });
       return () => cancelAnimationFrame(raf);
-    }, [headstone.mesh, headstone.frontZ, liftLocal, xPos, yPos]);
+    }, [headstone.mesh, headstone.frontZ, isLedgerSurface, liftLocal, xPos, yPos]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
-    const placeFromClientXY = React.useCallback(
+    const placeOnLedgerSurface = React.useCallback(
       (clientX: number, clientY: number) => {
+        if (!isLedgerSurface) return;
         const stone = headstone.mesh.current as THREE.Mesh | null;
         const canvas: HTMLCanvasElement | undefined = gl?.domElement;
-        if (!stone || !canvas) return;
+        if (!stone || !canvas || !surfaceBounds) return;
 
-        // ✅ FIX: Use canvas rect for correct NDC mapping (canvas may not be at 0,0)
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const hits = raycaster.intersectObject(stone, true);
+        let hit =
+          hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ??
+          hits[0];
+
+        if (!hit) {
+          const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -surfaceBounds.topY);
+          if (raycaster.ray.intersectPlane(plane, fallbackIntersection)) {
+            hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
+          }
+        }
+        if (!hit) return;
+
+        const local = stone.worldToLocal(hit.point.clone());
+
+        const inset = 0.01;
+        const depthInset = Math.min((surfaceBounds.maxZ - surfaceBounds.minZ) * 0.05, 0.01);
+        const minX = surfaceBounds.minX + inset;
+        const maxX = surfaceBounds.maxX - inset;
+        const minZ = surfaceBounds.minZ + depthInset;
+        const maxZ = surfaceBounds.maxZ - depthInset;
+
+        let nextX = local.x;
+        let nextZ = local.z;
+
+        if (dragOffset) {
+          nextX -= dragOffset.x;
+          nextZ -= dragOffset.z ?? 0;
+        }
+
+        nextX = Math.max(minX, Math.min(maxX, nextX));
+        nextZ = Math.max(minZ, Math.min(maxZ, nextZ));
+
+        const ledgerX = nextX - surfaceBounds.centerX;
+        const ledgerZ = nextZ - surfaceBounds.centerZ;
+
+        const state = useHeadstoneStore.getState();
+        updateLineStore(id, {
+          xPos: ledgerX,
+          yPos: ledgerZ,
+          target: 'ledger',
+          baseWidthMm: ledgerWidthMm ?? state.ledgerWidthMm ?? state.widthMm,
+          baseHeightMm: ledgerDepthMm ?? state.ledgerDepthMm ?? state.heightMm,
+        });
+        setPos(new THREE.Vector3(surfaceBounds.centerX, surfaceBounds.topY + liftLocal, surfaceBounds.centerZ));
+      },
+      [
+        camera,
+        gl,
+        headstone.mesh,
+        id,
+        isLedgerSurface,
+        ledgerDepthMm,
+        ledgerWidthMm,
+        mouse,
+        raycaster,
+        surfaceBounds,
+        dragOffset,
+        updateLineStore,
+      ],
+    );
+
+    const placeOnVerticalSurface = React.useCallback(
+      (clientX: number, clientY: number) => {
+        if (isLedgerSurface) return;
+        const stone = headstone.mesh.current as THREE.Mesh | null;
+        const canvas: HTMLCanvasElement | undefined = gl?.domElement;
+        if (!stone || !canvas || !surfaceBounds) return;
+
         const rect = canvas.getBoundingClientRect();
         mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
@@ -153,52 +254,70 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         const hits = raycaster.intersectObject(stone, true);
         if (!hits.length) return;
 
-        // prefer front-facing triangles
         const hit =
-          hits.find((h) => h.face?.normal?.z && h.face.normal.z > 0.2) ??
-          hits[0];
+          hits.find((h) => h.face?.normal?.z && h.face.normal.z > 0.2) ?? hits[0];
         if (!hit) return;
 
-        const local = hit.point.clone();
-        stone.worldToLocal(local);
+        const local = stone.worldToLocal(hit.point.clone());
         local.z = headstone.frontZ + liftLocal;
 
-        // next is in headstone-local space, corrected by the initial grab offset
         const next = local.add(dragOffset);
 
-        const state = useHeadstoneStore.getState();
-        const line = state.inscriptions.find((l) => l.id === id);
-        const targetSurface = line?.target === 'base' ? 'base' : 'headstone';
-        const baseWidth = targetSurface === 'base'
-          ? state.baseWidthMm ?? state.widthMm
-          : state.widthMm;
-        const baseHeight = targetSurface === 'base'
-          ? state.baseHeightMm ?? state.heightMm
-          : state.heightMm;
+        const inset = 0.01;
+        const spanY = surfaceBounds.maxY - surfaceBounds.minY;
+        const minX = surfaceBounds.minX + inset;
+        const maxX = surfaceBounds.maxX - inset;
+        const minY = surfaceBounds.minY + inset + 0.04 * spanY;
+        const maxY = surfaceBounds.maxY - inset;
 
-        // Update store with new position offsets (no target change)
+        const clampedX = Math.max(minX, Math.min(maxX, next.x));
+        const clampedY = Math.max(minY, Math.min(maxY, next.y));
+
+        const state = useHeadstoneStore.getState();
+        const targetSurface = isBaseSurface ? 'base' : 'headstone';
+        const baseWidth =
+          targetSurface === 'base'
+            ? state.baseWidthMm ?? state.widthMm
+            : state.widthMm;
+        const baseHeight =
+          targetSurface === 'base'
+            ? state.baseHeightMm ?? state.heightMm
+            : state.heightMm;
+
         updateLineStore(id, {
-          xPos: next.x,
-          yPos: next.y,
+          xPos: clampedX,
+          yPos: clampedY,
           baseWidthMm: baseWidth,
           baseHeightMm: baseHeight,
         });
-
-        // Reset local pos to base position (0, 0)
         setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));
       },
       [
         camera,
+        dragOffset,
         gl,
-        raycaster,
-        headstone.mesh,
         headstone.frontZ,
+        headstone.mesh,
+        id,
+        isBaseSurface,
+        isLedgerSurface,
         liftLocal,
         mouse,
-        dragOffset,
-        id,
+        raycaster,
+        surfaceBounds,
         updateLineStore,
       ],
+    );
+
+    const placeFromClientXY = React.useCallback(
+      (clientX: number, clientY: number) => {
+        if (isLedgerSurface) {
+          placeOnLedgerSurface(clientX, clientY);
+        } else {
+          placeOnVerticalSurface(clientX, clientY);
+        }
+      },
+      [isLedgerSurface, placeOnLedgerSurface, placeOnVerticalSurface],
     );
 
     /* ---------------------------- drag wiring (pointermove/up) --------------------------- */
@@ -315,11 +434,19 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       helperRef.current?.update();
     }, []);
     
+    const rotationRad = (rotationDeg * Math.PI) / 180;
+    const groupPosition: [number, number, number] = isLedgerSurface
+      ? [pos.x + (xPos ?? 0), pos.y + zBump, pos.z + (yPos ?? 0)]
+      : [pos.x + (xPos ?? 0), pos.y + (yPos ?? 0), pos.z + zBump];
+    const groupRotation: [number, number, number] = isLedgerSurface
+      ? [-Math.PI / 2, rotationRad, 0]
+      : [0, 0, rotationRad];
+
     return (
       <group
         ref={groupRef}
-        position={[pos.x + xPos, pos.y + yPos, pos.z + zBump]}
-        rotation={[0, 0, (rotationDeg * Math.PI) / 180]}
+        position={groupPosition}
+        rotation={groupRotation}
       >
         {/* Main text */}
         <Text
@@ -358,13 +485,26 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
               // world → headstone local at click
               const localPoint = stone.worldToLocal(e.point.clone());
 
-              // ✅ FIX: compute grab offset from the *rendered* local position = pos + xPos/yPos
-              const currentLocal = new THREE.Vector3(
-                pos.x + xPos,
-                pos.y + yPos,
-                headstone.frontZ + liftLocal,
-              );
-              setDragOffset(currentLocal.sub(localPoint));
+              if (isLedgerSurface) {
+                const anchorY = surfaceBounds?.topY ?? 0;
+                const centerX = surfaceBounds?.centerX ?? 0;
+                const centerZ = surfaceBounds?.centerZ ?? 0;
+                const currentLocal = new THREE.Vector3(
+                  centerX + (xPos ?? 0),
+                  anchorY,
+                  centerZ + (yPos ?? 0),
+                );
+                const diff = currentLocal.sub(localPoint);
+                setDragOffset(new THREE.Vector3(diff.x, 0, diff.z));
+              } else {
+                // ✅ FIX: compute grab offset from the *rendered* local position = pos + xPos/yPos
+                const currentLocal = new THREE.Vector3(
+                  pos.x + xPos,
+                  pos.y + yPos,
+                  headstone.frontZ + liftLocal,
+                );
+                setDragOffset(currentLocal.sub(localPoint));
+              }
             }
 
             // capture & start drag

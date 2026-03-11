@@ -15,6 +15,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useSelectSizePanelOpener } from '#/lib/useSelectSizePanelOpener';
 import { FULL_MONUMENT_GROUP_NAME } from '../constants';
 import { data } from '#/app/_internal/_data';
+import LedgerSurfaceContent from './LedgerSurfaceContent';
 
 export default function HeadstoneAssembly() {
   const pathname = usePathname();
@@ -135,8 +136,6 @@ export default function HeadstoneAssembly() {
             color="#4CAF50"
             pad={0.02}
             through={true}
-            showHandles={true}
-            handleSize={0.05}
           />
         )}
 
@@ -176,6 +175,8 @@ export default function HeadstoneAssembly() {
           }}
         />
       )}
+
+      {showLedger && <LedgerSurfaceContent ledgerRef={ledgerRef} />}
 
       {showLedger && (
         <RotatingBoxOutline

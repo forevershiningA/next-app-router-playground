@@ -504,6 +504,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                 <HeadstoneInscription
                   id={line.id}
                   headstone={baseAPI}
+                  surface="base"
                   font={`/fonts/${line.font}.woff2`}
                   editable
                   selected={selectedInscriptionId === line.id}
@@ -542,6 +543,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                 svgPath={motif.svgPath}
                 color={motif.color}
                 headstone={baseAPI}
+                surface="base"
                 index={i}
               />
             </Suspense>

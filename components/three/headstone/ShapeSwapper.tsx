@@ -184,6 +184,33 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages || []);
+  const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
+
+  const headstoneInscriptions = React.useMemo(
+    () => inscriptions.filter((line) => (line.target ?? 'headstone') === 'headstone'),
+    [inscriptions],
+  );
+
+  const headstoneAdditionIds = React.useMemo(
+    () =>
+      selectedAdditions.filter(
+        (additionId) => (additionOffsets[additionId]?.targetSurface ?? 'headstone') === 'headstone',
+      ),
+    [selectedAdditions, additionOffsets],
+  );
+
+  const headstoneMotifs = React.useMemo(
+    () =>
+      selectedMotifs.filter(
+        (motif) => (motifOffsets[motif.id]?.target ?? 'headstone') === 'headstone',
+      ),
+    [selectedMotifs, motifOffsets],
+  );
+
+  const headstoneImages = React.useMemo(
+    () => selectedImages.filter((image) => (image.target ?? 'headstone') === 'headstone'),
+    [selectedImages],
+  );
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
@@ -205,7 +232,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
       if (state.inscriptions.length > 0) {
         let linesChanged = false;
         const remappedLines = state.inscriptions.map((line) => {
-          if (line.target === 'base') {
+          if (line.target === 'base' || line.target === 'ledger') {
             return line;
           }
           const originalX = line.xPos ?? 0;
@@ -229,7 +256,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         let additionClone: typeof state.additionOffsets | null = null;
         for (const [id, offset] of Object.entries(state.additionOffsets)) {
           const surface = offset.targetSurface ?? 'headstone';
-          if (surface === 'base') continue;
+          if (surface === 'base' || surface === 'ledger') continue;
           const absolutePoint = absoluteFromCenterOffsets(offset.xPos, offset.yPos, oldMetrics);
           const mapped = remapPointBetweenBoxes(absolutePoint.x, absolutePoint.y, oldMetrics, newMetrics);
           const nextOffsets = centerOffsetsFromAbsolute(mapped.x, mapped.y, newMetrics);
@@ -252,7 +279,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         let motifClone: typeof state.motifOffsets | null = null;
         for (const [id, offset] of Object.entries(state.motifOffsets)) {
           const surface = offset.target ?? 'headstone';
-          if (surface === 'base') continue;
+          if (surface === 'base' || surface === 'ledger') continue;
           const isAbsolute = (offset.coordinateSpace ?? 'offset') === 'absolute';
 
           if (isAbsolute) {
@@ -285,6 +312,30 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         }
         if (motifClone) {
           updates.motifOffsets = motifClone;
+        }
+      }
+
+      if (state.selectedImages.length > 0) {
+        let imagesChanged = false;
+        const remappedImages = state.selectedImages.map((image) => {
+          const surface = image.target ?? 'headstone';
+          if (surface === 'base' || surface === 'ledger') {
+            return image;
+          }
+          const originalX = image.xPos ?? 0;
+          const originalY = image.yPos ?? 0;
+          const mapped = remapPointBetweenBoxes(originalX, originalY, oldMetrics, newMetrics);
+          if (
+            Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
+            Math.abs(mapped.y - originalY) > BBOX_EPSILON
+          ) {
+            imagesChanged = true;
+            return { ...image, xPos: mapped.x, yPos: mapped.y };
+          }
+          return image;
+        });
+        if (imagesChanged) {
+          updates.selectedImages = remappedImages;
         }
       }
 
@@ -499,16 +550,17 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             
             return (
             <>
-              {inscriptions.map((line: Line, i: number) => {
-                const zBump = (inscriptions.length - 1 - i) * 0.00005;
-                const scaledX = line.xPos ?? 0;
-                const scaledY = line.yPos ?? 0;
-                return (
-                <ErrorBoundary key={line.id}>
-                  <React.Suspense fallback={null}>
-                    <HeadstoneInscription
-                      id={line.id}
-                      headstone={api}
+               {headstoneInscriptions.map((line: Line, i: number) => {
+                 const zBump = (headstoneInscriptions.length - 1 - i) * 0.00005;
+                 const scaledX = line.xPos ?? 0;
+                 const scaledY = line.yPos ?? 0;
+                 return (
+                 <ErrorBoundary key={line.id}>
+                   <React.Suspense fallback={null}>
+                     <HeadstoneInscription
+                       id={line.id}
+                       headstone={api}
+                       surface="headstone"
                       font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
                       editable
                       selected={selectedInscriptionId === line.id}
@@ -544,51 +596,54 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                 </ErrorBoundary>
               )})}
 
-              {selectedAdditionIds.map((additionId, i) => (
-                <ErrorBoundary key={`${additionId}-${i}`}>
-                  <React.Suspense fallback={null}>
-                    <AdditionModel
-                      id={additionId}
-                      headstone={api}
-                      index={i}
-                    />
-                  </React.Suspense>
-                </ErrorBoundary>
-              ))}
+               {headstoneAdditionIds.map((additionId, i) => (
+                 <ErrorBoundary key={`${additionId}-${i}`}>
+                   <React.Suspense fallback={null}>
+                     <AdditionModel
+                       id={additionId}
+                       headstone={api}
+                       surface="headstone"
+                       index={i}
+                     />
+                   </React.Suspense>
+                 </ErrorBoundary>
+               ))}
 
-              {selectedMotifs.map((motif, i) => (
-                <ErrorBoundary key={`${motif.id}-${i}`}>
-                  <React.Suspense fallback={null}>
-                    <MotifModel
-                      id={motif.id}
-                      svgPath={motif.svgPath}
-                      color={motif.color}
-                      headstone={api}
-                      index={i}
-                    />
-                  </React.Suspense>
-                </ErrorBoundary>
-              ))}
+               {headstoneMotifs.map((motif, i) => (
+                 <ErrorBoundary key={`${motif.id}-${i}`}>
+                   <React.Suspense fallback={null}>
+                     <MotifModel
+                       id={motif.id}
+                       svgPath={motif.svgPath}
+                       color={motif.color}
+                       headstone={api}
+                       surface="headstone"
+                       index={i}
+                     />
+                   </React.Suspense>
+                 </ErrorBoundary>
+               ))}
 
-              {selectedImages.map((image, i) => (
-                <ErrorBoundary key={`${image.id}-${i}`}>
-                  <React.Suspense fallback={null}>
-                    <ImageModel
-                      id={image.id}
-                      imageUrl={image.imageUrl}
+               {headstoneImages.map((image, i) => (
+                 <ErrorBoundary key={`${image.id}-${i}`}>
+                   <React.Suspense fallback={null}>
+                     <ImageModel
+                       id={image.id}
+                       imageUrl={image.imageUrl}
                       widthMm={image.widthMm}
                       heightMm={image.heightMm}
                       xPos={image.xPos}
                       yPos={image.yPos}
                       rotationZ={image.rotationZ}
                       typeId={image.typeId}
-                      maskShape={image.maskShape}
-                      headstone={api}
-                      index={i}
-                    />
-                  </React.Suspense>
-                </ErrorBoundary>
-              ))}
+                       maskShape={image.maskShape}
+                       headstone={api}
+                       surface="headstone"
+                       index={i}
+                     />
+                   </React.Suspense>
+                 </ErrorBoundary>
+               ))}
 
               {/* Render bronze border if set */}
               {borderName && isPlaque && (
@@ -617,7 +672,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         ) : (
           <AutoFit
             target={tabletRef}
-            anchor={resolvedHeadstoneMeshRef}
+            anchor={resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>}
             margin={1.20}
             pad={0}
             duration={0.25}

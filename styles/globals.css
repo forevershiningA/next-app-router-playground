@@ -12,7 +12,16 @@ input, textarea, [contenteditable="true"] {
 
 /* Prevent text cursor on non-editable elements */
 *:not(input):not(textarea):not([contenteditable="true"]):not(button):not(a):not([role="button"]) {
-  cursor: default !important;
+  cursor: default;
+}
+
+button,
+button *,
+a,
+a *,
+[role="button"],
+[role="button"] * {
+  cursor: pointer !important;
 }
 
 /* Ensure images, buttons, links show pointer cursor */

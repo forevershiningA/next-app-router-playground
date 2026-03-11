@@ -46,9 +46,26 @@ type Props = {
   id: string; // e.g. "B1134S" or "K0320"
   headstone?: HeadstoneAPI; // passed from SvgHeadstone render-prop
   index?: number; // layering/z-fight avoidance
+  surface?: 'headstone' | 'base' | 'ledger';
 };
 
-export default function AdditionModel({ id, headstone, index = 0 }: Props) {
+type AdditionOffsetState = {
+  xPos?: number;
+  yPos?: number;
+  zPos?: number;
+  scale?: number;
+  rotationZ?: number;
+  sizeVariant?: number;
+  targetSurface?: 'headstone' | 'base' | 'ledger';
+  additionType?: AdditionKind;
+  additionName?: string;
+  assetFile?: string;
+  sourceId?: string;
+  zPosFinalized?: boolean;
+  footprintWidth?: number;
+};
+
+export default function AdditionModel({ id, headstone, index = 0, surface = 'headstone' }: Props) {
   // Extract base ID (remove timestamp suffix if present)
   // e.g., "B1134S_1234567890" => "B1134S"
   const baseId = React.useMemo(() => {
@@ -90,7 +107,16 @@ export default function AdditionModel({ id, headstone, index = 0 }: Props) {
   }
 
   // Now we can safely use hooks knowing we have valid data
-  return <AdditionModelInner id={id} baseId={baseId} addition={addition} headstone={headstone} index={index} />;
+  return (
+    <AdditionModelInner
+      id={id}
+      baseId={baseId}
+      addition={addition}
+      headstone={headstone}
+      index={index}
+      surface={surface}
+    />
+  );
 }
 
 // Separate component where we can safely use hooks
@@ -99,13 +125,15 @@ function AdditionModelInner({
   baseId,
   addition, 
   headstone, 
-  index 
+  index,
+  surface,
 }: { 
   id: string;
   baseId: string;
   addition: any; 
   headstone?: HeadstoneAPI; 
   index: number;
+  surface: 'headstone' | 'base' | 'ledger';
 }) {
   // ALL hooks must be called unconditionally at the top - before any early returns
   const { gl, camera, controls, scene: threeScene } = useThree();
@@ -121,13 +149,15 @@ function AdditionModelInner({
   const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
   
   const setAdditionRef = useHeadstoneStore((s) => s.setAdditionRef);
-  const storedOffset = useHeadstoneStore((s) => s.additionOffsets[id]);
+  const storedOffset = useHeadstoneStore((s) => s.additionOffsets[id]) as AdditionOffsetState | undefined;
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const selectedPrimary = useHeadstoneStore((s) => s.selected);
   const additionKind: AdditionKind = (addition.type as AdditionKind) ?? 'application';
+  const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
 
   React.useEffect(() => {
     if (!addition.file) return;
@@ -165,6 +195,7 @@ function AdditionModelInner({
   const dragDeltaRef = React.useRef<{ x: number; y: number; z?: number } | null>(null);
   const applicationDragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const baseDragPlane = React.useMemo(() => new THREE.Plane(), []);
+  const ledgerDragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
 
   // Create scene
@@ -231,7 +262,8 @@ function AdditionModelInner({
 
   // Compute headstone bounds and default offsets early so helper hooks can use them
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
-  const prefersBaseSurface = additionKind === 'statue' || additionKind === 'vase';
+  const prefersBaseSurface =
+    surface !== 'ledger' && (additionKind === 'statue' || additionKind === 'vase');
   const [baseMesh, setBaseMesh] = React.useState<THREE.Mesh | null>(null);
   React.useEffect(() => {
     let cancelled = false;
@@ -274,7 +306,7 @@ function AdditionModelInner({
   }, [stone]);
 
 
-  const fallbackOffset = React.useMemo(() => {
+  const fallbackOffset = React.useMemo<AdditionOffsetState>(() => {
     if (!bbox) {
       return { xPos: 0, yPos: 0, scale: 1, rotationZ: 0, sizeVariant: 1, targetSurface: 'headstone' };
     }
@@ -386,8 +418,9 @@ function AdditionModelInner({
       targetSurface: storedOffset.targetSurface ?? defaultOffset.targetSurface,
       zPos: storedOffset.zPos ?? defaultOffset.zPos,
     };
-  }, [defaultOffset, storedOffset]);
-  const targetSurface = offset.targetSurface === 'base' ? 'base' : 'headstone';
+  }, [defaultOffset, storedOffset]) as AdditionOffsetState;
+  const targetSurface = offset.targetSurface ?? surface ?? 'headstone';
+  const isLedgerSurface = targetSurface === 'ledger';
   const displayOffsetX = offset.xPos ?? 0;
   const displayOffsetY = offset.yPos ?? 0;
 
@@ -411,9 +444,102 @@ function AdditionModelInner({
   const headFrontZ = headstone?.frontZ ?? (bbox?.max.z ?? 0);
   const supportsDepthDrag = prefersBaseSurface;
 
+  const placeAdditionOnLedger = React.useCallback(
+    (clientX: number, clientY: number) => {
+      if (!isLedgerSurface) return;
+      if (!headstone?.mesh?.current || !gl?.domElement || !bbox) return;
+
+      const canvas = gl.domElement;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const targetMesh = headstone.mesh.current as THREE.Mesh;
+      const hits = raycaster.intersectObject(targetMesh, true);
+      let hit =
+        hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ?? hits[0];
+
+      if (!hit) {
+        const topY = bbox.max.y;
+        ledgerDragPlane.normal.set(0, 1, 0);
+        ledgerDragPlane.constant = -topY;
+        if (raycaster.ray.intersectPlane(ledgerDragPlane, fallbackIntersection)) {
+          hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
+        }
+      }
+
+      if (!hit) return;
+
+      const localPt = targetMesh.worldToLocal(hit.point.clone());
+      const centerX = (bbox.min.x + bbox.max.x) / 2;
+      const centerZ = (bbox.min.z + bbox.max.z) / 2;
+
+      const widthUnits =
+        (ledgerWidthMm || (bbox.max.x - bbox.min.x) * 1000) / 1000;
+      const depthUnits =
+        (ledgerDepthMm || (bbox.max.z - bbox.min.z) * 1000) / 1000;
+
+      const inset = 0.005;
+      const footprintHalfX = Math.min(
+        widthUnits / 2,
+        Math.abs(size.x * finalScale) / 2,
+      );
+      const footprintHalfZ = Math.min(
+        depthUnits / 2,
+        Math.abs(size.z * finalScale * depthScale) / 2,
+      );
+
+      const minX = centerX - widthUnits / 2 + footprintHalfX + inset;
+      const maxX = centerX + widthUnits / 2 - footprintHalfX - inset;
+      const minZ = centerZ - depthUnits / 2 + footprintHalfZ + inset;
+      const maxZ = centerZ + depthUnits / 2 - footprintHalfZ - inset;
+
+      const clampedX = Math.max(minX, Math.min(maxX, localPt.x));
+      const clampedZ = Math.max(minZ, Math.min(maxZ, localPt.z));
+
+      const relativeX = clampedX - centerX;
+      const relativeZ = clampedZ - centerZ;
+
+      setAdditionOffset(id, {
+        ...offset,
+        xPos: relativeX,
+        yPos: relativeZ,
+        targetSurface: 'ledger',
+        zPos: undefined,
+      });
+    },
+    [
+      bbox,
+      camera,
+      depthScale,
+      finalScale,
+      gl,
+      headstone,
+      id,
+      isLedgerSurface,
+      ledgerDepthMm,
+      ledgerDragPlane,
+      ledgerWidthMm,
+      fallbackIntersection,
+      mouse,
+      offset,
+      raycaster,
+      setAdditionOffset,
+      size.x,
+      size.z,
+    ],
+  );
+
   React.useEffect(() => {
     if (!defaultReady) return;
-    const desiredSurface = prefersBaseSurface && baseMesh ? 'base' : 'headstone';
+    const desiredSurface =
+      surface === 'ledger'
+        ? 'ledger'
+        : prefersBaseSurface && baseMesh
+          ? 'base'
+          : 'headstone';
     const coordsMissing = !storedOffset || storedOffset.xPos === undefined || storedOffset.yPos === undefined;
     const needsSurfaceUpdate = storedOffset?.targetSurface !== desiredSurface;
     const zMissing =
@@ -429,7 +555,17 @@ function AdditionModelInner({
         zPos: storedOffset?.zPos ?? defaultOffset.zPos,
       });
     }
-  }, [defaultReady, storedOffset, defaultOffset, id, setAdditionOffset, prefersBaseSurface, baseMesh, supportsDepthDrag]);
+  }, [
+    defaultReady,
+    storedOffset,
+    defaultOffset,
+    id,
+    setAdditionOffset,
+    prefersBaseSurface,
+    baseMesh,
+    supportsDepthDrag,
+    surface,
+  ]);
 
   const baseSurfaceZ = React.useMemo(() => {
     if (!prefersBaseSurface || !baseMesh || !stone) return null;
@@ -454,7 +590,7 @@ function AdditionModelInner({
   }, [prefersBaseSurface, baseMesh, stone]);
 
   React.useEffect(() => {
-    if (!prefersBaseSurface || additionKind === 'application') return;
+    if (!prefersBaseSurface) return;
     if (offset.targetSurface !== 'base') return;
     if (!bbox || baseTopY == null) return;
     const centerY = (bbox.min.y + bbox.max.y) / 2;
@@ -466,9 +602,15 @@ function AdditionModelInner({
   }, [additionKind, baseTopY, bbox, displayOffsetY, id, offset.targetSurface, prefersBaseSurface, setAdditionOffset]);
 
   React.useEffect(() => {
-    if (!prefersBaseSurface || additionKind === 'application') return;
+    if (!prefersBaseSurface) return;
     if (!defaultReady) return;
-    if (!storedOffset || storedOffset.zPosFinalized) return;
+    if (
+      !storedOffset ||
+      (Object.prototype.hasOwnProperty.call(storedOffset, 'zPosFinalized') &&
+        (storedOffset as { zPosFinalized?: boolean }).zPosFinalized)
+    ) {
+      return;
+    }
 
     if (storedOffset.zPos !== undefined) {
       setAdditionOffset(id, { zPosFinalized: true });
@@ -528,7 +670,7 @@ function AdditionModelInner({
         localPt = targetMesh.worldToLocal(intersects[0].point.clone());
       } else if (additionKind === 'application') {
         applicationDragPlane.normal.set(0, 0, 1);
-        applicationDragPlane.constant = -(headstone.frontZ ?? 0);
+        applicationDragPlane.constant = -(headstone?.frontZ ?? 0);
         if (raycaster.ray.intersectPlane(applicationDragPlane, fallbackIntersection)) {
           localPt = targetMesh.worldToLocal(fallbackIntersection.clone());
         }
@@ -588,6 +730,11 @@ function AdditionModelInner({
   // Drag handler - must be defined before effects
   const placeFromClientXY = React.useCallback(
     (clientX: number, clientY: number) => {
+      if (isLedgerSurface) {
+        placeAdditionOnLedger(clientX, clientY);
+        return;
+      }
+
       const data = computeInteractionPoint(clientX, clientY);
       if (!data) return;
 
@@ -643,17 +790,19 @@ function AdditionModelInner({
       setAdditionOffset(id, nextOffset);
     },
     [
-      computeInteractionPoint,
-      headstone,
-      id,
-      offset,
-      setAdditionOffset,
-      bbox,
-      supportsDepthDrag,
       baseDepthRange,
-      halfDepth,
+      bbox,
+      computeInteractionPoint,
       headFrontZ,
+      headstone,
+      halfDepth,
+      id,
+      isLedgerSurface,
+      offset,
+      placeAdditionOnLedger,
       prefersBaseSurface,
+      setAdditionOffset,
+      supportsDepthDrag,
     ]
   );
 
@@ -798,7 +947,7 @@ function AdditionModelInner({
   }
 
   React.useEffect(() => {
-    if (!prefersBaseSurface || additionKind === 'application') return;
+    if (!prefersBaseSurface) return;
     if (offset.zPos === undefined) return;
     const diff = Math.abs(offset.zPos - zPosition);
     if (diff < 1e-6 && offset.zPosFinalized) return;
@@ -813,6 +962,11 @@ function AdditionModelInner({
       const clientX = e.clientX ?? e?.nativeEvent?.clientX;
       const clientY = e.clientY ?? e?.nativeEvent?.clientY;
       if (typeof clientX !== 'number' || typeof clientY !== 'number') {
+        dragDeltaRef.current = null;
+        return;
+      }
+
+      if (isLedgerSurface) {
         dragDeltaRef.current = null;
         return;
       }
@@ -850,9 +1004,10 @@ function AdditionModelInner({
     [
       bbox,
       computeInteractionPoint,
-      headstone,
       displayOffsetX,
       displayOffsetY,
+      headstone,
+      isLedgerSurface,
       zPosition,
     ]
   );
@@ -899,19 +1054,38 @@ function AdditionModelInner({
 
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
+  const centerZ = (bbox.min.z + bbox.max.z) / 2;
 
   const desiredY = centerY - displayOffsetY;
   const finalY = prefersBaseSurface && offset.targetSurface === 'base' && baseTopY !== null
     ? Math.max(baseTopY, desiredY)
     : desiredY;
 
+  let groupPosition: [number, number, number];
+  let groupRotation: [number, number, number];
+
+  if (isLedgerSurface) {
+    const ledgerX = centerX + displayOffsetX;
+    const ledgerZ = centerZ + displayOffsetY;
+    const ledgerTopY = bbox.max.y;
+    if (additionKind === 'application') {
+      const lift = actualDepth / 2 + APPLICATION_Z_OFFSET;
+      groupPosition = [ledgerX, ledgerTopY + lift, ledgerZ];
+      groupRotation = [-Math.PI / 2, offset.rotationZ || 0, 0];
+    } else {
+      const objectHeight = Math.abs(size.y * finalScale);
+      groupPosition = [ledgerX, ledgerTopY + objectHeight / 2, ledgerZ];
+      groupRotation = [0, 0, offset.rotationZ || 0];
+    }
+  } else {
+    groupPosition = [centerX + displayOffsetX, finalY, zPosition];
+    groupRotation = [0, 0, offset.rotationZ || 0];
+  }
+
   return (
     <>
       {/* Parent group for positioning - convert Y-down saved coords to Y-up display */}
-      <group
-        position={[centerX + displayOffsetX, finalY, zPosition]}
-        rotation={[0, 0, offset.rotationZ || 0]}
-      >
+      <group position={groupPosition} rotation={groupRotation}>
         {/* Addition mesh with scale and Y-flip */}
         {/* Applications use reduced Z-scale for flatter appearance, statues/vases use normal scale */}
         <group

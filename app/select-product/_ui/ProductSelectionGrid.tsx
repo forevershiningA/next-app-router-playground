@@ -170,12 +170,12 @@ export default function ProductSelectionGrid({ products, priceMap, descriptionMa
                     }`}
                   >
                   {/* Product Image - Full width, touching top and sides */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-64 overflow-hidden cursor-pointer">
                     <Image
                       src={`/webp/products/${product.image}`}
                       alt={product.name}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover transition-transform group-hover:scale-105 cursor-pointer"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>

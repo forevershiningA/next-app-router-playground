@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-10
+**Last Updated:** 2026-03-11
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -28,6 +28,44 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-11)
+
+### ✅ Recent Changes (March 11, 2026)
+
+1. **Laser Full Monument camera + refresh stability - COMPLETE**
+   - **Context**: After visiting Select Product/Shape or reloading, the AutoFit camera regularly drifted to a top-down sky view for the Laser Etched Black Granite Full Monument.
+   - **Fix**: Added a runtime Box3-driven fitting tick that re-runs `FullMonumentFit` (and `Scene.tsx` orbit target updates) whenever product, shape, or ledger toggles change. The grave plot now stays centered after every navigation hop.
+   - **Files**: `components/three/FullMonumentFit.tsx`, `components/three/headstone/HeadstoneAssembly.tsx`, `components/three/headstone/ShapeSwapper.tsx`, `components/Scene.tsx`.
+
+2. **Select Size sidebar launch from canvas clicks - COMPLETE**
+   - **Root cause**: Clicking the 3D meshes used to set selection state but no longer opened the Select Size panel once the fullscreen flow was refactored.
+   - **Fix**: Introduced `useSelectSizePanelOpener` and wired headstone/base/ledger/kerbset mesh `onClick` handlers (plus DesignerNav tab changes) to dispatch the fullscreen panel open event and keep router navigation in sync.
+   - **Files**: `lib/useSelectSizePanelOpener.ts`, `components/three/headstone/HeadstoneAssembly.tsx`, `components/three/headstone/ShapeSwapper.tsx`, `components/DesignerNav.tsx`.
+
+3. **Ledger/Kerb data now included in Check Price + Save Design - COMPLETE**
+   - Added ledger/kerb visibility flags, dimensions, and pricing models to the store, serializer, and pricing helpers so totals reflect all monument parts.
+   - UI now renders ledger/kerb line items with correct catalog IDs, and `project-serializer.ts` persists the additional dimensions/editing target so reopening a saved design restores the ledger state.
+   - **Files**: `lib/headstone-store.ts`, `lib/project-serializer.ts`, `lib/project-schemas.ts`, `lib/saved-design-loader-utils.ts`, `components/DesignerNav.tsx`, pricing helpers in `lib/pricing/*`.
+
+4. **Ledger surface creative tooling - COMPLETE**
+   - `LedgerSurfaceContent.tsx` renders ledger-targeted inscriptions, motifs, images, and additions using a faux HeadstoneAPI derived from the ledger mesh.
+   - Each creative component understands `surface="ledger"`: we clamp to ledger width/depth, rotate assets -90° to lie flat, and serialize offsets in ledger space. Store APIs now default to ledger when the Ledger tab is active.
+   - **Files**: `components/three/headstone/LedgerSurfaceContent.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/ImageModel.tsx`, `components/three/AdditionModel.tsx`, `lib/headstone-store.ts`.
+
+5. **Selection overlays + picker cursor polish - COMPLETE**
+   - `SelectionBox` now scales handle geometry using `headstone.unitsPerMeter`, preventing gigantic outlines when editing ledger assets.
+   - Converted ledger image placement math from mm → local units so Ceramic Images land on the slab at the expected size.
+   - Updated global cursor rules plus the Select Product/Shape grids so hovering any image tile shows the hand cursor, signaling that each card is clickable.
+   - **Files**: `components/SelectionBox.tsx`, `components/three/ImageModel.tsx`, `styles/globals.css`, `app/select-product/_ui/ProductSelectionGrid.tsx`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
+
+### ⚠️ Known Gaps (March 11, 2026)
+- **Ledger creative QA**: Motif/Image placement math was refactored but still needs end-to-end QA on real projects (verify bounding boxes, reload persistence, and stacking order on the ledger plane).
+- **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
+- **TypeScript baseline**: `pnpm run type-check` fails due to pre-existing errors; we haven’t addressed them yet this cycle.
+- **Pricing regression tests**: Ledger/Kerb totals were added, but automated coverage is still missing—manual regression is required after catalog changes.
 
 ---
 

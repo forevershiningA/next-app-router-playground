@@ -261,14 +261,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                     }`}
                   >
                     {/* Shape Image - Square aspect ratio */}
-                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30">
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30 cursor-pointer">
                       <div className="absolute inset-0 flex items-center justify-center p-8">
                         <Image
                           src={shapeUrl}
                           alt={shape.name}
                           width={200}
                           height={200}
-                          className="object-contain transition-transform group-hover:scale-105"
+                          className="object-contain transition-transform group-hover:scale-105 cursor-pointer"
                         />
                       </div>
                     </div>
