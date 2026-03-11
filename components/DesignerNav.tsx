@@ -1112,7 +1112,11 @@ export default function DesignerNav() {
 
   // Sync canvas selection with editingObject on select-size page
   useEffect(() => {
-    const partValue = editingObject === 'base' ? 'base' : 'headstone';
+    const partValue: 'headstone' | 'base' | 'ledger' | 'kerbset' =
+      editingObject === 'base' ? 'base' :
+      editingObject === 'ledger' ? 'ledger' :
+      editingObject === 'kerbset' ? 'kerbset' :
+      'headstone';
     if (isSelectSizePage && selected !== partValue) {
       setSelected(partValue);
     }
@@ -1473,9 +1477,7 @@ export default function DesignerNav() {
             value={editingObject}
             onChange={(value) => {
               setEditingObject(value as 'headstone' | 'base' | 'ledger' | 'kerbset');
-              if (value === 'headstone' || value === 'base') {
-                setSelected(value as 'headstone' | 'base');
-              }
+              setSelected(value as 'headstone' | 'base' | 'ledger' | 'kerbset');
               if (value === 'base') {
                 setShowBase(true);
               }

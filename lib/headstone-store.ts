@@ -74,7 +74,7 @@ export type Line = {
   baseHeightMm?: number;
   ref: React.RefObject<Group | null>; // ✅ allow null
 };
-export type Part = 'headstone' | 'base' | null;
+export type Part = 'headstone' | 'base' | 'ledger' | 'kerbset' | null;
 export type AdditionKind = 'statue' | 'vase' | 'application';
 export type Material = {
   id: string;

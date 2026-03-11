@@ -19,6 +19,7 @@ function LedgerMesh({
   ledgerHeightMm,
   ledgerDepthMm,
   uprightThickness,
+  kerbHeightMm,
   onClick,
   meshRef,
 }: {
@@ -27,9 +28,10 @@ function LedgerMesh({
   ledgerHeightMm: number;
   ledgerDepthMm: number;
   uprightThickness: number;
+  kerbHeightMm: number;
   onClick?: (e: any) => void;
   meshRef: React.RefObject<THREE.Mesh | null>;
-}) {
+}){
   const texture = useTexture(texUrl);
 
   useLayoutEffect(() => {
@@ -58,8 +60,9 @@ function LedgerMesh({
   const h = ledgerHeightMm / 1000;
   const d = ledgerDepthMm / 1000;
   const standBackZ = -(uprightThickness / 1000) / 2;
+  const kerbH = kerbHeightMm / 1000;
 
-  const targetPos = useRef(new THREE.Vector3(0, h / 2 + EPSILON, standBackZ + d / 2));
+  const targetPos = useRef(new THREE.Vector3(0, kerbH + h / 2 + EPSILON, standBackZ + d / 2));
   const targetScale = useRef(new THREE.Vector3(w, h, d));
 
   useFrame(() => {
@@ -68,7 +71,8 @@ function LedgerMesh({
     const newH = ledgerHeightMm / 1000;
     const newD = ledgerDepthMm / 1000;
     const newStandBackZ = -(uprightThickness / 1000) / 2;
-    targetPos.current.set(0, newH / 2 + EPSILON, newStandBackZ + newD / 2);
+    const newKerbH = kerbHeightMm / 1000;
+    targetPos.current.set(0, newKerbH + newH / 2 + EPSILON, newStandBackZ + newD / 2);
     targetScale.current.set(newW, newH, newD);
     meshRef.current.position.lerp(targetPos.current, LERP_FACTOR);
     meshRef.current.scale.lerp(targetScale.current, LERP_FACTOR);
@@ -93,6 +97,7 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
   const ledgerHeightMm = useHeadstoneStore((s) => s.ledgerHeightMm);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
+  const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
 
   const texUrl = baseMaterialUrl
@@ -109,6 +114,7 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
         ledgerHeightMm={ledgerHeightMm}
         ledgerDepthMm={ledgerDepthMm}
         uprightThickness={uprightThickness}
+        kerbHeightMm={kerbHeightMm}
         onClick={onClick}
         meshRef={internalRef}
       />

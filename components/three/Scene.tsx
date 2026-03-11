@@ -170,6 +170,16 @@ export default function Scene({
   const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+  const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
+  const isFullMonument = productType === 'full-monument';
+
+  // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
+  // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
+  // and negative Z to orbit around the centre of the grave plot.
+  const orbitTarget: [number, number, number] = isFullMonument
+    ? [0, 0.8, -(ledgerDepthMm / 1000) * 0.55]
+    : [0, 3.8, 0];
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
   const fogSettings = isMobileViewport
@@ -353,9 +363,9 @@ export default function Scene({
         rotateSpeed={0.5}
         zoomSpeed={0.8}
         panSpeed={0.8}
-        minPolarAngle={Math.PI / 3.5}
-        maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera going below ground
-        target={[0, 3.8, 0]}
+        minPolarAngle={isFullMonument ? Math.PI / 6 : Math.PI / 3.5}
+        maxPolarAngle={Math.PI / 2 - 0.05}
+        target={orbitTarget}
       />
     </>
   );

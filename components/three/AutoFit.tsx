@@ -74,25 +74,11 @@ export default function AutoFit({
         anchorHeight = anchorSize.y;
       }
     }
-    
-    // Calculate proportional offset based on object height and whether base is shown
-    // Minimal offset to ensure all inscriptions/motifs are visible
-    const tallHeadstoneRatio = boxSize.y > 1 ? 0.00 : 0.00; // No offset for tall headstones
-    const lowProfileRatio = boxSize.y > 0.4 ? 0.00 : 0.00; // No offset for low profile
-    const verticalOffset = (showBase ? tallHeadstoneRatio : lowProfileRatio) * boxSize.y;
-    
-    console.log('[AutoFit] Bounding box:', {
-      min: { x: box.min.x.toFixed(2), y: box.min.y.toFixed(2), z: box.min.z.toFixed(2) },
-      max: { x: box.max.x.toFixed(2), y: box.max.y.toFixed(2), z: box.max.z.toFixed(2) },
-      size: { x: boxSize.x.toFixed(2), y: boxSize.y.toFixed(2), z: boxSize.z.toFixed(2) },
-      centerBefore: sphere.center.toArray().map(v => v.toFixed(2)),
-      verticalOffset: verticalOffset.toFixed(2),
-      showBase
-    });
-    
-    // Offset the target downward so camera shows more of the top
+
+    const verticalOffset = 0;
+
     const toTgt = sphere.center.clone();
-    toTgt.y -= verticalOffset; // Dynamic offset based on object size and type
+    toTgt.y -= verticalOffset;
 
     if (anchorCenterY !== null && anchorHeight !== null) {
       const maxTargetY = anchorCenterY + anchorHeight * 0.12;
@@ -107,20 +93,18 @@ export default function AutoFit({
     const dY = sphere.radius / Math.tan(vFov / 2);
     const dX = sphere.radius / Math.tan(hFov / 2);
     const dist = Math.max(dX, dY) * Math.max(1, margin) + pad;
-    
+
     const dir = new THREE.Vector3(0, 0, 1); // Front view
     dir.normalize();
 
     const toPos = toTgt.clone().addScaledVector(dir, dist);
 
-    // Explicitly set camera rotation to look directly at the target
     camera.position.copy(toPos);
     camera.lookAt(toTgt);
-    
-    camera.rotation.z = 0; // No roll
-    camera.up.set(0, 1, 0); // Ensure up vector is correct
 
-    // If controls exist, update their target as well
+    camera.rotation.z = 0;
+    camera.up.set(0, 1, 0);
+
     if (controls?.target) {
       controls.target.copy(toTgt);
       controls.update?.();

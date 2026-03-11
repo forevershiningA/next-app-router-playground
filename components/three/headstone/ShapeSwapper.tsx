@@ -7,6 +7,7 @@ import { useTexture } from '@react-three/drei';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
 import AutoFit from '../AutoFit';
+import FullMonumentFit from '../FullMonumentFit';
 import AdditionModel from '../AdditionModel';
 import MotifModel from '../MotifModel';
 import ImageModel from '../ImageModel';
@@ -18,6 +19,7 @@ import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
 import { AdditionData } from '#/lib/xml-parser';
 import { usePathname, useRouter } from 'next/navigation';
+import { useSelectSizePanelOpener } from '#/lib/useSelectSizePanelOpener';
 import type { Component, ReactNode } from 'react';
 
 /* --------------------------------- constants -------------------------------- */
@@ -191,6 +193,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const isSelectSizeRoute = pathname === '/select-size';
   const isSelectMaterialRoute = pathname === '/select-material';
   const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;
+  const openSelectSizePanel = useSelectSizePanelOpener();
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
     const oldMetrics = getBoxMetrics(oldBox);
@@ -482,6 +485,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                 if (!shouldKeepPanelOpen) {
                   window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
                 }
+                openSelectSizePanel();
               },
             }}
           >
@@ -608,15 +612,19 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         </SvgHeadstone>
         </React.Suspense>
 
-        <AutoFit
-          target={tabletRef}
-          anchor={resolvedHeadstoneMeshRef}
-          margin={1.20}
-          pad={0}
-          duration={0.25}
-          readyTimeoutMs={100}
-          trigger={fitTick}
-        />
+        {catalog?.product.type === 'full-monument' ? (
+          <FullMonumentFit trigger={fitTick} />
+        ) : (
+          <AutoFit
+            target={tabletRef}
+            anchor={resolvedHeadstoneMeshRef}
+            margin={1.20}
+            pad={0}
+            duration={0.25}
+            readyTimeoutMs={100}
+            trigger={fitTick}
+          />
+        )}
       </group>
 
       {!shapeSwapping && !isMaterialChange && textureTransitioning && (

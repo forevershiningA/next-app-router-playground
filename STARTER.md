@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-07 (afternoon)
+**Last Updated:** 2026-03-10
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -28,6 +28,39 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-10)
+
+### ✅ Recent Changes (March 10, 2026)
+
+1. **Full Monument — SelectionBox Outlines for Ledger & Kerbset - COMPLETE**
+   - **Root cause**: Click handlers in `HeadstoneAssembly.tsx` called `setSelected('headstone')` for both Ledger and Kerbset meshes; additionally `DesignerNav.tsx` had a `useEffect` that silently overrode any `selected` value back to `'headstone'` on the select-size page.
+   - **Part type extended** (`lib/headstone-store.ts` line 77): `'headstone' | 'base' | 'ledger' | 'kerbset' | null`
+   - **Click handlers fixed** (`HeadstoneAssembly.tsx`): Kerbset mesh calls `setSelected('kerbset')`, Ledger mesh calls `setSelected('ledger')`.
+   - **`RotatingBoxOutline` components added** for both Ledger and Kerbset (outside the assemblyRef group, same level as the meshes). Constants: `ledgerOutlinePad=0.004`, `ledgerOutlineDepthPad=0.002`, `kerbsetOutlinePad=0.005`, `kerbsetOutlineDepthPad=0.003`.
+   - **DesignerNav tab handler fixed** (~line 1475): now calls `setSelected(value)` for all four tabs instead of just headstone/base.
+   - **DesignerNav useEffect sync fixed** (~lines 1113–1122): was mapping everything except `'base'` to `'headstone'`, immediately overriding ledger/kerbset selections. Now maps all four values correctly.
+
+2. **Full Monument — Ledger Slab Positioned on Top of Kerbset - COMPLETE**
+   - **Root cause**: `LedgerSlab.tsx` positioned the flat slab at `Y = ledgerHeightMm/2` (ground level), meaning it phased through the kerbset border.
+   - **Fix** (`components/three/headstone/LedgerSlab.tsx`): Added `kerbHeightMm` from the store. Ledger Y is now `kerbHeightMm/1000 + ledgerHeightMm/2` so it rests on top of the kerbset border (default: 0.3 m above ground).
+
+3. **Full Monument — Assembly Z-Offset - COMPLETE**
+   - The whole assembly group (`<group position={[0, 0, zGroupOffset]}>` in `HeadstoneAssembly.tsx`) is shifted by `-(ledgerDepthMm/1000)` in Z for full-monument products, moving the ledger/kerbset away from the camera and aligning the headstone at the back of the grave plot.
+
+4. **Full Monument — Dedicated Camera Fit (`FullMonumentFit`) - COMPLETE**
+   - **New file**: `components/three/FullMonumentFit.tsx`
+   - Computes the world-space bounding box of the complete grave plot (headstone + base + kerbset + ledger) from store dimensions and positions the camera at a fixed elevated-front offset (`aboveCenter=1.4 m`, `inFrontOfCenter=1.8 m` relative to the grave-plot centre). No FOV/radius math — easy to tune by changing two constants.
+   - Re-fires via `useLayoutEffect` whenever any monument dimension changes.
+   - **ShapeSwapper.tsx** updated: renders `<FullMonumentFit />` when `catalog.product.type === 'full-monument'`; renders `<AutoFit>` for all other product types. AutoFit is unchanged and continues to work correctly for headstones.
+   - **`AutoFit.tsx`** kept at its pre-session state (original front-on headstone fit, debug `console.log` removed).
+   - **`Scene.tsx`**: Dynamic `orbitTarget` (`[0, 0.8, -(ledgerDepthMm/1000)*0.55]` for full-monument; `[0, 3.8, 0]` otherwise) and relaxed `minPolarAngle` for full-monument added as complementary controls.
+
+### ⚠️ Known Gaps (March 10, 2026)
+- **Full Monument pricing**: `catalog.product.ledgerPriceModel` and `kerbsetPriceModel` are parsed from XML but not yet included in the price total (`DesignerNav.tsx` ~line 1152 only sums `headstonePrice + basePrice`).
+- **Register endpoint**: `/api/auth/register` remains unimplemented.
 
 ---
 
