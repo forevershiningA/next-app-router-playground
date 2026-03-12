@@ -19,6 +19,7 @@ function LedgerMesh({
   ledgerHeightMm,
   ledgerDepthMm,
   uprightThickness,
+  baseThickness,
   kerbHeightMm,
   onClick,
   meshRef,
@@ -28,6 +29,7 @@ function LedgerMesh({
   ledgerHeightMm: number;
   ledgerDepthMm: number;
   uprightThickness: number;
+  baseThickness: number;
   kerbHeightMm: number;
   onClick?: (e: any) => void;
   meshRef: React.RefObject<THREE.Mesh | null>;
@@ -59,7 +61,8 @@ function LedgerMesh({
   const w = ledgerWidthMm / 1000;
   const h = ledgerHeightMm / 1000;
   const d = ledgerDepthMm / 1000;
-  const standBackZ = -(uprightThickness / 1000) / 2;
+  // Start at base front face: -(uprightThickness/2) + baseThickness (all in metres)
+  const standBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
   const kerbH = kerbHeightMm / 1000;
 
   const targetPos = useRef(new THREE.Vector3(0, kerbH + h / 2 + EPSILON, standBackZ + d / 2));
@@ -70,7 +73,7 @@ function LedgerMesh({
     const newW = ledgerWidthMm / 1000;
     const newH = ledgerHeightMm / 1000;
     const newD = ledgerDepthMm / 1000;
-    const newStandBackZ = -(uprightThickness / 1000) / 2;
+    const newStandBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
     const newKerbH = kerbHeightMm / 1000;
     targetPos.current.set(0, newKerbH + newH / 2 + EPSILON, newStandBackZ + newD / 2);
     targetScale.current.set(newW, newH, newD);
@@ -98,6 +101,7 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
 
   const texUrl = baseMaterialUrl
@@ -114,6 +118,7 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
         ledgerHeightMm={ledgerHeightMm}
         ledgerDepthMm={ledgerDepthMm}
         uprightThickness={uprightThickness}
+        baseThickness={baseThickness}
         kerbHeightMm={kerbHeightMm}
         onClick={onClick}
         meshRef={internalRef}

@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import React from 'react';
 import type { Group } from 'three';
-import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
+import { DEFAULT_SHAPE_URL, FULL_MONUMENT_WIDTH_DIFF, FULL_MONUMENT_HEIGHT_DIFF } from '#/lib/headstone-constants';
 import type { CatalogData, AdditionData, PriceModel } from '#/lib/xml-parser';
 import {
   parseCatalogXML,
@@ -569,8 +569,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
     set((s) => {
+      // Use editingObject as primary (persists through panel navigation) with selected as fallback
+      const editTarget = s.editingObject;
       const targetSurface: 'headstone' | 'base' | 'ledger' =
-        s.selected === 'base' ? 'base' : s.selected === 'ledger' ? 'ledger' : 'headstone';
+        (editTarget === 'base' || s.selected === 'base') ? 'base' :
+        (editTarget === 'ledger' || s.selected === 'ledger') ? 'ledger' : 'headstone';
       const defaultOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           scale: 1,
@@ -720,15 +723,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         : state.selected === 'ledger'
           ? 'ledger'
           : 'headstone';
+    const resolvedTarget = image.target ?? defaultTarget;
+    // For ledger surface, xPos/yPos are fractional (±0.5 range on unit-cube mesh).
+    // Reset to 0 so the image starts at the ledger centre rather than ~90 m off-slab.
+    const ledgerPos = resolvedTarget === 'ledger'
+      ? { xPos: 0, yPos: 0 }
+      : {};
     set((s) => ({
       selectedImages: [
         ...s.selectedImages,
         {
           ...image,
-          target: image.target ?? defaultTarget,
+          ...ledgerPos,
+          target: resolvedTarget,
         },
       ],
-      cropCanvasData: null, // Clear crop canvas after adding
+      cropCanvasData: null,
     }));
   },
   removeImage: (id) => {
@@ -1160,7 +1170,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setShowKerbset: (v) => set({ showKerbset: v }),
 
   ledgerWidthMm: 950,
-  setLedgerWidthMm: (v) => set({ ledgerWidthMm: v }),
+  setLedgerWidthMm: (v) => {
+    // ledger changes → base and kerbset = ledger + 200
+    const state = get();
+    const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
+    const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
+    const clampedLedger = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
+    const clampedBaseKerb = Math.min(maxAllowed, clampedLedger + FULL_MONUMENT_WIDTH_DIFF);
+    set({ ledgerWidthMm: clampedLedger, baseWidthMm: clampedBaseKerb, kerbWidthMm: clampedBaseKerb });
+  },
 
   ledgerHeightMm: 60,
   setLedgerHeightMm: (v) => set({ ledgerHeightMm: v }),
@@ -1169,10 +1187,24 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setLedgerDepthMm: (v) => set({ ledgerDepthMm: v }),
 
   kerbWidthMm: 1200,
-  setKerbWidthMm: (v) => set({ kerbWidthMm: v }),
+  setKerbWidthMm: (v) => {
+    // kerbset changes → base = kerbset, ledger = kerbset − 200
+    const state = get();
+    const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
+    const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
+    const clamped = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
+    set({ kerbWidthMm: clamped, baseWidthMm: clamped, ledgerWidthMm: Math.max(minAllowed, clamped - FULL_MONUMENT_WIDTH_DIFF) });
+  },
 
   kerbHeightMm: 300,
-  setKerbHeightMm: (v) => set({ kerbHeightMm: v }),
+  setKerbHeightMm: (v) => {
+    // kerbset changes → base = kerbset + 100 (clamped to base constraints)
+    const state = get();
+    const desiredBase = Math.round(v) + FULL_MONUMENT_HEIGHT_DIFF;
+    const clampedBase = Math.max(state.minBaseHeightMm, Math.min(state.maxBaseHeightMm, desiredBase));
+    const kerbHeight = Math.max(50, clampedBase - FULL_MONUMENT_HEIGHT_DIFF);
+    set({ kerbHeightMm: kerbHeight, baseHeightMm: clampedBase });
+  },
 
   kerbDepthMm: 2150,
   setKerbDepthMm: (v) => set({ kerbDepthMm: v }),
@@ -1252,10 +1284,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const clamped = Math.max(minWidthMm, Math.min(maxWidthMm, Math.round(v)));
     set({ widthMm: clamped });
     
-    // Ensure base width is at least as wide as headstone
+    // Ensure base/kerbset/ledger are at least as wide as headstone (full monument rule)
     const state = get();
     if (state.baseWidthMm < clamped) {
-      set({ baseWidthMm: clamped });
+      // headstone grew past base: base = headstone + 200, kerb = headstone + 200, ledger = headstone
+      const newBaseKerb = clamped + FULL_MONUMENT_WIDTH_DIFF;
+      set({ baseWidthMm: newBaseKerb, kerbWidthMm: newBaseKerb, ledgerWidthMm: clamped });
     }
   },
 
@@ -1268,18 +1302,21 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   
   baseWidthMm: 1260, // Default: 900 * 1.4
   setBaseWidthMm(v) {
+    // base changes → kerbset = base, ledger = base − 200
     const state = get();
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
     const clampedWidth = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
-    set({ baseWidthMm: clampedWidth });
+    set({ baseWidthMm: clampedWidth, kerbWidthMm: clampedWidth, ledgerWidthMm: Math.max(minAllowed, clampedWidth - FULL_MONUMENT_WIDTH_DIFF) });
   },
   
   baseHeightMm: 100, // Base height is 100mm
   setBaseHeightMm(v) {
     const { minBaseHeightMm, maxBaseHeightMm } = get();
     const clamped = Math.max(minBaseHeightMm, Math.min(maxBaseHeightMm, Math.round(v)));
-    set({ baseHeightMm: clamped });
+    // base changes → kerbset = base − 100
+    const kerbHeight = Math.max(50, clamped - FULL_MONUMENT_HEIGHT_DIFF);
+    set({ baseHeightMm: clamped, kerbHeightMm: kerbHeight });
   },
   
   baseThickness: 250, // Default base thickness 250mm (will be overwritten by catalog)
@@ -1511,21 +1548,31 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     if (!src) return '';
     const newId = genId();
 
-    // Measure the actual text height using canvas
-    let offset = src.sizeMm / 10 + 5; // fallback
-    if (typeof window !== 'undefined') {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.font = `${src.sizeMm}px "${src.font}"`;
-        const metrics = ctx.measureText(src.text);
-        if (
-          metrics.fontBoundingBoxAscent !== undefined &&
-          metrics.fontBoundingBoxDescent !== undefined
-        ) {
-          const heightPx =
-            metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
-          offset = heightPx + 5; // actual height in mm + gap
+    let offset: number;
+
+    if (src.target === 'ledger') {
+      // For ledger: yPos is fractional (-0.5 to +0.5). Convert text height to fractional
+      // using the stored ledger depth so the duplicate appears one line-height away.
+      // +offset moves toward the foot (visually "below" when viewing ledger from above).
+      const ledgerDepthMm = src.baseHeightMm || get().ledgerDepthMm || 400;
+      offset = (src.sizeMm + 5) / ledgerDepthMm;
+    } else {
+      // Headstone / base: yPos is in local mm-scale units — measure actual text height.
+      offset = src.sizeMm / 10 + 5; // fallback
+      if (typeof window !== 'undefined') {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.font = `${src.sizeMm}px "${src.font}"`;
+          const metrics = ctx.measureText(src.text);
+          if (
+            metrics.fontBoundingBoxAscent !== undefined &&
+            metrics.fontBoundingBoxDescent !== undefined
+          ) {
+            const heightPx =
+              metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+            offset = heightPx + 5; // actual height in mm + gap
+          }
         }
       }
     }
@@ -1537,10 +1584,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           ...src,
           id: newId,
           ref: React.createRef<Group>(),
-          yPos: src.yPos - offset, // Position below current position accounting for actual text height
+          yPos: src.target === 'ledger' ? src.yPos + offset : src.yPos - offset,
         },
       ],
-      selectedInscriptionId: newId, // Select the newly duplicated inscription
+      selectedInscriptionId: newId,
     }));
     get().calculateInscriptionCost();
     return newId;

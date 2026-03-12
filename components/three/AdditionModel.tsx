@@ -462,7 +462,8 @@ function AdditionModelInner({
         hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ?? hits[0];
 
       if (!hit) {
-        const topY = bbox.max.y;
+        // Use actual monument-local top Y (not geometry bbox which gives 0.5 for unit-cube mesh)
+        const topY = targetMesh.position.y + targetMesh.scale.y / 2;
         ledgerDragPlane.normal.set(0, 1, 0);
         ledgerDragPlane.constant = -topY;
         if (raycaster.ray.intersectPlane(ledgerDragPlane, fallbackIntersection)) {
@@ -1055,6 +1056,10 @@ function AdditionModelInner({
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
   const centerZ = (bbox.min.z + bbox.max.z) / 2;
+  // For ledger: the mesh is a unit cube with position+scale; use those for real bounds.
+  const ledgerCenterX_actual = stone.position.x;
+  const ledgerCenterZ_actual = stone.position.z;
+  const ledgerTopY_actual = stone.position.y + stone.scale.y / 2;
 
   const desiredY = centerY - displayOffsetY;
   const finalY = prefersBaseSurface && offset.targetSurface === 'base' && baseTopY !== null
@@ -1065,9 +1070,10 @@ function AdditionModelInner({
   let groupRotation: [number, number, number];
 
   if (isLedgerSurface) {
-    const ledgerX = centerX + displayOffsetX;
-    const ledgerZ = centerZ + displayOffsetY;
-    const ledgerTopY = bbox.max.y;
+    // displayOffsetX/Y are fractional (from worldToLocal on unit-cube mesh); multiply by scale
+    const ledgerX = ledgerCenterX_actual + displayOffsetX * stone.scale.x;
+    const ledgerZ = ledgerCenterZ_actual + displayOffsetY * stone.scale.z;
+    const ledgerTopY = ledgerTopY_actual;
     if (additionKind === 'application') {
       const lift = actualDepth / 2 + APPLICATION_Z_OFFSET;
       groupPosition = [ledgerX, ledgerTopY + lift, ledgerZ];

@@ -206,15 +206,26 @@ export default function Scene({
   }, [loading, baseSwapping, onReady]);
 
 
-  // Smooth rotation animation
+  // Smooth rotation animation — for full monument, rotate around the orbit target's Z pivot
+  // so the monument spins around its visual centre rather than world origin.
   useFrame(() => {
     if (groupRef.current && currentRotation) {
       const diff = targetRotation - currentRotation.current;
-      const delta = diff * 0.1; // Lerp factor (adjust for speed)
       
       if (Math.abs(diff) > 0.001) {
-        currentRotation.current += delta;
-        groupRef.current.rotation.y = currentRotation.current;
+        currentRotation.current += diff * 0.1;
+        const angle = currentRotation.current;
+        groupRef.current.rotation.y = angle;
+
+        if (isFullMonument) {
+          // Pivot at the same Z as orbitTarget so arrow rotation matches orbit behaviour.
+          // To keep world point [0,0,p] stationary while rotating by angle:
+          //   position.x = -p * sin(angle)
+          //   position.z =  p * (1 - cos(angle))
+          const pivotZ = -(ledgerDepthMm / 1000) * 0.55;
+          groupRef.current.position.x = -pivotZ * Math.sin(angle);
+          groupRef.current.position.z = pivotZ * (1 - Math.cos(angle));
+        }
       }
     }
   });

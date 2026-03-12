@@ -137,8 +137,10 @@ export default function SelectionBox({
 
   // Create outline segments (viewfinder-style for flat selections)
   const outlineSegments = React.useMemo(() => {
-    const w = minHalfWidth;
-    const h = minHalfHeight;
+    // For subtle outlines (images/motifs on ledger), use exact bounds — not the padded minHalf values
+    // which are inflated to ensure handle spacing and would make the outline 2–3× too large.
+    const w = usesSubtleOutline ? bounds.width / 2 : minHalfWidth;
+    const h = usesSubtleOutline ? bounds.height / 2 : minHalfHeight;
 
     if (w === 0 || h === 0) return [];
 
@@ -162,7 +164,7 @@ export default function SelectionBox({
       [new THREE.Vector3(w, h, 0), new THREE.Vector3(-w, h, 0)],
       [new THREE.Vector3(-w, h, 0), new THREE.Vector3(-w, -h, 0)],
     ];
-  }, [minHalfWidth, minHalfHeight, usesSubtleOutline]);
+  }, [minHalfWidth, minHalfHeight, usesSubtleOutline, bounds.width, bounds.height]);
 
   const easedProgress = animateOnShow
     ? animationProgress >= 1

@@ -20,6 +20,7 @@ function KerbMesh({
   kerbHeightMm,
   kerbDepthMm,
   uprightThickness,
+  baseThickness,
   onClick,
   groupRef,
 }: {
@@ -28,6 +29,7 @@ function KerbMesh({
   kerbHeightMm: number;
   kerbDepthMm: number;
   uprightThickness: number;
+  baseThickness: number;
   onClick?: (e: any) => void;
   groupRef: React.RefObject<THREE.Group | null>;
 }) {
@@ -60,7 +62,8 @@ function KerbMesh({
   const kH = kerbHeightMm / 1000;
   const kD = kerbDepthMm / 1000;
   const wall = WALL_MM / 1000;
-  const standBackZ = -(uprightThickness / 1000) / 2;
+  // Start at base front face: -(uprightThickness/2) + baseThickness (all in metres)
+  const standBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
   const kerbCenterZ = standBackZ + kD / 2;
   const centerY = kH / 2 + EPSILON;
 
@@ -74,7 +77,7 @@ function KerbMesh({
     if (!groupRef.current) return;
     const newKD = kerbDepthMm / 1000;
     const newKH = kerbHeightMm / 1000;
-    const newStandBackZ = -(uprightThickness / 1000) / 2;
+    const newStandBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
     targetGroupY.current = newKH / 2 + EPSILON;
     targetGroupZ.current = newStandBackZ + newKD / 2;
     groupRef.current.position.lerp(
@@ -133,6 +136,7 @@ const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function Kerbs
   const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
   const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
 
   const texUrl = baseMaterialUrl
@@ -149,6 +153,7 @@ const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function Kerbs
         kerbHeightMm={kerbHeightMm}
         kerbDepthMm={kerbDepthMm}
         uprightThickness={uprightThickness}
+        baseThickness={baseThickness}
         onClick={onClick}
         groupRef={internalRef}
       />

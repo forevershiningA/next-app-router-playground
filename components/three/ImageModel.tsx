@@ -269,8 +269,8 @@ export default function ImageModel({
         hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ?? hits[0];
 
       if (!hit) {
-        if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
-        const topY = targetMesh.geometry.boundingBox?.max.y ?? 0;
+        // Use actual monument-local top Y, not geometry bbox (which gives 0.5 for unit-cube mesh)
+        const topY = targetMesh.position.y + targetMesh.scale.y / 2;
         ledgerPlane.set(new THREE.Vector3(0, 1, 0), -topY);
         if (raycaster.ray.intersectPlane(ledgerPlane, fallbackIntersection)) {
           hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
@@ -353,6 +353,14 @@ export default function ImageModel({
       setSelectedImageId(id);
       setSelected(null);
       setActivePanel('image');
+
+      // Dispatch canvas-open event so DesignerNav sets panelSource='canvas',
+      // which prevents the panel-closure guard from immediately closing the panel.
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-images' } }),
+        );
+      }
 
       setDragging(true);
       const targetElement = e.target as HTMLElement | null;
@@ -437,7 +445,7 @@ export default function ImageModel({
   // Get headstone frontZ position (same as motifs/inscriptions)
   const frontZ = headstone?.frontZ ?? 0;
   const stackOffset = (index ?? 0) * 0.2; // Slight Z lift per image to prevent z-fighting when overlapping
-  const groupZ = frontZ + stackOffset;
+  const groupZ = frontZ + stackOffset * mmToLocalUnits;
   
   // Determine if this image needs a ceramic/enamel base (all except Granite Image ID 21)
   const needsCeramicBase = typeId !== 21 && typeId !== 135; // Granite Image (21) and YAG Laser (135) are flat
@@ -475,8 +483,11 @@ export default function ImageModel({
   const bbox = stone.geometry.boundingBox!.clone();
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
-  const ledgerCenterZ = (bbox.min.z + bbox.max.z) / 2;
-  const ledgerTopY = bbox.max.y;
+  // For ledger: the mesh is a unit cube (geometry ±0.5) with position+scale applied.
+  // Use stone.position/scale for real monument-local bounds.
+  const ledgerCenterX = stone.position.x;
+  const ledgerCenterZ = stone.position.z;
+  const ledgerTopY = stone.position.y + stone.scale.y / 2;
   const safeX = xPos ?? 0;
   const safeY = yPos ?? 0;
 
@@ -484,10 +495,9 @@ export default function ImageModel({
   let groupRotation: [number, number, number];
 
   if (isLedgerSurface) {
-    const offsetX = xPos ?? 0;
-    const offsetZ = yPos ?? 0;
-    const displayX = centerX + offsetX;
-    const displayZ = ledgerCenterZ + offsetZ;
+    // xPos/yPos are fractional (from worldToLocal on unit-cube mesh); multiply by scale to get meters
+    const displayX = ledgerCenterX + (xPos ?? 0) * stone.scale.x;
+    const displayZ = ledgerCenterZ + (yPos ?? 0) * stone.scale.z;
     const ledgerLift = 0.001 + (index ?? 0) * 0.001;
     groupPosition = [displayX, ledgerTopY + ledgerLift, displayZ];
     groupRotation = [-Math.PI / 2, rotationZ || 0, 0];
@@ -523,7 +533,7 @@ export default function ImageModel({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        position={[0, 0, actualCeramicDepthInUnits + 0.1]} // Photo slightly above ceramic surface
+        position={[0, 0, actualCeramicDepthInUnits + 0.1 * mmToLocalUnits]} // Photo slightly above ceramic surface
         geometry={planeGeometry}
         scale={[width, height, 1]}
         renderOrder={999}
@@ -542,7 +552,7 @@ export default function ImageModel({
       {selected && (
         <SelectionBox
           objectId={id}
-          position={new THREE.Vector3(0, 0, actualCeramicDepthInUnits + 0.5)}
+          position={new THREE.Vector3(0, 0, actualCeramicDepthInUnits + 0.5 * mmToLocalUnits)}
           bounds={{ width, height }}
           rotation={isLedgerSurface ? 0 : rotationZ}
           unitsPerMeter={headstone?.unitsPerMeter ?? 1}

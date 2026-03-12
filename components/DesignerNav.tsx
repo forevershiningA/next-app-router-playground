@@ -1117,10 +1117,12 @@ export default function DesignerNav() {
       editingObject === 'ledger' ? 'ledger' :
       editingObject === 'kerbset' ? 'kerbset' :
       'headstone';
+    // Don't override when user is actively editing a content item on the canvas
+    if (selectedImageId || selectedMotifId || selectedAdditionId || selectedInscriptionId) return;
     if (isSelectSizePage && selected !== partValue) {
       setSelected(partValue);
     }
-  }, [isSelectSizePage, editingObject, selected, setSelected]);
+  }, [isSelectSizePage, editingObject, selected, setSelected, selectedImageId, selectedMotifId, selectedAdditionId, selectedInscriptionId]);
 
   // Auto-open image panel when an image is selected and activePanel is 'image'
   useEffect(() => {

@@ -31,6 +31,20 @@
 
 ---
 
+## Current Status (2026-03-12)
+
+### ✅ Recent Changes (March 12, 2026)
+
+1. **Ledger Panel creative tooling — positioning fixes - COMPLETE**
+   - **Root cause**: `LedgerSlab` uses a unit-cube `RoundedBoxGeometry(1,1,1)` with mesh `scale` lerped to actual dimensions. All four content components (`HeadstoneInscription`, `MotifModel`, `ImageModel`, `AdditionModel`) were using `stone.geometry.boundingBox` (always `±0.5` in geometry space) instead of `stone.position + stone.scale/2` for actual monument-local bounds. This caused content to render at `Y ≈ 0.5` (half a metre above the floor) instead of on top of the real ledger slab. Drag fallback planes were also at the wrong Y, causing click-to-place to fail when clicking off the ledger edge.
+   - **Fix 1 — Positioning**: Replaced `bbox.max.y` / `ledgerCenterZ` / `centerX` (geometry space) with `stone.position.y + stone.scale.y/2`, `stone.position.z`, `stone.position.x` in all four components for the `isLedgerSurface` branch.
+   - **Fix 2 — Scale conversion**: Stored `xPos`/`yPos` offsets come from `stone.worldToLocal()` on the unit-cube mesh, so they are fractional (±0.5). The render path now multiplies them by `stone.scale.x` / `stone.scale.z` to convert to monument-local metres before setting `groupPosition`.
+   - **Fix 3 — Fallback planes**: All four drag handlers now compute `topY = stone.position.y + stone.scale.y / 2` for the horizontal fallback `THREE.Plane`, so clicking off the ledger edge still places items on the correct surface.
+   - **Fix 4 — Initial render**: `LedgerSurfaceContent` was returning `null` when `ledgerRef.current` was null (first render, before commit), and there was no subsequent trigger to re-render — meaning saved designs with ledger content never appeared on load. Added a `useFrame` hook that sets `meshReady = true` as soon as the ledger mesh mounts, releasing the null guard.
+   - **Files**: `components/three/headstone/LedgerSurfaceContent.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/ImageModel.tsx`, `components/three/AdditionModel.tsx`.
+
+---
+
 ## Current Status (2026-03-11)
 
 ### ✅ Recent Changes (March 11, 2026)
@@ -62,7 +76,6 @@
    - **Files**: `components/SelectionBox.tsx`, `components/three/ImageModel.tsx`, `styles/globals.css`, `app/select-product/_ui/ProductSelectionGrid.tsx`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
 
 ### ⚠️ Known Gaps (March 11, 2026)
-- **Ledger creative QA**: Motif/Image placement math was refactored but still needs end-to-end QA on real projects (verify bounding boxes, reload persistence, and stacking order on the ledger plane).
 - **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
 - **TypeScript baseline**: `pnpm run type-check` fails due to pre-existing errors; we haven’t addressed them yet this cycle.
 - **Pricing regression tests**: Ledger/Kerb totals were added, but automated coverage is still missing—manual regression is required after catalog changes.
@@ -4747,3 +4760,4 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 ---
 
 *End of STARTER.md - Last updated: March 2, 2026*
+

@@ -167,7 +167,11 @@ export default function ThreeScene() {
   const containerRef = useRef<HTMLDivElement>(null);
   const hasInitiallyLoaded = useRef(false);
   const glRef = useRef<any>(null);
+  // Track whether the scene has ever rendered (so we don't re-trigger the
+  // select-size fade when the user navigates there from an already-visible scene).
+  const sceneHasEverBeenReadyRef = useRef(false);
   const handleSceneReady = useCallback(() => {
+    sceneHasEverBeenReadyRef.current = true;
     setSceneReady(true);
     setShouldAnimateFade(false);
   }, []);
@@ -179,23 +183,20 @@ export default function ThreeScene() {
 
   // Fade in/out on /select-size page
   useEffect(() => {
-    console.log('[ThreeScene] Path changed to:', pathname, 'hasPlayedFade:', hasPlayedSelectSizeFade.current, 'sceneReady:', sceneReady);
-    
     if (pathname === '/select-size') {
-      // Always show scene on select-size without fade after first time
-      if (!hasPlayedSelectSizeFade.current) {
-        console.log('[ThreeScene] First visit to /select-size - starting fade animation');
+      if (!hasPlayedSelectSizeFade.current && !sceneHasEverBeenReadyRef.current) {
+        // True first page load arriving at /select-size before the scene has rendered.
         hasPlayedSelectSizeFade.current = true;
         setShouldAnimateFade(true);
         setSceneReady(false);
       } else {
-        console.log('[ThreeScene] Subsequent visit to /select-size - showing immediately');
+        // Scene was already rendered (or we're returning to this route) — show immediately.
+        hasPlayedSelectSizeFade.current = true;
         setShouldAnimateFade(false);
         setSceneReady(true);
       }
     } else {
-      console.log('[ThreeScene] Not on /select-size, stopping animation');
-      // When navigating away from select-size, just stop animating
+      // When navigating away from select-size, just stop animating.
       setShouldAnimateFade(false);
     }
 

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 
 import HeadstoneInscription from '../../HeadstoneInscription';
 import MotifModel from '../MotifModel';
@@ -49,6 +50,14 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Force a re-render once the ledger mesh mounts so content is visible on initial load
+  const [meshReady, setMeshReady] = React.useState(false);
+  useFrame(() => {
+    if (!meshReady && ledgerRef.current) {
+      setMeshReady(true);
+    }
+  });
+
   const headstoneApi = React.useMemo<HeadstoneAPI>(() => {
     const worldWidth = (ledgerWidthMm || 0) / 1000;
     const worldHeight = (ledgerDepthMm || 0) / 1000;
@@ -93,7 +102,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
     [additionOffsets, selectedAdditions],
   );
 
-  if (!ledgerRef?.current) {
+  if (!ledgerRef?.current && !meshReady) {
     return null;
   }
 

@@ -160,67 +160,70 @@ export default function HeadstoneAssembly() {
         )}
       </group>
 
-      {showLedger && (
-        <LedgerSlab
-          ref={ledgerRef}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelected('ledger');
-            setEditingObject('ledger');
-            setSelectedInscriptionId(null);
-            if (!shouldKeepPanelOpen) {
-              window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-            }
-            openSelectSizePanel();
-          }}
-        />
-      )}
+      {/* Ledger and kerbset sit at ground level; their Z is offset forward past the base */}
+      <group>
+        {showLedger && (
+          <LedgerSlab
+            ref={ledgerRef}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelected('ledger');
+              setEditingObject('ledger');
+              setSelectedInscriptionId(null);
+              if (!shouldKeepPanelOpen) {
+                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
+              }
+              openSelectSizePanel();
+            }}
+          />
+        )}
 
-      {showLedger && <LedgerSurfaceContent ledgerRef={ledgerRef} />}
+        {showLedger && <LedgerSurfaceContent ledgerRef={ledgerRef} />}
 
-      {showLedger && (
-        <RotatingBoxOutline
-          targetRef={ledgerRef}
-          visible={selected === 'ledger'}
-          color="#ffffff"
-          pad={ledgerOutlinePad}
-          depthPad={ledgerOutlineDepthPad}
-          through={false}
-          lineLength={ledgerOutlineLineLength}
-          animateOnShow
-          animationDuration={520}
-        />
-      )}
+        {showLedger && (
+          <RotatingBoxOutline
+            targetRef={ledgerRef}
+            visible={selected === 'ledger'}
+            color="#ffffff"
+            pad={ledgerOutlinePad}
+            depthPad={ledgerOutlineDepthPad}
+            through={false}
+            lineLength={ledgerOutlineLineLength}
+            animateOnShow
+            animationDuration={520}
+          />
+        )}
 
-      {showKerbset && (
-        <KerbsetBorder
-          ref={kerbsetRef}
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelected('kerbset');
-            setEditingObject('kerbset');
-            setSelectedInscriptionId(null);
-            if (!shouldKeepPanelOpen) {
-              window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-            }
-            openSelectSizePanel();
-          }}
-        />
-      )}
+        {showKerbset && (
+          <KerbsetBorder
+            ref={kerbsetRef}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelected('kerbset');
+              setEditingObject('kerbset');
+              setSelectedInscriptionId(null);
+              if (!shouldKeepPanelOpen) {
+                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
+              }
+              openSelectSizePanel();
+            }}
+          />
+        )}
 
-      {showKerbset && (
-        <RotatingBoxOutline
-          targetRef={kerbsetRef}
-          visible={selected === 'kerbset'}
-          color="#ffffff"
-          pad={kerbsetOutlinePad}
-          depthPad={kerbsetOutlineDepthPad}
-          through={false}
-          lineLength={kerbsetOutlineLineLength}
-          animateOnShow
-          animationDuration={520}
-        />
-      )}
+        {showKerbset && (
+          <RotatingBoxOutline
+            targetRef={kerbsetRef}
+            visible={selected === 'kerbset'}
+            color="#ffffff"
+            pad={kerbsetOutlinePad}
+            depthPad={kerbsetOutlineDepthPad}
+            through={false}
+            lineLength={kerbsetOutlineLineLength}
+            animateOnShow
+            animationDuration={520}
+          />
+        )}
+      </group>
     </group>
   );
 }

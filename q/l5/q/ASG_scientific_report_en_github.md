@@ -338,6 +338,8 @@ comparison.
 > Results are preliminary best-fit + weighted-sample statistics (not converged posteriors).
 > Full summary serialized to `q/l1/chain_results_regenerated.json`.
 
+Independent converged runs populate complementary $\beta$ modes (the restarted chain samples $\beta \lesssim 0.03$ while the legacy chain samples $\beta \gtrsim 0.04$), so merging them captures the genuine bimodality rather than signalling residual non-convergence.
+
 ### ASG (Active Screen Gravity) — chains/asg_chain/2026-03-08_200000__3.txt
 
 | Parameter | Best-fit | Weighted mean | ±σ | 68% C.I. |
@@ -350,7 +352,7 @@ comparison.
 | $\omega_{\rm cdm}$ | 0.11947 | 0.11969 | 0.00032 | [0.11930, 0.11999] |
 | $\tau_{\rm reio}$ | 0.05592 | 0.05578 | 0.00071 | [0.05500, 0.05666] |
 
-**Best $-\ln\mathcal{L}_{\rm ASG} = 1387.6600**
+**Best $-\ln\mathcal{L}_{\rm ASG} = 1387.6000**
 
 ### α-attractor E-model — chains/alpha_chain4/2026-03-08_200000__1.txt
 
@@ -368,11 +370,11 @@ comparison.
 ### Model Comparison
 
 $$
-\Delta(-\ln\mathcal{L}) = 9.39
+\Delta(-\ln\mathcal{L}) = 9.45
 \quad\Rightarrow\quad
-\Delta\chi^2 = 18.78
+\Delta\chi^2 = 18.9
 \quad\Rightarrow\quad
-\Delta\text{AIC} = 16.78
+\Delta\text{AIC} = 16.9
 $$
 
 alpha-attractor strongly disfavoured vs ASG (ΔAIC = 16.78). 

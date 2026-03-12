@@ -306,9 +306,8 @@ export default function MotifModel({
         hits.find((h) => h.face?.normal?.y && h.face.normal.y > 0.4) ?? hits[0];
 
       if (!hit) {
-        if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
-        const bb = targetMesh.geometry.boundingBox;
-        const topY = bb?.max.y ?? 0;
+        // Use actual monument-local top Y (not geometry bbox which gives ±0.5 for unit-cube mesh)
+        const topY = targetMesh.position.y + targetMesh.scale.y / 2;
         const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -topY);
         if (raycaster.ray.intersectPlane(plane, fallbackIntersection)) {
           hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
@@ -517,8 +516,11 @@ export default function MotifModel({
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
   const centerZ = headstone.frontZ + 0.02;
-  const ledgerCenterZ = (bbox.min.z + bbox.max.z) / 2;
-  const ledgerTopY = bbox.max.y;
+  // For ledger: the mesh is a unit cube (geometry ±0.5) with position+scale applied.
+  // Use stone.position/scale to get the real monument-local bounds, not the geometry bbox.
+  const ledgerCenterX = stone.position.x;
+  const ledgerCenterZ = stone.position.z;
+  const ledgerTopY = stone.position.y + stone.scale.y / 2;
 
   const inset = 0.01;
   const spanY = bbox.max.y - bbox.min.y;
@@ -580,8 +582,10 @@ export default function MotifModel({
   let groupRotation: [number, number, number];
 
   if (isLedgerSurface) {
-    const displayLedgerX = centerX + scaledOffsetX;
-    const displayLedgerZ = ledgerCenterZ + scaledOffsetY;
+    // xPos/yPos are in fractional mesh-local space (from worldToLocal on unit-cube mesh).
+    // Multiply by stone.scale to convert to monument-local meters.
+    const displayLedgerX = ledgerCenterX + scaledOffsetX * stone.scale.x;
+    const displayLedgerZ = ledgerCenterZ + scaledOffsetY * stone.scale.z;
     const ledgerLift = 0.001;
     groupPosition = [displayLedgerX, ledgerTopY + ledgerLift, displayLedgerZ];
     groupRotation = [-Math.PI / 2, offset.rotationZ || 0, 0];

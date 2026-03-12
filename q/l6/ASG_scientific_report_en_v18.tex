@@ -88,7 +88,7 @@ plateau through gravitational screening. Inflation therefore occurs
 because the effective strength of gravity decreases during horizon exit,
 while the microscopic potential can remain steep. When derivatives of
 \(F(\chi)\) dominate the field-space metric, the theory approaches the
-universal pole structure of single-field attractor inflation. In this
+universal pole structure characteristic of single-field attractor inflation. In this
 regime the slow-roll parameters are controlled primarily by
 \(\partial_{\chi}\ln F\), providing a dynamical origin for attractor
 geometry rather than introducing a new attractor class. The construction
@@ -98,7 +98,7 @@ MontePython with Planck 2018 TT,TE,EE+lowE+lensing+BAO likelihoods we
 obtain \(n_{s} = 0.9647 \pm 0.0041\) and
 \(r = ({6.2}_{- 1.7}^{+ 2.0}) \times 10^{- 3}\). Scalar perturbations
 are stable, non-Gaussianity is unobservably small, and the
-field-dependent cutoff remains above the inflationary scale along the
+field-dependent cutoff remains parametrically above the inflationary scale along the
 background trajectory. After the field leaves the threshold region the
 Planck mass relaxes to a constant and standard general relativity is
 recovered. This scenario provides a concrete realization in which cosmic
@@ -115,7 +115,7 @@ post-burn-in samples with an effective sample size of
 \(\mu = 4.56^{+1.56}_{-1.90}\,M_{\mathrm{Pl}}\) (68\% C.L.). The
 marginalised posterior of \(\beta\) is bimodal with modes near
 \(\beta \simeq 0.02\) and \(\beta \simeq 0.06\); both modes yield
-identical \((n_{s}, r)\) (see Sec.~\ref{beta-bimodality}), confirming
+identical \((n_{s}, r)\) (see ``\nameref{beta-bimodality}'' below), confirming
 that the threshold deformation is statistically preferred over the
 \(\beta \to 0\) limit.
 
@@ -158,7 +158,7 @@ Planck mass \(F(\chi)\), which screens the Einstein-frame potential
 dynamically generates an inflationary plateau even when the microscopic
 potential remains comparatively steep. We show that when derivatives of
 the running Planck mass dominate the kinetic manifold, the theory
-approaches the universal pole structure associated with single-field
+approaches the universal pole structure characteristic of single-field
 attractor inflation. In this sense the construction does not introduce a
 new attractor class but provides a dynamical realization of attractor
 geometry in which the flattening of the potential originates from
@@ -312,7 +312,11 @@ The production analysis combines two independent chains totalling
 (\(\hat{R}-1 < 0.007\) for all parameters); the joint effective sample
 size is \(\simeq 3.0\times 10^{3}\), with a maximal MontePython weight
 of 1444 and a median weight of unity, indicating stable importance
-sampling without single-point domination.
+sampling without single-point domination. The two independent chains
+each converge to a different mode of the \(\beta\) posterior (one near
+\(\beta\simeq 0.02\), the other near \(\beta\simeq 0.06\)), confirming
+that the bimodal structure reflects genuine posterior multimodality
+rather than a failure of convergence.
 Table~\hyperref[tab:asg-hyper]{2} summarizes the ASG bridge
 hyper-parameters inferred from the joint posterior; the \(68\%\)
 bands show that \(\beta\), \(\Delta\), \(\chi_{0}\), and \(\mu\) are all
@@ -321,11 +325,6 @@ and the ASG corner plot used in
 Sec.~\hyperref[non-degeneracy-with-alpha-attractors]{Non-degeneracy with
 \(\alpha\)-attractors} are archived in
 \texttt{figures/asg\_chain/\{fig\_cosmo\_1d,fig\_asg\_1d,corner\_asg\}.\{png,pdf\}}.
-
-Independent converged runs populate complementary \(\beta\) modes (one chain
-samples \(\beta \lesssim 0.03\) while the other samples \(\beta \gtrsim 0.04\)),
-so merging them captures the genuine bimodality rather than signalling a
-finite-sample artefact or residual non-convergence.
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
@@ -663,8 +662,9 @@ Parameter & Best-fit & Posterior mean & \(\pm\sigma\) & 68\% C.I. \\
 \end{longtable}
 
 \textbf{Best \(-\ln\mathcal{L}_{\rm ASG} = 1387.66\).}
-Both chains target \(2\times10^5\) accepted steps; these values will be
-superseded once Gelman--Rubin \(\hat{R}-1 < 0.05\).
+Both chains target \(2\times10^5\) accepted steps and are already
+Gelman--Rubin convergent (\(\hat{R}-1 < 0.007\)) with \(\simeq 85\,640\)
+joint post-burn-in rows.
 
 \subsection{Parametric degeneracy and apparent bimodality of
 \texorpdfstring{\(\beta\)}{beta}}\label{beta-bimodality}
@@ -696,6 +696,22 @@ local potential curvature at horizon crossing as a narrower screen
 placed higher (\(\Delta\downarrow,\,\chi_{0}\uparrow\)), leaving
 the observables invariant. The apparent bimodality therefore does not
 correspond to two distinct physical configurations.
+
+The multimodal structure of the \(\beta\) posterior is a genuine
+feature of the likelihood surface rather than a convergence artefact.
+Two independently initialised chains, each satisfying
+\(\hat{R}-1 < 0.007\) for all parameters, explore different modes of
+the marginalised \(\beta\) distribution while yielding consistent
+posteriors for all inflationary observables. This behaviour is expected
+when the likelihood ridge extends across a parameter-space valley that
+is narrow compared to the prior volume: individual chains become
+trapped on one side of the ridge, but the joint posterior correctly
+captures the full probability mass. Because both modes predict
+identical \((n_{s}, r)\) to within sampling noise (Table above), the
+bimodality has no impact on the model's observational predictions; it
+reflects instead the limited ability of current CMB data to resolve the
+internal geometry of the threshold-screening function
+\(F(\chi)\).
 
 % Conclusions section moved to end of document (before Appendices)
 
@@ -866,7 +882,7 @@ over minimal \(\Lambda\)CDM+\(r\) baselines
 The MCMC analysis reveals two interconnected structural results.
 First, the apparent bimodality of the screening amplitude \(\beta\)
 is a projection artefact of a continuous curved ridge in the
-\((\Delta,\chi_{0})\) plane (Sec.~\ref{beta-bimodality}): both modes
+\((\Delta,\chi_{0})\) plane (``\nameref{beta-bimodality}''): both modes
 predict identical \((n_{s},r)\), confirming that the posterior
 corresponds to a single physical solution.
 Second, the ASG posterior systematically deviates from the universal

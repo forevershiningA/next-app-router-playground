@@ -26,7 +26,11 @@ export const BASE_DEPTH_MULTIPLIER = 1.5; // Base is 1.5x deeper than headstone
 export const BASE_MIN_WIDTH = 0.05; // Minimum base width in meters
 export const BASE_MIN_DEPTH = 0.05; // Minimum base depth in meters
 
-// Addition model defaults
+// Full monument width relationship: kerbset and base are this much wider than the ledger
+export const FULL_MONUMENT_WIDTH_DIFF = 200; // mm
+// Full monument height relationship: base (stand) is this much taller than kerbset (diff/2 from legacy)
+export const FULL_MONUMENT_HEIGHT_DIFF = 100; // mm
+
 export const ADDITION_TARGET_HEIGHT_METERS = 0.18; // Default height for additions (18cm)
 export const ADDITION_MIN_SCALE = 0.05;
 export const ADDITION_MAX_SCALE = 5;

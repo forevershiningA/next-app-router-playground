@@ -114,8 +114,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       }
       return converted;
     }, [height, mmToLocalUnits]);
-    // Keep text on surface for both types (lean 0.05mm offset prevents z-fighting)
-    const liftLocal = 0.05;
+    // Keep text just above the surface to prevent z-fighting (0.05 mm, scaled to local units)
+    const liftLocal = 0.05 * mmToLocalUnits;
 
     // initial Y based on approx height
     const initialYLocal = React.useMemo(() => {
@@ -156,7 +156,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         };
         setSurfaceBounds(bounds);
         if (isLedgerSurface) {
-          setPos(new THREE.Vector3(bounds.centerX, bounds.topY + liftLocal, bounds.centerZ));
+          // For ledger: use stone.position/scale for real monument-local anchor.
+          // The geometry bbox gives ±0.5 (unit cube) but the mesh has position+scale applied.
+          setPos(new THREE.Vector3(
+            stone.position.x,
+            stone.position.y + stone.scale.y / 2 + liftLocal,
+            stone.position.z,
+          ));
         } else if (xPos === 0 && yPos === 0) {
           setPos(new THREE.Vector3(bounds.centerX, bounds.centerY, headstone.frontZ + liftLocal));
         }
@@ -183,7 +189,10 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           hits[0];
 
         if (!hit) {
-          const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -surfaceBounds.topY);
+          // Use the real monument-local top Y (stone.position.y + stone.scale.y/2)
+          // instead of surfaceBounds.topY which is in geometry space (0.5 for unit cube).
+          const actualTopY = stone.position.y + stone.scale.y / 2;
+          const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -actualTopY);
           if (raycaster.ray.intersectPlane(plane, fallbackIntersection)) {
             hit = { point: fallbackIntersection.clone() } as THREE.Intersection;
           }
@@ -221,7 +230,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           baseWidthMm: ledgerWidthMm ?? state.ledgerWidthMm ?? state.widthMm,
           baseHeightMm: ledgerDepthMm ?? state.ledgerDepthMm ?? state.heightMm,
         });
-        setPos(new THREE.Vector3(surfaceBounds.centerX, surfaceBounds.topY + liftLocal, surfaceBounds.centerZ));
+        // Do NOT call setPos here — surfaceBounds.topY is from the unit-cube geometry (0.5),
+        // not the actual world top-Y. The useEffect at the top of the component already
+        // maintains pos correctly using stone.position + stone.scale for the ledger.
       },
       [
         camera,
@@ -435,8 +446,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     }, []);
     
     const rotationRad = (rotationDeg * Math.PI) / 180;
+    // For ledger: xPos/yPos are fractional (from worldToLocal on unit-cube mesh).
+    // Multiply by stone.scale to convert to monument-local meters.
+    const ledgerMesh = isLedgerSurface ? (headstone.mesh.current as THREE.Mesh | null) : null;
+    const ledgerScaleX = ledgerMesh ? ledgerMesh.scale.x : 1;
+    const ledgerScaleZ = ledgerMesh ? ledgerMesh.scale.z : 1;
     const groupPosition: [number, number, number] = isLedgerSurface
-      ? [pos.x + (xPos ?? 0), pos.y + zBump, pos.z + (yPos ?? 0)]
+      ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump, pos.z + (yPos ?? 0) * ledgerScaleZ]
       : [pos.x + (xPos ?? 0), pos.y + (yPos ?? 0), pos.z + zBump];
     const groupRotation: [number, number, number] = isLedgerSurface
       ? [-Math.PI / 2, rotationRad, 0]

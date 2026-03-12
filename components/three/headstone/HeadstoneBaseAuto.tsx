@@ -15,6 +15,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import MotifModel from '../MotifModel';
+import AdditionModel from '../AdditionModel';
 import type { HeadstoneAPI } from '../../SvgHeadstone';
 import {
   TEX_BASE,
@@ -355,6 +356,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const inscriptions = useHeadstoneStore((s) => s.inscriptions);
     const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
     const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
+    const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
+    const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
     
     const baseHeightMeters = baseHeightMm / 1000;
     const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
@@ -542,6 +545,20 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                 id={motif.id}
                 svgPath={motif.svgPath}
                 color={motif.color}
+                headstone={baseAPI}
+                surface="base"
+                index={i}
+              />
+            </Suspense>
+          ))}
+
+        {/* Render additions that belong to the base */}
+        {selectedAdditions
+          .filter((id) => (additionOffsets[id]?.targetSurface ?? 'headstone') === 'base')
+          .map((additionId, i) => (
+            <Suspense key={`${additionId}-${i}`} fallback={null}>
+              <AdditionModel
+                id={additionId}
                 headstone={baseAPI}
                 surface="base"
                 index={i}
