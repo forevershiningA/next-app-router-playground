@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-11
+**Last Updated:** 2026-03-13
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -31,6 +31,45 @@
 
 ---
 
+## Current Status (2026-03-13)
+
+### ✅ Recent Changes (March 13, 2026)
+
+1. **Additions panel size-variant UI restored - COMPLETE**
+   - Re-aligned the selected-addition card in `components/DesignerNav.tsx` with the intended `ADDITION_SIZE_VARIANT_FIX.md` behavior.
+   - Single-size additions now show a read-only dimensions summary instead of an unnecessary size slider.
+   - Multi-size additions now use `sizeVariant` controls driven by the actual `addition.sizes.length`, rather than a hardcoded maximum.
+   - This keeps the panel simpler and closer to the pre-regression UX while still exposing real catalog size choices where available.
+   - **Files**: `components/DesignerNav.tsx`.
+
+2. **Ledger statue/addition sizing and fallback metadata improved - COMPLETE**
+   - Added fallback size metadata for `K0096` in `app/_internal/_additions-loader.ts` so the additions UI can resolve meaningful size data even when the parsed catalog payload is incomplete.
+   - Updated `components/three/AdditionModel.tsx` so ledger-mounted statues/vases use catalog-driven physical size data (mm converted to metres) instead of oversized raw model bounds.
+   - The catalog-height scaling was then scoped back to `surface === 'ledger'` only so base/headstone additions would not inherit the oversized or invisible behavior.
+   - **Files**: `app/_internal/_additions-loader.ts`, `components/three/AdditionModel.tsx`.
+
+3. **React 19 ledger hydration mismatch fixed - COMPLETE**
+   - **Root cause**: `components/three/headstone/LedgerSurfaceContent.tsx` returned `null` before the ledger mesh was ready, then later swapped in multiple `React.Suspense` children once `useFrame` detected the mesh. Under React 19 hydration this could produce the runtime error: `There should always be an Offscreen Fiber child in a hydrated Suspense boundary.`
+   - **Fix**: Kept the outer ledger content group stable from the first render and gated only the inner mapped children once the mesh becomes ready.
+   - This preserves the server/client tree shape during hydration and keeps ledger creative content mount timing predictable.
+   - **File**: `components/three/headstone/LedgerSurfaceContent.tsx`.
+
+4. **Base statue/vase targeting regression fixed (local-to-parent coordinate conversion) - COMPLETE (visual verification still pending)**
+   - `HeadstoneBaseAuto.tsx` already writes its live mesh ref into the store via a layout effect so `AdditionModel` can access the base geometry even when Suspense delays mount timing.
+   - **Confirmed root cause**: base-targeted additions were being positioned using coordinates derived in the base mesh's local space, but the final render group in `AdditionModel.tsx` was treating those values as if they were already in the parent monument space.
+   - **Fix**: added an explicit base-mesh local -> world -> parent conversion before assigning `groupPosition` for `surface="base"`, so statues and vases inherit the base slab transform instead of rendering offset toward the upright.
+   - `pnpm build` succeeds after the change. `pnpm type-check` still fails only because of unrelated baseline issues elsewhere in the repository (including `components/DesignerNav.tsx` and `archive/*`).
+   - **Files**: `components/three/AdditionModel.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `lib/headstone-store.ts`.
+
+### ⚠️ Known Gaps (March 13, 2026)
+- **Base additions need visual re-check**: The base-space/parent-space transform bug has been fixed in `components/three/AdditionModel.tsx`, but the change still needs in-app visual confirmation against the latest `screen.png` regression scenario.
+- **TypeScript baseline**: `pnpm type-check` still fails because of pre-existing errors, most notably in `components/DesignerNav.tsx` (`TS2554`, missing `CatalogData.material`, `shape`, `border`).
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
+- **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog or UI changes.
+
+---
+
 ## Current Status (2026-03-12)
 
 ### ✅ Recent Changes (March 12, 2026)
@@ -42,6 +81,43 @@
    - **Fix 3 — Fallback planes**: All four drag handlers now compute `topY = stone.position.y + stone.scale.y / 2` for the horizontal fallback `THREE.Plane`, so clicking off the ledger edge still places items on the correct surface.
    - **Fix 4 — Initial render**: `LedgerSurfaceContent` was returning `null` when `ledgerRef.current` was null (first render, before commit), and there was no subsequent trigger to re-render — meaning saved designs with ledger content never appeared on load. Added a `useFrame` hook that sets `meshReady = true` as soon as the ledger mesh mounts, releasing the null guard.
    - **Files**: `components/three/headstone/LedgerSurfaceContent.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/ImageModel.tsx`, `components/three/AdditionModel.tsx`.
+
+2. **Full Monument — Ledger/Kerbset Z-positioning (start at Base front face) - COMPLETE**
+   - **Root cause**: `LedgerSlab` and `KerbsetBorder` computed their Z start as `-(uprightThickness/2000)` — the base's *back* face — causing them to overlap (clip through) the entire base volume.
+   - **Fix**: Changed `standBackZ` in both components to `-(uprightThickness/2000) + baseThickness/1000`, i.e., the base *front* face. Both components now read `baseThicknessMm` from the store (`stand.initDepth`), which is the base's depth in mm.
+   - **Files**: `components/three/headstone/LedgerSlab.tsx`, `components/three/headstone/KerbsetBorder.tsx`.
+
+3. **Full Monument — Arrow-key rotation pivot fixed - COMPLETE**
+   - **Root cause**: In `Scene.tsx`, the `useFrame` rotation set `groupRef.rotation.y = angle`, rotating around world origin `[0,0,0]`. The monument visual center is at `Z ≈ -(ledgerDepth/1000)*0.55` due to the `zGroupOffset` applied in `HeadstoneAssembly`. OrbitControls already used the correct `orbitTarget = [0, 0.8, -(ledgerDepthMm/1000)*0.55]` — arrow keys did not.
+   - **Fix**: Added pivot-corrected position offsets in `useFrame` for full-monument products:
+     - `group.position.x = -pivotZ * sin(angle)`
+     - `group.position.z = pivotZ * (1 - cos(angle))`
+     - where `pivotZ = orbitTarget[2] = -(ledgerDepthMm/1000)*0.55`
+   - **File**: `components/three/Scene.tsx`.
+
+4. **Full Monument — Width sync across Base / Ledger / Kerbset - COMPLETE**
+   - **Business rule** (from legacy code): `kerbsetWidth = baseWidth` (same), `ledgerWidth = baseWidth - 200mm`.
+   - Added `FULL_MONUMENT_WIDTH_DIFF = 200` constant to `lib/headstone-constants.ts`.
+   - Fixed four setters in `lib/headstone-store.ts`:
+     - `setBaseWidthMm`: sets kerb = base, ledger = base − 200
+     - `setKerbWidthMm`: sets base = kerb, ledger = kerb − 200
+     - `setLedgerWidthMm`: sets base = ledger + 200, kerb = ledger + 200
+     - `setWidthMm` (headstone): when headstone widens past base, sets base = headstone+200, kerb = headstone+200, ledger = headstone
+   - **Files**: `lib/headstone-store.ts`, `lib/headstone-constants.ts`.
+
+5. **Full Monument — Height sync across Base / Kerbset - COMPLETE**
+   - **Business rule** (from legacy code): `baseHeight = kerbHeight + 100mm` (diff/2 where legacy diff=200).
+   - Catalog confirms: stand `init_height=350`, kerb `init_height=250` — exactly 100mm apart.
+   - Added `FULL_MONUMENT_HEIGHT_DIFF = 100` constant to `lib/headstone-constants.ts`.
+   - Fixed two setters in `lib/headstone-store.ts`:
+     - `setBaseHeightMm`: also sets kerbHeightMm = base − 100 (floored at 50mm)
+     - `setKerbHeightMm`: derives base = kerb + 100 (clamped to catalog min/max), then sets kerb = clamped_base − 100
+   - **Files**: `lib/headstone-store.ts`, `lib/headstone-constants.ts`.
+
+6. **Full Monument — Additions now render on Base and Ledger - COMPLETE**
+   - **Bug 1 — Base**: `HeadstoneBaseAuto.tsx` had zero `AdditionModel` rendering (inscriptions and motifs were present, additions were not). Added `AdditionModel` import, `selectedAdditions`/`additionOffsets` store selectors, and a rendering block that filters for `targetSurface === 'base'`.
+   - **Bug 2 — Targeting**: `addAddition()` in the store used `s.selected` to determine `targetSurface`. When the user opened the Additions full-screen panel, route-level effects could reset `selected` to `'headstone'` even if the user was editing the ledger. Fixed by using `s.editingObject` (which persists through panel navigation) as primary, with `s.selected` as fallback.
+   - **Files**: `components/three/headstone/HeadstoneBaseAuto.tsx`, `lib/headstone-store.ts`.
 
 ---
 

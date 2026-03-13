@@ -116,6 +116,13 @@ def main() -> None:
         header=None,
         names=columns,
     )
+    # Some MontePython outputs (notably high-\ell nuisance amplitudes) are
+    # occasionally written as strings even though they are numeric. Coerce every
+    # parameter column to float so downstream statistics never receive object
+    # dtypes.
+    df[param_names] = df[param_names].apply(
+        pd.to_numeric, errors="coerce"
+    )
     try:
         source_path = str(args.chain.relative_to(Path.cwd()))
     except ValueError:

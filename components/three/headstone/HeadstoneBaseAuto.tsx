@@ -370,6 +370,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       (s) => s.setSelectedAdditionId
     );
     const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+    const setBaseMeshRef = useHeadstoneStore((s) => s.setBaseMeshRef);
+    const lastRegisteredBaseMesh = React.useRef<THREE.Mesh | null>(null);
 
     const baseAPI: HeadstoneAPI = useMemo(() => {
       const baseDepth = baseThickness / 1000; // Convert mm to meters
@@ -383,6 +385,17 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
         worldHeight: height,
       };
     }, [widthMm, height, baseThickness]);
+
+    React.useLayoutEffect(() => {
+      const mesh = baseRef.current;
+      if (!mesh || mesh === lastRegisteredBaseMesh.current) return;
+      lastRegisteredBaseMesh.current = mesh;
+      setBaseMeshRef(mesh);
+    });
+
+    React.useEffect(() => {
+      return () => setBaseMeshRef(null);
+    }, [setBaseMeshRef]);
 
     const requestedBaseTex = useMemo(() => {
       if (!baseMaterialUrl) {

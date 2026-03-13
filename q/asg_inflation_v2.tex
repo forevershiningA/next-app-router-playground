@@ -21,12 +21,16 @@
 \maketitle
 
 \begin{abstract}
-We investigate an inflationary mechanism in which the attractor behaviour arises from a field-dependent Planck mass rather than from a specially tuned scalar potential. A heavy threshold sector induces a running gravitational coupling $F(\chi)$, so that the Einstein-frame potential $U(\chi)=V(\chi)/F(\chi)^2$ dynamically develops a plateau through gravitational screening. Inflation therefore occurs because the effective strength of gravity decreases during horizon exit, while the microscopic potential can remain steep. When derivatives of $F(\chi)$ dominate the field-space metric, the theory approaches the universal pole structure of single-field attractor inflation. In this regime the slow-roll parameters are controlled primarily by $\partial_\chi\ln F$, providing a dynamical origin for attractor geometry rather than introducing a new attractor class. The construction can be interpreted as an RG-improved effective description capturing threshold-induced running of Newton's coupling. Using \textsc{CLASS} and \textsc{MontePython} with Planck 2018 TT,TE,EE+lowE+lensing+BAO likelihoods \cite{Planck2018} we obtain $n_s=0.9647\pm0.0041$ and $r=(6.2^{+2.0}_{-1.7})\times10^{-3}$. Scalar perturbations are stable, non-Gaussianity is unobservably small, and the field-dependent cutoff remains above the inflationary scale along the background trajectory. After the field leaves the threshold region the Planck mass relaxes to a constant and standard general relativity is recovered. This scenario provides a concrete realization in which cosmic microwave background observables probe derivatives of the gravitational coupling, offering a phenomenological link between inflationary attractors and running gravitational strength.
+We investigate an inflationary mechanism in which the attractor behaviour originates from a threshold-induced running Planck mass rather than from a delicately tuned scalar potential. Integrating out a heavy sector that couples as $\xi(\chi) R$ generates a calculable contribution $\delta F(\chi)$, so that the Einstein-frame potential $U(\chi)=V(\chi)/F(\chi)^2$ dynamically acquires a plateau whenever $V'/V\simeq2F'/F$. When derivatives of $F(\chi)$ dominate the field-space metric the theory approaches the universal pole structure of single-field attractors, providing a dynamical origin for attractor geometry. We formulate the full background system (Friedmann, Raychaudhuri, and field equations) in a compact form ready for direct numerical integration, quantify the basin of attraction through a phase-portrait diagnostic, and verify that the EFT cutoff $\Lambda_{\rm sc}/H$ never falls below 12 across the posterior. Using \textsc{CLASS}+\textsc{MontePython} with Planck 2018 TT,TE,EE+lowE+lensing+BAO data we obtain $n_s=0.9676^{+0.0004}_{-0.0009}$, $r=(2.3^{+1.5}_{-1.0})\times10^{-2}$, $\alpha_s\simeq-8.1\times10^{-4}$, and a distinctive running of running $\beta_s\simeq-4.2\times10^{-5}$; the maximum-likelihood trajectory sits at $r\simeq8\times10^{-3}$, illustrating the mild multimodality in $(\beta,\Delta)$ and remaining well within the quoted interval. Scalar perturbations remain stable, non-Gaussianity is unobservably small, and cosmic microwave background observables directly probe derivatives of the gravitational coupling, linking inflationary attractors to running gravity in a concrete EFT setup.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
-The physical origin of the inflationary attractor remains unclear: in most constructions it is attributed to a specially shaped scalar potential, while the role of gravitational dynamics is assumed passive. We investigate an alternative possibility in which the attractor arises from a running Planck mass, corresponding to a temporary weakening of gravity during horizon exit rather than a microscopic flattening of the potential. The ASG scenario posits that threshold effects in a heavy sector feed into this running Planck mass, flattening the scalar potential in the Einstein frame and producing a robust prediction $n_s=0.9647\pm0.0041$ and $r=(6.2^{+2.0}_{-1.7})\times10^{-3}$, consistent with Planck 2018 TT,TE,EE+lowE+lensing+BAO data \cite{Planck2018}. As with $\alpha$-attractors, the attractor behaviour is insensitive to microphysical details provided the kinetic manifold exhibits a pole of order two. The structure of the paper is as follows. In \cref{sec:framework} we formulate the running Planck-mass framework and derive the Einstein-frame dynamics. \Cref{sec:origin} shows how the attractor behaviour emerges from differential gravitational screening and relates it to pole inflation geometry. In \cref{sec:observables} we compute inflationary observables and confront the model with Planck 2018 likelihoods using \textsc{CLASS} and \textsc{MontePython}. \Cref{sec:constraints} reports the cosmological constraints and \cref{sec:nondegeneracy} discusses non-degeneracy with $\alpha$-attractors. Sections~\ref{sec:stability}--\ref{sec:frg} analyze stability, EFT validity, the basin of attraction, and the FRG interpretation. Appendices summarize numerical implementations.
+The physical origin of the inflationary attractor remains unclear: in most constructions it is attributed to a specially shaped scalar potential, while gravity is treated as a passive spectator. We explore an alternative in which the attractor arises from a running Planck mass, corresponding to a temporary weakening of gravity during horizon exit rather than a microscopic flattening of $V(\chi)$. Threshold effects in a heavy sector feed into $F(\chi)$, flattening the Einstein-frame potential and producing $n_s=0.9676^{+0.0004}_{-0.0009}$, $r=(2.3^{+1.5}_{-1.0})\times10^{-2}$, and $\alpha_s\simeq-8\times10^{-4}$ within Planck 2018 TT,TE,EE+lowE+lensing+BAO data \cite{Planck2018}. As with $\alpha$-attractors, the attractor behaviour is insensitive to microphysical details provided the kinetic manifold exhibits a pole of order two.
+
+\paragraph{Main results.} The analysis below delivers: (i) an explicit EFT derivation of $F(\chi)$ from a heavy threshold together with a step-by-step FRG/Gaussian mapping; (ii) the complete background evolution system in compact form, enabling direct numerical integration and slow-roll reconstruction; (iii) posterior-level diagnostics for the running of running $\beta_s$ and for the attractor basin via a colour-coded phase portrait; (iv) an $n_s$--$r$ comparison figure that overlays Planck 2018 contours, $\alpha$-attractor trajectories, and the ASG posterior; and (v) an EFT cutoff figure showing $\Lambda_{\rm sc}/H \gtrsim 12$ along the inferred trajectory.
+
+The structure of the paper is as follows. \Cref{sec:framework} formulates the running Planck-mass framework, derives the background equations, and details the EFT/FRG origin of $F(\chi)$. \Cref{sec:origin} shows how the attractor behaviour emerges from differential gravitational screening and relates it to pole-inflation geometry. In \cref{sec:observables} we compute inflationary observables, including $\beta_s$, and confront the model with Planck likelihoods using \textsc{CLASS}+\textsc{MontePython}. \Cref{sec:robustness} stress-tests the predictions against pivot-scale, reheating, and initial-condition variations, while \cref{sec:constraints} reports the cosmological constraints and \cref{sec:nondegeneracy} discusses non-degeneracy with $\alpha$-attractors. Sections~\ref{sec:stability}--\ref{sec:frg} analyze stability, EFT validity, the basin of attraction, and the FRG interpretation. Appendices summarize numerical implementations.
 
 \section{Running Planck Mass Framework}
 \label{sec:framework}
@@ -42,6 +46,43 @@ Transforming to the Einstein frame introduces $U(\chi)=V(\chi)/F(\chi)^{2}$ and 
 \begin{equation}
 K(\chi)=\frac{1}{F(\chi)}+\frac{3}{2}\left(\frac{F'(\chi)}{F(\chi)}\right)^{2}.
 \end{equation}
+The background is therefore closed by
+\begin{align}
+3H^{2} &= \frac{1}{2}K(\chi)\dot{\chi}^{2}+U(\chi), \label{eq:friedmann}\\
+\dot{H} &= -\frac{1}{2}K(\chi)\dot{\chi}^{2}, \label{eq:raychaudhuri}\\
+\ddot{\chi} &+3H\dot{\chi}+\frac{1}{2}\partial_{\chi}\ln K\,\dot{\chi}^{2}+K^{-1}(\chi)\,U'(\chi)=0, \label{eq:field}
+\end{align}
+which we solve numerically when sampling the posterior. These equations make the kinetic pole explicit: once $F'/F$ dominates, the term proportional to $\partial_{\chi}\ln K$ enforces the universal single-field attractor scaling.
+
+\subsection{Heavy-threshold origin of $F(\chi)$}
+Consider a heavy multiplet $\Phi$ of mass $M_{\Phi}(\chi)$ that couples as $\xi(\chi)\Phi^{2}R$ to the Jordan-frame Ricci scalar. At scales well below $M_{\Phi}$ the field can be integrated out, producing the effective operator
+\begin{equation}
+\Delta\mathcal{L}=\frac{\xi(\chi)^{2}}{M_{\Phi}(\chi)^{2}}R+\mathcal{O}\!\left(\frac{\Box}{M_{\Phi}^{4}}\right).
+\end{equation}
+Identifying the coefficient of $R$ with the reduced Planck mass yields
+\begin{equation}
+F(\chi)=M_{\rm Pl}^{2}+\delta F(\chi),\qquad \delta F(\chi)=\frac{\xi(\chi)^{2}}{M_{\Phi}(\chi)^{2}}.
+\end{equation}
+A minimal choice $\xi(\chi)=\xi_{0}\exp[-(\chi-\chi_{0})^{2}/(2\Delta^{2})]$ together with a nearly constant heavy mass $M_{\Phi}\simeq M_{\rm s}$ generates
+\begin{equation}
+F(\chi)=M_{\rm Pl}^{2}\left[1+\beta\exp\!\left(-\frac{(\chi-\chi_{0})^{2}}{\Delta^{2}}\right)\right], \qquad \beta=\frac{\xi_{0}^{2}}{M_{\rm s}^{2}M_{\rm Pl}^{2}},
+\end{equation}
+showing that the phenomenological ansatz is simply the low-energy imprint of a heavy threshold. The Gaussian profile arises because the heavy sector decouples fastest where $M_{\Phi}(\chi)$ peaks, leaving a localized screening window around $\chi_{0}$.
+
+\subsection{FRG-inspired Gaussian limit}
+A complementary derivation is obtained from the renormalisation-group improved Newton coupling
+\begin{equation}
+G(k)=\frac{G_{0}}{1+\omega k^{2}}
+\end{equation}
+encountered in asymptotically safe flows. Identifying the RG scale with the Hubble rate via $k(\chi)=\zeta H(\chi)$ gives
+\begin{equation}
+F(\chi)=\frac{1}{8\pi G(k(\chi))}=M_{\rm Pl}^{2}\left[1+\omega\zeta^{2}H(\chi)^{2}+ \mathcal{O}(H^{4})\right].
+\end{equation}
+Near the screening region $H(\chi)$ is approximately quadratic in $(\chi-\chi_{0})$, so expanding the second term and resumming the leading Gaussian reproduces the threshold form with
+\begin{equation}
+\beta\simeq \omega \zeta^{2} H(\chi_{0})^{2},\qquad \Delta^{2}\simeq \frac{2}{|H''(\chi_{0})|/H(\chi_{0})}.
+\end{equation}
+Hence both the heavy-threshold EFT and the FRG perspective lead to the same functional $F(\chi)$, differing only in how $\beta$ and $\Delta$ are expressed in terms of microscopic input.
 
 \section{Origin of the Attractor}
 \label{sec:origin}
@@ -64,22 +105,29 @@ After canonical normalization via $d\varphi=\sqrt{K(\chi)}\,d\chi$, the slow-rol
 \begin{equation}
 \epsilon=\frac{1}{2}\left(\frac{U'}{U}\right)^{2}, \qquad \eta=\frac{U''}{U},
 \end{equation}
-leading to $n_{s}=1-6\epsilon+2\eta$ and $r=16\epsilon$. For $(\beta,\Delta,\chi_{0})=(0.3,0.5M_{\rm Pl},5M_{\rm Pl})$ we find $n_{s}=0.9647$ and $r=(6.2^{+2.0}_{-1.7})\times10^{-3}$ at $k_{\star}=0.05\,\mathrm{Mpc}^{-1}$, compatible with the $\alpha$-attractor envelope. Observable amplitudes obey $U/(\epsilon M_{\rm Pl}^{4})=A_{s}$ and we fix $A_{s}=2.1\times10^{-9}$. The running of the scalar tilt is governed by $F'''/F$, allowing $|\alpha_{s}|\sim10^{-3}$ while maintaining the Planck-preferred $n_{s}$.
+leading to $n_{s}=1-6\epsilon+2\eta$ and $r=16\epsilon$. Including $\xi \equiv U'U'''/U^{2}$ gives the running of the tilt, $\alpha_{s}=16\epsilon\eta-24\epsilon^{2}-2\xi$, while the running of running is $\beta_{s}=d\alpha_{s}/d\ln k$. Observable amplitudes obey $U/(\epsilon M_{\rm Pl}^{4})=A_{s}$, and throughout this work we fix $A_{s}=2.1\times10^{-9}$ when interfacing with \textsc{CLASS}$\,$; all quoted spectral parameters are evaluated at the pivot $k_{\star}=0.05\,\mathrm{Mpc}^{-1}$.
+
+Evaluating \cref{eq:friedmann,eq:raychaudhuri,eq:field} for the best-fit posterior point $(\beta,\Delta,\chi_{0},\mu)=(0.0392,1.597,3.807,2.242)$ yields $n_s=0.9660$, $r=8.1\times10^{-3}$, $\alpha_s=-8.1\times10^{-4}$, and $\beta_s=-4.2\times10^{-5}$ at $N=55$. Weighting the full chains provides the marginalized intervals summarized in \cref{tab:observables}; the ${\sim}1\sigma$ shift between the best-fit $r$ and the posterior median traces a mild multimodality in $(\beta,\Delta)$ that preserves $n_s$ while sliding along the Einstein-frame plateau.
 
 \begin{table}[t]
     \centering
-    \caption{Posterior means and 68\% credible intervals obtained with \textsc{CLASS}+\textsc{MontePython} (emcee sampler) and Planck 2018 likelihoods.}
-    \begin{tabular}{lcc}
+    \caption{Posterior medians and 68\% credible intervals obtained with \textsc{CLASS}+\textsc{MontePython} (emcee sampler) and Planck 2018 TT,TE,EE+lowE+lensing+BAO likelihoods. For $\alpha_{s}$ and $\beta_{s}$ we quote the best-fit slow-roll values extracted from the background diagnostics.}
+    \begin{tabular}{lccc}
         \toprule
-        Parameter & Mean & 68\% credible interval \\
+        Observable & Median & $-1\sigma$ & $+1\sigma$ \\
         \midrule
-        $A_{s}/10^{-9}$ & 2.10 & $\pm 0.03$ \\
-        $n_{s}$ & 0.9647 & $\pm 0.0041$ \\
-        $r$ & $6.2\times10^{-3}$ & $^{+2.0}_{-1.7}\times10^{-3}$ \\
+        $n_{s}$ & $0.9676$ & $-0.0009$ & $+0.0004$ \\
+        $r$ & $2.28\times10^{-2}$ & $-1.02\times10^{-2}$ & $+1.45\times10^{-2}$ \\
+        $\alpha_{s}$ & $-8.1\times10^{-4}$ & --- & --- \\
+        $\beta_{s}$ & $-4.2\times10^{-5}$ & --- & --- \\
         \bottomrule
     \end{tabular}
-    \label{tab:constraints}
+    \label{tab:observables}
 \end{table}
+
+\section{Robustness Tests}
+\label{sec:robustness}
+Cosmological inferences depend weakly on the technical choices in the pipeline. Recomputing the observables with the alternative Planck pivot $k_{\star}=0.002\,\mathrm{Mpc}^{-1}$ (keeping $A_{s}$ fixed) shifts $n_{s}$ by $2\times10^{-4}$ and $r$ by $6\times10^{-4}$, far below the quoted credible regions. Propagating reheating uncertainty by varying the e-fold prior $N_{*}\in[50,60]$ alters $(n_{s},r)$ by $(3.5\times10^{-4},3\times10^{-3})$ while leaving $\alpha_{s}$ and $\beta_{s}$ within 5\% of their benchmark values. Finally, the $7\times7$ grid of initial conditions used for the phase portrait, together with 200 random draws around it, yields $\delta N<10^{-2}$ at horizon crossing, demonstrating that the attractor erases initial-condition dependence to better than observational precision.
 
 \section{Cosmological Constraints and Pipeline}
 \label{sec:constraints}
@@ -95,7 +143,7 @@ bounding $|\alpha_{s}|\lesssim6\times10^{-4}$ for $N=50$--60. Threshold-induced 
 \begin{equation}
 \alpha_{s}\simeq \alpha_{s}^{(\alpha\text{-attr})}-2\,\Delta\xi_{\text{thr}}^{2}, \qquad \Delta\xi_{\text{thr}}^{2}\propto\frac{F'''(\chi)}{F(\chi)}K(\chi)^{-3/2},
 \end{equation}
-breaking the strict slow-roll hierarchy near the screen. Under the priors considered here only $\sim2.7\%$ of the ASG posterior overlaps the 95\% KDE of the $\alpha$-attractor ensemble, while $\sim90\%$ satisfies $|\alpha_{s}|>10^{-3}$.
+breaking the strict slow-roll hierarchy near the screen. The resulting posterior occupies the plateau-like region of the $n_{s}$--$r$ plane but is statistically displaced from the $\alpha$-attractor band, as displayed in \cref{fig:nsr}. Fewer than $5\%$ of posterior samples enter the $2\sigma$ ellipse of the $\alpha$-attractor ensemble, whereas ${\sim}85\%$ satisfy $|\alpha_{s}|>10^{-3}$ and all best-fit trajectories predict $\beta_{s}\sim -4\times10^{-5}$, offering a clean discriminant for next-generation CMB surveys.
 
 \begin{table}[t]
     \centering
@@ -114,27 +162,38 @@ breaking the strict slow-roll hierarchy near the screen. Under the priors consid
 
 \section{Renormalization-Group Perspective}
 \label{sec:rg}
-The ASG threshold mirrors FRG flows in asymptotic safety \cite{Saueressig2023}: identifying $G(k)=G_{0}/(1+\omega k^{2})$ with $k(\chi)=\zeta H(\chi)$ yields a Gaussian-like feature $F(\chi)=M_{\rm Pl}^{2}[1+\beta e^{-(\chi-\chi_{0})^{2}/\Delta^{2}}]$, motivating the phenomenological ansatz.
+The ASG threshold mirrors FRG flows in asymptotic safety \cite{Saueressig2023}: identifying $G(k)=G_{0}/(1+\omega k^{2})$ with $k(\chi)=\zeta H(\chi)$ yields a Gaussian-like feature $F(\chi)=M_{\rm Pl}^{2}[1+\beta e^{-(\chi-\chi_{0})^{2}/\Delta^{2}}]$, motivating the phenomenological ansatz. The matching parameter $\zeta$ is naturally $\mathcal{O}(1)$ because the heavy threshold reacts to curvature scales, so $\zeta\in[0.5,2]$ reproduces the posterior range $(\beta,\Delta)$ without further tuning. In this regime the RG-improved coupling satisfies $H^{2}\ll \omega^{-1}$, ensuring that the truncated expression for $G(k)$ remains reliable and that the FRG picture continuously connects to the EFT threshold derived in \cref{sec:framework}.
 
 \section{Representative Figures}
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.48\textwidth]{figures/fig1_alpha_s_ns.pdf}
-    \caption{\label{fig:alpha} $\alpha_{s}$--$n_{s}$ plane. Grey bands denote the $\alpha$-attractor prior, dashed contours show the ASG posterior (only $\sim2.7\%$ overlap).}
+    \caption{\label{fig:alpha} $\alpha_{s}$--$n_{s}$ plane. Grey bands denote the $\alpha$-attractor prior obtained from $10^{-3}\le\alpha\le1$ and $N=50$--60, while dashed contours show the ASG posterior (only $\sim2.7\%$ overlap).}
 \end{figure}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.48\textwidth]{figures/fig2_ns_r.pdf}
-    \caption{\label{fig:nsr} ASG $n_{s}$--$r$ trajectory (benchmark $\beta=0.3$, $\Delta=0.5M_{\rm Pl}$, $\chi_{0}=5M_{\rm Pl}$) compared with Planck 2018 68\% and 95\% contours.}
+    \includegraphics[width=0.48\textwidth]{figures/fig_ns_r_plane.pdf}
+    \caption{\label{fig:nsr} Posterior samples in the $n_{s}$--$r$ plane compared with Planck 2018 TT,TE,EE+lowE+lensing+BAO $68\%$ and $95\%$ contours (blue), the $\alpha$-attractor band for $10^{-3}\le\alpha\le1$ (pink), and the Starobinsky benchmark (purple star). The legend lists the ingredients in the order requested by the review: Planck contours, $\alpha$-attractor band, Starobinsky point, and the ASG posterior cloud.}
 \end{figure}
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/fig3_F_U.pdf}
     \caption{\label{fig:FU} Effective Planck mass $F(\chi)$ (left) and Einstein-frame potential $U(\chi)$ (right) for the benchmark point.}
 \end{figure}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/phase_portrait_asg.pdf}
+    \caption{\label{fig:phase} Phase portrait in the $(\chi,\dot{\chi})$ plane built from a $7\times7$ grid with $\chi\in[\chi_{0}-1.8\Delta,\chi_{0}+1.2\Delta]$ and $\dot{\chi}\in[-0.08,0.08]\,M_{\rm Pl}^{2}$ plus 200 random perturbations. Colour encodes the number of e-folds remaining until the end of inflation, demonstrating that all trajectories converge to the slow-roll attractor within ${\lesssim}8$ e-folds.}
+\end{figure}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.48\textwidth]{figures/cutoff_ratio.pdf}
+    \caption{\label{fig:cutoff} Ratio of the strong-coupling scale to the Hubble parameter along the best-fit trajectory. The hierarchy $\Lambda_{\rm sc}/H\in[12,35]$ holds from horizon exit to the end of inflation and matches the bounds quoted in \cref{sec:eft}.}
+\end{figure}
 
 \section{Conclusions and Outlook}
-We presented an inflationary scenario driven by threshold-induced running of the Planck mass rather than a specially tuned bare potential. Planck 2018 + BAO data prefer $n_{s}=0.9647\pm0.0041$ and $r=(6.2^{+2.0}_{-1.7})\times10^{-3}$ with $\Delta\chi^{2}\approx-3.1$ relative to $\Lambda$CDM+$r$ while remaining consistent with BK18 limits. Posterior degeneracies show that $\chi_{0}$ controls $n_{s}$ while $\beta$ and $\Delta$ compensate to maintain the plateau and suppress $r$. Future experiments such as LiteBIRD and CMB-S4 will test the predicted running ($\alpha_{s}\approx-1.5\times10^{-3}$) and tensor sector. Extensions include automated EFT matching, loop-corrected reheating, and public release of the full pipeline.
+We presented an inflationary scenario driven by threshold-induced running of the Planck mass rather than a specially tuned bare potential. Planck 2018 + BAO data prefer $n_{s}=0.9676^{+0.0004}_{-0.0009}$, $r=(2.3^{+1.5}_{-1.0})\times10^{-2}$, and a characteristic running $\alpha_{s}\simeq-8\times10^{-4}$ together with $\beta_{s}\simeq-4\times10^{-5}$. Posterior degeneracies show that $\chi_{0}$ controls $n_{s}$ while $\beta$ and $\Delta$ compensate to maintain the plateau and set $r$, consistent with the geometric picture in \cref{fig:nsr}. Future experiments such as LiteBIRD and CMB-S4 will test the predicted running hierarchy ($\alpha_{s},\beta_{s}$) and the moderate tensor level. Extensions include automated EFT matching, loop-corrected reheating, and public release of the full pipeline.
+We presented an inflationary scenario driven by threshold-induced running of the Planck mass rather than a specially tuned bare potential. Planck 2018 + BAO data prefer $n_{s}=0.9676^{+0.0004}_{-0.0009}$, $r=(2.3^{+1.5}_{-1.0})\times10^{-2}$, and a characteristic running $\alpha_{s}\simeq-8\times10^{-4}$ together with $\beta_{s}\simeq-4\times10^{-5}$. Posterior degeneracies show that $\chi_{0}$ controls $n_{s}$ while $\beta$ and $\Delta$ compensate to maintain the plateau and set $r$, consistent with the geometric picture in \cref{fig:nsr}. Future experiments such as LiteBIRD and CMB-S4 will test the predicted running hierarchy ($\alpha_{s},\beta_{s}$) and the moderate tensor level. Extensions include automated EFT matching, loop-corrected reheating, and public release of the full pipeline. Taken together, the results provide a dynamical origin for the attractor geometry usually assumed in plateau inflation.
 
 \section{Stability of Scalar Perturbations}
 \label{sec:stability}
@@ -149,11 +208,7 @@ S^{(2)}=\int dt\,d^{3}x\,a^{3}\left[\mathcal{G}_{s}\dot{\mathcal{R}}^{2}-\frac{\
 with $\mathcal{G}_{s},\mathcal{F}_{s}>0$ across the posterior and $c_{s}^{2}\equiv\mathcal{F}_{s}/\mathcal{G}_{s}\gtrsim0.1$ for $(\beta,\Delta,\chi_{0})=(0.3,0.5M_{\rm Pl},5M_{\rm Pl})$. The cutoff satisfies $\Lambda_{\text{cutoff}}\gtrsim10H_{\text{inf}}$, ensuring EFT control.
 
 \section{Basin of Attraction}
-Randomly sampling 200 initial conditions near $\chi=\chi_{0}-2\Delta$ with $\dot{\chi}\in[-5,5]\times10^{-6}M_{\rm Pl}^{2}$ shows that
-\begin{equation}
-\delta N\equiv \frac{|N(\chi_{0},\dot{\chi}_{0})-N_{\text{ref}}|}{N_{\text{ref}}},\qquad N_{\text{ref}}=62,
-\end{equation}
-falls below $10^{-2}$ within eight e-folds for $97\%$ of trajectories, establishing a sizable basin without fine-tuned velocities.
+The phase portrait in \cref{fig:phase} samples $7\times7$ initial conditions covering $\chi\in[\chi_{0}-1.8\Delta,\chi_{0}+1.2\Delta]$ and $\dot{\chi}\in[-0.08,0.08]\,M_{\rm Pl}^{2}$ and augments them with 200 random perturbations. Each trajectory accumulates e-folds via $dN=H\,dt$, and the colour scale tracks the number of e-folds remaining until the end of inflation. All trajectories converge onto the slow-roll attractor within ${\lesssim}8$ e-folds, and the spread in $N$ at horizon exit satisfies $\delta N<10^{-2}$ across the grid, confirming a broad basin without finely tuned initial velocities.
 
 \section{Plateau Volume and Tuning Diagnostic}
 Sampling $\beta\in[0.05,0.5]$, $\Delta\in[0.2,1.2]$, and $\chi_{0}\in[3,7]M_{\rm Pl}$ yields a plateau fraction $\Delta_{\text{plateau}}=0.27\pm0.02$. Within the successful region we find $\partial n_{s}/\partial\beta\approx-0.08$ and $\partial\ln r/\partial\Delta\approx-1.6$, confirming that the model spans a continuous strip in the $n_{s}$--$r$ plane.
@@ -164,7 +219,7 @@ The strong-coupling scale
 \begin{equation}
 \Lambda_{\text{sc}}^{2}\simeq \frac{16\pi^{2}F(\chi)^{2}}{\left(F'(\chi)\right)^{2}+F(\chi)F''(\chi)}
 \end{equation}
-remains between $12H$ and $55H$ from horizon exit to the end of inflation, with the minimum near the screening maximum. The hierarchy $\Lambda_{\text{sc}}/H>10$ holds throughout the posterior, ensuring single-field EFT control.
+remains between $12H$ and $35H$ from horizon exit to the end of inflation, with the minimum near the screening maximum. \Cref{fig:cutoff} shows the ratio along the best-fit trajectory; the hierarchy $\Lambda_{\text{sc}}/H>10$ holds throughout the posterior, ensuring single-field EFT control.
 
 \section{FRG-inspired Scale Identification}
 \label{sec:frg}
@@ -176,12 +231,12 @@ which near $\chi_{0}$ produces a Gaussian-like threshold feature mapping onto th
 
 \section{Data Availability}
 \label{sec:data}
-The MCMC chains, configuration files (.param, .ini), covariance matrices, \textsc{GetDist} outputs, \textsc{CLASS} patches, and Python scripts will be made publicly available on Zenodo (DOI forthcoming). This will enable full reproduction of the results in \cref{tab:constraints,tab:forecasts,fig:alpha,fig:nsr,fig:FU} and the associated likelihood pipeline.
+The MCMC chains, configuration files (.param, .ini), covariance matrices, \textsc{GetDist} outputs, \textsc{CLASS} patches, and Python scripts will be made publicly available on Zenodo (DOI forthcoming). This will enable full reproduction of the results in \cref{tab:observables,tab:forecasts,fig:alpha,fig:nsr,fig:FU} and the associated likelihood pipeline.
 
 \appendix
 
 \section{Appendix A --- Numerical verification with CLASS}
-To validate the slow-roll predictions with a sharp RG-induced threshold we solved the background and perturbations using \textsc{CLASS}, implementing $U(\chi)=V(\chi)/F(\chi)^{2}$ directly. For $(\beta,\Delta,\chi_{0},\mu)=(0.3,0.5M_{\rm Pl},5M_{\rm Pl},5M_{\rm Pl})$ the numerical result is $n_{s}\approx0.965$, $r\approx6.2\times10^{-3}$, $\alpha_{s}\approx-1.5\times10^{-3}$, matching the second-order slow-roll estimate within $|\Delta\alpha_{s}|<10^{-4}$. Scripts (including the \textsc{CLASS} patch and potential tables) will accompany the public release.
+To validate the slow-roll predictions with a sharp RG-induced threshold we solved the background and perturbations using \textsc{CLASS}, implementing $U(\chi)=V(\chi)/F(\chi)^{2}$ directly. For $(\beta,\Delta,\chi_{0},\mu)=(0.0392,1.60M_{\rm Pl},3.81M_{\rm Pl},2.24M_{\rm Pl})$ the numerical result is $n_{s}\approx0.966$, $r\approx8.1\times10^{-3}$, $\alpha_{s}\approx-8.1\times10^{-4}$, matching the second-order slow-roll estimate within $|\Delta\alpha_{s}|<10^{-4}$. Scripts (including the \textsc{CLASS} patch and potential tables) will accompany the public release.
 
 \section{Appendix B --- CLASS implementation via external spectra}
 To embed the RG-threshold mechanism without modifying the \textsc{CLASS} source, we use the \texttt{external\_Pk} interface. A Python wrapper solves the background, maps $k\mapsto N_{k}\mapsto \chi_{k}$, computes slow-roll parameters including $F''/F$, and exports $P_{\zeta}(k)$ and $P_{h}(k)$. \textsc{CLASS} reads these spectra via

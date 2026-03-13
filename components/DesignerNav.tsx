@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { 
+import {
   CubeIcon,
   Squares2X2Icon,
   ArrowsPointingOutIcon,
@@ -42,7 +42,12 @@ const menuGroups = [
     items: [
       { slug: 'select-product', name: 'Select Product', icon: CubeIcon },
       { slug: 'select-shape', name: 'Select Shape', icon: Squares2X2Icon },
-      { slug: 'select-border', name: 'Select Border', icon: RectangleStackIcon, requiresBorder: true },
+      {
+        slug: 'select-border',
+        name: 'Select Border',
+        icon: RectangleStackIcon,
+        requiresBorder: true,
+      },
       { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
       { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
     ],
@@ -52,7 +57,11 @@ const menuGroups = [
     items: [
       { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
       { slug: 'select-images', name: 'Add Your Image', icon: PhotoIcon },
-      { slug: 'select-additions', name: 'Select Additions', icon: PlusCircleIcon },
+      {
+        slug: 'select-additions',
+        name: 'Select Additions',
+        icon: PlusCircleIcon,
+      },
       { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
       { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
     ],
@@ -67,16 +76,25 @@ const menuGroups = [
 ];
 
 // Flatten for compatibility with existing code
-const menuItems = menuGroups.flatMap(group => group.items);
-const fullscreenPanelSlugs = new Set(['select-size', 'select-shape', 'select-material', 'select-border', 'inscriptions', 'select-images', 'select-additions', 'select-motifs']);
+const menuItems = menuGroups.flatMap((group) => group.items);
+const fullscreenPanelSlugs = new Set([
+  'select-size',
+  'select-shape',
+  'select-material',
+  'select-border',
+  'inscriptions',
+  'select-images',
+  'select-additions',
+  'select-motifs',
+]);
 
 export default function DesignerNav() {
   const pathname = usePathname();
   const router = useRouter();
-  
+
   // Ref for the nav container
   const navRef = React.useRef<HTMLElement>(null);
-  
+
   // Get catalog info
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -115,7 +133,7 @@ export default function DesignerNav() {
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
-  const selectedAdditions = useHeadstoneStore ((s) => s.selectedAdditions);
+  const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
@@ -129,28 +147,43 @@ export default function DesignerNav() {
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const setShowBase = useHeadstoneStore((s) => s.setShowBase);
-  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedInscriptionId = useHeadstoneStore(
+    (s) => s.selectedInscriptionId,
+  );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
-  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedAdditionId = useHeadstoneStore(
+    (s) => s.setSelectedAdditionId,
+  );
   const setProductId = useHeadstoneStore((s) => s.setProductId);
 
   // Check if anything has been added to the headstone
-  const hasCustomizations = inscriptions.length > 0 || selectedAdditions.length > 0 || selectedMotifs.length > 0;
-  
+  const hasCustomizations =
+    inscriptions.length > 0 ||
+    selectedAdditions.length > 0 ||
+    selectedMotifs.length > 0;
+
   // Unified expansion state for all sections (replaces individual states)
-  const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({
+  const [expandedSections, setExpandedSections] = React.useState<
+    Record<string, boolean>
+  >({
     'select-size': false,
     'select-shape': false,
     'select-material': false,
-    'inscriptions': false,
+    inscriptions: false,
     'select-additions': false,
     'select-motifs': false,
   });
-  
+
   // Full-screen panel state - when set, hides menu and shows panel
-  const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<string | null>(null);
-  const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<string | null>(null);
-  const [panelSource, setPanelSource] = React.useState<'menu' | 'canvas' | null>(null);
+  const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<
+    string | null
+  >(null);
+  const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<
+    string | null
+  >(null);
+  const [panelSource, setPanelSource] = React.useState<
+    'menu' | 'canvas' | null
+  >(null);
   const [forceAdditionCatalog, setForceAdditionCatalog] = React.useState(false);
   const [forceMotifCatalog, setForceMotifCatalog] = React.useState(false);
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
@@ -158,7 +191,6 @@ export default function DesignerNav() {
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
   const activeFullscreenPanelRef = React.useRef<string | null>(null);
   activeFullscreenPanelRef.current = activeFullscreenPanel;
-
 
   // Listen for open panel events from canvas (e.g., inscription/motif/addition click)
   useEffect(() => {
@@ -179,17 +211,15 @@ export default function DesignerNav() {
       });
     };
     window.addEventListener('openFullscreenPanel', handleOpenPanel);
-    return () => window.removeEventListener('openFullscreenPanel', handleOpenPanel);
+    return () =>
+      window.removeEventListener('openFullscreenPanel', handleOpenPanel);
   }, []);
 
   // Toggle a section's expansion
   const toggleSection = (slug: string) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [slug]: !prev[slug]
-    }));
+    setExpandedSections((prev) => ({ ...prev, [slug]: !prev[slug] }));
   };
-  
+
   // Open full-screen panel
   const openFullscreenPanel = (slug: string) => {
     setDismissedPanelSlug(null);
@@ -199,7 +229,7 @@ export default function DesignerNav() {
     }
     setActiveFullscreenPanel(slug);
   };
-  
+
   // Close full-screen panel and return to menu
   const closeFullscreenPanel = React.useCallback(() => {
     const currentSlug = pathname.replace('/', '') || null;
@@ -245,18 +275,19 @@ export default function DesignerNav() {
       closePanelHandlerRef.current();
     };
     window.addEventListener('closeFullscreenPanel', handleClosePanel);
-    return () => window.removeEventListener('closeFullscreenPanel', handleClosePanel);
+    return () =>
+      window.removeEventListener('closeFullscreenPanel', handleClosePanel);
   }, []);
-  
+
   // Auto-expand current route's section and collapse others
   useEffect(() => {
     const activeSection = pathname.replace('/', '');
     if (activeSection && expandedSections.hasOwnProperty(activeSection)) {
-      setExpandedSections(prev => ({
-        ...Object.keys(prev).reduce((acc, key) => ({
-          ...acc,
-          [key]: key === activeSection
-        }), {} as Record<string, boolean>)
+      setExpandedSections((prev) => ({
+        ...Object.keys(prev).reduce(
+          (acc, key) => ({ ...acc, [key]: key === activeSection }),
+          {} as Record<string, boolean>,
+        ),
       }));
     }
   }, [pathname]);
@@ -281,7 +312,7 @@ export default function DesignerNav() {
       setForceMotifCatalog(false);
     }
   }, [selectedMotifId]);
-  
+
   useEffect(() => {
     if (!productId && showConvertPanel) {
       setShowConvertPanel(false);
@@ -291,7 +322,7 @@ export default function DesignerNav() {
   useEffect(() => {
     setShowConvertPanel(false);
   }, [pathname]);
-  
+
   // Auto-open full-screen panel based on current route
   // DISABLED: Panel should only open when menu item is clicked, not automatically on route
   /*
@@ -311,24 +342,24 @@ export default function DesignerNav() {
     }
   }, [pathname]);
   */
-  
+
   // State for Select Size expansion (keep for backward compatibility)
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
-  
+
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
   const removeMotif = useHeadstoneStore((s) => s.removeMotif);
   const duplicateMotif = useHeadstoneStore((s) => s.duplicateMotif);
   const setMotifColor = useHeadstoneStore((s) => s.setMotifColor);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
-  
+
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
   const duplicateAddition = useHeadstoneStore((s) => s.duplicateAddition);
-  
+
   // Get materials and shapes from store
   const materials = useHeadstoneStore((s) => s.materials);
   const shapes = useHeadstoneStore((s) => s.shapes);
@@ -340,19 +371,29 @@ export default function DesignerNav() {
   const additionsList = React.useMemo(() => {
     return data.additions || [];
   }, []);
-  
+
   // Show Select Size panel when on select-size page
   const isSelectSizePage = pathname === '/select-size';
   const isSelectAdditionsPage = pathname === '/select-additions';
-  
+
   // Determine if canvas is visible (on pages with 3D scene)
-  const canvasVisiblePages = ['/select-size', '/inscriptions', '/select-motifs', '/select-material', '/select-border', '/select-additions', '/select-images'];
-  const isCanvasVisible = canvasVisiblePages.some(page => pathname === page);
+  const canvasVisiblePages = [
+    '/select-size',
+    '/inscriptions',
+    '/select-motifs',
+    '/select-material',
+    '/select-border',
+    '/select-additions',
+    '/select-images',
+  ];
+  const isCanvasVisible = canvasVisiblePages.some((page) => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
-  
+
   const isAdditionCatalogVisible =
     activeFullscreenPanel === 'select-additions' &&
-    (forceAdditionCatalog || panelSource === 'menu' || (panelSource === null && isSelectAdditionsPage)) &&
+    (forceAdditionCatalog ||
+      panelSource === 'menu' ||
+      (panelSource === null && isSelectAdditionsPage)) &&
     !selectedAdditionId;
 
   const isMotifCatalogVisible =
@@ -360,7 +401,8 @@ export default function DesignerNav() {
     (forceMotifCatalog || !selectedMotifId);
 
   const shouldShowBackToListButton =
-    (activeFullscreenPanel === 'select-additions' && !isAdditionCatalogVisible) ||
+    (activeFullscreenPanel === 'select-additions' &&
+      !isAdditionCatalogVisible) ||
     (activeFullscreenPanel === 'select-motifs' && !isMotifCatalogVisible);
 
   // Add loading state when pathname changes
@@ -369,10 +411,10 @@ export default function DesignerNav() {
     const timer = setTimeout(() => {
       setIsLoadingPanel(false);
     }, 300); // Show loader for minimum 300ms
-    
+
     return () => clearTimeout(timer);
   }, [pathname, activeFullscreenPanel]);
-  
+
   // Close fullscreen panel if user navigates away from its route or when canvas is hidden
   useEffect(() => {
     if (!isCanvasVisible) {
@@ -395,13 +437,19 @@ export default function DesignerNav() {
       return;
     }
 
-    if (activeFullscreenPanel === 'select-shape' && pathname !== '/select-shape') {
+    if (
+      activeFullscreenPanel === 'select-shape' &&
+      pathname !== '/select-shape'
+    ) {
       return;
     }
 
     const currentSlug = pathname.replace('/', '');
     if (fullscreenPanelSlugs.has(currentSlug)) {
-      if (activeFullscreenPanel !== currentSlug && dismissedPanelSlug !== currentSlug) {
+      if (
+        activeFullscreenPanel !== currentSlug &&
+        dismissedPanelSlug !== currentSlug
+      ) {
         if (currentSlug === 'inscriptions') {
           setActivePanel('inscription');
         }
@@ -439,45 +487,78 @@ export default function DesignerNav() {
   ]);
 
   useEffect(() => {
-    if (pathname === '/select-border' && isPlaque && dismissedPanelSlug !== 'select-border') {
+    if (
+      pathname === '/select-border' &&
+      isPlaque &&
+      dismissedPanelSlug !== 'select-border'
+    ) {
       if (activeFullscreenPanel !== 'select-border') {
         setDismissedPanelSlug(null);
         setPanelSource('menu');
         setActiveFullscreenPanel('select-border');
       }
     }
-  }, [pathname, isPlaque, activeFullscreenPanel, dismissedPanelSlug, setDismissedPanelSlug, setPanelSource, setActiveFullscreenPanel]);
-  
+  }, [
+    pathname,
+    isPlaque,
+    activeFullscreenPanel,
+    dismissedPanelSlug,
+    setDismissedPanelSlug,
+    setPanelSource,
+    setActiveFullscreenPanel,
+  ]);
+
   const renderSelectAdditionsPanel = () => {
     const activeAdditionOffset = selectedAdditionId
-      ? (additionOffsets[selectedAdditionId] || {
+      ? additionOffsets[selectedAdditionId] || {
           xPos: 0,
           yPos: 0,
           scale: 1,
           rotationZ: 0,
-        })
+        }
       : null;
-    const hasActiveAddition = !!selectedAdditionId && !!activeAdditionOffset && activePanel === 'addition';
-    
+    const hasActiveAddition =
+      !!selectedAdditionId &&
+      !!activeAdditionOffset &&
+      activePanel === 'addition';
+
     // Find the addition type to determine if rotation should be enabled
     // Extract base ID from instance ID (e.g., "K0096_177030562074Z" -> "K0096")
     const baseAdditionId = selectedAdditionId?.split('_')[0];
-    const activeAddition = baseAdditionId 
-      ? additionsList.find(a => a.id === baseAdditionId)
+    const activeAddition = baseAdditionId
+      ? additionsList.find((a) => a.id === baseAdditionId)
       : null;
-    const isStatueOrVase = activeAddition?.type === 'statue' || activeAddition?.type === 'vase';
-    
-    const additionRotation = ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
+    const additionSizes = activeAddition?.sizes ?? [];
+    const maxSize = additionSizes.length;
+    const selectedSizeVariant = Math.max(
+      1,
+      Math.min(
+        maxSize || 1,
+        Math.round(activeAdditionOffset?.sizeVariant ?? 1),
+      ),
+    );
+    const activeAdditionSize =
+      additionSizes[selectedSizeVariant - 1] ?? additionSizes[0] ?? null;
+    const isStatueOrVase =
+      activeAddition?.type === 'statue' || activeAddition?.type === 'vase';
+
+    const additionRotation =
+      ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
     const showAdditionCatalog =
-      forceAdditionCatalog || panelSource === 'menu' || (panelSource === null && isSelectAdditionsPage);
-    
+      forceAdditionCatalog ||
+      panelSource === 'menu' ||
+      (panelSource === null && isSelectAdditionsPage);
+
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveAddition ? (
           <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-300">
-                Selected: <span className="font-semibold text-white">{selectedAdditionId}</span>
+                Selected:{' '}
+                <span className="font-semibold text-white">
+                  {selectedAdditionId}
+                </span>
               </div>
               <button
                 type="button"
@@ -485,23 +566,25 @@ export default function DesignerNav() {
                   setSelectedAdditionId(null);
                   setActivePanel(null);
                 }}
-                className="text-xs text-white/60 hover:text-white transition-colors"
+                className="text-xs text-white/60 transition-colors hover:text-white"
               >
                 Clear selection
               </button>
             </div>
-            
+
             <div className="flex gap-2">
               <button
                 type="button"
-                className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
-                onClick={() => selectedAdditionId && duplicateAddition(selectedAdditionId)}
+                className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-700"
+                onClick={() =>
+                  selectedAdditionId && duplicateAddition(selectedAdditionId)
+                }
               >
                 Duplicate
               </button>
               <button
                 type="button"
-                className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+                className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
                 onClick={() => {
                   if (selectedAdditionId) {
                     removeAddition(selectedAdditionId);
@@ -514,245 +597,282 @@ export default function DesignerNav() {
                 Delete
               </button>
             </div>
-            
+
             <div className="space-y-4">
-              {/* Size Slider - Discrete size options (only show if addition has multiple sizes) */}
-              {(() => {
-                const hasSizeData = activeAddition?.sizes && activeAddition.sizes.length > 0;
-                const maxSize = activeAddition?.sizes?.length ?? 1;
-                
-                // If no size data at all, show info message
-                if (!hasSizeData) {
-                  return (
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <label className="text-sm font-medium text-gray-200">Size</label>
-                        <div className="text-sm text-gray-400">Default size</div>
-                      </div>
+              {maxSize <= 1 ? (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <label className="text-sm font-medium text-gray-200">
+                      Size
+                    </label>
+                    <div className="text-sm text-gray-400">
+                      {activeAdditionSize
+                        ? `${activeAdditionSize.width}×${activeAdditionSize.height}mm`
+                        : ''}
                     </div>
-                  );
-                }
-                
-                // If only 1 size, show a readonly display instead of slider
-                if (maxSize === 1) {
-                  const singleSize = activeAddition.sizes[0];
-                  return (
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <label className="text-sm font-medium text-gray-200">Size</label>
-                        <div className="text-sm text-gray-400">
-                          {`${singleSize.width}×${singleSize.height}mm`}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-                
-                // Show slider for multiple sizes
-                return (
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <label className="text-sm font-medium text-gray-200 w-20">Size</label>
-                      <div className="flex items-center gap-2 justify-end">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (!selectedAdditionId || !activeAdditionOffset) return;
-                            const currentSize = Math.round(activeAdditionOffset.sizeVariant ?? 1);
-                            const newVal = Math.max(1, currentSize - 1);
-                            setAdditionOffset(selectedAdditionId, {
-                              ...activeAdditionOffset,
-                              sizeVariant: newVal,
-                            });
-                          }}
-                          className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                          aria-label="Decrease size"
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <label className="w-20 text-sm font-medium text-gray-200">
+                      Size
+                    </label>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const newVal = Math.max(1, selectedSizeVariant - 1);
+                          setAdditionOffset(selectedAdditionId, {
+                            ...activeAdditionOffset,
+                            sizeVariant: newVal,
+                          });
+                        }}
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        aria-label="Decrease size variant"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                          </svg>
-                        </button>
-                        <input
-                          type="number"
-                          min={1}
-                          max={maxSize}
-                          step={1}
-                          value={Math.round(activeAdditionOffset?.sizeVariant ?? 1)}
-                          onChange={(e) => {
-                            if (!selectedAdditionId || !activeAdditionOffset) return;
-                            const val = parseInt(e.target.value);
-                            if (!isNaN(val)) {
-                              setAdditionOffset(selectedAdditionId, {
-                                ...activeAdditionOffset,
-                                sizeVariant: val,
-                              });
-                            }
-                          }}
-                          onBlur={(e) => {
-                            if (!selectedAdditionId || !activeAdditionOffset) return;
-                            const val = parseInt(e.target.value);
-                            if (isNaN(val) || val < 1) {
-                              setAdditionOffset(selectedAdditionId, {
-                                ...activeAdditionOffset,
-                                sizeVariant: 1,
-                              });
-                            } else if (val > maxSize) {
-                              setAdditionOffset(selectedAdditionId, {
-                                ...activeAdditionOffset,
-                                sizeVariant: maxSize,
-                              });
-                            }
-                          }}
-                          className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (!selectedAdditionId || !activeAdditionOffset) return;
-                            const currentSize = Math.round(activeAdditionOffset.sizeVariant ?? 1);
-                            const newVal = Math.min(maxSize, currentSize + 1);
-                            setAdditionOffset(selectedAdditionId, {
-                              ...activeAdditionOffset,
-                              sizeVariant: newVal,
-                            });
-                          }}
-                          className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                          aria-label="Increase size"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="relative">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M20 12H4"
+                          />
+                        </svg>
+                      </button>
                       <input
-                        type="range"
+                        type="number"
                         min={1}
                         max={maxSize}
                         step={1}
-                        value={Math.round(activeAdditionOffset?.sizeVariant ?? 1)}
+                        value={selectedSizeVariant}
                         onChange={(e) => {
-                          if (selectedAdditionId && activeAdditionOffset) {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const val = parseInt(e.target.value, 10);
+                          if (!Number.isNaN(val)) {
                             setAdditionOffset(selectedAdditionId, {
                               ...activeAdditionOffset,
-                              sizeVariant: parseInt(e.target.value),
+                              sizeVariant: val,
                             });
                           }
                         }}
-                        className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+                        onBlur={(e) => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const val = parseInt(e.target.value, 10);
+                          setAdditionOffset(selectedAdditionId, {
+                            ...activeAdditionOffset,
+                            sizeVariant:
+                              Number.isNaN(val) || val < 1
+                                ? 1
+                                : Math.min(maxSize, val),
+                          });
+                        }}
+                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none"
                       />
-                      <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                        <span>{activeAddition?.sizes?.[0] ? `${activeAddition.sizes[0].width}×${activeAddition.sizes[0].height}mm` : 'Size 1'}</span>
-                        <span>{activeAddition?.sizes?.[maxSize - 1] ? `${activeAddition.sizes[maxSize - 1].width}×${activeAddition.sizes[maxSize - 1].height}mm` : `Size ${maxSize}`}</span>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const newVal = Math.min(
+                            maxSize,
+                            selectedSizeVariant + 1,
+                          );
+                          setAdditionOffset(selectedAdditionId, {
+                            ...activeAdditionOffset,
+                            sizeVariant: newVal,
+                          });
+                        }}
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        aria-label="Increase size variant"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      </button>
                     </div>
                   </div>
-                );
-              })()}
-              
-              
+                  <div className="relative">
+                    <input
+                      type="range"
+                      min={1}
+                      max={maxSize}
+                      step={1}
+                      value={selectedSizeVariant}
+                      onChange={(e) => {
+                        if (!selectedAdditionId || !activeAdditionOffset)
+                          return;
+                        setAdditionOffset(selectedAdditionId, {
+                          ...activeAdditionOffset,
+                          sizeVariant: parseInt(e.target.value, 10),
+                        });
+                      }}
+                      className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                    />
+                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                      <span>
+                        {additionSizes[0]
+                          ? `${additionSizes[0].width}×${additionSizes[0].height}mm`
+                          : 'Size 1'}
+                      </span>
+                      <span>
+                        {additionSizes[maxSize - 1]
+                          ? `${additionSizes[maxSize - 1].width}×${additionSizes[maxSize - 1].height}mm`
+                          : `Size ${maxSize}`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Rotation Slider - Only shown for applications, not for statues/vases */}
               {!isStatueOrVase && (
                 <div className="space-y-1">
                   <div className="flex items-center justify-between gap-2">
-                    <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
-                    <div className="flex items-center gap-2 justify-end">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const newVal = Math.max(-180, additionRotation - 1);
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          rotationZ: (newVal * Math.PI) / 180,
-                        });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Decrease rotation by 1 degree"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
+                    <label className="w-20 text-sm font-medium text-gray-200">
+                      Rotation
+                    </label>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const newVal = Math.max(-180, additionRotation - 1);
+                          setAdditionOffset(selectedAdditionId, {
+                            ...activeAdditionOffset,
+                            rotationZ: (newVal * Math.PI) / 180,
+                          });
+                        }}
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        aria-label="Decrease rotation by 1 degree"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M20 12H4"
+                          />
+                        </svg>
+                      </button>
+                      <input
+                        type="number"
+                        min={-180}
+                        max={180}
+                        step={1}
+                        value={Math.round(additionRotation)}
+                        onChange={(e) => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          setAdditionOffset(selectedAdditionId, {
+                            ...activeAdditionOffset,
+                            rotationZ: (Number(e.target.value) * Math.PI) / 180,
+                          });
+                        }}
+                        onBlur={(e) => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const val = Number(e.target.value);
+                          if (val < -180) {
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              rotationZ: (-180 * Math.PI) / 180,
+                            });
+                          } else if (val > 180) {
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              rotationZ: (180 * Math.PI) / 180,
+                            });
+                          }
+                        }}
+                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!selectedAdditionId || !activeAdditionOffset)
+                            return;
+                          const newVal = Math.min(180, additionRotation + 1);
+                          setAdditionOffset(selectedAdditionId, {
+                            ...activeAdditionOffset,
+                            rotationZ: (newVal * Math.PI) / 180,
+                          });
+                        }}
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        aria-label="Increase rotation by 1 degree"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      </button>
+                      <span className="text-sm font-medium text-gray-300">
+                        °
+                      </span>
+                    </div>
+                  </div>
+                  <div className="relative">
                     <input
-                      type="number"
+                      type="range"
                       min={-180}
                       max={180}
                       step={1}
-                      value={Math.round(additionRotation)}
+                      value={additionRotation}
                       onChange={(e) => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          rotationZ: (Number(e.target.value) * Math.PI) / 180,
-                        });
-                      }}
-                      onBlur={(e) => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const val = Number(e.target.value);
-                        if (val < -180) {
+                        if (selectedAdditionId && activeAdditionOffset) {
                           setAdditionOffset(selectedAdditionId, {
                             ...activeAdditionOffset,
-                            rotationZ: (-180 * Math.PI) / 180,
-                          });
-                        } else if (val > 180) {
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            rotationZ: (180 * Math.PI) / 180,
+                            rotationZ: (Number(e.target.value) * Math.PI) / 180,
                           });
                         }
                       }}
-                      className="w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] border-[#5A5A5A] focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none transition-colors"
+                      className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
                     />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!selectedAdditionId || !activeAdditionOffset) return;
-                        const newVal = Math.min(180, additionRotation + 1);
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          rotationZ: (newVal * Math.PI) / 180,
-                        });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Increase rotation by 1 degree"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
-                    <span className="text-sm font-medium text-gray-300">°</span>
+                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                      <span>-180°</span>
+                      <span>180°</span>
+                    </div>
                   </div>
                 </div>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min={-180}
-                    max={180}
-                    step={1}
-                    value={additionRotation}
-                    onChange={(e) => {
-                      if (selectedAdditionId && activeAdditionOffset) {
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          rotationZ: (Number(e.target.value) * Math.PI) / 180,
-                        });
-                      }
-                    }}
-                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                    <span>-180°</span>
-                    <span>180°</span>
-                  </div>
-                </div>
-              </div>
               )}
             </div>
           </div>
         ) : null}
-        
+
         {showAdditionCatalog && !selectedAdditionId && (
           <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
             <div className="h-full overflow-y-auto pr-1">
@@ -763,17 +883,17 @@ export default function DesignerNav() {
       </div>
     );
   };
-  
+
   const renderSelectMotifsPanel = () => {
     const activeMotif = selectedMotifs.find((m) => m.id === selectedMotifId);
     const activeOffset = selectedMotifId
-      ? (motifOffsets[selectedMotifId] || {
+      ? motifOffsets[selectedMotifId] || {
           xPos: 0,
           yPos: 0,
           scale: 1,
           rotationZ: 0,
           heightMm: 100,
-        })
+        }
       : null;
 
     const isLaser = catalog?.product?.laser === '1';
@@ -793,7 +913,11 @@ export default function DesignerNav() {
       initHeight = 100;
     }
 
-    const hasActiveMotif = !!selectedMotifId && !!activeOffset && !!activeMotif && activePanel === 'motif';
+    const hasActiveMotif =
+      !!selectedMotifId &&
+      !!activeOffset &&
+      !!activeMotif &&
+      activePanel === 'motif';
     const rotationDegrees = ((activeOffset?.rotationZ ?? 0) * 180) / Math.PI;
     const motifPriceValue =
       hasActiveMotif && motifPriceModel && !isLaser
@@ -801,294 +925,381 @@ export default function DesignerNav() {
             activeOffset?.heightMm ?? initHeight,
             activeMotif?.color ?? '#c99d44',
             motifPriceModel.priceModel,
-            isLaser
+            isLaser,
           )
         : null;
-    const clampHeight = (value: number) => Math.min(maxHeight, Math.max(minHeight, value));
+    const clampHeight = (value: number) =>
+      Math.min(maxHeight, Math.max(minHeight, value));
     const showMotifCatalog =
-      activeFullscreenPanel === 'select-motifs' && (forceMotifCatalog || !hasActiveMotif);
+      activeFullscreenPanel === 'select-motifs' &&
+      (forceMotifCatalog || !hasActiveMotif);
 
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
           <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-300">
-            Selected: <span className="font-semibold text-white">{selectedMotifId}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedMotifId(null);
-              setActivePanel(null);
-            }}
-            className="text-xs text-white/60 hover:text-white transition-colors"
-          >
-            Clear selection
-          </button>
-        </div>
-
-        {motifPriceValue !== null && (
-          <div className="border border-white/15 bg-white/5 p-4 rounded-xl">
-            <div className="text-xs text-white/60 uppercase tracking-[0.2em] mb-1">Motif Price</div>
-            <div className="text-2xl font-semibold text-white">${motifPriceValue.toFixed(2)}</div>
-          </div>
-        )}
-
-        <div className="flex gap-2">
-          <button
-            type="button"
-            className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
-            onClick={() => selectedMotifId && duplicateMotif(selectedMotifId)}
-          >
-            Duplicate
-          </button>
-          <button
-            type="button"
-            className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
-            onClick={() => {
-              if (selectedMotifId) {
-                removeMotif(selectedMotifId);
-                setSelectedMotifId(null);
-                setActivePanel(null);
-              }
-            }}
-          >
-            Delete
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {/* Height Slider */}
-          <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Height</label>
-              <div className="flex items-center gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!selectedMotifId) return;
-                    const newVal = clampHeight((activeOffset.heightMm ?? initHeight) - 1);
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      heightMm: newVal,
-                    });
-                  }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Decrease height by 1mm"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                  </svg>
-                </button>
-                <input
-                  type="number"
-                  min={minHeight}
-                  max={maxHeight}
-                  step={1}
-                  value={activeOffset.heightMm ?? initHeight}
-                  onChange={(e) => {
-                    if (!selectedMotifId) return;
-                    const clampedValue = clampHeight(Number(e.target.value));
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      heightMm: clampedValue,
-                    });
-                  }}
-                  onBlur={(e) => {
-                    if (!selectedMotifId) return;
-                    const clampedValue = clampHeight(Number(e.target.value));
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      heightMm: clampedValue,
-                    });
-                  }}
-                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
-                    (activeOffset.heightMm ?? initHeight) < minHeight || (activeOffset.heightMm ?? initHeight) > maxHeight
-                      ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!selectedMotifId) return;
-                    const newVal = clampHeight((activeOffset.heightMm ?? initHeight) + 1);
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      heightMm: newVal,
-                    });
-                  }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Increase height by 1mm"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
-                <span className="text-sm font-medium text-gray-300">mm</span>
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-300">
+                Selected:{' '}
+                <span className="font-semibold text-white">
+                  {selectedMotifId}
+                </span>
               </div>
-            </div>
-            <div className="relative">
-              <input
-                type="range"
-                min={minHeight}
-                max={maxHeight}
-                step={1}
-                value={activeOffset.heightMm ?? initHeight}
-                onChange={(e) => {
-                  if (!selectedMotifId) return;
-                  const clampedValue = clampHeight(Number(e.target.value));
-                  setMotifOffset(selectedMotifId, {
-                    ...activeOffset,
-                    heightMm: clampedValue,
-                  });
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedMotifId(null);
+                  setActivePanel(null);
                 }}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                <span>{minHeight}mm</span>
-                <span>{maxHeight}mm</span>
-              </div>
+                className="text-xs text-white/60 transition-colors hover:text-white"
+              >
+                Clear selection
+              </button>
             </div>
-          </div>
 
-          {/* Rotation Slider */}
-          <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
-              <div className="flex items-center gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!selectedMotifId) return;
-                    const newVal = Math.max(-180, rotationDegrees - 1);
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      rotationZ: (newVal * Math.PI) / 180,
-                    });
-                  }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Decrease rotation by 1 degree"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                  </svg>
-                </button>
-                <input
-                  type="number"
-                  min={-180}
-                  max={180}
-                  step={1}
-                  value={Math.round(rotationDegrees)}
-                  onChange={(e) => {
-                    if (!selectedMotifId) return;
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      rotationZ: (Number(e.target.value) * Math.PI) / 180,
-                    });
-                  }}
-                  onBlur={(e) => {
-                    if (!selectedMotifId) return;
-                    const val = Number(e.target.value);
-                    if (val < -180) {
-                      setMotifOffset(selectedMotifId, {
-                        ...activeOffset,
-                        rotationZ: (-180 * Math.PI) / 180,
-                      });
-                    } else if (val > 180) {
-                      setMotifOffset(selectedMotifId, {
-                        ...activeOffset,
-                        rotationZ: (180 * Math.PI) / 180,
-                      });
-                    }
-                  }}
-                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
-                    rotationDegrees < -180 || rotationDegrees > 180
-                      ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!selectedMotifId) return;
-                    const newVal = Math.min(180, rotationDegrees + 1);
-                    setMotifOffset(selectedMotifId, {
-                      ...activeOffset,
-                      rotationZ: (newVal * Math.PI) / 180,
-                    });
-                  }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Increase rotation by 1 degree"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
-                <span className="text-sm font-medium text-gray-300">°</span>
+            {motifPriceValue !== null && (
+              <div className="rounded-xl border border-white/15 bg-white/5 p-4">
+                <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+                  Motif Price
+                </div>
+                <div className="text-2xl font-semibold text-white">
+                  ${motifPriceValue.toFixed(2)}
+                </div>
               </div>
-            </div>
-            <div className="relative">
-              <input
-                type="range"
-                min={-180}
-                max={180}
-                step={1}
-                value={rotationDegrees}
-                onChange={(e) =>
-                  selectedMotifId &&
-                  setMotifOffset(selectedMotifId, {
-                    ...activeOffset,
-                    rotationZ: (Number(e.target.value) * Math.PI) / 180,
-                  })
+            )}
+
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-700"
+                onClick={() =>
+                  selectedMotifId && duplicateMotif(selectedMotifId)
                 }
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                <span>-180°</span>
-                <span>180°</span>
+              >
+                Duplicate
+              </button>
+              <button
+                type="button"
+                className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                onClick={() => {
+                  if (selectedMotifId) {
+                    removeMotif(selectedMotifId);
+                    setSelectedMotifId(null);
+                    setActivePanel(null);
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Height Slider */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="w-20 text-sm font-medium text-gray-200">
+                    Height
+                  </label>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!selectedMotifId) return;
+                        const newVal = clampHeight(
+                          (activeOffset.heightMm ?? initHeight) - 1,
+                        );
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          heightMm: newVal,
+                        });
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      aria-label="Decrease height by 1mm"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M20 12H4"
+                        />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      min={minHeight}
+                      max={maxHeight}
+                      step={1}
+                      value={activeOffset.heightMm ?? initHeight}
+                      onChange={(e) => {
+                        if (!selectedMotifId) return;
+                        const clampedValue = clampHeight(
+                          Number(e.target.value),
+                        );
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          heightMm: clampedValue,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (!selectedMotifId) return;
+                        const clampedValue = clampHeight(
+                          Number(e.target.value),
+                        );
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          heightMm: clampedValue,
+                        });
+                      }}
+                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                        (activeOffset.heightMm ?? initHeight) < minHeight ||
+                        (activeOffset.heightMm ?? initHeight) > maxHeight
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!selectedMotifId) return;
+                        const newVal = clampHeight(
+                          (activeOffset.heightMm ?? initHeight) + 1,
+                        );
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          heightMm: newVal,
+                        });
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      aria-label="Increase height by 1mm"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                    </button>
+                    <span className="text-sm font-medium text-gray-300">
+                      mm
+                    </span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={minHeight}
+                    max={maxHeight}
+                    step={1}
+                    value={activeOffset.heightMm ?? initHeight}
+                    onChange={(e) => {
+                      if (!selectedMotifId) return;
+                      const clampedValue = clampHeight(Number(e.target.value));
+                      setMotifOffset(selectedMotifId, {
+                        ...activeOffset,
+                        heightMm: clampedValue,
+                      });
+                    }}
+                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  />
+                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                    <span>{minHeight}mm</span>
+                    <span>{maxHeight}mm</span>
+                  </div>
+                </div>
               </div>
+
+              {/* Rotation Slider */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="w-20 text-sm font-medium text-gray-200">
+                    Rotation
+                  </label>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!selectedMotifId) return;
+                        const newVal = Math.max(-180, rotationDegrees - 1);
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          rotationZ: (newVal * Math.PI) / 180,
+                        });
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      aria-label="Decrease rotation by 1 degree"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M20 12H4"
+                        />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      min={-180}
+                      max={180}
+                      step={1}
+                      value={Math.round(rotationDegrees)}
+                      onChange={(e) => {
+                        if (!selectedMotifId) return;
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          rotationZ: (Number(e.target.value) * Math.PI) / 180,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (!selectedMotifId) return;
+                        const val = Number(e.target.value);
+                        if (val < -180) {
+                          setMotifOffset(selectedMotifId, {
+                            ...activeOffset,
+                            rotationZ: (-180 * Math.PI) / 180,
+                          });
+                        } else if (val > 180) {
+                          setMotifOffset(selectedMotifId, {
+                            ...activeOffset,
+                            rotationZ: (180 * Math.PI) / 180,
+                          });
+                        }
+                      }}
+                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                        rotationDegrees < -180 || rotationDegrees > 180
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!selectedMotifId) return;
+                        const newVal = Math.min(180, rotationDegrees + 1);
+                        setMotifOffset(selectedMotifId, {
+                          ...activeOffset,
+                          rotationZ: (newVal * Math.PI) / 180,
+                        });
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      aria-label="Increase rotation by 1 degree"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                    </button>
+                    <span className="text-sm font-medium text-gray-300">°</span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={-180}
+                    max={180}
+                    step={1}
+                    value={rotationDegrees}
+                    onChange={(e) =>
+                      selectedMotifId &&
+                      setMotifOffset(selectedMotifId, {
+                        ...activeOffset,
+                        rotationZ: (Number(e.target.value) * Math.PI) / 180,
+                      })
+                    }
+                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  />
+                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                    <span>-180°</span>
+                    <span>180°</span>
+                  </div>
+                </div>
+              </div>
+
+              {!isLaser && catalog?.product?.color !== '0' && (
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-white">
+                    Select Color
+                  </label>
+                  <div className="mb-3 grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        selectedMotifId &&
+                        setMotifColor(selectedMotifId, '#c99d44')
+                      }
+                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5"
+                    >
+                      <span
+                        className="h-5 w-5 rounded border border-white/20"
+                        style={{ backgroundColor: '#c99d44' }}
+                      />
+                      <span className="text-xs text-white/80">
+                        Gold Gilding
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        selectedMotifId &&
+                        setMotifColor(selectedMotifId, '#eeeeee')
+                      }
+                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5"
+                    >
+                      <span
+                        className="h-5 w-5 rounded border border-white/20"
+                        style={{ backgroundColor: '#eeeeee' }}
+                      />
+                      <span className="text-xs text-white/80">
+                        Silver Gilding
+                      </span>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-7 gap-1">
+                    {data.colors.map((color) => (
+                      <button
+                        key={color.id}
+                        type="button"
+                        className={`h-6 w-6 rounded border ${activeMotif?.color === color.hex ? 'border-[#D7B356] ring-2 ring-[#D7B356]' : 'border-white/20'}`}
+                        style={{ backgroundColor: color.hex }}
+                        onClick={() =>
+                          selectedMotifId &&
+                          setMotifColor(selectedMotifId, color.hex)
+                        }
+                        title={color.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          {!isLaser && catalog?.product?.color !== '0' && (
-            <div>
-              <label className="mb-2 block text-sm font-medium text-white">Select Color</label>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <button
-                  type="button"
-                  onClick={() => selectedMotifId && setMotifColor(selectedMotifId, '#c99d44')}
-                  className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5"
-                >
-                  <span className="h-5 w-5 rounded border border-white/20" style={{ backgroundColor: '#c99d44' }} />
-                  <span className="text-xs text-white/80">Gold Gilding</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => selectedMotifId && setMotifColor(selectedMotifId, '#eeeeee')}
-                  className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5"
-                >
-                  <span className="h-5 w-5 rounded border border-white/20" style={{ backgroundColor: '#eeeeee' }} />
-                  <span className="text-xs text-white/80">Silver Gilding</span>
-                </button>
-              </div>
-              <div className="grid grid-cols-7 gap-1">
-                {data.colors.map((color) => (
-                  <button
-                    key={color.id}
-                    type="button"
-                    className={`h-6 w-6 rounded border ${activeMotif?.color === color.hex ? 'border-[#D7B356] ring-2 ring-[#D7B356]' : 'border-white/20'}`}
-                    style={{ backgroundColor: color.hex }}
-                    onClick={() => selectedMotifId && setMotifColor(selectedMotifId, color.hex)}
-                    title={color.name}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-        </div>
         ) : null}
 
         {showMotifCatalog && (
@@ -1113,20 +1324,42 @@ export default function DesignerNav() {
   // Sync canvas selection with editingObject on select-size page
   useEffect(() => {
     const partValue: 'headstone' | 'base' | 'ledger' | 'kerbset' =
-      editingObject === 'base' ? 'base' :
-      editingObject === 'ledger' ? 'ledger' :
-      editingObject === 'kerbset' ? 'kerbset' :
-      'headstone';
+      editingObject === 'base'
+        ? 'base'
+        : editingObject === 'ledger'
+          ? 'ledger'
+          : editingObject === 'kerbset'
+            ? 'kerbset'
+            : 'headstone';
     // Don't override when user is actively editing a content item on the canvas
-    if (selectedImageId || selectedMotifId || selectedAdditionId || selectedInscriptionId) return;
+    if (
+      selectedImageId ||
+      selectedMotifId ||
+      selectedAdditionId ||
+      selectedInscriptionId
+    )
+      return;
     if (isSelectSizePage && selected !== partValue) {
       setSelected(partValue);
     }
-  }, [isSelectSizePage, editingObject, selected, setSelected, selectedImageId, selectedMotifId, selectedAdditionId, selectedInscriptionId]);
+  }, [
+    isSelectSizePage,
+    editingObject,
+    selected,
+    setSelected,
+    selectedImageId,
+    selectedMotifId,
+    selectedAdditionId,
+    selectedInscriptionId,
+  ]);
 
   // Auto-open image panel when an image is selected and activePanel is 'image'
   useEffect(() => {
-    if (selectedImageId && activePanel === 'image' && activeFullscreenPanel !== 'select-images') {
+    if (
+      selectedImageId &&
+      activePanel === 'image' &&
+      activeFullscreenPanel !== 'select-images'
+    ) {
       setActiveFullscreenPanel('select-images');
     }
   }, [selectedImageId, activePanel, activeFullscreenPanel]);
@@ -1138,7 +1371,7 @@ export default function DesignerNav() {
       quantity = widthMm + heightMm;
     }
   }
-  
+
   let baseQuantity = 0;
   if (showBase && catalog?.product?.basePriceModel) {
     const qt = catalog.product.basePriceModel.quantityType;
@@ -1150,11 +1383,14 @@ export default function DesignerNav() {
       baseQuantity = baseWidthMm * baseHeightMm;
     }
   }
-  
-  const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
-  const basePrice = showBase && catalog?.product?.basePriceModel 
-    ? calculatePrice(catalog.product.basePriceModel, baseQuantity) 
+
+  const headstonePrice = catalog
+    ? calculatePrice(catalog.product.priceModel, quantity)
     : 0;
+  const basePrice =
+    showBase && catalog?.product?.basePriceModel
+      ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+      : 0;
   const price = headstonePrice + basePrice;
   const formattedPrice = price > 0 ? price.toFixed(2) : null;
   const productTitle = React.useMemo(() => {
@@ -1165,14 +1401,21 @@ export default function DesignerNav() {
     if (!productId) {
       return 'Design Your Own Headstone';
     }
-    return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
+    return (
+      data.products.find((p) => p.id === productId)?.name ??
+      'Design Your Own Headstone'
+    );
   }, [catalog, productId]);
-  const dimensionLabel = widthMm > 0 && heightMm > 0 ? `${widthMm} × ${heightMm} mm` : 'Select dimensions';
+  const dimensionLabel =
+    widthMm > 0 && heightMm > 0
+      ? `${widthMm} × ${heightMm} mm`
+      : 'Select dimensions';
 
   const handleMenuClick = async (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
-      const keepCanvasVisibleForShape = slug === 'select-shape' && isCanvasVisible;
+      const keepCanvasVisibleForShape =
+        slug === 'select-shape' && isCanvasVisible;
       openFullscreenPanel(slug);
       if (!keepCanvasVisibleForShape && pathname !== `/${slug}`) {
         router.push(`/${slug}`);
@@ -1212,13 +1455,16 @@ export default function DesignerNav() {
 
       // Get all state from store
       const state = useHeadstoneStore.getState();
-      
+
       // Calculate current price
-      const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
-      const basePrice = state.showBase && catalog?.product?.basePriceModel 
-        ? calculatePrice(catalog.product.basePriceModel, baseQuantity) 
+      const headstonePrice = catalog
+        ? calculatePrice(catalog.product.priceModel, quantity)
         : 0;
-      
+      const basePrice =
+        state.showBase && catalog?.product?.basePriceModel
+          ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+          : 0;
+
       // Calculate motif prices
       let motifsPrice = 0;
       if (state.selectedMotifs && state.selectedMotifs.length > 0) {
@@ -1226,10 +1472,10 @@ export default function DesignerNav() {
           return total + calculateMotifPrice(motif, catalog?.product);
         }, 0);
       }
-      
+
       const totalPrice = headstonePrice + basePrice + motifsPrice;
       const totalPriceCents = Math.round(totalPrice * 100);
-      
+
       // Prepare design state matching DesignerSnapshot schema
       const designState = {
         version: 1,
@@ -1249,7 +1495,7 @@ export default function DesignerNav() {
         baseThickness: state.baseThickness,
         borderName: state.borderName,
         showBase: state.showBase,
-        inscriptions: state.inscriptions.map(insc => ({
+        inscriptions: state.inscriptions.map((insc) => ({
           id: insc.id,
           text: insc.text,
           font: insc.font,
@@ -1262,7 +1508,7 @@ export default function DesignerNav() {
           baseWidthMm: insc.baseWidthMm,
           baseHeightMm: insc.baseHeightMm,
         })),
-        selectedMotifs: state.selectedMotifs.map(motif => ({
+        selectedMotifs: state.selectedMotifs.map((motif) => ({
           id: motif.id,
           svgPath: motif.svgPath,
           color: motif.color,
@@ -1281,9 +1527,7 @@ export default function DesignerNav() {
       // Use the existing projects API endpoint
       const response = await fetch('/api/projects', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: designName,
           designState,
@@ -1311,10 +1555,9 @@ export default function DesignerNav() {
 
       // Success - close modal and redirect to My Account
       setShowSaveDesignModal(false);
-      
+
       // Redirect to My Account
       router.push('/my-account');
-      
     } catch (error) {
       console.error('Error saving design:', error);
       if (error instanceof Error) {
@@ -1328,7 +1571,11 @@ export default function DesignerNav() {
 
   const handleNewDesign = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (confirm('Are you sure you want to start a new design? This will remove all inscriptions, additions, and motifs.')) {
+    if (
+      confirm(
+        'Are you sure you want to start a new design? This will remove all inscriptions, additions, and motifs.',
+      )
+    ) {
       resetDesign();
       // Don't navigate, just reset the design and stay on current page
     }
@@ -1354,18 +1601,24 @@ export default function DesignerNav() {
   const isCheckPricePage = pathname === '/check-price';
 
   // Helper function to determine status of menu items
-  const getItemStatus = (slug: string): 'incomplete' | 'complete' | 'available' => {
+  const getItemStatus = (
+    slug: string,
+  ): 'incomplete' | 'complete' | 'available' => {
     const productId = useHeadstoneStore.getState().productId;
     const shapeUrl = useHeadstoneStore.getState().shapeUrl;
     const materialUrl = useHeadstoneStore.getState().materialUrl;
-    
+
     if (slug === 'select-product') return productId ? 'complete' : 'incomplete';
     if (slug === 'select-shape') return shapeUrl ? 'complete' : 'incomplete';
-    if (slug === 'select-material') return materialUrl ? 'complete' : 'incomplete';
-    if (slug === 'select-size' && (widthMm > 0 && heightMm > 0)) return 'complete';
+    if (slug === 'select-material')
+      return materialUrl ? 'complete' : 'incomplete';
+    if (slug === 'select-size' && widthMm > 0 && heightMm > 0)
+      return 'complete';
     if (slug === 'inscriptions' && inscriptions.length > 0) return 'complete';
-    if (slug === 'select-additions' && selectedAdditions.length > 0) return 'complete';
-    if (slug === 'select-motifs' && selectedMotifs.length > 0) return 'complete';
+    if (slug === 'select-additions' && selectedAdditions.length > 0)
+      return 'complete';
+    if (slug === 'select-motifs' && selectedMotifs.length > 0)
+      return 'complete';
     return 'available';
   };
 
@@ -1457,8 +1710,18 @@ export default function DesignerNav() {
           ? 3000
           : (firstShape?.table?.maxDepth ?? 300);
 
-    const currentDepthMm = editingObject === 'ledger' ? ledgerDepthMm : editingObject === 'kerbset' ? kerbDepthMm : null;
-    const setCurrentDepthMm = editingObject === 'ledger' ? setLedgerDepthMm : editingObject === 'kerbset' ? setKerbDepthMm : null;
+    const currentDepthMm =
+      editingObject === 'ledger'
+        ? ledgerDepthMm
+        : editingObject === 'kerbset'
+          ? kerbDepthMm
+          : null;
+    const setCurrentDepthMm =
+      editingObject === 'ledger'
+        ? setLedgerDepthMm
+        : editingObject === 'kerbset'
+          ? setKerbDepthMm
+          : null;
 
     const sizeTabOptions = isFullMonument
       ? [
@@ -1473,12 +1736,16 @@ export default function DesignerNav() {
         ];
 
     return (
-      <div className={`fs-size-panel space-y-5 rounded-2xl p-4 shadow-xl backdrop-blur-sm ${extraClassName}`}>
+      <div
+        className={`fs-size-panel space-y-5 rounded-2xl p-4 shadow-xl backdrop-blur-sm ${extraClassName}`}
+      >
         {!isPlaque && (
           <SegmentedControl
             value={editingObject}
             onChange={(value) => {
-              setEditingObject(value as 'headstone' | 'base' | 'ledger' | 'kerbset');
+              setEditingObject(
+                value as 'headstone' | 'base' | 'ledger' | 'kerbset',
+              );
               setSelected(value as 'headstone' | 'base' | 'ledger' | 'kerbset');
               if (value === 'base') {
                 setShowBase(true);
@@ -1490,14 +1757,14 @@ export default function DesignerNav() {
 
         {editingObject === 'base' && (
           <>
-            <div className="flex gap-1.5 rounded-full bg-[#0A0A0A] p-1 border border-[#3A3A3A]">
+            <div className="flex gap-1.5 rounded-full border border-[#3A3A3A] bg-[#0A0A0A] p-1">
               <button
                 type="button"
                 onClick={() => setShowBase(false)}
                 className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   !showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
                 }`}
               >
                 No Base
@@ -1511,7 +1778,7 @@ export default function DesignerNav() {
                 className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   baseFinish === 'default' && showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
                 }`}
               >
                 Polished
@@ -1525,13 +1792,13 @@ export default function DesignerNav() {
                 className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   baseFinish === 'rock-pitch' && showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:text-white hover:bg-[#1A1A1A]'
+                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
                 }`}
               >
                 Rock Pitch
               </button>
             </div>
-            <div className="border-t border-[#3A3A3A]/50 -mx-4"></div>
+            <div className="-mx-4 border-t border-[#3A3A3A]/50"></div>
           </>
         )}
 
@@ -1539,20 +1806,26 @@ export default function DesignerNav() {
           <>
             <SegmentedControl
               value={headstoneStyle}
-              onChange={(value) => setHeadstoneStyle(value as 'upright' | 'slant')}
+              onChange={(value) =>
+                setHeadstoneStyle(value as 'upright' | 'slant')
+              }
               options={[
                 { label: 'Upright', value: 'upright' },
                 { label: 'Slant', value: 'slant' },
               ]}
             />
-            <div className="border-t border-[#3A3A3A]/50 -mx-4"></div>
+            <div className="-mx-4 border-t border-[#3A3A3A]/50"></div>
           </>
         )}
 
-        <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div
+          className={`space-y-1 ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+        >
           <div className="flex items-center justify-between gap-2">
-            <label className="text-sm font-medium text-gray-200 w-20">Width</label>
-            <div className="flex items-center gap-2 justify-end">
+            <label className="w-20 text-sm font-medium text-gray-200">
+              Width
+            </label>
+            <div className="flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -1560,11 +1833,21 @@ export default function DesignerNav() {
                   setCurrentWidthMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Decrease width by 10mm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 12H4"
+                  />
                 </svg>
               </button>
               <input
@@ -1583,7 +1866,7 @@ export default function DesignerNav() {
                   }
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
                   currentWidthMm < minWidth || currentWidthMm > maxWidth
                     ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
                     : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
@@ -1596,11 +1879,21 @@ export default function DesignerNav() {
                   setCurrentWidthMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Increase width by 10mm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
               </button>
               <span className="text-sm font-medium text-gray-300">mm</span>
@@ -1615,19 +1908,23 @@ export default function DesignerNav() {
               value={currentWidthMm}
               onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
               disabled={editingObject === 'base' && !showBase}
-              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+            <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
               <span>{minWidth}mm</span>
               <span>{maxWidth}mm</span>
             </div>
           </div>
         </div>
 
-        <div className={`space-y-1 ${editingObject === 'base' && !showBase ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div
+          className={`space-y-1 ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+        >
           <div className="flex items-center justify-between gap-2">
-            <label className="text-sm font-medium text-gray-200 w-20">Height</label>
-            <div className="flex items-center gap-2 justify-end">
+            <label className="w-20 text-sm font-medium text-gray-200">
+              Height
+            </label>
+            <div className="flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -1635,11 +1932,21 @@ export default function DesignerNav() {
                   setCurrentHeightMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Decrease height by 10mm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 12H4"
+                  />
                 </svg>
               </button>
               <input
@@ -1658,7 +1965,7 @@ export default function DesignerNav() {
                   }
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
                   currentHeightMm < minHeight || currentHeightMm > maxHeight
                     ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
                     : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
@@ -1671,11 +1978,21 @@ export default function DesignerNav() {
                   setCurrentHeightMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Increase height by 10mm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
               </button>
               <span className="text-sm font-medium text-gray-300">mm</span>
@@ -1690,9 +2007,9 @@ export default function DesignerNav() {
               value={currentHeightMm}
               onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
               disabled={editingObject === 'base' && !showBase}
-              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)]"
+              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+            <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
               <span>{minHeight}mm</span>
               <span>{maxHeight}mm</span>
             </div>
@@ -1702,12 +2019,17 @@ export default function DesignerNav() {
         {editingObject === 'headstone' && !isPlaque && (
           <div className="space-y-1">
             <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Thickness</label>
-              <div className="flex items-center gap-2 justify-end">
+              <label className="w-20 text-sm font-medium text-gray-200">
+                Thickness
+              </label>
+              <div className="flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => {
-                    const currentVal = headstoneStyle === 'upright' ? uprightThickness : slantThickness;
+                    const currentVal =
+                      headstoneStyle === 'upright'
+                        ? uprightThickness
+                        : slantThickness;
                     const newVal = Math.max(minThickness, currentVal - 10);
                     if (headstoneStyle === 'upright') {
                       setUprightThickness(newVal);
@@ -1715,11 +2037,21 @@ export default function DesignerNav() {
                       setSlantThickness(newVal);
                     }
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
                   aria-label="Decrease thickness by 10mm"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20 12H4"
+                    />
                   </svg>
                 </button>
                 <input
@@ -1727,7 +2059,11 @@ export default function DesignerNav() {
                   min={minThickness}
                   max={maxThickness}
                   step={10}
-                  value={Math.round(headstoneStyle === 'upright' ? uprightThickness : slantThickness)}
+                  value={Math.round(
+                    headstoneStyle === 'upright'
+                      ? uprightThickness
+                      : slantThickness,
+                  )}
                   onChange={(e) => {
                     const val = Number(e.target.value);
                     if (headstoneStyle === 'upright') {
@@ -1752,9 +2088,13 @@ export default function DesignerNav() {
                       }
                     }
                   }}
-                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
-                    (headstoneStyle === 'upright' ? uprightThickness : slantThickness) < minThickness ||
-                    (headstoneStyle === 'upright' ? uprightThickness : slantThickness) > maxThickness
+                  className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                    (headstoneStyle === 'upright'
+                      ? uprightThickness
+                      : slantThickness) < minThickness ||
+                    (headstoneStyle === 'upright'
+                      ? uprightThickness
+                      : slantThickness) > maxThickness
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
                       : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                   }`}
@@ -1762,7 +2102,10 @@ export default function DesignerNav() {
                 <button
                   type="button"
                   onClick={() => {
-                    const currentVal = headstoneStyle === 'upright' ? uprightThickness : slantThickness;
+                    const currentVal =
+                      headstoneStyle === 'upright'
+                        ? uprightThickness
+                        : slantThickness;
                     const newVal = Math.min(maxThickness, currentVal + 10);
                     if (headstoneStyle === 'upright') {
                       setUprightThickness(newVal);
@@ -1770,11 +2113,21 @@ export default function DesignerNav() {
                       setSlantThickness(newVal);
                     }
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
                   aria-label="Increase thickness by 10mm"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                 </button>
                 <span className="text-sm font-medium text-gray-300">mm</span>
@@ -1786,7 +2139,11 @@ export default function DesignerNav() {
                 min={minThickness}
                 max={maxThickness}
                 step={10}
-                value={headstoneStyle === 'upright' ? uprightThickness : slantThickness}
+                value={
+                  headstoneStyle === 'upright'
+                    ? uprightThickness
+                    : slantThickness
+                }
                 onChange={(e) => {
                   const newValue = Number(e.target.value);
                   if (headstoneStyle === 'upright') {
@@ -1795,9 +2152,9 @@ export default function DesignerNav() {
                     setSlantThickness(newValue);
                   }
                 }}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)]"
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)]"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+              <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
                 <span>{minThickness}mm</span>
                 <span>{maxThickness}mm</span>
               </div>
@@ -1808,19 +2165,31 @@ export default function DesignerNav() {
         {editingObject === 'base' && showBase && (
           <div className="space-y-1">
             <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Thickness</label>
-              <div className="flex items-center gap-2 justify-end">
+              <label className="w-20 text-sm font-medium text-gray-200">
+                Thickness
+              </label>
+              <div className="flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     const newVal = Math.max(minThickness, baseThickness - 10);
                     setBaseThickness(newVal);
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
                   aria-label="Decrease base thickness by 10mm"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20 12H4"
+                    />
                   </svg>
                 </button>
                 <input
@@ -1838,7 +2207,7 @@ export default function DesignerNav() {
                       setBaseThickness(maxThickness);
                     }
                   }}
-                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                  className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
                     baseThickness < minThickness || baseThickness > maxThickness
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
                       : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
@@ -1850,11 +2219,21 @@ export default function DesignerNav() {
                     const newVal = Math.min(maxThickness, baseThickness + 10);
                     setBaseThickness(newVal);
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
                   aria-label="Increase base thickness by 10mm"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                 </button>
                 <span className="text-sm font-medium text-gray-300">mm</span>
@@ -1868,9 +2247,9 @@ export default function DesignerNav() {
                 step={10}
                 value={baseThickness}
                 onChange={(e) => setBaseThickness(Number(e.target.value))}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)]"
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)]"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+              <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
                 <span>{minThickness}mm</span>
                 <span>{maxThickness}mm</span>
               </div>
@@ -1878,60 +2257,92 @@ export default function DesignerNav() {
           </div>
         )}
 
-        {(editingObject === 'ledger' || editingObject === 'kerbset') && currentDepthMm !== null && setCurrentDepthMm && (
-          <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Length</label>
-              <div className="flex items-center gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={() => setCurrentDepthMm(Math.max(minThickness, currentDepthMm - 10))}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Decrease length by 10mm"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                  </svg>
-                </button>
+        {(editingObject === 'ledger' || editingObject === 'kerbset') &&
+          currentDepthMm !== null &&
+          setCurrentDepthMm && (
+            <div className="space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <label className="w-20 text-sm font-medium text-gray-200">
+                  Length
+                </label>
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCurrentDepthMm(
+                        Math.max(minThickness, currentDepthMm - 10),
+                      )
+                    }
+                    className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                    aria-label="Decrease length by 10mm"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 12H4"
+                      />
+                    </svg>
+                  </button>
+                  <input
+                    type="number"
+                    min={minThickness}
+                    max={maxThickness}
+                    step={10}
+                    value={currentDepthMm}
+                    onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
+                    className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCurrentDepthMm(
+                        Math.min(maxThickness, currentDepthMm + 10),
+                      )
+                    }
+                    className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                    aria-label="Increase length by 10mm"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                  <span className="text-sm font-medium text-gray-300">mm</span>
+                </div>
+              </div>
+              <div className="relative">
                 <input
-                  type="number"
+                  type="range"
                   min={minThickness}
                   max={maxThickness}
                   step={10}
                   value={currentDepthMm}
                   onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
-                  className="w-16 rounded border border-[#5A5A5A] px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 focus:border-[#D7B356] focus:ring-[#D7B356]/30 transition-colors"
+                  className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
                 />
-                <button
-                  type="button"
-                  onClick={() => setCurrentDepthMm(Math.min(maxThickness, currentDepthMm + 10))}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                  aria-label="Increase length by 10mm"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
-                <span className="text-sm font-medium text-gray-300">mm</span>
+                <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                  <span>{minThickness}mm</span>
+                  <span>{maxThickness}mm</span>
+                </div>
               </div>
             </div>
-            <div className="relative">
-              <input
-                type="range"
-                min={minThickness}
-                max={maxThickness}
-                step={10}
-                value={currentDepthMm}
-                onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                <span>{minThickness}mm</span>
-                <span>{maxThickness}mm</span>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
       </div>
     );
   };
@@ -1939,11 +2350,11 @@ export default function DesignerNav() {
   return (
     <nav
       ref={navRef}
-      className="flex h-full flex-col bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white overflow-hidden"
+      className="flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
-        <div className="flex flex-col h-full">
+        <div className="flex h-full flex-col">
           {/* Panel Header - desktop only */}
           <div className="hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -1953,39 +2364,63 @@ export default function DesignerNav() {
                   className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
                 >
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
                     </svg>
                   </span>
                   <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
                 </button>
                 {shouldShowBackToListButton && (
                   <button
-                    onClick={activeFullscreenPanel === 'select-additions' ? handleBackToAdditionList : handleBackToMotifList}
+                    onClick={
+                      activeFullscreenPanel === 'select-additions'
+                        ? handleBackToAdditionList
+                        : handleBackToMotifList
+                    }
                     className="inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-200 hover:border-white/40 hover:text-white"
                   >
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
                       <Squares2X2Icon className="h-4 w-4" />
                     </span>
-                    <span className="tracking-wide">Back&nbsp;to&nbsp;List</span>
+                    <span className="tracking-wide">
+                      Back&nbsp;to&nbsp;List
+                    </span>
                   </button>
                 )}
               </div>
               <div className="text-left md:text-right">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/50">Guided Step</p>
-                <h2 className="mt-1 text-2xl font-semibold text-white">{menuItems.find(item => item.slug === activeFullscreenPanel)?.name}</h2>
+                <p className="text-xs tracking-[0.35em] text-white/50 uppercase">
+                  Guided Step
+                </p>
+                <h2 className="mt-1 text-2xl font-semibold text-white">
+                  {
+                    menuItems.find(
+                      (item) => item.slug === activeFullscreenPanel,
+                    )?.name
+                  }
+                </h2>
                 <div className="mt-3 h-px w-24 bg-white/20" />
               </div>
             </div>
           </div>
-          
+
           {/* Panel Content */}
           <div className="flex-1 overflow-y-auto p-4">
             {/* Render content based on activeFullscreenPanel */}
             {activeFullscreenPanel === 'select-size' && renderSelectSizePanel()}
-            {activeFullscreenPanel === 'select-shape' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+            {activeFullscreenPanel === 'select-shape' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">Loading shapes...</p>
@@ -1995,25 +2430,25 @@ export default function DesignerNav() {
                 <div className="space-y-6">
                   <ShapeSelector shapes={shapes} />
                 </div>
-              )
-            )}
-            {activeFullscreenPanel === 'select-material' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+              ))}
+            {activeFullscreenPanel === 'select-material' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
-                    <p className="text-sm text-white/60">Loading materials...</p>
+                    <p className="text-sm text-white/60">
+                      Loading materials...
+                    </p>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <MaterialSelector materials={materials} />
                 </div>
-              )
-            )}
-            {activeFullscreenPanel === 'select-border' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+              ))}
+            {activeFullscreenPanel === 'select-border' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">Loading borders...</p>
@@ -2021,435 +2456,506 @@ export default function DesignerNav() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-220px)] overflow-hidden">
+                  <div className="h-[calc(100vh-220px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                     <div className="h-full overflow-y-auto pr-1">
                       <BorderSelector borders={borders} disableInternalScroll />
                     </div>
                   </div>
                 </div>
-              )
-            )}
-            {activeFullscreenPanel === 'inscriptions' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+              ))}
+            {activeFullscreenPanel === 'inscriptions' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
-                    <p className="text-sm text-white/60">Loading inscriptions...</p>
+                    <p className="text-sm text-white/60">
+                      Loading inscriptions...
+                    </p>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <InscriptionEditPanel />
                 </div>
-              )
-            )}
-            {activeFullscreenPanel === 'select-additions' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+              ))}
+            {activeFullscreenPanel === 'select-additions' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
-                    <p className="text-sm text-white/60">Loading additions...</p>
+                    <p className="text-sm text-white/60">
+                      Loading additions...
+                    </p>
                   </div>
                 </div>
-              ) : renderSelectAdditionsPanel()
-            )}
-            {activeFullscreenPanel === 'select-images' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+              ) : (
+                renderSelectAdditionsPanel()
+              ))}
+            {activeFullscreenPanel === 'select-images' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">Loading images...</p>
                   </div>
                 </div>
-              ) : renderSelectImagesPanel()
-            )}
-            {activeFullscreenPanel === 'select-motifs' && (
-              isLoadingPanel ? (
-                <div className="flex items-center justify-center h-64">
+              ) : (
+                renderSelectImagesPanel()
+              ))}
+            {activeFullscreenPanel === 'select-motifs' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">Loading motifs...</p>
                   </div>
                 </div>
-              ) : renderSelectMotifsPanel()
-            )}
+              ) : (
+                renderSelectMotifsPanel()
+              ))}
           </div>
         </div>
       ) : (
         <>
           {/* Desktop Header */}
           <div className="hidden items-center justify-between border-b border-white/10 px-6 md:flex">
-            <Link href="/" className="hover:opacity-80 transition-opacity">
+            <Link href="/" className="transition-opacity hover:opacity-80">
               <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" />
             </Link>
           </div>
 
           {/* Mobile Header */}
-          <div className="md:hidden border-b border-white/5 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)]">
+          <div className="border-b border-white/5 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
             <div className="flex items-center justify-between gap-4">
-              <p className="text-[10px] uppercase tracking-[0.45em] text-white/50">Guided Studio</p>
-              <Link href="/" className="hover:opacity-80 transition-opacity">
-                <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="h-8 w-auto" />
+              <p className="text-[10px] tracking-[0.45em] text-white/50 uppercase">
+                Guided Studio
+              </p>
+              <Link href="/" className="transition-opacity hover:opacity-80">
+                <img
+                  src="/ico/forever-transparent-logo.png"
+                  alt="Forever Logo"
+                  className="h-8 w-auto"
+                />
               </Link>
             </div>
           </div>
 
           {/* Menu Items */}
-          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 md:space-y-0 md:p-4">
-
-        {/* Primary/Secondary CTAs */}
-        {(hasCustomizations || productId) && (
-          <div className="flex flex-col gap-3 sm:flex-row mb-5">
-            {hasCustomizations && (
-              <button
-                onClick={handleNewDesign}
-                className="flex-1 inline-flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-base font-medium text-gray-900 bg-gradient-to-r from-[#f4d07e] to-[#d7b356] shadow-[0_12px_30px_rgba(0,0,0,0.25)] transition-all hover:from-[#ffe2a8] hover:to-[#e0c068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d07e]"
-              >
-                <ArrowPathIcon className="h-5 w-5" />
-                <span>New Design</span>
-              </button>
+          <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 md:space-y-0 md:p-4">
+            {/* Primary/Secondary CTAs */}
+            {(hasCustomizations || productId) && (
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row">
+                {hasCustomizations && (
+                  <button
+                    onClick={handleNewDesign}
+                    className="inline-flex flex-1 items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-[#f4d07e] to-[#d7b356] px-4 py-3 text-base font-medium text-gray-900 shadow-[0_12px_30px_rgba(0,0,0,0.25)] transition-all hover:from-[#ffe2a8] hover:to-[#e0c068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d07e]"
+                  >
+                    <ArrowPathIcon className="h-5 w-5" />
+                    <span>New Design</span>
+                  </button>
+                )}
+                {productId && (
+                  <button
+                    onClick={handleToggleConvertPanel}
+                    className={`inline-flex flex-1 items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all ${
+                      showConvertPanel
+                        ? 'border-[#f4d07e] bg-white/5 text-[#f4d07e]'
+                        : 'border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5'
+                    }`}
+                  >
+                    <Squares2X2Icon className="h-5 w-5" />
+                    <span>Convert&nbsp;Design</span>
+                  </button>
+                )}
+              </div>
             )}
-            {productId && (
-              <button
-                onClick={handleToggleConvertPanel}
-                className={`flex-1 inline-flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border ${
-                  showConvertPanel
-                    ? 'text-[#f4d07e] border-[#f4d07e] bg-white/5'
-                    : 'text-gray-200 border-white/20 hover:border-white/40 hover:bg-white/5'
-                }`}
-              >
-                <Squares2X2Icon className="h-5 w-5" />
-                <span>Convert&nbsp;Design</span>
-              </button>
-            )}
-          </div>
-        )}
 
-        {showConvertPanel && productId && (
-          <div className="mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-sm font-semibold text-white">Convert this design</p>
-                <p className="text-xs text-white/60">Select a different product to reload catalog settings</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowConvertPanel(false)}
-                className="rounded-full border border-white/15 px-3 py-1 text-xs uppercase tracking-wide text-white/70 hover:border-white/40 hover:text-white"
-              >
-                Close
-              </button>
-            </div>
-            <div className="mt-4 max-h-80 overflow-y-auto pr-1">
-              <div className="grid grid-cols-1 gap-3">
-                {products.map((product) => {
-                  const isActiveProduct = product.id === productId;
-                  return (
-                    <button
-                      key={product.id}
-                      type="button"
-                      onClick={() => handleConvertProductSelect(product.id)}
-                      className={`flex items-center gap-3 rounded-xl border px-3 py-3 text-left transition-all ${
-                        isActiveProduct
-                          ? 'border-[#cfac6c] bg-white/10 shadow-lg shadow-[#cfac6c]/15'
-                          : 'border-white/10 hover:border-white/25 hover:bg-white/5'
-                      }`}
-                    >
-                      <div className="h-16 w-16 overflow-hidden rounded-lg bg-black/40">
-                        <img
-                          src={`/webp/products/${product.image}`}
-                          alt={product.name}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-sm font-semibold text-white leading-tight">{product.name}</p>
-                        <p className="text-xs text-white/60 capitalize">{product.category}</p>
-                        {isActiveProduct ? (
-                          <span className="text-[11px] font-medium text-emerald-400">Current product</span>
-                        ) : (
-                          <span className="text-[11px] text-white/50">Tap to convert</span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Grouped Menu Navigation */}
-        <div className="flex flex-col gap-5">
-          {menuGroups.map((group, groupIndex) => (
-            <div
-              key={group.label}
-              className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm"
-            >
-              <div className="mb-3 flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-1.5">
-                <div className="flex items-center gap-2.5">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-[#0f0a07]/60 text-xs font-semibold text-white/80">
-                    {String(groupIndex + 1).padStart(2, '0')}
-                  </span>
-                  <p className="text-lg text-white font-normal tracking-tight">{group.label}</p>
-                </div>
-                <span className="text-[9px] uppercase tracking-[0.4em] text-white/45">Step {groupIndex + 1}</span>
-              </div>
-              
-              {/* Group Items */}
-              <div className="flex flex-col gap-2">
-                {group.items.map((item, index) => {
-                  const Icon = item.icon;
-                  const isRouteActive = pathname === `/${item.slug}`;
-                  const isPanelActive = activeFullscreenPanel === item.slug;
-                  const isActive = isRouteActive || isPanelActive;
-                  const highlightActive = fullscreenPanelSlugs.has(item.slug) ? (isPanelActive || isRouteActive) : isActive;
-                  const itemStatus = getItemStatus(item.slug);
-                  const itemCount = getItemCount(item.slug);
-                  
-                  // Status-based styling
-                  const statusClasses = 
-                    itemStatus === 'complete' ? 'border-green-500/30 text-green-400' :
-                    itemStatus === 'incomplete' ? 'border-amber-500/30 text-amber-400' :
-                    'border-white/10 text-gray-200';
-            
-            // Hide "Select Material" for laser etched products
-            if (item.slug === 'select-material' && catalog?.product?.laser === '1') {
-              return null;
-            }
-            
-            // Hide "Select Border" for products without border support
-            if (item.slug === 'select-border' && !hasBorder) {
-              return null;
-            }
-            
-            // Hide "Select Additions" for laser etched products
-            if (item.slug === 'select-additions' && catalog?.product?.laser === '1') {
-              return null;
-            }
-            
-            // Hide 3D Preview when canvas is already visible or on select-size page
-            if (item.slug === '3d-preview' && (showCanvas || pathname === '/select-size')) {
-              return null;
-            }
-            
-            if (fullscreenPanelSlugs.has(item.slug)) {
-              const shouldRenderInlinePanel =
-                item.slug === 'select-size' &&
-                isSelectSizePage &&
-                !selectedMotifId &&
-                !selectedAdditionId &&
-                activeFullscreenPanel === 'select-size';
-
-              return (
-                <React.Fragment key={item.slug}>
+            {showConvertPanel && productId && (
+              <div className="mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      Convert this design
+                    </p>
+                    <p className="text-xs text-white/60">
+                      Select a different product to reload catalog settings
+                    </p>
+                  </div>
                   <button
                     type="button"
-                    data-section={item.slug}
-                    onClick={(e) => handleMenuClick(item.slug, e)}
-                    onMouseDown={(e) => e.preventDefault()}
-                    style={{ caretColor: 'transparent', userSelect: 'none' }}
-                    className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
-                      highlightActive
-                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm'
-                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                    }`}
+                    onClick={() => setShowConvertPanel(false)}
+                    className="rounded-full border border-white/15 px-3 py-1 text-xs tracking-wide text-white/70 uppercase hover:border-white/40 hover:text-white"
                   >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
-                    <span className="select-none" style={{ caretColor: 'transparent' }}>{item.name}</span>
+                    Close
                   </button>
-
-                  {shouldRenderInlinePanel && renderSelectSizePanel('mt-3')}
-                </React.Fragment>
-              );
-            }
-            
-
-            // Special handling for Select Border - show border selector in sidebar when canvas is visible
-            if (item.slug === 'select-border') {
-              return (
-                <React.Fragment key={item.slug}>
-                  {isCanvasVisible ? (
-                    <>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Navigate to select-border page to keep canvas visible and show border selector
-                          if (pathname !== '/select-border') {
-                            router.push('/select-border');
-                          }
-                        }}
-                        onMouseDown={(e) => e.preventDefault()}
-                        style={{ caretColor: 'transparent', userSelect: 'none' }}
-                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
-                          isActive
-                            ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                            : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                        }`}
-                      >
-                        <Icon className="h-5 w-5 flex-shrink-0" />
-                        <span>{item.name}</span>
-                      </button>
-                      
-                      {isActive && !selectedMotifId && !selectedAdditionId && (
-                        <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
-                          <BorderSelector borders={borders} />
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    // Show link when canvas is not visible (first-time selection)
-                    <Link
-                      href={`/${item.slug}`}
-                      data-section={item.slug}
-                      className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                        isActive 
-                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5 flex-shrink-0" />
-                      <span>{item.name}</span>
-                    </Link>
-                  )}
-                  
-                </React.Fragment>
-              );
-            }
-
-            // Special handling for Select Material - show material selector in sidebar when canvas is visible
-            if (item.slug === 'select-material') {
-              return (
-                <React.Fragment key={item.slug}>
-                  {isCanvasVisible ? (
-                    <>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Navigate to select-material page to keep canvas visible and show material selector
-                          if (pathname !== '/select-material') {
-                            router.push('/select-material');
-                          }
-                        }}
-                        onMouseDown={(e) => e.preventDefault()}
-                        style={{ caretColor: 'transparent', userSelect: 'none' }}
-                        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer ${
-                          isActive
-                            ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                            : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                        }`}
-                      >
-                        <Icon className="h-5 w-5 flex-shrink-0" />
-                        <span className="select-none" style={{ caretColor: 'transparent' }}>{item.name}</span>
-                      </button>
-                      
-                      {isActive && !selectedMotifId && !selectedAdditionId && materials.length > 0 && (
-                        <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm h-[calc(100vh-280px)] overflow-hidden">
-                          <div className="h-full overflow-y-auto pr-1">
-                            <MaterialSelector materials={materials} disableInternalScroll />
+                </div>
+                <div className="mt-4 max-h-80 overflow-y-auto pr-1">
+                  <div className="grid grid-cols-1 gap-3">
+                    {products.map((product) => {
+                      const isActiveProduct = product.id === productId;
+                      return (
+                        <button
+                          key={product.id}
+                          type="button"
+                          onClick={() => handleConvertProductSelect(product.id)}
+                          className={`flex items-center gap-3 rounded-xl border px-3 py-3 text-left transition-all ${
+                            isActiveProduct
+                              ? 'border-[#cfac6c] bg-white/10 shadow-lg shadow-[#cfac6c]/15'
+                              : 'border-white/10 hover:border-white/25 hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="h-16 w-16 overflow-hidden rounded-lg bg-black/40">
+                            <img
+                              src={`/webp/products/${product.image}`}
+                              alt={product.name}
+                              className="h-full w-full object-cover"
+                              loading="lazy"
+                            />
                           </div>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    // Show link when canvas is not visible (first-time selection)
-                    <Link
-                      href={`/${item.slug}`}
-                      data-section={item.slug}
-                      className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                        isActive 
-                          ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                          : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5 flex-shrink-0" />
-                      <span>{item.name}</span>
-                    </Link>
-                  )}
-                  
-                </React.Fragment>
-              );
-            }
-            
-            // Special handling for Save Design - always a button, never navigate
-            if (item.slug === 'save-design') {
-              return (
-                <React.Fragment key={item.slug}>
-                  <button
-                    onClick={(e) => handleMenuClick(item.slug, e)}
-                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all w-full text-left cursor-pointer text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20"
-                  >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
-                    <span>{item.name}</span>
-                  </button>
-                </React.Fragment>
-              );
-            }
-            
-            // Determine if step should be disabled (steps 3-10 need a product selected)
-            // Exception: Check Price is always enabled (users can see base price even with empty headstone)
-            const needsProduct = index >= 2 && item.slug !== 'check-price';
-            const isDisabled = needsProduct && !catalog;
-            
-            return (
-              <React.Fragment key={item.slug}>
-                {isDisabled ? (
-                  <div
-                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-light opacity-40 cursor-not-allowed border border-white/5"
-                    title="Please select a product first"
-                  >
-                    <Icon className="h-5 w-5 flex-shrink-0 text-gray-500" />
-                    <span className="text-gray-500">{item.name}</span>
+                          <div className="flex-1 text-left">
+                            <p className="text-sm leading-tight font-semibold text-white">
+                              {product.name}
+                            </p>
+                            <p className="text-xs text-white/60 capitalize">
+                              {product.category}
+                            </p>
+                            {isActiveProduct ? (
+                              <span className="text-[11px] font-medium text-emerald-400">
+                                Current product
+                              </span>
+                            ) : (
+                              <span className="text-[11px] text-white/50">
+                                Tap to convert
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                ) : (
-                  <Link
-                    href={`/${item.slug}`}
-                    onClick={(e) => handleMenuClick(item.slug, e)}
-                    className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                      isActive 
-                        ? 'text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm' 
-                        : 'text-gray-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="h-5 w-5 flex-shrink-0" />
-                      <span>{item.name}</span>
-                    </div>
-                    
-                    {/* Count Badge */}
-                    {itemCount && itemCount > 0 && (
-                      <span className="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full text-xs font-medium">
-                        {itemCount}
-                      </span>
-                    )}
-                    
-                    {/* Expandable Indicator */}
-                    {(item.slug === 'inscriptions' || item.slug === 'select-additions' || item.slug === 'select-motifs') && itemCount && itemCount > 0 && (
-                      expandedSections[item.slug] ? 
-                        <ChevronUpIcon className="h-4 w-4 flex-shrink-0" /> : 
-                        <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
-                    )}
-                  </Link>
-                )}
-                
-              </React.Fragment>
-            );
-          })}
+                </div>
               </div>
+            )}
+
+            {/* Grouped Menu Navigation */}
+            <div className="flex flex-col gap-5">
+              {menuGroups.map((group, groupIndex) => (
+                <div
+                  key={group.label}
+                  className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm"
+                >
+                  <div className="mb-3 flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-1.5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-[#0f0a07]/60 text-xs font-semibold text-white/80">
+                        {String(groupIndex + 1).padStart(2, '0')}
+                      </span>
+                      <p className="text-lg font-normal tracking-tight text-white">
+                        {group.label}
+                      </p>
+                    </div>
+                    <span className="text-[9px] tracking-[0.4em] text-white/45 uppercase">
+                      Step {groupIndex + 1}
+                    </span>
+                  </div>
+
+                  {/* Group Items */}
+                  <div className="flex flex-col gap-2">
+                    {group.items.map((item, index) => {
+                      const Icon = item.icon;
+                      const isRouteActive = pathname === `/${item.slug}`;
+                      const isPanelActive = activeFullscreenPanel === item.slug;
+                      const isActive = isRouteActive || isPanelActive;
+                      const highlightActive = fullscreenPanelSlugs.has(
+                        item.slug,
+                      )
+                        ? isPanelActive || isRouteActive
+                        : isActive;
+                      const itemStatus = getItemStatus(item.slug);
+                      const itemCount = getItemCount(item.slug);
+
+                      // Status-based styling
+                      const statusClasses =
+                        itemStatus === 'complete'
+                          ? 'border-green-500/30 text-green-400'
+                          : itemStatus === 'incomplete'
+                            ? 'border-amber-500/30 text-amber-400'
+                            : 'border-white/10 text-gray-200';
+
+                      // Hide "Select Material" for laser etched products
+                      if (
+                        item.slug === 'select-material' &&
+                        catalog?.product?.laser === '1'
+                      ) {
+                        return null;
+                      }
+
+                      // Hide "Select Border" for products without border support
+                      if (item.slug === 'select-border' && !hasBorder) {
+                        return null;
+                      }
+
+                      // Hide "Select Additions" for laser etched products
+                      if (
+                        item.slug === 'select-additions' &&
+                        catalog?.product?.laser === '1'
+                      ) {
+                        return null;
+                      }
+
+                      // Hide 3D Preview when canvas is already visible or on select-size page
+                      if (
+                        item.slug === '3d-preview' &&
+                        (showCanvas || pathname === '/select-size')
+                      ) {
+                        return null;
+                      }
+
+                      if (fullscreenPanelSlugs.has(item.slug)) {
+                        const shouldRenderInlinePanel =
+                          item.slug === 'select-size' &&
+                          isSelectSizePage &&
+                          !selectedMotifId &&
+                          !selectedAdditionId &&
+                          activeFullscreenPanel === 'select-size';
+
+                        return (
+                          <React.Fragment key={item.slug}>
+                            <button
+                              type="button"
+                              data-section={item.slug}
+                              onClick={(e) => handleMenuClick(item.slug, e)}
+                              onMouseDown={(e) => e.preventDefault()}
+                              style={{
+                                caretColor: 'transparent',
+                                userSelect: 'none',
+                              }}
+                              className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                highlightActive
+                                  ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                  : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                              }`}
+                            >
+                              <Icon className="h-5 w-5 flex-shrink-0" />
+                              <span
+                                className="select-none"
+                                style={{ caretColor: 'transparent' }}
+                              >
+                                {item.name}
+                              </span>
+                            </button>
+
+                            {shouldRenderInlinePanel &&
+                              renderSelectSizePanel('mt-3')}
+                          </React.Fragment>
+                        );
+                      }
+
+                      // Special handling for Select Border - show border selector in sidebar when canvas is visible
+                      if (item.slug === 'select-border') {
+                        return (
+                          <React.Fragment key={item.slug}>
+                            {isCanvasVisible ? (
+                              <>
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    // Navigate to select-border page to keep canvas visible and show border selector
+                                    if (pathname !== '/select-border') {
+                                      router.push('/select-border');
+                                    }
+                                  }}
+                                  onMouseDown={(e) => e.preventDefault()}
+                                  style={{
+                                    caretColor: 'transparent',
+                                    userSelect: 'none',
+                                  }}
+                                  className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                    isActive
+                                      ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                      : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                  }`}
+                                >
+                                  <Icon className="h-5 w-5 flex-shrink-0" />
+                                  <span>{item.name}</span>
+                                </button>
+
+                                {isActive &&
+                                  !selectedMotifId &&
+                                  !selectedAdditionId && (
+                                    <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                                      <BorderSelector borders={borders} />
+                                    </div>
+                                  )}
+                              </>
+                            ) : (
+                              // Show link when canvas is not visible (first-time selection)
+                              <Link
+                                href={`/${item.slug}`}
+                                data-section={item.slug}
+                                className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                                  isActive
+                                    ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                    : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                }`}
+                              >
+                                <Icon className="h-5 w-5 flex-shrink-0" />
+                                <span>{item.name}</span>
+                              </Link>
+                            )}
+                          </React.Fragment>
+                        );
+                      }
+
+                      // Special handling for Select Material - show material selector in sidebar when canvas is visible
+                      if (item.slug === 'select-material') {
+                        return (
+                          <React.Fragment key={item.slug}>
+                            {isCanvasVisible ? (
+                              <>
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    // Navigate to select-material page to keep canvas visible and show material selector
+                                    if (pathname !== '/select-material') {
+                                      router.push('/select-material');
+                                    }
+                                  }}
+                                  onMouseDown={(e) => e.preventDefault()}
+                                  style={{
+                                    caretColor: 'transparent',
+                                    userSelect: 'none',
+                                  }}
+                                  className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                    isActive
+                                      ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                      : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                  }`}
+                                >
+                                  <Icon className="h-5 w-5 flex-shrink-0" />
+                                  <span
+                                    className="select-none"
+                                    style={{ caretColor: 'transparent' }}
+                                  >
+                                    {item.name}
+                                  </span>
+                                </button>
+
+                                {isActive &&
+                                  !selectedMotifId &&
+                                  !selectedAdditionId &&
+                                  materials.length > 0 && (
+                                    <div className="mt-3 h-[calc(100vh-280px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                                      <div className="h-full overflow-y-auto pr-1">
+                                        <MaterialSelector
+                                          materials={materials}
+                                          disableInternalScroll
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+                              </>
+                            ) : (
+                              // Show link when canvas is not visible (first-time selection)
+                              <Link
+                                href={`/${item.slug}`}
+                                data-section={item.slug}
+                                className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                                  isActive
+                                    ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                    : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                }`}
+                              >
+                                <Icon className="h-5 w-5 flex-shrink-0" />
+                                <span>{item.name}</span>
+                              </Link>
+                            )}
+                          </React.Fragment>
+                        );
+                      }
+
+                      // Special handling for Save Design - always a button, never navigate
+                      if (item.slug === 'save-design') {
+                        return (
+                          <React.Fragment key={item.slug}>
+                            <button
+                              onClick={(e) => handleMenuClick(item.slug, e)}
+                              className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10"
+                            >
+                              <Icon className="h-5 w-5 flex-shrink-0" />
+                              <span>{item.name}</span>
+                            </button>
+                          </React.Fragment>
+                        );
+                      }
+
+                      // Determine if step should be disabled (steps 3-10 need a product selected)
+                      // Exception: Check Price is always enabled (users can see base price even with empty headstone)
+                      const needsProduct =
+                        index >= 2 && item.slug !== 'check-price';
+                      const isDisabled = needsProduct && !catalog;
+
+                      return (
+                        <React.Fragment key={item.slug}>
+                          {isDisabled ? (
+                            <div
+                              className="flex cursor-not-allowed items-center gap-3 rounded-lg border border-white/5 px-4 py-3 text-base font-light opacity-40"
+                              title="Please select a product first"
+                            >
+                              <Icon className="h-5 w-5 flex-shrink-0 text-gray-500" />
+                              <span className="text-gray-500">{item.name}</span>
+                            </div>
+                          ) : (
+                            <Link
+                              href={`/${item.slug}`}
+                              onClick={(e) => handleMenuClick(item.slug, e)}
+                              className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                                isActive
+                                  ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                  : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <Icon className="h-5 w-5 flex-shrink-0" />
+                                <span>{item.name}</span>
+                              </div>
+
+                              {/* Count Badge */}
+                              {itemCount && itemCount > 0 && (
+                                <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400">
+                                  {itemCount}
+                                </span>
+                              )}
+
+                              {/* Expandable Indicator */}
+                              {(item.slug === 'inscriptions' ||
+                                item.slug === 'select-additions' ||
+                                item.slug === 'select-motifs') &&
+                                itemCount &&
+                                itemCount > 0 &&
+                                (expandedSections[item.slug] ? (
+                                  <ChevronUpIcon className="h-4 w-4 flex-shrink-0" />
+                                ) : (
+                                  <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
+                                ))}
+                            </Link>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-          
-        {/* Browse Designs CTA */}
-        <Link
-          href="/designs"
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-light transition-all text-white bg-white/15 shadow-lg border border-white/30 backdrop-blur-sm hover:bg-white/20"
-        >
-          <SparklesIcon className="h-5 w-5 flex-shrink-0" />
-          <span>Browse Designs</span>
-        </Link>
-      </div>
+
+            {/* Browse Designs CTA */}
+            <Link
+              href="/designs"
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-4 py-3 text-base font-light text-white shadow-lg backdrop-blur-sm transition-all hover:bg-white/20"
+            >
+              <SparklesIcon className="h-5 w-5 flex-shrink-0" />
+              <span>Browse Designs</span>
+            </Link>
+          </div>
         </>
       )}
 
@@ -2463,7 +2969,3 @@ export default function DesignerNav() {
     </nav>
   );
 }
-
-
-
-

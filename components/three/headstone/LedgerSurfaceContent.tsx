@@ -13,9 +13,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
 
-type Props = {
-  ledgerRef: React.RefObject<THREE.Mesh>;
-};
+type Props = { ledgerRef: React.RefObject<THREE.Mesh> };
 
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
   (map, font) => {
@@ -35,7 +33,9 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
-  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedInscriptionId = useHeadstoneStore(
+    (s) => s.selectedInscriptionId,
+  );
   const setSelectedInscriptionId = useHeadstoneStore(
     (s) => s.setSelectedInscriptionId,
   );
@@ -97,103 +97,105 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
   const ledgerAdditionIds = React.useMemo(
     () =>
       selectedAdditions.filter(
-        (id) => (additionOffsets[id]?.targetSurface ?? 'headstone') === 'ledger',
+        (id) =>
+          (additionOffsets[id]?.targetSurface ?? 'headstone') === 'ledger',
       ),
     [additionOffsets, selectedAdditions],
   );
 
-  if (!ledgerRef?.current && !meshReady) {
-    return null;
-  }
+  const canRenderLedgerContent = !!ledgerRef.current || meshReady;
 
   return (
     <group ref={groupRef}>
-      {ledgerInscriptions.map((line, index) => {
-        const zBump = (ledgerInscriptions.length - 1 - index) * 0.00005;
-        return (
-          <React.Suspense key={line.id} fallback={null}>
-            <HeadstoneInscription
-              id={line.id}
+      {canRenderLedgerContent &&
+        ledgerInscriptions.map((line, index) => {
+          const zBump = (ledgerInscriptions.length - 1 - index) * 0.00005;
+          return (
+            <React.Suspense key={line.id} fallback={null}>
+              <HeadstoneInscription
+                id={line.id}
+                headstone={headstoneApi}
+                surface="ledger"
+                font={FONT_MAP[line.font] || `/fonts/${line.font}.woff2`}
+                editable
+                selected={selectedInscriptionId === line.id}
+                onSelectInscription={() => {
+                  setSelected('ledger');
+                  setSelectedMotifId(null);
+                  setSelectedAdditionId(null);
+                  setSelectedInscriptionId(line.id);
+                  setActivePanel('inscription');
+
+                  if (pathname !== '/inscriptions') {
+                    router.push('/inscriptions');
+                  }
+
+                  if (typeof window !== 'undefined') {
+                    window.dispatchEvent(
+                      new CustomEvent('openFullscreenPanel', {
+                        detail: { panel: 'inscriptions' },
+                      }),
+                    );
+                  }
+                }}
+                color={line.color}
+                lift={0.002}
+                xPos={line.xPos}
+                yPos={line.yPos}
+                rotationDeg={line.rotationDeg}
+                height={line.sizeMm}
+                text={line.text}
+                zBump={zBump}
+              />
+            </React.Suspense>
+          );
+        })}
+
+      {canRenderLedgerContent &&
+        ledgerMotifs.map((motif, index) => (
+          <React.Suspense key={`${motif.id}-${index}`} fallback={null}>
+            <MotifModel
+              id={motif.id}
+              svgPath={motif.svgPath}
+              color={motif.color}
               headstone={headstoneApi}
               surface="ledger"
-              font={FONT_MAP[line.font] || `/fonts/${line.font}.woff2`}
-              editable
-              selected={selectedInscriptionId === line.id}
-              onSelectInscription={() => {
-                setSelected('ledger');
-                setSelectedMotifId(null);
-                setSelectedAdditionId(null);
-                setSelectedInscriptionId(line.id);
-                setActivePanel('inscription');
-
-                if (pathname !== '/inscriptions') {
-                  router.push('/inscriptions');
-                }
-
-                if (typeof window !== 'undefined') {
-                  window.dispatchEvent(
-                    new CustomEvent('openFullscreenPanel', {
-                      detail: { panel: 'inscriptions' },
-                    }),
-                  );
-                }
-              }}
-              color={line.color}
-              lift={0.002}
-              xPos={line.xPos}
-              yPos={line.yPos}
-              rotationDeg={line.rotationDeg}
-              height={line.sizeMm}
-              text={line.text}
-              zBump={zBump}
+              index={index}
             />
           </React.Suspense>
-        );
-      })}
+        ))}
 
-      {ledgerMotifs.map((motif, index) => (
-        <React.Suspense key={`${motif.id}-${index}`} fallback={null}>
-          <MotifModel
-            id={motif.id}
-            svgPath={motif.svgPath}
-            color={motif.color}
-            headstone={headstoneApi}
-            surface="ledger"
-            index={index}
-          />
-        </React.Suspense>
-      ))}
+      {canRenderLedgerContent &&
+        ledgerImages.map((image, index) => (
+          <React.Suspense key={`${image.id}-${index}`} fallback={null}>
+            <ImageModel
+              id={image.id}
+              imageUrl={image.imageUrl}
+              widthMm={image.widthMm}
+              heightMm={image.heightMm}
+              xPos={image.xPos}
+              yPos={image.yPos}
+              rotationZ={image.rotationZ}
+              typeId={image.typeId}
+              maskShape={image.maskShape}
+              headstone={headstoneApi}
+              surface="ledger"
+              index={index}
+            />
+          </React.Suspense>
+        ))}
 
-      {ledgerImages.map((image, index) => (
-        <React.Suspense key={`${image.id}-${index}`} fallback={null}>
-          <ImageModel
-            id={image.id}
-            imageUrl={image.imageUrl}
-            widthMm={image.widthMm}
-            heightMm={image.heightMm}
-            xPos={image.xPos}
-            yPos={image.yPos}
-            rotationZ={image.rotationZ}
-            typeId={image.typeId}
-            maskShape={image.maskShape}
-            headstone={headstoneApi}
-            surface="ledger"
-            index={index}
-          />
-        </React.Suspense>
-      ))}
-
-      {ledgerAdditionIds.map((additionId, index) => (
-        <React.Suspense key={`${additionId}-${index}`} fallback={null}>
-          <AdditionModel
-            id={additionId}
-            headstone={headstoneApi}
-            surface="ledger"
-            index={index}
-          />
-        </React.Suspense>
-      ))}
+      {canRenderLedgerContent &&
+        ledgerAdditionIds.map((additionId, index) => (
+          <React.Suspense key={`${additionId}-${index}`} fallback={null}>
+            <AdditionModel
+              id={additionId}
+              headstone={headstoneApi}
+              surface="ledger"
+              index={index}
+            />
+          </React.Suspense>
+        ))}
     </group>
   );
 }
-

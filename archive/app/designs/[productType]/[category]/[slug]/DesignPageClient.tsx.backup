@@ -1,0 +1,315 @@
+'use client';
+
+import { useEffect, useState, Suspense, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSavedDesign, convertSavedDesignToDYO } from '#/components/SavedDesignLoader';
+import { loadSavedDesignIntoEditor } from '#/lib/saved-design-loader-utils';
+import { useHeadstoneStore } from '#/lib/headstone-store';
+import { ChevronRightIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import type { CategoryInfo } from '#/lib/saved-designs-data';
+import ThreeScene from '#/components/ThreeScene';
+import SceneOverlayHost from '#/components/SceneOverlayHost';
+import CanvasFallback from '#/components/CanvasFallback';
+import { SkeletonCard } from '#/ui/skeleton-card';
+
+interface DesignPageClientProps {
+  productType: string;
+  category: string;
+  slug: string; // Format: {id}_{description}
+  categoryInfo: CategoryInfo;
+  designId: string | null; // Extracted from slug
+}
+
+export default function DesignPageClient({ 
+  productType,
+  category, 
+  slug, 
+  categoryInfo, 
+  designId 
+}: DesignPageClientProps) {
+  const router = useRouter();
+  const [loadingIntoEditor, setLoadingIntoEditor] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showEditor, setShowEditor] = useState(true); // Start with editor shown
+
+  const { design, loading } = useSavedDesign(designId || '');
+  const loadedRef = useRef(false);
+  const sidebarInitialized = useRef(false);
+
+  // Ensure sidebar is visible on mount for desktop
+  useEffect(() => {
+    if (sidebarInitialized.current) return;
+    sidebarInitialized.current = true;
+    
+    // Small delay to ensure GlobalNav has initialized
+    const timer = setTimeout(() => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+        // Check if sidebar is already open by checking the MainContent padding
+        const mainContent = document.querySelector('.lg\\:pl-\\[400px\\]');
+        if (!mainContent) {
+          // Sidebar is closed, open it
+          window.dispatchEvent(new Event('toggle-sidebar'));
+        }
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Auto-load design when it becomes available
+  useEffect(() => {
+    if (design && designId && !loadingIntoEditor && !error && !loadedRef.current) {
+      console.log('🔄 Auto-loading design...');
+      loadedRef.current = true;
+      handleLoadDesign();
+    }
+  }, [design, designId, loadingIntoEditor, error]);
+
+  const handleLoadDesign = async () => {
+    if (!design || !designId) {
+      console.error('❌ Missing data:', { design, designId });
+      setError('Design data not available');
+      alert('Failed to load design. Please try again.');
+      return;
+    }
+
+    console.log('🔵 Starting design load...');
+    console.log('📦 Design ID:', designId);
+    console.log('📄 Design data:', design);
+    console.log('📊 Design array length:', design?.length);
+    console.log('🔍 First few items:', design?.slice(0, 3));
+
+    try {
+      setLoadingIntoEditor(true);
+      setError(null);
+
+      console.log('⚙️ Calling loadSavedDesignIntoEditor...');
+      
+      // Load into editor
+      const result = await loadSavedDesignIntoEditor(design, designId);
+      
+      console.log('✅ Load successful:', result);
+      
+      // Check the store state after loading
+      const store = useHeadstoneStore.getState();
+      console.log('📊 Store state after load:', {
+        inscriptions: store.inscriptions.length,
+        motifs: store.motifs?.length || 0,
+        additions: store.additions?.length || 0,
+        width: store.widthMm,
+        height: store.heightMm,
+        texture: store.headstoneMaterialUrl
+      });
+      console.log('📝 Inscription details:', store.inscriptions);
+
+      console.log('🎉 Design loaded successfully!');
+      console.log(`✨ Loaded ${result.inscriptionsLoaded} inscriptions, ${result.motifsLoaded || 0} motifs`);
+      
+      // Show the editor
+      setShowEditor(true);
+      
+    } catch (err) {
+      console.error('❌ Failed to load design into editor:', err);
+      console.error('📋 Error details:', {
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : undefined,
+        design,
+        designId
+      });
+      setError(err instanceof Error ? err.message : 'Failed to load design');
+      alert('Failed to load design. Please try again.');
+    } finally {
+      setLoadingIntoEditor(false);
+    }
+  };
+
+  if (loading || (designId && loadingIntoEditor)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <ArrowPathIcon className="w-12 h-12 animate-spin text-blue-600" />
+          <p className="text-gray-600">
+            {loading ? 'Loading design...' : 'Loading into editor...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="max-w-md p-6 bg-red-50 border border-red-200 rounded-lg">
+          <h2 className="text-xl font-bold text-red-900 mb-2">Error Loading Design</h2>
+          <p className="text-red-700">{error}</p>
+          <button
+            onClick={() => router.push(`/designs/${category}`)}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Back to {categoryInfo.name}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const productTypeTitle = productType.charAt(0).toUpperCase() + productType.slice(1);
+
+  return (
+    <>
+      {/* 3D Editor - shown by default */}
+      {showEditor && (
+        <div className="fixed inset-0 z-40">
+          <Suspense fallback={<SkeletonCard />}>
+            <SceneOverlayHost />
+            <ThreeScene />
+          </Suspense>
+          <CanvasFallback>
+            {/* Design info below canvas */}
+            <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+              <div className="max-w-7xl mx-auto px-4 py-6">
+                {/* Breadcrumb */}
+                <nav className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                  <a href="/designs" className="hover:text-blue-600">Designs</a>
+                  <ChevronRightIcon className="w-4 h-4" />
+                  <a href={`/designs/${productType}`} className="hover:text-blue-600 capitalize">{productTypeTitle}</a>
+                  <ChevronRightIcon className="w-4 h-4" />
+                  <a href={`/designs/${productType}/${category}`} className="hover:text-blue-600">{categoryInfo.name}</a>
+                  <ChevronRightIcon className="w-4 h-4" />
+                  <span className="text-gray-900 font-medium">{design?.title || slug.replace(/_/g, ' ').replace(/-/g, ' ')}</span>
+                </nav>
+
+                {/* Compact info */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">
+                        {productTypeTitle}
+                      </span>
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">
+                        {categoryInfo.name}
+                      </span>
+                    </div>
+                    <h2 className="text-lg font-semibold text-gray-900">
+                      {design?.title || slug.replace(/_/g, ' ').replace(/-/g, ' ')}
+                    </h2>
+                  </div>
+                  <button
+                    onClick={() => router.push(`/designs/${productType}/${category}`)}
+                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg"
+                  >
+                    Back to Gallery
+                  </button>
+                </div>
+              </div>
+            </div>
+          </CanvasFallback>
+        </div>
+      )}
+      
+      {/* Full Info Page (hidden when editor is shown) */}
+      {!showEditor && (
+        <div className="min-h-screen bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
+            <a href="/designs" className="hover:text-blue-600">Designs</a>
+            <ChevronRightIcon className="w-4 h-4" />
+            <a href={`/designs/${productType}`} className="hover:text-blue-600 capitalize">{productTypeTitle}</a>
+            <ChevronRightIcon className="w-4 h-4" />
+            <a href={`/designs/${productType}/${category}`} className="hover:text-blue-600">{categoryInfo.name}</a>
+            <ChevronRightIcon className="w-4 h-4" />
+            <span className="text-gray-900">{design?.title || slug.replace(/_/g, ' ').replace(/-/g, ' ')}</span>
+          </nav>
+
+          {/* Content */}
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="p-8">
+              <div className="mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
+                    {productTypeTitle}
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full">
+                    {categoryInfo.name}
+                  </span>
+                </div>
+                
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                  {design?.title || slug.replace(/_/g, ' ').replace(/-/g, ' ')}
+                </h1>
+                
+                <p className="text-lg text-gray-600">
+                  {design?.description || categoryInfo.description}
+                </p>
+              </div>
+
+              {/* Keywords */}
+              {design?.keywords && design.keywords.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {design.keywords.map((keyword, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                {designId && !loadingIntoEditor && (
+                  <button
+                    onClick={handleLoadDesign}
+                    disabled={loading}
+                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    Load Design & Open Editor
+                  </button>
+                )}
+                {loadingIntoEditor && (
+                  <button
+                    disabled
+                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg opacity-50 cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                    Loading Design...
+                  </button>
+                )}
+              </div>
+
+              {/* Design Info */}
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Design Information</h2>
+                <dl className="grid grid-cols-2 gap-4">
+                  <div>
+                    <dt className="text-sm font-medium text-gray-500">Product Type</dt>
+                    <dd className="text-sm text-gray-900 capitalize">{productType}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm font-medium text-gray-500">Category</dt>
+                    <dd className="text-sm text-gray-900">{categoryInfo.name}</dd>
+                  </div>
+                  {design?.style && (
+                    <div>
+                      <dt className="text-sm font-medium text-gray-500">Style</dt>
+                      <dd className="text-sm text-gray-900 capitalize">{design.style.replace(/-/g, ' ')}</dd>
+                    </div>
+                  )}
+                  {designId && (
+                    <div>
+                      <dt className="text-sm font-medium text-gray-500">Design ID</dt>
+                      <dd className="text-sm text-gray-900 font-mono">{designId}</dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import React from 'react';
-import type { Group } from 'three';
+import type { Group, Mesh } from 'three';
 import { DEFAULT_SHAPE_URL, FULL_MONUMENT_WIDTH_DIFF, FULL_MONUMENT_HEIGHT_DIFF } from '#/lib/headstone-constants';
 import type { CatalogData, AdditionData, PriceModel } from '#/lib/xml-parser';
 import {
@@ -165,6 +165,8 @@ type HeadstoneState = {
   addAddition: (id: string) => void;
   removeAddition: (id: string) => void;
   hasStatue: () => boolean;
+  baseMeshRef: Mesh | null;
+  setBaseMeshRef: (mesh: Mesh | null) => void;
 
   selectedMotifs: Array<{ id: string; svgPath: string; color: string }>;
   addMotif: (svgPath: string) => void;
@@ -521,6 +523,24 @@ const withOffsetSurfaceDimensions = <T extends OffsetWithDimensions>(
   } as T & { baseWidthMm: number; baseHeightMm: number };
 };
 
+const clampEditingObject = (
+  editingObject: HeadstoneState['editingObject'],
+  visibility: { showBase: boolean; showLedger: boolean; showKerbset: boolean },
+): HeadstoneState['editingObject'] => {
+  if (editingObject === 'ledger' && !visibility.showLedger) {
+    return visibility.showBase ? 'base' : 'headstone';
+  }
+  if (editingObject === 'kerbset' && !visibility.showKerbset) {
+    if (visibility.showLedger) return 'ledger';
+    if (visibility.showBase) return 'base';
+    return 'headstone';
+  }
+  if (editingObject === 'base' && !visibility.showBase) {
+    return visibility.showLedger ? 'ledger' : 'headstone';
+  }
+  return editingObject;
+};
+
 const genId = () => `l-${crypto.randomUUID()}`;
 const genMotifId = () => `motif-${crypto.randomUUID()}`;
 
@@ -569,11 +589,31 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
     set((s) => {
-      // Use editingObject as primary (persists through panel navigation) with selected as fallback
+      // Use editingObject as primary (persists through panel navigation) with selected as fallback.
+      // Only honor a surface when it is actually visible to avoid targeting hidden ledger/base meshes.
       const editTarget = s.editingObject;
-      const targetSurface: 'headstone' | 'base' | 'ledger' =
-        (editTarget === 'base' || s.selected === 'base') ? 'base' :
-        (editTarget === 'ledger' || s.selected === 'ledger') ? 'ledger' : 'headstone';
+      const wantsBase = editTarget === 'base' || s.selected === 'base';
+      const wantsLedger = editTarget === 'ledger' || s.selected === 'ledger';
+      const baseAvailable = s.showBase;
+      const ledgerAvailable = s.showLedger;
+      const prefersBaseSurface = additionType === 'statue' || additionType === 'vase';
+
+      const fallbackSurface: 'headstone' | 'base' | 'ledger' =
+        prefersBaseSurface && baseAvailable
+          ? 'base'
+          : prefersBaseSurface && !baseAvailable && ledgerAvailable
+            ? 'ledger'
+            : 'headstone';
+
+      let targetSurface: 'headstone' | 'base' | 'ledger' = fallbackSurface;
+
+      if (wantsLedger && ledgerAvailable) {
+        targetSurface = 'ledger';
+      } else if (wantsBase && baseAvailable) {
+        targetSurface = 'base';
+      } else if (wantsLedger && !ledgerAvailable && baseAvailable) {
+        targetSurface = 'base';
+      }
       const defaultOffset = withOffsetSurfaceDimensions<AdditionOffset>(
         {
           scale: 1,
@@ -631,6 +671,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const addition = data.additions.find((a) => a.id === baseId);
       return addition?.type === 'statue' || addition?.type === 'vase';
     });
+  },
+  baseMeshRef: null,
+  setBaseMeshRef(mesh) {
+    set({ baseMeshRef: mesh });
   },
 
   // Sample template: Add dove motif
@@ -850,10 +894,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const showBase = isHeadstoneLike || productType === 'monument' || productType === 'full-monument';
       const isFullMonument = productType === 'full-monument';
       const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
-      set({ showBase, showInscriptionColor });
-      if (isFullMonument !== undefined) {
-        set({ showLedger: isFullMonument, showKerbset: isFullMonument });
-      }
+      set((s) => {
+        const visibility = {
+          showBase,
+          showLedger: isFullMonument,
+          showKerbset: isFullMonument,
+        };
+        const nextEditingObject = clampEditingObject(s.editingObject, visibility);
+        const patch: Partial<HeadstoneState> = {
+          ...visibility,
+          showInscriptionColor,
+        };
+        if (nextEditingObject !== s.editingObject) {
+          patch.editingObject = nextEditingObject;
+        }
+        return patch;
+      });
       const hasBase = showBase;
       const prevProductType = prevSnapshot.catalog?.product?.type;
       const prevProductWasPlaque =
@@ -1161,13 +1217,46 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   showBase: true,
-  setShowBase: (showBase) => set({ showBase }),
+  setShowBase: (showBase) =>
+    set((s) => {
+      const nextEditingObject = clampEditingObject(s.editingObject, {
+        showBase,
+        showLedger: s.showLedger,
+        showKerbset: s.showKerbset,
+      });
+      if (nextEditingObject === s.editingObject) {
+        return { showBase };
+      }
+      return { showBase, editingObject: nextEditingObject };
+    }),
 
   showLedger: false,
-  setShowLedger: (v) => set({ showLedger: v }),
+  setShowLedger: (v) =>
+    set((s) => {
+      const nextEditingObject = clampEditingObject(s.editingObject, {
+        showBase: s.showBase,
+        showLedger: v,
+        showKerbset: s.showKerbset,
+      });
+      if (nextEditingObject === s.editingObject) {
+        return { showLedger: v };
+      }
+      return { showLedger: v, editingObject: nextEditingObject };
+    }),
 
   showKerbset: false,
-  setShowKerbset: (v) => set({ showKerbset: v }),
+  setShowKerbset: (v) =>
+    set((s) => {
+      const nextEditingObject = clampEditingObject(s.editingObject, {
+        showBase: s.showBase,
+        showLedger: s.showLedger,
+        showKerbset: v,
+      });
+      if (nextEditingObject === s.editingObject) {
+        return { showKerbset: v };
+      }
+      return { showKerbset: v, editingObject: nextEditingObject };
+    }),
 
   ledgerWidthMm: 950,
   setLedgerWidthMm: (v) => {
