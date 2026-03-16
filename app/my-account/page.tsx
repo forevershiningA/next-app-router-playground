@@ -72,13 +72,16 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
     }
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
+      const endpoint = tab === 'login' ? '/api/auth/login' : '/api/auth/register';
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (!res.ok) setError(data.error || 'Login failed');
+      if (!res.ok) {
+        setError(data.error || (tab === 'login' ? 'Login failed' : 'Registration failed'));
+      }
       else {
         window.dispatchEvent(new Event('session-changed'));
         onLogin(email);
