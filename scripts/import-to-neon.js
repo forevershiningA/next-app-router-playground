@@ -14,6 +14,31 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
+function cleanSqlDump(sqlContent) {
+  console.log('🧹 Cleaning SQL content...');
+  const cleanedSql = sqlContent
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('\\restrict') || trimmed.startsWith('\\unrestrict')) {
+        console.log(`   Removed: ${trimmed.substring(0, 60)}...`);
+        return false;
+      }
+      if (trimmed === '\\' || trimmed.match(/^\\\.+$/)) {
+        console.log(`   Removed: ${trimmed}`);
+        return false;
+      }
+      if (/^SET\s+transaction_timeout\s*=.*;$/i.test(trimmed)) {
+        console.log(`   Removed: ${trimmed}`);
+        return false;
+      }
+      return true;
+    })
+    .join('\n');
+  console.log('✅ SQL cleaned\n');
+  return cleanedSql;
+}
+
 async function importToNeon() {
   console.log('📥 Importing Database to Neon...\n');
 
@@ -65,6 +90,7 @@ async function importToNeon() {
   console.log('📖 Reading SQL dump...');
   const sqlContent = fs.readFileSync(exportFile, 'utf8');
   console.log(`✅ Loaded ${(sqlContent.length / 1024).toFixed(2)} KB of SQL\n`);
+  const cleanedSql = cleanSqlDump(sqlContent);
 
   // Confirm before proceeding
   console.log('⚠️  WARNING: This will replace all data in your Neon database!\n');
@@ -101,7 +127,7 @@ async function importToNeon() {
     console.log('🔨 Executing SQL dump...');
     console.log('   This may take a minute...\n');
     
-    await client.query(sqlContent);
+    await client.query(cleanedSql);
     
     console.log('✅ Import completed successfully!\n');
 

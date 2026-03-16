@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * Automated Database Backup & Sync to Neon
- * 
+ * Automated Database Backup & Sync to a remote PostgreSQL database
+ *
  * This script will:
- * 1. Backup local PostgreSQL database
- * 2. Drop all tables in Neon database (with confirmation)
- * 3. Import local backup to Neon
+ * 1. Backup the local PostgreSQL database
+ * 2. Drop all tables in the remote database (with confirmation)
+ * 3. Import the local backup to the remote database
  * 4. Verify the sync
  */
 
@@ -15,24 +15,98 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
 
-// Neon database connection (from Vercel)
-const NEON_CONFIG = {
-  connectionString: process.env.POSTGRES_URL || 'postgresql://neondb_owner:npg_4cngLG7qeuwQ@ep-aged-night-aibddvtz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require',
-  host: 'ep-aged-night-aibddvtz-pooler.c-4.us-east-1.aws.neon.tech',
-  database: 'neondb',
-  user: 'neondb_owner',
-  password: 'npg_4cngLG7qeuwQ',
+const parseBoolean = (value, fallback) => {
+  if (typeof value !== 'string' || value.length === 0) return fallback;
+  const normalized = value.trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+  if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+  return fallback;
+};
+
+const TARGET_CONFIG = {
+  label: process.env.DB_SYNC_TARGET_LABEL || 'home.pl',
+  connectionString: process.env.DB_SYNC_TARGET_URL || process.env.HOMEPL_DATABASE_URL || '',
+  host: process.env.DB_SYNC_TARGET_HOST || 'wiecznapamiec.home.pl',
+  port: process.env.DB_SYNC_TARGET_PORT || '5432',
+  database: process.env.DB_SYNC_TARGET_DATABASE || '11276881_forevershining',
+  user: process.env.DB_SYNC_TARGET_USER || '11276881_forevershining',
+  password: process.env.DB_SYNC_TARGET_PASSWORD || process.env.HOMEPL_DATABASE_PASSWORD || '',
+  ssl: parseBoolean(process.env.DB_SYNC_TARGET_SSL, false),
 };
 
 // Local database connection
 const LOCAL_CONFIG = {
-  host: 'localhost',
-  port: '5432',
-  user: 'postgres',
-  password: 'postgres',
-  database: 'headstonesdesigner'
+  host: process.env.LOCAL_DATABASE_HOST || 'localhost',
+  port: process.env.LOCAL_DATABASE_PORT || '5432',
+  user: process.env.LOCAL_DATABASE_USER || 'postgres',
+  password: process.env.LOCAL_DATABASE_PASSWORD || 'postgres',
+  database: process.env.LOCAL_DATABASE_NAME || 'headstonesdesigner',
 };
+
+function cleanSqlDump(sqlContent) {
+  console.log('🧹 Cleaning SQL content...');
+  const cleanedSql = sqlContent
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('\\restrict') || trimmed.startsWith('\\unrestrict')) {
+        console.log(`   Removed: ${trimmed.substring(0, 60)}...`);
+        return false;
+      }
+      if (trimmed === '\\' || trimmed.match(/^\\\.+$/)) {
+        console.log(`   Removed: ${trimmed}`);
+        return false;
+      }
+      if (/^SET\s+transaction_timeout\s*=.*;$/i.test(trimmed)) {
+        console.log(`   Removed: ${trimmed}`);
+        return false;
+      }
+      return true;
+    })
+    .join('\n');
+  console.log('✅ SQL cleaned\n');
+  return cleanedSql;
+}
+
+function ensureTargetConfig() {
+  if (TARGET_CONFIG.connectionString) {
+    return;
+  }
+
+  if (!TARGET_CONFIG.password) {
+    console.error(`❌ Error: Missing remote database password for ${TARGET_CONFIG.label}.\n`);
+    console.error('Set one of these environment variables in `.env.local` or your shell:');
+    console.error('  - DB_SYNC_TARGET_PASSWORD');
+    console.error('  - HOMEPL_DATABASE_PASSWORD\n');
+    console.error('Optional variables:');
+    console.error('  - DB_SYNC_TARGET_HOST');
+    console.error('  - DB_SYNC_TARGET_PORT');
+    console.error('  - DB_SYNC_TARGET_DATABASE');
+    console.error('  - DB_SYNC_TARGET_USER');
+    console.error('  - DB_SYNC_TARGET_SSL (default: false)\n');
+    process.exit(1);
+  }
+}
+
+function createTargetClient() {
+  if (TARGET_CONFIG.connectionString) {
+    return new Client({
+      connectionString: TARGET_CONFIG.connectionString,
+      ssl: TARGET_CONFIG.ssl ? { rejectUnauthorized: false } : false,
+    });
+  }
+
+  return new Client({
+    host: TARGET_CONFIG.host,
+    port: Number(TARGET_CONFIG.port),
+    database: TARGET_CONFIG.database,
+    user: TARGET_CONFIG.user,
+    password: TARGET_CONFIG.password,
+    ssl: TARGET_CONFIG.ssl ? { rejectUnauthorized: false } : false,
+  });
+}
 
 async function backupLocalDatabase() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -82,9 +156,9 @@ async function backupLocalDatabase() {
   });
 }
 
-async function dropNeonTables(client) {
+async function dropRemoteTables(client) {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log('🗑️  STEP 2: Dropping existing tables in Neon');
+  console.log(`🗑️  STEP 2: Dropping existing tables in ${TARGET_CONFIG.label}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
   console.log('🔍 Fetching existing tables...\n');
@@ -97,7 +171,7 @@ async function dropNeonTables(client) {
   `);
 
   if (tablesResult.rows.length === 0) {
-    console.log('ℹ️  No tables found in Neon database (fresh start)\n');
+    console.log(`ℹ️  No tables found in ${TARGET_CONFIG.label} database (fresh start)\n`);
     return;
   }
 
@@ -129,58 +203,35 @@ async function dropNeonTables(client) {
     END $$;
   `);
 
-  console.log('✅ Neon database cleaned!\n');
+  console.log(`✅ ${TARGET_CONFIG.label} database cleaned!\n`);
 }
 
-async function importToNeon(exportFile) {
+async function importToRemote(exportFile) {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log('📥 STEP 3: Importing to Neon database');
+  console.log(`📥 STEP 3: Importing to ${TARGET_CONFIG.label} database`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-  console.log('🔍 Neon database:');
-  console.log(`   Host: ${NEON_CONFIG.host}`);
-  console.log(`   Database: ${NEON_CONFIG.database}`);
-  console.log(`   User: ${NEON_CONFIG.user}\n`);
+  console.log(`🔍 ${TARGET_CONFIG.label} database:`);
+  console.log(`   Host: ${TARGET_CONFIG.host}:${TARGET_CONFIG.port}`);
+  console.log(`   Database: ${TARGET_CONFIG.database}`);
+  console.log(`   User: ${TARGET_CONFIG.user}`);
+  console.log(`   SSL: ${TARGET_CONFIG.ssl ? 'enabled' : 'disabled'}\n`);
 
   console.log('📖 Reading backup file...');
   const sqlContent = fs.readFileSync(exportFile, 'utf8');
   console.log(`✅ Loaded ${(sqlContent.length / 1024).toFixed(2)} KB of SQL\n`);
 
-  // Clean SQL content - remove problematic backslash commands
-  console.log('🧹 Cleaning SQL content...');
-  const cleanedSql = sqlContent
-    .split('\n')
-    .filter(line => {
-      const trimmed = line.trim();
-      // Remove \restrict and other unknown backslash commands (PostgreSQL 17+ security feature)
-      if (trimmed.startsWith('\\restrict') || trimmed.startsWith('\\unrestrict')) {
-        console.log(`   Removed: ${trimmed.substring(0, 60)}...`);
-        return false;
-      }
-      // Also remove empty backslash-only lines
-      if (trimmed === '\\' || trimmed.match(/^\\\.+$/)) {
-        console.log(`   Removed: ${trimmed}`);
-        return false;
-      }
-      return true;
-    })
-    .join('\n');
-  console.log('✅ SQL cleaned\n');
+  const cleanedSql = cleanSqlDump(sqlContent);
 
-  const client = new Client({
-    connectionString: NEON_CONFIG.connectionString,
-    ssl: {
-      rejectUnauthorized: false
-    }
-  });
+  const client = createTargetClient();
 
   try {
-    console.log('📡 Connecting to Neon...');
+    console.log(`📡 Connecting to ${TARGET_CONFIG.label}...`);
     await client.connect();
     console.log('✅ Connected!\n');
 
     // Drop existing tables
-    await dropNeonTables(client);
+    await dropRemoteTables(client);
 
     // Import SQL dump
     console.log('🚀 Executing SQL dump...');
@@ -245,10 +296,10 @@ async function confirmAction() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
   console.log('This script will:');
   console.log('1. Backup your LOCAL database');
-  console.log('2. DROP ALL TABLES in your NEON (production) database');
-  console.log('3. Import the local backup to Neon');
+  console.log(`2. DROP ALL TABLES in your ${TARGET_CONFIG.label} database`);
+  console.log(`3. Import the local backup to ${TARGET_CONFIG.label}`);
   console.log('4. Verify the sync\n');
-  console.log('🔴 ALL DATA IN NEON WILL BE REPLACED!\n');
+  console.log(`🔴 ALL DATA IN ${TARGET_CONFIG.label.toUpperCase()} WILL BE REPLACED!\n`);
 
   const answer = await new Promise(resolve => {
     rl.question('Type "SYNC" to continue or anything else to cancel: ', resolve);
@@ -265,14 +316,16 @@ async function confirmAction() {
 
 async function main() {
   try {
+    ensureTargetConfig();
+
     // Confirm before starting
     await confirmAction();
 
     // Step 1: Backup local database
     const exportFile = await backupLocalDatabase();
 
-    // Steps 2-3: Drop Neon tables and import
-    const client = await importToNeon(exportFile);
+    // Steps 2-3: Drop remote tables and import
+    const client = await importToRemote(exportFile);
 
     // Step 4: Verify
     await verifyImport(client);
@@ -282,7 +335,7 @@ async function main() {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('✨ DATABASE SYNC COMPLETE!');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-    console.log('✅ Your local database has been synced to Neon');
+    console.log(`✅ Your local database has been synced to ${TARGET_CONFIG.label}`);
     console.log(`📁 Backup saved: ${exportFile}\n`);
     console.log('Next steps:');
     console.log('1. Deploy to Vercel (if needed): git push');
@@ -296,7 +349,7 @@ async function main() {
     console.error('Error:', error.message);
     console.error('\nTroubleshooting:');
     console.error('1. Check that local PostgreSQL is running');
-    console.error('2. Verify Neon connection credentials');
+    console.error(`2. Verify ${TARGET_CONFIG.label} connection credentials`);
     console.error('3. Check network connectivity');
     console.error('4. Review error details above\n');
     process.exit(1);

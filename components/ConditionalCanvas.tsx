@@ -1,9 +1,8 @@
 'use client';
 
 import { Suspense, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import ThreeScene from '#/components/ThreeScene';
-import CropCanvas from '#/components/CropCanvas';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
 import CheckPricePanel from '#/components/CheckPricePanel';
 import SEOPanel from '#/components/SEOPanel';
@@ -11,6 +10,25 @@ import LoadDesignButton from '#/components/LoadDesignButton';
 import ErrorBoundary from '#/components/ErrorBoundary';
 import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+
+const CanvasLoadingFallback = (
+  <div className="flex min-h-[400px] items-center justify-center">
+    <div className="flex flex-col items-center gap-4">
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
+      <p className="text-sm text-gray-400">Loading scene...</p>
+    </div>
+  </div>
+);
+
+const ThreeScene = dynamic(() => import('#/components/ThreeScene'), {
+  ssr: false,
+  loading: () => CanvasLoadingFallback,
+});
+
+const CropCanvas = dynamic(() => import('#/components/CropCanvas'), {
+  ssr: false,
+  loading: () => CanvasLoadingFallback,
+});
 
 export default function ConditionalCanvas() {
   const pathname = usePathname();
@@ -87,14 +105,7 @@ export default function ConditionalCanvas() {
   return (
     <div className="fixed inset-0 lg:left-[400px] z-0">
       <Suspense
-        fallback={
-          <div className="flex min-h-[400px] items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
-              <p className="text-sm text-gray-400">Loading scene...</p>
-            </div>
-          </div>
-        }
+        fallback={CanvasLoadingFallback}
       >
         <ErrorBoundary
           fallback={
