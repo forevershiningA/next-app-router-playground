@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { getProductFromId } from '#/lib/product-utils';
 import DesignPageClient from './DesignPageClient';
@@ -190,7 +190,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
   const canonicalSlug = design.slug; // Use the clean, SEO-friendly slug from metadata
-  const currentPath = `/designs/${productSlug}/${category}/${canonicalSlug}`;
+  const currentPath = `/designs/${design.productSlug}/${design.category}/${canonicalSlug}`;
   const canonicalUrl = `${baseUrl}${currentPath}`;
 
   return {
@@ -241,6 +241,13 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
     notFound();
   }
 
+  const canonicalPath = `/designs/${design.productSlug}/${design.category}/${design.slug}`;
+  const requestedPath = `/designs/${productSlug}/${category}/${slug}`;
+
+  if (requestedPath !== canonicalPath) {
+    permanentRedirect(canonicalPath);
+  }
+
   const designId = design.id;
 
   // Generate structured data for SEO
@@ -272,7 +279,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
-  const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}/${design.slug}`;
+  const canonicalUrl = `${baseUrl}${canonicalPath}`;
   
   // JSON-LD Structured Data
   const structuredData = {

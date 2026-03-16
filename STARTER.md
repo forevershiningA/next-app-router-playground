@@ -1,7 +1,7 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-15
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
+**Last Updated:** 2026-03-16
+**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
 
@@ -31,34 +31,64 @@
 
 ---
 
-## Current Status (2026-03-15)
+## Current Status (2026-03-16)
 
-### ✅ Recent Changes (March 15, 2026)
+### ✅ Recent Changes (March 16, 2026)
 
-1. **Full Monument camera now supports headstone-focused auto zoom with orbit-preserving zoom-out - COMPLETE**
-   - Updated `components/three/FullMonumentFit.tsx` so full monuments no longer use a single static overview fit for every selection state.
-   - When `selected === 'headstone'`, the camera still fits to the upright/headstone mesh with a tighter framing.
-   - When switching from headstone to `base`, `ledger`, or `kerbset`, the camera now animates back out to the whole-monument fit while preserving the current `OrbitControls` direction instead of rotating back to a canned front overview.
-   - Non-headstone-to-non-headstone selection changes still leave the existing orbit view alone, while initial load and geometry-driven refits continue using the whole-monument overview.
-   - **File**: `components/three/FullMonumentFit.tsx`.
+1. **Full Monument camera + selection UX refined - COMPLETE**
+   - `components/three/FullMonumentFit.tsx` now supports:
+     - headstone-focused zoom-in,
+     - slower animated transitions,
+     - orbit-preserving zoom-out from headstone to whole-monument view,
+     - suppression of camera moves during material application,
+     - initial fit correction based on actual loaded monument bounds rather than trigger-only reruns.
+   - Clicking `Headstone` still zooms in; clicking `Base`, `Ledger`, or `Kerbset` still zooms out.
+   - Material application no longer forces the camera back to the front view while previewing granite from a custom orbit angle.
+   - **Files**: `components/three/FullMonumentFit.tsx`.
 
-2. **Full Monument headstone camera transitions are now smooth - COMPLETE**
-   - Replaced the immediate full-monument camera snap with an ease-in-out animated pose transition in `components/three/FullMonumentFit.tsx`.
-   - The initial fit still applies immediately on first load, and subsequent moves into headstone focus or back out to the full monument animate 50% slower for a calmer feel.
-   - This applies only to full monuments; non-full-monument products still use the existing `AutoFit` behavior.
-   - **File**: `components/three/FullMonumentFit.tsx`.
+2. **Monument-part clicks now retarget editing without changing sidebar section - COMPLETE**
+   - `ShapeSwapper.tsx` and `HeadstoneAssembly.tsx` now set both `selected` and `editingObject` for `headstone`, `base`, `ledger`, and `kerbset`.
+   - This keeps selection outlines and camera behavior working while leaving the user in the current panel (for example `Select Material`) instead of opening `Select Size`.
+   - Full monuments still initialize with `editingObject = 'ledger'` and `selected = 'ledger'`.
+   - **Files**: `components/three/headstone/ShapeSwapper.tsx`, `components/three/headstone/HeadstoneAssembly.tsx`.
 
-3. **Full Monument now defaults to the Ledger panel/selection on load - COMPLETE**
-   - `components/three/headstone/HeadstoneAssembly.tsx` now initializes full monuments with `editingObject = 'ledger'` and `selected = 'ledger'`.
-   - This prevents the UI from opening in a headstone-selected state by default and keeps the initial full-monument workflow focused on the ledger panel.
-   - Because the camera zoom-in path only activates for `selected === 'headstone'`, the initial full-monument view still stays on the whole-monument overview even though the ledger is the active panel.
-   - **File**: `components/three/headstone/HeadstoneAssembly.tsx`.
+3. **Ledger and Kerbset materials are now first-class targets - COMPLETE**
+   - Added independent `ledgerMaterialUrl` and `kerbsetMaterialUrl` state and persistence.
+   - Material UI now supports `Headstone`, `Base`, `Ledger`, and `Kerbset` targeting, and thumbnails/textures are normalized through `lib/material-utils.ts`.
+   - `LedgerSlab.tsx` and `KerbsetBorder.tsx` now render their own materials rather than reusing base material state.
+   - **Files**: `lib/headstone-store.ts`, `components/MaterialSelector.tsx`, `app/select-material/_ui/MaterialSelectionGrid.tsx`, `components/three/headstone/LedgerSlab.tsx`, `components/three/headstone/KerbsetBorder.tsx`, `lib/material-utils.ts`, serializer/check-price files.
 
-### ⚠️ Known Gaps (March 15, 2026)
-- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, currently including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+4. **Database workflow moved away from Neon assumptions - COMPLETE**
+   - `scripts/sync-to-neon.js` is now a generic remote sync script despite the legacy filename. It loads `.env.local`, backs up the local DB, drops remote tables, imports the dump, and verifies record counts.
+   - Default remote target is now the `home.pl` PostgreSQL database, with env-driven overrides:
+     - `DB_SYNC_TARGET_HOST`
+     - `DB_SYNC_TARGET_PORT`
+     - `DB_SYNC_TARGET_DATABASE`
+     - `DB_SYNC_TARGET_USER`
+     - `DB_SYNC_TARGET_PASSWORD`
+     - `DB_SYNC_TARGET_SSL`
+   - SQL cleanup now strips `\restrict`, `\unrestrict`, and `SET transaction_timeout = ...;` so imports work against PostgreSQL 13 on `home.pl`.
+   - `home.pl` PostgreSQL was verified reachable externally, but it **does not support SSL**, so remote connection strings currently require `sslmode=disable`.
+   - **Files**: `scripts/sync-to-neon.js`, `scripts/import-to-neon.js`.
+
+5. **Vercel build OOM regression fixed - COMPLETE**
+   - `ConditionalCanvas.tsx` now loads `ThreeScene` and `CropCanvas` with `next/dynamic(..., { ssr: false })`.
+   - This prevents the heavy React Three Fiber scene from being rendered during static generation, which was the main Vercel build memory spike after the DB/camera work.
+   - `pnpm build` now completes locally through static page generation after this change.
+   - **File**: `components/ConditionalCanvas.tsx`.
+
+6. **Account registration/login flow is now functional - COMPLETE**
+   - Added `POST /api/auth/register` to create accounts, create the matching profile row, and sign the user in immediately.
+   - `app/my-account/page.tsx` now posts the Register tab to `/api/auth/register` instead of incorrectly reusing `/api/auth/login`.
+   - Important operational note: login/registration always uses whichever database `DATABASE_URL` points to. Localhost and remote deployments can therefore have different account data until explicitly synced or seeded.
+   - **Files**: `app/api/auth/register/route.ts`, `app/my-account/page.tsx`.
+
+### ⚠️ Known Gaps (March 16, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
-- **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
-- **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog or UI changes.
+- **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog, material, or UI changes.
+- **home.pl SSL limitation**: The current remote PostgreSQL target rejects SSL connections, so Vercel/local connection strings need `sslmode=disable`. This is less robust than managed Postgres providers.
+- **Legacy script naming**: `scripts/sync-to-neon.js` and `scripts/import-to-neon.js` still carry Neon-era filenames even though the logic is now generic and `home.pl`-oriented by default.
 
 ---
 
@@ -96,7 +126,7 @@
 - **Base additions need visual re-check**: The base-space/parent-space transform bug has been fixed in `components/three/AdditionModel.tsx`, but the change still needs in-app visual confirmation against the latest `screen.png` regression scenario.
 - **TypeScript baseline**: `pnpm type-check` still fails because of pre-existing errors, most notably in `components/DesignerNav.tsx` (`TS2554`, missing `CatalogData.material`, `shape`, `border`).
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
-- **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
+- **Registration flow**: `/api/auth/register` now exists, but sub-page auth guards still need a fuller pass.
 - **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog or UI changes.
 
 ---
@@ -183,7 +213,7 @@
    - **Files**: `components/SelectionBox.tsx`, `components/three/ImageModel.tsx`, `styles/globals.css`, `app/select-product/_ui/ProductSelectionGrid.tsx`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
 
 ### ⚠️ Known Gaps (March 11, 2026)
-- **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
+- **Registration flow**: `/api/auth/register` now exists, but sub-page auth guards still need a fuller pass.
 - **TypeScript baseline**: `pnpm run type-check` fails due to pre-existing errors; we haven’t addressed them yet this cycle.
 - **Pricing regression tests**: Ledger/Kerb totals were added, but automated coverage is still missing—manual regression is required after catalog changes.
 
@@ -218,7 +248,7 @@
 
 ### ⚠️ Known Gaps (March 10, 2026)
 - **Full Monument pricing**: `catalog.product.ledgerPriceModel` and `kerbsetPriceModel` are parsed from XML but not yet included in the price total (`DesignerNav.tsx` ~line 1152 only sums `headstonePrice + basePrice`).
-- **Register endpoint**: `/api/auth/register` remains unimplemented.
+- **Registration flow**: `/api/auth/register` now exists, but account-area coverage is still incomplete.
 
 ---
 
@@ -237,7 +267,7 @@
 
 ### ⚠️ Known Gaps (March 7, 2026)
 - **Full Monument designer tabs**: Ledger and Kerbset dimension tabs still aren't wired into the pricing logic.
-- **Register endpoint**: `/api/auth/register` remains unimplemented even though the AuthGate exposes the register tab.
+- **Registration flow**: `/api/auth/register` now exists, but auth/authorization coverage outside the main gate still needs work.
 
 ---
 
@@ -346,25 +376,24 @@
    - **38-minute build**: After OOM fix, `config.cache = false` (added to reduce memory) backfired — it disabled webpack's filesystem cache, forcing full recompilation of Three.js/R3F/etc. on every build. Fixed by removing `cache = false` and instead setting `config.parallelism = 2` to limit concurrent module compilation.
    - **Files**: `package.json`, `next.config.ts`, `pnpm-lock.yaml`
 
-9. **Neon Production Database Setup**
-   - **Problem**: `db:sync` (copies local → Neon) ran correctly but the admin user was missing from Neon's `accounts` table.
-   - **Schema pushed to Neon**: Used `drizzle.neon.config.ts` (bypasses `.env.local` dotenv override) to push schema changes (indexes, column defaults) directly to Neon.
-   - **Search path issue**: Neon pooler endpoint requires `SET search_path TO public` before DML queries — without it, `INSERT INTO accounts` fails with "relation does not exist" even though the table exists in `information_schema`.
-   - **Admin user seeded**: Upserted via direct pg client with explicit `SET search_path TO public`.
+9. **Remote PostgreSQL Setup (current target: `home.pl`)**
+   - **Current direction**: production/staging DB work is now oriented around the externally reachable `home.pl` PostgreSQL instance rather than Neon.
+   - **`db:sync`** now targets the configured remote database and imports local dumps after stripping commands unsupported by PostgreSQL 13.
+   - **Credentials model**: the sync script defaults to `home.pl`, but remote host/database/user/password/SSL are all overridable via env vars.
    - **`SESSION_SECRET` required on Vercel**: Must be set as a Vercel environment variable. Without it, `lib/auth/session.ts`'s `getSecret()` throws and login returns 500.
 
 ### ⚠️ Known Gaps (March 5, 2026)
-- **Register endpoint**: `AuthGate` has a register tab but `/api/auth/register` route not yet created
+- **Sub-page auth gates**: `/my-account/details`, `/my-account/invoice`, `/my-account/designs/[id]`, etc. don't yet have a full auth/authorization pass
 - **Sub-page auth gates**: `/my-account/details`, `/my-account/invoice`, `/my-account/designs/[id]`, etc. don't guard against unauthenticated access
 - **Email sharing**: Returns 501 — needs real SendGrid/Resend implementation
 - **Orders page**: `/my-account/orders` linked from AccountNav but page doesn't exist yet
-- **Neon seeding after `db:sync`**: Running `db:sync` overwrites Neon. Must re-run admin seed after every sync. Consider adding it to the sync script's post-step.
-- **`drizzle.neon.config.ts`**: Temporary file used for Neon schema push — contains hardcoded credentials, should not be committed. Currently deleted after use.
+- **Remote account parity**: `db:sync` copies local DB contents to the remote DB, but local and remote accounts can drift whenever either side is seeded manually afterward.
+- **Legacy naming**: Some helper scripts and notes still use "neon" naming even though the live remote target has moved.
 
 ### 🔑 Vercel Environment Variables Required
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `DATABASE_URL` | Active PostgreSQL connection string (local or remote) |
 | `SESSION_SECRET` | JWT signing secret (any long random string) |
 
 ---
@@ -3703,24 +3732,25 @@ npm run db:seed-additions  # 82 additions (vases, statues, etc.)
 # Seed test user locally (admin@forevershining.com / admin123)
 node --env-file=.env.local scripts/seed-test-user.mjs
 
-# Sync local DB to Neon (production)
+# Sync local DB to the configured remote PostgreSQL target
 npm run db:sync
-# ⚠️ After db:sync, re-seed the admin user on Neon (db:sync overwrites everything):
-# Run seed-test-user.mjs with DATABASE_URL pointed at Neon connection string
+# ⚠️ After db:sync, any later manual account changes only exist on the DB you changed.
+# Keep local and remote accounts in sync intentionally.
 
 # Open Drizzle Studio (database GUI)
 npm run db:studio
 ```
 
-### Neon / Production Notes
+### Remote PostgreSQL / Production Notes
 - **`SESSION_SECRET`** must be set as a Vercel environment variable (JWT signing fails without it → login returns 500)
-- **`DATABASE_URL`** on Vercel must point to the Neon connection string
-- **Neon pooler search path**: When connecting via pooler endpoint (`*-pooler.*.neon.tech`), run `SET search_path TO public` before DML queries or they'll fail with "relation does not exist"
-- **After `db:sync`**: The admin user in `accounts` is included IF it exists locally. Always verify after sync.
+- **`DATABASE_URL`** on Vercel must point to the intended production PostgreSQL connection string
+- **Current `home.pl` caveat**: remote PostgreSQL works only with SSL disabled (`sslmode=disable`)
+- **After `db:sync`**: The remote `accounts` table mirrors whatever existed locally at sync time. Always verify/seed required users after environment switches.
 
 ### Build Notes
 - Build script: `NODE_OPTIONS='--max-old-space-size=4096' next build` — caps heap at 4 GB (Vercel container has 8 GB)
 - `webpack.parallelism = 2` — limits concurrent module compilation to prevent OOM
+- `ConditionalCanvas` dynamically imports `ThreeScene`/`CropCanvas` with `ssr: false` so static generation does not render the heavy 3D canvas on the server
 - **Do NOT set `config.cache = false`** — disabling webpack cache causes 30+ minute builds (Three.js/R3F must recompile from scratch every time)
 
 ### Building for Production
