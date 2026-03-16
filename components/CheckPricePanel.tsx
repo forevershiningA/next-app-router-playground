@@ -15,6 +15,7 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { calculatePrice } from '#/lib/xml-parser';
+import { getMaterialNameFromUrl } from '#/lib/material-utils';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -23,6 +24,8 @@ export default function CheckPricePanel() {
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const ledgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
+  const kerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
@@ -133,16 +136,14 @@ export default function CheckPricePanel() {
     
     // Check if it's a bronze texture
     if (url.includes('phoenix')) {
-      const match = url.match(/\/(\d+)\.jpg$/);
+      const match = url.match(/\/(\d+)\.(jpg|webp)$/);
       if (match) {
         const number = match[1];
         return BRONZE_MATERIALS[number] || `Bronze ${number}`;
       }
     }
-    
-    const parts = url.split('/');
-    const filename = parts[parts.length - 1];
-    return filename.replace('.jpg', '').replace('.png', '').replace(/-/g, ' ');
+
+    return getMaterialNameFromUrl(url);
   };
 
   // Convert mm to inches for display
@@ -394,7 +395,7 @@ export default function CheckPricePanel() {
                     <p className="text-gray-600">
                       Shape: {shapeName}
                       <br />
-                      Material: {getMaterialName(headstoneMaterialUrl)}
+                      Material: {getMaterialName(ledgerMaterialUrl)}
                       <br />
                       Size: {mmToInches(widthMm)} × {mmToInches(heightMm)}
                     </p>
@@ -454,7 +455,7 @@ export default function CheckPricePanel() {
                       <br />
                       Shape: Rectangle
                       <br />
-                      Material: {getMaterialName(headstoneMaterialUrl)}
+                      Material: {getMaterialName(kerbsetMaterialUrl)}
                       <br />
                       Size: {mmToInches(selectedShape?.lid?.initWidth ?? 0)} × {mmToInches(selectedShape?.lid?.initHeight ?? 0)} × {mmToInches(selectedShape?.lid?.initDepth ?? 0)}
                     </p>

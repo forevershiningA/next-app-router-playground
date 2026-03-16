@@ -3,7 +3,12 @@
 import { create } from 'zustand';
 import React from 'react';
 import type { Group, Mesh } from 'three';
-import { DEFAULT_SHAPE_URL, FULL_MONUMENT_WIDTH_DIFF, FULL_MONUMENT_HEIGHT_DIFF } from '#/lib/headstone-constants';
+import {
+  DEFAULT_SHAPE_URL,
+  FULL_MONUMENT_WIDTH_DIFF,
+  FULL_MONUMENT_HEIGHT_DIFF,
+  FULL_MONUMENT_DEPTH_DIFF,
+} from '#/lib/headstone-constants';
 import type { CatalogData, AdditionData, PriceModel } from '#/lib/xml-parser';
 import {
   parseCatalogXML,
@@ -266,6 +271,12 @@ type HeadstoneState = {
 
   baseMaterialUrl: string | null;
   setBaseMaterialUrl: (url: string) => void;
+
+  ledgerMaterialUrl: string | null;
+  setLedgerMaterialUrl: (url: string) => void;
+
+  kerbsetMaterialUrl: string | null;
+  setKerbsetMaterialUrl: (url: string) => void;
 
   baseSwapping: boolean;
   setBaseSwapping: (swapping: boolean) => void;
@@ -1072,7 +1083,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           const baseTexturePath = shape.stand.color.startsWith('/') 
             ? shape.stand.color 
             : `/${shape.stand.color}`;
-          set({ baseMaterialUrl: baseTexturePath });
+          set({
+            baseMaterialUrl: baseTexturePath,
+            ledgerMaterialUrl: baseTexturePath,
+            kerbsetMaterialUrl: baseTexturePath,
+          });
         }
 
         const productDefaultColor =
@@ -1273,7 +1288,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setLedgerHeightMm: (v) => set({ ledgerHeightMm: v }),
 
   ledgerDepthMm: 2030,
-  setLedgerDepthMm: (v) => set({ ledgerDepthMm: v }),
+  setLedgerDepthMm: (v) => {
+    const clampedDepth = Math.max(0, Math.round(v));
+    set({
+      ledgerDepthMm: clampedDepth,
+      kerbDepthMm: clampedDepth + FULL_MONUMENT_DEPTH_DIFF,
+    });
+  },
 
   kerbWidthMm: 1200,
   setKerbWidthMm: (v) => {
@@ -1296,7 +1317,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   kerbDepthMm: 2150,
-  setKerbDepthMm: (v) => set({ kerbDepthMm: v }),
+  setKerbDepthMm: (v) => {
+    const clampedDepth = Math.max(0, Math.round(v));
+    set({
+      kerbDepthMm: clampedDepth,
+      ledgerDepthMm: Math.max(0, clampedDepth - FULL_MONUMENT_DEPTH_DIFF),
+    });
+  },
 
   editingObject: 'headstone',
   setEditingObject: (obj) => set({ editingObject: obj }),
@@ -1362,6 +1389,18 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setBaseMaterialUrl(url) {
     const normalized = normalizeTextureUrl(url) ?? `${TEX_BASE}${DEFAULT_TEX}`;
     set({ baseMaterialUrl: normalized, baseSwapping: true });
+  },
+
+  ledgerMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
+  setLedgerMaterialUrl(url) {
+    const normalized = normalizeTextureUrl(url) ?? `${TEX_BASE}${DEFAULT_TEX}`;
+    set({ ledgerMaterialUrl: normalized });
+  },
+
+  kerbsetMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
+  setKerbsetMaterialUrl(url) {
+    const normalized = normalizeTextureUrl(url) ?? `${TEX_BASE}${DEFAULT_TEX}`;
+    set({ kerbsetMaterialUrl: normalized });
   },
 
   baseSwapping: false,

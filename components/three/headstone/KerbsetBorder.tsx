@@ -137,12 +137,12 @@ const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function Kerbs
   const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
-  const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const kerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
 
-  const texUrl = baseMaterialUrl
-    ? baseMaterialUrl.startsWith('/')
-      ? baseMaterialUrl
-      : `/${baseMaterialUrl}`
+  const texUrl = kerbsetMaterialUrl
+    ? kerbsetMaterialUrl.startsWith('/')
+      ? kerbsetMaterialUrl
+      : `/${kerbsetMaterialUrl}`
     : `${TEX_BASE}${DEFAULT_TEX}`;
 
   return (

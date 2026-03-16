@@ -1484,6 +1484,8 @@ export default function DesignerNav() {
         materialUrl: state.materialUrl,
         headstoneMaterialUrl: state.headstoneMaterialUrl,
         baseMaterialUrl: state.baseMaterialUrl,
+        ledgerMaterialUrl: state.ledgerMaterialUrl,
+        kerbsetMaterialUrl: state.kerbsetMaterialUrl,
         widthMm: state.widthMm,
         heightMm: state.heightMm,
         uprightThickness: state.uprightThickness,
@@ -1700,14 +1702,18 @@ export default function DesignerNav() {
     const minThickness =
       editingObject === 'base'
         ? (firstShape?.stand?.minDepth ?? 100)
-        : editingObject === 'ledger' || editingObject === 'kerbset'
-          ? 500
+        : editingObject === 'ledger'
+          ? 400
+          : editingObject === 'kerbset'
+            ? 500
           : (firstShape?.table?.minDepth ?? 100);
     const maxThickness =
       editingObject === 'base'
         ? (firstShape?.stand?.maxDepth ?? 300)
-        : editingObject === 'ledger' || editingObject === 'kerbset'
-          ? 3000
+        : editingObject === 'ledger'
+          ? 2900
+          : editingObject === 'kerbset'
+            ? 3000
           : (firstShape?.table?.maxDepth ?? 300);
 
     const currentDepthMm =

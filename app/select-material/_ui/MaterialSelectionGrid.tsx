@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import { bronzes } from '#/app/_internal/_data';
+import { resolveMaterialAssetPath } from '#/lib/material-utils';
 
 type MaterialCategory = {
   id: string;
@@ -37,11 +38,17 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const pathname = usePathname();
   const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
+  const setLedgerMaterialUrl = useHeadstoneStore((s) => s.setLedgerMaterialUrl);
+  const setKerbsetMaterialUrl = useHeadstoneStore((s) => s.setKerbsetMaterialUrl);
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
-  const currentMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const currentHeadstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const currentBaseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const currentLedgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
+  const currentKerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelectedPart = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const editingObject = useHeadstoneStore((s) => s.editingObject);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const storeMaterials = useHeadstoneStore((s) => s.materials);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
@@ -50,29 +57,31 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
 
-  const resolveAssetPath = (value: string | null | undefined, basePath: string) => {
-    if (!value) return null;
-    if (value.startsWith('http')) return value;
-    if (value.startsWith('/')) return value;
-    return `${basePath}${value}`;
-  };
-
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
     return (
-      resolveAssetPath(material.textureUrl, basePath) ??
-      resolveAssetPath(material.image, basePath)
+      resolveMaterialAssetPath(material.textureUrl, basePath) ??
+      resolveMaterialAssetPath(material.image, basePath)
     );
   };
 
   const buildThumbnailUrl = (material: MaterialOption, textureUrl: string | null) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
     return (
-      resolveAssetPath(material.thumbnailUrl, '/') ??
+      resolveMaterialAssetPath(material.thumbnailUrl, basePath) ??
       textureUrl ??
-      resolveAssetPath(material.image, basePath)
+      resolveMaterialAssetPath(material.image, basePath)
     );
   };
+
+  const currentMaterialUrl =
+    editingObject === 'base'
+      ? currentBaseMaterialUrl
+      : editingObject === 'ledger'
+        ? currentLedgerMaterialUrl
+        : editingObject === 'kerbset'
+          ? currentKerbsetMaterialUrl
+          : currentHeadstoneMaterialUrl;
   
   // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
   const displayMaterials = useMemo(() => {
@@ -104,10 +113,14 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     }
 
     setIsMaterialChange(true);
-    const targetSelection = isPlaque ? 'headstone' : selected ?? 'headstone';
+    const targetSelection = isPlaque ? 'headstone' : (selected ?? editingObject ?? 'headstone');
 
     if (targetSelection === 'base') {
       setBaseMaterialUrl(materialUrl);
+    } else if (targetSelection === 'ledger') {
+      setLedgerMaterialUrl(materialUrl);
+    } else if (targetSelection === 'kerbset') {
+      setKerbsetMaterialUrl(materialUrl);
     } else {
       setHeadstoneMaterialUrl(materialUrl);
     }

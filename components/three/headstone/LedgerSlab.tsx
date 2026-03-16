@@ -102,12 +102,12 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
-  const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const ledgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
 
-  const texUrl = baseMaterialUrl
-    ? baseMaterialUrl.startsWith('/')
-      ? baseMaterialUrl
-      : `/${baseMaterialUrl}`
+  const texUrl = ledgerMaterialUrl
+    ? ledgerMaterialUrl.startsWith('/')
+      ? ledgerMaterialUrl
+      : `/${ledgerMaterialUrl}`
     : `${TEX_BASE}${DEFAULT_TEX}`;
 
   return (

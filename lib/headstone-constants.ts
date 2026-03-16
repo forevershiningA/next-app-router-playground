@@ -30,6 +30,8 @@ export const BASE_MIN_DEPTH = 0.05; // Minimum base depth in meters
 export const FULL_MONUMENT_WIDTH_DIFF = 200; // mm
 // Full monument height relationship: base (stand) is this much taller than kerbset (diff/2 from legacy)
 export const FULL_MONUMENT_HEIGHT_DIFF = 100; // mm
+// Full monument length relationship: kerbset is this much longer than the ledger (diff/2 from legacy)
+export const FULL_MONUMENT_DEPTH_DIFF = 100; // mm
 
 export const ADDITION_TARGET_HEIGHT_METERS = 0.18; // Default height for additions (18cm)
 export const ADDITION_MIN_SCALE = 0.05;
@@ -54,4 +56,3 @@ export const CAMERA_3D_POSITION_Z = 10; // Increased to show full headstone
 export const CAMERA_FOV = 35; // Reduced FOV for more zoom
 export const CAMERA_NEAR = 0.1;
 export const CAMERA_FAR = 100;
-

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
 import { bronzes } from '#/app/_internal/_data';
+import { resolveMaterialAssetPath } from '#/lib/material-utils';
 
 type MaterialSelectorProps = {
   materials: MaterialOption[];
@@ -14,35 +15,37 @@ type MaterialSelectorProps = {
 export default function MaterialSelector({ materials, disableInternalScroll = false }: MaterialSelectorProps) {
   const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
+  const setLedgerMaterialUrl = useHeadstoneStore((s) => s.setLedgerMaterialUrl);
+  const setKerbsetMaterialUrl = useHeadstoneStore((s) => s.setKerbsetMaterialUrl);
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
   const currentHeadstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const currentBaseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const currentLedgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
+  const currentKerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
   const selected = useHeadstoneStore((s) => s.selected);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
+  const showBase = useHeadstoneStore((s) => s.showBase);
+  const showLedger = useHeadstoneStore((s) => s.showLedger);
+  const showKerbset = useHeadstoneStore((s) => s.showKerbset);
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
-
-  const resolveAssetPath = (value: string | null | undefined, basePath: string) => {
-    if (!value) return null;
-    if (value.startsWith('http')) return value;
-    if (value.startsWith('/')) return value;
-    return `${basePath}${value}`;
-  };
+  const isFullMonument = catalog?.product.type === 'full-monument';
 
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
     return (
-      resolveAssetPath(material.textureUrl, basePath) ??
-      resolveAssetPath(material.image, basePath)
+      resolveMaterialAssetPath(material.textureUrl, basePath) ??
+      resolveMaterialAssetPath(material.image, basePath)
     );
   };
 
   const buildThumbnailUrl = (material: MaterialOption, fallbackTexture: string | null) => {
-    const thumb = resolveAssetPath(material.thumbnailUrl, '/');
+    const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
+    const thumb = resolveMaterialAssetPath(material.thumbnailUrl, basePath);
     if (thumb) {
       return thumb;
     }
@@ -66,7 +69,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   // Ensure canvas selection matches editingObject when component mounts
   useEffect(() => {
     if (selected !== editingObject) {
-      setSelected(editingObject === 'base' ? 'base' : 'headstone');
+      setSelected(editingObject);
     }
   }, [editingObject, selected, setSelected]);
 
@@ -78,7 +81,36 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   }, [editingObject, isPlaque, setEditingObject, setSelected]);
 
   // Determine current material URL based on what's being edited
-  const currentMaterialUrl = editingObject === 'base' ? currentBaseMaterialUrl : currentHeadstoneMaterialUrl;
+  const currentMaterialUrl =
+    editingObject === 'base'
+      ? currentBaseMaterialUrl
+      : editingObject === 'ledger'
+        ? currentLedgerMaterialUrl
+        : editingObject === 'kerbset'
+          ? currentKerbsetMaterialUrl
+          : currentHeadstoneMaterialUrl;
+
+  const targetOptions = useMemo(() => {
+    if (isPlaque) {
+      return [{ label: 'Headstone', value: 'headstone' }];
+    }
+
+    const options: { label: string; value: string }[] = [
+      { label: 'Headstone', value: 'headstone' },
+    ];
+
+    if (showBase) {
+      options.push({ label: 'Base', value: 'base' });
+    }
+    if (isFullMonument && showLedger) {
+      options.push({ label: 'Ledger', value: 'ledger' });
+    }
+    if (isFullMonument && showKerbset) {
+      options.push({ label: 'Kerbset', value: 'kerbset' });
+    }
+
+    return options;
+  }, [isFullMonument, isPlaque, showBase, showKerbset, showLedger]);
 
   const handleMaterialSelect = (material: MaterialOption) => {
     const materialUrl = buildTextureUrl(material);
@@ -88,16 +120,19 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
     setIsMaterialChange(true);
     const targetObject = isPlaque ? 'headstone' : editingObject;
-    const targetPart = targetObject === 'base' ? 'base' : 'headstone';
 
     if (targetObject === 'base') {
       setBaseMaterialUrl(materialUrl);
+    } else if (targetObject === 'ledger') {
+      setLedgerMaterialUrl(materialUrl);
+    } else if (targetObject === 'kerbset') {
+      setKerbsetMaterialUrl(materialUrl);
     } else {
       setHeadstoneMaterialUrl(materialUrl);
     }
 
-    setSelected(targetPart);
-    setEditingObject(targetPart);
+    setSelected(targetObject);
+    setEditingObject(targetObject);
 
     setTimeout(() => setIsMaterialChange(false), 100);
   };
@@ -109,13 +144,11 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           <SegmentedControl
             value={editingObject}
             onChange={(value) => {
-              setEditingObject(value as 'headstone' | 'base');
-              setSelected(value as 'headstone' | 'base');
+              const nextTarget = value as 'headstone' | 'base' | 'ledger' | 'kerbset';
+              setEditingObject(nextTarget);
+              setSelected(nextTarget);
             }}
-            options={[
-              { label: 'Headstone', value: 'headstone' },
-              { label: 'Base', value: 'base' },
-            ]}
+            options={targetOptions}
           />
         </div>
       )}

@@ -3,7 +3,6 @@
 
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { usePathname } from 'next/navigation';
 
 import ShapeSwapper from './ShapeSwapper';
 import HeadstoneBaseAuto from './HeadstoneBaseAuto';
@@ -12,13 +11,11 @@ import KerbsetBorder from './KerbsetBorder';
 import RotatingBoxOutline from '../RotatingBoxOutline';
 import SelectionBox from '../SelectionBox';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { useSelectSizePanelOpener } from '#/lib/useSelectSizePanelOpener';
 import { FULL_MONUMENT_GROUP_NAME } from '../constants';
 import { data } from '#/app/_internal/_data';
 import LedgerSurfaceContent from './LedgerSurfaceContent';
 
 export default function HeadstoneAssembly() {
-  const pathname = usePathname();
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
@@ -66,10 +63,6 @@ export default function HeadstoneAssembly() {
   const kerbsetOutlinePad = 0.005;
   const kerbsetOutlineDepthPad = 0.003;
   const kerbsetOutlineLineLength = 0.10;
-  const isSelectSizeRoute = pathname === '/select-size';
-  const isSelectMaterialRoute = pathname === '/select-material';
-  const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;
-  const openSelectSizePanel = useSelectSizePanelOpener();
 
   // For full monument, shift the whole assembly back so the ledger/kerbset
   // is centred in view. Shifting by the full ledger depth places the headstone
@@ -95,6 +88,12 @@ export default function HeadstoneAssembly() {
     if (!monumentGroupRef.current) return;
     monumentGroupRef.current.name = FULL_MONUMENT_GROUP_NAME;
   }, [isFullMonument]);
+
+  useEffect(() => {
+    if (!isFullMonument) return;
+    setEditingObject('ledger');
+    setSelected('ledger');
+  }, [isFullMonument, setEditingObject, setSelected]);
 
   return (
     <group ref={monumentGroupRef} position={[0, 0, zGroupOffset]}>
@@ -148,13 +147,8 @@ export default function HeadstoneAssembly() {
             height={baseHeightMeters}
             onClick={(e) => {
               e.stopPropagation();
-              setSelected('base');
               setEditingObject('base');
-              setSelectedInscriptionId(null);
-              if (!shouldKeepPanelOpen) {
-                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-              }
-              openSelectSizePanel();
+              setSelected('base');
             }}
           />
         )}
@@ -167,13 +161,8 @@ export default function HeadstoneAssembly() {
             ref={ledgerRef}
             onClick={(e) => {
               e.stopPropagation();
-              setSelected('ledger');
               setEditingObject('ledger');
-              setSelectedInscriptionId(null);
-              if (!shouldKeepPanelOpen) {
-                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-              }
-              openSelectSizePanel();
+              setSelected('ledger');
             }}
           />
         )}
@@ -199,13 +188,8 @@ export default function HeadstoneAssembly() {
             ref={kerbsetRef}
             onClick={(e) => {
               e.stopPropagation();
-              setSelected('kerbset');
               setEditingObject('kerbset');
-              setSelectedInscriptionId(null);
-              if (!shouldKeepPanelOpen) {
-                window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-              }
-              openSelectSizePanel();
+              setSelected('kerbset');
             }}
           />
         )}

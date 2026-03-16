@@ -71,6 +71,8 @@ export type DesignerSnapshot = {
   materialUrl: string | null;
   headstoneMaterialUrl: string | null;
   baseMaterialUrl: string | null;
+  ledgerMaterialUrl: string | null;
+  kerbsetMaterialUrl: string | null;
   widthMm: number;
   heightMm: number;
   baseWidthMm: number;

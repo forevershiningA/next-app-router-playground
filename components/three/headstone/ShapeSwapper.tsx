@@ -19,7 +19,6 @@ import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
 import { AdditionData } from '#/lib/xml-parser';
 import { usePathname, useRouter } from 'next/navigation';
-import { useSelectSizePanelOpener } from '#/lib/useSelectSizePanelOpener';
 import type { Component, ReactNode } from 'react';
 
 /* --------------------------------- constants -------------------------------- */
@@ -217,10 +216,6 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
   const bronzeBorderColor = '#FFDFA3';
-  const isSelectSizeRoute = pathname === '/select-size';
-  const isSelectMaterialRoute = pathname === '/select-material';
-  const shouldKeepPanelOpen = isSelectSizeRoute || isSelectMaterialRoute;
-  const openSelectSizePanel = useSelectSizePanelOpener();
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
     const oldMetrics = getBoxMetrics(oldBox);
@@ -523,20 +518,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                   console.log('[ShapeSwapper] Ignoring click - it was on an image');
                   return;
                 }
-                
-                console.log('[ShapeSwapper] Headstone clicked');
-                setSelected('headstone');
+
                 setEditingObject('headstone');
-                setSelectedInscriptionId(null);
-                setSelectedAdditionId(null); // Close addition panel
-                setSelectedMotifId(null); // Close motif panel
-                setActivePanel(null); // Clear active panel state
-                // Trigger close fullscreen panel (same as "Back to Menu" button)
-                // But keep panel open on select-size and select-material pages
-                if (!shouldKeepPanelOpen) {
-                  window.dispatchEvent(new CustomEvent('closeFullscreenPanel'));
-                }
-                openSelectSizePanel();
+                setSelected('headstone');
               },
             }}
           >

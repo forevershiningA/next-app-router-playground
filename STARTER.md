@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-13
+**Last Updated:** 2026-03-15
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (Vercel Postgres)
 
 ---
@@ -28,6 +28,37 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-15)
+
+### ✅ Recent Changes (March 15, 2026)
+
+1. **Full Monument camera now supports headstone-focused auto zoom with orbit-preserving zoom-out - COMPLETE**
+   - Updated `components/three/FullMonumentFit.tsx` so full monuments no longer use a single static overview fit for every selection state.
+   - When `selected === 'headstone'`, the camera still fits to the upright/headstone mesh with a tighter framing.
+   - When switching from headstone to `base`, `ledger`, or `kerbset`, the camera now animates back out to the whole-monument fit while preserving the current `OrbitControls` direction instead of rotating back to a canned front overview.
+   - Non-headstone-to-non-headstone selection changes still leave the existing orbit view alone, while initial load and geometry-driven refits continue using the whole-monument overview.
+   - **File**: `components/three/FullMonumentFit.tsx`.
+
+2. **Full Monument headstone camera transitions are now smooth - COMPLETE**
+   - Replaced the immediate full-monument camera snap with an ease-in-out animated pose transition in `components/three/FullMonumentFit.tsx`.
+   - The initial fit still applies immediately on first load, and subsequent moves into headstone focus or back out to the full monument animate 50% slower for a calmer feel.
+   - This applies only to full monuments; non-full-monument products still use the existing `AutoFit` behavior.
+   - **File**: `components/three/FullMonumentFit.tsx`.
+
+3. **Full Monument now defaults to the Ledger panel/selection on load - COMPLETE**
+   - `components/three/headstone/HeadstoneAssembly.tsx` now initializes full monuments with `editingObject = 'ledger'` and `selected = 'ledger'`.
+   - This prevents the UI from opening in a headstone-selected state by default and keeps the initial full-monument workflow focused on the ledger panel.
+   - Because the camera zoom-in path only activates for `selected === 'headstone'`, the initial full-monument view still stays on the whole-monument overview even though the ledger is the active panel.
+   - **File**: `components/three/headstone/HeadstoneAssembly.tsx`.
+
+### ⚠️ Known Gaps (March 15, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, currently including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **Register endpoint**: `/api/auth/register` route remains unimplemented; AuthGate still shows the tab.
+- **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog or UI changes.
 
 ---
 
