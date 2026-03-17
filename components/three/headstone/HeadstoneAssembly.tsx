@@ -9,7 +9,6 @@ import HeadstoneBaseAuto from './HeadstoneBaseAuto';
 import LedgerSlab from './LedgerSlab';
 import KerbsetBorder from './KerbsetBorder';
 import RotatingBoxOutline from '../RotatingBoxOutline';
-import SelectionBox from '../SelectionBox';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { FULL_MONUMENT_GROUP_NAME } from '../constants';
 import { data } from '#/app/_internal/_data';
@@ -19,10 +18,6 @@ export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
-  const selectedInscriptionId = useHeadstoneStore(
-    (s) => s.selectedInscriptionId,
-  );
-  const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const setSelectedInscriptionId = useHeadstoneStore(
     (s) => s.setSelectedInscriptionId,
   );
@@ -80,10 +75,6 @@ export default function HeadstoneAssembly() {
   const ledgerRef = useRef<THREE.Mesh>(null!);
   const kerbsetRef = useRef<THREE.Group>(null!);
 
-  const selectedInscription = inscriptions.find(
-    (inscription) => inscription.id === selectedInscriptionId,
-  );
-
   useEffect(() => {
     if (!monumentGroupRef.current) return;
     monumentGroupRef.current.name = FULL_MONUMENT_GROUP_NAME;
@@ -127,16 +118,6 @@ export default function HeadstoneAssembly() {
           animateOnShow
           animationDuration={520}
         />
-
-        {selectedInscription && (
-          <SelectionBox
-            targetRef={selectedInscription.ref}
-            visible={true}
-            color="#4CAF50"
-            pad={0.02}
-            through={true}
-          />
-        )}
 
         {showBase && (
           <HeadstoneBaseAuto

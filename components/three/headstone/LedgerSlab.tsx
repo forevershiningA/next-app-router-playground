@@ -1,13 +1,14 @@
 // components/three/headstone/LedgerSlab.tsx
 'use client';
 
-import React, { useRef, useMemo, useLayoutEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
+import React, { useRef, useMemo, useLayoutEffect, useEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { TEX_BASE, DEFAULT_TEX, LERP_FACTOR, EPSILON } from '#/lib/headstone-constants';
+import { configureGraniteTexture, createPolishedGraniteMaterial } from '#/lib/granite-material';
 
 type LedgerSlabProps = {
   onClick?: (e: any) => void;
@@ -38,11 +39,7 @@ function LedgerMesh({
 
   useLayoutEffect(() => {
     if (texture) {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(3, 1);
-      texture.anisotropy = 16;
-      texture.needsUpdate = true;
+      configureGraniteTexture(texture, { repeatX: 3, repeatY: 1 });
     }
   }, [texture]);
 
@@ -50,13 +47,21 @@ function LedgerMesh({
 
   const material = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
-        map: texture,
-        roughness: 0.25,
-        metalness: 0.05,
+      createPolishedGraniteMaterial({
+        texture,
+        envMapIntensity: 0.75,
+        roughness: 0.24,
+        clearcoatRoughness: 0.18,
       }),
     [texture],
   );
+
+  useEffect(() => {
+    return () => {
+      material.dispose();
+      geometry.dispose();
+    };
+  }, [geometry, material]);
 
   const w = ledgerWidthMm / 1000;
   const h = ledgerHeightMm / 1000;

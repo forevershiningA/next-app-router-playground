@@ -113,6 +113,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
           return (
             <React.Suspense key={line.id} fallback={null}>
               <HeadstoneInscription
+                ref={line.ref}
                 id={line.id}
                 headstone={headstoneApi}
                 surface="ledger"

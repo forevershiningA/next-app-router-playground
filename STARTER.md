@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-16
+**Last Updated:** 2026-03-17
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,62 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-17)
+
+### ✅ Recent Changes (March 17, 2026)
+
+1. **Full Monument headstone zoom now ends upright en face - COMPLETE**
+   - `components/three/FullMonumentFit.tsx` now derives the zoom-in camera direction for `selected === 'headstone'` from the headstone object's world quaternion instead of using a generic static fallback angle.
+   - Zooming in on the headstone now ends front-facing and upright, while zooming back out to the whole monument still preserves the user's current orbit direction.
+   - **File**: `components/three/FullMonumentFit.tsx`.
+
+2. **Blue Pearl full-monument granite response normalized across parts - COMPLETE**
+   - Introduced `lib/granite-material.ts` as the shared polished-granite helper for texture setup and `MeshPhysicalMaterial` creation.
+   - `LedgerSlab.tsx`, `KerbsetBorder.tsx`, and `HeadstoneBaseAuto.tsx` were aligned to the same calibrated polished-granite family so Blue Pearl no longer blows out on ledger/kerbset relative to the other monument parts.
+   - The non-slant headstone was then brought back into the same calibrated range as ledger/base/kerbset after a brighter intermediate tuning pass made it stand out too much.
+   - **Files**: `lib/granite-material.ts`, `components/three/headstone/LedgerSlab.tsx`, `components/three/headstone/KerbsetBorder.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `components/SvgHeadstone.tsx`.
+
+3. **Granite helper no longer emits undefined normal-map warnings - COMPLETE**
+   - Fixed the runtime warning source in `lib/granite-material.ts`: optional `normalMap` and `normalScale` are now only passed into `THREE.MeshPhysicalMaterial` when actually defined.
+   - This removes warnings such as:
+     - `THREE.Material: parameter 'normalMap' has value of undefined`
+     - `THREE.Material: parameter 'normalScale' has value of undefined`
+   - **File**: `lib/granite-material.ts`.
+
+4. **Full Monument camera focus now respects the actual selected surface - COMPLETE**
+   - `components/three/FullMonumentFit.tsx` now keeps the close-up only for headstone-surface content selections.
+   - Selecting inscriptions, motifs, images, or additions on the headstone keeps the headstone zoom active.
+   - Selecting content on ledger or base no longer incorrectly triggers the headstone zoom.
+   - Clicking monument parts still behaves as expected:
+     - `Headstone` -> zoom in
+     - `Base` / `Ledger` / `Kerbset` -> monument-part view
+   - **File**: `components/three/FullMonumentFit.tsx`.
+
+5. **Inscription duplication and reset behavior refined - COMPLETE**
+   - Duplicated inscriptions on headstone/base now use the rendered inscription bounds via live refs instead of a loose canvas estimate, so the copied line lands directly below the source.
+   - Fixed a unit mismatch where world-space measured height was being applied to local surface coordinates, which previously caused duplicates to overlap perfectly.
+   - Removed the redundant extra green inscription `SelectionBox` from `HeadstoneAssembly.tsx`; the duplicate/selected inscription now shows only one correct outline.
+   - `InscriptionEditPanel.tsx` now recenters a brand-new inscription (`yPos: 0`) whenever there is no active inscription selected, so after deleting all inscriptions the next new line starts centered again instead of reusing the old bottom position.
+   - **Files**: `lib/headstone-store.ts`, `components/three/headstone/ShapeSwapper.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `components/three/headstone/LedgerSurfaceContent.tsx`, `components/three/headstone/HeadstoneAssembly.tsx`, `components/InscriptionEditPanel.tsx`.
+
+6. **Ledger-mounted statues/vases now stay ledger-scoped - COMPLETE**
+   - `hasStatue()` in the store now expands the base only for base-mounted `statue` / `vase` additions, not for ledger-mounted ones.
+   - `components/three/AdditionModel.tsx` ledger drag bounds were corrected to clamp in the ledger mesh's local coordinate system, so ledger statues/vases remain within the slab footprint front-to-back instead of sliding half off the ledger.
+   - This avoids the single-headstone base-expansion side effect when adding a statue to the ledger of a full monument.
+   - **Files**: `lib/headstone-store.ts`, `components/three/AdditionModel.tsx`.
+
+7. **Validation status for this batch**
+   - `pnpm build` succeeded after each shipped change set in this session.
+   - `pnpm type-check` was not re-run after every follow-up because the repo still has unrelated baseline failures outside these files.
+
+### ⚠️ Known Gaps (March 17, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog, material, camera, or UI changes.
+- **Saved Design 2 (`1578016189116`) still not resolved**: The remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
 
 ---
 
@@ -83,12 +139,28 @@
    - Important operational note: login/registration always uses whichever database `DATABASE_URL` points to. Localhost and remote deployments can therefore have different account data until explicitly synced or seeded.
    - **Files**: `app/api/auth/register/route.ts`, `app/my-account/page.tsx`.
 
+7. **Saved-design canonical contract investigation advanced - PARTIAL**
+   - `lib/saved-design-loader-utils.ts` now supports explicit canonical `scene.coordinateSystem` metadata instead of relying purely on source-directory heuristics.
+   - `scripts/convert-legacy-design.js` and `scripts/convert-saved-design.js` now emit:
+     - `positionMode`
+     - `headstonePlacement`
+     - `flipMode`
+   - Re-generated the three manual regression samples:
+     - `1725769905504`
+     - `1578016189116`
+     - `1723691641046`
+   - Fixed a real loader bug where the canonical out-of-bounds fallback check was evaluated before the detector function was assigned, making the legacy fallback effectively unreachable.
+   - Also confirmed that `scripts/convert-saved-design.js` writes to `public/designs/v2026/` rather than the runtime-loaded `public/canonical-designs/v2026/`.
+   - **Files**: `lib/saved-design-loader-utils.ts`, `scripts/convert-legacy-design.js`, `scripts/convert-saved-design.js`, regenerated canonical JSON samples.
+
 ### ⚠️ Known Gaps (March 16, 2026)
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog, material, or UI changes.
 - **home.pl SSL limitation**: The current remote PostgreSQL target rejects SSL connections, so Vercel/local connection strings need `sslmode=disable`. This is less robust than managed Postgres providers.
 - **Legacy script naming**: `scripts/sync-to-neon.js` and `scripts/import-to-neon.js` still carry Neon-era filenames even though the logic is now generic and `home.pl`-oriented by default.
+- **Saved Design 2 (`1578016189116`) still not resolved**: Re-running the converter and adding explicit canonical coordinate metadata did **not** eliminate the `screen.png` mismatch. The remaining problem appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
+- **Canonical vs batch design outputs are still split**: `convert-legacy-design.js` updates `public/canonical-designs/v2026/`, while `convert-saved-design.js` writes to `public/designs/v2026/`. The batch output for Design 2 preserves `photos`, but the runtime loader is still pointed at the canonical path.
 
 ---
 
@@ -1211,10 +1283,10 @@
    - Files: `components/MotifSelectorPanel.tsx`
 
 ### ✅ Recent Changes (January 29, 2026)
-1. **Canonical Loader Scaling Fix**: Fixed race condition in coordinate scaling
+1. **Canonical Loader Scaling Fix**: Reduced one canonical scaling issue, but did not fully solve Design 2
    - Removed dynamic scale factor calculation that compared old design dimensions with new ones
    - Set all scale factors to 1.0 for canonical designs (coordinates already in correct space)
-   - Fixes Design 2 (1578016189116) loading with incorrect positioning
+   - This improved one class of canonical scaling errors, but later investigation showed `1578016189116` still has unresolved forevershining-specific layout issues
    - Files: `lib/saved-design-loader-utils.ts`
 
 2. **Texture Mapping Enhancement**: Added numbered texture mapping to converter
@@ -1454,6 +1526,7 @@ yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
 - If any inscription/motif exceeds the physical headstone+base envelope (or the spread suggests the data is still in stage-space pixels), the loader automatically swaps to the embedded legacy JSON and calls `loadSavedDesignIntoEditor()` so the design still renders correctly.
 - The legacy fallback path shares the same viewport/DPR inference as the converter (navigator-first sizing + preserved DPR for physical saves) so loading a regenerated canonical file produces the exact layout seen in the DesignPageClient 2D preview.
 - This keeps problematic canonical snapshots (e.g., partially converted files) from spawning clustered motifs or missing inscriptions while we regenerate the JSON via `scripts/convert-legacy-design.js`.
+- **March 16, 2026 correction:** a later audit found the fallback reason was being checked before the real out-of-bounds detector was assigned, so this safeguard was not actually firing in the broken path. That bug has now been fixed in `lib/saved-design-loader-utils.ts`.
 
 **Canonical Loader Behavior Update (2026-01-26):**
 - Canonical JSON already stores physical millimeter values, so `loadCanonicalDesignIntoEditor()` now treats `size_mm` (fonts) and `height_mm` (motifs) as absolute numbers. The previous SIZE_SCALE_FACTOR-based approach caused “double scaling” and oversized text; that multiplier has been removed.
@@ -1461,6 +1534,7 @@ yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
 - All design-specific hacks (e.g., special offsets for the surname “KLEIN”, epitaph lines, or bird/ivy motifs) have been deleted. The loader now applies one data-driven path for every design, making it safe to ingest thousands of canonical files without bespoke tweaks.
 - Motif flips still mirror `flip.x` correctly (canvas vs canonical parity), and the loader continues to fall back to legacy JSON when canonical coordinates fail the physical-bounds sanity check.
 - ⚠️ **Known Regression (2026-01-28):** The current canonical loader still produces major Y-offset errors for the newly converted design `1578016189116` (forevershining ML set). Until the stage→component transform is normalized per design, expect motifs/inscriptions to land too high and, in some cases, mirrored vertically. Use `public/screenshots/1.png` as the visual reference when reworking this math.
+- **March 16, 2026 update:** the codebase now carries an explicit canonical `scene.coordinateSystem` contract (`positionMode`, `headstonePlacement`, `flipMode`) so future regenerated files no longer need to rely only on `mlDir` heuristics. This improved the loader architecture, but it did **not** fully fix `1578016189116`; that design still needs another pass.
 
 **Common Pitfall:** 
 The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y-flipped)" was misleading. The legacy 3D renderer did NOT flip the entire scene. The conversion formula `yPos = yPixels / pixelsPerMm` works for both inscriptions and motifs without negation.

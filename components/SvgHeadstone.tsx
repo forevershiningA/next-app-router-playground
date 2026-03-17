@@ -1010,13 +1010,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   const materials = useMemo(() => {
     const isSlant = headstoneStyle === 'slant';
 
-    // Polished granite settings - keep plaques lighter without blowing out highlights
+    // Match the calibrated polished granite response used across the monument parts.
     const common = {
-      color: new THREE.Color(isSlant ? 0x444444 : 0xdcdcdc),
-      roughness: isSlant ? 0.08 : 0.18,
+      color: new THREE.Color(isSlant ? 0x444444 : 0xa6a6a6),
+      roughness: isSlant ? 0.08 : 0.24,
       metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-      envMapIntensity: isSlant ? 2.0 : 1.85,
+      envMapIntensity: isSlant ? 2.0 : 0.78,
     };
     
     // For slant headstones, apply rock pitch normal map to side material
@@ -1046,24 +1046,24 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     }
     
     return [
-      new THREE.MeshPhysicalMaterial({ 
-        ...common, 
-        map: clonedFaceMap,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      }),
-      new THREE.MeshPhysicalMaterial({ 
-        ...common, 
-        map: clonedSideMap,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      })
+        new THREE.MeshPhysicalMaterial({ 
+          ...common, 
+          map: clonedFaceMap,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.18,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1,
+        }),
+        new THREE.MeshPhysicalMaterial({ 
+          ...common, 
+          map: clonedSideMap,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.18,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1,
+        })
     ];
   }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture]);
 

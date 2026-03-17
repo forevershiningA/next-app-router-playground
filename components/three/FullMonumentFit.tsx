@@ -16,6 +16,7 @@ type FullMonumentFitProps = {
 const HEADSTONE_OBJECT_NAME = 'headstone';
 const CAMERA_ANIMATION_MS = 630;
 const BOX_EPSILON = 1e-4;
+const HEADSTONE_FRONT_ELEVATION = 0.06;
 
 type CameraPose = {
   position: THREE.Vector3;
@@ -45,10 +46,40 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const showLedger      = useHeadstoneStore((s) => s.showLedger);
   const showKerbset     = useHeadstoneStore((s) => s.showKerbset);
   const selected        = useHeadstoneStore((s) => s.selected);
+  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
+  const selectedInscriptionSurface = useHeadstoneStore((s) =>
+    selectedInscriptionId
+      ? (s.inscriptions.find((line) => line.id === selectedInscriptionId)?.target ?? 'headstone')
+      : null,
+  );
+  const selectedAdditionSurface = useHeadstoneStore((s) =>
+    selectedAdditionId
+      ? (s.additionOffsets[selectedAdditionId]?.targetSurface ?? 'headstone')
+      : null,
+  );
+  const selectedMotifSurface = useHeadstoneStore((s) =>
+    selectedMotifId
+      ? (s.motifOffsets[selectedMotifId]?.target ?? 'headstone')
+      : null,
+  );
+  const selectedImageSurface = useHeadstoneStore((s) =>
+    selectedImageId
+      ? (s.selectedImages.find((image) => image.id === selectedImageId)?.target ?? 'headstone')
+      : null,
+  );
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const animationFrameRef = React.useRef<number | null>(null);
   const hasAppliedInitialPoseRef = React.useRef(false);
-  const lastSelectedRef = React.useRef(selected);
+  const shouldFocusHeadstone =
+    selected === 'headstone' ||
+    selectedInscriptionSurface === 'headstone' ||
+    selectedAdditionSurface === 'headstone' ||
+    selectedMotifSurface === 'headstone' ||
+    selectedImageSurface === 'headstone';
+  const lastSelectedRef = React.useRef(shouldFocusHeadstone);
   const lastFitKeyRef = React.useRef<string | null>(null);
   const materialChangeActiveRef = React.useRef(false);
   const lastAppliedBoxRef = React.useRef<THREE.Box3 | null>(null);
@@ -71,9 +102,9 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
 
   React.useLayoutEffect(() => {
     let retryRafId: number | null = null;
-    const previousSelected = lastSelectedRef.current;
+    const previousFocusHeadstone = lastSelectedRef.current;
     const previousFitKey = lastFitKeyRef.current;
-    const selectionChanged = previousSelected !== selected;
+    const selectionChanged = previousFocusHeadstone !== shouldFocusHeadstone;
     const fitInputsChanged = previousFitKey !== fitKey;
     const materialChangeJustEnded = materialChangeActiveRef.current && !isMaterialChange;
 
@@ -83,7 +114,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       materialChangeActiveRef.current = false;
     }
 
-    lastSelectedRef.current = selected;
+    lastSelectedRef.current = shouldFocusHeadstone;
     lastFitKeyRef.current = fitKey;
 
     if (isMaterialChange && hasAppliedInitialPoseRef.current) {
@@ -98,8 +129,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       hasAppliedInitialPoseRef.current &&
       selectionChanged &&
       !fitInputsChanged &&
-      selected !== 'headstone' &&
-      previousSelected !== 'headstone'
+      !shouldFocusHeadstone &&
+      !previousFocusHeadstone
     ) {
       return;
     }
@@ -156,6 +187,23 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         near: Math.max(0.01, camDist * 0.015),
         far: Math.max(100, camDist * 8),
       };
+    };
+
+    const getHeadstoneFrontDirection = (targetObj: THREE.Object3D) => {
+      const worldQuaternion = new THREE.Quaternion();
+      targetObj.getWorldQuaternion(worldQuaternion);
+
+      const frontDirection = new THREE.Vector3(0, 0, 1).applyQuaternion(worldQuaternion);
+      frontDirection.y = 0;
+
+      if (frontDirection.lengthSq() <= 1e-6) {
+        frontDirection.set(0, 0, 1);
+      } else {
+        frontDirection.normalize();
+      }
+
+      frontDirection.y = HEADSTONE_FRONT_ELEVATION;
+      return frontDirection.normalize();
     };
 
     const applyPose = (pose: CameraPose) => {
@@ -251,13 +299,13 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     };
 
     const fitCamera = () => {
-      const zoomToHeadstone = selected === 'headstone';
+      const zoomToHeadstone = shouldFocusHeadstone;
       const shouldAnimateFromHeadstoneOverview =
         hasAppliedInitialPoseRef.current &&
         selectionChanged &&
         !fitInputsChanged &&
-        previousSelected === 'headstone' &&
-        selected !== 'headstone';
+        previousFocusHeadstone &&
+        !shouldFocusHeadstone;
       const targetObj = zoomToHeadstone
         ? scene.getObjectByName(HEADSTONE_OBJECT_NAME)
         : scene.getObjectByName(FULL_MONUMENT_GROUP_NAME);
@@ -293,9 +341,11 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const currentTarget = controls?.target
         ? controls.target.clone()
         : new THREE.Vector3(0, 0, 0);
-      const preferredDirection = shouldAnimateFromHeadstoneOverview
-        ? camera.position.clone().sub(currentTarget).normalize()
-        : undefined;
+      const preferredDirection = zoomToHeadstone
+        ? getHeadstoneFrontDirection(targetObj)
+        : shouldAnimateFromHeadstoneOverview
+          ? camera.position.clone().sub(currentTarget).normalize()
+          : undefined;
 
       applyFitFromBox(box, zoomToHeadstone, preferredDirection);
       retryRafId = null;
@@ -316,6 +366,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     ledgerDepthMm, kerbDepthMm, kerbWidthMm, kerbHeightMm,
     heightMm, baseHeightMm, uprightThickness,
     productId, shapeUrl, showLedger, showKerbset, selected, trigger,
+    selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
+    selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
     isMaterialChange, camera, size.width, size.height, controls, invalidate, scene, fitKey,
   ]);
 

@@ -26,6 +26,7 @@ import {
   LERP_FACTOR,
   EPSILON,
 } from '#/lib/headstone-constants';
+import { createPolishedGraniteMaterial } from '#/lib/granite-material';
 
 type HeadstoneBaseAutoProps = {
   headstoneObject: React.RefObject<THREE.Object3D>;
@@ -197,14 +198,11 @@ function BaseMesh({
 
   // 3. Create Materials
   const materials = useMemo(() => {
-    const polishedMaterial = new THREE.MeshPhysicalMaterial({
-      map: baseTexture,
-      color: 0x888888,
-      metalness: 0.0,
-      roughness: 0.08, // Very low for polished granite sparkle
-      envMapIntensity: 2.0, // Increased for better reflections
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.05, // Lower for shinier polish layer
+    const polishedMaterial = createPolishedGraniteMaterial({
+      texture: baseTexture,
+      envMapIntensity: 0.82,
+      roughness: 0.24,
+      clearcoatRoughness: 0.16,
     });
 
     if (finish === 'rock-pitch' && rockNormalCanvas) {
@@ -221,28 +219,24 @@ function BaseMesh({
       // Rock Pitch Material Settings - upgraded for realistic granite sparkle
       const rockColor = 0x444444; 
       
-      const matShort = new THREE.MeshPhysicalMaterial({
-        map: baseTexture,
-        normalMap: texShort,
-        normalScale: new THREE.Vector2(2.0, 2.0), // Enhanced for crystalline detail
+      const matShort = createPolishedGraniteMaterial({
+        texture: baseTexture,
         color: rockColor,
-        metalness: 0.0,
-        roughness: 0.08, // Polished granite - very reflective
-        envMapIntensity: 2.0, // Strong environment reflections for sparkle
-        clearcoat: 1.0, // Polish layer on top
-        clearcoatRoughness: 0.05, // Shiny polish
+        normalMap: texShort,
+        normalScale: new THREE.Vector2(2.0, 2.0),
+        envMapIntensity: 0.82,
+        roughness: 0.24,
+        clearcoatRoughness: 0.16,
       });
 
-      const matLong = new THREE.MeshPhysicalMaterial({
-        map: baseTexture,
-        normalMap: texLong,
-        normalScale: new THREE.Vector2(2.0, 2.0), // Enhanced for crystalline detail
+      const matLong = createPolishedGraniteMaterial({
+        texture: baseTexture,
         color: rockColor,
-        metalness: 0.0,
-        roughness: 0.08, // Polished granite - very reflective
-        envMapIntensity: 2.0, // Strong environment reflections for sparkle
-        clearcoat: 1.0, // Polish layer on top
-        clearcoatRoughness: 0.05, // Shiny polish
+        normalMap: texLong,
+        normalScale: new THREE.Vector2(2.0, 2.0),
+        envMapIntensity: 0.82,
+        roughness: 0.24,
+        clearcoatRoughness: 0.16,
       });
 
       return [
@@ -518,6 +512,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
             return (
               <Suspense key={line.id} fallback={null}>
                 <HeadstoneInscription
+                  ref={line.ref}
                   id={line.id}
                   headstone={baseAPI}
                   surface="base"

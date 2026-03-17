@@ -1,12 +1,13 @@
 // components/three/headstone/KerbsetBorder.tsx
 'use client';
 
-import React, { useRef, useMemo, useLayoutEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
+import React, { useRef, useMemo, useLayoutEffect, useEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { TEX_BASE, DEFAULT_TEX, LERP_FACTOR, EPSILON } from '#/lib/headstone-constants';
+import { configureGraniteTexture, createPolishedGraniteMaterial } from '#/lib/granite-material';
 
 type KerbsetBorderProps = {
   onClick?: (e: any) => void;
@@ -37,26 +38,30 @@ function KerbMesh({
 
   useLayoutEffect(() => {
     if (texture) {
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(4, 1);
-      texture.anisotropy = 16;
-      texture.needsUpdate = true;
+      configureGraniteTexture(texture, { repeatX: 4, repeatY: 1 });
     }
   }, [texture]);
 
   const material = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
-        map: texture,
-        roughness: 0.4,
-        metalness: 0.05,
+      createPolishedGraniteMaterial({
+        texture,
+        envMapIntensity: 0.78,
+        roughness: 0.26,
+        clearcoatRoughness: 0.18,
       }),
     [texture],
   );
 
   // 4 bar geometries (reused for each bar via scale)
   const barGeo = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
+
+  useEffect(() => {
+    return () => {
+      material.dispose();
+      barGeo.dispose();
+    };
+  }, [barGeo, material]);
 
   const kW = kerbWidthMm / 1000;
   const kH = kerbHeightMm / 1000;

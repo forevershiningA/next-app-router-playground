@@ -136,6 +136,18 @@ function round(value) {
   return Math.round(value * 1000) / 1000;
 }
 
+function buildCoordinateSystem(mlDir) {
+  const normalizedMlDir = String(mlDir || '').toLowerCase();
+  return {
+    positionMode: 'legacy-stage-px',
+    headstonePlacement: normalizedMlDir === 'forevershining' ? 'auto-center' : 'legacy-stage-offset',
+    flipMode:
+      normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque'
+        ? 'invert-legacy-bools'
+        : 'preserve',
+  };
+}
+
 function parseFontPixelValue(item) {
   if (typeof item.font === 'string') {
     const match = item.font.match(/([\d.]+)px/i);
@@ -464,7 +476,7 @@ function buildComponents(legacyData, existingCanonical) {
   return components;
 }
 
-function buildScene(metrics) {
+function buildScene(metrics, mlDir) {
   return {
     canvas: {
       width_mm: metrics.productWidth,
@@ -479,6 +491,7 @@ function buildScene(metrics) {
       origin: [0, 0, 0],
       normal: [0, 0, 1],
     },
+    coordinateSystem: buildCoordinateSystem(mlDir),
   };
 }
 
@@ -563,7 +576,7 @@ function main() {
     optimizeLayout: args.optimizeLayout,
   });
   const components = buildComponents(legacyData, existingCanonical);
-  const scene = buildScene(metrics);
+  const scene = buildScene(metrics, args.mlDir);
   const assets = buildAssets(motifs);
 
   const canonical = existingCanonical

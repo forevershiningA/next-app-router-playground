@@ -541,11 +541,12 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                  return (
                  <ErrorBoundary key={line.id}>
                    <React.Suspense fallback={null}>
-                     <HeadstoneInscription
-                       id={line.id}
-                       headstone={api}
-                       surface="headstone"
-                      font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
+                      <HeadstoneInscription
+                        ref={line.ref}
+                        id={line.id}
+                        headstone={api}
+                        surface="headstone"
+                       font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
                       editable
                       selected={selectedInscriptionId === line.id}
                       onSelectInscription={() => {

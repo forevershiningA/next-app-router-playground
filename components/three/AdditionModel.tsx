@@ -597,28 +597,39 @@ function AdditionModelInner({
       if (!hit) return;
 
       const localPt = targetMesh.worldToLocal(hit.point.clone());
-      const centerX = (bbox.min.x + bbox.max.x) / 2;
-      const centerZ = (bbox.min.z + bbox.max.z) / 2;
+      if (!targetMesh.geometry.boundingBox) {
+        targetMesh.geometry.computeBoundingBox();
+      }
+      const targetBBox = targetMesh.geometry.boundingBox;
+      if (!targetBBox) return;
 
-      const widthUnits =
-        (ledgerWidthMm || (bbox.max.x - bbox.min.x) * 1000) / 1000;
-      const depthUnits =
-        (ledgerDepthMm || (bbox.max.z - bbox.min.z) * 1000) / 1000;
+      const centerX = (targetBBox.min.x + targetBBox.max.x) / 2;
+      const centerZ = (targetBBox.min.z + targetBBox.max.z) / 2;
+      const targetSpanX = Math.max(1e-6, targetBBox.max.x - targetBBox.min.x);
+      const targetSpanZ = Math.max(1e-6, targetBBox.max.z - targetBBox.min.z);
+      const targetScaleX = Math.max(
+        1e-6,
+        Math.abs(ledgerWidthMm ? ledgerWidthMm / 1000 : targetMesh.scale.x),
+      );
+      const targetScaleZ = Math.max(
+        1e-6,
+        Math.abs(ledgerDepthMm ? ledgerDepthMm / 1000 : targetMesh.scale.z),
+      );
 
       const inset = 0.005;
       const footprintHalfX = Math.min(
-        widthUnits / 2,
-        Math.abs(size.x * finalScale) / 2,
+        targetSpanX / 2,
+        Math.abs(size.x * finalScale) / (2 * targetScaleX),
       );
       const footprintHalfZ = Math.min(
-        depthUnits / 2,
-        Math.abs(size.z * finalScale * depthScale) / 2,
+        targetSpanZ / 2,
+        Math.abs(size.z * finalScale * depthScale) / (2 * targetScaleZ),
       );
 
-      const minX = centerX - widthUnits / 2 + footprintHalfX + inset;
-      const maxX = centerX + widthUnits / 2 - footprintHalfX - inset;
-      const minZ = centerZ - depthUnits / 2 + footprintHalfZ + inset;
-      const maxZ = centerZ + depthUnits / 2 - footprintHalfZ - inset;
+      const minX = targetBBox.min.x + footprintHalfX + inset;
+      const maxX = targetBBox.max.x - footprintHalfX - inset;
+      const minZ = targetBBox.min.z + footprintHalfZ + inset;
+      const maxZ = targetBBox.max.z - footprintHalfZ - inset;
 
       const clampedX = Math.max(minX, Math.min(maxX, localPt.x));
       const clampedZ = Math.max(minZ, Math.min(maxZ, localPt.z));

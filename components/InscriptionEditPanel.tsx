@@ -44,13 +44,15 @@ export default function InscriptionEditPanel() {
   );
 
   const handleAddNewLine = useCallback(() => {
-    const maxY = lines.length > 0 ? Math.max(...lines.map((l) => l.yPos)) : 0;
-    const lastLine = lines.find((l) => l.yPos === maxY);
-    const offset = lastLine ? lastLine.sizeMm / 10 + 5 : 0;
-    const newY = maxY + offset;
     const text = activeInscriptionText.trim() || 'New line';
+    if (!active) {
+      addInscriptionLine({ text, font: selectedFont, yPos: 0 });
+      return;
+    }
+
+    const newY = active.yPos + (active.sizeMm / 10 + 5);
     addInscriptionLine({ text, font: selectedFont, yPos: newY });
-  }, [lines, addInscriptionLine, activeInscriptionText, selectedFont]);
+  }, [active, addInscriptionLine, activeInscriptionText, selectedFont]);
 
   return (
     <div className="space-y-4">

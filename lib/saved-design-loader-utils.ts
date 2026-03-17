@@ -13,6 +13,10 @@ export interface LoadDesignOptions {
   autoSave?: boolean; // Whether to auto-save after loading
 }
 
+type CanonicalPositionMode = 'legacy-stage-px' | 'surface-mm';
+type CanonicalHeadstonePlacement = 'legacy-stage-offset' | 'auto-center' | 'none';
+type CanonicalFlipMode = 'invert-legacy-bools' | 'preserve';
+
 export type CanonicalDesignData = {
   version?: string;
   generatedAt?: string;
@@ -47,6 +51,11 @@ export type CanonicalDesignData = {
   scene?: {
     canvas?: { width_mm?: number; height_mm?: number };
     viewportPx?: { width?: number; height?: number; dpr?: number };
+    coordinateSystem?: {
+      positionMode?: CanonicalPositionMode;
+      headstonePlacement?: CanonicalHeadstonePlacement;
+      flipMode?: CanonicalFlipMode;
+    };
   };
   source?: {
     id?: string;
@@ -616,30 +625,19 @@ export async function loadCanonicalDesignIntoEditor(
   const headstoneHalf = headstone?.height_mm ? headstone.height_mm / 2 : null;
   const normalizedMlDir = (designData.source?.mlDir ?? '').toLowerCase();
   const isForevershining = normalizedMlDir === 'forevershining';
-  const needsLegacyStageCompensation = !isForevershining;
-  const invertLegacyFlips = normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque';
+  const coordinateSystem = designData.scene?.coordinateSystem;
+  const positionMode = coordinateSystem?.positionMode ?? 'legacy-stage-px';
+  const headstonePlacement =
+    coordinateSystem?.headstonePlacement ?? (isForevershining ? 'auto-center' : 'legacy-stage-offset');
+  const flipMode =
+    coordinateSystem?.flipMode ??
+    (normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque'
+      ? 'invert-legacy-bools'
+      : 'preserve');
+  const needsLegacyStageCompensation = headstonePlacement === 'legacy-stage-offset';
+  const invertLegacyFlips = flipMode === 'invert-legacy-bools';
 
   let canonicalOutOfBounds = () => null as string | null;
-
-  const fallbackReason = canonicalOutOfBounds();
-  if (fallbackReason) {
-    console.warn(
-      `[loadCanonicalDesignIntoEditor] ${fallbackReason}; attempting legacy fallback via ${designData.source?.legacyFile ?? 'N/A'}`,
-    );
-    const legacyDesign = await fetchLegacyDesign();
-    if (legacyDesign) {
-      await loadSavedDesignIntoEditor(legacyDesign, designData.source?.id ?? 'canonical', {
-        clearExisting,
-      });
-      return {
-        inscriptionsLoaded: canonicalInscriptionSnapshot.length,
-        motifsLoaded: canonicalMotifSnapshot.length,
-      };
-    }
-    console.warn('[loadCanonicalDesignIntoEditor] Legacy fallback unavailable; proceeding with canonical data');
-  }
-  
-  console.log('[loadCanonicalDesignIntoEditor] Using canonical coordinates (no fallback needed)');
 
   if (clearExisting) {
     store.setInscriptions([]);
@@ -837,6 +835,13 @@ export async function loadCanonicalDesignIntoEditor(
       };
     }
 
+    if (positionMode === 'surface-mm') {
+      return {
+        xMm: position?.x_px ?? 0,
+        yMm: position?.y_px ?? 0,
+      };
+    }
+
     const xPx = position?.x_px ?? 0;
     const yPx = position?.y_px ?? 0;
     const stageXMm = xPx * mmPerPxX;
@@ -987,6 +992,26 @@ export async function loadCanonicalDesignIntoEditor(
     }
     return adjustedShift;
   };
+
+  const fallbackReason = canonicalOutOfBounds();
+  if (fallbackReason) {
+    console.warn(
+      `[loadCanonicalDesignIntoEditor] ${fallbackReason}; attempting legacy fallback via ${designData.source?.legacyFile ?? 'N/A'}`,
+    );
+    const legacyDesign = await fetchLegacyDesign();
+    if (legacyDesign) {
+      await loadSavedDesignIntoEditor(legacyDesign, designData.source?.id ?? 'canonical', {
+        clearExisting,
+      });
+      return {
+        inscriptionsLoaded: canonicalInscriptionSnapshot.length,
+        motifsLoaded: canonicalMotifSnapshot.length,
+      };
+    }
+    console.warn('[loadCanonicalDesignIntoEditor] Legacy fallback unavailable; proceeding with canonical data');
+  } else {
+    console.log('[loadCanonicalDesignIntoEditor] Using canonical coordinates (no fallback needed)');
+  }
 
   type PendingMotifData = {
     svgPath: string;
@@ -1141,9 +1166,9 @@ export async function loadCanonicalDesignIntoEditor(
     headstoneRangeTracker,
     HEADSTONE_HALF_MM,
     DEFAULT_HEADSTONE_Y_SHIFT_MM,
-    isForevershining ? 'auto-center' : 'default',
+    headstonePlacement === 'auto-center' ? 'auto-center' : 'default',
   );
-  if (isForevershining) {
+  if (headstonePlacement === 'auto-center') {
     console.log('[Canonical Loader] Forevershining auto-centering applied:', {
       appliedShiftMm: headstoneShiftMm,
       defaultShiftMm: DEFAULT_HEADSTONE_Y_SHIFT_MM,

@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import React from 'react';
+import { Box3, Vector3 } from 'three';
 import type { Group, Mesh } from 'three';
 import {
   DEFAULT_SHAPE_URL,
@@ -670,9 +671,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
   },
   hasStatue: () => {
-    const { selectedAdditions } = get();
+    const { selectedAdditions, additionOffsets } = get();
     // Check if any selected addition is a statue or vase
     return selectedAdditions.some((instanceId) => {
+      if ((additionOffsets[instanceId]?.targetSurface ?? 'headstone') !== 'base') {
+        return false;
+      }
       // Extract base ID from instance ID (remove timestamp suffix)
       const parts = instanceId.split('_');
       const baseId = parts.length > 1 && !isNaN(Number(parts[parts.length - 1])) 
@@ -1685,22 +1689,25 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const ledgerDepthMm = src.baseHeightMm || get().ledgerDepthMm || 400;
       offset = (src.sizeMm + 5) / ledgerDepthMm;
     } else {
-      // Headstone / base: yPos is in local mm-scale units — measure actual text height.
-      offset = src.sizeMm / 10 + 5; // fallback
-      if (typeof window !== 'undefined') {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.font = `${src.sizeMm}px "${src.font}"`;
-          const metrics = ctx.measureText(src.text);
-          if (
-            metrics.fontBoundingBoxAscent !== undefined &&
-            metrics.fontBoundingBoxDescent !== undefined
-          ) {
-            const heightPx =
-              metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
-            offset = heightPx + 5; // actual height in mm + gap
-          }
+      // Headstone / base: yPos is stored in the surface's local units, so convert any
+      // measured world-space height back into that local space before applying it.
+      const fallbackGapMm = Math.max(2, Math.round(src.sizeMm * 0.08));
+      const fallbackGapLocal =
+        src.target === 'base' ? fallbackGapMm : Math.max(1, Math.round(fallbackGapMm / 10));
+      offset = src.target === 'base' ? src.sizeMm + fallbackGapMm : src.sizeMm / 10 + 5;
+
+      const rendered = src.ref.current;
+      if (rendered) {
+        rendered.updateWorldMatrix(true, true);
+        const bounds = new Box3().setFromObject(rendered);
+        const renderedWorldHeight = bounds.max.y - bounds.min.y;
+        const renderedWorldScale = new Vector3();
+        rendered.getWorldScale(renderedWorldScale);
+        const localScaleY = Math.abs(renderedWorldScale.y) > 1e-6 ? Math.abs(renderedWorldScale.y) : 1;
+        const renderedLocalHeight = renderedWorldHeight / localScaleY;
+
+        if (Number.isFinite(renderedLocalHeight) && renderedLocalHeight > 0) {
+          offset = renderedLocalHeight + fallbackGapLocal;
         }
       }
     }

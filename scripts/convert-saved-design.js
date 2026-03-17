@@ -30,6 +30,17 @@ const metadataById = {
     mlDir: 'headstonesdesigner',
     preview: '/ml/headstonesdesigner/saved-designs/screenshots/2024/09/1725769905504.jpg',
   },
+  '1578016189116': {
+    slug: 'curved-gable-gods-garden',
+    productId: '124',
+    productName: 'Traditional Engraved Headstone',
+    productType: 'headstone',
+    productSlug: 'traditional-headstone',
+    category: 'biblical-memorial',
+    title: 'Biblical Memorial',
+    mlDir: 'forevershining',
+    preview: '/ml/forevershining/saved-designs/screenshots/1578016189116.jpg',
+  },
 };
 
 function hashString(str) {
@@ -253,6 +264,18 @@ function round(value) {
   return Math.round(value * 1000) / 1000;
 }
 
+function buildCoordinateSystem(mlDir) {
+  const normalizedMlDir = String(mlDir || '').toLowerCase();
+  return {
+    positionMode: 'legacy-stage-px',
+    headstonePlacement: normalizedMlDir === 'forevershining' ? 'auto-center' : 'legacy-stage-offset',
+    flipMode:
+      normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque'
+        ? 'invert-legacy-bools'
+        : 'preserve',
+  };
+}
+
 function buildInscription(item, _pxPerMmX, _pxPerMmY, category) {
   const xPx = round(item.x || 0);
   const yPx = round(item.y || 0);
@@ -388,6 +411,7 @@ function convertDesign(designId) {
       canvas: { width_mm: widthMm, height_mm: heightMm },
       viewportPx: { width: viewport.width, height: viewport.height, dpr },
       surface: { origin: [0, 0, 0], normal: [0, 0, 1] },
+      coordinateSystem: buildCoordinateSystem(meta.mlDir),
     },
     components: {
       headstone: {
