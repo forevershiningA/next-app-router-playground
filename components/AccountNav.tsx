@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import type { ComponentType } from 'react';
+import { useEffect, useState, type ComponentType } from 'react';
 import {
   SparklesIcon,
   BookmarkSquareIcon,
@@ -59,6 +59,33 @@ export default function AccountNav() {
   const pathname = usePathname();
   const router = useRouter();
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
+  const [sessionEmail, setSessionEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadSessionEmail = async () => {
+      try {
+        const response = await fetch('/api/auth/session', { cache: 'no-store' });
+        if (!response.ok) {
+          setSessionEmail(null);
+          return;
+        }
+        const data = await response.json();
+        setSessionEmail(data?.session?.email ?? null);
+      } catch (error) {
+        console.error('Failed to fetch session email:', error);
+        setSessionEmail(null);
+      }
+    };
+
+    void loadSessionEmail();
+
+    const handleSessionChanged = () => {
+      void loadSessionEmail();
+    };
+
+    window.addEventListener('session-changed', handleSessionChanged);
+    return () => window.removeEventListener('session-changed', handleSessionChanged);
+  }, []);
 
   function handleNewDesign() {
     resetDesign();
@@ -128,7 +155,9 @@ export default function AccountNav() {
           </div>
           <div className="mt-8 rounded-2xl border border-white/12 bg-white/5 px-4 py-4 text-sm text-white/75 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
             <p className="text-[12px] uppercase tracking-[0.4em] text-white/45">Signed in as</p>
-            <p className="mt-2 text-lg font-semibold text-white">admin@forevershining.com</p>
+            <p className="mt-2 text-lg font-semibold text-white">
+              {sessionEmail ?? 'Loading...'}
+            </p>
           </div>
         </nav>
       </div>

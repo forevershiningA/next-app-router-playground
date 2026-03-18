@@ -1445,10 +1445,7 @@ export default function DesignerNav() {
       // Capture screenshot from the 3D canvas
       let screenshotDataUrl: string | null = null;
       try {
-        const canvas = document.querySelector('canvas');
-        if (canvas) {
-          screenshotDataUrl = canvas.toDataURL('image/png');
-        }
+        screenshotDataUrl = captureBestCanvasScreenshot();
       } catch (error) {
         console.warn('Failed to capture canvas screenshot:', error);
       }
@@ -1465,16 +1462,53 @@ export default function DesignerNav() {
           ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
           : 0;
 
-      // Calculate motif prices
+      const additionsPrice = state.selectedAdditions.length * 75;
+
+      // Calculate motif prices (same pricing model used by Check Price)
       let motifsPrice = 0;
       if (state.selectedMotifs && state.selectedMotifs.length > 0) {
+        const isLaser = catalog?.product.laser === '1';
         motifsPrice = state.selectedMotifs.reduce((total, motif) => {
-          return total + calculateMotifPrice(motif, catalog?.product);
+          const offset = state.motifOffsets?.[motif.id];
+          const heightMm = offset?.heightMm ?? 100;
+          if (!isLaser && motifPriceModel) {
+            return total + calculateMotifPrice(
+              heightMm,
+              motif.color,
+              motifPriceModel.priceModel,
+              isLaser,
+            );
+          }
+          return total;
         }, 0);
       }
 
-      const totalPrice = headstonePrice + basePrice + motifsPrice;
+      const validInscriptions = (state.inscriptions || []).filter((line) =>
+        line.text?.trim(),
+      );
+      const inscriptionPrice = validInscriptions.length * 50;
+      const imagePrice = 0; // Image pricing is computed on Check Price save path
+      const subtotal =
+        headstonePrice +
+        basePrice +
+        additionsPrice +
+        motifsPrice +
+        inscriptionPrice +
+        imagePrice;
+      const tax = subtotal * 0.1;
+      const totalPrice = subtotal + tax;
       const totalPriceCents = Math.round(totalPrice * 100);
+      const pricingBreakdown = {
+        headstonePrice,
+        basePrice,
+        additionsPrice,
+        motifsPrice,
+        inscriptionPrice,
+        imagePrice,
+        subtotal,
+        tax,
+        total: totalPrice,
+      };
 
       // Prepare design state matching DesignerSnapshot schema
       const designState = {
@@ -1536,9 +1570,7 @@ export default function DesignerNav() {
           status: 'draft',
           totalPriceCents,
           currency: 'AUD',
-          materialId: catalog?.material?.id || null,
-          shapeId: catalog?.shape?.id || null,
-          borderId: catalog?.border?.id || null,
+          pricingBreakdown,
         }),
       });
 
@@ -2974,4 +3006,72 @@ export default function DesignerNav() {
       />
     </nav>
   );
+}
+
+function captureBestCanvasScreenshot(): string | null {
+  const canvases = Array.from(document.querySelectorAll('canvas'));
+  if (!canvases.length) return null;
+
+  const ranked = canvases
+    .map((canvas) => {
+      const width = canvas.width || canvas.clientWidth || 0;
+      const height = canvas.height || canvas.clientHeight || 0;
+      const area = width * height;
+      return { canvas, area };
+    })
+    .filter((entry) => entry.area > 0)
+    .sort((a, b) => b.area - a.area);
+
+  const first = ranked[0]?.canvas ?? null;
+
+  for (const { canvas } of ranked) {
+    try {
+      if (isLikelyBlankCanvas(canvas)) {
+        continue;
+      }
+      return canvas.toDataURL('image/png');
+    } catch {
+      // Try next canvas
+    }
+  }
+
+  if (!first) return null;
+  try {
+    return first.toDataURL('image/png');
+  } catch {
+    return null;
+  }
+}
+
+function isLikelyBlankCanvas(canvas: HTMLCanvasElement): boolean {
+  const probe = document.createElement('canvas');
+  probe.width = 64;
+  probe.height = 48;
+  const ctx = probe.getContext('2d', { willReadFrequently: true });
+  if (!ctx) return false;
+
+  try {
+    ctx.drawImage(canvas, 0, 0, probe.width, probe.height);
+    const pixels = ctx.getImageData(0, 0, probe.width, probe.height).data;
+    let opaque = 0;
+    let nonWhite = 0;
+
+    for (let i = 0; i < pixels.length; i += 4) {
+      const r = pixels[i];
+      const g = pixels[i + 1];
+      const b = pixels[i + 2];
+      const a = pixels[i + 3];
+      if (a > 10) {
+        opaque += 1;
+        if (!(r > 245 && g > 245 && b > 245)) {
+          nonWhite += 1;
+        }
+      }
+    }
+
+    if (opaque === 0) return true;
+    return nonWhite / opaque < 0.01;
+  } catch {
+    return false;
+  }
 }

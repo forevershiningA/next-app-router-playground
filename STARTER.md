@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-17
+**Last Updated:** 2026-03-18
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,58 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-18)
+
+### ✅ Recent Changes (March 18, 2026)
+
+1. **My Account session identity corrected - COMPLETE**
+   - Replaced hardcoded account email in `AccountNav` with live `/api/auth/session` data.
+   - Added `session-changed` refresh behavior so sidebar updates immediately after login/logout.
+   - **File**: `components/AccountNav.tsx`.
+
+2. **Default sample cards removed from My Account - COMPLETE**
+   - Saved designs list now renders only persisted `/api/projects` records for the current account view.
+   - Removed static dataset/fallback-card merge from active account card rendering.
+   - **File**: `app/my-account/page.tsx`.
+
+3. **Crop-to-render mismatch fixed for Add Your Image - COMPLETE**
+   - Crop math now maps to the real `object-contain` image box (not full preview container).
+   - Horizontal/vertical crop selections now align with headstone render output.
+   - **Files**: `components/CropCanvas.tsx`, `components/ImageSelector.tsx`.
+
+4. **Saved-design storage pipeline hardened - COMPLETE**
+   - Fixed screenshot decode to support generic `data:image/*;base64,...` payloads.
+   - Prevented empty image writes by validating screenshot buffers and using placeholder fallback when invalid.
+   - Normalized saved screenshot/thumbnail public URLs to forward slashes.
+   - Added path normalization in project DB mapping (`\` -> `/`) for persisted paths.
+   - **Files**: `app/api/projects/route.ts`, `lib/fileStorage.ts`, `lib/projects-db.ts`.
+
+5. **Saved Design PDF made print-friendly and quote-complete - COMPLETE**
+   - Switched to white-background print layout and added full quote breakdown (line items + subtotal + GST + total).
+   - Wired PDF generation to fetch project details and include `pricingBreakdown`.
+   - Added richer detail sections for Additions, Motifs, and Inscriptions.
+   - Added motif/addition thumbnails in both Check Price detail rows and PDF detail sections.
+   - **Files**: `lib/pdf-generator.ts`, `lib/design-quote.ts`, `app/my-account/page.tsx`, `app/my-account/designs/[id]/page.tsx`, `app/check-price/_ui/CheckPriceGrid.tsx`.
+
+6. **Save Design pricing parity aligned with Check Price - COMPLETE**
+   - `DesignerNav` save flow now persists additions/motifs/inscriptions/subtotal/tax/total in `pricingBreakdown`.
+   - Removed invalid payload fields (`catalog.material/shape/border`) from save request.
+   - **File**: `components/DesignerNav.tsx`.
+
+7. **Post-change regressions addressed - COMPLETE**
+   - Fixed white saved thumbnails by improving canvas selection (largest non-blank canvas capture).
+   - Fixed black-square motif thumbnails in PDF by preserving transparency (PNG raster path).
+   - Improved Check Price thumbnail chip contrast for dark assets.
+   - **Files**: `components/DesignerNav.tsx`, `lib/pdf-generator.ts`, `app/check-price/_ui/CheckPriceGrid.tsx`.
+
+### ⚠️ Known Gaps (March 18, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **User re-save needed for legacy projects**: older saved records with incomplete historical pricing/asset data may require re-saving to fully reflect the latest PDF quote and thumbnail behavior.
+- **Saved Design 2 (`1578016189116`) still not resolved**: The remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
 
 ---
 

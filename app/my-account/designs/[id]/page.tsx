@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { generateDesignPDF } from '#/lib/pdf-generator';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
+import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
@@ -158,6 +159,7 @@ export default function DesignDetailPage() {
         createdLabel: formatDate(createdDate),
         description: buildDescription(project),
         productName,
+        quote: buildPdfQuoteFromProject(project),
       });
     } catch (err) {
       console.error('PDF export failed', err);

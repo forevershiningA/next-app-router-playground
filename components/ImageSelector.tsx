@@ -101,7 +101,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     }
   }, [isGraniteImage, cropColorMode]);
   
-  // Crop area state (in percentage of preview container)
+  // Crop area state (in percentage of the rendered image box, excluding letterbox bars)
   // Default for oval (portrait): 0.8:1 aspect ratio (400/500)
   const [cropArea, setCropArea] = useState({
     x: 26, // left position as % - centered for 48% width

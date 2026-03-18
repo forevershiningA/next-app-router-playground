@@ -29,6 +29,9 @@ type CheckPriceGridProps = {
   initialImagePricing?: ImagePricingMap | null;
 };
 
+const toAssetPath = (path?: string | null) =>
+  path ? (path.startsWith('/') || path.startsWith('data:') ? path : `/${path}`) : '';
+
 export default function CheckPriceGrid({ initialImagePricing = null }: CheckPriceGridProps) {
   const router = useRouter();
   const [returnPath, setReturnPath] = useState('/select-size');
@@ -43,6 +46,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
+  const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
@@ -272,14 +276,19 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         : addId;
       
       const addition = data.additions.find(a => a.id === baseId);
+      const dirName = addition?.file?.split('/')?.[0] || '';
+      const thumbnail = dirName && addition?.image ? `/additions/${dirName}/${addition.image}` : null;
+      const sizeVariant = additionOffsets?.[addId]?.sizeVariant ?? 1;
       return {
         id: addId,
         baseId: baseId,
         name: addition?.name || 'Addition',
         type: addition?.type || 'application',
+        sizeVariant,
+        thumbnail,
       };
     });
-  }, [selectedAdditions]);
+  }, [selectedAdditions, additionOffsets]);
   
   // Get detailed motif items
   const motifItems = useMemo(() => {
@@ -312,6 +321,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         heightMm,
         color: motif.color,
         colorName,
+        thumbnail: toAssetPath(motif.svgPath),
         price: individualPrice,
       };
     });
@@ -433,9 +443,18 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                     <ul className="mt-3 space-y-2 text-sm text-gray-300">
                       {additionItems.map((item) => (
                         <li key={item.id} className="flex items-center justify-between">
-                          <div>
-                            <p className="text-white font-medium">{item.name}</p>
-                            <p className="text-xs text-gray-400 capitalize">{item.type}</p>
+                          <div className="flex items-center gap-3">
+                            {item.thumbnail && (
+                              <div className="h-10 w-10 overflow-hidden rounded-md border border-gray-400/70 bg-gray-300/90">
+                                <img src={item.thumbnail} alt={item.name} className="h-full w-full object-contain p-1" />
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-white font-medium">{item.name}</p>
+                              <p className="text-xs text-gray-400 capitalize">
+                                Product ID: {item.baseId} · Type: {item.type} · Size Variant: {item.sizeVariant}
+                              </p>
+                            </div>
                           </div>
                           <p className="text-white font-semibold">$75.00</p>
                         </li>
@@ -479,9 +498,17 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                   <div className="mt-3 space-y-2 text-sm text-gray-300">
                     {motifItems.map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-4">
-                        <div>
-                          <p className="text-white font-medium capitalize">{item.name}</p>
-                          <p className="text-xs text-gray-400">Height: {item.heightMm}mm · Color: {item.colorName}</p>
+                        <div className="flex items-center gap-3">
+                          {item.thumbnail && (
+                            <div className="h-10 w-10 overflow-hidden rounded-md border border-gray-400/70 bg-gray-300/90">
+                              <img src={item.thumbnail} alt={item.name} className="h-full w-full object-contain p-1" />
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-white font-medium capitalize">{item.name}</p>
+                            <p className="text-xs text-gray-400">Height: {item.heightMm}mm · Color: {item.colorName}</p>
+                            <p className="text-xs text-gray-500">{item.svgPath}</p>
+                          </div>
                         </div>
                         <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
                       </div>
@@ -580,6 +607,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                         <div>
                           <p className="text-white font-medium">{item.text}</p>
                           <p className="text-xs text-gray-400">Font: {item.font} · Size: {item.sizeMm}mm · Color: {item.colorName}</p>
+                          <p className="text-xs text-gray-500">Line ID: {item.id}</p>
                         </div>
                         <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
                       </div>

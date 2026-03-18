@@ -54,6 +54,22 @@ type SaveProjectBody = {
   pricingBreakdown?: PricingBreakdown | null;
 };
 
+function decodeScreenshotDataUrl(raw: string | undefined): Buffer {
+  if (!raw) return Buffer.alloc(0);
+  const normalized = raw.trim();
+  const match = normalized.match(/^data:image\/[a-zA-Z0-9.+-]+;base64,([A-Za-z0-9+/=]+)$/);
+  if (!match?.[1]) {
+    return Buffer.alloc(0);
+  }
+
+  try {
+    const buffer = Buffer.from(match[1], 'base64');
+    return buffer.length > 0 ? buffer : Buffer.alloc(0);
+  } catch {
+    return Buffer.alloc(0);
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as SaveProjectBody;
@@ -72,15 +88,8 @@ export async function POST(request: NextRequest) {
     let tempSummary: any = null;
     
     try {
-      const screenshotDataUrl = body.designState.metadata?.screenshot;
-      let screenshotBuffer: Buffer;
-      
-      if (screenshotDataUrl && screenshotDataUrl.startsWith('data:image/png;base64,')) {
-        const base64Data = screenshotDataUrl.replace('data:image/png;base64,', '');
-        screenshotBuffer = Buffer.from(base64Data, 'base64');
-      } else {
-        screenshotBuffer = Buffer.from('');
-      }
+      const screenshotDataUrl = body.designState.metadata?.screenshot ?? undefined;
+      const screenshotBuffer = decodeScreenshotDataUrl(screenshotDataUrl);
 
       // Create temporary project to get ID
       tempSummary = await saveProjectRecord({

@@ -19,6 +19,7 @@ export default function CropCanvas() {
   const previewRef = useRef<HTMLDivElement>(null);
   const cropAreaRef = useRef<HTMLDivElement>(null);
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
+  const [imageNaturalSize, setImageNaturalSize] = useState<{ width: number; height: number } | null>(null);
 
   if (!cropCanvasData) {
     return null;
@@ -73,6 +74,31 @@ export default function CropCanvas() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    const img = new window.Image();
+    img.onload = () => {
+      if (cancelled) return;
+      const width = img.naturalWidth || img.width;
+      const height = img.naturalHeight || img.height;
+      if (!width || !height) {
+        setImageNaturalSize(null);
+        return;
+      }
+      setImageNaturalSize({ width, height });
+    };
+    img.onerror = () => {
+      if (!cancelled) {
+        setImageNaturalSize(null);
+      }
+    };
+    img.src = uploadedImage;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [uploadedImage]);
+
   const FALLBACK_BOUNDS: Record<MaskShape, { left: number; top: number; width: number; height: number; viewWidth: number; viewHeight: number }> = {
     oval: { left: 50, top: 0, width: 400, height: 500, viewWidth: 500, viewHeight: 500 },
     'horizontal-oval': { left: 0, top: 50, width: 500, height: 400, viewWidth: 500, viewHeight: 500 },
@@ -95,18 +121,43 @@ export default function CropCanvas() {
   const maskImageHeight = maskViewHeight;
   const preserveAspect = 'xMidYMid meet';
 
-  const cropPx = useMemo(() => {
+  const imageBoxPx = useMemo(() => {
     if (!previewSize.width || !previewSize.height) {
+      return { left: 0, top: 0, width: 0, height: 0 };
+    }
+
+    if (!imageNaturalSize?.width || !imageNaturalSize?.height) {
+      return { left: 0, top: 0, width: previewSize.width, height: previewSize.height };
+    }
+
+    const previewAspect = previewSize.width / previewSize.height;
+    const imageAspect = imageNaturalSize.width / imageNaturalSize.height;
+
+    if (previewAspect > imageAspect) {
+      const height = previewSize.height;
+      const width = height * imageAspect;
+      const left = (previewSize.width - width) / 2;
+      return { left, top: 0, width, height };
+    }
+
+    const width = previewSize.width;
+    const height = width / imageAspect;
+    const top = (previewSize.height - height) / 2;
+    return { left: 0, top, width, height };
+  }, [imageNaturalSize?.height, imageNaturalSize?.width, previewSize.height, previewSize.width]);
+
+  const cropPx = useMemo(() => {
+    if (!imageBoxPx.width || !imageBoxPx.height) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
 
     return {
-      x: (cropArea.x / 100) * previewSize.width,
-      y: (cropArea.y / 100) * previewSize.height,
-      width: (cropArea.width / 100) * previewSize.width,
-      height: (cropArea.height / 100) * previewSize.height,
+      x: imageBoxPx.left + (cropArea.x / 100) * imageBoxPx.width,
+      y: imageBoxPx.top + (cropArea.y / 100) * imageBoxPx.height,
+      width: (cropArea.width / 100) * imageBoxPx.width,
+      height: (cropArea.height / 100) * imageBoxPx.height,
     };
-  }, [cropArea, previewSize.height, previewSize.width]);
+  }, [cropArea, imageBoxPx.height, imageBoxPx.left, imageBoxPx.top, imageBoxPx.width]);
 
   const maskFit = useMemo(() => {
     const sw = maskBounds.width;
@@ -183,8 +234,10 @@ export default function CropCanvas() {
       if (!dragState.isDragging || !previewRef.current) return;
 
       const rect = previewRef.current.getBoundingClientRect();
-      const deltaX = ((e.clientX - dragState.startX) / rect.width) * 100;
-      const deltaY = ((e.clientY - dragState.startY) / rect.height) * 100;
+      const boxWidth = Math.max(imageBoxPx.width, 1);
+      const boxHeight = Math.max(imageBoxPx.height, 1);
+      const deltaX = ((e.clientX - dragState.startX) / rect.width) * (rect.width / boxWidth) * 100;
+      const deltaY = ((e.clientY - dragState.startY) / rect.height) * (rect.height / boxHeight) * 100;
 
       const { initialCropArea, handle } = dragState;
 
@@ -324,7 +377,7 @@ export default function CropCanvas() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [dragState, hasFixedSizes, allowFreeformHandles, maskBounds, updateCropArea]);
+  }, [allowFreeformHandles, dragState, hasFixedSizes, imageBoxPx.height, imageBoxPx.width, maskBounds, updateCropArea]);
 
   return (
     <div className="absolute inset-0 bg-[#0A0A0A] flex items-center justify-center">

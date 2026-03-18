@@ -18,6 +18,28 @@ export async function ensureDirectoryExists(dirPath: string): Promise<void> {
   }
 }
 
+async function ensureValidScreenshotBuffer(screenshot: Buffer): Promise<Buffer> {
+  if (screenshot.length > 0) {
+    try {
+      await sharp(screenshot).metadata();
+      return screenshot;
+    } catch (error) {
+      console.warn('Invalid screenshot buffer received, using placeholder image:', error);
+    }
+  }
+
+  return sharp({
+    create: {
+      width: 1200,
+      height: 900,
+      channels: 3,
+      background: { r: 245, g: 245, b: 245 },
+    },
+  })
+    .png()
+    .toBuffer();
+}
+
 export async function saveDesignFiles(
   designId: string,
   screenshot: Buffer,
@@ -26,6 +48,7 @@ export async function saveDesignFiles(
   htmlData: string,
   p3dData: Buffer
 ): Promise<DesignFiles> {
+  const screenshotBuffer = await ensureValidScreenshotBuffer(screenshot);
   const basePath = path.join(process.cwd(), 'public', 'saved-designs');
   
   // Get current year and month
@@ -33,6 +56,7 @@ export async function saveDesignFiles(
   const year = now.getFullYear().toString();
   const month = (now.getMonth() + 1).toString().padStart(2, '0');
   const datePath = path.join(year, month);
+  const dateUrlPath = `${year}/${month}`;
   
   // Create subdirectories with year/month structure
   const screenshotsPath = path.join(basePath, 'screenshots', datePath);
@@ -62,7 +86,7 @@ export async function saveDesignFiles(
   // Generate thumbnail (300x200 max, maintain aspect ratio)
   let thumbnail: Buffer;
   try {
-    thumbnail = await sharp(screenshot)
+    thumbnail = await sharp(screenshotBuffer)
       .resize(300, 200, {
         fit: 'inside',
         withoutEnlargement: true
@@ -71,12 +95,12 @@ export async function saveDesignFiles(
       .toBuffer();
   } catch (error) {
     console.error('Failed to generate thumbnail, using original:', error);
-    thumbnail = screenshot;
+    thumbnail = screenshotBuffer;
   }
 
   // Save files
   await Promise.all([
-    writeFile(path.join(screenshotsPath, screenshotFile), screenshot),
+    writeFile(path.join(screenshotsPath, screenshotFile), screenshotBuffer),
     writeFile(path.join(thumbnailsPath, thumbnailFile), thumbnail),
     writeFile(path.join(jsonPath, jsonFile), JSON.stringify(jsonData, null, 2)),
     writeFile(path.join(xmlPath, xmlFile), xmlData),
@@ -85,12 +109,12 @@ export async function saveDesignFiles(
   ]);
 
   return {
-    screenshot: `/saved-designs/screenshots/${datePath}/${screenshotFile}`,
-    thumbnail: `/saved-designs/thumbnails/${datePath}/${thumbnailFile}`,
-    json: `/saved-designs/json/${datePath}/${jsonFile}`,
-    xml: `/saved-designs/xml/${datePath}/${xmlFile}`,
-    html: `/saved-designs/html/${datePath}/${htmlFile}`,
-    p3d: `/saved-designs/p3d/${datePath}/${p3dFile}`,
+    screenshot: `/saved-designs/screenshots/${dateUrlPath}/${screenshotFile}`,
+    thumbnail: `/saved-designs/thumbnails/${dateUrlPath}/${thumbnailFile}`,
+    json: `/saved-designs/json/${dateUrlPath}/${jsonFile}`,
+    xml: `/saved-designs/xml/${dateUrlPath}/${xmlFile}`,
+    html: `/saved-designs/html/${dateUrlPath}/${htmlFile}`,
+    p3d: `/saved-designs/p3d/${dateUrlPath}/${p3dFile}`,
   };
 }
 

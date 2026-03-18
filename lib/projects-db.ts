@@ -7,6 +7,9 @@ const GUEST_PASSWORD_PLACEHOLDER = 'guest-placeholder';
 
 let cachedGuestAccountId: string | null = null;
 
+const normalizePublicPath = (value: string | null | undefined) =>
+  value ? value.replace(/\\/g, '/') : null;
+
 function ensureDb() {
   if (!db) {
     throw new Error('Database not configured. Please set DATABASE_URL environment variable.');
@@ -20,8 +23,8 @@ const toSummary = (record: typeof projects.$inferSelect): ProjectSummary => ({
   status: record.status,
   totalPriceCents: record.totalPriceCents ?? null,
   currency: record.currency ?? 'AUD',
-  screenshotPath: record.screenshotPath ?? null,
-  thumbnailPath: record.thumbnailPath ?? null,
+  screenshotPath: normalizePublicPath(record.screenshotPath),
+  thumbnailPath: normalizePublicPath(record.thumbnailPath),
   updatedAt: record.updatedAt.toISOString(),
   createdAt: record.createdAt.toISOString(),
 });
@@ -101,8 +104,8 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
         materialId: input.materialId ?? null,
         shapeId: input.shapeId ?? null,
         borderId: input.borderId ?? null,
-        screenshotPath: input.screenshotPath ?? null,
-        thumbnailPath: input.thumbnailPath ?? null,
+        screenshotPath: normalizePublicPath(input.screenshotPath),
+        thumbnailPath: normalizePublicPath(input.thumbnailPath),
         designState: input.designState,
         pricingBreakdown,
         updatedAt: new Date(),
@@ -128,8 +131,8 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
       materialId: input.materialId ?? null,
       shapeId: input.shapeId ?? null,
       borderId: input.borderId ?? null,
-      screenshotPath: input.screenshotPath ?? null,
-      thumbnailPath: input.thumbnailPath ?? null,
+      screenshotPath: normalizePublicPath(input.screenshotPath),
+      thumbnailPath: normalizePublicPath(input.thumbnailPath),
       designState: input.designState,
       pricingBreakdown,
     })
@@ -162,8 +165,8 @@ export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]
     status: row.status,
     totalPriceCents: row.totalPriceCents ?? null,
     currency: row.currency ?? 'AUD',
-    screenshotPath: row.screenshotPath ?? null,
-    thumbnailPath: row.thumbnailPath ?? null,
+    screenshotPath: normalizePublicPath(row.screenshotPath),
+    thumbnailPath: normalizePublicPath(row.thumbnailPath),
     updatedAt: row.updatedAt.toISOString(),
     createdAt: row.createdAt.toISOString(),
   }));

@@ -8,6 +8,7 @@ import { UserCircleIcon } from '@heroicons/react/24/outline';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
+import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 
 type DesignStatus = 'awaiting-approval' | 'ready-to-order' | 'in-production' | 'completed' | 'draft';
 
@@ -174,7 +175,6 @@ export default function MyAccountPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
-  const [allDesigns, setAllDesigns] = useState<SavedDesignMetadata[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
 
   async function handleEdit(cardId: string) {
@@ -250,12 +250,6 @@ export default function MyAccountPage() {
     else if (session === null) setIsLoading(false);
   }, [session]);
 
-  useEffect(() => {
-    import('#/lib/saved-designs-data').then(({ getAllSavedDesigns }) => {
-      setAllDesigns(getAllSavedDesigns());
-    });
-  }, []);
-
   const handleDeleteCard= async (cardId: string) => {
     if (!confirm('Delete this design? This cannot be undone.')) return;
     try {
@@ -267,11 +261,7 @@ export default function MyAccountPage() {
 
   // Convert API projects to design cards
   const projectCards = savedProjects.map((project) => buildProjectCard(project));
-  
-  // Merge with static designs
-  const designCards = buildDesignCards(allDesigns);
-  const allCards = [...projectCards, ...designCards];
-  const cards = allCards.length ? allCards : getFallbackCards();
+  const cards = projectCards;
   const visibleCards = cards.filter((card) => card.status !== 'awaiting-approval');
 
   // Still checking session
@@ -446,14 +436,21 @@ export default function MyAccountPage() {
                             onClick={async () => {
                               setOpenMenuId(null);
                               try {
+                                const detailsRes = await fetch(`/api/projects/${card.id}`);
+                                if (!detailsRes.ok) {
+                                  throw new Error('Failed to load project details');
+                                }
+                                const details = await detailsRes.json();
+                                const project = details.project;
                                 const { generateDesignPDF } = await import('#/lib/pdf-generator');
                                 await generateDesignPDF({
                                   title: card.title,
-                                  screenshot: card.preview,
+                                  screenshot: project?.screenshotPath || card.preview,
                                   priceLabel: card.priceLabel,
                                   createdLabel: card.createdLabel,
                                   description: card.description,
                                   productName: card.productName,
+                                  quote: buildPdfQuoteFromProject(project ?? {}),
                                 });
                               } catch { alert('Failed to generate PDF. Please try again.'); }
                             }}
