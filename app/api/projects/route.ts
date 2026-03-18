@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/lib/projects-db';
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
-import { saveDesignFiles, designToXML, designToP3D, generatePriceQuoteHTML } from '#/lib/fileStorage';
-import { writeFile } from 'fs/promises';
-import path from 'path';
+
+export const runtime = 'nodejs';
 
 const MAX_LIST_LIMIT = 50;
 
@@ -81,6 +80,7 @@ export async function POST(request: NextRequest) {
     const totalPriceCents = typeof body.totalPriceCents === 'number'
       ? Math.round(body.totalPriceCents)
       : null;
+    const cleanedDesignState = cleanDesignState(body.designState);
 
     // Save design files first to get the screenshot and thumbnail paths
     let screenshotPath: string | null = null;
@@ -101,62 +101,40 @@ export async function POST(request: NextRequest) {
         materialId: body.materialId ?? null,
         shapeId: body.shapeId ?? null,
         borderId: body.borderId ?? null,
-        designState: body.designState,
+        designState: cleanedDesignState,
         pricingBreakdown: body.pricingBreakdown ?? null,
       });
 
-      const designData = {
-        id: tempSummary.id,
-        name: tempSummary.title,
-        productId: body.designState.productId,
-        price: totalPriceCents ? totalPriceCents / 100 : 0,
-        quote: `Design "${tempSummary.title}" - ${new Date().toLocaleDateString()}`,
-        createdAt: tempSummary.createdAt,
-        data: body.designState,
-        screenshot: screenshotDataUrl || '',
-      };
+      if (process.env.VERCEL !== '1') {
+        const { saveDesignFiles, designToXML, designToP3D, generatePriceQuoteHTML } = await import('#/lib/fileStorage');
 
-      const xmlData = designToXML(designData);
-      const htmlData = generatePriceQuoteHTML(designData);
-      const p3dData = designToP3D(designData);
+        const designData = {
+          id: tempSummary.id,
+          name: tempSummary.title,
+          productId: body.designState.productId,
+          price: totalPriceCents ? totalPriceCents / 100 : 0,
+          quote: `Design "${tempSummary.title}" - ${new Date().toLocaleDateString()}`,
+          createdAt: tempSummary.createdAt,
+          data: cleanedDesignState,
+          screenshot: screenshotDataUrl || '',
+        };
 
-      const filePaths = await saveDesignFiles(
-        tempSummary.id,
-        screenshotBuffer,
-        body.designState,
-        xmlData,
-        htmlData,
-        p3dData
-      );
-      
-      screenshotPath = filePaths.screenshot;
-      thumbnailPath = filePaths.thumbnail;
+        const xmlData = designToXML(designData);
+        const htmlData = generatePriceQuoteHTML(designData);
+        const p3dData = designToP3D(designData);
 
-      // Now create clean design data with URLs instead of base64
-      const cleanDesignData = {
-        id: tempSummary.id,
-        name: tempSummary.title,
-        productId: body.designState.productId,
-        price: totalPriceCents ? totalPriceCents / 100 : 0,
-        quote: `Design "${tempSummary.title}" - ${new Date().toLocaleDateString()}`,
-        createdAt: tempSummary.createdAt,
-        screenshot: filePaths.screenshot,
-        thumbnail: filePaths.thumbnail,
-        data: cleanDesignState(body.designState),
-      };
+        const filePaths = await saveDesignFiles(
+          tempSummary.id,
+          screenshotBuffer,
+          cleanedDesignState,
+          xmlData,
+          htmlData,
+          p3dData
+        );
 
-      // Regenerate files with clean data (URLs instead of base64)
-      const cleanXmlData = designToXML(cleanDesignData);
-      const cleanHtmlData = generatePriceQuoteHTML(cleanDesignData);
-      const cleanP3dData = designToP3D(cleanDesignData);
-
-      // Overwrite the files with clean versions
-      await Promise.all([
-        writeFile(path.join(process.cwd(), 'public', filePaths.json.substring(1)), JSON.stringify(cleanDesignData, null, 2)),
-        writeFile(path.join(process.cwd(), 'public', filePaths.xml.substring(1)), cleanXmlData),
-        writeFile(path.join(process.cwd(), 'public', filePaths.html.substring(1)), cleanHtmlData),
-        writeFile(path.join(process.cwd(), 'public', filePaths.p3d.substring(1)), cleanP3dData),
-      ]);
+        screenshotPath = filePaths.screenshot;
+        thumbnailPath = filePaths.thumbnail;
+      }
     } catch (fileError) {
       console.error('[api/projects] Failed to save design files:', fileError);
       console.error('[api/projects] Error details:', fileError instanceof Error ? fileError.message : fileError);
@@ -180,7 +158,7 @@ export async function POST(request: NextRequest) {
       borderId: body.borderId ?? null,
       screenshotPath,
       thumbnailPath,
-      designState: body.designState,
+      designState: cleanedDesignState,
       pricingBreakdown: body.pricingBreakdown ?? null,
     });
 

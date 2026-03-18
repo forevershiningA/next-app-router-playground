@@ -1579,7 +1579,14 @@ export default function DesignerNav() {
       try {
         result = rawResponse ? (JSON.parse(rawResponse) as Record<string, unknown>) : {};
       } catch {
-        result = { message: `Unexpected ${response.status} response from save API` };
+        const compact = rawResponse
+          ? rawResponse.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
+          : '';
+        result = {
+          message: compact
+            ? `Save API returned ${response.status}: ${compact}`
+            : `Unexpected ${response.status} response from save API`,
+        };
       }
 
       if (!response.ok) {
