@@ -1574,7 +1574,13 @@ export default function DesignerNav() {
         }),
       });
 
-      const result = await response.json();
+      const rawResponse = await response.text();
+      let result: Record<string, unknown> = {};
+      try {
+        result = rawResponse ? (JSON.parse(rawResponse) as Record<string, unknown>) : {};
+      } catch {
+        result = { message: `Unexpected ${response.status} response from save API` };
+      }
 
       if (!response.ok) {
         console.error('Save design failed:', {
@@ -1582,7 +1588,9 @@ export default function DesignerNav() {
           statusText: response.statusText,
           result,
         });
-        throw new Error(result.message || 'Failed to save design');
+        const message =
+          typeof result.message === 'string' ? result.message : 'Failed to save design';
+        throw new Error(message);
       }
 
       console.log('Design saved successfully:', result);
@@ -3029,7 +3037,7 @@ function captureBestCanvasScreenshot(): string | null {
       if (isLikelyBlankCanvas(canvas)) {
         continue;
       }
-      return canvas.toDataURL('image/png');
+      return encodeCanvasForUpload(canvas);
     } catch {
       // Try next canvas
     }
@@ -3037,10 +3045,35 @@ function captureBestCanvasScreenshot(): string | null {
 
   if (!first) return null;
   try {
-    return first.toDataURL('image/png');
+    return encodeCanvasForUpload(first);
   } catch {
     return null;
   }
+}
+
+function encodeCanvasForUpload(source: HTMLCanvasElement): string {
+  const maxWidth = 1920;
+  const maxHeight = 1080;
+  const sourceWidth = source.width || source.clientWidth || 1;
+  const sourceHeight = source.height || source.clientHeight || 1;
+  const scale = Math.min(1, maxWidth / sourceWidth, maxHeight / sourceHeight);
+
+  let exportCanvas = source;
+  if (scale < 1) {
+    const resized = document.createElement('canvas');
+    resized.width = Math.max(1, Math.round(sourceWidth * scale));
+    resized.height = Math.max(1, Math.round(sourceHeight * scale));
+    const ctx = resized.getContext('2d');
+    if (ctx) {
+      // Use a white background to avoid alpha artifacts in JPEG exports.
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, resized.width, resized.height);
+      ctx.drawImage(source, 0, 0, resized.width, resized.height);
+      exportCanvas = resized;
+    }
+  }
+
+  return exportCanvas.toDataURL('image/jpeg', 0.86);
 }
 
 function isLikelyBlankCanvas(canvas: HTMLCanvasElement): boolean {
