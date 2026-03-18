@@ -134,6 +134,11 @@ export async function POST(request: NextRequest) {
 
         screenshotPath = filePaths.screenshot;
         thumbnailPath = filePaths.thumbnail;
+      } else if (screenshotDataUrl?.startsWith('data:image/')) {
+        // Vercel serverless filesystem is ephemeral/read-only for this flow.
+        // Persist screenshot previews as data URLs so My Account cards render correctly.
+        screenshotPath = screenshotDataUrl;
+        thumbnailPath = screenshotDataUrl;
       }
     } catch (fileError) {
       console.error('[api/projects] Failed to save design files:', fileError);
