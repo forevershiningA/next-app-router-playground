@@ -1,11 +1,6 @@
-import { desc, eq } from 'drizzle-orm';
-import { db, projects, accounts } from '#/lib/db/index';
+import { and, desc, eq } from 'drizzle-orm';
+import { db, projects } from '#/lib/db/index';
 import type { DesignerSnapshot, PricingBreakdown, ProjectSummary, ProjectRecordWithState } from '#/lib/project-schemas';
-
-const GUEST_ACCOUNT_EMAIL = 'guest@local.project';
-const GUEST_PASSWORD_PLACEHOLDER = 'guest-placeholder';
-
-let cachedGuestAccountId: string | null = null;
 
 const normalizePublicPath = (value: string | null | undefined) =>
   value ? value.replace(/\\/g, '/') : null;
@@ -38,37 +33,8 @@ const withState = (record: typeof projects.$inferSelect): ProjectRecordWithState
   pricingBreakdown: (record.pricingBreakdown as PricingBreakdown) ?? null,
 });
 
-async function ensureGuestAccount() {
-  const database = ensureDb();
-  
-  if (cachedGuestAccountId) {
-    return cachedGuestAccountId;
-  }
-
-  const existing = await database.query.accounts.findFirst({
-    where: eq(accounts.email, GUEST_ACCOUNT_EMAIL),
-  });
-
-  if (existing) {
-    cachedGuestAccountId = existing.id;
-    return existing.id;
-  }
-
-  const [created] = await database
-    .insert(accounts)
-    .values({
-      email: GUEST_ACCOUNT_EMAIL,
-      passwordHash: GUEST_PASSWORD_PLACEHOLDER,
-      role: 'client',
-      status: 'active',
-    })
-    .returning();
-
-  cachedGuestAccountId = created.id;
-  return created.id;
-}
-
 type SaveProjectInput = {
+  accountId: string;
   projectId?: string;
   title: string;
   status?: string;
@@ -85,7 +51,7 @@ type SaveProjectInput = {
 
 export async function saveProjectRecord(input: SaveProjectInput): Promise<ProjectSummary> {
   const database = ensureDb();
-  const accountId = await ensureGuestAccount();
+  const { accountId } = input;
   const title = input.title?.trim() || 'Untitled Design';
   const status = input.status ?? 'draft';
   const currency = input.currency ?? 'AUD';
@@ -110,7 +76,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
         pricingBreakdown,
         updatedAt: new Date(),
       })
-      .where(eq(projects.id, input.projectId))
+      .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
       .returning();
 
     if (!updated) {
@@ -141,7 +107,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
   return toSummary(created);
 }
 
-export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]> {
+export async function listProjectSummaries(accountId: string, limit = 20): Promise<ProjectSummary[]> {
   const database = ensureDb();
   const results = await database
     .select({
@@ -156,6 +122,7 @@ export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]
       createdAt: projects.createdAt,
     })
     .from(projects)
+    .where(eq(projects.accountId, accountId))
     .orderBy(desc(projects.updatedAt))
     .limit(limit);
 
@@ -172,10 +139,10 @@ export async function listProjectSummaries(limit = 20): Promise<ProjectSummary[]
   }));
 }
 
-export async function getProjectRecord(projectId: string): Promise<ProjectRecordWithState | null> {
+export async function getProjectRecord(projectId: string, accountId: string): Promise<ProjectRecordWithState | null> {
   const database = ensureDb();
   const record = await database.query.projects.findFirst({
-    where: eq(projects.id, projectId),
+    where: and(eq(projects.id, projectId), eq(projects.accountId, accountId)),
   });
 
   if (!record) {
@@ -185,11 +152,11 @@ export async function getProjectRecord(projectId: string): Promise<ProjectRecord
   return withState(record);
 }
 
-export async function deleteProjectRecord(projectId: string): Promise<boolean> {
+export async function deleteProjectRecord(projectId: string, accountId: string): Promise<boolean> {
   const database = ensureDb();
   const result = await database
     .delete(projects)
-    .where(eq(projects.id, projectId))
+    .where(and(eq(projects.id, projectId), eq(projects.accountId, accountId)))
     .returning();
 
   return result.length > 0;

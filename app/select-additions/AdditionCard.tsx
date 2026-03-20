@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { Addition } from '#/app/_internal/_data';
+import { normalizeAdditionBaseId } from '#/lib/addition-utils';
 
 type AdditionCardProps = {
   addition: Addition;
@@ -17,12 +18,7 @@ export default function AdditionCard({ addition }: AdditionCardProps) {
 
   // Check if this addition type is selected (check base ID in any instance)
   const isSelected = selectedAdditions.some(id => {
-    // Extract base ID from instance ID (remove timestamp suffix)
-    const parts = id.split('_');
-    const baseId = parts.length > 1 && !isNaN(Number(parts[parts.length - 1])) 
-      ? parts.slice(0, -1).join('_')
-      : id;
-    return baseId === addition.id;
+    return normalizeAdditionBaseId(id) === addition.id;
   });
 
   // Extract directory from file path if available, otherwise from ID

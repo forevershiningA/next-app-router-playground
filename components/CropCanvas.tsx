@@ -440,10 +440,10 @@ export default function CropCanvas() {
             ref={cropAreaRef}
             className="absolute"
             style={{
-              left: `${cropArea.x}%`,
-              top: `${cropArea.y}%`,
-              width: `${cropArea.width}%`,
-              height: `${cropArea.height}%`,
+              left: `${cropPx.x}px`,
+              top: `${cropPx.y}px`,
+              width: `${cropPx.width}px`,
+              height: `${cropPx.height}px`,
             }}
           >
             {/* Bounding box rectangle with connecting lines - aligned to mask bounds */}

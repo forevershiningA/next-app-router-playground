@@ -114,11 +114,10 @@ export default function SceneOverlayController({
       }
 
       if (loaded) {
-        setPos((p) => (p.x === loaded!.x && p.y === loaded!.y ? p : loaded!));
+        setPos((p) => (p.x === loaded.x && p.y === loaded.y ? p : loaded));
         getUI().pos = loaded;
       }
     } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specificKey, globalKey]);
 
   // Persist to BOTH (so every section and the shared global stay in sync)

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-18
+**Last Updated:** 2026-03-20
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,89 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-20)
+
+### ✅ Recent Changes (March 20, 2026)
+
+1. **Crop overlay drag alignment corrected after refactor - COMPLETE**
+   - `CropCanvas` drag rectangle now uses the same pixel-space `object-contain` image-box mapping (`cropPx`) as the green mask overlay.
+   - This removes horizontal (and vertical) drift between drag handles and mask output after the recent crop-section refactor.
+   - **File**: `components/CropCanvas.tsx`.
+
+2. **Saved design account isolation enforced end-to-end - COMPLETE**
+   - Closed a data isolation bug where `/api/projects` operations were not scoped to the authenticated account and could expose other users' designs.
+   - Project DB helpers now require `accountId` and enforce ownership in list/get/update/delete queries.
+   - Project API routes now require session and pass `session.accountId` for:
+     - `GET /api/projects`
+     - `POST /api/projects`
+     - `DELETE /api/projects`
+     - `GET /api/projects/[id]`
+   - Removed guest-account fallback behavior from project persistence path.
+   - **Files**: `lib/projects-db.ts`, `app/api/projects/route.ts`, `app/api/projects/[id]/route.ts`.
+
+3. **Validation status for this batch**
+   - `pnpm build --no-lint` succeeded after the crop alignment fix.
+   - `pnpm build --no-lint` succeeded after the account-isolation API fix.
+
+### ⚠️ Known Gaps (March 20, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **Saved Design 2 (`1578016189116`) still not resolved**: Remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
+
+---
+
+## Current Status (2026-03-19)
+
+### ✅ Recent Changes (March 19, 2026)
+
+1. **Local refactor campaign continued with behavior-safe slices - COMPLETE**
+   - Repeatedly used extract-and-validate workflow (small slice -> `pnpm build` -> next slice) to reduce risk while preserving current UI/3D behavior.
+   - Session tracked with explicit SQL todos and dependency ordering for each slice.
+
+2. **ImageSelector UX/structure cleanup - COMPLETE**
+   - Replaced `alert()` paths in `components/ImageSelector.tsx` with inline feedback banner state (`feedbackMessage`, `feedbackTone`) for upload/crop failure messaging.
+   - Completed earlier decomposition by keeping crop/mask logic in dedicated helpers:
+     - `components/useImageCropState.ts`
+     - `lib/image-mask.ts`
+   - Result: lower component complexity and more consistent in-app error UX.
+
+3. **Hook dependency cleanup in overlay controllers - COMPLETE**
+   - Removed `react-hooks/exhaustive-deps` suppressions in:
+     - `components/SceneOverlayHost.tsx`
+     - `components/SceneOverlayController.tsx`
+   - Updated effects to rely on stable updater/dependency patterns.
+
+4. **Check Price panel modularization - COMPLETE**
+   - Added `lib/check-price-utils.ts` and extracted:
+     - section state defaults/types
+     - shape/material display helpers
+     - mm -> imperial formatting helper
+   - Updated `components/CheckPricePanel.tsx` to consume shared helpers.
+
+5. **AdditionModel decomposition progressed through multiple slices - COMPLETE**
+   - Added/expanded `lib/addition-utils.ts` with reusable typed helpers:
+     - ID normalization: `normalizeAdditionBaseId`
+     - depth safety clamp: `clampDepthWithinRange`
+     - geometry helpers: `clampValue`, `getBoundsCenter`, `getInteractionClampBounds`
+     - conversion helpers: `getHeadstoneCenterXY`, `convertPointBetweenMeshLocals`
+     - base sampling helpers: `getMeshBoundingBox`, `sampleBaseSurfaceMetrics`, `BaseSurfaceSamples`
+   - Updated `components/three/AdditionModel.tsx` to consume these helpers across default placement, drag interaction, and base-surface sampling.
+   - Reused `normalizeAdditionBaseId` in:
+     - `app/select-additions/AdditionCard.tsx`
+     - `lib/headstone-store.ts`
+   - Result: reduced duplicated geometry/conversion logic and clearer extraction seams for future slices.
+
+6. **Validation status for this batch**
+   - `pnpm build` succeeded after each completed slice in this session.
+   - Type-check/lint baselines remain unchanged from prior status (see Known Gaps).
+
+### ⚠️ Known Gaps (March 19, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **Saved Design 2 (`1578016189116`) still not resolved**: Remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
 
 ---
 
@@ -75,10 +158,18 @@
    - Improved Check Price thumbnail chip contrast for dark assets.
    - **Files**: `components/DesignerNav.tsx`, `lib/pdf-generator.ts`, `app/check-price/_ui/CheckPriceGrid.tsx`.
 
+8. **Vercel Save Design reliability and preview rendering fixed - COMPLETE**
+   - Save API now avoids filesystem writes on Vercel runtime and still persists project records.
+   - For Vercel saves, `screenshotPath` and `thumbnailPath` are now stored as data URLs so cards do not fall back to `/screen.png`.
+   - Save response parsing in `DesignerNav` now handles non-JSON error bodies safely and surfaces clearer diagnostics.
+   - Client screenshot payload is downscaled/compressed before upload to reduce request-size failures.
+   - **Files**: `app/api/projects/route.ts`, `components/DesignerNav.tsx`.
+
 ### ⚠️ Known Gaps (March 18, 2026)
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **User re-save needed for legacy projects**: older saved records with incomplete historical pricing/asset data may require re-saving to fully reflect the latest PDF quote and thumbnail behavior.
+- **Vercel preview persistence mode**: screenshots/thumbnails are intentionally stored as data URLs in DB on Vercel (instead of public filesystem paths) until durable object storage is introduced.
 - **Saved Design 2 (`1578016189116`) still not resolved**: The remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
 
 ---

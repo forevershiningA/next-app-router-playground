@@ -88,6 +88,179 @@ const fullscreenPanelSlugs = new Set([
   'select-motifs',
 ]);
 
+type PanelSource = 'menu' | 'canvas' | null;
+type SetActivePanelFn = (panel: 'inscription' | 'addition' | 'motif' | null) => void;
+
+function useDesignerNavPanelState({
+  pathname,
+  setActivePanel,
+  selectedAdditionId,
+  selectedMotifId,
+  setSelectedAdditionId,
+  setSelectedMotifId,
+}: {
+  pathname: string;
+  setActivePanel: SetActivePanelFn;
+  selectedAdditionId: string | null;
+  selectedMotifId: string | null;
+  setSelectedAdditionId: (id: string | null) => void;
+  setSelectedMotifId: (id: string | null) => void;
+}) {
+  const [expandedSections, setExpandedSections] = React.useState<
+    Record<string, boolean>
+  >({
+    'select-size': false,
+    'select-shape': false,
+    'select-material': false,
+    inscriptions: false,
+    'select-additions': false,
+    'select-motifs': false,
+  });
+  const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<
+    string | null
+  >(null);
+  const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<
+    string | null
+  >(null);
+  const [panelSource, setPanelSource] = React.useState<PanelSource>(null);
+  const [forceAdditionCatalog, setForceAdditionCatalog] = React.useState(false);
+  const [forceMotifCatalog, setForceMotifCatalog] = React.useState(false);
+  const activeFullscreenPanelRef = React.useRef<string | null>(null);
+  activeFullscreenPanelRef.current = activeFullscreenPanel;
+
+  useEffect(() => {
+    const handleOpenPanel = (e: Event) => {
+      const customEvent = e as CustomEvent<{ panel: string }>;
+      const panelSlug = customEvent.detail.panel;
+      setActiveFullscreenPanel(panelSlug);
+      setDismissedPanelSlug(null);
+      setPanelSource((prev) => {
+        if (
+          panelSlug === 'select-additions' &&
+          prev === 'menu' &&
+          activeFullscreenPanelRef.current === 'select-additions'
+        ) {
+          return prev;
+        }
+        return 'canvas';
+      });
+    };
+    window.addEventListener('openFullscreenPanel', handleOpenPanel);
+    return () =>
+      window.removeEventListener('openFullscreenPanel', handleOpenPanel);
+  }, []);
+
+  const toggleSection = (slug: string) => {
+    setExpandedSections((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  };
+
+  const openFullscreenPanel = (slug: string) => {
+    setDismissedPanelSlug(null);
+    setPanelSource('menu');
+    if (slug === 'inscriptions') {
+      setActivePanel('inscription');
+    }
+    setActiveFullscreenPanel(slug);
+  };
+
+  const closeFullscreenPanel = React.useCallback(() => {
+    const currentSlug = pathname.replace('/', '') || null;
+    if (activeFullscreenPanel) {
+      if (
+        activeFullscreenPanel === 'inscriptions' ||
+        activeFullscreenPanel === 'select-additions' ||
+        activeFullscreenPanel === 'select-motifs' ||
+        activeFullscreenPanel === 'select-images'
+      ) {
+        setActivePanel(null);
+      }
+    }
+    const slugToDismiss = currentSlug || activeFullscreenPanel;
+    if (slugToDismiss) {
+      setDismissedPanelSlug(slugToDismiss);
+    }
+    setActiveFullscreenPanel(null);
+    setPanelSource(null);
+  }, [activeFullscreenPanel, pathname, setActivePanel]);
+
+  const handleBackToAdditionList = React.useCallback(() => {
+    setForceAdditionCatalog(true);
+    setSelectedAdditionId(null);
+    setActivePanel('addition');
+  }, [setSelectedAdditionId, setActivePanel]);
+
+  const handleBackToMotifList = React.useCallback(() => {
+    setForceMotifCatalog(true);
+    setSelectedMotifId(null);
+    setActivePanel('motif');
+  }, [setSelectedMotifId, setActivePanel]);
+
+  const closePanelHandlerRef = React.useRef(closeFullscreenPanel);
+  closePanelHandlerRef.current = closeFullscreenPanel;
+
+  useEffect(() => {
+    const handleClosePanel = () => {
+      closePanelHandlerRef.current();
+    };
+    window.addEventListener('closeFullscreenPanel', handleClosePanel);
+    return () =>
+      window.removeEventListener('closeFullscreenPanel', handleClosePanel);
+  }, []);
+
+  useEffect(() => {
+    const activeSection = pathname.replace('/', '');
+    if (activeSection && expandedSections.hasOwnProperty(activeSection)) {
+      setExpandedSections((prev) => ({
+        ...Object.keys(prev).reduce(
+          (acc, key) => ({ ...acc, [key]: key === activeSection }),
+          {} as Record<string, boolean>,
+        ),
+      }));
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (activeFullscreenPanel !== 'select-additions') {
+      setForceAdditionCatalog(false);
+    }
+    if (activeFullscreenPanel !== 'select-motifs') {
+      setForceMotifCatalog(false);
+    }
+  }, [activeFullscreenPanel]);
+
+  useEffect(() => {
+    if (selectedAdditionId) {
+      setForceAdditionCatalog(false);
+    }
+  }, [selectedAdditionId]);
+
+  useEffect(() => {
+    if (selectedMotifId) {
+      setForceMotifCatalog(false);
+    }
+  }, [selectedMotifId]);
+
+  return {
+    expandedSections,
+    setExpandedSections,
+    activeFullscreenPanel,
+    setActiveFullscreenPanel,
+    dismissedPanelSlug,
+    setDismissedPanelSlug,
+    panelSource,
+    setPanelSource,
+    forceAdditionCatalog,
+    setForceAdditionCatalog,
+    forceMotifCatalog,
+    setForceMotifCatalog,
+    toggleSection,
+    openFullscreenPanel,
+    closeFullscreenPanel,
+    handleBackToAdditionList,
+    handleBackToMotifList,
+  };
+}
+
 export default function DesignerNav() {
   const pathname = usePathname();
   const router = useRouter();
@@ -162,156 +335,33 @@ export default function DesignerNav() {
     selectedAdditions.length > 0 ||
     selectedMotifs.length > 0;
 
-  // Unified expansion state for all sections (replaces individual states)
-  const [expandedSections, setExpandedSections] = React.useState<
-    Record<string, boolean>
-  >({
-    'select-size': false,
-    'select-shape': false,
-    'select-material': false,
-    inscriptions: false,
-    'select-additions': false,
-    'select-motifs': false,
+  const {
+    expandedSections,
+    setExpandedSections,
+    activeFullscreenPanel,
+    setActiveFullscreenPanel,
+    dismissedPanelSlug,
+    setDismissedPanelSlug,
+    panelSource,
+    setPanelSource,
+    forceAdditionCatalog,
+    forceMotifCatalog,
+    openFullscreenPanel,
+    closeFullscreenPanel,
+    handleBackToAdditionList,
+    handleBackToMotifList,
+    toggleSection,
+  } = useDesignerNavPanelState({
+    pathname,
+    setActivePanel,
+    selectedAdditionId,
+    selectedMotifId,
+    setSelectedAdditionId,
+    setSelectedMotifId,
   });
-
-  // Full-screen panel state - when set, hides menu and shows panel
-  const [activeFullscreenPanel, setActiveFullscreenPanel] = React.useState<
-    string | null
-  >(null);
-  const [dismissedPanelSlug, setDismissedPanelSlug] = React.useState<
-    string | null
-  >(null);
-  const [panelSource, setPanelSource] = React.useState<
-    'menu' | 'canvas' | null
-  >(null);
-  const [forceAdditionCatalog, setForceAdditionCatalog] = React.useState(false);
-  const [forceMotifCatalog, setForceMotifCatalog] = React.useState(false);
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
-  const activeFullscreenPanelRef = React.useRef<string | null>(null);
-  activeFullscreenPanelRef.current = activeFullscreenPanel;
-
-  // Listen for open panel events from canvas (e.g., inscription/motif/addition click)
-  useEffect(() => {
-    const handleOpenPanel = (e: Event) => {
-      const customEvent = e as CustomEvent<{ panel: string }>;
-      const panelSlug = customEvent.detail.panel;
-      setActiveFullscreenPanel(panelSlug);
-      setDismissedPanelSlug(null);
-      setPanelSource((prev) => {
-        if (
-          panelSlug === 'select-additions' &&
-          prev === 'menu' &&
-          activeFullscreenPanelRef.current === 'select-additions'
-        ) {
-          return prev;
-        }
-        return 'canvas';
-      });
-    };
-    window.addEventListener('openFullscreenPanel', handleOpenPanel);
-    return () =>
-      window.removeEventListener('openFullscreenPanel', handleOpenPanel);
-  }, []);
-
-  // Toggle a section's expansion
-  const toggleSection = (slug: string) => {
-    setExpandedSections((prev) => ({ ...prev, [slug]: !prev[slug] }));
-  };
-
-  // Open full-screen panel
-  const openFullscreenPanel = (slug: string) => {
-    setDismissedPanelSlug(null);
-    setPanelSource('menu');
-    if (slug === 'inscriptions') {
-      setActivePanel('inscription');
-    }
-    setActiveFullscreenPanel(slug);
-  };
-
-  // Close full-screen panel and return to menu
-  const closeFullscreenPanel = React.useCallback(() => {
-    const currentSlug = pathname.replace('/', '') || null;
-    if (activeFullscreenPanel) {
-      // Clear activePanel for all panel types
-      if (
-        activeFullscreenPanel === 'inscriptions' ||
-        activeFullscreenPanel === 'select-additions' ||
-        activeFullscreenPanel === 'select-motifs' ||
-        activeFullscreenPanel === 'select-images'
-      ) {
-        setActivePanel(null);
-      }
-    }
-    const slugToDismiss = currentSlug || activeFullscreenPanel;
-    if (slugToDismiss) {
-      setDismissedPanelSlug(slugToDismiss);
-    }
-    setActiveFullscreenPanel(null);
-    setPanelSource(null);
-    // Don't navigate - just hide panel and show menu
-    // URL stays the same (e.g., stays on /select-size)
-  }, [activeFullscreenPanel, pathname, setActivePanel, setDismissedPanelSlug]);
-
-  const handleBackToAdditionList = React.useCallback(() => {
-    setForceAdditionCatalog(true);
-    setSelectedAdditionId(null);
-    setActivePanel('addition');
-  }, [setForceAdditionCatalog, setSelectedAdditionId, setActivePanel]);
-
-  const handleBackToMotifList = React.useCallback(() => {
-    setForceMotifCatalog(true);
-    setSelectedMotifId(null);
-    setActivePanel('motif');
-  }, [setForceMotifCatalog, setSelectedMotifId, setActivePanel]);
-
-  const closePanelHandlerRef = React.useRef(closeFullscreenPanel);
-  closePanelHandlerRef.current = closeFullscreenPanel;
-
-  // Listen for close panel events from canvas (e.g., headstone click)
-  useEffect(() => {
-    const handleClosePanel = () => {
-      closePanelHandlerRef.current();
-    };
-    window.addEventListener('closeFullscreenPanel', handleClosePanel);
-    return () =>
-      window.removeEventListener('closeFullscreenPanel', handleClosePanel);
-  }, []);
-
-  // Auto-expand current route's section and collapse others
-  useEffect(() => {
-    const activeSection = pathname.replace('/', '');
-    if (activeSection && expandedSections.hasOwnProperty(activeSection)) {
-      setExpandedSections((prev) => ({
-        ...Object.keys(prev).reduce(
-          (acc, key) => ({ ...acc, [key]: key === activeSection }),
-          {} as Record<string, boolean>,
-        ),
-      }));
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    if (activeFullscreenPanel !== 'select-additions') {
-      setForceAdditionCatalog(false);
-    }
-    if (activeFullscreenPanel !== 'select-motifs') {
-      setForceMotifCatalog(false);
-    }
-  }, [activeFullscreenPanel]);
-
-  useEffect(() => {
-    if (selectedAdditionId) {
-      setForceAdditionCatalog(false);
-    }
-  }, [selectedAdditionId]);
-
-  useEffect(() => {
-    if (selectedMotifId) {
-      setForceMotifCatalog(false);
-    }
-  }, [selectedMotifId]);
 
   useEffect(() => {
     if (!productId && showConvertPanel) {

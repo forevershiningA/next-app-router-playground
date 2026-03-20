@@ -10,6 +10,17 @@ import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
 import SelectionBox from '../SelectionBox';
 import RotatingBoxOutline from './RotatingBoxOutline';
+import {
+  clampDepthWithinRange,
+  clampValue,
+  getMeshBoundingBox,
+  getBoundsCenter,
+  getHeadstoneCenterXY,
+  getInteractionClampBounds,
+  normalizeAdditionBaseId,
+  convertPointBetweenMeshLocals,
+  sampleBaseSurfaceMetrics,
+} from '#/lib/addition-utils';
 
 const MM = 0.001; // meters per millimeter
 
@@ -71,11 +82,7 @@ export default function AdditionModel({
   // Extract base ID (remove timestamp suffix if present)
   // e.g., "B1134S_1234567890" => "B1134S"
   const baseId = React.useMemo(() => {
-    const parts = id.split('_');
-    while (parts.length > 1 && !Number.isNaN(Number(parts[parts.length - 1]))) {
-      parts.pop();
-    }
-    return parts.join('_');
+    return normalizeAdditionBaseId(id);
   }, [id]);
 
   const storedAdditionMeta = useHeadstoneStore((s) => s.additionOffsets[id]);
@@ -445,8 +452,7 @@ function AdditionModelInner({
       return { values: fallbackOffset, ready: false };
     }
 
-    const headCenterX = (bbox.min.x + bbox.max.x) / 2;
-    const headCenterY = (bbox.min.y + bbox.max.y) / 2;
+    const headCenter = getHeadstoneCenterXY(bbox);
 
     if (prefersBaseSurface && resolvedBaseMesh) {
       if (!resolvedBaseMesh.geometry.boundingBox)
@@ -479,15 +485,16 @@ function AdditionModelInner({
         const targetZ = targetBBox.max.z - depthInset;
 
         const targetPointLocal = new THREE.Vector3(targetX, surfaceY, targetZ);
-        const pointWorld = resolvedBaseMesh.localToWorld(
-          targetPointLocal.clone(),
+        const pointInHead = convertPointBetweenMeshLocals(
+          targetPointLocal,
+          resolvedBaseMesh,
+          stone,
         );
-        const pointInHead = stone.worldToLocal(pointWorld.clone());
 
         return {
           values: {
-            xPos: pointInHead.x - headCenterX,
-            yPos: -(pointInHead.y - headCenterY),
+            xPos: pointInHead.x - headCenter.x,
+            yPos: -(pointInHead.y - headCenter.y),
             scale: 1,
             rotationZ: 0,
             sizeVariant: 1,
@@ -603,8 +610,7 @@ function AdditionModelInner({
       const targetBBox = targetMesh.geometry.boundingBox;
       if (!targetBBox) return;
 
-      const centerX = (targetBBox.min.x + targetBBox.max.x) / 2;
-      const centerZ = (targetBBox.min.z + targetBBox.max.z) / 2;
+      const targetCenter = getBoundsCenter(targetBBox);
       const targetSpanX = Math.max(1e-6, targetBBox.max.x - targetBBox.min.x);
       const targetSpanZ = Math.max(1e-6, targetBBox.max.z - targetBBox.min.z);
       const targetScaleX = Math.max(
@@ -631,11 +637,11 @@ function AdditionModelInner({
       const minZ = targetBBox.min.z + footprintHalfZ + inset;
       const maxZ = targetBBox.max.z - footprintHalfZ - inset;
 
-      const clampedX = Math.max(minX, Math.min(maxX, localPt.x));
-      const clampedZ = Math.max(minZ, Math.min(maxZ, localPt.z));
+      const clampedX = clampValue(localPt.x, minX, maxX);
+      const clampedZ = clampValue(localPt.z, minZ, maxZ);
 
-      const relativeX = clampedX - centerX;
-      const relativeZ = clampedZ - centerZ;
+      const relativeX = clampedX - targetCenter.x;
+      const relativeZ = clampedZ - targetCenter.z;
 
       setAdditionOffset(id, {
         ...offset,
@@ -710,33 +716,12 @@ function AdditionModelInner({
     surface,
   ]);
 
-  const baseSurfaceZ = React.useMemo(() => {
+  const baseSurfaceSamples = React.useMemo(() => {
     if (!prefersBaseSurface || !resolvedBaseMesh || !stone) return null;
-    if (!resolvedBaseMesh.geometry.boundingBox)
-      resolvedBaseMesh.geometry.computeBoundingBox();
-    const targetBBox = resolvedBaseMesh.geometry.boundingBox;
-    if (!targetBBox) return null;
-    const topFrontPoint = new THREE.Vector3(
-      0,
-      targetBBox.max.y,
-      targetBBox.max.z,
-    );
-    const worldTopFront = resolvedBaseMesh.localToWorld(topFrontPoint.clone());
-    return stone.worldToLocal(worldTopFront.clone()).z;
+    return sampleBaseSurfaceMetrics(resolvedBaseMesh, stone);
   }, [prefersBaseSurface, resolvedBaseMesh, stone]);
-
-  const baseTopY = React.useMemo(() => {
-    if (!prefersBaseSurface || !resolvedBaseMesh || !stone) return null;
-    if (!resolvedBaseMesh.geometry.boundingBox)
-      resolvedBaseMesh.geometry.computeBoundingBox();
-    const targetBBox = resolvedBaseMesh.geometry.boundingBox;
-    if (!targetBBox) return null;
-    const centerX = (targetBBox.min.x + targetBBox.max.x) / 2;
-    const centerZ = (targetBBox.min.z + targetBBox.max.z) / 2;
-    const topPoint = new THREE.Vector3(centerX, targetBBox.max.y, centerZ);
-    const worldTop = resolvedBaseMesh.localToWorld(topPoint.clone());
-    return stone.worldToLocal(worldTop.clone()).y;
-  }, [prefersBaseSurface, resolvedBaseMesh, stone]);
+  const baseSurfaceZ = baseSurfaceSamples?.surfaceZ ?? null;
+  const baseTopY = baseSurfaceSamples?.topY ?? null;
 
   React.useEffect(() => {
     if (!prefersBaseSurface) return;
@@ -790,32 +775,7 @@ function AdditionModelInner({
     storedOffset,
   ]);
 
-  const baseDepthRange = React.useMemo(() => {
-    if (!prefersBaseSurface || !resolvedBaseMesh || !stone) return null;
-    if (!resolvedBaseMesh.geometry.boundingBox)
-      resolvedBaseMesh.geometry.computeBoundingBox();
-    const targetBBox = resolvedBaseMesh.geometry.boundingBox;
-    if (!targetBBox) return null;
-    const topY = targetBBox.max.y;
-    const depthInset = Math.min(
-      (targetBBox.max.z - targetBBox.min.z) * 0.08,
-      0.01,
-    );
-    const backPoint = new THREE.Vector3(0, topY, targetBBox.min.z + depthInset);
-    const frontPoint = new THREE.Vector3(
-      0,
-      topY,
-      targetBBox.max.z - depthInset,
-    );
-    const worldBack = resolvedBaseMesh.localToWorld(backPoint.clone());
-    const worldFront = resolvedBaseMesh.localToWorld(frontPoint.clone());
-    const headBack = stone.worldToLocal(worldBack.clone()).z;
-    const headFront = stone.worldToLocal(worldFront.clone()).z;
-    return {
-      min: Math.min(headBack, headFront),
-      max: Math.max(headBack, headFront),
-    };
-  }, [prefersBaseSurface, resolvedBaseMesh, stone]);
+  const baseDepthRange = baseSurfaceSamples?.depthRange ?? null;
 
   const computeInteractionPoint = React.useCallback(
     (clientX: number, clientY: number) => {
@@ -856,9 +816,7 @@ function AdditionModelInner({
         resolvedBaseMesh &&
         targetMesh === resolvedBaseMesh
       ) {
-        if (!resolvedBaseMesh.geometry.boundingBox)
-          resolvedBaseMesh.geometry.computeBoundingBox();
-        const bbox = resolvedBaseMesh.geometry.boundingBox;
+        const bbox = getMeshBoundingBox(resolvedBaseMesh);
         if (bbox) {
           const planeOriginLocal = new THREE.Vector3(0, bbox.max.y, 0);
           const planeOriginWorld = resolvedBaseMesh.localToWorld(
@@ -888,25 +846,15 @@ function AdditionModelInner({
       if (!targetMesh.geometry.boundingBox)
         targetMesh.geometry.computeBoundingBox();
       const targetBBox = targetMesh.geometry.boundingBox!;
-      const inset = 0.01;
-      const spanY = targetBBox.max.y - targetBBox.min.y;
-      const depthSpan = targetBBox.max.z - targetBBox.min.z;
-      const depthInset = Math.min(depthSpan * 0.08, 0.01);
-      const minX = targetBBox.min.x + inset;
-      const maxX = targetBBox.max.x - inset;
-      const minY = targetBBox.min.y + inset + 0.04 * spanY;
-      const maxY = targetBBox.max.y - inset;
-      const minZ = targetBBox.min.z + depthInset;
-      const maxZ = targetBBox.max.z - depthInset;
+      const { minX, maxX, minY, maxY, minZ, maxZ } =
+        getInteractionClampBounds(targetBBox);
+      const targetCenter = getBoundsCenter(targetBBox);
 
       const clamped = new THREE.Vector3(
-        Math.max(minX, Math.min(maxX, localPt.x)),
-        Math.max(minY, Math.min(maxY, localPt.y)),
-        Math.max(minZ, Math.min(maxZ, localPt.z)),
+        clampValue(localPt.x, minX, maxX),
+        clampValue(localPt.y, minY, maxY),
+        clampValue(localPt.z, minZ, maxZ),
       );
-
-      const centerX = (targetBBox.min.x + targetBBox.max.x) / 2;
-      const centerY = (targetBBox.min.y + targetBBox.max.y) / 2;
 
       if (
         prefersBaseSurface &&
@@ -917,13 +865,13 @@ function AdditionModelInner({
         const anchorInsetY = Math.min(spanY * 0.15, 0.02);
         const anchorY = maxY - anchorInsetY;
         clamped.y = anchorY;
-        clamped.z = Math.max(minZ, Math.min(maxZ, clamped.z));
+        clamped.z = clampValue(clamped.z, minZ, maxZ);
       }
 
       return {
         clamped,
-        centerX,
-        centerY,
+        centerX: targetCenter.x,
+        centerY: targetCenter.y,
         minX,
         maxX,
         minY,
@@ -985,34 +933,28 @@ function AdditionModelInner({
       const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
       if (!headstoneMesh || !bbox) return;
 
-      const convertToHeadstone = (vec: THREE.Vector3) => {
-        const worldPoint = targetMesh.localToWorld(vec.clone());
-        return headstoneMesh.worldToLocal(worldPoint.clone());
-      };
-
-      const headstonePoint = convertToHeadstone(clamped);
-      const headCenterX = (bbox.min.x + bbox.max.x) / 2;
-      const headCenterY = (bbox.min.y + bbox.max.y) / 2;
+      const headstonePoint = convertPointBetweenMeshLocals(
+        clamped,
+        targetMesh,
+        headstoneMesh,
+      );
+      const headCenter = getHeadstoneCenterXY(bbox);
 
       let nextZ = headstonePoint.z;
       if (supportsDepthDrag && prefersBaseSurface && baseDepthRange) {
-        const clearance = Math.max(halfDepth, HEADSTONE_COLLISION_PADDING);
-        const safeMin = Math.max(
-          baseDepthRange.min + clearance,
-          headFrontZ + clearance,
+        nextZ = clampDepthWithinRange(
+          nextZ,
+          baseDepthRange,
+          halfDepth,
+          headFrontZ,
+          HEADSTONE_COLLISION_PADDING,
         );
-        const safeMax = baseDepthRange.max - clearance;
-        if (safeMax > safeMin) {
-          nextZ = Math.max(safeMin, Math.min(safeMax, nextZ));
-        } else {
-          nextZ = safeMin;
-        }
       }
 
       const nextOffset = {
         ...offset,
-        xPos: headstonePoint.x - headCenterX,
-        yPos: -(headstonePoint.y - headCenterY),
+        xPos: headstonePoint.x - headCenter.x,
+        yPos: -(headstonePoint.y - headCenter.y),
       } as typeof offset;
 
       if (supportsDepthDrag && prefersBaseSurface && baseDepthRange) {
@@ -1193,17 +1135,13 @@ function AdditionModelInner({
     baseDepthRange &&
     offset.zPos !== undefined
   ) {
-    const clearance = Math.max(halfDepth, HEADSTONE_COLLISION_PADDING);
-    const safeMin = Math.max(
-      baseDepthRange.min + clearance,
-      headFrontZ + clearance,
+    zPosition = clampDepthWithinRange(
+      zPosition,
+      baseDepthRange,
+      halfDepth,
+      headFrontZ,
+      HEADSTONE_COLLISION_PADDING,
     );
-    const safeMax = baseDepthRange.max - clearance;
-    if (safeMax > safeMin) {
-      zPosition = Math.max(safeMin, Math.min(safeMax, zPosition));
-    } else {
-      zPosition = safeMin;
-    }
   }
 
   React.useEffect(() => {
@@ -1252,18 +1190,18 @@ function AdditionModelInner({
         return;
       }
 
-      const headCenterX = (bbox.min.x + bbox.max.x) / 2;
-      const headCenterY = (bbox.min.y + bbox.max.y) / 2;
+      const headCenter = getHeadstoneCenterXY(bbox);
       const currentHeadstonePoint = new THREE.Vector3(
-        headCenterX + displayOffsetX,
-        headCenterY - displayOffsetY,
+        headCenter.x + displayOffsetX,
+        headCenter.y - displayOffsetY,
         zPosition,
       );
 
-      const worldPoint = headstoneMesh.localToWorld(
-        currentHeadstonePoint.clone(),
+      const currentTargetPoint = convertPointBetweenMeshLocals(
+        currentHeadstonePoint,
+        headstoneMesh,
+        targetMesh,
       );
-      const currentTargetPoint = targetMesh.worldToLocal(worldPoint.clone());
 
       dragDeltaRef.current = {
         x: clamped.x - currentTargetPoint.x,
@@ -1322,9 +1260,10 @@ function AdditionModelInner({
     return null;
   }
 
-  const centerX = (bbox.min.x + bbox.max.x) / 2;
-  const centerY = (bbox.min.y + bbox.max.y) / 2;
-  const centerZ = (bbox.min.z + bbox.max.z) / 2;
+  const bboxCenter = getBoundsCenter(bbox);
+  const centerX = bboxCenter.x;
+  const centerY = bboxCenter.y;
+  const centerZ = bboxCenter.z;
   // For ledger: the mesh is a unit cube with position+scale; use those for real bounds.
   const ledgerCenterX_actual = stone.position.x;
   const ledgerCenterZ_actual = stone.position.z;

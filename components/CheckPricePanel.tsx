@@ -2,20 +2,19 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-type ExpandableSection = 'inscriptions' | 'motifs' | 'images' | 'additions';
-const SECTION_DEFAULT_STATE: Record<ExpandableSection, boolean> = {
-  inscriptions: true,
-  motifs: true,
-  images: true,
-  additions: true,
-};
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { calculatePrice } from '#/lib/xml-parser';
-import { getMaterialNameFromUrl } from '#/lib/material-utils';
+import {
+  formatMmAsImperial,
+  getCheckPriceMaterialName,
+  getShapeNameFromUrl,
+  SECTION_DEFAULT_STATE,
+  type ExpandableSection,
+} from '#/lib/check-price-utils';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -97,77 +96,13 @@ export default function CheckPricePanel() {
     setActivePanel(null);
   }, [setActivePanel]);
 
-  // Get shape name from URL
-  const shapeName = useMemo(() => {
-    if (!shapeUrl) return 'Unknown';
-    const parts = shapeUrl.split('/');
-    const filename = parts[parts.length - 1];
-    return filename.replace('.svg', '').replace(/-/g, ' ');
-  }, [shapeUrl]);
+  const shapeName = useMemo(() => getShapeNameFromUrl(shapeUrl), [shapeUrl]);
 
   // Find the currently selected shape in the catalog (matched by URL)
   const selectedShape = useMemo(() => {
     if (!catalog || !shapeUrl) return null;
     return catalog.product.shapes.find((s) => s.url === shapeUrl) ?? catalog.product.shapes[0] ?? null;
   }, [catalog, shapeUrl]);
-
-  // Bronze material name mapping
-  const BRONZE_MATERIALS: Record<string, string> = {
-    '01': 'Black',
-    '02': 'Brown', 
-    '03': 'Casino Blue',
-    '04': 'Dark Brown',
-    '05': 'Dark Green',
-    '06': 'Grey',
-    '07': 'Holly Green',
-    '08': 'Ice Blue',
-    '09': 'Maroon',
-    '10': 'Navy Blue',
-    '11': 'Purple',
-    '12': 'Red',
-    '13': 'Sundance Pink',
-    '14': 'Turquoise',
-    '15': 'White',
-  };
-
-  // Get material name from URL
-  const getMaterialName = (url: string | null) => {
-    if (!url) return 'Unknown';
-    
-    // Check if it's a bronze texture
-    if (url.includes('phoenix')) {
-      const match = url.match(/\/(\d+)\.(jpg|webp)$/);
-      if (match) {
-        const number = match[1];
-        return BRONZE_MATERIALS[number] || `Bronze ${number}`;
-      }
-    }
-
-    return getMaterialNameFromUrl(url);
-  };
-
-  // Convert mm to inches for display
-  const mmToInches = (mm: number) => {
-    const inches = mm / 25.4;
-    const whole = Math.floor(inches);
-    const fraction = inches - whole;
-    
-    // Convert to nearest 16th
-    const sixteenths = Math.round(fraction * 16);
-    
-    if (sixteenths === 0) return `${whole}"`;
-    if (sixteenths === 16) return `${whole + 1}"`;
-    
-    // Simplify fraction
-    let num = sixteenths;
-    let den = 16;
-    const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
-    const divisor = gcd(num, den);
-    num /= divisor;
-    den /= divisor;
-    
-    return whole > 0 ? `${whole} ${num}/${den}"` : `${num}/${den}"`;
-  };
 
   // Whether this is a full-monument product (has ledger + kerbset components)
   const isFullMonument = catalog?.product.type === 'full-monument';
@@ -395,9 +330,9 @@ export default function CheckPricePanel() {
                     <p className="text-gray-600">
                       Shape: {shapeName}
                       <br />
-                      Material: {getMaterialName(ledgerMaterialUrl)}
+                      Material: {getCheckPriceMaterialName(ledgerMaterialUrl)}
                       <br />
-                      Size: {mmToInches(widthMm)} × {mmToInches(heightMm)}
+                      Size: {formatMmAsImperial(widthMm)} × {formatMmAsImperial(heightMm)}
                     </p>
                   </div>
                 </td>
@@ -426,9 +361,9 @@ export default function CheckPricePanel() {
                       <br />
                       Shape: Rectangle
                       <br />
-                      Material: {getMaterialName(baseMaterialUrl)}
+                      Material: {getCheckPriceMaterialName(baseMaterialUrl)}
                       <br />
-                      Size: {mmToInches(selectedShape?.stand?.initWidth ?? (widthMm + 100))} × {mmToInches(selectedShape?.stand?.initHeight ?? 100)} × {mmToInches(selectedShape?.stand?.initDepth ?? 250)}
+                      Size: {formatMmAsImperial(selectedShape?.stand?.initWidth ?? (widthMm + 100))} × {formatMmAsImperial(selectedShape?.stand?.initHeight ?? 100)} × {formatMmAsImperial(selectedShape?.stand?.initDepth ?? 250)}
                     </p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
@@ -455,9 +390,9 @@ export default function CheckPricePanel() {
                       <br />
                       Shape: Rectangle
                       <br />
-                      Material: {getMaterialName(kerbsetMaterialUrl)}
+                      Material: {getCheckPriceMaterialName(kerbsetMaterialUrl)}
                       <br />
-                      Size: {mmToInches(selectedShape?.lid?.initWidth ?? 0)} × {mmToInches(selectedShape?.lid?.initHeight ?? 0)} × {mmToInches(selectedShape?.lid?.initDepth ?? 0)}
+                      Size: {formatMmAsImperial(selectedShape?.lid?.initWidth ?? 0)} × {formatMmAsImperial(selectedShape?.lid?.initHeight ?? 0)} × {formatMmAsImperial(selectedShape?.lid?.initDepth ?? 0)}
                     </p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
@@ -484,9 +419,9 @@ export default function CheckPricePanel() {
                       <br />
                       Shape: Rectangle
                       <br />
-                      Material: {getMaterialName(headstoneMaterialUrl)}
+                      Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}
                       <br />
-                      Size: {mmToInches(selectedShape?.kerb?.initWidth ?? 0)} × {mmToInches(selectedShape?.kerb?.initHeight ?? 0)} × {mmToInches(selectedShape?.kerb?.initDepth ?? 0)}
+                      Size: {formatMmAsImperial(selectedShape?.kerb?.initWidth ?? 0)} × {formatMmAsImperial(selectedShape?.kerb?.initHeight ?? 0)} × {formatMmAsImperial(selectedShape?.kerb?.initDepth ?? 0)}
                     </p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>

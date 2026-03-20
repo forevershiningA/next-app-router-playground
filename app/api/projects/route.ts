@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/lib/projects-db';
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
+import { getServerSession } from '#/lib/auth/session';
 
 export const runtime = 'nodejs';
 
@@ -30,13 +31,18 @@ function cleanDesignState(designState: DesignerSnapshot): DesignerSnapshot {
 }
 
 export async function GET(request: NextRequest) {
+  const session = await getServerSession();
+  if (!session) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
   const limitParam = request.nextUrl.searchParams.get('limit');
   const parsedLimit = limitParam ? Number.parseInt(limitParam, 10) : 20;
   const limit = Number.isNaN(parsedLimit)
     ? 20
     : Math.min(MAX_LIST_LIMIT, Math.max(1, parsedLimit));
 
-  const projects = await listProjectSummaries(limit);
+  const projects = await listProjectSummaries(session.accountId, limit);
   return NextResponse.json({ projects });
 }
 
@@ -71,6 +77,11 @@ function decodeScreenshotDataUrl(raw: string | undefined): Buffer {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession();
+    if (!session) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = (await request.json()) as SaveProjectBody;
 
     if (!body.designState) {
@@ -93,6 +104,7 @@ export async function POST(request: NextRequest) {
 
       // Create temporary project to get ID
       tempSummary = await saveProjectRecord({
+        accountId: session.accountId,
         projectId: body.projectId,
         title: body.title ?? 'Untitled Design',
         status: body.status ?? 'draft',
@@ -153,6 +165,7 @@ export async function POST(request: NextRequest) {
 
     // Now update with screenshot and thumbnail paths
     const summary = await saveProjectRecord({
+      accountId: session.accountId,
       projectId: tempSummary.id, // Use the temp project ID to update it
       title: body.title ?? 'Untitled Design',
       status: body.status ?? 'draft',
@@ -180,6 +193,11 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const session = await getServerSession();
+    if (!session) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const projectId = searchParams.get('id');
 
@@ -187,7 +205,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ message: 'Project ID is required' }, { status: 400 });
     }
 
-    const deleted = await deleteProjectRecord(projectId);
+    const deleted = await deleteProjectRecord(projectId, session.accountId);
 
     if (!deleted) {
       return NextResponse.json({ message: 'Project not found' }, { status: 404 });

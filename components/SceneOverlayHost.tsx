@@ -43,12 +43,11 @@ export default function SceneOverlayHost() {
     if (!open || !root || !cardRef.current) return;
     const c = root.getBoundingClientRect();
     const r = cardRef.current.getBoundingClientRect();
-    setPos({
-      x: pos.x,
+    setPos((prev) => ({
+      x: prev.x,
       y: Math.max(12, Math.round((c.height - r.height) / 2)),
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, root]);
+    }));
+  }, [open, root, setPos]);
 
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (e.button !== 0) return; // left only

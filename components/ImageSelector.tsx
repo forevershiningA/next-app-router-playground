@@ -4,8 +4,10 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { AdditionData } from '#/lib/xml-parser';
 import Image from 'next/image';
-import { fetchMaskMetrics, type MaskMetrics } from '#/lib/mask-metrics';
-import { getFlexibleImageBounds, getImageSizeOptions, isFlexibleImageType } from '#/lib/image-size-config';
+import { fetchMaskMetrics } from '#/lib/mask-metrics';
+import { getFlexibleImageBounds, getImageSizeOptions } from '#/lib/image-size-config';
+import { MASK_OPTIONS, getMaskAspectRatio, getMaskUrl } from '#/lib/image-mask';
+import { useImageCropState } from './useImageCropState';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -19,31 +21,6 @@ const IMAGE_THUMBNAILS: Record<string, string> = {
   '2300': '/jpg/photos/product-vitreous-enamel-image.jpg',
   '2400': '/jpg/photos/plana.jpg',
 };
-
-type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
-
-const MASK_URL_MAP: Record<string, string> = {
-  oval: '/shapes/masks/oval_vertical.svg',
-  'horizontal-oval': '/shapes/masks/oval_horizontal.svg',
-  square: '/shapes/masks/rectangle_vertical.svg',
-  rectangle: '/shapes/masks/rectangle_horizontal.svg',
-  heart: '/shapes/masks/heart.svg',
-  teardrop: '/shapes/masks/teardrop.svg',
-  triangle: '/shapes/masks/triangle.svg',
-};
-
-const MASK_ASPECT_FALLBACK: Record<MaskShape, number> = {
-  oval: 0.8,
-  'horizontal-oval': 1.25,
-  square: 0.8,
-  rectangle: 1.25,
-  heart: 640 / 600,
-  teardrop: 0.71,
-  triangle: 1.16,
-};
-
-const getMaskUrl = (mask: string) => MASK_URL_MAP[mask];
-const getMaskAspectRatio = (mask: string): number => MASK_ASPECT_FALLBACK[mask as MaskShape] ?? 0.8;
 
 export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   // Store hooks
@@ -59,148 +36,48 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const duplicateImage = useHeadstoneStore((s) => s.duplicateImage);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   
-  const [selectedType, setSelectedType] = useState<AdditionData | null>(null);
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [showCropSection, setShowCropSection] = useState(false);
-  const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
-  
-  // Crop state
-  const [selectedMask, setSelectedMask] = useState<MaskShape>('oval');
-  const [cropColorMode, setCropColorMode] = useState<'full' | 'bw' | 'sepia'>('full');
-  const [cropScale, setCropScale] = useState(100);
-  const [cropRotation, setCropRotation] = useState(0);
-  const [flipX, setFlipX] = useState(false);
-  const [flipY, setFlipY] = useState(false);
-  const [maskMetrics, setMaskMetrics] = useState<MaskMetrics | null>(null);
-  
-  // Get available sizes for selected image type
-  const availableSizes = useMemo(() => {
-    if (!selectedType) return [];
-    if (isFlexibleImageType(selectedType.id)) {
-      return null;
-    }
-    return getImageSizeOptions(selectedType.id);
-  }, [selectedType]);
-  const hasFixedSizes = useMemo(
-    () => Array.isArray(availableSizes) && availableSizes.length > 0,
-    [availableSizes],
-  );
-
-  const selectedTypeId = selectedType ? String(selectedType.id) : '';
-  const isGraniteImage = selectedTypeId === '21' || selectedTypeId === '135';
-
-  const allowFreeformHandles = useMemo(() => {
-    if (!selectedType) return false;
-    const normalizedName = selectedType.name?.toLowerCase() ?? '';
-    return isGraniteImage || normalizedName.includes('granite');
-  }, [selectedType, isGraniteImage]);
-  
-  useEffect(() => {
-    if (isGraniteImage && cropColorMode !== 'bw') {
-      setCropColorMode('bw');
-    }
-  }, [isGraniteImage, cropColorMode]);
-  
-  // Crop area state (in percentage of the rendered image box, excluding letterbox bars)
-  // Default for oval (portrait): 0.8:1 aspect ratio (400/500)
-  const [cropArea, setCropArea] = useState({
-    x: 26, // left position as % - centered for 48% width
-    y: 20, // top position as %
-    width: 48, // width as % - 0.8 aspect ratio
-    height: 60, // height as % (portrait aspect)
-  });
-
-  useEffect(() => {
-    let cancelled = false;
-    const maskUrl = getMaskUrl(selectedMask);
-    if (!maskUrl) {
-      setMaskMetrics(null);
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    fetchMaskMetrics(maskUrl)
-      .then((metrics) => {
-        if (!cancelled) {
-          setMaskMetrics(metrics);
-        }
-      })
-      .catch((error) => {
-        console.error('[ImageSelector] Failed to load mask metrics:', error);
-        if (!cancelled) {
-          setMaskMetrics(null);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedMask]);
-  
-  // Adjust crop area dimensions when mask changes or on initial load
-  useEffect(() => {
-    const maskAspect = maskMetrics?.aspect ?? getMaskAspectRatio(selectedMask);
-
-    const centerCrop = (width: number, height: number) => {
-      const clampedWidth = Math.min(95, Math.max(width, 10));
-      const clampedHeight = Math.min(95, Math.max(height, 10));
-      setCropArea({
-        x: (100 - clampedWidth) / 2,
-        y: (100 - clampedHeight) / 2,
-        width: clampedWidth,
-        height: clampedHeight,
-      });
-    };
-
-    if (!imageDimensions || hasFixedSizes) {
-      const portraitPreferred = maskAspect < 1;
-      const baseHeight = portraitPreferred ? 60 : 50;
-      centerCrop(baseHeight * maskAspect, baseHeight);
-      return;
-    }
-
-    if (isGraniteImage) {
-      const imgWidth = imageDimensions.width;
-      const imgHeight = imageDimensions.height;
-      const imgType = imgWidth === imgHeight ? 'SQUARE' : imgWidth > imgHeight ? 'LANDSCAPE' : 'PORTRAIT';
-
-      let width = 50;
-      let height = 50;
-
-      if (imgType === 'PORTRAIT' || imgType === 'SQUARE') {
-        const ratio = imgWidth / imgHeight;
-        width = 50;
-        height = (50 * ratio) * 0.7;
-      }
-
-      centerCrop(width, height);
-      return;
-    }
-
-    const portraitPreferred = maskAspect < 1;
-    const baseHeight = portraitPreferred ? 60 : 50;
-    centerCrop(baseHeight * maskAspect, baseHeight);
-  }, [selectedMask, imageDimensions, hasFixedSizes, maskMetrics, isGraniteImage]);
+  const {
+    selectedType,
+    setSelectedType,
+    uploadedImage,
+    setUploadedImage,
+    showCropSection,
+    setShowCropSection,
+    selectedMask,
+    setSelectedMask,
+    cropColorMode,
+    setCropColorMode,
+    cropScale,
+    setCropScale,
+    cropRotation,
+    setCropRotation,
+    flipX,
+    setFlipX,
+    flipY,
+    setFlipY,
+    maskMetrics,
+    cropArea,
+    setCropArea,
+    availableSizes,
+    hasFixedSizes,
+    isGraniteImage,
+    allowFreeformHandles,
+    selectedSizeIndex,
+    setSelectedSizeIndex,
+    activeSizeIndex,
+    activeSize,
+    resetCropState,
+    openUploadForImage,
+    clearSelectedType,
+  } = useImageCropState();
   
   const [isDragging, setIsDragging] = useState(false);
   const [dragHandle, setDragHandle] = useState<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const previewRef = useRef<HTMLDivElement>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const [feedbackTone, setFeedbackTone] = useState<'error' | 'info'>('error');
   
-  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
-
-  useEffect(() => {
-    if (!hasFixedSizes || !availableSizes?.length) {
-      setSelectedSizeIndex(0);
-      return;
-    }
-    setSelectedSizeIndex((idx) => Math.min(Math.max(idx, 0), availableSizes.length - 1));
-  }, [hasFixedSizes, availableSizes?.length]);
-
-  const activeSizeIndex = hasFixedSizes && availableSizes?.length ? Math.min(selectedSizeIndex, availableSizes.length - 1) : 0;
-  const activeSize = hasFixedSizes && availableSizes?.length ? availableSizes[activeSizeIndex] : null;
-
   const catalog = useHeadstoneStore((s) => s.catalog);
   const addImage = useHeadstoneStore((s) => s.addImage);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
@@ -239,6 +116,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   }, [catalog]);
 
   const handleImageTypeSelect = (imageType: AdditionData) => {
+    setFeedbackMessage(null);
     setSelectedType(imageType);
     onImageSelect?.(imageType);
   };
@@ -249,15 +127,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
     // Check file type
     if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file');
+      setFeedbackTone('error');
+      setFeedbackMessage('Please upload an image file.');
       return;
     }
 
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('Image size must be less than 5MB');
+      setFeedbackTone('error');
+      setFeedbackMessage('Image size must be less than 5MB.');
       return;
     }
+    setFeedbackMessage(null);
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -266,9 +147,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       // Load image to get dimensions
       const img = new window.Image();
       img.onload = () => {
-        setImageDimensions({ width: img.width, height: img.height });
-        setUploadedImage(imageUrl);
-        setShowCropSection(true);
+        openUploadForImage(imageUrl, { width: img.width, height: img.height });
       };
       img.src = imageUrl;
     };
@@ -517,15 +396,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
 
       // 12. Reset and close crop UI
-      setUploadedImage(null);
-      setShowCropSection(false);
-      setCropScale(100);
-      setCropRotation(0);
-      setSelectedMask('oval');
-      setCropColorMode('full');
-      setFlipX(false);
-      setFlipY(false);
-      setCropArea({ x: 26, y: 20, width: 48, height: 60 });
+      resetCropState();
       
       // Clear crop canvas
       setCropCanvasData(null);
@@ -533,7 +404,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       
     } catch (error) {
       console.error('[handleCropImage] Error processing image:', error);
-      alert('Failed to process image. Please try again.');
+      setFeedbackTone('error');
+      setFeedbackMessage('Failed to process image. Please try again.');
     }
   };
 
@@ -619,8 +491,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   }, [isDragging, dragHandle, dragStart]);
 
   const handleBackToImageTypes = () => {
-    setSelectedType(null);
-    setUploadedImage(null);
+    setFeedbackMessage(null);
+    clearSelectedType();
     setSelectedImageId(null);
   };
 
@@ -996,6 +868,17 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
   return (
     <div className="flex h-full flex-col gap-4">
+      {feedbackMessage && (
+        <div
+          className={`rounded-lg border px-3 py-2 text-sm ${
+            feedbackTone === 'error'
+              ? 'border-red-500/40 bg-red-900/25 text-red-200'
+              : 'border-blue-500/40 bg-blue-900/25 text-blue-200'
+          }`}
+        >
+          {feedbackMessage}
+        </div>
+      )}
       {!selectedType ? (
         <>
           <div className="flex items-center justify-between">
@@ -1122,18 +1005,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     <div className="text-xs text-white/60 mb-2">Step 1</div>
                     <div className="text-sm text-white font-medium mb-3">SELECT MASK</div>
                     <div className="grid grid-cols-4 gap-2">
-                      {[
-                        { id: 'oval', label: 'Oval', svg: '/shapes/masks/oval_vertical.svg' },
-                        { id: 'horizontal-oval', label: 'H. Oval', svg: '/shapes/masks/oval_horizontal.svg' },
-                        { id: 'square', label: 'Square', svg: '/shapes/masks/rectangle_vertical.svg' },
-                        { id: 'rectangle', label: 'Rect', svg: '/shapes/masks/rectangle_horizontal.svg' },
-                        { id: 'heart', label: 'Heart', svg: '/shapes/masks/heart.svg' },
-                        { id: 'teardrop', label: 'Tear', svg: '/shapes/masks/teardrop.svg' },
-                        { id: 'triangle', label: 'Triangle', svg: '/shapes/masks/triangle.svg' },
-                      ].map((mask) => (
+                      {MASK_OPTIONS.map((mask) => (
                         <button
                           key={mask.id}
-                          onClick={() => setSelectedMask(mask.id as MaskShape)}
+                          onClick={() => setSelectedMask(mask.id)}
                           className={`aspect-square rounded-lg border-2 transition-all ${
                             selectedMask === mask.id
                               ? 'border-[#D7B356] bg-[#D7B356]/20'
@@ -1385,8 +1260,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       </button>
                       <button
                         onClick={() => {
-                          setUploadedImage(null);
-                          setShowCropSection(false);
+                          resetCropState();
                         }}
                         className="rounded-lg bg-red-900/20 border border-red-500/30 px-3 py-2 text-red-400 text-sm hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2"
                       >
