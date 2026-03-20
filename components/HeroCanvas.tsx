@@ -96,7 +96,7 @@ interface GoldMotifProps {
 }
 
 const GoldMotif: React.FC<GoldMotifProps> = ({ position, rotation = [0, 0, 0], scale = 1 }) => {
-  const svgData = useLoader(SVGLoader, '/shapes/motifs/2_116_01.svg');
+  const svgData = useLoader(SVGLoader, '/shapes/motifs/hero_qr_forevershining.svg');
 
   const geometry = useMemo(() => {
     if (!svgData?.paths?.length) return null;
@@ -296,7 +296,7 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
           <GoldText
             position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.52, textZ]}
             fontSize={0.22}
-            text="Eleanor Rose"
+            text="Margaret Ann Cole"
             font="/fonts/Garamond.ttf"
             fontWeight="bold"
           />
@@ -304,7 +304,7 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
           <GoldText
             position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.42, textZ]}
             fontSize={0.11}
-            text="☼ 1945   ✟ 2023"
+            text="Her kindness lives on in every life she touched."
             font="/fonts/Garamond.ttf"
           />
 
@@ -313,21 +313,27 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
             rotation={[0, Math.PI, 0]}
           >
             <GoldText
-              position={[0, 0.35, 0]}
-              fontSize={0.16}
-              text="“The Lord is my shepherd.”"
+              position={[0, 0.4, 0]}
+              fontSize={0.14}
+              text="Design Your Own"
               font="/fonts/Garamond.ttf"
             />
             <GoldText
-              position={[0, 0.11, 0]}
-              fontSize={0.12}
-              text="Psalm 23:1"
+              position={[0, 0.18, 0]}
+              fontSize={0.11}
+              text="forevershining.org"
+              font="/fonts/Garamond.ttf"
+            />
+            <GoldText
+              position={[0, -0.02, 0]}
+              fontSize={0.095}
+              text="Create a lasting tribute in minutes"
               font="/fonts/Garamond.ttf"
             />
             <GoldMotif
-              position={[0, -0.46, 0]}
+              position={[0, -0.38, 0]}
               rotation={[0, 0, Math.PI]}
-              scale={0.002}
+              scale={0.018}
             />
           </group>
         </group>
