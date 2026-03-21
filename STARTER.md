@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-20
+**Last Updated:** 2026-03-21
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,37 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-21)
+
+### ✅ Recent Changes (March 21, 2026)
+
+1. **Home hero headstone front layout updated for ceramic-photo showcase - COMPLETE**
+   - Inscriptions on the front of the hero headstone were moved upward to create dedicated space below for a photo insert.
+   - **File**: `components/HeroCanvas.tsx`.
+
+2. **Hero photo switched from flat rectangle to masked ceramic/enamel style - COMPLETE**
+   - Replaced the temporary rectangular photo plane with a dedicated `HeroCeramicImage` renderer in `HeroCanvas`.
+   - The hero image now uses the existing oval mask asset (`/shapes/masks/oval_horizontal.svg`) and SVG-based shape geometry, so the photo no longer shows a rectangular white background around the oval.
+   - Added ceramic-style base geometry + front photo layering to mirror the Designer ceramic image look-and-feel in the homepage hero.
+   - **File**: `components/HeroCanvas.tsx`.
+
+3. **Hero ceramic/photo visual tuning pass based on screenshot feedback - COMPLETE**
+   - Reduced over-deep ceramic extrusion from the first implementation pass, then adjusted it upward by ~15% for a more natural enamel depth.
+   - Fixed missing/unstable photo rendering by adding explicit UV generation for the mask-shaped photo geometry.
+   - Increased photo offset and added polygon offset material settings to reduce z-fighting/flashing and detail loss while rotating.
+   - Applied a second inscription upward nudge after visual check.
+   - **File**: `components/HeroCanvas.tsx`.
+
+4. **Validation status for this batch**
+   - `pnpm build --no-lint` succeeded after each hero update slice in this session (initial placement, ceramic-mask conversion, depth/UV fix, and final polish pass).
+
+### ⚠️ Known Gaps (March 21, 2026)
+- **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
+- **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
+- **Saved Design 2 (`1578016189116`) still not resolved**: Remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
 
 ---
 

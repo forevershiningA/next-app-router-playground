@@ -95,6 +95,128 @@ interface GoldMotifProps {
   scale?: number | [number, number, number];
 }
 
+interface HeroCeramicImageProps {
+  position: [number, number, number];
+  imageUrl: string;
+  maskPath?: string;
+  width: number;
+  height: number;
+}
+
+const HeroCeramicImage: React.FC<HeroCeramicImageProps> = ({
+  position,
+  imageUrl,
+  maskPath = '/shapes/masks/oval_horizontal.svg',
+  width,
+  height,
+}) => {
+  const svgData = useLoader(SVGLoader, maskPath);
+  const photoTexture = useTexture(imageUrl);
+
+  useMemo(() => {
+    if (photoTexture) {
+      photoTexture.colorSpace = THREE.SRGBColorSpace;
+      photoTexture.wrapS = THREE.ClampToEdgeWrapping;
+      photoTexture.wrapT = THREE.ClampToEdgeWrapping;
+      photoTexture.anisotropy = 16;
+      photoTexture.needsUpdate = true;
+    }
+  }, [photoTexture]);
+
+  const shapeData = useMemo(() => {
+    const paths = svgData?.paths ?? [];
+    if (!paths.length) return null;
+    const shapes = paths.flatMap((path) => path.toShapes(true));
+    if (!shapes.length) return null;
+
+    const photoGeometry = new THREE.ShapeGeometry(shapes, 64);
+    const ceramicGeometry = new THREE.ExtrudeGeometry(shapes, {
+      depth: 0.0046,
+      bevelEnabled: true,
+      bevelThickness: 0.00115,
+      bevelSize: 0.00115,
+      bevelSegments: 4,
+      curveSegments: 64,
+    });
+
+    photoGeometry.computeBoundingBox();
+    const bounds = photoGeometry.boundingBox;
+    if (!bounds) {
+      photoGeometry.dispose();
+      ceramicGeometry.dispose();
+      return null;
+    }
+
+    const shapeWidth = bounds.max.x - bounds.min.x;
+    const shapeHeight = bounds.max.y - bounds.min.y;
+    const centerX = (bounds.min.x + bounds.max.x) / 2;
+    const centerY = (bounds.min.y + bounds.max.y) / 2;
+
+    const positions = photoGeometry.getAttribute('position');
+    const uvs = new Float32Array(positions.count * 2);
+    for (let i = 0; i < positions.count; i += 1) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const u = (x - bounds.min.x) / shapeWidth;
+      const v = (y - bounds.min.y) / shapeHeight;
+      uvs[i * 2] = u;
+      uvs[i * 2 + 1] = v;
+    }
+    photoGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+
+    photoGeometry.translate(-centerX, -centerY, 0);
+    ceramicGeometry.translate(-centerX, -centerY, 0);
+
+    return { photoGeometry, ceramicGeometry, shapeWidth, shapeHeight };
+  }, [svgData]);
+
+  React.useEffect(() => {
+    return () => {
+      shapeData?.photoGeometry.dispose();
+      shapeData?.ceramicGeometry.dispose();
+    };
+  }, [shapeData]);
+
+  if (!shapeData) return null;
+
+  const { photoGeometry, ceramicGeometry, shapeWidth, shapeHeight } = shapeData;
+  const scaleX = width / shapeWidth;
+  const scaleY = height / shapeHeight;
+  const ceramicBorder = 1.05;
+
+  return (
+    <group position={position}>
+      <mesh
+        geometry={ceramicGeometry}
+        scale={[scaleX * ceramicBorder, scaleY * ceramicBorder, 1]}
+        renderOrder={8}
+        castShadow
+        receiveShadow
+      >
+        <meshStandardMaterial color="#f3f3f3" roughness={0.2} metalness={0.05} />
+      </mesh>
+
+      <mesh
+        geometry={photoGeometry}
+        position={[0, 0, 0.0072]}
+        scale={[scaleX, scaleY, 1]}
+        renderOrder={9}
+        castShadow
+        receiveShadow
+      >
+        <meshBasicMaterial
+          map={photoTexture}
+          transparent
+          side={THREE.DoubleSide}
+          polygonOffset
+          polygonOffsetFactor={-1}
+          polygonOffsetUnits={-1}
+        />
+      </mesh>
+    </group>
+  );
+};
+
 const GoldMotif: React.FC<GoldMotifProps> = ({ position, rotation = [0, 0, 0], scale = 1 }) => {
   const svgData = useLoader(SVGLoader, '/shapes/motifs/hero_qr_forevershining.svg');
 
@@ -287,14 +409,14 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
         
         <group position={[0, 0, 0]}>
           <GoldText
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.62, textZ]}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.755, textZ]}
             fontSize={0.11}
             text="In Loving Memory"
             font="/fonts/Garamond.ttf"
           />
           
           <GoldText
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.52, textZ]}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.655, textZ]}
             fontSize={0.22}
             text="Margaret Ann Cole"
             font="/fonts/Garamond.ttf"
@@ -302,10 +424,18 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
           />
           
           <GoldText
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.42, textZ]}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.555, textZ]}
             fontSize={0.11}
             text="Her kindness lives on in every life she touched."
             font="/fonts/Garamond.ttf"
+          />
+
+          <HeroCeramicImage
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.32, textZ + 0.008]}
+            imageUrl="/jpg/photos/vitreous-enamel-image.jpg"
+            maskPath="/shapes/masks/oval_horizontal.svg"
+            width={0.58}
+            height={0.74}
           />
 
           <group
