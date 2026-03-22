@@ -426,7 +426,7 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
           <GoldText
             position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.555, textZ]}
             fontSize={0.11}
-            text="Her kindness lives on in every life she touched."
+            text="Her kindness lives on in every life she touched"
             font="/fonts/Garamond.ttf"
           />
 

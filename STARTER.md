@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-21
+**Last Updated:** 2026-03-22
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,33 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-22)
+
+### ✅ Recent Changes (March 22, 2026)
+
+1. **Homepage conversion flow simplified (Variant B cleanup) - COMPLETE**
+   - Kept the homepage focused on a single core goal: **Start Your Free Design**.
+   - Removed duplicated support/promotional messaging and reduced repeated information density.
+   - **File**: `app/_ui/HomeSplash.tsx`.
+
+2. **How It Works streamlined to steps-only narrative - COMPLETE**
+   - Retained Step 1 / Step 2 / Step 3 cards as the central guidance element.
+   - Removed secondary highlight/stat blocks that duplicated already-present value messaging.
+   - Tightened card copy and kept visual step progression cleaner.
+   - **File**: `app/_ui/HomeSplash.tsx`.
+
+3. **Redundant and heavy lower-homepage sections removed/replaced - COMPLETE**
+   - Replaced the previous heavy pre-footer testimonial/CTA composition with a cleaner CTA strip.
+   - Removed the entire interactive `DesignPossibilitiesSection` block (the section beginning with “Tap the steps below to customize every detail in our 3D studio.”).
+   - Removed leftover conversion-path prompts for premium support (e.g., “Talk with a designer”) from the homepage flow.
+   - **File**: `app/_ui/HomeSplash.tsx`.
+
+4. **Validation notes for this batch**
+   - `pnpm lint` remains blocked by repo-level ESLint 9 config migration gap (`eslint.config.*` missing).
+   - TypeScript still has known baseline issues outside this homepage simplification scope.
 
 ---
 
