@@ -84,11 +84,11 @@ const HASH_MODAL_CONTENT = {
   'how-it-works': {
     eyebrow: 'Guided Flow',
     title: 'How the Studio Works',
-    description: 'A three-phase workflow keeps your family in sync from inspiration to final approval.',
+    description: 'A three-step workflow keeps your family in sync from inspiration to final approval.',
     bullets: [
-      'Phase 1: Choose product, shape, and material with real-time previews.',
-      'Phase 2: Personalize inscriptions, motifs, and additions with live pricing.',
-      'Phase 3: Share proofs, lock pricing, and hand off to production when ready.'
+      'Step 1: Choose product, shape, and material with real-time previews.',
+      'Step 2: Personalize inscriptions, motifs, and additions with live pricing.',
+      'Step 3: Share proofs, lock pricing, and hand off to production when ready.'
     ]
   },
   pricing: {
@@ -160,6 +160,13 @@ const HASH_MODAL_CONTENT = {
 } as const;
 
 type HashModalKey = keyof typeof HASH_MODAL_CONTENT;
+type HashModalContent = (typeof HASH_MODAL_CONTENT)[HashModalKey];
+type HashModalLink = { label: string; href: string };
+
+const hasModalLinks = (
+  content: HashModalContent,
+): content is HashModalContent & { links: readonly HashModalLink[] } =>
+  'links' in content && Array.isArray(content.links);
 
 export default function HomeSplash() {
   const router = useRouter();
@@ -664,54 +671,60 @@ export default function HomeSplash() {
 
       {activeModalContent && (
         <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 px-4"
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-labelledby="hash-modal-title"
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-lg rounded-3xl border border-[#d4af37]/40 bg-[#0b0805]/95 p-6 text-white shadow-[0_35px_80px_rgba(0,0,0,0.65)]"
+            className="relative w-full max-w-xl overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 p-6 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10 md:p-7"
             onClick={(event) => event.stopPropagation()}
           >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
+            />
             <button
               type="button"
               onClick={closeModal}
-              className="absolute right-4 top-4 rounded-full border border-white/20 p-1 text-white/70 hover:text-white hover:border-white transition-colors cursor-pointer"
+              className="absolute right-4 top-4 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white cursor-pointer"
               aria-label="Close dialog"
             >
               <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l8 8M14 6l-8 8" />
               </svg>
             </button>
-            {activeModalContent.eyebrow && (
-              <p className="text-[11px] uppercase tracking-[0.5em] text-[#d4af37]/70 mb-3">
-                {activeModalContent.eyebrow}
+            <div className="relative">
+              {activeModalContent.eyebrow && (
+                <p className="mb-3 inline-flex items-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3d48f]">
+                  {activeModalContent.eyebrow}
+                </p>
+              )}
+              <h3 id="hash-modal-title" className="text-2xl font-serif text-white md:text-[1.75rem]">
+                {activeModalContent.title}
+              </h3>
+              <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-white/85 md:text-[15px]">
+                {activeModalContent.description}
               </p>
-            )}
-            <h3 id="hash-modal-title" className="text-2xl font-serif text-white">
-              {activeModalContent.title}
-            </h3>
-            <p className="mt-3 text-sm text-white/80 leading-relaxed">
-              {activeModalContent.description}
-            </p>
+            </div>
             {activeModalContent.bullets && (
-              <ul className="mt-5 space-y-3 text-sm text-white/85">
+              <ul className="mt-6 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/85 md:p-5">
                 {activeModalContent.bullets.map((item) => (
                   <li key={item} className="flex items-start gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
+                    <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[#d4af37]" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
             )}
-            {activeModalContent.links && (
+            {hasModalLinks(activeModalContent) && (
               <div className="mt-6 flex flex-wrap gap-3">
                 {activeModalContent.links.map((link) => (
                   <a
                     key={link.href + link.label}
                     href={link.href}
-                    className="rounded-full border border-[#d4af37]/60 px-4 py-2 text-sm font-semibold text-white hover:bg-[#d4af37]/15 transition-colors"
+                    className="rounded-full border border-[#d4af37]/65 bg-[#d4af37]/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#d4af37]/20"
                   >
                     {link.label}
                   </a>

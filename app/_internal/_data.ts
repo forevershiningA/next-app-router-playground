@@ -10,7 +10,7 @@ function getAdditions(): Addition[] {
     const { loadAdditionsWithSizes } = require('./_additions-loader');
     additionsCache = loadAdditionsWithSizes();
   }
-  return additionsCache;
+  return additionsCache ?? [];
 }
 
 export type Product = {

@@ -42,7 +42,7 @@ export default function EditImagePanel() {
   }
 
   return (
-    <SceneOverlayController onClose={handleClose}>
+    <SceneOverlayController section="image" title="Edit Image" onClose={handleClose}>
       <div className="flex flex-col gap-4 text-white">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -74,6 +74,7 @@ export default function EditImagePanel() {
               <span className="text-xs text-white/80">{activeImage.xPos.toFixed(1)} mm</span>
             </div>
             <TailwindSlider
+              label="X"
               value={activeImage.xPos}
               onChange={(val) => updateImagePosition(activeId, val, activeImage.yPos)}
               min={-200}
@@ -89,6 +90,7 @@ export default function EditImagePanel() {
               <span className="text-xs text-white/80">{activeImage.yPos.toFixed(1)} mm</span>
             </div>
             <TailwindSlider
+              label="Y"
               value={activeImage.yPos}
               onChange={(val) => updateImagePosition(activeId, activeImage.xPos, val)}
               min={-200}
@@ -109,6 +111,7 @@ export default function EditImagePanel() {
               <span className="text-xs text-white/80">{activeImage.widthMm.toFixed(0)} mm</span>
             </div>
             <TailwindSlider
+              label="W"
               value={activeImage.widthMm}
               onChange={(val) => {
                 const aspectRatio = activeImage.heightMm / activeImage.widthMm;
@@ -127,6 +130,7 @@ export default function EditImagePanel() {
               <span className="text-xs text-white/80">{activeImage.heightMm.toFixed(0)} mm</span>
             </div>
             <TailwindSlider
+              label="H"
               value={activeImage.heightMm}
               onChange={(val) => {
                 const aspectRatio = activeImage.widthMm / activeImage.heightMm;
@@ -148,6 +152,7 @@ export default function EditImagePanel() {
               <span className="text-xs text-white/80">{activeImage.rotationZ.toFixed(0)}°</span>
             </div>
             <TailwindSlider
+              label="Rot"
               value={activeImage.rotationZ}
               onChange={(val) => updateImageRotation(activeId, val)}
               min={-180}

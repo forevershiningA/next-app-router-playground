@@ -8,6 +8,13 @@ import { data } from '#/app/_internal/_data';
 import { getMotifThumbnailPath, getMotifSvgPath } from '#/lib/motifs';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import type { ProductFormula } from '#/lib/motifs';
+import type { MotifCatalogItem } from '#/lib/headstone-store.types';
+
+type LegacyMotifCategory = {
+  id: string | number;
+  name: string;
+  img?: string;
+};
 
 export default function MotifOverlayPanel() {
   const activePanel = useHeadstoneStore((s) => s.activePanel);
@@ -15,6 +22,8 @@ export default function MotifOverlayPanel() {
   const productId = useHeadstoneStore((s) => s.productId);
   const addMotif = useHeadstoneStore((s) => s.addMotif);
   const motifsCatalog = useHeadstoneStore((s) => s.motifsCatalog);
+  const categories: Array<MotifCatalogItem | LegacyMotifCategory> =
+    motifsCatalog.length > 0 ? motifsCatalog : data.motifs;
   
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -185,14 +194,13 @@ export default function MotifOverlayPanel() {
 
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
-    const categories = motifsCatalog.length > 0 ? motifsCatalog : data.motifs;
     if (!searchQuery) return categories;
     
     const query = searchQuery.toLowerCase();
     return categories.filter(motif => 
       motif.name.toLowerCase().includes(query)
     );
-  }, [searchQuery, motifsCatalog]);
+  }, [searchQuery, categories]);
 
   if (!isOpen) {
     return null;
@@ -217,7 +225,7 @@ export default function MotifOverlayPanel() {
                 }`}
               >
                 <h1 className="text-base leading-none font-semibold">
-                  {viewMode === 'categories' ? 'Select Motif Category' : `Motifs: ${selectedCategoryIndex !== null ? getMotifCategoryName((motifsCatalog.length > 0 ? motifsCatalog : data.motifs)[selectedCategoryIndex].name) : ''}`}
+                  {viewMode === 'categories' ? 'Select Motif Category' : `Motifs: ${selectedCategoryIndex !== null ? getMotifCategoryName(categories[selectedCategoryIndex].name) : ''}`}
                 </h1>
               </div>
 
@@ -311,10 +319,16 @@ export default function MotifOverlayPanel() {
             <div className="grid grid-cols-3 gap-2">
               {filteredCategories.map((motif, index) => {
                 // Find the actual index in the full array
-                const fullArray = motifsCatalog.length > 0 ? motifsCatalog : data.motifs;
-                const actualIndex = fullArray.indexOf(motif);
+                const actualIndex = categories.findIndex((item) => item.id === motif.id);
                 // Get thumbnail path from png/motifs/s/
-                const thumbnailPath = motif.thumbnailPath || motif.previewUrl || motif.img?.replace('/motifs/', '/png/motifs/s/');
+                const thumbnailPath =
+                  ('previewUrl' in motif &&
+                    typeof motif.previewUrl === 'string' &&
+                    motif.previewUrl) ||
+                  ('img' in motif &&
+                    typeof motif.img === 'string' &&
+                    motif.img.replace('/motifs/', '/png/motifs/s/')) ||
+                  '/png/motifs/s/default.png';
                 
                 return (
                   <button

@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '#/lib/db/index';
 import { sql } from 'drizzle-orm';
 
+type DbRecord = Record<string, unknown>;
+
+function getRows<T extends DbRecord>(result: unknown): T[] {
+  if (Array.isArray(result)) {
+    return result as T[];
+  }
+  if (
+    result &&
+    typeof result === 'object' &&
+    'rows' in result &&
+    Array.isArray((result as { rows?: unknown }).rows)
+  ) {
+    return (result as { rows: T[] }).rows;
+  }
+  return [];
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -13,7 +30,7 @@ export async function GET(request: NextRequest) {
     
     if (!category) {
       const result = await db.execute(sql`SELECT sku, name, category, tags, price_cents, preview_url, attributes, is_active, sort_order FROM motifs WHERE sku LIKE 'MOTIF-CAT-%' AND is_active = true ORDER BY sort_order, name`);
-      const categories = (result.rows || result).map((cat: any) => {
+      const categories = getRows<DbRecord>(result).map((cat) => {
         const attributes = typeof cat.attributes === 'string' ? JSON.parse(cat.attributes) : cat.attributes;
         return {
           id: cat.sku,
@@ -29,7 +46,7 @@ export async function GET(request: NextRequest) {
     }
     
     const result = await db.execute(sql`SELECT sku, name, category, tags, price_cents, preview_url, svg_url, attributes, is_active FROM motifs WHERE LOWER(category) = LOWER(${category}) AND sku NOT LIKE 'MOTIF-CAT-%' AND is_active = true ORDER BY name`);
-    const motifs = (result.rows || result).map((motif: any) => {
+    const motifs = getRows<DbRecord>(result).map((motif) => {
       const attributes = typeof motif.attributes === 'string' ? JSON.parse(motif.attributes) : motif.attributes;
       return {
         id: motif.sku,

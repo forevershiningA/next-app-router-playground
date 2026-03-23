@@ -46,6 +46,7 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
       setLoading(false);
       return;
     }
+    const selectedSrc = selectedCategoryMotif.src;
 
     const controller = new AbortController();
     let isCancelled = false;
@@ -54,7 +55,7 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
       setLoading(true);
       try {
         // Try API first
-        const response = await fetch(`/api/motifs/${selectedCategoryMotif.src}`, {
+        const response = await fetch(`/api/motifs/${selectedSrc}`, {
           signal: controller.signal,
         });
         if (!response.ok) throw new Error('API failed');
@@ -64,7 +65,7 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
       } catch (apiError) {
         if (controller.signal.aborted) return;
         try {
-          const categoryName = selectedCategoryMotif.src.split('/').pop();
+          const categoryName = selectedSrc.split('/').pop();
           const categoryData = MotifsData.find(
             (cat) => cat.name.toLowerCase() === categoryName?.toLowerCase()
           );
@@ -76,7 +77,7 @@ export default function MotifSelectionGrid({ motifs }: MotifSelectionGridProps) 
             const motifs = fileNames.map((fileName) => ({
               path: `/shapes/motifs/${fileName}.svg`,
               name: fileName.replace(/_/g, ' '),
-              category: selectedCategoryMotif.src,
+              category: selectedSrc,
             }));
             setIndividualMotifs(motifs);
           } else {

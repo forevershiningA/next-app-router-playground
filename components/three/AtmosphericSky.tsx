@@ -2,8 +2,6 @@
 import * as THREE from 'three';
 import { Clouds, Cloud } from '@react-three/drei';
 
-const CLOUD_EMISSIVE = new THREE.Color('#ffffff');
-
 const SkyMaterial = {
   uniforms: {
     // UPDATED: Rich Sky Blue
@@ -76,16 +74,6 @@ export default function AtmosphericSky({ showDome = false }: AtmosphericSkyProps
       */}
       <Clouds
         material={THREE.MeshStandardMaterial}
-        materialProps={{
-          transparent: true,
-          depthWrite: false,
-          depthTest: false,
-          toneMapped: false,
-          color: '#ffffff',
-          opacity: 0.98,
-          emissive: CLOUD_EMISSIVE,
-          emissiveIntensity: 0.45,
-        }}
       >
         <Cloud 
           seed={10} 

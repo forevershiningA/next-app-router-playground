@@ -43,7 +43,9 @@ import {
 import { normalizeAdditionBaseId } from '#/lib/addition-utils';
 
 export type {
+  AdditionKind,
   BorderOption,
+  Line,
   Material,
   MotifCatalogItem,
   PanelName,

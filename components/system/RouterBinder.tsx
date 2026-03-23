@@ -61,10 +61,10 @@ export default function RouterBinder() {
       return;
     }
 
-    if (DESIGNER_ROUTES.some((route) => currentPath.startsWith(route))) {
-      return;
-    }
-    
+    // On direct refresh of designer routes (e.g. /select-size), we still need a
+    // deterministic product so the catalog, shape and material all initialize
+    // from the same product instead of mixing defaults.
+
     // Check if URL contains a product category or product slug
     let productId = '124'; // Default headstone
     
@@ -99,6 +99,13 @@ export default function RouterBinder() {
       }
     }
     
+    // Allow explicit product selection from query string on refresh/deep links.
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const queryProductId = params?.get('productId');
+    if (queryProductId && data.products.some((p) => p.id === queryProductId)) {
+      productId = queryProductId;
+    }
+
     setProductId(productId);
   }, [pathname, currentProductId, setProductId]);
 

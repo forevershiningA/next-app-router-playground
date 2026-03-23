@@ -33,7 +33,7 @@ const categoryKeys = new Set<string>();
 for (const design of designs) {
   categoryKeys.add(`${design.productSlug}/${design.category}`);
 }
-for (const key of categoryKeys) {
+for (const key of Array.from(categoryKeys)) {
   entries.push({ url: `${BASE_URL}/designs/${key}`, lastmod: TODAY, changefreq: 'weekly', priority: 0.7 });
 }
 

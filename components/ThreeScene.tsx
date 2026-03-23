@@ -6,8 +6,11 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, type CatalogData } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
+import { loadCatalogForProduct } from '#/lib/check-price-utils';
+import { formatDimensionPair } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 const CANVAS_ROUTES = new Set([
   '/select-size',
@@ -51,6 +54,7 @@ function CameraController() {
 function ProductNameHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
@@ -59,18 +63,56 @@ function ProductNameHeader() {
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
+  const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const unitSystem = useUnitSystem();
+  const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(null);
+  const fallbackProductId = useMemo(
+    () => productId ?? data.products[0]?.id ?? null,
+    [productId],
+  );
+  const activeCatalog = catalog ?? resolvedCatalog;
+  const selectedShape = useMemo(
+    () =>
+      activeCatalog?.product.shapes.find((shape) => shape.url === shapeUrl) ??
+      activeCatalog?.product.shapes[0] ??
+      null,
+    [activeCatalog, shapeUrl],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    if (catalog) {
+      setResolvedCatalog(catalog);
+      return;
+    }
+    if (!fallbackProductId) {
+      setResolvedCatalog(null);
+      return;
+    }
+
+    loadCatalogForProduct(fallbackProductId).then((loadedCatalog) => {
+      if (!cancelled && loadedCatalog) {
+        setResolvedCatalog(loadedCatalog);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [catalog, fallbackProductId]);
   
   const displayProductName = useMemo(() => {
     console.log('[ThreeScene] Product name calc:', {
       catalogName: catalog?.product?.name,
       catalogId: catalog?.product?.id,
       productId,
+      fallbackProductId,
       fallbackName: data.products.find((p) => p.id === productId)?.name
     });
     
     // Safety check: Only use catalog name if it matches the selected product ID
-    if (catalog?.product?.name && catalog.product.id === productId) {
-      return catalog.product.name;
+    if (activeCatalog?.product?.name) {
+      return activeCatalog.product.name;
     }
     
     // Fall back to static product list
@@ -78,47 +120,80 @@ function ProductNameHeader() {
       return 'Design Your Own Headstone';
     }
     return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
-  }, [catalog, productId]);
+  }, [activeCatalog, productId, fallbackProductId, catalog]);
   
   // Calculate quantity based on catalog's quantity type
   const quantity = useMemo(() => {
     let qty = widthMm * heightMm; // default to area
-    if (catalog) {
-      const qt = catalog.product.priceModel.quantityType;
+    if (activeCatalog) {
+      const qt = activeCatalog.product.priceModel.quantityType;
       if (qt === 'Width + Height') {
         qty = widthMm + heightMm;
       }
     }
     return qty;
-  }, [catalog, widthMm, heightMm]);
+  }, [activeCatalog, widthMm, heightMm]);
   
   // Calculate base quantity (usually Area)
   const baseQuantity = useMemo(() => {
-    if (!showBase || !catalog?.product?.basePriceModel) return 0;
-    const qt = catalog.product.basePriceModel.quantityType;
+    if (!showBase || !activeCatalog?.product?.basePriceModel) return 0;
+    const qt = activeCatalog.product.basePriceModel.quantityType;
     if (qt === 'Width + Height') {
       return baseWidthMm + baseHeightMm;
     } else if (qt === 'Width') {
       return baseWidthMm + baseThickness; // Width + Thickness (depth)
     }
     return baseWidthMm * baseHeightMm; // default to area
-  }, [catalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
+  }, [activeCatalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
   
   // Calculate total price including inscriptions and motifs
   const totalPrice = useMemo(() => {
-    const headstonePrice = catalog 
-      ? calculatePrice(catalog.product.priceModel, quantity) 
+    const headstonePrice = activeCatalog 
+      ? calculatePrice(activeCatalog.product.priceModel, quantity) 
       : 0;
-    const basePrice = showBase && catalog?.product?.basePriceModel
-      ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+    const basePrice = showBase && activeCatalog?.product?.basePriceModel
+      ? calculatePrice(activeCatalog.product.basePriceModel, baseQuantity)
       : 0;
+    const isFullMonument = activeCatalog?.product.type === 'full-monument';
+    const ledgerPrice =
+      isFullMonument && activeCatalog?.product.ledgerPriceModel
+        ? calculatePrice(
+            activeCatalog.product.ledgerPriceModel,
+            selectedShape?.lid?.initWidth || widthMm,
+          )
+        : 0;
+    const kerbsetPrice =
+      isFullMonument && activeCatalog?.product.kerbsetPriceModel
+        ? calculatePrice(
+            activeCatalog.product.kerbsetPriceModel,
+            selectedShape?.kerb?.initWidth || widthMm,
+          )
+        : 0;
     
-    return headstonePrice + basePrice + inscriptionCost + motifCost;
-  }, [catalog, quantity, baseQuantity, inscriptionCost, motifCost, showBase]);
+    return (
+      headstonePrice +
+      basePrice +
+      ledgerPrice +
+      kerbsetPrice +
+      inscriptionCost +
+      motifCost
+    );
+  }, [
+    activeCatalog,
+    quantity,
+    baseQuantity,
+    inscriptionCost,
+    motifCost,
+    showBase,
+    selectedShape,
+    widthMm,
+  ]);
 
-  // Convert mm to inches (1 inch = 25.4 mm) and round up
-  const widthInches = useMemo(() => Math.ceil(widthMm / 25.4), [widthMm]);
-  const heightInches = useMemo(() => Math.ceil(heightMm / 25.4), [heightMm]);
+  const sizeLabel = useMemo(
+    () => formatDimensionPair(widthMm, heightMm, unitSystem),
+    [widthMm, heightMm, unitSystem],
+  );
+  const priceLabel = `$${totalPrice.toFixed(2)}`;
 
   return (
     <>
@@ -133,18 +208,21 @@ function ProductNameHeader() {
       )}
 
       {/* Price Pill Floating Bottom Center */}
-      {catalog && (
+      {widthMm > 0 && heightMm > 0 && (
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-auto w-[75vw] sm:w-auto"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-auto w-[75vw] sm:w-auto"
         >
-          <div
-            className="bg-black/80 backdrop-blur-md text-white py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center justify-between w-full"
+          <button
+            type="button"
+            onClick={() => setActivePanel('checkprice')}
+            aria-label="Open check price breakdown"
+            className="cursor-pointer bg-black/80 backdrop-blur-md text-white py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center justify-between w-full hover:bg-black/90 transition-colors"
             style={{ paddingLeft: '1.25rem', paddingRight: '1.725rem' }}
           >
-            <span className="opacity-80 text-sm">{widthMm} × {heightMm} mm</span>
+            <span className="opacity-80 text-sm">{sizeLabel}</span>
             <div className="w-px h-4 bg-white/20"></div>
-            <span className="font-bold text-green-400">${totalPrice.toFixed(2)}</span>
-          </div>
+            <span className="font-bold text-green-400">{priceLabel}</span>
+          </button>
         </div>
       )}
     </>

@@ -103,7 +103,7 @@ export default function ConditionalCanvas() {
   }
 
   return (
-    <div className="fixed inset-0 lg:left-[400px] z-0">
+    <div id="scene-root" className="fixed inset-0 lg:left-[400px] z-0">
       <Suspense
         fallback={CanvasLoadingFallback}
       >

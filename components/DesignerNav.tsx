@@ -34,6 +34,8 @@ import AdditionSelector from './AdditionSelector';
 import MotifSelectorPanel from './MotifSelectorPanel';
 import ImageSelector from './ImageSelector';
 import SaveDesignModal from './SaveDesignModal';
+import { formatDimensionPair } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -262,6 +264,7 @@ function useDesignerNavPanelState({
 }
 
 export default function DesignerNav() {
+  const unitSystem = useUnitSystem();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -1458,7 +1461,7 @@ export default function DesignerNav() {
   }, [catalog, productId]);
   const dimensionLabel =
     widthMm > 0 && heightMm > 0
-      ? `${widthMm} × ${heightMm} mm`
+      ? formatDimensionPair(widthMm, heightMm, unitSystem)
       : 'Select dimensions';
 
   const handleMenuClick = async (slug: string, e: React.MouseEvent) => {

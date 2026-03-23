@@ -33,7 +33,10 @@ let pricingCache: ImagePricingMap | null = null;
 let pricingPromise: Promise<ImagePricingMap> | null = null;
 
 type DomParserInstance = {
-  parseFromString: (xml: string, mimeType: string) => Document;
+  parseFromString: (
+    xml: string,
+    mimeType: DOMParserSupportedType,
+  ) => Document;
 };
 type DomParserConstructor = new () => DomParserInstance;
 

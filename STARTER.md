@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-22
+**Last Updated:** 2026-03-23
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,52 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-23)
+
+### ✅ Recent Changes (March 23, 2026)
+
+1. **Quality gates restored for active codebase - COMPLETE**
+   - Migrated to ESLint 9 flat config (`eslint.config.js`) and aligned Next.js config usage.
+   - Resolved active TypeScript errors across app/components/lib and excluded legacy `archive/` from active compile scope.
+   - Validation now passes on active code:
+     - `pnpm lint` ✅
+     - `pnpm type-check` ✅
+     - `pnpm build --no-lint` ✅
+
+2. **Canvas price chip + Check Price modal integration - COMPLETE**
+   - Bottom canvas price chip is clickable and opens the existing Check Price flow (`activePanel = 'checkprice'`) over the canvas.
+   - Popup is rendered via portal to `#scene-root` so centering is within canvas, not full window.
+   - Pricing fallback reliability fixed by loading `/xml/catalog-id-<productId>.xml` with safe product ID fallback when store product is temporarily null.
+   - Files: `components/ThreeScene.tsx`, `components/ConditionalCanvas.tsx`, `components/CheckPricePanel.tsx`, `lib/check-price-utils.ts`.
+
+3. **Locale-aware unit display rollout (safe scope) - COMPLETE**
+   - Added country-driven unit detection (`US`, `LR`, `MM` => imperial; others => metric) and persisted `unit_system` cookie in middleware.
+   - Added shared unit formatting helpers/hooks and applied to:
+     - canvas chip dimensions,
+     - Check Price size/height labels,
+     - DesignerNav main dimension label,
+     - MobileHeader dimensions.
+   - Internal calculations remain in millimeters; display formatting only changed.
+   - Files: `middleware.ts`, `lib/unit-system.ts`, `lib/use-unit-system.ts`, `components/ThreeScene.tsx`, `components/CheckPricePanel.tsx`, `components/DesignerNav.tsx`, `components/MobileHeader.tsx`.
+
+4. **Refresh consistency fix on `/select-size` - COMPLETE**
+   - Fixed direct-refresh mismatch where `/select-size` could initialize a different default product/catalog than the Select Product flow.
+   - RouterBinder now initializes product state on designer-route refresh (with optional `?productId=` override), keeping granite/material/price consistent.
+   - File: `components/system/RouterBinder.tsx`.
+
+5. **Check Price canvas popup visual simplification - COMPLETE**
+   - Removed "Pricing Breakdown" chip in popup header.
+   - Removed Download PDF button from the canvas popup (reserved for registered-user workflow later).
+   - Rethemed table away from white backgrounds to dark/gold styling and removed decorative gradients as requested.
+   - Adjusted popup width to a narrower layout for readability.
+   - File: `components/CheckPricePanel.tsx`.
+
+### ⚠️ Known Gaps (March 23, 2026)
+- **Saved Design 2 (`1578016189116`)** remains unresolved; current evidence still points to loader interpretation / non-text asset hydration behavior rather than simple reconversion.
+- **Unit-system rollout is partial by design**: safe-scope surfaces are done, but additional `mm` labels remain in deeper Designer panels and can be migrated in a follow-up pass.
 
 ---
 

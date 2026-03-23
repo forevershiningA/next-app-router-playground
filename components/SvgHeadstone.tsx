@@ -340,9 +340,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const holeShapeEntries = shapesWithBounds.flatMap(({ shape }) => {
       if (!shape.holes?.length) return [];
       return shape.holes.map((holePath) => {
-        const pts = holePath.getPoints(64).map((pt) =>
-          pt instanceof THREE.Vector2 ? pt.clone() : new THREE.Vector2(pt.x, pt.y)
-        );
+        const pts = holePath.getPoints(64).map((pt) => pt.clone());
         const holeShape = new THREE.Shape(pts);
         holeShape.autoClose = true;
         holeShape.holes = [];

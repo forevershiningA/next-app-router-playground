@@ -436,8 +436,9 @@ export default function ImageModel({
   }
 
   const { texture, aspect } = textureInfo;
+  const unitsPerMeter = headstone?.unitsPerMeter ?? 1000;
   const safeUnitsPerMeter =
-    Math.abs(headstone.unitsPerMeter) > 1e-6 ? Math.abs(headstone.unitsPerMeter) : 1000;
+    Math.abs(unitsPerMeter) > 1e-6 ? Math.abs(unitsPerMeter) : 1000;
   const mmToLocalUnits = safeUnitsPerMeter / 1000;
   const width = widthMm * mmToLocalUnits;
   const height = heightMm * mmToLocalUnits;

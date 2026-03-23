@@ -6,6 +6,8 @@ import { Bars3Icon } from '@heroicons/react/24/solid';
 import { useMemo, useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { data } from '#/app/_internal/_data';
+import { formatDimensionPair } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 export default function MobileHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -18,6 +20,7 @@ export default function MobileHeader() {
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
+  const unitSystem = useUnitSystem();
   const [isDesktop, setIsDesktop] = useState(false);
   const pathname = usePathname();
   
@@ -87,6 +90,11 @@ export default function MobileHeader() {
     return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
   }, [catalog, productId]);
 
+  const dimensionLabel = useMemo(
+    () => formatDimensionPair(widthMm, heightMm, unitSystem),
+    [widthMm, heightMm, unitSystem],
+  );
+
   // Don't render header on design list pages, when catalog isn't ready, or when canvas is hidden
   if (isDesignListPage || !catalog || !isCanvasVisible) {
     return null;
@@ -110,7 +118,7 @@ export default function MobileHeader() {
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
         <h1 className="text-xl font-semibold text-white !p-0 !m-0">
-          {displayProductName} - {widthMm} x {heightMm} mm ($
+          {displayProductName} - {dimensionLabel} ($
           {price.toFixed(2)})
         </h1>
       </div>

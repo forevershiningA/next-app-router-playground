@@ -1,4 +1,5 @@
 import { getMaterialNameFromUrl } from '#/lib/material-utils';
+import { parseCatalogXML, type CatalogData } from '#/lib/xml-parser';
 
 export type ExpandableSection = 'inscriptions' | 'motifs' | 'images' | 'additions';
 
@@ -66,3 +67,16 @@ export const formatMmAsImperial = (mm: number) => {
 
   return whole > 0 ? `${whole} ${numerator}/${denominator}"` : `${numerator}/${denominator}"`;
 };
+
+export async function loadCatalogForProduct(productId: string): Promise<CatalogData | null> {
+  if (!productId || typeof window === 'undefined') return null;
+  try {
+    const response = await fetch(`/xml/catalog-id-${productId}.xml`);
+    if (!response.ok) return null;
+    const xmlText = await response.text();
+    return await parseCatalogXML(xmlText, productId);
+  } catch (error) {
+    console.error('[check-price-utils] Failed to load catalog fallback', error);
+    return null;
+  }
+}

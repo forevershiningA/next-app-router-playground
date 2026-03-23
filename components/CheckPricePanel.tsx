@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import OverlayPortal from '#/components/OverlayPortal';
 
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
@@ -9,12 +10,15 @@ import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { calculatePrice } from '#/lib/xml-parser';
 import {
-  formatMmAsImperial,
   getCheckPriceMaterialName,
   getShapeNameFromUrl,
+  loadCatalogForProduct,
   SECTION_DEFAULT_STATE,
   type ExpandableSection,
 } from '#/lib/check-price-utils';
+import type { CatalogData } from '#/lib/xml-parser';
+import { formatDimensionPair, formatDimensionTriplet, formatLengthFromMm } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -38,13 +42,21 @@ export default function CheckPricePanel() {
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const unitSystem = useUnitSystem();
+  const fallbackProductId = useMemo(
+    () => productId ?? data.products[0]?.id ?? null,
+    [productId],
+  );
 
   const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
+  const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<ExpandableSection, boolean>>({
     ...SECTION_DEFAULT_STATE,
   });
   const isMountedRef = useRef(true);
+  const activeCatalog = catalog ?? resolvedCatalog;
 
   const isOpen = activePanel === 'checkprice';
 
@@ -58,6 +70,28 @@ export default function CheckPricePanel() {
   const expandAllSections = useCallback(() => {
     setExpandedSections({ ...SECTION_DEFAULT_STATE });
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (catalog) {
+      setResolvedCatalog(catalog);
+      return;
+    }
+    if (!fallbackProductId) {
+      setResolvedCatalog(null);
+      return;
+    }
+
+    loadCatalogForProduct(fallbackProductId).then((loadedCatalog) => {
+      if (!cancelled && loadedCatalog) {
+        setResolvedCatalog(loadedCatalog);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [catalog, fallbackProductId]);
 
   useEffect(() => {
     return () => {
@@ -100,49 +134,49 @@ export default function CheckPricePanel() {
 
   // Find the currently selected shape in the catalog (matched by URL)
   const selectedShape = useMemo(() => {
-    if (!catalog || !shapeUrl) return null;
-    return catalog.product.shapes.find((s) => s.url === shapeUrl) ?? catalog.product.shapes[0] ?? null;
-  }, [catalog, shapeUrl]);
+    if (!activeCatalog || !shapeUrl) return null;
+    return activeCatalog.product.shapes.find((s) => s.url === shapeUrl) ?? activeCatalog.product.shapes[0] ?? null;
+  }, [activeCatalog, shapeUrl]);
 
   // Whether this is a full-monument product (has ledger + kerbset components)
-  const isFullMonument = catalog?.product.type === 'full-monument';
+  const isFullMonument = activeCatalog?.product.type === 'full-monument';
 
   // Calculate headstone price from catalog price model
   // Most headstone price models use quantity_type="Width + Height"
   const headstonePrice = useMemo(() => {
-    if (!catalog) return 0;
-    const pm = catalog.product.priceModel;
+    if (!activeCatalog) return 0;
+    const pm = activeCatalog.product.priceModel;
     const quantity = pm.quantityType === 'Width + Height'
       ? widthMm + heightMm
       : pm.quantityType === 'Height'
       ? heightMm
       : widthMm;
     return calculatePrice(pm, quantity);
-  }, [catalog, widthMm, heightMm]);
+  }, [activeCatalog, widthMm, heightMm]);
 
   // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {
-    if (!showBase || !catalog?.product.basePriceModel) return 0;
-    const pm = catalog.product.basePriceModel;
+    if (!showBase || !activeCatalog?.product.basePriceModel) return 0;
+    const pm = activeCatalog.product.basePriceModel;
     const quantity = baseWidthMm || selectedShape?.stand?.initWidth || widthMm;
     return calculatePrice(pm, quantity);
-  }, [showBase, catalog, baseWidthMm, selectedShape, widthMm]);
+  }, [showBase, activeCatalog, baseWidthMm, selectedShape, widthMm]);
 
   // Calculate ledger price (full-monument only)
   const ledgerPrice = useMemo(() => {
-    if (!isFullMonument || !catalog?.product.ledgerPriceModel) return 0;
-    const pm = catalog.product.ledgerPriceModel;
+    if (!isFullMonument || !activeCatalog?.product.ledgerPriceModel) return 0;
+    const pm = activeCatalog.product.ledgerPriceModel;
     const quantity = selectedShape?.lid?.initWidth || widthMm;
     return calculatePrice(pm, quantity);
-  }, [isFullMonument, catalog, selectedShape, widthMm]);
+  }, [isFullMonument, activeCatalog, selectedShape, widthMm]);
 
   // Calculate kerbset price (full-monument only)
   const kerbsetPrice = useMemo(() => {
-    if (!isFullMonument || !catalog?.product.kerbsetPriceModel) return 0;
-    const pm = catalog.product.kerbsetPriceModel;
+    if (!isFullMonument || !activeCatalog?.product.kerbsetPriceModel) return 0;
+    const pm = activeCatalog.product.kerbsetPriceModel;
     const quantity = selectedShape?.kerb?.initWidth || widthMm;
     return calculatePrice(pm, quantity);
-  }, [isFullMonument, catalog, selectedShape, widthMm]);
+  }, [isFullMonument, activeCatalog, selectedShape, widthMm]);
 
   // Calculate additions price
   const additionsPrice = useMemo(() => {
@@ -179,7 +213,7 @@ export default function CheckPricePanel() {
       const fallbackHeight = Math.max(0, Math.round(img.heightMm || 0));
       const widthMm = sizeOption?.width ?? fallbackWidth;
       const heightMm = sizeOption?.height ?? fallbackHeight;
-      const sizeLabel = sizeOption?.label ?? `${widthMm} mm × ${heightMm} mm`;
+      const sizeLabel = sizeOption?.label ?? formatDimensionPair(widthMm, heightMm, unitSystem);
       const price = product
         ? calculateImagePrice(product, widthMm, heightMm, img.colorMode)
         : 0;
@@ -203,7 +237,7 @@ export default function CheckPricePanel() {
         price,
       };
     });
-  }, [selectedImages, imagePricingData]);
+  }, [selectedImages, imagePricingData, unitSystem]);
 
   const imagePriceTotal = useMemo(() => {
     return imageItems.reduce((sum, item) => sum + item.price, 0);
@@ -235,7 +269,7 @@ export default function CheckPricePanel() {
       const motifFileName = motif.svgPath.split('/').pop()?.replace('.svg', '') || 'unknown';
       
       // Calculate individual motif price
-      const isLaser = catalog?.product.laser === '1';
+      const isLaser = activeCatalog?.product.laser === '1';
       let individualPrice = 0;
       
       if (!isLaser && motifPriceModel) {
@@ -257,7 +291,7 @@ export default function CheckPricePanel() {
         price: individualPrice,
       };
     });
-  }, [selectedMotifs, motifOffsets, motifPriceModel, catalog]);
+  }, [selectedMotifs, motifOffsets, motifPriceModel, activeCatalog]);
 
   // Get detailed inscription items
   const inscriptionItems = useMemo(() => {
@@ -284,26 +318,36 @@ export default function CheckPricePanel() {
   if (!isOpen) return null;
 
   return (
-    <>
+    <OverlayPortal containerId="scene-root">
       <div 
-        className="check-price-panel__overlay fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 p-4"
+        className="check-price-panel__overlay pointer-events-auto absolute inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm"
         onClick={handleClose}
       >
         <div 
-          className="check-price-panel__modal relative w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white shadow-2xl rounded-lg"
+          className="check-price-panel__modal relative w-full max-w-[58rem] max-h-[90vh] overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header with green background */}
-          <div className="bg-[#a8d5ba] px-6 py-4">
-            <h2 className="text-2xl font-medium text-gray-800">
+          <button
+            type="button"
+            onClick={handleClose}
+            className="absolute right-4 top-4 z-10 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white cursor-pointer"
+            aria-label="Close dialog"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l8 8M14 6l-8 8" />
+            </svg>
+          </button>
+
+          <div className="relative border-b border-white/10 px-6 py-5">
+            <h2 className="text-2xl font-serif text-white">
               Check Price (${totalPrice.toFixed(2)})
             </h2>
           </div>
 
           {/* Content - Table */}
-          <div className="check-price-panel__table max-h-[calc(90vh-180px)] overflow-y-auto overflow-x-auto bg-white">
+          <div className="check-price-panel__table max-h-[calc(90vh-220px)] overflow-y-auto overflow-x-auto bg-[#0d0906]">
             <table className="w-full border-collapse">
-            <thead className="bg-gray-50 sticky top-0">
+              <thead className="sticky top-0">
               <tr>
                 <th className="text-left px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
                   Product
@@ -319,20 +363,30 @@ export default function CheckPricePanel() {
                 </th>
               </tr>
             </thead>
+            {!activeCatalog && (
+              <tbody>
+                <tr>
+                  <td colSpan={4} className="px-6 py-10 text-center text-sm text-[#d7d0c0]">
+                    Loading pricing data...
+                  </td>
+                </tr>
+              </tbody>
+            )}
+            {activeCatalog && (
             <tbody>
               {/* Headstone */}
               <tr className="border-b border-gray-200">
                 <td className="px-6 py-4">
                   <div className="text-sm">
                     <p className="font-semibold text-gray-900 mb-1">
-                      Product ID: {catalog?.product.id || 'N/A'} - {catalog?.product.name || 'Headstone'}
+                      Product ID: {activeCatalog.product.id} - {activeCatalog.product.name || 'Headstone'}
                     </p>
                     <p className="text-gray-600">
                       Shape: {shapeName}
                       <br />
                       Material: {getCheckPriceMaterialName(ledgerMaterialUrl)}
                       <br />
-                      Size: {formatMmAsImperial(widthMm)} × {formatMmAsImperial(heightMm)}
+                      Size: {formatDimensionPair(widthMm, heightMm, unitSystem)}
                     </p>
                   </div>
                 </td>
@@ -354,7 +408,7 @@ export default function CheckPricePanel() {
                     <p>
                       <strong>
                         {(() => {
-                          const a = catalog?.product.additions.find(a => a.type === 'base');
+                          const a = activeCatalog.product.additions.find(a => a.type === 'base');
                           return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Base'}`;
                         })()}
                       </strong>
@@ -363,7 +417,12 @@ export default function CheckPricePanel() {
                       <br />
                       Material: {getCheckPriceMaterialName(baseMaterialUrl)}
                       <br />
-                      Size: {formatMmAsImperial(selectedShape?.stand?.initWidth ?? (widthMm + 100))} × {formatMmAsImperial(selectedShape?.stand?.initHeight ?? 100)} × {formatMmAsImperial(selectedShape?.stand?.initDepth ?? 250)}
+                      Size: {formatDimensionTriplet(
+                        selectedShape?.stand?.initWidth ?? (widthMm + 100),
+                        selectedShape?.stand?.initHeight ?? 100,
+                        selectedShape?.stand?.initDepth ?? 250,
+                        unitSystem,
+                      )}
                     </p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
@@ -383,7 +442,7 @@ export default function CheckPricePanel() {
                     <p>
                       <strong>
                         {(() => {
-                          const a = catalog?.product.additions.find(a => a.type === 'ledger');
+                          const a = activeCatalog.product.additions.find(a => a.type === 'ledger');
                           return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Ledger'}`;
                         })()}
                       </strong>
@@ -392,7 +451,12 @@ export default function CheckPricePanel() {
                       <br />
                       Material: {getCheckPriceMaterialName(kerbsetMaterialUrl)}
                       <br />
-                      Size: {formatMmAsImperial(selectedShape?.lid?.initWidth ?? 0)} × {formatMmAsImperial(selectedShape?.lid?.initHeight ?? 0)} × {formatMmAsImperial(selectedShape?.lid?.initDepth ?? 0)}
+                      Size: {formatDimensionTriplet(
+                        selectedShape?.lid?.initWidth ?? 0,
+                        selectedShape?.lid?.initHeight ?? 0,
+                        selectedShape?.lid?.initDepth ?? 0,
+                        unitSystem,
+                      )}
                     </p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
@@ -412,7 +476,7 @@ export default function CheckPricePanel() {
                     <p>
                       <strong>
                         {(() => {
-                          const a = catalog?.product.additions.find(a => a.type === 'kerbset');
+                          const a = activeCatalog.product.additions.find(a => a.type === 'kerbset');
                           return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Kerbset'}`;
                         })()}
                       </strong>
@@ -421,7 +485,12 @@ export default function CheckPricePanel() {
                       <br />
                       Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}
                       <br />
-                      Size: {formatMmAsImperial(selectedShape?.kerb?.initWidth ?? 0)} × {formatMmAsImperial(selectedShape?.kerb?.initHeight ?? 0)} × {formatMmAsImperial(selectedShape?.kerb?.initDepth ?? 0)}
+                      Size: {formatDimensionTriplet(
+                        selectedShape?.kerb?.initWidth ?? 0,
+                        selectedShape?.kerb?.initHeight ?? 0,
+                        selectedShape?.kerb?.initDepth ?? 0,
+                        unitSystem,
+                      )}
                     </p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
@@ -474,7 +543,7 @@ export default function CheckPricePanel() {
                     <tr key={`ins-${item.id}`} className="border-b border-gray-100 bg-gray-50">
                       <td className="px-8 py-3 text-sm text-gray-900">
                         <p className="font-medium text-gray-900">{item.text || 'Inscription Text'}</p>
-                        <p className="text-xs text-gray-600">Font: {item.font} · Size: {item.sizeMm}mm</p>
+                        <p className="text-xs text-gray-600">Font: {item.font} · Size: {formatLengthFromMm(item.sizeMm, unitSystem)}</p>
                         <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
                           <span>Color: {item.colorName}</span>
                           <span
@@ -531,7 +600,7 @@ export default function CheckPricePanel() {
                     <tr key={`motif-${item.id}`} className="border-b border-gray-100 bg-gray-50">
                       <td className="px-8 py-3 text-sm text-gray-900">
                         <p className="font-medium text-gray-900 capitalize">{item.name}</p>
-                        <p className="text-xs text-gray-600">Height: {item.heightMm}mm</p>
+                        <p className="text-xs text-gray-600">Height: {formatLengthFromMm(item.heightMm, unitSystem)}</p>
                         <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
                           <span>{item.colorDisplay}</span>
                           <span
@@ -673,26 +742,20 @@ export default function CheckPricePanel() {
                 <td className="px-6 py-4 text-right text-base font-bold text-gray-900">${totalPrice.toFixed(2)}</td>
               </tr>
             </tbody>
+            )}
           </table>
         </div>
 
-        {/* Footer with green background */}
-        <div className="check-price-panel__actions flex items-center justify-end gap-3 bg-[#a8d5ba] px-6 py-4">
-          <button
-            onClick={() => window.print()}
-            className="rounded-full bg-[#cfac6c] px-6 py-2.5 text-sm font-semibold uppercase text-slate-900 shadow hover:brightness-95"
-          >
-            Download PDF
-          </button>
-          <button
-            onClick={handleClose}
-            className="rounded-full border border-[#cfac6c] px-6 py-2.5 text-sm font-semibold uppercase text-slate-900 hover:bg-[#fdf8f0]"
-          >
-            Close
-          </button>
+          <div className="check-price-panel__actions flex items-center justify-end gap-3 border-t border-white/10 bg-black/20 px-6 py-4">
+            <button
+              onClick={handleClose}
+              className="rounded-full border border-white/25 bg-black/25 px-6 py-2.5 text-sm font-semibold uppercase text-white transition-colors hover:border-white/50 hover:bg-black/40"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
       <style>
         {`
@@ -716,8 +779,61 @@ export default function CheckPricePanel() {
               display: none !important;
             }
           }
+
+          .check-price-panel__table table {
+            color: #f5eee1;
+            background: #0d0906;
+          }
+
+          .check-price-panel__table thead th {
+            background: rgba(212, 175, 55, 0.12) !important;
+            color: #f3d48f !important;
+            border-bottom-color: rgba(212, 175, 55, 0.35) !important;
+          }
+
+          .check-price-panel__table tbody tr {
+            background: rgba(22, 15, 10, 0.9) !important;
+          }
+
+          .check-price-panel__table tbody tr:nth-child(even) {
+            background: rgba(27, 19, 13, 0.92) !important;
+          }
+
+          .check-price-panel__table tbody tr:hover {
+            background: rgba(42, 30, 20, 0.92) !important;
+          }
+
+          .check-price-panel__table td {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+          }
+
+          .check-price-panel__table .text-gray-900 {
+            color: #f5eee1 !important;
+          }
+
+          .check-price-panel__table .text-gray-700,
+          .check-price-panel__table .text-gray-600,
+          .check-price-panel__table .text-gray-500 {
+            color: #cdbfa4 !important;
+          }
+
+          .check-price-panel__table .border-gray-300,
+          .check-price-panel__table .border-gray-200,
+          .check-price-panel__table .border-gray-100,
+          .check-price-panel__table .border-gray-400 {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+          }
+
+          .check-price-panel__table tbody tr:last-child {
+            background: rgba(18, 12, 8, 0.95) !important;
+          }
+
+          .check-price-panel__table tbody tr:last-child td {
+            color: #f6e3b4 !important;
+            border-top-color: rgba(212, 175, 55, 0.6) !important;
+          }
         `}
       </style>
-    </>
+    </OverlayPortal>
   );
 }
