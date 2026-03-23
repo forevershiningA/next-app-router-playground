@@ -15,9 +15,13 @@ const nextConfig = {
     // Optimize for faster builds
     optimizePackageImports: ['@react-three/drei', '@react-three/fiber', 'three'],
   },
-  webpack: (config, { isServer }) => {
-    // Limit parallel compilation to reduce peak memory on Vercel's 8 GB container
-    config.parallelism = 2;
+  webpack: (config) => {
+    // Keep default parallelism unless explicitly overridden.
+    // Hard-capping to 2 significantly slows large builds on Vercel.
+    const override = Number(process.env.WEBPACK_PARALLELISM || '');
+    if (Number.isFinite(override) && override > 0) {
+      config.parallelism = override;
+    }
     return config;
   },
   // Exclude large static assets from serverless functions
