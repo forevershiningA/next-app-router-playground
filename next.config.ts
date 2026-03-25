@@ -28,8 +28,9 @@ const nextConfig = {
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
   outputFileTracingExcludes: {
     '*': [
-      'public/ml/**/*',
-      'public/shapes/**/*',
+       'public/ml/**/*',
+       'public/designs/**/*',      // Canonical rollout artifacts are static assets; do not bundle in functions
+       'public/shapes/**/*',
       'public/additions/**/*',
       'public/png/**/*',           // 343 MB motifs + 34 MB emblems
       'public/emblems/**/*',       // 33 MB
